@@ -1,0 +1,188 @@
+
+/**
+ * Extends the parser-module with helper functions for
+ * storing/restoring compiled templates (eHTML -> layout, view, partial etc)
+ *
+ * Dependencies:
+ * 
+ *  @depends jQuery.extend 
+ *  
+ *  alternatively: set <code>mobileDS.parser.CLASS_EXTENDER</code> with an object that 
+ *  exposes a function <tt>extend(obj1,obj1)</tt>, i.e.
+ *  
+ *  <code>mmir.parser.CLASS_EXTENDER.extend(obj1, obj2)</code>
+ * 
+ * @module mobileDS.tools
+ * 
+ */
+
+define(['jquery', 'parserModule'], function($, parser){
+
+/**
+ * Creates the appropriate object from a JSON-like <tt>storedObject</tt>.
+ * 
+ * <p>
+ * NOTE that in difference to a real JSON object, the <tt>storedObject</tt> 
+ * may contain function definitions.
+ * 
+ * <p>
+ * The storedObject must have a String property <strong>classConstructor</strong>
+ * <ul>
+ * 	<li>that must correspond to a constructor function (which will be invoked with <tt>new</tt>)</li>
+ * 	<li>the constructor function must be invokable without parameters</li>
+ * 	<li>the constructor function must be accessable from the global namespace
+ * 		(or <tt>classConstuctor</tt> must contain the code for retrieving the constructor
+ * 		 function from the global namespace)</li>
+ * </ul>
+ * 
+ * 
+ * <p>
+ * If <tt>storedObject</tt> contains a function <tt>init</tt>, then this function will be invoked
+ * before returning the new newly created object.
+ * 
+ * 
+ * @function
+ * @static
+ * @public
+ * 
+ * @param {Object} storedObject 
+ * 				a JSON-like object with fields and functions (which will be transfered to the returned object).
+ * @returns {Object} an new instance created with the constructor <tt>classConstructor</tt> and
+ * 			set with all properties (fields and functions) from <tt>storedObject</tt>.
+ */
+parser.restoreObject = function(storedObject, isTriggerPublish){
+	var classExtender;
+	if(parser.CLASS_EXTENDER && typeof parser.CLASS_EXTENDER.extend === 'function'){
+		classExtender = parser.CLASS_EXTENDER;
+	}
+	else {
+		classExtender = $;
+	}
+	
+//	//NOTE: classConstructor contains a list of Strings:
+//	//       * the constructor-function is either in global namespace
+//	//         e.g. "View" -> then the list contains exactly one entry ["View"]
+//	//
+//	//       * if the constructor-function is in a sub-namespace (e.g. "sub-module")
+//	//         then the list contains the "path" to the constructorf-function
+//	//         starting with the module that is in the global namespace
+//	//         e.g. "mobileDS.parser.ParsingResult" -> ["mobileDS, "parser", "ParsingResult"]
+//	//
+//	var constructor = window[storedObject.classConstructor[0]];//FIXME need to convert this to require
+//	for(var i=1, size = storedObject.classConstructor.length; i < size; ++i){
+//		constructor = constructor[storedObject.classConstructor[i]];
+//	}
+	
+	//requirejs version (for this to work, all Classe (i.e. JS-files) need to already have been loaded & required!)
+	var constructor = require(storedObject.classConstructor);
+	
+	var obj = classExtender.extend( new constructor(), storedObject);
+	if(typeof obj.init === 'function'){
+		obj.init();
+	}
+	
+	if(isTriggerPublish && typeof obj.initPublish === 'function'){
+		obj.initPublish();
+	}
+	
+	return obj;
+};
+
+/**
+ * Creates String-representations (JSON-like) for the specified properties and appends them to the StringBuffer.
+ * 
+ * <p>
+ * This function iterates over the Array <tt>propertyNames</tt>:
+ * If a property with that name exists in <tt>obj</tt>, a JSON-like String-representation is generated
+ * and appended at the end of the array <tt>stringBuffer</tt>.
+ * <br>
+ * Multiple representations are separated by comma entry <code>','</code> in <tt>stringBuffer</tt>.
+ * <br>
+ * The last entry in <tt>stringBuffer</tt> is a comma entry <code>','</code> if at least one property 
+ * entry was inserted in <tt>stringBuffer</tt>.
+ * 
+ * <p>
+ * NOTE that the String-representation inserted into <tt>stringBuffer</tt> may not have a 1:1 correspondence
+ * with properties (only the last entry is guaranteed to be <code>','</code>, if a property was inserted).
+ * <br>
+ * For pratical use, the returned (or modified) <tt>stringBuffer</tt> should be converted into a String
+ * e.g. by <code>stringBuffer.join('')</code>.
+ * 
+ * 
+ * @function
+ * @static
+ * @public
+ * 
+ * @param {Object} obj 
+ * 				the object, that contains the properties for which String representations should be generated.
+ * @param {Array<String>} propertyNames 
+ * 				the names of the properties, for which String-representations should be generated.
+ * @param {Array<String>} stringBuffer 
+ * 				the buffer: String-representations will be appended as entries at the end of the buffer
+ * @param {String} [propertyNamePostfix] 
+ * 				OPTIONAL if present, this postfix will be appended to each property name, before processing it.
+ * 				This is a convenience method, e.g. if all properties in <tt>propertyNames</tt> should end with
+ * 				the same String / postfix.
+ * @param {Function} [valueFunc] 
+ * 				OPTIONAL by default, value representations are generated using the <code>JSON.stringify</code>
+ * 				function. If instead this argument is present, this function will be invoked for creating
+ * 				the string representation of the property-value.
+ * 				The function signature is <code>valueFunc(propertyName : String, propertyValue : Object) : String</code>.
+ * 
+ * @returns {Array<String>} the modified <tt>stringBuffer</tt>
+ * 
+ * @depends JSON.stringify
+ * 
+ * @example
+ * 
+ * var obj = {
+ * 	some: "properties",
+ * 	including: function(arg1,arg2){ return 'functions' }
+ * };
+ * 
+ * var sb = mobileDS.parser.appendStringified(obj, ['some'], []);
+ * var str = sb.join(',');
+ * //str will be: "some:\"properties\","
+ * 
+ */
+parser.appendStringified = function(obj, propertyNames, stringBuffer, propertyNamePostfix, valueFunc){
+	
+	//"shift" arguments, if necessary
+	if(typeof propertyNamePostfix === 'function' && ! valueFunc){
+		valueFunc = propertyNamePostfix;
+		propertyNamePostfix = null;
+	}
+	
+	var prop, val;
+	for(var i=0, size = propertyNames.length; i < size; ++i){
+		prop = propertyNames[i];
+		
+		if(propertyNamePostfix){
+			prop += propertyNamePostfix;
+		}
+
+		if(typeof obj[prop] === 'undefined'){
+			continue;
+		}
+		
+		
+		if(valueFunc){
+			val = valueFunc(prop, obj[prop]);
+		}
+		else {
+			val = JSON.stringify(obj[prop]);
+		}
+		
+		stringBuffer.push( prop );
+		stringBuffer.push( ':' );
+		stringBuffer.push( val );
+
+		stringBuffer.push( ',' );
+	}
+	
+	return stringBuffer;
+};
+
+return parser;
+
+});//END: define(..., function(){
