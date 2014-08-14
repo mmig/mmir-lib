@@ -73,10 +73,10 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				// -> after this: continue (i.e. resolve promise)
 				var isCordova = env.isCordovaEnv;
 				if(isCordova){
-					require(['cordova'], function(){
+//					require(['cordova'], function(){
 						commonUtils.loadAllCordovaPlugins()
 							.then(defer.resolve());
-					});
+//					});
 		        }
 		        else {
 		        	// otherwise (e.g. BROWSER env):

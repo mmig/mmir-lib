@@ -39,7 +39,7 @@ require.config({
 	    // lib
  	    , 'jquery': 'vendor/libs/jquery-1.11.1'
  	    , 'scion': 'vendor/libs/scion-amd'
- 	    , 'cordova': 'vendor/libs/cordova-2.8.1'
+// 	    , 'cordova': 'vendor/libs/cordova-2.8.1'
 	    
 	    // globals and AMDs
  	    , 'constants': 'tools/constants'
@@ -106,10 +106,6 @@ require.config({
 	    , 'parseUtils': 'mvc/parser/templateParseUtils'				
 	    , 'ES3Lexer': 'gen/parser/ES3Lexer'
 	    , 'ES3Parser': 'gen/parser/ES3Parser'
-//	    , 'blockLexer': 'gen/parser/MmirScriptBlockLexer'
-//	    , 'blockParser': 'gen/parser/MmirScriptBlockParser'
-//	    , 'statementLexer': 'gen/parser/MmirScriptStatementLexer'
-//	    , 'statementParser': 'gen/parser/MmirScriptStatementParser'
 	    , 'scriptLexer': 'gen/parser/MmirScriptLexer'
 	    , 'scriptParser': 'gen/parser/MmirScriptParser'
 	    , 'contentLexer': 'gen/parser/MmirScriptContentLexer'
@@ -126,7 +122,6 @@ require.config({
 		, 'grammarConverter' : 'semantic/grammarConverter'
 		, 'grammarParserTemplate' : 'semantic/grammarParserTemplate'
 		, 'semanticInterpreter' : 'semantic/semanticInterpreter'
-		, 'jsonlint' : 'vendor/libs/jsonlint.parser'
 
 		//MD5 checksum computation (for check pre-compiled resources, like grammars (JSON->JS), and templates (eHTML->JS)
 		, 'md5' : 'vendor/libs/md5'
@@ -145,10 +140,6 @@ require.config({
 	    , 'antlr3': {			
 	    	exports : 'org'
 	    }
-	    
-		, 'jsonlint': {
-			exports : 'jsl.parser'
-		}
 		
 		, 'md5': {
 			exports : 'CryptoJS'
@@ -156,10 +147,6 @@ require.config({
 		
 		, 'ES3Lexer': {'exports': 'ES3Lexer'}
 		, 'ES3Parser': {'exports': 'ES3Parser'}
-//		, 'blockLexer': {'exports': 'MmirScriptBlockLexer'}
-//		, 'blockParser': {'exports': 'MmirScriptBlockParser'}
-//    	, 'statementLexer': {'exports': 'MmirScriptStatementLexer'}
-//    	, 'statementParser': {'exports': 'MmirScriptStatementParser'}
     	, 'scriptLexer': {'exports': 'MmirScriptLexer'}
     	, 'scriptParser': {'exports': 'MmirScriptParser'}
     	, 'contentLexer': {'exports': 'MmirScriptContentLexer'}
