@@ -557,7 +557,13 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 				
 				//console.log('about to load all libraries from path "'+librariesPath+'"...');//FIXM debug
 				
-				if( ! isSerial){
+				
+				if(size < 1){
+					//if there are no files to resolve: 
+					// immediately resolve Promise / trigger callback
+					_defer.resolve();
+				}
+				else if( ! isSerial){
 					//asynchronous load: trigger loading for all at once:
 					for(var counter=0; counter < size; ++counter){
 						doLoadImplFile(theFileList, counter);
