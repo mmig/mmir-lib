@@ -17,6 +17,18 @@ Usually, the content of the root directory would be placed within the directory 
 
 of the application, that uses the MMIR framework (cf. the [StarterKit][1] example).
 
+--
+#### Including mmir-lib as subtree
+
+This repository can be included as GIT _subtree_ so that updates can be easily fetched.
+E.g. for including the repository as subtree in the directory ```www/mmirf``` the 
+following command can be used:
+
+    git subtree add --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
+
+later updates from this repository can be fetched from within the referencing project using
+
+    git subtree pull --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
 
 --
 #### Used Libraries
