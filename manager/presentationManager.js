@@ -74,18 +74,25 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	var pageIndex = 0;
 
 	 /**
-	  * Name of the default controller.
+	  * Name for the default layout.
 	  * 
 	  * <p>
-	  * Note, that there must be (1) a controller and (2) a layout definition for
-	  * this name, otherwise the framework will not be able to start.
+	  * There must exist a layout definition by
+	  * this name, i.e.
+	  * <pre>views/layout/<DEFAULT_LAYOUT_NAME>.ehtml</pre>
 	  * 
-	  * @property DEFAULT_CONTROLLER_NAME
+	  * NOTE: while the name begins with an upper case
+	  *       letter, the file name for the layout must
+	  *       start with a lower case letter, e.g. for
+	  *       name <code>Default</code>, the file name
+	  *       must be <code>default.ehtml</code>.
+	  * 
+	  * @property DEFAULT_LAYOUT_NAME
 	  * @type String
 	  * @private
 	  * @constant
 	  */
-	 var DEFAULT_CONTROLLER_NAME = 'Application';
+	 var DEFAULT_LAYOUT_NAME = 'Default';
 	 
 	 /**
 	  * Name of the configuration property that specifies whether or not to use 
@@ -414,7 +421,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 layout = layouts.get(layoutName);
                 if (!layout) {
                     if (doUseDefaultIfMissing) {
-                        layout = _instance.getLayout(DEFAULT_CONTROLLER_NAME, false);
+                        layout = _instance.getLayout(DEFAULT_LAYOUT_NAME, false);
                     }
                     else {
                         console.error('[PresentationManager.getLayout]: could not find layout "' + layoutName +'"')
@@ -836,7 +843,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
         	var loadedLayoutsCount = 0;
 			 
 			 var ctrlNameList = controllerManager.getControllerNames();
-			 var remainingCtrlCount = ctrlNameList.length;
+			 var remainingCtrlCount = ctrlNameList.length + 1;//+1: for the default layout
 			 var currentLoadCount = 0;
 			 var checkCompletion = function(){
 				 if(defer.state() === 'pending' && remainingCtrlCount === 0 && currentLoadCount === 0){
@@ -846,7 +853,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 							defer.reject(
 								'Could not load any layout! At least one layout must be present at '
 								+ constants.getLayoutPath() 
-								+ DEFAULT_CONTROLLER_NAME[0].toLowerCase() + DEFAULT_CONTROLLER_NAME.substring(1) 
+								+ DEFAULT_LAYOUT_NAME[0].toLowerCase() + DEFAULT_LAYOUT_NAME.substring(1) 
 								+ '.ehtml'
 							);
 						}
@@ -871,12 +878,24 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 };
 			 
 
-        	$.each(ctrlNameList, function(index, ctrlName){
+        	 var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
         		
-        		var ctrl = controllerManager.getController( ctrlName );
-        		var layoutInfo = ctrl.getLayout();
+        		var ctrlName;
+         		var layoutInfo;
+        		if(theDefaultLayoutName){
+        			ctrlName = theDefaultLayoutName;
+             		layoutInfo = {
+             			fileName: theDefaultLayoutName[0].toLowerCase() 
+             						+ theDefaultLayoutName.substring(1, theDefaultLayoutName.length)
+             		};
+        		}
+        		else {
+            		var ctrl = controllerManager.getController( ctrlName );
+            		ctrlName = ctrl.getName();
+            		layoutInfo = ctrl.getLayout();
+        		}
 
-        		if(layoutInfo){//FIXME warn if no layout is present? create/load default APPLICATION layout?
+        		if(layoutInfo){
 
         			var layoutPath = constants.getLayoutPath() + layoutInfo.fileName + '.ehtml';
         			
@@ -901,7 +920,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 											+layoutPath
 									);
 
-        							var layout = new Layout(ctrl.getName(), data);
+        							var layout = new Layout(ctrlName, data);
         							layouts.put(layout.getName(), layout);
         							
         							updateLoadStatus();
@@ -909,7 +928,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
         					}
         					else {
-        						var layout = new Layout(ctrl.getName(), data);
+        						var layout = new Layout(ctrlName, data);
         						layouts.put(layout.getName(), layout);
         						
         						updateLoadStatus();
@@ -931,8 +950,14 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
         		--remainingCtrlCount;
         		checkCompletion();
         		
-        	});//END: each(i; ctrlNames)
-
+        	};//END: doLoadLayout(){...
+			
+        	//load the default layout:
+        	doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
+        	
+        	//load layouts for controllers (there may be none defined)
+			$.each(ctrlNameList, doLoadLayout);
+			
         	checkCompletion();
         	return defer.promise();
         	
