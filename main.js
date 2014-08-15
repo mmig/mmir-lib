@@ -155,8 +155,8 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 					//FIXME impl. mechanism where this is done for each view/layout rendering 
 					//   (i.e. in presentationManager's rendering function and not here)
 					//
-					//initialize with layout contents of the default-controller (i.e. "Application"):
-					var headerContents = $( presentationManager.getLayout("Application").getHeaderContents() );
+					//initialize with default layout contents:
+					var headerContents = $( presentationManager.getLayout(null, true).getHeaderContents() );
 					//NOTE: need to handle scripts separately, since some browsers may refuse to "simply append" script TAGs...
 					var scriptList = [];
 					var stylesheetList = headerContents.filter(function(index){
