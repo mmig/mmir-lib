@@ -4,7 +4,7 @@ require.config({
 	
 	baseUrl: './mmirf'
 		
-	//FIXME this should be defined/"defineable" somewhere else (outside the framework-scope) 
+	//TODO this should be defined/"defineable" somewhere else (outside the framework-scope) 
 	, config: {
 		
 
@@ -21,19 +21,12 @@ require.config({
 
 	    }
 	    
-//	    , 'constants': {
-////	        
-////	        , template: 'mmir'
-//	    }
-	    
-
-	    
 	}
 
 	, paths : {
 	    
 	    // core
-		'core' : 'core'
+		  'core': 'core'
  	    , 'main': 'main'
  	    
 	    // lib
@@ -65,7 +58,7 @@ require.config({
 	    , 'modelManager': 'manager/modelManager'
 	    
 	    // #####################################################################
-	    // ########### PRESENTATION LAYER (TODO: swap out) #####################
+	    // ########### PRESENTATION LAYER (TODO: make changeable) ##############
 	    // #####################################################################
 	    
 	    , 'presentationManager':  'manager/presentationManager'
@@ -118,12 +111,13 @@ require.config({
 	    , 'parsingResult': 'mvc/parser/parsingResult'
 	    	
     	//grammar related
-		, 'jscc' : 'vendor/libs/jscc-amd'
-		, 'grammarConverter' : 'semantic/grammarConverter'
-		, 'grammarParserTemplate' : 'semantic/grammarParserTemplate'
-		, 'semanticInterpreter' : 'semantic/semanticInterpreter'
+		, 'jscc': 'vendor/libs/jscc-amd'
+		, 'grammarConverter': 'semantic/grammarConverter'
+		, 'grammarParserTemplate': 'semantic/grammarParserTemplate'
+		, 'semanticInterpreter': 'semantic/semanticInterpreter'
 
-		//MD5 checksum computation (for check pre-compiled resources, like grammars (JSON->JS), and templates (eHTML->JS)
+		//MD5 checksum computation: for checking pre-compiled resources, e.g.
+		//    grammars (JSON->JS), and templates (eHTML->JS)
 		, 'md5' : 'vendor/libs/md5'
 		, 'checksumUtils' : 'tools/checksumUtils'
 
@@ -131,34 +125,31 @@ require.config({
 	    , 'commonUtilsCompatibility' : 'tools/extensions/CommonUtilsCompatibility'
 	    , 'languageManagerCompatibility' : 'tools/extensions/LanguageManagerCompatibility'
 	    
-	},//END: paths : {
+	},//END: paths : {...
 
 	shim : {
 	    
-	    'jqm': ['jquery']
+	      'jqm':            ['jquery']
 	    
-	    , 'antlr3': {			
-	    	exports : 'org'
-	    }
+	    , 'antlr3':         {exports : 'org'}
 		
-		, 'md5': {
-			exports : 'CryptoJS'
-		}
+		, 'md5':            {exports : 'CryptoJS'}
 		
-		, 'ES3Lexer': {'exports': 'ES3Lexer'}
-		, 'ES3Parser': {'exports': 'ES3Parser'}
-    	, 'scriptLexer': {'exports': 'MmirScriptLexer'}
-    	, 'scriptParser': {'exports': 'MmirScriptParser'}
-    	, 'contentLexer': {'exports': 'MmirScriptContentLexer'}
-    	, 'contentParser': {'exports': 'MmirScriptContentParser'}
-    	, 'templateLexer': {'exports': 'MmirTemplateLexer'}
-    	, 'templateParser': {'exports': 'MmirTemplateParser'}
+		, 'ES3Lexer':       {deps: ['antlr3'], exports: 'ES3Lexer'}
+		, 'ES3Parser':      {deps: ['antlr3'], exports: 'ES3Parser'}
+    	, 'scriptLexer':    {deps: ['antlr3'], exports: 'MmirScriptLexer'}
+    	, 'scriptParser':   {deps: ['antlr3'], exports: 'MmirScriptParser'}
+    	, 'contentLexer':   {deps: ['antlr3'], exports: 'MmirScriptContentLexer'}
+    	, 'contentParser':  {deps: ['antlr3'], exports: 'MmirScriptContentParser'}
+    	, 'templateLexer':  {deps: ['antlr3'], exports: 'MmirTemplateLexer'}
+    	, 'templateParser': {deps: ['antlr3'], exports: 'MmirTemplateParser'}
     	
     	//TODO implement explicit mechanism for declaring & loading dependencies (JS & CSS)
     	//QUICKFIX hardcode impl.-specific dependencies here:
     	, 'presentationManager': ['jqmCss', 'jqmSimpleModal']
 
 	}
+	
 });//END: require.config({...
 
 //FIXME see remark above for shim::presentationManager
@@ -174,6 +165,12 @@ define('jqmCss', ['jquery'], function loadJqmCss($) {
 });
 
 
-require(['core', 'main']);
+require(['core'], function(core){
+	var startModule = core.startModule;
+	
+	core.applyConfig();
+	
+	require([startModule]);
+});
 
 }());//END: (function(){...

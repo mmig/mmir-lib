@@ -26,11 +26,11 @@ function initMmir() {
 	}
 	
     
-    //STATE: state var for indicating "doc is already loaded" (this needs to be set/reset manually)
+    //STATE: state variable for indicating "doc is already loaded" (this needs to be set/reset manually)
 	var _isReady = false;
-	var list = [];
-	function dequeue () { return list.shift(); };
-	function isEmpty () { return list.length === 0; };
+	var _funcList = [];
+	function dequeue () { return _funcList.shift(); };
+	function isEmpty () { return _funcList.length === 0; };
 	//param func OPTIONAL
 	//			if func is present, func will be used instead of dequeueing a callback from the queue
 	function deqExex (func) {
@@ -42,12 +42,31 @@ function initMmir() {
 		func.call(mmir);
 	};
 	
-	window.mmir = {
+	//STATE: state variable for indicating "configs for requirejs are already applied"
+	var _isApplied = false;
+	var _configList = [];
+	function applyConfigs(){
+		
+		if(typeof require === 'undefined'){
+			return;
+		}
+		
+		
+		_isApplied = true;
+		while(_configList.length > 0){
+			require.config( _configList.shift() );
+		}
+	}
+	
+	var mmir = {
 			
 			setInitialized : function() {
 				
 				_isReady = true;
 
+				//apply configurations to requirejs instance:
+				applyConfigs();
+				
 				//execute all callbacks in queue
 				while(!isEmpty()){
 					deqExex();
@@ -67,7 +86,7 @@ function initMmir() {
 			 * @param {Function} func
 			 * 				callback Function that will be triggered when the framework has been initialized 
 			 */
-			ready : function(func) {
+			ready: function(func) {
 		
 				//SPECIAL MODE: if already active, execute the callback 
 				//				(if queue is not empty yet: queue function call in order to preserve the execution ordering)
@@ -75,13 +94,87 @@ function initMmir() {
 					deqExec(func);
 				}
 				else {
-					list.push(func);
+					_funcList.push(func);
 				}
-			}
+			},
+			
+			/**
+			 * Set options / settings for overwriting the default
+			 * configuration for RequireJS:
+			 * 
+			 * <br>
+			 * Options / configurations that are added by this
+			 * method will overwrite settings specified in
+			 * <code>mainConfig.js</code>.
+			 * 
+			 * <p>
+			 * NOTE: the options added here will be applied in the order
+			 *       the were added, i.e. if a later option specifies
+			 *       settings that were already set by a previous call,
+			 *       then these later options will overwrite the earlier
+			 *       ones.
+			 * 
+			 * 
+			 * @param {PlainObject} options
+			 * 			options for RequireJS
+			 */
+			config: function(options){
+				if(_isApplied && typeof require !== 'undefined'){
+					require.config(options);
+				}
+				else {
+					_configList.push(options);
+				}
+			},
+			
+			/*
+			 * Applies settings that were added via
+			 * {@link #config}.
+			 * 
+			 * <p>
+			 * WARNING: use this only, if you know what
+			 *          you are doing -- normally this
+			 *          functions is only called once
+			 *          during initialization by the
+			 *          framework, after the default
+			 *          configuration settings for 
+			 *          RequireJS in <code>mainConfig.js</code>
+			 *          were applied.
+			 * 
+			 * @private this is a semi-private function that 
+			 *          should only be used by the initialization
+			 *          process.
+			 */
+			applyConfig: applyConfigs,
+			
+			/**
+			 * The name / ID of the RequireJS module that will
+			 * be loaded, after the configuration in
+			 * <code>mainConfig.js</code> was applied.
+			 * 
+			 * <p>
+			 * This module should first start-up the framework and
+			 * then signal the application (via {@link #setInitialized}
+			 * that it is ready to be used, i.e. fully initialized now.
+			 * 
+			 * <p>
+			 * NOTE: If set to <code>undefined</code>, no module will be 
+			 * loaded after configuration in <code>mainConfig.js</code>
+			 * was applied.
+			 * 
+			 * @property
+			 * @type String
+			 * @default "main" will load the module specified in main.js
+			 */
+			startModule: 'main'
 	};
 	
 	if(typeof define === 'function'){
 		define(function(){ return mmir; });
 	}
+	
+	//export as global namespace:
+	window.mmir = mmir;
+	
 	return mmir;
 }());
