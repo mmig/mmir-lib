@@ -177,24 +177,28 @@ GrammarConverter.prototype.parseStopWords = function(){
 	var stop_words = "";
 	
 	if(size > 0){
-		stop_words += "(";
+		stop_words += "\\b(";           //starting at a word-boundary (-> ignore within-word matches)
 		
-		//the RegExp matches each stopword (and optionally followed by one white-character)
+		//... then the RegExp matches each stopword:
 		for(var index=0; index < size ; ++index){
 			var stop_word = json_stop_words[index];
 			if (index > 0){
-				stop_words +=	"|"; 		//there is already a previous stopword-entry: do add OR-matching ...
+				stop_words +=	"|";    //... if there is already a previous stopword-entry: do add OR-matching ...
 			}
 	
-			stop_words +=	stop_word   //... the stopword "stop_word"
-							+ "\\s?";	//... and optionally one white-character that follows the stopword
+			stop_words +=	stop_word;  //... add the stopword "stop_word"
 		}
 		
-		stop_words += ")";
+		stop_words += ")"
+			       + "\\b"	            //... ending with a word-boundary -> avoid "cutting out" matching partial strings
+		                                //    e.g. without \b: '(in)\s?' would match (and cut out all matches) within "winning" -> "wng"
+			       
+			       + "\\s?";	        //... and optionally: one white-character that follows the stopword
 	}
 	else {
-		//this will never match:
-		stop_words += '^[.]';
+		//for empty stopword definition: match empty string
+		//  (basically: remove nothing)
+		stop_words += '^$';
 	}
 	this.stop_words_regexp = new RegExp(stop_words,"igm");	//RegExp options: 
 															// ignore-case (i),
@@ -228,8 +232,9 @@ GrammarConverter.prototype.parseStopWords_alt = function(){
 		stop_words += ")";
 	}
 	else {
-		//this will never match:
-		stop_words += '^[.]';
+		//for empty stopword definition: match empty string
+		//  (basically: remove nothing)
+		stop_words += '^$';
 	}
 	this.stop_words_regexp_alt = new RegExp(stop_words,"igm");
 };
@@ -741,9 +746,9 @@ GrammarConverter.prototype.encodeUmlauts = function(target, doAlsoEncodeUpperCas
 	//	data = data.replaceAll("\u00FC", "__ue__");//HTML: &#252;
 	//	data = data.replaceAll("\u00F6", "__oe__");//HTML: &#246;
 	//	data = data.replaceAll("\u00DF", "__ss__");//HTML: &#223;
-	str = str.replace(/Ã¶/g,'__oe__').replace(/Ã¤/g,'__ae__').replace(/Ã¼/g,'__ue__').replace(/ÃŸ/g,'__ss__');
+	str = str.replace(/ö/g,'__oe__').replace(/ä/g,'__ae__').replace(/ü/g,'__ue__').replace(/ß/g,'__ss__');
 	if(doAlsoEncodeUpperCase){
-    	str = str.replace(/Ã–/g,'__Oe__').replace(/Ã„/g,'__Ae__').replace(/Ãœ/g,'__Ue__');
+    	str = str.replace(/Ö/g,'__Oe__').replace(/Ä/g,'__Ae__').replace(/Ü/g,'__Ue__');
 	}
 	
 	if(isString){
@@ -784,9 +789,9 @@ GrammarConverter.prototype.decodeUmlauts = function(target, doAlsoDecodeUpperCas
 		str = JSON.stringify(target);
 	}
 	
-	str = str.replace(/__oe__/g,'Ã¶').replace(/__ae__/g,'Ã¤').replace(/__ue__/g,'Ã¼').replace(/__ss__/g,'ÃŸ');
+	str = str.replace(/__oe__/g,'ö').replace(/__ae__/g,'ä').replace(/__ue__/g,'ü').replace(/__ss__/g,'ß');
 	if(doAlsoDecodeUpperCase){
-    	str = str.replace(/__Oe__/g,'Ã–').replace(/__Ae__/g,'Ã„').replace(/__Ue__/g,'Ãœ');
+    	str = str.replace(/__Oe__/g,'Ö').replace(/__Ae__/g,'Ä').replace(/__Ue__/g,'Ü');
 	}
 	
 	if(isString){
