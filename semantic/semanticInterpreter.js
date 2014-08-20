@@ -289,7 +289,7 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
                 grammarParser = grammarParser.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
                 grammarParser = grammarParser.replace(/##LABELS##/gi, jscc.print_symbol_labels());
                 grammarParser = grammarParser.replace(/##ACTIONS##/gi, jscc.print_actions());
-                grammarParser = grammarParser.replace(/##FOOTER##/gi, "__parse( "+INPUT_FIELD_NAME+", new Array(), new Array());");
+                grammarParser = grammarParser.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
                 grammarParser = grammarParser.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
                 grammarParser = grammarParser.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
                 grammarParser = grammarParser.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
@@ -368,14 +368,14 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
            
             if(IS_DEBUG_ENABLED) console.debug('SemanticInterpreter.process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
             
-    		grammarConverter.executeGrammar( strPreparedPhrase );
+    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
             
     		//unmask previously mask non-ASCII chars in all Strings of the returned result:
-            grammarConverter.semanticAnnotationResult = grammarConverter.unmaskJSON(
-    				grammarConverter.semanticAnnotationResult 
+    		result = grammarConverter.unmaskJSON(
+    				result
     		);
             
-            return grammarConverter.semanticAnnotationResult;//TODO return copy instead of original instance? 
+            return result;//TODO return copy instead of original instance? 
         };
         
 
