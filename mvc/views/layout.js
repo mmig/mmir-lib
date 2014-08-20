@@ -25,13 +25,13 @@
  */
 
 
-define (['commonUtils', 'viewConstants', 'yield', 'renderUtils', 'parseUtils', 'storageUtils' ],
+define (['commonUtils', 'viewConstants', 'yield', 'storageUtils' ],
 	/**
 	 * @name Layout
 	 * @class
 	 */
-	function(//TODO storageUtils
-		commonUtils, ViewConstants, YieldDeclaration, renderer, parser, storageUtils
+	function(
+		commonUtils, ViewConstants, YieldDeclaration, storageUtils
 ) {
 	
 
@@ -46,8 +46,17 @@ define (['commonUtils', 'viewConstants', 'yield', 'renderUtils', 'parseUtils', '
  * The constructor parses the layout and divides them into containers (headerContents, bodyContents, dialogsContents).
  * 
  * @constructs Layout
- * @param {String} name Name of the Layout 
- * @param {String} definition layout description
+ * @param {String} name
+ * 			Name of the Layout (usually the same name as the Layout's controller).
+ * @param {String} definition
+ * 			Layout description, i.e. the raw template code that will be processed.
+ * 			May be empty: in this case the processed contents must be
+ * 						  added manually (cf. parser.StorageUtils)
+ * 
+ * @depends if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+ * 			
+ * @depends if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+ * 
  * @category core
  */
 function Layout(name, definition, remote, ignoreMissingBody){
@@ -117,13 +126,12 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	    this.yields = new Array();
 	    
 	    if(this.def){
-
-//		    var parser = mmir.parser.ParserUtils.getInstance();
-//		    var renderer = mmir.parser.RenderUtils.getInstance();
 		    
 		    //console.debug('Layout<constructor>: start rendering layout for "'+this.name+'"'+(remote?' (REMOTE)':'')+', RAW: '+this.def);
-		    	    	
+		    var parser = require('parseUtils');
 	    	var parseResult = parser.parse(this.def, this);
+	    	
+	    	var renderer = require('renderUtils');
 	    	var renderedLayout = renderer.renderLayout(parseResult, null/*FIXME?*/);
 
 	    	//DISABLED: parsing a string as HTML via jQuery etc. does not work (removes head, body,... tags):

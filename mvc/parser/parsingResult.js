@@ -29,14 +29,16 @@
  * Dependencies:
  * 
  *  * parser.element (parserModule.js)
- *  * ANTLR TokenStream (antlr3-all.js)
+ *  * OPTIONALLY: ANTLR TokenStream (antlr3-all.js)
+ *                (if present, the constructor may be able to automatically derive start/end properties from given argument)
  * 
  * @module mobileDS.tools
  * 
+ * @depends antlr3-all.js as <code>org</code> (see comment above)
+ * 
  */
 
-define(['antlr3', 'parserModule'], function(org, parser){
-
+define(['parserModule'], function(parser){
 
 /**
  * ParsingResult represents an element that was detected during parsing.
@@ -191,20 +193,25 @@ parser.ParsingResult = function (thetokens){
 	
 	//try to extract start-/end-indexes from the argument:
 	if(thetokens){
-		//NOTE: must invoke getTokens() for initializing size() etc.!
-		if(thetokens instanceof org.antlr.runtime.CommonTokenStream && thetokens.getTokens() && thetokens.size() > 0){
-			this.start = thetokens.getTokens()[0].getStartIndex();
-			this.end = thetokens.getTokens()[thetokens.size()-1].getStopIndex();
-			
-			isSet = true;
+		
+		if(typeof org !== 'undefined'){
+			//NOTE: must invoke getTokens() for initializing size() etc.!
+			if(thetokens instanceof org.antlr.runtime.CommonTokenStream && thetokens.getTokens() && thetokens.size() > 0){
+				this.start = thetokens.getTokens()[0].getStartIndex();
+				this.end = thetokens.getTokens()[thetokens.size()-1].getStopIndex();
+				
+				isSet = true;
+			}
+			else if(thetokens instanceof org.antlr.runtime.CommonToken || thetokens instanceof org.antlr.runtime.Token){
+				this.start = thetokens.getStartIndex();
+				this.end = thetokens.getStopIndex();
+							
+				isSet = true;
+			}
 		}
-		else if(thetokens instanceof org.antlr.runtime.CommonToken || thetokens instanceof org.antlr.runtime.Token){
-			this.start = thetokens.getStartIndex();
-			this.end = thetokens.getStopIndex();
-						
-			isSet = true;
-		}
-		else if(typeof thetokens.getToken !== 'undefined' && (typeof thetokens.getToken().getStartIndex !== 'undefined' && typeof thetokens.getToken().getStopIndex !== 'undefined')){
+		
+		//if not already set, try...
+		if( isSet === false && typeof thetokens.getToken !== 'undefined' && (typeof thetokens.getToken().getStartIndex !== 'undefined' && typeof thetokens.getToken().getStopIndex !== 'undefined')){
 			this.start = thetokens.getToken().getStartIndex();
 			this.end = thetokens.getToken().getStopIndex();
 						
@@ -216,7 +223,7 @@ parser.ParsingResult = function (thetokens){
 						
 			isSet = true;
 		}
-		else {
+		else if(isSet === false) {
 			var type = Object.prototype.toString.call(thetokens);//.match(/^\[object (.*)\]$/)[1];
 			console.warn('unknown argument type: '+type);//debug
 		}

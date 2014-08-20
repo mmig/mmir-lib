@@ -29,7 +29,7 @@
 define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager', 'renderUtils'
          , 'layout', 'view', 'partial', 'dictionary', 'checksumUtils', 'languageManager'
          , 'jquery'//, 'module'
-         , 'antlr3', 'jqm', 'stringExtension', 'parserModule'
+         , 'jqm', 'stringExtension', 'parserModule'
         
     ],
     
@@ -877,6 +877,17 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 				 checkCompletion();
 			 };
 			 
+			 var doParseLayoutTemplate = function(ctrlName, data){
+				 
+				 require(['parseUtils'], function(){
+					 var layout = new Layout(ctrlName, data);
+					 layouts.put(layout.getName(), layout);
+	
+					 updateLoadStatus();
+				 });
+				 
+			 };
+			 
 
         	 var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
         		
@@ -920,18 +931,12 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 											+layoutPath
 									);
 
-        							var layout = new Layout(ctrlName, data);
-        							layouts.put(layout.getName(), layout);
-        							
-        							updateLoadStatus();
+        							doParseLayoutTemplate(ctrlName, data);
         						});
 
         					}
         					else {
-        						var layout = new Layout(ctrlName, data);
-        						layouts.put(layout.getName(), layout);
-        						
-        						updateLoadStatus();
+        						doParseLayoutTemplate(ctrlName, data);
         					}
         				}
         			}).fail(function(jqxhr, status, err){
@@ -999,6 +1004,17 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 				
 				checkCompletion();
 			 };
+			 
+			 var doParseViewTemplate = function(controller, viewName, data){
+				 
+				 require(['parseUtils'], function(){
+					 var ctrlView = new View(controller, viewName , data);
+					 views.put( createViewKey( controller.getName(), viewName), ctrlView);
+					 
+					 updateLoadStatus();
+				 });
+				 
+			 };
 			
         	$.each(ctrlNameList, function(ctrlIndex, controllerName){
         		
@@ -1027,20 +1043,15 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 											+view.path
 									);
 
-        							var ctrlView = new View(controller, view.name , data);
-        							views.put( createViewKey( controller.getName(), view.name), ctrlView);
-        							
-        							updateLoadStatus();
+        							doParseViewTemplate(controller, view.name , data);
 
         						});
 
         					}
         					else {
 
-        						var ctrlView = new View(controller, view.name , data);
-        						views.put( createViewKey( controller.getName(), view.name), ctrlView);
-
-        						updateLoadStatus();
+        						doParseViewTemplate(controller, view.name , data);
+        						
         					}
         				}
         			}).fail(function(jqxhr, status, err){
@@ -1105,6 +1116,17 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
 				 checkCompletion();
 			 };
+			 
+			 var doParsePartialTemplate = function(controller, partialName, data){
+				 
+				 require(['parseUtils'], function(){
+					 var ctrlPartial = new Partial(controller, partialName, data);
+					 partials.put(createPartialKey( controller.getName(), partialName), ctrlPartial);
+					 
+					 updateLoadStatus();
+				 });
+				 
+			 };
 
 			 $.each(ctrlNameList, function(ctrlIndex, controllerName){
 				 
@@ -1134,18 +1156,12 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 											 +partial.path
 									 );
 
-									 var ctrlPartial = new Partial(controller, partial.name, data);
-									 partials.put(createPartialKey( controller.getName(), partial.name), ctrlPartial);
-									 
-									 updateLoadStatus();
+									 doParsePartialTemplate(controller, partial.name, data);
 								 });
 
 							 }
 							 else {
-								 var ctrlPartial = new Partial(controller, partial.name, data);
-								 partials.put(createPartialKey( controller.getName(), partial.name), ctrlPartial);
-								 
-								 updateLoadStatus();
+								 doParsePartialTemplate(controller, partial.name, data);
 							 }
 						 }
 					 }).fail(function(jqxhr, status, err){

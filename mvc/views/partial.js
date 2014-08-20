@@ -25,13 +25,13 @@
  */
 
 
-define ( ['commonUtils', 'contentElement', 'renderUtils', 'parseUtils', 'storageUtils'],  
+define ( ['commonUtils', 'contentElement', 'storageUtils'],  
 	/**
 	 * @name Partial
 	 * @class
 	 */
 	function (
-			commonUtils, ContentElement, renderUtils, parseUtils, parser
+			commonUtils, ContentElement, parser
 ){
 	/** @scope Partial.prototype */
 	/**
@@ -43,9 +43,18 @@ define ( ['commonUtils', 'contentElement', 'renderUtils', 'parseUtils', 'storage
 	 * The Partial class is a containing the definition of the partial and methods to access the definition.
 	 * 
 	 * @constructs Partial
-	 * @param {Object} ctrl Controller instance / object
-	 * @param {String} name Name of the Partial 
-	 * @param {String} definition Partial description
+	 * @param {Object} ctrl 
+	 * 			Controller instance / object
+	 * @param {String} name
+	 * 			Name of the Partial 
+	 * @param {String} definition
+	 * 			Partial description, i.e. the raw template code that will be processed.
+	 * 			May be empty: in this case the processed contents must be
+	 * 						  added manually (cf. parser.StorageUtils)
+	 * 
+	 * @depends if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+	 * @depends if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * 
 	 * @category core
 	 */
 	function Partial(ctrl, name, definition){
@@ -62,15 +71,13 @@ define ( ['commonUtils', 'contentElement', 'renderUtils', 'parseUtils', 'storage
 //	    console.log("[Partial] parsed Partial '" +this.controller + "-"+this.name+ "'.");
 	    
 	    if(definition){
-//		    var parser = mmir.parser.ParserUtils.getInstance();
-//		    var renderer = mmir.parser.RenderUtils.getInstance();
 		    
 		    var contentElementInfo = {
 		    		//this name is purely informational:
 		    		name : this.controller.getName() + 'Partial',
 		    		content : this.def
 		    	};
-		    this.contentElement = new ContentElement(contentElementInfo, this, parseUtils, renderUtils);
+		    this.contentElement = new ContentElement(contentElementInfo, this, require('parseUtils'), require('renderUtils'));
 	    }
 	}
 	

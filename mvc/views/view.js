@@ -24,13 +24,13 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define ( ['commonUtils', 'contentElement', 'renderUtils', 'parseUtils', 'storageUtils'], 
+define ( ['commonUtils', 'contentElement', 'storageUtils'], 
 	/**
 	 * @name View
 	 * @class
 	 */
 	function(
-			commonUtils, ContentElement, renderUtils, parserUtils, parser
+			commonUtils, ContentElement, parser
 ){
 /** @scope View.prototype */
 /**
@@ -40,12 +40,21 @@ define ( ['commonUtils', 'contentElement', 'renderUtils', 'parseUtils', 'storage
 	
 /**
  * The View class is a kind of interface-class which gives access to the methods and data of a helper (which itself belongs to a controller)<br>
- * Apart from initialising some properties, the constructor also parses the view description and looks for needed helper methods.
+ * Apart from initializing some properties, the constructor also parses the view description and looks for needed helper methods.
  * 
  * @constructs View
- * @param {Object} ctrl Controller instance / object
- * @param {String} name Name of the View 
- * @param {String} definition View description
+ * @param {Object} ctrl 
+ * 			Controller instance / object
+ * @param {String} name
+ * 			Name of the View 
+ * @param {String} definition
+ * 			View description, i.e. the raw template code that will be processed.
+ * 			May be empty: in this case the processed contents must be
+ * 						  added manually (cf. parser.StorageUtils)
+ * 
+ * @depends if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+ * @depends if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+ * 
  * @category core
  */
  function View(ctrl, name, definition){
@@ -107,9 +116,9 @@ define ( ['commonUtils', 'contentElement', 'renderUtils', 'parseUtils', 'storage
     this.helperMethods = new Array();
     
     if(this.def){
-//	    var parser = mmir.parser.ParserUtils.getInstance();
-//	    var renderer = mmir.parser.RenderUtils.getInstance();
 	    
+	    var parserUtils = require('parseUtils');
+	    var renderUtils = require('renderUtils');
 	    
 	    var parseResult = parserUtils.parse(this.def, this);
 	    
