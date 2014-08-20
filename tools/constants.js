@@ -96,6 +96,19 @@ function(
 		if(typeof isBrowserEnvParam === 'string'){
 			basePath = isBrowserEnvParam;
 		}
+		else if (isBrowserEnvParam && isBrowserEnvParam.env){
+
+			switch(isBrowserEnvParam.env){
+				case 'cordova':
+				case 'android':
+					basePath = "file:///android_asset/www/";
+					break;
+				case 'ios':
+				case 'default':
+					basePath = "";
+			}
+			
+		}
 		else if (isBrowserEnvParam){
 			basePath = "";
 		}
@@ -349,6 +362,9 @@ function(
 	var isBrowserEnvironment = env.isBrowserEnv;// module.config().forBrowser;
 	
 	instance = new constructor(isBrowserEnvironment);
+	
+	//TODO find better way for initializing env-dependent settings (see also comment above)
+	setBasePath({env: env.envSetting});
 	
 	return instance;
 

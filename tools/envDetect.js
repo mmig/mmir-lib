@@ -18,9 +18,10 @@ define(['paramsParseFunc'], function(paramsParseFunc) {
 	
 	var isBrowserEnv;
 	var isCordovaEnv;
+	var envSetting = '';
 	
 	if(params.has('env')){
-		var envSetting = params['env'];
+		envSetting = params['env'];
 		
 		if(envSetting === 'browser'){
 			isBrowserEnv = true;
@@ -29,7 +30,7 @@ define(['paramsParseFunc'], function(paramsParseFunc) {
 			isBrowserEnv = false;
 		}
 		
-		if(envSetting === 'cordova' || envSetting !== 'android' || envSetting !== 'ios'){
+		if(envSetting === 'cordova' || envSetting === 'android' || envSetting === 'ios'){
 			isCordovaEnv = true;
 			isBrowserEnv = false;
 		}
@@ -44,7 +45,8 @@ define(['paramsParseFunc'], function(paramsParseFunc) {
 
 	return {
 		  isBrowserEnv: isBrowserEnv,
-		  isCordovaEnv: isCordovaEnv
+		  isCordovaEnv: isCordovaEnv,
+		  envSetting: envSetting
 //		, params : params
 	};
 });
