@@ -173,6 +173,7 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 					mmir.PresentationManager = presentationManager;
 					checkInitCompleted();
 				});
+				//TODO handle reject/fail of the presentationManager's init-Promise!
 				
 				dialogManager.init().then(function(_dlgMng, _dialogEngine){
 					isDialogManagerLoaded = true;
