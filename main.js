@@ -150,7 +150,6 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				});
 				
 				presentationManager.init().then(function(){
-					isVisualsLoaded = true;
 					
 					//FIXME impl. mechanism where this is done for each view/layout rendering 
 					//   (i.e. in presentationManager's rendering function and not here)
@@ -168,10 +167,15 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 						return true;
 					});
 					$("head").append( stylesheetList );
-					commonUtils.loadImpl(scriptList, true);//load serially, since scripts may depend on each other; TODO should processing wait, until these scripts have been finished! (i.e. add callbacks etc.?)
+					commonUtils.loadImpl(scriptList, true)//load serially, since scripts may depend on each other; TODO should processing wait, until these scripts have been finished! (i.e. add callbacks etc.?)
+							
+						.then(function(){//<- need to wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
+
+								isVisualsLoaded = true;//<- set to "LOADED" after all scripts have been loaded / TODO impl. better mechanism for including application-scripts...
 					
-					mmir.PresentationManager = presentationManager;
-					checkInitCompleted();
+								mmir.PresentationManager = presentationManager;
+								checkInitCompleted();
+					});
 				});
 				//TODO handle reject/fail of the presentationManager's init-Promise!
 				
