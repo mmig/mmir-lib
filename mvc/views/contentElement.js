@@ -183,7 +183,9 @@ function ContentElement(group, view, parser, renderer){
 			|| 	(contentElement.ifs 				&& contentElement.ifs.length 				> 0)
 			|| 	(contentElement.fors 				&& contentElement.fors.length 				> 0)
 			|| 	(contentElement.vars 				&& contentElement.vars.length 				> 0)
-		;//TODO if ContentElement supports more dynamic elements (e.g. child-ContentElement objects, For-Loops ...) then add appropriate checks here!
+			//TODO should comments be "pre-rendered", i.e. already removed here, so that they need not be re-evaluated each time a view gets rendered?
+			|| 	(contentElement.comments			&& contentElement.comments.length 			> 0)
+		;//TODO if ContentElement supports more dynamic elements (e.g. child-ContentElement objects ...) then add appropriate checks here!
 	};
 	
 	//"buffered" field that signifies if this ContentElement has dynamic content
