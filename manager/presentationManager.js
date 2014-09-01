@@ -725,93 +725,87 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	return _instance;
 	
 	function init () {
-		
+
 		/** @scope mmir.MediaManager.prototype */
-		
+
 		checksumUtils = require('checksumUtils');//FIXME why is this undefined on loading? dependency cycle? really, this should already be available, since it is mentioned in the deps of define()....
 
 		delete _instance.init;//FIXME should init be deleted?
 
-        /**
-         * Checks if a pre-compiled view is up-to-date:
-         * loads the view, if it is current.
-         * 
-         * If the pre-compiled view is not current, or loading-errors
-         * occur, the fail-callback will be triggered 
-         * (the callback argument may contain information about the cause).
-         * 
-         * @async
-         * @private
-         * 
-         * @param {String} rawViewData
-         * 					the text content of the view template (i.e. content of a eHTML file "as is")
-         * @param {String} targetPath
-         * 					the path to the pre-compiled view file
-         * @param {Function} success
-         * 					callback that will be triggered, if pre-compiled view file was loaded
-         * 					NOTE: the JS code of the loaded file may not have been fully executed yet!
-         * @param {Function} fail
-         * 					callback that will be triggered, if pre-compiled view is not up-to-date or
-         * 					an error occurs while loading the file
-         */
-        function loadPrecompiledView(rawViewData, targetpath, success, fail){
-        	
-        	if(! isUpToDate(rawViewData, targetpath)){
-        		if(fail) fail('Precompiled view file is outdated!');
-        		else console.warn('Outdated pre-compiled view at: '+targetpath);
-        	}
-        	
-//        	console.warn('Loading pre-compiled view: '+targetpath);//FIXM DEBUG
-        	
-        	commonUtils.getLocalScript( //scriptUrl, success, fail)
-        			targetpath, success, fail
-        	);
-        }
-        
-        //determine if pre-compiled views should be used
-        //DEFAULT: use templates files and compile them (freshly) on-the-fly
-        var isUsePreCompiledViews = configurationManager.get(CONFIG_PRECOMPILED_VIEWS_MODE);
-        isUsePreCompiledViews = typeof isUsePreCompiledViews === 'undefined' ? false : isUsePreCompiledViews === 'false'? false : isUsePreCompiledViews? true : false;
+		/**
+		 * Checks if a pre-compiled view is up-to-date:
+		 * loads the view, if it is current.
+		 * 
+		 * If the pre-compiled view is not current, or loading-errors
+		 * occur, the fail-callback will be triggered 
+		 * (the callback argument may contain information about the cause).
+		 * 
+		 * @async
+		 * @private
+		 * 
+		 * @param {String} rawViewData
+		 * 					the text content of the view template (i.e. content of a eHTML file "as is")
+		 * @param {String} targetPath
+		 * 					the path to the pre-compiled view file
+		 * @param {Function} success
+		 * 					callback that will be triggered, if pre-compiled view file was loaded
+		 * 					NOTE: the JS code of the loaded file may not have been fully executed yet!
+		 * @param {Function} fail
+		 * 					callback that will be triggered, if pre-compiled view is not up-to-date or
+		 * 					an error occurs while loading the file
+		 */
+		function loadPrecompiledView(rawViewData, targetpath, success, fail){
 
-        //util for checking if pre-compiled views are up-to-date
-        // (i.e.: can we use the pre-compiled view, or do we need to use the template file and compile it on-the-fly)
-        //TODO should this also be configurable -> up-to-date check (e.g. use pre-compiled views without checking for changes)
-        var checksumUtils = checksumUtils.init();
-        
-        /**
-         * Read the checksum file that was created when the pre-compiled view was created:
-         * 
-         * it contains the view's template size (the length of its String representation) and MD5 hash.
-         * 
-         * -> by calculating the viewContent's size and MD5 hash, we can determine, if it has changed
-         *    by comparing it with the data of the checksum file.
-         *    
-         * @sync the checksum file is loaded in synchronous mode
-         * @private
-         * 
-         * @param {String} viewContent
-         * 						the content of the view template (i.e. loaded eHTML file)
-         * @param {String} preCompiledViewPath
-         * 						the path to the corresponding pre-compiled view file
-         * 
-         */
-        function isUpToDate(viewContent, preCompiledViewPath){
-        	//replace file extension with the checksum-file's one: '.js' -> '.checksum.txt'
-        	var  viewVerificationInfoPath = 
-        				preCompiledViewPath.substring(0, preCompiledViewPath.length - 3) 
-        				+ checksumUtils.getFileExt();
-        	
+			if(! isUpToDate(rawViewData, targetpath)){
+				if(fail) fail('Precompiled view file is outdated!');
+				else console.warn('Outdated pre-compiled view at: '+targetpath);
+			}
 
-//			console.warn('verifying that pre-compiled view is up-to-date at '+preCompiledViewPath);//FIXM DEBUG
-        	
+			commonUtils.getLocalScript( //scriptUrl, success, fail)
+					targetpath, success, fail
+			);
+		}
+
+		//determine if pre-compiled views (*.js) should be used
+		//DEFAULT: use templates files (*.ehtml) and compile them (freshly) on-the-fly
+		var isUsePreCompiledViews = configurationManager.getBoolean(CONFIG_PRECOMPILED_VIEWS_MODE, true, false);
+
+		//util for checking if pre-compiled views are up-to-date
+		// (i.e.: can we use the pre-compiled view, or do we need to use the template file and compile it on-the-fly)
+		//TODO should this also be configurable -> up-to-date check (e.g. use pre-compiled views without checking for changes)
+		var checksumUtils = checksumUtils.init();
+
+		/**
+		 * Read the checksum file that was created when the pre-compiled view was created:
+		 * 
+		 * it contains the view's template size (the length of its String representation) and MD5 hash.
+		 * 
+		 * -> by calculating the viewContent's size and MD5 hash, we can determine, if it has changed
+		 *    by comparing it with the data of the checksum file.
+		 *    
+		 * @sync the checksum file is loaded in synchronous mode
+		 * @private
+		 * 
+		 * @param {String} viewContent
+		 * 						the content of the view template (i.e. loaded eHTML file)
+		 * @param {String} preCompiledViewPath
+		 * 						the path to the corresponding pre-compiled view file
+		 * 
+		 */
+		function isUpToDate(viewContent, preCompiledViewPath){
+			//replace file extension with the checksum-file's one: '.js' -> '.checksum.txt'
+			var  viewVerificationInfoPath = 
+					preCompiledViewPath.substring(0, preCompiledViewPath.length - 3) 
+						+ checksumUtils.getFileExt();
+
 			var isCompiledViewUpToDate = false;
-			
-        	$.ajax({
+
+			$.ajax({
 				async: false,//<-- use "SYNC" modus here (NOTE: we win nothing with async here, because the following step (loading/not loading the pre-compiled view) strictly depends on the result of this)
 				dataType: "text",
 				url: viewVerificationInfoPath,
 				success: function(data){
-					
+
 					//compare raw String to checksum-data from file
 					isCompiledViewUpToDate = checksumUtils.isSame(viewContent, data);
 				}
@@ -820,401 +814,528 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 				var errMsg = err && err.stack? err.stack : err;
 				console.error("[" + status + "] Could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
 			});
-        	
-//        	var func = isCompiledViewUpToDate? 'warn' : 'error';//FIXM DEBUG
-//			console[func]((isCompiledViewUpToDate? '+++++++++':'--------')+'pre-compiled view is '+(isCompiledViewUpToDate?'':'NOT ')+'up-to-date! -> '+preCompiledViewPath);//FIXM DEBUG
-        	return isCompiledViewUpToDate;
-        }
-		 
-		 /**
-		  * This function loads the layouts for every controller and puts the
-		  * name of the layouts into the <b>layouts</b> array.
-		  * 
-		  * @function loadLayouts
-		  * @private
-		  * 
-		  * @returns {Promise} a Deferred.promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
-		  */
-        function loadLayouts() {
-        	// Load application's layouts. 
-        	
-        	var defer = $.Deferred();
-        	
-        	var loadedLayoutsCount = 0;
-			 
-			 var ctrlNameList = controllerManager.getControllerNames();
-			 var remainingCtrlCount = ctrlNameList.length + 1;//+1: for the default layout
-			 var currentLoadCount = 0;
-			 var checkCompletion = function(){
-				 if(defer.state() === 'pending' && remainingCtrlCount === 0 && currentLoadCount === 0){
-					 if(loadedLayoutsCount < 1){
-							
+
+			return isCompiledViewUpToDate;
+		}
+
+		/**
+		 * This function loads the layouts for every controller and puts the
+		 * name of the layouts into the <b>layouts</b> array.
+		 * 
+		 * @function loadLayouts
+		 * @private
+		 * 
+		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
+		 */
+		function loadLayouts() {
+			// Load application's layouts. 
+
+
+			var defer = $.Deferred();
+
+			var ctrlNameList = controllerManager.getControllerNames();
+
+			var loadStatus = {
+					loader: defer,
+					remainingCtrlCount: ctrlNameList.length + 1,//+1: for the default layout
+					currentLoadCount: 0,
+
+					//additional property for keeping track on how many layouts were load overall
+					// NOTE: this additional counter is necessary, since currentLoadCount
+					//       keeps only track of how many controller's were checked. But since
+					//       a controller may not have a layout-defintion of its own, we have
+					//       to use another counter to keep track of actually loaded layouts.
+					loadedLayoutsCount: 0,
+
+					//need a custom function for checking the load status: if no layout was loaded, 
+					//                                                     the Derred will be rejected
+					onCompletionImpl: function(status){
+						if(status.loadedLayoutsCount < 1){
+
 							//there must be at least on layout-file for the default-controller:
-							defer.reject(
-								'Could not load any layout! At least one layout must be present at '
-								+ constants.getLayoutPath() 
-								+ DEFAULT_LAYOUT_NAME[0].toLowerCase() + DEFAULT_LAYOUT_NAME.substring(1) 
-								+ '.ehtml'
+							status.loader.reject( 'Could not load any layout! At least one layout must be present at '
+									+ constants.getLayoutPath() 
+									+ DEFAULT_LAYOUT_NAME[0].toLowerCase() + DEFAULT_LAYOUT_NAME.substring(1) 
+									+ '.ehtml'
 							);
 						}
 						else {
-							defer.resolve();
+							status.loader.resolve();
+						} 
+					},
+
+					//extend the status-update function: in case loading succeeded, increase the counter
+					//                                   for overall loaded layouts.
+					extLoadStatusFunc: function(status, hasLoadingFailed){
+						if(hasLoadingFailed === true){
+							//do nothing
 						}
-					 
+						else {
+							++status.loadedLayoutsCount;
+						}
 					}
-			 };
-			 var updateLoadStatus = function(isLoadFailed){
-				 
-				 --currentLoadCount;
-				 
-				 if(isLoadFailed === true){//NOTE: need to do exact comparison here, since script-loading callback may pass its event into here, too
-					 //do nothing
-				 }
-				 else {
-					 ++loadedLayoutsCount;
-				 }
-				 
-				 checkCompletion();
-			 };
-			 
-			 var doParseLayoutTemplate = function(ctrlName, data){
-				 
-				 require(['parseUtils'], function(){
-					 var layout = new Layout(ctrlName, data);
-					 layouts.put(layout.getName(), layout);
-	
-					 updateLoadStatus();
-				 });
-				 
-			 };
-			 
+			};
 
-        	 var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
-        		
-        		var ctrlName;
-         		var layoutInfo;
-        		if(theDefaultLayoutName){
-        			ctrlName = theDefaultLayoutName;
-             		layoutInfo = {
-             			fileName: theDefaultLayoutName[0].toLowerCase() 
-             						+ theDefaultLayoutName.substring(1, theDefaultLayoutName.length)
-             		};
-        		}
-        		else {
-            		var ctrl = controllerManager.getController( ctrlName );
-            		ctrlName = ctrl.getName();
-            		layoutInfo = ctrl.getLayout();
-        		}
+			var createLayoutConfig = {
+					constructor: Layout,
+					typeName: 'Layout',
+					collection: layouts
+			};
 
-        		if(layoutInfo){
+			//helper for loading a single layout-file
+			var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
 
-        			var layoutPath = constants.getLayoutPath() + layoutInfo.fileName + '.ehtml';
-        			
-        			var genPath = constants.getCompiledLayoutPath()//TODO add compiled-path to view-info object (and read it from file-structure/JSON) 
-        							+ layoutInfo.fileName + '.js';
+				var ctrlName;
+				var layoutInfo;
+				if(theDefaultLayoutName){
 
-        			++currentLoadCount;
-        			
-        			$.ajax({
-        				async: true,
-        				dataType: "text",
-        				url: layoutPath,
-        				success: function(data){
+					ctrlName = theDefaultLayoutName;
 
-        					if(isUsePreCompiledViews){
+					//create info-object for default-layout
+					var layoutFileName = theDefaultLayoutName[0].toLowerCase() 
+					+ theDefaultLayoutName.substring(1, theDefaultLayoutName.length);
+					layoutInfo = {
+						name: theDefaultLayoutName,
+						fileName: layoutFileName,
+						genPath: constants.getCompiledLayoutPath()//TODO add compiled-path to view-info object (and read it from file-structure/JSON) 
+									+ layoutFileName + '.js',
+						path: constants.getLayoutPath() + layoutFileName + '.ehtml'
+					};
 
-        						loadPrecompiledView(data, genPath, updateLoadStatus, function(err){
+				}
+				else {
+					var ctrl = controllerManager.getController( ctrlName );
+					ctrlName = ctrl.getName();
+					layoutInfo = ctrl.getLayout();
+				}
 
-        							console.warn('Could not load precompiled layout from "'
-        									+genPath+'", because: '+err
-        									+', compiling template instead: '
-											+layoutPath
-									);
+				if(layoutInfo){
 
-        							doParseLayoutTemplate(ctrlName, data);
-        						});
+					doLoadTemplateFile(null, layoutInfo, createLayoutConfig, loadStatus);
 
-        					}
-        					else {
-        						doParseLayoutTemplate(ctrlName, data);
-        					}
-        				}
-        			}).fail(function(jqxhr, status, err){
-        				
-        				// print out an error message
-        				var errMsg = err && err.stack? err.stack : err;
-        				console.error("[" + status + "] Could not load '" + layoutPath + "': "+errMsg); //failure
-        				
-        				updateLoadStatus(true);
-        			});
-        			
-        			checkCompletion();
+				}
 
-        		}//END: if(layoutInfo)
-        		
-        		--remainingCtrlCount;
-        		checkCompletion();
-        		
-        	};//END: doLoadLayout(){...
-			
-        	//load the default layout:
-        	doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
-        	
-        	//load layouts for controllers (there may be none defined)
+				--loadStatus.remainingCtrlCount;
+				checkCompletion(loadStatus);
+
+			};//END: doLoadLayout(){...
+
+			//load the default layout:
+			doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
+
+			//load layouts for controllers (there may be none defined)
 			$.each(ctrlNameList, doLoadLayout);
-			
-        	checkCompletion();
-        	return defer.promise();
-        	
-        }
 
-		 /**
-		  * This function actually loads the views for every controller, creates
-		  * an instance of a view class and puts the view instance in the
-		  * <b>views</b> array.<br>
-		  * It uses a asynchronous way of loading the view-files one after
-		  * another.<br>
-		  * <b>If you want to make sure, that all views are indeed loaded, before
-		  * proceeding with the subsequent instructions, you could look at the
-		  * function {@link mmir.ControllerManager#foundControllersCallBack}
-		  * for reference of a function which loads the files one after another -
-		  * not asynchronous.</b>
-		  * 
-		  * @function loadViews
-		  * @private
-		  * @async
-		  * 
-		  * @returns {Promise} a Deferred.promise that gets resolved upon loading all views
-		  */
-        function loadViews() {
-        	
-        	var defer = $.Deferred();
-			 
-			 var ctrlNameList = controllerManager.getControllerNames();
-			 var remainingCtrlCount = ctrlNameList.length;
-			 var currentLoadCount = 0;
-			 var checkCompletion = function(){
-				 if(defer.state() === 'pending' && remainingCtrlCount === 0 && currentLoadCount === 0){
-						defer.resolve();
+			checkCompletion(loadStatus);
+			return defer.promise();
+
+		}//END: loadLayouts()
+
+		/**
+		 * This function actually loads the views for every controller, creates
+		 * an instance of a view class and puts the view instance in the
+		 * <b>views</b> array.<br>
+		 * 
+		 * @function loadViews
+		 * @private
+		 * @async
+		 * 
+		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all views
+		 * 
+		 * @see doProcessTemplateList
+		 */
+		function loadViews() {
+
+			var creatorConfig = {
+					constructor: View,
+					typeName: 'View',
+					collection: views,
+					keyGen: createViewKey,
+					accessorName: 'getViews'
+			};
+
+			return doProcessTemplateList(creatorConfig);
+
+		}//END: loadViews()
+
+		/**
+		 * This function actually loads the partials for every controller,
+		 * creates an instance of a partial class and puts the partial instance
+		 * in the <b>partials</b> array.<br>
+		 * It uses a asynchronous way of loading the partials-files one after
+		 * another.<br>
+		 * <b>If you want to make sure, that all partials are indeed loaded,
+		 * before proceeding with the subsequent instructions, you could look at
+		 * the function
+		 * {@link mmir.ControllerManager#foundControllersCallBack} for
+		 * reference of a function which loads the files one after another - not
+		 * asynchronously.</b>
+		 * 
+		 * @function loadPartials
+		 * @private
+		 * @async
+		 * 
+		 * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
+		 * 					NOTE: loading failures will generate a warning message (on the console)
+		 * 						  but will not cause the Promise to fail.
+		 */
+		function loadPartials() {
+
+			var creatorConfig = {
+					constructor: Partial,
+					typeName: 'Partial',
+					collection: partials,
+					keyGen: createPartialKey,
+					accessorName: 'getPartials'
+			};
+
+			return doProcessTemplateList(creatorConfig);
+
+		}//END: loadPartials()
+
+		/**
+		 * HELPER for checking the loading status.
+		 * 
+		 * As long as the Deferred <code>status.loader</code> is
+		 * still pending, the loading status will be checked:
+		 * 
+		 * Depending on <code>status.currentLoadCount</code> and
+		 * <code>status.remainingCtrlCount</code> the completion
+		 * of the loading process is checked.
+		 * 
+		 * If loading is completed, the Deferred <code>status.loader</code>
+		 * will be resolved.
+		 * 
+		 * If OPTIONAL <code>status.loader</code> (Function) exists, intead of resolving
+		 * <code>status.loader</code>, this function is invoked in case of completion
+		 * with <code>status</code> as argument.
+		 * 
+		 * @private
+		 * @function
+		 * 
+		 * @param {PlainObject} status
+		 * 		the object for managing the laoding status.
+		 * 
+		 */
+		var checkCompletion = function(status){
+			if(status.loader.state() === 'pending' && status.remainingCtrlCount === 0 && status.currentLoadCount === 0){
+
+				if(status.onCompletionImpl){
+					status.onCompletionImpl(status);
+				}
+				else {
+					status.loader.resolve();
+				}
+
+			}
+		};
+
+		/**
+		 * HELPER for updating the loading status.
+		 * 
+		 * Invokes {@link checkCompletion} with <code>status</code> as argument.
+		 * 
+		 * @private
+		 * @function
+		 * 
+		 * @param {PlainObject} status
+		 * 		the object for managing the laoding status:
+		 * 		<code>status.currentLoadCount</code> (Integer): this property will be decreased by 1.
+		 * 											This value should initially be set to the count
+		 * 											of files, that will / should be loaded.
+		 * 		OPTIONAL <code>status.extLoadStatusFunc</code> (Function): if this property is set, the
+		 * 											function will be invoked with <code>status</code>
+		 * 											and <code>hasLoadingFailed</code> as arguments.
+		 * 
+		 * @param {Boolean} [hasLoadingFailed] OPTIONAL
+		 * 		if present and <code>true</code>: this indicates that the loading process for the current
+		 * 		template file (*.ehtml) has failed. NOTE that this is NOT used, when loading of a 
+		 * 		_compiled_ template file (*.js) fails!
+		 */
+		var updateLoadStatus = function(status, hasLoadingFailed){
+			--status.currentLoadCount;
+
+			if(status.extLoadStatusFunc){
+				status.extLoadStatusFunc(status, hasLoadingFailed);
+			}
+
+			checkCompletion(status);
+		};
+
+		/**
+		 * HELPER: creates a template-object (e.g. a View or a Partial) for the 
+		 *         raw template conent.
+		 *         
+		 *         If necessary, the parser-classes (module 'parseUtils') are loaded,
+		 *         which are necessary to process the raw template content.
+		 * 
+		 * @private
+		 * @function doParseTemplate
+		 * 
+		 * @param {Controller} controller
+		 * 		the controller to which the template files belong.
+		 * 		May be <code>null</code>: in this case, this argument will be omitted when
+		 * 		creating the template object and creating the lookup-key (e.g. in case of a Layout).
+		 * 
+		 * @param {String} templateName
+		 * 		the name for the template (e.g. file-name without extension)
+		 * 
+		 * @param {PlainObject} createConfig
+		 * 		configuration that is used to create the template-object
+		 * 		for the template-contents:
+		 * 		<code>createConfig.constructor</code>: the constructor function
+		 *                    IF controller IS NOT null: <code>(controller, templateName, templateContent)</code> 
+		 *                    							 (e.g. View, Partial)
+		 *                    IF controller IS null:     <code>(templateName, templateContent)</code>
+		 *                    							 (e.g. Layout)
+		 *                    
+		 * 		<code>createConfig.collection</code>: the Dictionary to which the created
+		 * 											 template-object will be added
+		 * 		<code>createConfig.keyGen</code>: a generator function for creating the lookup-key when adding
+		 * 										the template-object to the collection.
+		 * 										This function is invoked with <code>(controller.getName(), templateName)</code>,
+		 * 										that is <code>(String, String)</code>.
+		 * 										
+		 * 										NOTE: if controller IS null, the keyGen function will not be used, and
+		 * 											  instead the template-object will be added with the
+		 * 											  created template-object's name as lookup-key.
+		 * @param {PlainObject} status
+		 * 			the object for managing the loading status.
+		 * 			After creating and adding the template-object to the collection, the loading
+		 * 			status will be updated via {@link updateLoadStatus}
+		 * 
+		 */
+		var doParseTemplate = function(controller, templateName, config, templateContent, status){
+
+			require(['parseUtils'], function(){
+
+				var templateObj;
+				if(controller){
+					//"normal" view constructor: (Controller, nameAsString, templateAsString)
+					templateObj = new config.constructor(controller, templateName , templateContent);
+					config.collection.put( config.keyGen(controller.getName(), templateName), templateObj );
+				}
+				else {
+					//in case of Layout: omit controller argument
+					// -> layout constructor: (nameAsString, templateAsString)
+					// -> there is a 1:1 correspondence betwenn controller and layout,
+					//    and Layout.name === Controller.name
+					//    => no need to create a lookup-key
+					templateObj = new config.constructor(templateName , templateContent);
+					config.collection.put( templateObj.getName(), templateObj );
+				}
+
+				updateLoadStatus(status);
+
+			});
+
+		};
+
+		/**
+		 * Generic helper for loading a list of template files (*.ehtml)
+		 * that correspond to a specific template type (e.g. <code>View</code>s, or <code>Partial</code>s).
+		 * 
+		 *  If compiled representations of the template file exist AND is up-to-date AND
+		 *  the configuration is set to load the compiled files rather than the raw template
+		 *  file (see <code>isUsePreCompiledViews</code>), then the compiled template is used.
+		 *  
+		 *  
+		 * This function uses an asynchronous method for loading the template-files.<br>
+		 * 
+		 * <b>If you want to make sure, that all templates have indeed been loaded, before
+		 * proceeding with the subsequent program flow, you should have a look at the
+		 * function {@link mmir.ControllerManager#foundControllersCallBack}: use the returned
+		 * Deferred.Promise for executing code that depends on the templates being loaded.</b>
+		 * 
+		 * <p>
+		 * Uses {@link doloadTemplateFile} for loading single template files.
+		 * 
+		 * @function doProcessTemplateList
+		 * @private
+		 * @async
+		 * 
+		 * @see doLoadTemplateFile
+		 * 
+		 * @param {PlainObject} createConfig
+		 * 			configuration object that determines which templates are loaded, and how
+		 * 			the loaded data is processed.
+		 * 
+		 * 
+		 * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
+		 * 					NOTE: loading failures will generate a warning message (on the console)
+		 * 						  but will not cause the Promise to fail.
+		 */
+		var doProcessTemplateList = function(createConfig){
+
+			var defer = $.Deferred();
+
+			var ctrlNameList = controllerManager.getControllerNames();
+
+			var loadStatus = {
+					loader: defer,
+					remainingCtrlCount: ctrlNameList.length,
+					currentLoadCount: 0
+			};
+
+			$.each(ctrlNameList, function(ctrlIndex, controllerName){
+
+				var controller = controllerManager.getController(controllerName); 
+
+				$.each(controller[createConfig.accessorName](), function(index, templateInfo){
+
+					doLoadTemplateFile(controller, templateInfo, createConfig, loadStatus);
+
+				});//END: each(templateInfo)
+
+				-- loadStatus.remainingCtrlCount;
+				checkCompletion(loadStatus);
+
+			});//END: each(ctrlName)
+
+			checkCompletion(loadStatus);
+			return defer.promise();
+
+		};//END: doProcessTemplateList()
+
+		/**
+		 * HELPER that loads a single template file asynchronously and creates a corresponding template-class instance
+		 * (depending on <code>createConfig</code>).
+		 * 
+		 * The <code>status</code> is updated on successful loading or on error (see {@link updateLoadStatus}).
+		 * 
+		 * @example
+		 * 
+		 * //EXAMPLE for createConfig for loading template contents into a Partial
+		 * var theCreateConfig = {
+		 *   constructor: Partial,        // the class constructor that takes the loaded template data
+		 *   typeName: 'Partial',         // the name of the class that will be created
+		 *   collection: partials,        // the map/dictionary to which the created class-instance will be added
+		 *   keyGen: createPartialKey,    // the function for creating the lookup-key (for the dictionary)
+		 *   accessorName: 'getPartials'  // the accessor-function's name for accessing the info-objects on the controller-instance
+		 * };
+		 * doLoadTemplateFiles(theCreateConfig).then(function(){
+		 * 	//do something that depends on loading of the template files... 
+		 * });
+		 * 
+		 * //EXAMPLE for createConfig for loading template contents into a Layout
+		 * var theCreateLayoutConfig = {
+		 *   constructor: Layout,        // the class constructor that takes the loaded template data
+		 *   typeName: 'Layout',         // the name of the class that will be created
+		 *   collection: layouts,        // the map/dictionary to which the created class-instance will be added
+		 * };
+		 * 
+		 * doLoadTemplateFiles(theCreateLayoutConfig).then(function(){
+		 * 	//do something that depends on loading of the template files... 
+		 * });
+		 * 
+		 * //for createConfig for loading template contents into a Partial
+		 * 
+		 * @param {Controller} controller
+		 * 		the controller to which the template files belong.
+		 * 		May be <code>null</code>: see {@link doParseTemplate}.
+		 * 
+		 * @param {PlainObject} templateInfo
+		 * 		the JSON-like object containing information for the template
+		 * 		(e.g. <code>name</code>, <code>file-path</code> etc.; see
+		 * 		 {@link mmir.ControllerManager#getControllerResources} for 
+		 *          more information).
+		 *          
+		 * @param {PlainObject} createConfig
+		 * 		configuration that is used to create a corresponding template-object
+		 * 		for the loaded template-contents.
+		 * 		The created object will be added to <code>createConfig.collection</code>
+		 * 		(Dictionary; with controller's name as key).
+		 * 
+		 * @param {PlainObject} loadStatus
+		 * 		Object for managing the loading-status. The status is updated and used to
+		 * 		determine, if all templates (e.g. from a list) have been (asynchronously)
+		 * 		loaded.
+		 * 
+		 * @function doProcessTemplateList
+		 * @private
+		 * @async
+		 */
+		var doLoadTemplateFile = function(controller, templateInfo, createConfig, loadStatus){
+			++loadStatus.currentLoadCount;
+
+			$.ajax({
+				async: true,
+				dataType: "text",
+				url: templateInfo.path,
+				success: function(data){
+
+					if(isUsePreCompiledViews){
+
+						loadPrecompiledView(data, templateInfo.genPath, function(){
+
+							updateLoadStatus(loadStatus);
+
+						}, function(err){
+
+							console.warn('Could not load precompiled '+createConfig.typeName+' from '
+									+templateInfo.genPath+'", because: '+err
+									+', compiling template instead: '
+									+templateInfo.path
+							);
+
+							doParseTemplate(controller, templateInfo.name, createConfig , data, loadStatus);
+
+						});
+
 					}
-			 };
-			 var updateLoadStatus = function(){
-				 
-				--currentLoadCount;
-				
-				checkCompletion();
-			 };
-			 
-			 var doParseViewTemplate = function(controller, viewName, data){
-				 
-				 require(['parseUtils'], function(){
-					 var ctrlView = new View(controller, viewName , data);
-					 views.put( createViewKey( controller.getName(), viewName), ctrlView);
-					 
-					 updateLoadStatus();
-				 });
-				 
-			 };
-			
-        	$.each(ctrlNameList, function(ctrlIndex, controllerName){
-        		
-        		var controller = controllerManager.getController(controllerName); 
-        		
-        		$.each(controller.getViews(), function(index, view){
+					else {
 
-        			var genPath = constants.getCompiledViewPath()//TODO add compiled-path to view-info object (and read it from file-structure/JSON)
-        							+ controllerName.toLowerCase() + '/' + view.name + '.js';
+						doParseTemplate(controller, templateInfo.name, createConfig, data, loadStatus);
 
-        			++currentLoadCount;
-        			
-        			$.ajax({
-        				async: true,
-        				dataType: "text",
-        				url: view.path,
-        				success: function(data){
-
-        					if(isUsePreCompiledViews){
-
-        						loadPrecompiledView(data, genPath, updateLoadStatus, function(err){
-        							
-        							console.warn('Could not load precompiled view from '
-        									+genPath+'", because: '+err
-        									+', compiling template instead: '
-											+view.path
-									);
-
-        							doParseViewTemplate(controller, view.name , data);
-
-        						});
-
-        					}
-        					else {
-
-        						doParseViewTemplate(controller, view.name , data);
-        						
-        					}
-        				}
-        			}).fail(function(jqxhr, status, err){
-        				
-        				// print out an error message
-        				var errMsg = err && err.stack? err.stack : err;
-        				console.error("[" + status + "] Could not load '" + view.path + "': "+errMsg); //failure
-        				
-        				updateLoadStatus();
-        			});
-        			
-        			checkCompletion();
-
-        		});//END: each(view)
-        		
-        		--remainingCtrlCount;
-        		checkCompletion();
-
-        	});//END: each(ctrlName)
-        	
-        	checkCompletion();
-        	return defer.promise();
-        	
-        }//END: loadViews()
-
-		 /**
-		  * This function actually loads the partials for every controller,
-		  * creates an instance of a partial class and puts the partial instance
-		  * in the <b>partials</b> array.<br>
-		  * It uses a asynchronous way of loading the partials-files one after
-		  * another.<br>
-		  * <b>If you want to make sure, that all partials are indeed loaded,
-		  * before proceeding with the subsequent instructions, you could look at
-		  * the function
-		  * {@link mmir.ControllerManager#foundControllersCallBack} for
-		  * reference of a function which loads the files one after another - not
-		  * asynchronous.</b>
-		  * 
-		  * @function loadPartials
-		  * @private
-		  * @async
-		  * 
-		  * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
-		  * 					NOTE: loading failures will generate a warning message (on the console)
-		  * 						  but will not cause the Promise to fail.
-		  */
-		 function loadPartials() {
-			 
-			 var defer = $.Deferred();
-			 
-			 var ctrlNameList = controllerManager.getControllerNames();
-			 var remainingCtrlCount = ctrlNameList.length;
-			 var currentLoadCount = 0;
-			 var checkCompletion = function(){
-				 if(defer.state() === 'pending' && remainingCtrlCount === 0 && currentLoadCount === 0){
-						defer.resolve();
 					}
-			 };
-			 var updateLoadStatus = function(){
+				}
 
-				 --currentLoadCount;
+			}).fail(function(jqxhr, status, err){
 
-				 checkCompletion();
-			 };
-			 
-			 var doParsePartialTemplate = function(controller, partialName, data){
-				 
-				 require(['parseUtils'], function(){
-					 var ctrlPartial = new Partial(controller, partialName, data);
-					 partials.put(createPartialKey( controller.getName(), partialName), ctrlPartial);
-					 
-					 updateLoadStatus();
-				 });
-				 
-			 };
+				// print out an error message
+				var errMsg = err && err.stack? err.stack : err;
+				console.error("[" + status + "] Could not load '" + templateInfo.path + "': "+errMsg); //failure
 
-			 $.each(ctrlNameList, function(ctrlIndex, controllerName){
-				 
-				 var controller = controllerManager.getController(controllerName); 
-				 
-				 $.each(controller.getPartials(), function(index, partial){
+				updateLoadStatus(loadStatus, true);
+			});
 
-					 var prefix = commonUtils.getPartialsPrefix();
-					 var genPath = constants.getCompiledViewPath()//TODO add compiled-path to view-info object (and read it from file-structure/JSON) 
-					 				+ controllerName.toLowerCase() + '/' +prefix+ partial.name + '.js';
+			checkCompletion(loadStatus);
 
-					 ++ currentLoadCount;
-					 
-					 $.ajax({
-						 async: true,
-						 dataType: "text",
-						 url: partial.path,
-						 success: function(data){
+		};//END: doLoadTemplateFile()
 
-							 if(isUsePreCompiledViews){
+		
+		///////////// start intialization: ////////////////
 
-								 loadPrecompiledView(data, genPath, updateLoadStatus, function(err){
-									 
-									 console.warn('Could not load precompiled partial from '
-											 +genPath+'", because: '+err
-											 +', compiling template instead: '
-											 +partial.path
-									 );
+		var defer = $.Deferred();
 
-									 doParsePartialTemplate(controller, partial.name, data);
-								 });
+		var isLayoutsLoaded = false;
+		var isViewsLoaded = false;
+		var isPartialsLoaded = false;
+		var checkResolved = function(){
+			if(isLayoutsLoaded && isViewsLoaded && isPartialsLoaded){
+				defer.resolve();
+			}
+		};
+		var failPromise = function(msg){
+			defer.reject(msg);
+		};
 
-							 }
-							 else {
-								 doParsePartialTemplate(controller, partial.name, data);
-							 }
-						 }
-					 }).fail(function(jqxhr, status, err){
-						 // print out an error message
-						 var errMsg = err && err.stack? err.stack : err;
-						 console.error("[" + status + "] " + JSON.stringify(jqxhr) + " -- " + partial.path + ": "+errMsg); //failure
+		loadLayouts().then(
+				function(){ isLayoutsLoaded = true; checkResolved(); },
+				failPromise
+		);
+		loadViews().then(
+				function(){ isViewsLoaded = true; checkResolved(); },
+				failPromise
+		);
+		loadPartials().then(
+				function(){ isPartialsLoaded = true; checkResolved(); },
+				failPromise
+		);
 
-						 updateLoadStatus();
-					 });
-					 
-					 checkCompletion();
+		return defer.promise(_instance);
 
-				 });//END: each(partial)
-				 
-				 --remainingCtrlCount;
-				 checkCompletion();
-				 
-			 });//END: each(ctrlName)
-			 
-			 checkCompletion();
-			 return defer.promise();
-			 
-		 }//END: loadPartials()
-
-		 var defer = $.Deferred();
-		 
-		 var isLayoutsLoaded = false;
-		 var isViewsLoaded = false;
-		 var isPartialsLoaded = false;
-		 var checkResolved = function(){
-			 if(isLayoutsLoaded && isViewsLoaded && isPartialsLoaded){
-				 defer.resolve();
-			 }
-		 };
-		 var failPromise = function(msg){ defer.reject(msg); };
-		 
-		 loadLayouts().then(
-				 function(){ isLayoutsLoaded = true; checkResolved(); },
-				 failPromise
-		 );
-		 loadViews().then(
-				 function(){ isViewsLoaded = true; checkResolved(); },
-				 failPromise
-		 );
-		 loadPartials().then(
-				 function(){ isPartialsLoaded = true; checkResolved(); },
-				 failPromise
-		 );
-
-
-		 return defer.promise(_instance);
-
-	};
+	};//END: init()
 
 	/** #@- */
 });

@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 ../MmirScriptContent.g 2013-08-13 18:04:03
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g 2014-08-27 22:02:40
 
 var MmirScriptContentLexer = function(input, state) {
 // alternate constructor @todo
@@ -90,7 +90,7 @@ org.antlr.lang.extend(MmirScriptContentLexer, org.antlr.runtime.Lexer, {
     STRING : 30,
     SSTRING : 31,
     ScriptVar : 32,
-    getGrammarFileName: function() { return "../MmirScriptContent.g"; }
+    getGrammarFileName: function() { return "D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g"; }
 });
 org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     // $ANTLR start T__33
@@ -98,8 +98,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.T__33;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:13:7: ( '{' )
-            // ../MmirScriptContent.g:13:9: '{'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:13:7: ( '{' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:13:9: '{'
             this.match('{'); if (this.state.failed) return ;
 
 
@@ -117,8 +117,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.EscapeExit;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:102:12: ( '}@@' )
-            // ../MmirScriptContent.g:102:14: '}@@'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:102:12: ( '}@@' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:102:14: '}@@'
             this.match("}@@"); if (this.state.failed) return ;
 
 
@@ -137,8 +137,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.DoEnterBlock;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:104:14: ( '@{' )
-            // ../MmirScriptContent.g:104:16: '@{'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:104:14: ( '@{' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:104:16: '@{'
             this.match("@{"); if (this.state.failed) return ;
 
             if ( this.state.backtracking===0 ) {
@@ -163,8 +163,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.DoEnterYieldContent;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:109:21: ( '@contentFor(' )
-            // ../MmirScriptContent.g:109:25: '@contentFor('
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:109:21: ( '@contentFor(' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:109:25: '@contentFor('
             this.match("@contentFor("); if (this.state.failed) return ;
 
             if ( this.state.backtracking===0 ) {
@@ -184,39 +184,13 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     },
     // $ANTLR end "DoEnterYieldContent",
 
-    // $ANTLR start DoEnterRender
-    mDoEnterRender: function()  {
-        try {
-            var _type = this.DoEnterRender;
-            var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:114:15: ( '@render(' )
-            // ../MmirScriptContent.g:114:19: '@render('
-            this.match("@render("); if (this.state.failed) return ;
-
-            if ( this.state.backtracking===0 ) {
-              ++this.nesting;
-            }
-            if ( this.state.backtracking===0 ) {
-              _channel=HIDDEN;
-            }
-
-
-
-            this.state.type = _type;
-            this.state.channel = _channel;
-        }
-        finally {
-        }
-    },
-    // $ANTLR end "DoEnterRender",
-
     // $ANTLR start DoEnterIfStatement
     mDoEnterIfStatement: function()  {
         try {
             var _type = this.DoEnterIfStatement;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:119:20: ( '@if(' )
-            // ../MmirScriptContent.g:119:24: '@if('
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:114:20: ( '@if(' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:114:24: '@if('
             this.match("@if("); if (this.state.failed) return ;
 
             if ( this.state.backtracking===0 ) {
@@ -241,8 +215,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.DoEnterElseStatement;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:124:22: ( '@else' )
-            // ../MmirScriptContent.g:124:26: '@else'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:119:22: ( '@else' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:119:26: '@else'
             this.match("@else"); if (this.state.failed) return ;
 
             if ( this.state.backtracking===0 ) {
@@ -267,8 +241,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.DoEnterForStatement;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:129:21: ( '@for(' )
-            // ../MmirScriptContent.g:129:25: '@for('
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:124:21: ( '@for(' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:124:25: '@for('
             this.match("@for("); if (this.state.failed) return ;
 
             if ( this.state.backtracking===0 ) {
@@ -293,8 +267,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.DoExit;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:134:8: ( '}@' )
-            // ../MmirScriptContent.g:134:10: '}@'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:129:8: ( '}@' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:129:10: '}@'
             this.match("}@"); if (this.state.failed) return ;
 
             if ( this.state.backtracking===0 ) {
@@ -326,7 +300,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.NL;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:148:2: ( ( '\\r' )? '\\n' | '\\r' | '\\u2028' | '\\u2029' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:143:2: ( ( '\\r' )? '\\n' | '\\r' | '\\u2028' | '\\u2029' )
             var alt2=4;
             switch ( this.input.LA(1) ) {
             case '\r':
@@ -357,8 +331,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
             switch (alt2) {
                 case 1 :
-                    // ../MmirScriptContent.g:148:4: ( '\\r' )? '\\n'
-                    // ../MmirScriptContent.g:148:4: ( '\\r' )?
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:143:4: ( '\\r' )? '\\n'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:143:4: ( '\\r' )?
                     var alt1=2;
                     var LA1_0 = this.input.LA(1);
 
@@ -367,7 +341,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
                     }
                     switch (alt1) {
                         case 1 :
-                            // ../MmirScriptContent.g:148:4: '\\r'
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:143:4: '\\r'
                             this.match('\r'); if (this.state.failed) return ;
 
 
@@ -380,19 +354,19 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                     break;
                 case 2 :
-                    // ../MmirScriptContent.g:149:4: '\\r'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:144:4: '\\r'
                     this.match('\r'); if (this.state.failed) return ;
 
 
                     break;
                 case 3 :
-                    // ../MmirScriptContent.g:150:4: '\\u2028'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:145:4: '\\u2028'
                     this.match('\u2028'); if (this.state.failed) return ;
 
 
                     break;
                 case 4 :
-                    // ../MmirScriptContent.g:151:4: '\\u2029'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:146:4: '\\u2029'
                     this.match('\u2029'); if (this.state.failed) return ;
 
 
@@ -412,9 +386,9 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.WS;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:155:5: ( ( ' ' | '\\t' | NL ) )
-            // ../MmirScriptContent.g:155:7: ( ' ' | '\\t' | NL )
-            // ../MmirScriptContent.g:155:7: ( ' ' | '\\t' | NL )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:150:5: ( ( ' ' | '\\t' | NL ) )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:150:7: ( ' ' | '\\t' | NL )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:150:7: ( ' ' | '\\t' | NL )
             var alt3=3;
             switch ( this.input.LA(1) ) {
             case ' ':
@@ -439,19 +413,19 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
             switch (alt3) {
                 case 1 :
-                    // ../MmirScriptContent.g:155:8: ' '
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:150:8: ' '
                     this.match(' '); if (this.state.failed) return ;
 
 
                     break;
                 case 2 :
-                    // ../MmirScriptContent.g:155:12: '\\t'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:150:12: '\\t'
                     this.match('\t'); if (this.state.failed) return ;
 
 
                     break;
                 case 3 :
-                    // ../MmirScriptContent.g:155:18: NL
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:150:18: NL
                     this.mNL(); if (this.state.failed) return ;
 
 
@@ -478,8 +452,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.CHAR;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:157:6: (~ ( '\\n' | '\\r' ) )
-            // ../MmirScriptContent.g:157:8: ~ ( '\\n' | '\\r' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:152:6: (~ ( '\\n' | '\\r' ) )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:152:8: ~ ( '\\n' | '\\r' )
             if ( (this.input.LA(1)>='\u0000' && this.input.LA(1)<='\t')||(this.input.LA(1)>='\u000B' && this.input.LA(1)<='\f')||(this.input.LA(1)>='\u000E' && this.input.LA(1)<='\uFFFF') ) {
                 this.input.consume();
             this.state.failed=false;
@@ -506,11 +480,11 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.COMMENT;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:160:5: ( '@*' ( options {greedy=false; } : . )* '*@' )
-            // ../MmirScriptContent.g:164:6: '@*' ( options {greedy=false; } : . )* '*@'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:155:5: ( '@*' ( options {greedy=false; } : . )* '*@' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:159:6: '@*' ( options {greedy=false; } : . )* '*@'
             this.match("@*"); if (this.state.failed) return ;
 
-            // ../MmirScriptContent.g:164:11: ( options {greedy=false; } : . )*
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:159:11: ( options {greedy=false; } : . )*
             loop4:
             do {
                 var alt4=2;
@@ -535,7 +509,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                 switch (alt4) {
                 case 1 :
-                    // ../MmirScriptContent.g:164:39: .
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:159:39: .
                     this.matchAny(); if (this.state.failed) return ;
 
 
@@ -567,10 +541,10 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.STRING;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:169:5: ( '\"' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) ) )* '\"' )
-            // ../MmirScriptContent.g:169:8: '\"' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) ) )* '\"'
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:5: ( '\"' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) ) )* '\"' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:8: '\"' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) ) )* '\"'
             this.match('\"'); if (this.state.failed) return ;
-            // ../MmirScriptContent.g:169:12: ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) ) )*
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:12: ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) ) )*
             loop6:
             do {
                 var alt6=2;
@@ -586,8 +560,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                 switch (alt6) {
                 case 1 :
-                    // ../MmirScriptContent.g:169:39: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) )
-                    // ../MmirScriptContent.g:169:39: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:39: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:39: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\"' ) )
                     var alt5=4;
                     var LA5_0 = this.input.LA(1);
 
@@ -640,25 +614,25 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
                     }
                     switch (alt5) {
                         case 1 :
-                            // ../MmirScriptContent.g:169:40: ( EscapeExit )=> EscapeExit
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:40: ( EscapeExit )=> EscapeExit
                             this.mEscapeExit(); if (this.state.failed) return ;
 
 
                             break;
                         case 2 :
-                            // ../MmirScriptContent.g:169:67: ( DoExit )=> DoExit
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:67: ( DoExit )=> DoExit
                             this.mDoExit(); if (this.state.failed) return ;
 
 
                             break;
                         case 3 :
-                            // ../MmirScriptContent.g:169:86: ESC_SEQ
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:86: ESC_SEQ
                             this.mESC_SEQ(); if (this.state.failed) return ;
 
 
                             break;
                         case 4 :
-                            // ../MmirScriptContent.g:169:96: ~ ( '\\\\' | '\"' )
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:96: ~ ( '\\\\' | '\"' )
                             if ( (this.input.LA(1)>='\u0000' && this.input.LA(1)<='!')||(this.input.LA(1)>='#' && this.input.LA(1)<='[')||(this.input.LA(1)>=']' && this.input.LA(1)<='\uFFFF') ) {
                                 this.input.consume();
                             this.state.failed=false;
@@ -701,10 +675,10 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
         try {
             var _type = this.SSTRING;
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
-            // ../MmirScriptContent.g:173:5: ( '\\'' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) ) )* '\\'' )
-            // ../MmirScriptContent.g:173:8: '\\'' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) ) )* '\\''
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:5: ( '\\'' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) ) )* '\\'' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:8: '\\'' ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) ) )* '\\''
             this.match('\''); if (this.state.failed) return ;
-            // ../MmirScriptContent.g:173:13: ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) ) )*
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:13: ( options {greedy=false; } : ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) ) )*
             loop8:
             do {
                 var alt8=2;
@@ -720,8 +694,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                 switch (alt8) {
                 case 1 :
-                    // ../MmirScriptContent.g:173:40: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) )
-                    // ../MmirScriptContent.g:173:40: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:40: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:40: ( ( EscapeExit )=> EscapeExit | ( DoExit )=> DoExit | ESC_SEQ | ~ ( '\\\\' | '\\'' ) )
                     var alt7=4;
                     var LA7_0 = this.input.LA(1);
 
@@ -774,25 +748,25 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
                     }
                     switch (alt7) {
                         case 1 :
-                            // ../MmirScriptContent.g:173:41: ( EscapeExit )=> EscapeExit
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:41: ( EscapeExit )=> EscapeExit
                             this.mEscapeExit(); if (this.state.failed) return ;
 
 
                             break;
                         case 2 :
-                            // ../MmirScriptContent.g:173:68: ( DoExit )=> DoExit
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:68: ( DoExit )=> DoExit
                             this.mDoExit(); if (this.state.failed) return ;
 
 
                             break;
                         case 3 :
-                            // ../MmirScriptContent.g:173:87: ESC_SEQ
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:87: ESC_SEQ
                             this.mESC_SEQ(); if (this.state.failed) return ;
 
 
                             break;
                         case 4 :
-                            // ../MmirScriptContent.g:173:97: ~ ( '\\\\' | '\\'' )
+                            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:97: ~ ( '\\\\' | '\\'' )
                             if ( (this.input.LA(1)>='\u0000' && this.input.LA(1)<='&')||(this.input.LA(1)>='(' && this.input.LA(1)<='[')||(this.input.LA(1)>=']' && this.input.LA(1)<='\uFFFF') ) {
                                 this.input.consume();
                             this.state.failed=false;
@@ -833,8 +807,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     // $ANTLR start HEX_DIGIT
     mHEX_DIGIT: function()  {
         try {
-            // ../MmirScriptContent.g:177:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
-            // ../MmirScriptContent.g:177:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:172:11: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' ) )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:172:13: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' )
             if ( (this.input.LA(1)>='0' && this.input.LA(1)<='9')||(this.input.LA(1)>='A' && this.input.LA(1)<='F')||(this.input.LA(1)>='a' && this.input.LA(1)<='f') ) {
                 this.input.consume();
             this.state.failed=false;
@@ -857,7 +831,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     // $ANTLR start ESC_SEQ
     mESC_SEQ: function()  {
         try {
-            // ../MmirScriptContent.g:181:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:176:5: ( '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' ) | UNICODE_ESC | OCTAL_ESC )
             var alt9=3;
             var LA9_0 = this.input.LA(1);
 
@@ -904,7 +878,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
             }
             switch (alt9) {
                 case 1 :
-                    // ../MmirScriptContent.g:181:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:176:9: '\\\\' ( 'b' | 't' | 'n' | 'f' | 'r' | '\\\"' | '\\'' | '\\\\' )
                     this.match('\\'); if (this.state.failed) return ;
                     if ( this.input.LA(1)=='\"'||this.input.LA(1)=='\''||this.input.LA(1)=='\\'||this.input.LA(1)=='b'||this.input.LA(1)=='f'||this.input.LA(1)=='n'||this.input.LA(1)=='r'||this.input.LA(1)=='t' ) {
                         this.input.consume();
@@ -920,13 +894,13 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                     break;
                 case 2 :
-                    // ../MmirScriptContent.g:182:9: UNICODE_ESC
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:177:9: UNICODE_ESC
                     this.mUNICODE_ESC(); if (this.state.failed) return ;
 
 
                     break;
                 case 3 :
-                    // ../MmirScriptContent.g:183:9: OCTAL_ESC
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:178:9: OCTAL_ESC
                     this.mOCTAL_ESC(); if (this.state.failed) return ;
 
 
@@ -942,7 +916,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     // $ANTLR start OCTAL_ESC
     mOCTAL_ESC: function()  {
         try {
-            // ../MmirScriptContent.g:188:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:5: ( '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) ( '0' .. '7' ) | '\\\\' ( '0' .. '7' ) )
             var alt10=3;
             var LA10_0 = this.input.LA(1);
 
@@ -990,22 +964,22 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
             }
             switch (alt10) {
                 case 1 :
-                    // ../MmirScriptContent.g:188:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:9: '\\\\' ( '0' .. '3' ) ( '0' .. '7' ) ( '0' .. '7' )
                     this.match('\\'); if (this.state.failed) return ;
-                    // ../MmirScriptContent.g:188:14: ( '0' .. '3' )
-                    // ../MmirScriptContent.g:188:15: '0' .. '3'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:14: ( '0' .. '3' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:15: '0' .. '3'
                     this.matchRange('0','3'); if (this.state.failed) return ;
 
 
 
-                    // ../MmirScriptContent.g:188:25: ( '0' .. '7' )
-                    // ../MmirScriptContent.g:188:26: '0' .. '7'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:25: ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:26: '0' .. '7'
                     this.matchRange('0','7'); if (this.state.failed) return ;
 
 
 
-                    // ../MmirScriptContent.g:188:36: ( '0' .. '7' )
-                    // ../MmirScriptContent.g:188:37: '0' .. '7'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:36: ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:183:37: '0' .. '7'
                     this.matchRange('0','7'); if (this.state.failed) return ;
 
 
@@ -1014,16 +988,16 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                     break;
                 case 2 :
-                    // ../MmirScriptContent.g:189:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:184:9: '\\\\' ( '0' .. '7' ) ( '0' .. '7' )
                     this.match('\\'); if (this.state.failed) return ;
-                    // ../MmirScriptContent.g:189:14: ( '0' .. '7' )
-                    // ../MmirScriptContent.g:189:15: '0' .. '7'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:184:14: ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:184:15: '0' .. '7'
                     this.matchRange('0','7'); if (this.state.failed) return ;
 
 
 
-                    // ../MmirScriptContent.g:189:25: ( '0' .. '7' )
-                    // ../MmirScriptContent.g:189:26: '0' .. '7'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:184:25: ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:184:26: '0' .. '7'
                     this.matchRange('0','7'); if (this.state.failed) return ;
 
 
@@ -1032,10 +1006,10 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                     break;
                 case 3 :
-                    // ../MmirScriptContent.g:190:9: '\\\\' ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:185:9: '\\\\' ( '0' .. '7' )
                     this.match('\\'); if (this.state.failed) return ;
-                    // ../MmirScriptContent.g:190:14: ( '0' .. '7' )
-                    // ../MmirScriptContent.g:190:15: '0' .. '7'
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:185:14: ( '0' .. '7' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:185:15: '0' .. '7'
                     this.matchRange('0','7'); if (this.state.failed) return ;
 
 
@@ -1054,8 +1028,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     // $ANTLR start UNICODE_ESC
     mUNICODE_ESC: function()  {
         try {
-            // ../MmirScriptContent.g:195:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
-            // ../MmirScriptContent.g:195:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:190:5: ( '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:190:9: '\\\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
             this.match('\\'); if (this.state.failed) return ;
             this.match('u'); if (this.state.failed) return ;
             this.mHEX_DIGIT(); if (this.state.failed) return ;
@@ -1078,10 +1052,10 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
             var _channel = org.antlr.runtime.BaseRecognizer.DEFAULT_TOKEN_CHANNEL;
             var theText;
 
-            // ../MmirScriptContent.g:199:11: ( '@' (theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' ) )+ )
-            // ../MmirScriptContent.g:199:14: '@' (theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' ) )+
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:194:11: ( '@' (theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' ) )+ )
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:194:14: '@' (theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' ) )+
             this.match('@'); if (this.state.failed) return ;
-            // ../MmirScriptContent.g:199:25: (theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' ) )+
+            // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:194:25: (theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' ) )+
             var cnt11=0;
             loop11:
             do {
@@ -1095,7 +1069,7 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
                 switch (alt11) {
                 case 1 :
-                    // ../MmirScriptContent.g:199:25: theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' )
+                    // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:194:25: theText=~ ( '\\t' | ' ' | '(' | ')' | '[' | ']' | '{' | '}' | '\\r' | '\\n' )
                     theText= this.input.LA(1);
                     if ( (this.input.LA(1)>='\u0000' && this.input.LA(1)<='\b')||(this.input.LA(1)>='\u000B' && this.input.LA(1)<='\f')||(this.input.LA(1)>='\u000E' && this.input.LA(1)<='\u001F')||(this.input.LA(1)>='!' && this.input.LA(1)<='\'')||(this.input.LA(1)>='*' && this.input.LA(1)<='Z')||this.input.LA(1)=='\\'||(this.input.LA(1)>='^' && this.input.LA(1)<='z')||this.input.LA(1)=='|'||(this.input.LA(1)>='~' && this.input.LA(1)<='\uFFFF') ) {
                         this.input.consume();
@@ -1137,102 +1111,96 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
     // $ANTLR end "ScriptVar",
 
     mTokens: function() {
-        // ../MmirScriptContent.g:1:8: ( T__33 | EscapeExit | DoEnterBlock | DoEnterYieldContent | DoEnterRender | DoEnterIfStatement | DoEnterElseStatement | DoEnterForStatement | DoExit | NL | WS | CHAR | COMMENT | STRING | SSTRING | ScriptVar )
-        var alt12=16;
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:8: ( T__33 | EscapeExit | DoEnterBlock | DoEnterYieldContent | DoEnterIfStatement | DoEnterElseStatement | DoEnterForStatement | DoExit | NL | WS | CHAR | COMMENT | STRING | SSTRING | ScriptVar )
+        var alt12=15;
         alt12 = this.dfa12.predict(this.input);
         switch (alt12) {
             case 1 :
-                // ../MmirScriptContent.g:1:10: T__33
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:10: T__33
                 this.mT__33(); if (this.state.failed) return ;
 
 
                 break;
             case 2 :
-                // ../MmirScriptContent.g:1:16: EscapeExit
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:16: EscapeExit
                 this.mEscapeExit(); if (this.state.failed) return ;
 
 
                 break;
             case 3 :
-                // ../MmirScriptContent.g:1:27: DoEnterBlock
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:27: DoEnterBlock
                 this.mDoEnterBlock(); if (this.state.failed) return ;
 
 
                 break;
             case 4 :
-                // ../MmirScriptContent.g:1:40: DoEnterYieldContent
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:40: DoEnterYieldContent
                 this.mDoEnterYieldContent(); if (this.state.failed) return ;
 
 
                 break;
             case 5 :
-                // ../MmirScriptContent.g:1:60: DoEnterRender
-                this.mDoEnterRender(); if (this.state.failed) return ;
-
-
-                break;
-            case 6 :
-                // ../MmirScriptContent.g:1:74: DoEnterIfStatement
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:60: DoEnterIfStatement
                 this.mDoEnterIfStatement(); if (this.state.failed) return ;
 
 
                 break;
-            case 7 :
-                // ../MmirScriptContent.g:1:93: DoEnterElseStatement
+            case 6 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:79: DoEnterElseStatement
                 this.mDoEnterElseStatement(); if (this.state.failed) return ;
 
 
                 break;
-            case 8 :
-                // ../MmirScriptContent.g:1:114: DoEnterForStatement
+            case 7 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:100: DoEnterForStatement
                 this.mDoEnterForStatement(); if (this.state.failed) return ;
 
 
                 break;
-            case 9 :
-                // ../MmirScriptContent.g:1:134: DoExit
+            case 8 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:120: DoExit
                 this.mDoExit(); if (this.state.failed) return ;
 
 
                 break;
-            case 10 :
-                // ../MmirScriptContent.g:1:141: NL
+            case 9 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:127: NL
                 this.mNL(); if (this.state.failed) return ;
 
 
                 break;
-            case 11 :
-                // ../MmirScriptContent.g:1:144: WS
+            case 10 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:130: WS
                 this.mWS(); if (this.state.failed) return ;
 
 
                 break;
-            case 12 :
-                // ../MmirScriptContent.g:1:147: CHAR
+            case 11 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:133: CHAR
                 this.mCHAR(); if (this.state.failed) return ;
 
 
                 break;
-            case 13 :
-                // ../MmirScriptContent.g:1:152: COMMENT
+            case 12 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:138: COMMENT
                 this.mCOMMENT(); if (this.state.failed) return ;
 
 
                 break;
-            case 14 :
-                // ../MmirScriptContent.g:1:160: STRING
+            case 13 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:146: STRING
                 this.mSTRING(); if (this.state.failed) return ;
 
 
                 break;
-            case 15 :
-                // ../MmirScriptContent.g:1:167: SSTRING
+            case 14 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:153: SSTRING
                 this.mSSTRING(); if (this.state.failed) return ;
 
 
                 break;
-            case 16 :
-                // ../MmirScriptContent.g:1:175: ScriptVar
+            case 15 :
+                // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:1:161: ScriptVar
                 this.mScriptVar(); if (this.state.failed) return ;
 
 
@@ -1244,8 +1212,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
     // $ANTLR start "synpred1_MmirScriptContent"
     synpred1_MmirScriptContent_fragment: function() {
-        // ../MmirScriptContent.g:169:40: ( EscapeExit )
-        // ../MmirScriptContent.g:169:41: EscapeExit
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:40: ( EscapeExit )
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:41: EscapeExit
         this.mEscapeExit(); if (this.state.failed) return ;
 
 
@@ -1254,8 +1222,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
     // $ANTLR start "synpred2_MmirScriptContent"
     synpred2_MmirScriptContent_fragment: function() {
-        // ../MmirScriptContent.g:169:67: ( DoExit )
-        // ../MmirScriptContent.g:169:68: DoExit
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:67: ( DoExit )
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:164:68: DoExit
         this.mDoExit(); if (this.state.failed) return ;
 
 
@@ -1264,8 +1232,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
     // $ANTLR start "synpred3_MmirScriptContent"
     synpred3_MmirScriptContent_fragment: function() {
-        // ../MmirScriptContent.g:173:41: ( EscapeExit )
-        // ../MmirScriptContent.g:173:42: EscapeExit
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:41: ( EscapeExit )
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:42: EscapeExit
         this.mEscapeExit(); if (this.state.failed) return ;
 
 
@@ -1274,8 +1242,8 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
     // $ANTLR start "synpred4_MmirScriptContent"
     synpred4_MmirScriptContent_fragment: function() {
-        // ../MmirScriptContent.g:173:68: ( DoExit )
-        // ../MmirScriptContent.g:173:69: DoExit
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:68: ( DoExit )
+        // D:\\git_repo\\mmir-starter-kit__public\\www\\mmirf\\mvc\\parser\\antlr\\MmirScriptContent.g:168:69: DoExit
         this.mDoExit(); if (this.state.failed) return ;
 
 
@@ -1342,42 +1310,38 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer.prototype, {
 
 org.antlr.lang.augmentObject(MmirScriptContentLexer, {
     DFA12_eotS:
-        "\u0002\uffff\u0002\u000c\u0001\u0017\u0005\uffff\u0002\u000c\u0002"+
-    "\uffff\u0001\u001c\u0001\uffff\u0006\u0016\u0007\uffff\u0007\u0016\u0001"+
-    "\uffff\u0002\u0016\u0001\uffff\u0002\u0016\u0001\u0024\u0002\u0016\u0001"+
-    "\u0031\u0001\uffff\u0002\u0016\u0001\uffff\u0003\u0016\u0001\uffff\u0003"+
-    "\u0016\u0001\uffff",
+        "\u0002\uffff\u0002\u000c\u0001\u0016\u0005\uffff\u0002\u000c\u0002"+
+    "\uffff\u0001\u001b\u0001\uffff\u0005\u0015\u0007\uffff\u0006\u0015\u0001"+
+    "\uffff\u0001\u0015\u0001\uffff\u0002\u0015\u0001\u0022\u0001\u0015\u0001"+
+    "\u002c\u0001\uffff\u0001\u0015\u0001\uffff\u0005\u0015\u0001\uffff",
     DFA12_eofS:
-        "\u003a\uffff",
+        "\u0033\uffff",
     DFA12_minS:
         "\u0001\u0000\u0001\uffff\u0001\u0040\u0001\u0000\u0001\u000a\u0005"+
     "\uffff\u0002\u0000\u0002\uffff\u0001\u0040\u0001\uffff\u0001\u006f\u0001"+
-    "\u0065\u0001\u0066\u0001\u006c\u0001\u006f\u0001\u0000\u0007\uffff\u0002"+
-    "\u006e\u0001\u0028\u0001\u0073\u0001\u0072\u0002\u0000\u0001\uffff\u0001"+
-    "\u0074\u0001\u0064\u0001\uffff\u0001\u0065\u0001\u0028\u0001\u0000\u0002"+
-    "\u0065\u0001\u0000\u0001\uffff\u0001\u006e\u0001\u0072\u0001\uffff\u0001"+
-    "\u0074\u0001\u0028\u0001\u0046\u0001\uffff\u0001\u006f\u0001\u0072\u0001"+
-    "\u0028\u0001\uffff",
+    "\u0066\u0001\u006c\u0001\u006f\u0001\u0000\u0007\uffff\u0001\u006e\u0001"+
+    "\u0028\u0001\u0073\u0001\u0072\u0002\u0000\u0001\uffff\u0001\u0074\u0001"+
+    "\uffff\u0001\u0065\u0001\u0028\u0001\u0000\u0001\u0065\u0001\u0000\u0001"+
+    "\uffff\u0001\u006e\u0001\uffff\u0001\u0074\u0001\u0046\u0001\u006f\u0001"+
+    "\u0072\u0001\u0028\u0001\uffff",
     DFA12_maxS:
         "\u0001\uffff\u0001\uffff\u0001\u0040\u0001\uffff\u0001\u000a\u0005"+
     "\uffff\u0002\uffff\u0002\uffff\u0001\u0040\u0001\uffff\u0001\u006f\u0001"+
-    "\u0065\u0001\u0066\u0001\u006c\u0001\u006f\u0001\uffff\u0007\uffff\u0002"+
-    "\u006e\u0001\u0028\u0001\u0073\u0001\u0072\u0002\uffff\u0001\uffff\u0001"+
-    "\u0074\u0001\u0064\u0001\uffff\u0001\u0065\u0001\u0028\u0001\uffff\u0002"+
-    "\u0065\u0001\uffff\u0001\uffff\u0001\u006e\u0001\u0072\u0001\uffff\u0001"+
-    "\u0074\u0001\u0028\u0001\u0046\u0001\uffff\u0001\u006f\u0001\u0072\u0001"+
-    "\u0028\u0001\uffff",
+    "\u0066\u0001\u006c\u0001\u006f\u0001\uffff\u0007\uffff\u0001\u006e\u0001"+
+    "\u0028\u0001\u0073\u0001\u0072\u0002\uffff\u0001\uffff\u0001\u0074\u0001"+
+    "\uffff\u0001\u0065\u0001\u0028\u0001\uffff\u0001\u0065\u0001\uffff\u0001"+
+    "\uffff\u0001\u006e\u0001\uffff\u0001\u0074\u0001\u0046\u0001\u006f\u0001"+
+    "\u0072\u0001\u0028\u0001\uffff",
     DFA12_acceptS:
-        "\u0001\uffff\u0001\u0001\u0003\uffff\u0003\u000a\u0002\u000b\u0002"+
-    "\uffff\u0001\u000c\u0001\u0001\u0001\uffff\u0001\u0003\u0006\uffff\u0001"+
-    "\u0010\u0001\u000a\u0001\u000b\u0001\u000e\u0001\u000f\u0001\u0002\u0001"+
-    "\u0009\u0007\uffff\u0001\u000d\u0002\uffff\u0001\u0006\u0006\uffff\u0001"+
-    "\u0008\u0002\uffff\u0001\u0007\u0003\uffff\u0001\u0005\u0003\uffff\u0001"+
-    "\u0004",
+        "\u0001\uffff\u0001\u0001\u0003\uffff\u0003\u0009\u0002\u000a\u0002"+
+    "\uffff\u0001\u000b\u0001\u0001\u0001\uffff\u0001\u0003\u0005\uffff\u0001"+
+    "\u000f\u0001\u0009\u0001\u000a\u0001\u000d\u0001\u000e\u0001\u0002\u0001"+
+    "\u0008\u0006\uffff\u0001\u000c\u0001\uffff\u0001\u0005\u0005\uffff\u0001"+
+    "\u0007\u0001\uffff\u0001\u0006\u0005\uffff\u0001\u0004",
     DFA12_specialS:
-        "\u0001\u0006\u0002\uffff\u0001\u0007\u0006\uffff\u0001\u0008\u0001"+
-    "\u0000\u0009\uffff\u0001\u0005\u000c\uffff\u0001\u0001\u0001\u0003\u0006"+
-    "\uffff\u0001\u0002\u0002\uffff\u0001\u0004\u000c\uffff}>",
+        "\u0001\u0004\u0002\uffff\u0001\u0007\u0006\uffff\u0001\u0001\u0001"+
+    "\u0008\u0008\uffff\u0001\u0006\u000b\uffff\u0001\u0003\u0001\u0000\u0005"+
+    "\uffff\u0001\u0002\u0001\uffff\u0001\u0005\u0009\uffff}>",
     DFA12_transitionS: [
             "\u0009\u000c\u0001\u0009\u0001\u0005\u0002\u000c\u0001\u0004"+
             "\u0012\u000c\u0001\u0008\u0001\u000c\u0001\u000a\u0004\u000c"+
@@ -1386,33 +1350,31 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer, {
             "\udfd6\u000c",
             "",
             "\u0001\u000e",
-            "\u0009\u0016\u0002\uffff\u0002\u0016\u0001\uffff\u0012\u0016"+
-            "\u0001\uffff\u0007\u0016\u0002\uffff\u0001\u0015\u0030\u0016"+
-            "\u0001\uffff\u0001\u0016\u0001\uffff\u0005\u0016\u0001\u0010"+
-            "\u0001\u0016\u0001\u0013\u0001\u0014\u0002\u0016\u0001\u0012"+
-            "\u0008\u0016\u0001\u0011\u0008\u0016\u0001\u000f\u0001\u0016"+
-            "\u0001\uffff\uff82\u0016",
+            "\u0009\u0015\u0002\uffff\u0002\u0015\u0001\uffff\u0012\u0015"+
+            "\u0001\uffff\u0007\u0015\u0002\uffff\u0001\u0014\u0030\u0015"+
+            "\u0001\uffff\u0001\u0015\u0001\uffff\u0005\u0015\u0001\u0010"+
+            "\u0001\u0015\u0001\u0012\u0001\u0013\u0002\u0015\u0001\u0011"+
+            "\u0011\u0015\u0001\u000f\u0001\u0015\u0001\uffff\uff82\u0015",
             "\u0001\u0005",
             "",
             "",
             "",
             "",
             "",
+            "\u0000\u0018",
             "\u0000\u0019",
-            "\u0000\u001a",
             "",
             "",
-            "\u0001\u001b",
+            "\u0001\u001a",
             "",
+            "\u0001\u001c",
             "\u0001\u001d",
             "\u0001\u001e",
             "\u0001\u001f",
-            "\u0001\u0020",
-            "\u0001\u0021",
-            "\u0009\u0023\u0002\u0024\u0002\u0023\u0001\u0024\u0012\u0023"+
-            "\u0001\u0024\u0007\u0023\u0002\u0024\u0001\u0022\u0030\u0023"+
-            "\u0001\u0024\u0001\u0023\u0001\u0024\u001d\u0023\u0001\u0024"+
-            "\u0001\u0023\u0001\u0024\uff82\u0023",
+            "\u0009\u0021\u0002\u0022\u0002\u0021\u0001\u0022\u0012\u0021"+
+            "\u0001\u0022\u0007\u0021\u0002\u0022\u0001\u0020\u0030\u0021"+
+            "\u0001\u0022\u0001\u0021\u0001\u0022\u001d\u0021\u0001\u0022"+
+            "\u0001\u0021\u0001\u0022\uff82\u0021",
             "",
             "",
             "",
@@ -1420,46 +1382,40 @@ org.antlr.lang.augmentObject(MmirScriptContentLexer, {
             "",
             "",
             "",
+            "\u0001\u0023",
+            "\u0001\u0024",
             "\u0001\u0025",
             "\u0001\u0026",
-            "\u0001\u0027",
-            "\u0001\u0028",
-            "\u0001\u0029",
-            "\u0009\u0023\u0002\u0024\u0002\u0023\u0001\u0024\u0012\u0023"+
-            "\u0001\u0024\u0007\u0023\u0002\u0024\u0001\u0022\u0015\u0023"+
-            "\u0001\u002a\u001a\u0023\u0001\u0024\u0001\u0023\u0001\u0024"+
-            "\u001d\u0023\u0001\u0024\u0001\u0023\u0001\u0024\uff82\u0023",
-            "\u0009\u0023\u0002\u0024\u0002\u0023\u0001\u0024\u0012\u0023"+
-            "\u0001\u0024\u0007\u0023\u0002\u0024\u0001\u0022\u0030\u0023"+
-            "\u0001\u0024\u0001\u0023\u0001\u0024\u001d\u0023\u0001\u0024"+
-            "\u0001\u0023\u0001\u0024\uff82\u0023",
+            "\u0009\u0021\u0002\u0022\u0002\u0021\u0001\u0022\u0012\u0021"+
+            "\u0001\u0022\u0007\u0021\u0002\u0022\u0001\u0020\u0015\u0021"+
+            "\u0001\u0027\u001a\u0021\u0001\u0022\u0001\u0021\u0001\u0022"+
+            "\u001d\u0021\u0001\u0022\u0001\u0021\u0001\u0022\uff82\u0021",
+            "\u0009\u0021\u0002\u0022\u0002\u0021\u0001\u0022\u0012\u0021"+
+            "\u0001\u0022\u0007\u0021\u0002\u0022\u0001\u0020\u0030\u0021"+
+            "\u0001\u0022\u0001\u0021\u0001\u0022\u001d\u0021\u0001\u0022"+
+            "\u0001\u0021\u0001\u0022\uff82\u0021",
             "",
+            "\u0001\u0028",
+            "",
+            "\u0001\u0029",
+            "\u0001\u002a",
+            "\u0009\u0021\u0002\uffff\u0002\u0021\u0001\uffff\u0012\u0021"+
+            "\u0001\uffff\u0007\u0021\u0002\uffff\u0001\u0020\u0030\u0021"+
+            "\u0001\uffff\u0001\u0021\u0001\uffff\u001d\u0021\u0001\uffff"+
+            "\u0001\u0021\u0001\uffff\uff82\u0021",
             "\u0001\u002b",
-            "\u0001\u002c",
+            "\u0009\u0015\u0002\uffff\u0002\u0015\u0001\uffff\u0012\u0015"+
+            "\u0001\uffff\u0007\u0015\u0002\uffff\u0031\u0015\u0001\uffff"+
+            "\u0001\u0015\u0001\uffff\u001d\u0015\u0001\uffff\u0001\u0015"+
+            "\u0001\uffff\uff82\u0015",
             "",
             "\u0001\u002d",
+            "",
             "\u0001\u002e",
-            "\u0009\u0023\u0002\uffff\u0002\u0023\u0001\uffff\u0012\u0023"+
-            "\u0001\uffff\u0007\u0023\u0002\uffff\u0001\u0022\u0030\u0023"+
-            "\u0001\uffff\u0001\u0023\u0001\uffff\u001d\u0023\u0001\uffff"+
-            "\u0001\u0023\u0001\uffff\uff82\u0023",
             "\u0001\u002f",
             "\u0001\u0030",
-            "\u0009\u0016\u0002\uffff\u0002\u0016\u0001\uffff\u0012\u0016"+
-            "\u0001\uffff\u0007\u0016\u0002\uffff\u0031\u0016\u0001\uffff"+
-            "\u0001\u0016\u0001\uffff\u001d\u0016\u0001\uffff\u0001\u0016"+
-            "\u0001\uffff\uff82\u0016",
-            "",
+            "\u0001\u0031",
             "\u0001\u0032",
-            "\u0001\u0033",
-            "",
-            "\u0001\u0034",
-            "\u0001\u0035",
-            "\u0001\u0036",
-            "",
-            "\u0001\u0037",
-            "\u0001\u0038",
-            "\u0001\u0039",
             ""
     ]
 });
@@ -1502,7 +1458,7 @@ MmirScriptContentLexer.DFA12 = function(recognizer) {
 
 org.antlr.lang.extend(MmirScriptContentLexer.DFA12, org.antlr.runtime.DFA, {
     getDescription: function() {
-        return "1:1: Tokens : ( T__33 | EscapeExit | DoEnterBlock | DoEnterYieldContent | DoEnterRender | DoEnterIfStatement | DoEnterElseStatement | DoEnterForStatement | DoExit | NL | WS | CHAR | COMMENT | STRING | SSTRING | ScriptVar );";
+        return "1:1: Tokens : ( T__33 | EscapeExit | DoEnterBlock | DoEnterYieldContent | DoEnterIfStatement | DoEnterElseStatement | DoEnterForStatement | DoExit | NL | WS | CHAR | COMMENT | STRING | SSTRING | ScriptVar );";
     },
     specialStateTransition: function(s, input) {
         var _s = s;
@@ -1510,82 +1466,58 @@ org.antlr.lang.extend(MmirScriptContentLexer.DFA12, org.antlr.runtime.DFA, {
         var retval = (function(s, input) {
             switch ( s ) {
                         case 0 : 
-                            var LA12_11 = input.LA(1);
+                            var LA12_33 = input.LA(1);
 
                             s = -1;
-                            if ( ((LA12_11>='\u0000' && LA12_11<='\uFFFF')) ) {s = 26;}
+                            if ( (LA12_33=='*') ) {s = 32;}
+
+                            else if ( ((LA12_33>='\u0000' && LA12_33<='\b')||(LA12_33>='\u000B' && LA12_33<='\f')||(LA12_33>='\u000E' && LA12_33<='\u001F')||(LA12_33>='!' && LA12_33<='\'')||(LA12_33>='+' && LA12_33<='Z')||LA12_33=='\\'||(LA12_33>='^' && LA12_33<='z')||LA12_33=='|'||(LA12_33>='~' && LA12_33<='\uFFFF')) ) {s = 33;}
+
+                            else if ( ((LA12_33>='\t' && LA12_33<='\n')||LA12_33=='\r'||LA12_33==' '||(LA12_33>='(' && LA12_33<=')')||LA12_33=='['||LA12_33==']'||LA12_33=='{'||LA12_33=='}') ) {s = 34;}
+
+                            else s = 21;
+
+                            if ( s>=0 ) return s;
+                            break;
+                        case 1 : 
+                            var LA12_10 = input.LA(1);
+
+                            s = -1;
+                            if ( ((LA12_10>='\u0000' && LA12_10<='\uFFFF')) ) {s = 24;}
 
                             else s = 12;
 
                             if ( s>=0 ) return s;
                             break;
-                        case 1 : 
-                            var LA12_34 = input.LA(1);
-
-                            s = -1;
-                            if ( (LA12_34=='@') ) {s = 42;}
-
-                            else if ( (LA12_34=='*') ) {s = 34;}
-
-                            else if ( ((LA12_34>='\u0000' && LA12_34<='\b')||(LA12_34>='\u000B' && LA12_34<='\f')||(LA12_34>='\u000E' && LA12_34<='\u001F')||(LA12_34>='!' && LA12_34<='\'')||(LA12_34>='+' && LA12_34<='?')||(LA12_34>='A' && LA12_34<='Z')||LA12_34=='\\'||(LA12_34>='^' && LA12_34<='z')||LA12_34=='|'||(LA12_34>='~' && LA12_34<='\uFFFF')) ) {s = 35;}
-
-                            else if ( ((LA12_34>='\t' && LA12_34<='\n')||LA12_34=='\r'||LA12_34==' '||(LA12_34>='(' && LA12_34<=')')||LA12_34=='['||LA12_34==']'||LA12_34=='{'||LA12_34=='}') ) {s = 36;}
-
-                            else s = 22;
-
-                            if ( s>=0 ) return s;
-                            break;
                         case 2 : 
-                            var LA12_42 = input.LA(1);
+                            var LA12_39 = input.LA(1);
 
                             s = -1;
-                            if ( (LA12_42=='*') ) {s = 34;}
+                            if ( (LA12_39=='*') ) {s = 32;}
 
-                            else if ( ((LA12_42>='\u0000' && LA12_42<='\b')||(LA12_42>='\u000B' && LA12_42<='\f')||(LA12_42>='\u000E' && LA12_42<='\u001F')||(LA12_42>='!' && LA12_42<='\'')||(LA12_42>='+' && LA12_42<='Z')||LA12_42=='\\'||(LA12_42>='^' && LA12_42<='z')||LA12_42=='|'||(LA12_42>='~' && LA12_42<='\uFFFF')) ) {s = 35;}
+                            else if ( ((LA12_39>='\u0000' && LA12_39<='\b')||(LA12_39>='\u000B' && LA12_39<='\f')||(LA12_39>='\u000E' && LA12_39<='\u001F')||(LA12_39>='!' && LA12_39<='\'')||(LA12_39>='+' && LA12_39<='Z')||LA12_39=='\\'||(LA12_39>='^' && LA12_39<='z')||LA12_39=='|'||(LA12_39>='~' && LA12_39<='\uFFFF')) ) {s = 33;}
 
-                            else s = 36;
+                            else s = 34;
 
                             if ( s>=0 ) return s;
                             break;
                         case 3 : 
-                            var LA12_35 = input.LA(1);
+                            var LA12_32 = input.LA(1);
 
                             s = -1;
-                            if ( (LA12_35=='*') ) {s = 34;}
+                            if ( (LA12_32=='@') ) {s = 39;}
 
-                            else if ( ((LA12_35>='\u0000' && LA12_35<='\b')||(LA12_35>='\u000B' && LA12_35<='\f')||(LA12_35>='\u000E' && LA12_35<='\u001F')||(LA12_35>='!' && LA12_35<='\'')||(LA12_35>='+' && LA12_35<='Z')||LA12_35=='\\'||(LA12_35>='^' && LA12_35<='z')||LA12_35=='|'||(LA12_35>='~' && LA12_35<='\uFFFF')) ) {s = 35;}
+                            else if ( (LA12_32=='*') ) {s = 32;}
 
-                            else if ( ((LA12_35>='\t' && LA12_35<='\n')||LA12_35=='\r'||LA12_35==' '||(LA12_35>='(' && LA12_35<=')')||LA12_35=='['||LA12_35==']'||LA12_35=='{'||LA12_35=='}') ) {s = 36;}
+                            else if ( ((LA12_32>='\u0000' && LA12_32<='\b')||(LA12_32>='\u000B' && LA12_32<='\f')||(LA12_32>='\u000E' && LA12_32<='\u001F')||(LA12_32>='!' && LA12_32<='\'')||(LA12_32>='+' && LA12_32<='?')||(LA12_32>='A' && LA12_32<='Z')||LA12_32=='\\'||(LA12_32>='^' && LA12_32<='z')||LA12_32=='|'||(LA12_32>='~' && LA12_32<='\uFFFF')) ) {s = 33;}
 
-                            else s = 22;
+                            else if ( ((LA12_32>='\t' && LA12_32<='\n')||LA12_32=='\r'||LA12_32==' '||(LA12_32>='(' && LA12_32<=')')||LA12_32=='['||LA12_32==']'||LA12_32=='{'||LA12_32=='}') ) {s = 34;}
+
+                            else s = 21;
 
                             if ( s>=0 ) return s;
                             break;
                         case 4 : 
-                            var LA12_45 = input.LA(1);
-
-                            s = -1;
-                            if ( ((LA12_45>='\u0000' && LA12_45<='\b')||(LA12_45>='\u000B' && LA12_45<='\f')||(LA12_45>='\u000E' && LA12_45<='\u001F')||(LA12_45>='!' && LA12_45<='\'')||(LA12_45>='*' && LA12_45<='Z')||LA12_45=='\\'||(LA12_45>='^' && LA12_45<='z')||LA12_45=='|'||(LA12_45>='~' && LA12_45<='\uFFFF')) ) {s = 22;}
-
-                            else s = 49;
-
-                            if ( s>=0 ) return s;
-                            break;
-                        case 5 : 
-                            var LA12_21 = input.LA(1);
-
-                            s = -1;
-                            if ( (LA12_21=='*') ) {s = 34;}
-
-                            else if ( ((LA12_21>='\u0000' && LA12_21<='\b')||(LA12_21>='\u000B' && LA12_21<='\f')||(LA12_21>='\u000E' && LA12_21<='\u001F')||(LA12_21>='!' && LA12_21<='\'')||(LA12_21>='+' && LA12_21<='Z')||LA12_21=='\\'||(LA12_21>='^' && LA12_21<='z')||LA12_21=='|'||(LA12_21>='~' && LA12_21<='\uFFFF')) ) {s = 35;}
-
-                            else if ( ((LA12_21>='\t' && LA12_21<='\n')||LA12_21=='\r'||LA12_21==' '||(LA12_21>='(' && LA12_21<=')')||LA12_21=='['||LA12_21==']'||LA12_21=='{'||LA12_21=='}') ) {s = 36;}
-
-                            else s = 22;
-
-                            if ( s>=0 ) return s;
-                            break;
-                        case 6 : 
                             var LA12_0 = input.LA(1);
 
                             s = -1;
@@ -1615,6 +1547,30 @@ org.antlr.lang.extend(MmirScriptContentLexer.DFA12, org.antlr.runtime.DFA, {
 
                             if ( s>=0 ) return s;
                             break;
+                        case 5 : 
+                            var LA12_41 = input.LA(1);
+
+                            s = -1;
+                            if ( ((LA12_41>='\u0000' && LA12_41<='\b')||(LA12_41>='\u000B' && LA12_41<='\f')||(LA12_41>='\u000E' && LA12_41<='\u001F')||(LA12_41>='!' && LA12_41<='\'')||(LA12_41>='*' && LA12_41<='Z')||LA12_41=='\\'||(LA12_41>='^' && LA12_41<='z')||LA12_41=='|'||(LA12_41>='~' && LA12_41<='\uFFFF')) ) {s = 21;}
+
+                            else s = 44;
+
+                            if ( s>=0 ) return s;
+                            break;
+                        case 6 : 
+                            var LA12_20 = input.LA(1);
+
+                            s = -1;
+                            if ( (LA12_20=='*') ) {s = 32;}
+
+                            else if ( ((LA12_20>='\u0000' && LA12_20<='\b')||(LA12_20>='\u000B' && LA12_20<='\f')||(LA12_20>='\u000E' && LA12_20<='\u001F')||(LA12_20>='!' && LA12_20<='\'')||(LA12_20>='+' && LA12_20<='Z')||LA12_20=='\\'||(LA12_20>='^' && LA12_20<='z')||LA12_20=='|'||(LA12_20>='~' && LA12_20<='\uFFFF')) ) {s = 33;}
+
+                            else if ( ((LA12_20>='\t' && LA12_20<='\n')||LA12_20=='\r'||LA12_20==' '||(LA12_20>='(' && LA12_20<=')')||LA12_20=='['||LA12_20==']'||LA12_20=='{'||LA12_20=='}') ) {s = 34;}
+
+                            else s = 21;
+
+                            if ( s>=0 ) return s;
+                            break;
                         case 7 : 
                             var LA12_3 = input.LA(1);
 
@@ -1623,27 +1579,25 @@ org.antlr.lang.extend(MmirScriptContentLexer.DFA12, org.antlr.runtime.DFA, {
 
                             else if ( (LA12_3=='c') ) {s = 16;}
 
-                            else if ( (LA12_3=='r') ) {s = 17;}
+                            else if ( (LA12_3=='i') ) {s = 17;}
 
-                            else if ( (LA12_3=='i') ) {s = 18;}
+                            else if ( (LA12_3=='e') ) {s = 18;}
 
-                            else if ( (LA12_3=='e') ) {s = 19;}
+                            else if ( (LA12_3=='f') ) {s = 19;}
 
-                            else if ( (LA12_3=='f') ) {s = 20;}
+                            else if ( (LA12_3=='*') ) {s = 20;}
 
-                            else if ( (LA12_3=='*') ) {s = 21;}
-
-                            else if ( ((LA12_3>='\u0000' && LA12_3<='\b')||(LA12_3>='\u000B' && LA12_3<='\f')||(LA12_3>='\u000E' && LA12_3<='\u001F')||(LA12_3>='!' && LA12_3<='\'')||(LA12_3>='+' && LA12_3<='Z')||LA12_3=='\\'||(LA12_3>='^' && LA12_3<='b')||LA12_3=='d'||(LA12_3>='g' && LA12_3<='h')||(LA12_3>='j' && LA12_3<='q')||(LA12_3>='s' && LA12_3<='z')||LA12_3=='|'||(LA12_3>='~' && LA12_3<='\uFFFF')) ) {s = 22;}
+                            else if ( ((LA12_3>='\u0000' && LA12_3<='\b')||(LA12_3>='\u000B' && LA12_3<='\f')||(LA12_3>='\u000E' && LA12_3<='\u001F')||(LA12_3>='!' && LA12_3<='\'')||(LA12_3>='+' && LA12_3<='Z')||LA12_3=='\\'||(LA12_3>='^' && LA12_3<='b')||LA12_3=='d'||(LA12_3>='g' && LA12_3<='h')||(LA12_3>='j' && LA12_3<='z')||LA12_3=='|'||(LA12_3>='~' && LA12_3<='\uFFFF')) ) {s = 21;}
 
                             else s = 12;
 
                             if ( s>=0 ) return s;
                             break;
                         case 8 : 
-                            var LA12_10 = input.LA(1);
+                            var LA12_11 = input.LA(1);
 
                             s = -1;
-                            if ( ((LA12_10>='\u0000' && LA12_10<='\uFFFF')) ) {s = 25;}
+                            if ( ((LA12_11>='\u0000' && LA12_11<='\uFFFF')) ) {s = 25;}
 
                             else s = 12;
 

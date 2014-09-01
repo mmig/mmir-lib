@@ -106,6 +106,37 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    function firstToUpperCase(name){
 	    	return name[0].toUpperCase()+name.substr(1);
 	    }
+	    
+	    /**
+		 * HELPER FUNC: add file path for generated / compiled view-element
+		 *              if it exists.
+		 * 
+		 * @param {String} genDirPath
+		 * 				path the the directory, where the file for the generated view-element
+		 * 				is potentially located (generated file may not exists)
+		 * 
+		 * @param {PlainObject} infoObj
+		 * 				the info-object for the view-element. MUST HAVE property <code>name</code>!
+		 * 
+		 * @param {String} [fileNamePrefix] OPTIONAL
+		 * 				prefix for the file-name, e.g. in case of Partials, the file-name would be:
+		 * 				<code>fileNamePrefix + infoObj.name</code> (+ file-extension)
+		 * 
+		 * @returns {PlainObject}
+		 * 				the info-object: if a path for the generated file exists,
+		 * 				a property <code>genPath</code> (String) with the path as value is added.
+		 * @private
+		 */
+	    function addGenPath(genDirPath, infoObj, fileNamePrefix){
+	    	
+	    	var prefix = fileNamePrefix? fileNamePrefix : '';
+	    	var genPath = commonUtils.getDirectoryContentsWithFilter(genDirPath, prefix + infoObj.name+".js");
+    		if(genPath && genPath.length > 0){
+    			infoObj.genPath = genDirPath + '/' + genPath[0];
+    		}
+    		
+    		return infoObj;
+	    }
 		
 		/**
 		 * This function gets the controller file names and builds a JSON object containing information about
@@ -131,21 +162,25 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		 *   "views": [
 		 *     {
 		 *       "name": "login",
-		 *       "path": "views/application/login.ehtml"
+		 *       "path": "views/application/login.ehtml",
+		 *       "genPath": "gen/views/application/login.js"
 		 *     },
 		 *     {
 		 *       "name": "registration",
-		 *       "path": "views/application/registration.ehtml"
+		 *       "path": "views/application/registration.ehtml",
+		 *       "genPath": "gen/views/application/registration.js"
 		 *     },
 		 *     {
 		 *       "name": "welcome",
-		 *       "path": "views/application/welcome.ehtml"
+		 *       "path": "views/application/welcome.ehtml",
+		 *       "genPath": "gen/views/application/welcome.js"
 		 *     }
 		 *   ],
 		 *   "partials": [
 		 *     {
 		 *       "name": "languageMenu",
-		 *       "path": "views/application/~languageMenu.ehtml"
+		 *       "path": "views/application/~languageMenu.ehtml",
+		 *       "genPath": "gen/views/application/~languageMenu.js"
 		 *     }
 		 *   ],
 		 *   "helper": {
@@ -156,9 +191,13 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		 *   "layout": {
 		 *     "fileName": "application",
 		 *     "name": "application",
-		 *     "path": "views/layouts/application.ehtml"
+		 *     "path": "views/layouts/application.ehtml",
+		 *     "genPath": "gen/views/layouts/application.js"
 		 *   }
 		 * }
+		 * //NOTE 1: genPath is an optional field, i.e. it will only be added
+		 *           if the corresponding file exists
+		 * //NOTE 2: layout may be NULL
 		 * 
 		 * @depends mmir.CommonUtils
 		 * @depends mmir.Constants
@@ -173,6 +212,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    	
 	    	
 	    	var viewsPath = constants.getViewPath() + controllerName;
+	    	var genViewsPath = constants.getCompiledViewPath() + controllerName;
 	    	
 	    	controllerName = firstToUpperCase(controllerName);
 	    	
@@ -182,11 +222,11 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    	var viewsList = [];
 	    	if(viewsFileList != null){
 	    		for (i=0, size = viewsFileList.length; i < size; ++i){
-	    		
-		    		viewsList.push({
+	    			
+	    			viewsList.push(addGenPath( genViewsPath, {
 		    			name: removeFileExt(viewsFileList[i]),
 		    			path: viewsPath+"/"+viewsFileList[i]
-		    		});
+		    		}));
 		    	}
 	    	}
 
@@ -196,11 +236,12 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    	if(partialsFileList != null) {
 	    		for (i=0, size = partialsFileList.length; i < size; ++i){
 	    		
-		    		partialsInfoList.push({
+		    		partialsInfoList.push(addGenPath(genViewsPath, {
 				    		// remove leading "~" indicating it is a partial
 				    		name: removeFileExt( partialsFileList[i].replace(partialsPrefix,'') ),
 				        	path: viewsPath+"/"+partialsFileList[i]
-					});
+		    		
+					}, partialsPrefix));
 		        }
 	    	}
 
@@ -229,8 +270,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    	var layoutsPath = constants.getLayoutPath();
 	    	layoutsPath = layoutsPath.substring(0, layoutsPath.length-1);//remove trailing slash
 	    	var layoutsFileList = commonUtils.getDirectoryContentsWithFilter(layoutsPath, "(?!"+partialsPrefix+")*.ehtml");
-
-	    	var layoutInfo = null;
+	    	
+	    	var layoutInfo = null, layoutGenPath;
 	    	for(i=0, size = layoutsFileList.length; i < size; ++i){
 	    		
 	    		if( layoutsFileList[i].startsWith(controllerName, true) ){
@@ -238,9 +279,12 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    			var layoutName = removeFileExt(layoutsFileList[i]);
 	    	    	layoutInfo = {
 			    		fileName: layoutName,
-			    		name: layoutName,
+			    		name: firstToUpperCase(layoutName),
 			        	path: layoutsPath+"/"+layoutsFileList[i],
 	    	    	};
+	    	    	
+	    	    	layoutGenPath = constants.getCompiledLayoutPath();
+	    	    	addGenPath(layoutGenPath.substring(0, layoutGenPath.length-1), layoutInfo);
 		        	
 		        	break;
 	    		}

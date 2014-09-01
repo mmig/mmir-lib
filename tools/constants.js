@@ -71,10 +71,10 @@ function(
 	var helperPath = "helpers/";
 	var languagePath = "config/languages/";
 	var modelPath = "models/";
-	var layoutPath = "views/layouts/";
+	var layoutPath = "views/layouts/";//before changing this: see also use of 'layouts' sub-dir-name in build/lib/mmir-build/ant/StandaloneTemplateParserExec.js
 	var viewPath = "views/";
 	var genViewPath = "gen/views/";
-	var genLayoutPath = "gen/views/layouts/";
+	var genLayoutPath = "gen/views/layouts/";//before changing this: see also use of 'layouts' sub-dir-name in build/lib/mmir-build/ant/StandaloneTemplateParserExec.js
 	var genGrammarsPath = "gen/grammar/";
 	
 	var speechConfigFileName = "speech.json";
