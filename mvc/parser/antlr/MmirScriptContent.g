@@ -110,11 +110,6 @@ DoEnterYieldContent :   '@contentFor('
             {++this.nesting;}
             {$channel=HIDDEN;}
         ;
-
-DoEnterRender :   '@render('
-            {++this.nesting;}
-            {$channel=HIDDEN;}
-        ;
         
 DoEnterIfStatement :   '@if('
             {++this.nesting;}
