@@ -278,7 +278,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, 
     
     function getScionConfig(){
     	
-    	var hasWebWorkers = window.Worker !== 'undefined';
+    	var hasWebWorkers = typeof window.Worker !== 'undefined';
     	
     	//TODO make this configurable? through ConfigurationManager?
     	if(hasWebWorkers){
