@@ -1,11 +1,15 @@
 mmir-lib
 ========
 
+https://github.com/mmig/mmir-lib
+
+
 Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library 
 
-This is the mere source code of the library without any tooling etc.
+This is the mere source code of the bare library (i.e. without any tooling etc.)
 
-Usually, the content of the root directory would be placed within the directory ```mmirf/```:
+Usually, the content of this repository (of the root directory)
+would be placed within the directory ```mmirf/``` of the web application:
 
     ...
     /controllers/
@@ -15,7 +19,7 @@ Usually, the content of the root directory would be placed within the directory 
     /index.html
     ...
 
-of the application, that uses the MMIR framework (cf. the [StarterKit][1] example).
+For examples, see the [StarterKit][1] or the [minimal Cordova example][2].
 
 --
 #### Including mmir-lib as subtree
@@ -37,20 +41,26 @@ later updates from this repository can be fetched from within the referencing pr
 
  * jQuery 1.11.1
  * jQuery Mobile 1.4.3
- * RequireJS
+ * RequireJS 2.1.9
  * SCION
- * JS/CC
+ * JS/CC 0.30
  * ANTLR 3
- * CryptoJS MD5
+ * CryptoJS MD5 3.1.2
 
-NOTE: Integration / loading of the Cordova is now designed to work with the _build process_
+
+
+See also the [tools project][3] for scripts, resources etc. for compiling and generating resources
+(e.g. for compiling JSON grammar files from the application's `config/languages/[language code]/`
+directories into JavaScript files).
+
+NOTE: Integration with / loading of Cordova is now designed to work with the _build process_
       of **Cordova 3** (see [MMIR skeleton project][2] for integration / tooling of the MMIR framework
-      in combination with Cordova 3.
+      in combination with Cordova 3).
 
 --
 #### License
 
-If not stated otherwise, all files and resources is provided under the MIT license
+If not stated otherwise, all files and resources are provided under the MIT license
 
 
 --
@@ -61,4 +71,5 @@ If not stated otherwise, all files and resources is provided under the MIT licen
 
 [1]: https://github.com/mmig/mmir-starter-kit
 [2]: https://github.com/mmig/mmir-cordova
+[3]: https://github.com/mmig/mmir-tooling
 
