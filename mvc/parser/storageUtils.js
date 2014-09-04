@@ -17,6 +17,8 @@
  */
 
 define(['jquery', 'parserModule'], function($, parser){
+	
+parser.STORAGE_FILE_FORMAT_NUMBER = 2;
 
 /**
  * Creates the appropriate object from a JSON-like <tt>storedObject</tt>.
@@ -46,11 +48,35 @@ define(['jquery', 'parserModule'], function($, parser){
  * @public
  * 
  * @param {Object} storedObject 
- * 				a JSON-like object with fields and functions (which will be transfered to the returned object).
- * @returns {Object} an new instance created with the constructor <tt>classConstructor</tt> and
+ * 				    a JSON-like object with fields and functions (which will be transfered to the returned object).
+ * @param {Boolean} [isTriggerPublish] OPTIONAL
+ * 					if <code>true</code> then the restore function call
+ * 					<code>initPublish()</code> on the restored object before returning.
+ * 					This should only be <code>true</code> for the root-object
+ * 					(e.g. the View-object or Partial-object; nested objects should NOT invoke
+ * 					 restoreObject() with this argument set to true).
+ * @param {Number} [fileFormatNo] OPTIONAL
+ * 					NOTE: if argument <code>isTriggerPublish</code> was used with value <code>true</code>,
+ * 						  then this argument MUST be used too!
+ * 					If the number given does not match {@link parser.STORAGE_FILE_FORMAT_NUMBER}
+ * 					the file format is assumed to be out-dated and an Error will be thrown.
+ * @returns {Object} 
+ *          an new instance created with the constructor <tt>classConstructor</tt> and
  * 			set with all properties (fields and functions) from <tt>storedObject</tt>.
+ * 
+ * @throws Error if <code>fileFormatNo</code> does not match STORAGE_FILE_FORMAT_NUMBER.
  */
-parser.restoreObject = function(storedObject, isTriggerPublish){
+parser.restoreObject = function(storedObject, isTriggerPublish, fileFormatNo){
+	
+	if(isTriggerPublish && fileFormatNo != parser.STORAGE_FILE_FORMAT_NUMBER){
+		
+		throw new Error('Compiled template file has wrong format: need file with format version '
+				+ parser.STORAGE_FILE_FORMAT_NUMBER +', but got: '+ fileFormatNo
+				+ '. Please re-compile views / templates.'
+		);
+		
+	}
+	
 	var classExtender;
 	if(parser.CLASS_EXTENDER && typeof parser.CLASS_EXTENDER.extend === 'function'){
 		classExtender = parser.CLASS_EXTENDER;

@@ -544,7 +544,7 @@ Layout.prototype.stringify = function(){
 //	sb.push(' }, true); });\n require(['//<- add require-call, so that this JS-file adds itself to the loaded dependencies in requirejs
 //			+ moduleNameString + ']);');
 	
-	sb.push(' }, true);');
+	sb.push(' }, true, '+storageUtils.STORAGE_FILE_FORMAT_NUMBER+');');
 	
 	return sb.join('');
 };
