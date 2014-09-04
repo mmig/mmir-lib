@@ -1,0 +1,474 @@
+﻿
+version notes for MMIR framework code (v 3.0beta3)
+
+ * using Cordova 3.5.x library
+ * using jQuery 1.11.x library
+ * using jQuery Mobile 1.4.x library
+ 
+ 
+ NOTE: for versions older than 3.x, the change-information refers to the MMIG StarterKit code.
+       Since version 3.x the code is restructured:
+       
+       * mmir-lib: the framework code itself (would usually be located at /www/mmirf/)
+       * mmir-tooling: the tools for building resources (would usually be located at /build/)
+       
+       * mmir-starter-kit: the code for the StarterKit includes mmir-lib and mmir-tooling as well 
+                           as a small example application (i.e. basically this is the same as the
+                           StarterKit from pre 3.x versions)
+                           NOTE: the mmir-lib and mmir-tooling code that is used within this example
+                                 project may lack behind the most current version of their base
+                                 repositories of mmir-lib and mmir-tooling.
+       
+ --------------
+ Change Log
+ --------------
+
+##################
+ Version 3.0beta4
+##################
+ 
+ * removed un-documented/private field semanticAnnotationResult from GrammarConverter: now using local variable for handling result of grammar execution
+   NOTE: you should re-generate the application's grammar files at
+         /gen/grammar/
+         (either delete the directory, or use the ANT clean-task; then rebuild
+          grammars with the ANT build task)
+ 
+ * changed name of default layout: application -> default
+   NOTE: you have to rename your application's
+         /views/layout/application.ehtml
+         to ->
+         /views/layout/default.ehtml
+ 
+##################
+ Version 3.0beta3
+##################
+ 
+ * changed to Cordova 3.x
+ * new project structure for Cordova 3.x
+
+##################
+ Version 3.0beta2
+##################
+
+ * moved JavaScript files used in build process & testing into separate folder /build/lib/mmir-build/ (and into /test/scripts/ respectively)
+  * updated build.properties, build.xml and parse.xml accordingly
+  * updated test.settings, test.xml ect. accordingly
+  
+ * moved jsonlint library to build directory (only used during build-process and grammar-testing)
+  * for testSemanticInterpreter.html: copied jsonlint source-code directly into the HTML page
+     
+##################
+ Version 3.0beta / alpha
+##################
+
+ * change of framework-namespace:
+     mobileDS -> mmir
+   e.g. use mmir.DialogEngine (instead of old-style: mobileDS.DialogEngine)
+
+ * renamed directory mmirf/res/ -> mmirf/vendor/
+ 
+ * renamed resources:
+  * renamed files /lanugages/<lang>/speaker.json -> /languages/<lang>/speech.json
+  * renamed file extension /lanugages/<lang>/dictionary.dic -> /languages/<lang>/dictionary.json
+  * renamed: elementTypes[.js] -> parserModule[.js]
+
+ * moved resources:
+  * moved checksum files from /config/languages/<lang>/** and /config/statedef/** -> /gen/** (see also comment for build.xml)
+
+ * languageManager:
+   * removed getSpeaker(); replaced by new machanism via getLanguageConfig(str [, str, str])
+      * NOTE: renamed speaker.json -> speech.json
+      * NOTE: format for speech.json (previously speaker.json) has changed too!
+  * renamed (private) function: loadSpeaker() -> loadSpeechConfig()
+  * renamed function: existsSpeaker() -> existsSpeechConfig()
+
+ * constants
+   * changed speaker.json -> speech.json
+   * renamed getter function: getSpeakerFileName -> getSpeechConfigFileName
+ 
+ * build.xml
+   * all checksum files are now located where the generated counterparts are
+   * unified checksum file names to the file-extension used by the JavaScript checksumUtils code
+   * removed checksum file generation where these are already created by JavaScript code (i.e. for grammars); ANT tasks uses the JavaScript generated checksums now instead (for up-to-date verification)
+
+ * configurationManager
+   * added support for nested / structured configuration
+   * changed media-plugin settings into structured settings (for htm5AudioInput and maryTextToSpeech)
+   * TODO document possible configuration values!!!
+   
+ * commonUtils:
+   * renamed: commonUtils.loadAllPhonegapPlugins -> loadAllCordovaPlugins
+
+ * notificationManager:
+   * renamed: Notification -> NotificationManager
+   
+ * backwards compatibility issues
+  * mobileDS.constants is now mmir.Constants
+    (NOTE: case change for first letter!)
+  * create() is now replaced with init()!
+	         in: Constants, ControllerManager, CommonUtils, MediaManager, ModelManager
+	         
+  * deprecated / removed:
+    * BROWSER-part of plugins/directoryListing (-> now in CommonUtils!)
+    * html5Navigator (removed; now use navigator directly...)
+
+ * AMD (Asynchronous Module Definition) version for MMIR framework (using requirejs)
+  * changes in almost all files for modularization (i.e. converting to AMD modules)
+  * improved separation of framework-code and application-code:
+    * initialization is now done in /assets/www/mmirf/main.js
+    * the bootstrap-code for the application is now located in /assets/www/app.js
+  * adjusted build.xml and parse.xml to new AMD structure
+  * updated testSemanticInterpreter.html to use new AMD version of the framework
+ * important changes:
+  * renamed main namespace: mobileDS -> mmir
+    * e.g. instead of mobileDS.LanguageManager.getInstance():
+       -> now use: mmir.LanguageManager.getInstance()
+       -> or add "backwards compatability" by creating global variable: var mobileDS = mmir;
+  * renamed Notification -> NotificationManager (moved file into mmirf/manager/)
+  * manager modules that had a .create() function: functions renamed to .init() [which return now Promise objects]
+  
+##################
+ Version 2.4.1
+##################
+ (changes are contained within 3.0 notes)
+ 
+##################
+ Version 2.4
+##################
+
+ * implemented pre-compilation for templates (eHTML)
+   * completed implementation for storing & loading compiled template files
+   * added pre-compilation code for template-parsing task (in ANT parse.xml)
+   * added mechanism for loading pre-compiled templates
+   * configuration for enabling/disabling usage of pre-compiled files
+   * included up-to-date check (using MD5-checksums) to verify that compiled templates are up-to-date
+ * grammars:
+   * added English example grammar (from/used in smart-case example)
+   * example Japanese dictionary and (minimal) grammar
+ * test page for semantic-interpreter: FIX in language-selection menu (dropdown box): select currently set language on page-load (before: first entry in the list was selected)
+ * CommonUtils:
+   * BUGFIX create instance with new (avoid var-leaking into global namespace)
+   * updated network-checking code (to reflect/use current Cordova-implementation)
+ * ControllerManager: refactored info-object creation (for preparing controller-/view-loading)
+ * BUGFIX load input-manager asynchronously
+ * BUGFIX prevent default-click behavior in DEFAULT-BUTTON-HANDLER (see vclick handling in executeAfterEachPageIsLoaded())
+ * cordovaAudioOutput
+   * removed some commments
+   * BUGFIX for implementation of isPaused() function
+   * slightly modified stop() implementation
+   * removed unnecessary/obsolete callback-id-list mechanism
+   * FIX: remove onCanPlay listener after first invocation
+   * FIXED/IMPROVED status-dependent functions (stop() etc);
+   * NOTE intialization only works error-free in combinaiton with modification in Cordova resources so that on-init event for media/audio is correctly fired in case of async-preparation
+   * FIX included private field for audio status in order to avoid Exceptions in stop() function
+ * Cordova (MODIFIACATION for 2.8.1 JAR)
+   * added listeners in Audio impl. in order to avoid ERROR output (for normal/regular behavior) to LogCat
+   * BUGFIX in onPreparation() in case of async preparation: only signal MEDIA_STARTING if the current state is lower (e.g. do nothing if already playing)
+   * FIX for media/audio initialization: in case of async-preparation now INIT-callback is triggered when prepared-listener is invoked (not directly when async-preparation is started as before)
+ * html5AudioOutput
+   * remove console debug output
+   * FIX / WORKAROUND for stop/replay: in case audio does not support timeranges (dependent on server), audio is reloaded, since we cannot reset currentTime to 0
+   * BUGFIX need this-reference for removing listener in audio-object
+   * BUGFIX for initialization listener (should only be called once)
+ * maryTextToSpeech
+   * BUGFIX trigger onEnd-callback in tts-function if cancel-function is called (i.e. notify ending of TTS)
+   * FIX set onEnd-callback to null, after calling (avoiding possible, multiple calls to same callback)
+   * FIX apply encodeURIComponents() to text/sentence before sending to MARY (instead of just encoding space chars)
+ * webkitAudioInput
+   * BUGFIX for recognize() implementation
+   * BUGFIX need to reset variable aborted, otherwise recognition assumes abortion on every listener-callback, if abort/cancel has been invoked once before
+   * BUGFIX only restart asr if no speech is detected.
+   * BUGFIX for BUG in case of more than one instance running, ASR would get stuck in an infinite loop
+ * Notification
+   * BUGFIX for callback triggering (avoid null-pointer exceptions)
+   * DISABLED releasing resources on pause (in order to be able to play notification sounds as long as app is only paused and not exited yet)
+     * added & implemented optional parameter isKeepOnPause for creating notifications sounds (only relevant for ANDROID): if set, sounds are not released when APP pauses   
+   * added initSound() function (for avoiding double-triggering sound upon first playing, e.g. BEEP feedback after starting/resuming APP)
+   * REFACTORED private method for getting audio-object from internal cache
+ * removed language-specific functionality from ConfigurationManager (set to @deprecated: instead the LanguageManager should be used directly)
+ * modified ANT tasks to use integrated SCXML-JS for compiling dialog- and input-engine
+ * buil-properties/-settings:
+   * removed properties in build-setting files and ANT script that were required for previous solution (i.e. usage of external SCXML-JS)
+   * added/extended comments and added example for referencing nodejs in standard MacOS-environment
+   
+   
+##################
+ Version 2.3
+##################
+ * notification: added stopSound() function
+ * Templating (ehtml): added stringify() function for template representation objects
+ * Controllers/PresentationManager: added optional callback before_page_load()
+ * env/media: 
+   * added new Audio Input Module webkitAudioInput.js
+   * some BUGFIXes for audio output modules (html5 and cordova)
+   * updated recorder.js/recorderWorker.js
+   * FIX for hmtl5AudioInput.js in new Chrome version (> 30.x.x): due to performance problems (-> "stutter" in encoded WAV audio) integrated silenceDetection into audio-input module (recorder/recorderWorker)
+ * added VolumeControl plugin (ANDROID): control Android's volume setting and store/restore volume setting on leaving/entering the APP
+ * added textarea to login view, and ctrl code for speech input (for TESTING speech input; DISABLED by default)
+ * (changed default configuration for HTML5-speech-input's WebSocket to default port of new service-implementation)
+ * added UNICODE support for grammars (UNICODE characters need to be masked within grammar code, since JS/CC cannot handle these!)
+   - TODO remove obsolete UMLAUTs handling
+ * improved handling of SEMANTIC object in grammar, in case TOKENS / UTTERANCES are referenced multiple times within a phrase
+ * BUGFIX handling empty stopword list in grammar definitions (JSON)
+ * BUGFIX for testSemanticInterpreter.html:
+   - initialize with controls with correct default-language
+   - remove languages where no grammar is available, from drop-down list
+ * improved testSemanticInterpreter.html
+   - improved layout, added descriptions
+   - added mask/unmask option for JSON values (-> for non-ASCI unicode chars)
+ * added check / detailed error message for invalid JSON grammars
+   - using json-lint
+   - added check / detail message for build.xml
+   - added check / detail message for testSemanticInterpreter.html
+   
+ 
+##################
+ Version 2.2
+##################
+ 
+ * added transitions (animations) for views: now jQuery Mobile page transitions can be used in render(..., {transition: 'jqm transition name', reverse: [true|false]})
+   - default transition now set in PresentationManager (to: 'none'), instead of in main.js::afterLoadingControllers()
+   - added example dialogDescriptionSCXML.xml that uses transitions
+ * BUGFIX for template (.ehtml) parser: avoid false-negative error-messages (i.e. reported errors that are not errors)
+ * re-factored build.xml: renaming of targets/variables for SemanticInterpreter/Parser (to GrammarParser / -Generator)
+ * "normalized" Controller interface:
+  - added getLayout function (and corresponding property)
+  - added getLayoutName function
+  - renamed: getViews to getViewNames
+  - added: getViews [returns a list of the view info/JSON objects]
+  - renamed: getPartials to getPartialNames
+  - added: getPartials [returns a list of the partial info/JSON objects]
+* added ANT file parser.xml for parsing template files (*.ehtml): layouts, views, partials (as listed in directories.json)
+* renamed JavaScript files for ANT build tasks:
+  - InitForAntRhinoScriptEnv.js -> InitRhinoEnv.js
+  - AntScriptFileHandler.js -> AntFileHandler.js
+  - InitForAntNodeJsScriptEnv.js -> InitNodeJsEnv.js
+  - InitForAntDefaultScriptEnv.js -> InitAntDefaultEnv.js
+* updated HTML test page for grammar generation/testing (for new multi-language support of grammars)
+* some updates in user-guide.pdf
+  
+##################
+ Version 2.1
+##################
+ 
+ * ModelManger:
+	- API change: now use create(callback) before first usage (instead of getInstance(callback))
+	- API change: removed getModels() [RETURNS: Array<Object>]; replaced with getModelNames() [RETURNS: Array<String>]
+ * API change:
+	- naming convetion for models: now names for model files must be analogous to controller files:
+		* model class name must correspond to file name (except for first letter: file name may be lower case (or upper case); the class name's first letter MUST be upper case)
+		* model classes must be specified within namespace mobileDS, e.g. model "CalendarModel": mobileDS.CalendarModel = ...
+ * multi-language support for speech grammars (incl. automated loading)
+ * generic loadImpl() function in CommonUtils for loading/executing JavaScript implementation files (with serial / paralell loading modes)
+ * updated res/xml/config.xml to new Cordova format
+ * modified event-handling in InputEngine/DialogEngine: changed from touch_end_on_XXX to click_on_XXX
+ * build.settings / build.properties: moved several propeties into build.properties
+ * added targets to build.xml
+  - clean (extended version: now removes all generated files)
+  - build (compile all necessary files, i.e. compile grammars, update directories.json file etc.)
+  - doc (generate HTML documentation for framework code; WINDOWS only)
+  - targets for compiling all available grammar.json files
+ 
+##################
+ Version 2.0
+##################
+----------------------
+TODO (changes that may effect application specific code)
+----------------------
+ * build.settings: update your build.settings file (see updated version of build.settingsDefault)
+ * mobileDS.AudioInput and mobileDS.AudioOutput are now merged into mobileDS.MediaManager
+ * renamed assets/www/javascripts/ to assets/www/mmirf/ (MMIR Framework)
+ * renamed parsed_directories.json: directories.json
+ * moved application specific JS-files into assets/www/appStarterKit/
+	- suggested file structure: application specific code should be placed into assets/www/app[ application name ]/...
+	
+ * changed behavior for file-/class-/view-names:
+	* names will now ALWAYS be treated case-sensitive & corresponding to the file-name, with the exception
+	* controllers: the controller-class must have the same name as the controller's file
+		* EXCEPTION if the first character of the file-name is lower-case, the controller-class (and if exists the controller-helper-class) name must be (in difference to the file-name) begin with upper-case
+		-> controller-class-names must ALWAYS start with an upper-case character (regardless of the controller's file name)
+		* e.g. for getLayout(controllerName): use getLayout("Application") instead of getLayout("application") even if controller file-name is application.js
+		(NOTE: the first character of file-names for layouts is treated case-insensitive analog to controller-file-names: regardless of the layout's file-name,
+				references must always use upper-case for the first character as in the example above)
+	* partials: partial file-names always start with the character "~"; however, when refering to partials (e.g. @render('Application','languageMenu')) the "~" SHOULD be omitted
+	* see also comments for PresentationManager
+	* NOTE: do not forget to update directories.json (default target in build.xml) after adding, removing, or renaming files
+ 
+ * restructured 3rd party JS files, libraries etc.:
+	- resources (JS-files, CSS-files, images, sounds etc) required by the framework itself are now located in mmirf/vendor/ (previously: mmirf/res/), that is, in the corresponding sub-directories thereof
+	- application specific JS-files are now located in assets/www/libs/
+	- other application specific resources are located in assets/www/content/ as before
+
+ * InputManager renamed to InputEngine
+  - initializeDialog: startEngine
+  - raiseEvent: raise
+  * changed API: now InputEngine must be created ( mobileDS.InputEngine.create( callback ) ), before it can be used (or its instance be accessed)
+  
+ * DialogEngine: renamed functions
+  - show_dialog: showDialog
+  - close_current_dialog: hideCurrentDialog
+  - show_wait_dialog: showWaitDialog
+  - close_wait_dialog: hideWaitDialog
+  - get_on_page_loaded: getOnPageRenderedHandler
+  - set_on_page_loaded: setOnPageRenderedHandler
+  - perform_helper_method: performHelper
+  - raiseEvent: raise
+  - initializeDialog: startEngine
+  * changed API: now DialogEngine must be created ( mobileDS.DialogEngine.create( callback ) ), before it can be used (or its instance be accessed)
+ 
+ * renamed functions in SemanticInterpreter:
+	- get_asr_semantic: getASRSemantic
+	- get_asr_semantic_alt: getASRSemantic_alt
+	- removeStopwordsAlt: removeStopwords_alt
+
+ * removed from global namespace
+   - asr_semantic_annotation
+   - asr_recognized_text
+   -> instead use: var asr_recognized_text = mobileDS.SemanticInterpreter.getInstance().getASRSemantic(asr_semantic_annotation);
+
+ * "renamed" stem_word: mobileDS.SnowballSimple.stem
+ 
+ * renamed in CommonUtils
+  - html_comment_regex: regexHTMLComment
+  - html_resize_font_to_fit_surrounding_box: resizeFitToSourroundingBox
+  - to_json_string_value: toJSONStringValue
+  - convert_to_json_value_HTML_string: convertJSONStringValueToHTML
+  - convert_json_to_HTML_string: convertJSONStringToHTML
+  - get_params_as_dict: parseParamsToDictionary
+
+ * removed deprecated/un-used functions/properties in CommonUtils:
+  - log
+  - ehtml2Html
+  - appendJsSrcToHeader
+  - partial_name_regex
+  - partial_parameter_regex
+  - partial_var_pattern_assignment_regex
+  - partial_var_pattern_dataobject_regex
+  - partial_var_pattern_regex
+  - partial_var_pattern_simpleobject_regex
+  - render_partial_regex
+  - value_of_path_regex
+  - value_of_regex
+  - get_params_as_dict
+
+  - get_date_as_string
+  - get_duration_as_string
+
+  -> NOTE: these can be made re-available by calling setToCompatibilityMode() on the CommonUtils object
+  
+ * in LanguageManager removed deprecated function:
+	- translateHTML
+	- changeLanguage (this was/is an application specific function; a "copy" is available in controller/application.js)
+	- getCurrentLanguage (same as getLanguage)
+  * renamed:
+	- existsGrammarForLanguage: existsGrammar
+	- existsDictionaryForLanguage: existsDictionary
+	- existsSpeakerForLanguage: existsSpeaker
+	- cycleLanguages: setNextLanguage
+  -> NOTE: these can be made re-available by calling setToCompatibilityMode() on the LanguageManager object
+
+ * in ControllerManager renamed:
+	- performAction: perform
+	- performHelperAction: performHelper
+	- initializeControllers: create
+  * API change:
+	- removed getControllers() (RETURNS: Array<Controller>); replaced by getControllerNames() (RETURNS: Array<String>)
+	
+ * in View renamed:
+  (NOTE these changes are unlikely to effect application specific code)
+	- performAction: perform
+	- performActionIfPresent: performIfPresent
+ 
+ * in Helper renamed:
+  (NOTE these changes are unlikely to effect application specific code)
+	- performAction: perform
+	
+ * mobileDS.constants:
+	- changed for interface:
+		* needs to initialized using mobileDS.constants.create(env-mode) (NOTE: backwards compatible, i.e. mobileDS.constants.getInstance(new-mode) can be used too)
+		* afterwards instance can be accessed with mobileDS.constants (i.e. no need for mobileDS.constants.getInstance())
+		* env-mode can be changed using mobileDS.constants.create(new-mode) or mobileDS.constants.getInstance(new-mode)
+		* NOTE: this change is backwards-compatible, i.e. can still be used with mobileDS.constants.getInstance(new-mode) as before
+	* renamed functions:
+		- getDictionaryFilename: getDictionaryFileName
+		- getSpeakerFilename: getSpeakerFileName
+		- getGrammarFilename: getGrammarFileName
+ 
+ * PresentationManager
+  - removed un-used functions/properties: getVisualComponent, visualComponents
+  - renamed
+	- show_dialog: showDialog
+	- close_current_dialog: hideCurrentDialog
+	- render_view_successor: doRenderView
+	- rerenderView: reRenderView
+  - changed function API (signature):
+	- addView(view): addView(controllerName, view)
+	- getView(viewName): getView(controllerName, viewName)
+	- getPartial(partialName, controller): getPartial(controllerName, partialName)
+	
+
+ * renamed functions in GrammarConverter: 
+  (NOTE these changes are unlikely to effect application specific code)
+	- load_grammar: loadGrammar
+	- convert_json_grammar: convertJSONGrammar
+	- set_stop_words: setStopWords
+	- get_stop_words: getStopWords
+	- parse_stop_words: parseStopWords
+	- parse_stop_words_alt: parseStopWords_alt
+	- get_stop_words_regexp: getStopWordsRegExpr
+	- get_stop_words_regexp_alt: getStopWordsRegExpr_alt
+	- get_jscc_grammar: getJSCCGrammar
+	- get_js_grammar: getJSGrammar
+	- set_js_grammar: setJSGrammar
+	- parse_tokes: parseTokens
+	- parse_utterances: parseUtterances
+	- parse_utterance: doParseUtterance
+	- get_semantic_interpretationt_of_utterance: doCreateSemanticInterpretationForUtterance
+	- get_semantic_interpretationt_of_phrase: doCreateSemanticInterpretationForPhrase
+	- set_compile_grammar: setGrammarFunction
+	- compiled_grammar: executeGrammar
+	- (field) asr_semantic_annotation: semanticAnnotationResult
+	
+----------------------
+Change Information (changes that mostly concern internal framework code)
+----------------------
+
+* index.html: 
+  NOTE: new SCRIPT tag order requirement: "javascripts/gen/grammar.js" must be loaded AFTER "javascripts/semantic/semantic_interpreter.js"
+
+* JSON Grammar files:
+ - now moved to config/languages/[language code]
+ - build.xml extended for generating grammar.js-files for JSON-grammar files
++ Compiled Grammar files (named: <language code>_grammar.js) in assets/www/gen/grammar/
+
+* SCION queue implementation moved to .../tools/extensions
+
+* all JS-files .../tools/xxxExtensions moved to sub-directory .../tools/extensions/
+
+* JS-files for building (i.e. used in build.xml) now moved to .../tools/build/
+
+* JS-files for testing (e.g. used in test.xml) now moved to .../tools/test/
+
+* renamed files with underscore naming scheme (now: CamelCase):
+ - grammar_converter.js: grammarConverter.js
+ - grammar_parser_template.js: grammarParserTemplate.js
+ - semantic_interpreter.js: semanticInterpreter.js
+ - input_manager_engine.js: inputEngine.js
+ - input_manager_scxml.xml: inputDescriptionSCXML.xml
+ - input_manager_state_chart.js: InputDescription.js
+ - dialogDescription.xml: dialogDescriptionSCXML.xml
+ - DialogEngine.js: dialogEngine.js
+ 
+##################
+ Version 1.0
+##################
+ 
+ * added support for Partial views
+ * extended support for template expressions:
+  - control structures: @if [@else], @for(;;), @for( in )
+  - partial view expression: @render
+  - comments: @* *@
+  - "code execution" expressions: @(), @{ }@
+ * added message queue for SCION: now raising events from within SCION event-processing code is supported (i.e. from within BIG STEP in SCION) 
+ * added JSDoc generation for framework documentation 
+   
