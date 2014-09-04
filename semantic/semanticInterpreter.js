@@ -55,7 +55,24 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
 	 */
     var INPUT_FIELD_NAME = 'asr_recognized_text';
     
-    
+    /**
+     * The version number for the format of generated (JavaScript) grammars.
+     * 
+     * This number is "written into" the generated grammars and then
+     * used as argument, when the grammar adds itself via
+     * <code>addGrammar(id, func, versionNumber)</code>.
+     * 
+     * See generator function build_grammar() within createAndAddGrammar().
+     * 
+     * NOTE: This version number must be increased, when way changes, how 
+     *       grammars are generated.
+     *       Or more precisely: when previously generated grammars cannot
+     *       be used anymore, after the generation mechanism has been changed.
+     * 
+     * @constant
+     * @private
+     */
+    var GRAMMAR_FILE_FORMAT_VERSION = 3;
     
     /**
      * @param doRecompile (OPTIONAL) IF {Boolean}: if true, the JSON grammar in content\grammar.json will be recompiled (needs to be accessible via AJAX!)
@@ -141,9 +158,25 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
 	     * 					IF {Function}: the {Function} {@link GrammarConverter.executeGrammar()} - 
 	     * 									In this case, if no GrammarConverter instance fo <tt>id</tt> is present, a new one will be created; 
 	     * 									The stopwords must already be set, or must additionally be set for the GrammarConverter instance
-	     * 									  (e.g. using {@link mmir.SemanticInterpreter.setStopwords}) 
+	     * 									  (e.g. using {@link mmir.SemanticInterpreter.setStopwords})
+		 * @param {Number} [fileFormatNo] OPTIONAL
+		 * 					If the number given does not match {@link #GRAMMAR_FILE_FORMAT_VERSION}
+		 * 					the file format is assumed to be out-dated and an Error will be thrown.
+		 * 
+	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION.
 	     */
-    	var doAddGrammar = function(id, grammarImpl){
+    	var doAddGrammar = function(id, grammarImpl, fileFormatNo){
+    		
+    		//check if the added grammar has correct format
+    		if(fileFormatNo && fileFormatNo != GRAMMAR_FILE_FORMAT_VERSION){
+    			
+    			//grammar has old / out-dated format:
+    			throw new Error('Grammar file has wrong format: need grammar file with format version '
+    					+GRAMMAR_FILE_FORMAT_VERSION+', but got: '+fileFormatNo
+    					+ '. Please update generated grammar (delete '
+    					+ constants.getGeneratedGrammarsPath() +' and re-build grammars).'
+    			);
+    		}
         	
     		//the grammar function must be "wrapped" in a GrammarConverter instance
     		// ... if not, do so now:
@@ -299,13 +332,14 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
                 var moduleNameString = '"'+generatedParserLanguageCode+'GrammarJs"';
                 var addGrammarParserExec = 
 //                	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
-                	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
+                	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n  '//FIXME
+                	+ 'var fileFormatVersion = '+GRAMMAR_FILE_FORMAT_VERSION+';\n  '
                 	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
                 			+ grammarParser
                 	+ '\n};\n'
                 	+ 'semanticInterpreter.addGrammar("'
                 		+generatedParserLanguageCode
-                		+'", grammarFunc);\n\n'
+                		+'", grammarFunc , fileFormatVersion);\n\n'
                 	+ 'semanticInterpreter.setStopwords("'
                 		+generatedParserLanguageCode+'",'
                 		+JSON.stringify(theConverterInstance.getStopWords())
