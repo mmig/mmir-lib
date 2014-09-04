@@ -46,6 +46,40 @@ newMediaPlugin = {
 				}
 			};
 			
+
+			//EXPERIMENTAL: command-queue in case TTS is currently in use
+			// -> if TTS invoked, but currently not ready: add to queue
+			// -> after processing current TTS: process next on queue
+			var commandQueue = [];
+			var addToCommandQueue = function(args){
+				
+				//copy argument list:
+				var len = args.length;
+				var list = new Array(len);
+				for(var i=len-1; i >= 0; --i){
+					list[i] = args[i];
+				}
+				
+				commandQueue.push(list);
+			};
+			var processNextInCommandQueue = function(){
+				
+				isReady = false;
+				if(commandQueue.length > 0){
+					var args = commandQueue.shift();
+					isReady = true;
+					_instance.textToSpeech.apply(_instance, args);
+				}
+				else {
+					isReady = true;
+				}
+				
+			};
+			var clearCommandQueue = function(args){
+				commandQueue.splice(0, commandQueue.length);
+			};
+			//END: command queue
+			
 			var onEndCallBack= null;
 			var currentFailureCallBack = null;
 			var isReady= true;
@@ -89,7 +123,10 @@ newMediaPlugin = {
 						onEndCallBack();
 						onEndCallBack = null;
 					}
-					isReady = true;
+//					isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
+					
+					//EXPERIMENTAL: command-queue feature.
+					processNextInCommandQueue();
 				}
 			};
 			var ttsSingleSentence = function(text, onEnd, failureCallBack, onLoad){
@@ -98,16 +135,21 @@ newMediaPlugin = {
 					isReady = false;		   			
 					ttsMedia = mediaManager.getURLAsAudio(generateTTSURL(text), 
 								function(){
-									isReady = true;
+//									isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
 									if(onEnd){
 										onEnd();
 									};
+									//EXPERIMENTAL: command-queue feature.
+									processNextInCommandQueue();
 								},
 								function(){
-									isReady = true;
+//									isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
 									if (failureCallBack){
 										failureCallBack();
 									};
+
+									//EXPERIMENTAL: command-queue feature.
+									processNextInCommandQueue();
 								},
 								function(){
 									if(onLoad){
@@ -116,11 +158,14 @@ newMediaPlugin = {
 								});
 					ttsMedia.play();
 				} catch (e){
-					isReady=true;
+//					isReady=true;//DISABLED -> EXPERIMENTAL: command-queue feature.
 		    		console.log('error!'+e);
 					if (failureCallBack){
 						failureCallBack();
 					}
+
+					//EXPERIMENTAL: command-queue feature.
+					processNextInCommandQueue();
 				}
 				
 			};
@@ -151,11 +196,14 @@ newMediaPlugin = {
 						isLoading = false;
 						loadNext(onInit);
 					} catch (e){
-						isReady=true;
+//						isReady=true;//DISABLED -> EXPERIMENTAL: command-queue feature.
 			    		console.log('error! '+e);
 						if (failureCallBack){
 							failureCallBack();
 						}
+
+						//EXPERIMENTAL: command-queue feature.
+						processNextInCommandQueue();
 					}
 				}
 			};
@@ -180,10 +228,16 @@ newMediaPlugin = {
 							},
 
 							function(){
-								isReady = true;
+								//TODO currently, all pending sentences are aborted in case of an error
+								//     -> should we try the next sentence instead?
+								
+//								isReady = true;//DISABLE -> EXPERIMENTAL: command-queue feature.
 								if (currentFailureCallBack){
 									currentFailureCallBack();
 								};
+								
+								//EXPERIMENTAL: command-queue feature.
+								processNextInCommandQueue();
 							},
 							function(){
 								console.log("LongTTS done loading "+currIndex+ " "+sentenceArray[currIndex]+ (!this.isEnabled()?' DISABLED':''));
@@ -204,21 +258,41 @@ newMediaPlugin = {
 				}
 			};
 			
-			callBack({
+			var _instance = {
 				textToSpeech: function(parameter, successCallback, failureCallback, onInit){
+					var errMsg;
 					if (!isReady) {
-						if(failureCallback){
-							failureCallback("TTS is already used at the moment.");
-						}
+						
+						//EXPERIMENTAL: use command-queue in case TTS is currently in use.
+						addToCommandQueue(arguments);
 						return;
+						
+						//EXPERIMENTAL: command-queue feature.
+						// -> DISABLED error case (not needed anymore, if queuing TTS requests...)
+//						errMsg = "TTS is already used at the moment.";
+//						if(failureCallback){
+//							failureCallback(errMsg);
+//						}
+//						else {
+//							console.error(errMsg);
+//						}
+//						return;
 					}
 					isReady = false;
 					if ((typeof parameter) == 'string'){
 						if(parameter.length === 0){
 							isReady = true;
+							errMsg = "Aborted TTS: no text supplied (string has length 0)";
 							if(failureCallback){
-								failureCallback("Aborted TTS: no text supplied (string has length 0)");
+								failureCallback(errMsg);
 							}
+							else {
+								console.error(errMsg);
+							}
+
+							//EXPERIMENTAL: command-queue feature.
+							processNextInCommandQueue();
+							
 							return;/////////////////////////////////// EARLY EXIT /////////////////////////////
 						}
 						ttsSingleSentence(parameter, successCallback, failureCallback, onInit);
@@ -256,6 +330,11 @@ newMediaPlugin = {
 					console.debug('cancel tts...');
 					try {
 						
+
+						//EXPERIMENTAL: use command-queue in case TTS is currently in use -> empty queue
+						//              TODO should queue stay left intact? i.e. only current TTS canceled ...?
+						clearCommandQueue();
+						
 						//prevent further loading:
 						loadIndex = audioArray.length;
 						
@@ -288,6 +367,8 @@ newMediaPlugin = {
 				setTextToSpeechVolume: function(newValue){
 					_setVolume(newValue);
 				}
-			});//END: callback{ ...
+			};//END: _instance = { ...
+			
+			callBack(_instance);
 		}
 };
