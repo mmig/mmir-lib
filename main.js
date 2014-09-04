@@ -116,6 +116,24 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 							&&	isDialogManagerLoaded
 							&&	isSemanticsLoaded
 					){
+						//get additional configuration for requirejs
+						//from configuration.json:
+						// -> if property "config" is set, apply it as requirejs-config
+						//    before signaling READY
+						// EXAMPLE:
+						// the following entry (in config/configuration.json) would add
+						// the dependency information for www/appjs/test.js as module "testConf"
+						// 
+						//	, "config": {
+						//    	"paths": {
+						//    		"testConf": "../appjs/test"
+						//    	}
+						//    }
+						//
+						var requireConfig = configurationManager.get('config');
+						if(requireConfig){
+							require.config(requireConfig);
+						}
 						
 						//"give signal" that the framework is now initialized / ready
 						mmir.setInitialized();
