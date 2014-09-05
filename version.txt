@@ -24,6 +24,31 @@ version notes for MMIR framework code (v 3.0beta3)
  --------------
 
 ##################
+ Version 3.0.0
+##################
+
+ * added versioning for file format of generated grammar files:
+   if file is loaded and its file format is out-of-date, an exception will be thrown
+   NOTE: you should re-generated grammars (use ANT clean & build task)
+   
+ * added versioning for file format of compiled view / template files:
+   if file is loaded and its file format is out-of-date, an exception will be thrown
+   NOTE: you should re-compile views (use ANT default task in mmir-parse.xml)
+ 
+ * added mechanism for enabling RequireJS config settings through config/configuration.json:
+   if property "config" is set, this will be applied to require.config(..), AFTER the framework
+   has been initialized and BEFORE the mmir.ready() signal is given
+   (see documentation of RequireJS for usage of require.config())
+   NOTE: the requirejs' base-path is currently set to the mmirf/ sub-directory! path references have to start with "../"
+         in order to navigate to the root directory (where index.html is located).
+         
+ * added mechanism for configuring MediaManager, ie. which media-plugin implementations should be loaded via
+   config/configuration.json
+   (see the MMIR StarterKit demo for an example)
+   
+ * FIX for MARY-TTS plugin: if TTS is active, incoming requests for TTS are now queued and processed, after the current TTS has finished (before, they were ignored)
+
+##################
  Version 3.0beta4
 ##################
  
@@ -39,12 +64,25 @@ version notes for MMIR framework code (v 3.0beta3)
          to ->
          /views/layout/default.ehtml
  
+ * added option "usePrecompiledViews" in config/configuration.json for enabling/disabling use of pre-compiled views:
+   if this option is present and enabled ("true"), pre-compiled views will be used if
+   (1) the pre-compiled view (*.js) exists for the view (*.ehtml) in gen/views/...
+   (2) the view (*.ehtml) has not changed, since it has been compiled (verified by using the checksum files)
+ 
+ * Removed "hard-coded" requirejs dependencies for template/view parser from PresentationManager (and view classes):
+   using "lazy loading" for parsers now (e.g. in case pre-compiled views are used, parsers will not be loaded)
+ 
+ * FIX for stopword removal in SemanticInterpreter: respect word boundaries, ie. do not remove matches that occur within words (e.g. for stopword "in" ignore match within "going")
+ 
 ##################
  Version 3.0beta3
 ##################
  
  * changed to Cordova 3.x
  * new project structure for Cordova 3.x
+ 
+ * added function for overwriting default requirejs-config of framework via mmir.config(..)
+   USAGE NOTE must be invoked, after core.js is loaded AND before requirejs is loaded (in index.html)
 
 ##################
  Version 3.0beta2
