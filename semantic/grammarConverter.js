@@ -132,12 +132,19 @@ GrammarConverter.prototype.convertJSONGrammar = function(){
 			+ "*]\n\n"
 			+ this.grammar_tokens
 			+ "\n\n ##\n\n/~ --- Grammar specification --- ~/\n\nutterance:      phrases    [*  "
-			+ this.variable_prefix
-			+ "result['semantic'] = "
-			+ this.variable_prefix
-			+ "result['semantic'].replace(/\"{/g,'{').replace(/}\"/g,'}'); console.log("
-			+ this.variable_prefix + "result); semanticAnnotationResult.result = "
-			+ this.variable_prefix + "result*] ;\n\n" + this.grammar_utterances
+			
+			//DISABLE russa: not needed anymore, since no JSON.stringify is used during execution of generated grammar.
+//			+ this.variable_prefix
+//			+ "result['semantic'] = "
+//			+ this.variable_prefix
+//			+ "result['semantic'].replace(/\"{/g,'{').replace(/}\"/g,'}'); "
+			
+			//TODO use LOG LEVEL for activating / deactivating this:
+			+ "console.log("
+			+ this.variable_prefix + "result); "
+			
+			+ "semanticAnnotationResult.result = "
+			+ this.variable_prefix + "result; *] ;\n\n" + this.grammar_utterances
 			+ "\n" + this.grammar_phrases + ";";
 
 	this.json_grammar_definition = this.unmaskJSON(this.json_grammar_definition);
@@ -366,19 +373,43 @@ GrammarConverter.prototype.doCreateSemanticInterpretationForUtterance = function
 		
 		variable_index = /\[(\d+)\]/.exec(variable);
 		variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
+//		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?(\["semantic"\]|\['semantic'\]|\.semantic)?/.exec(variable);
+//		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
+//"_$NAME[INDEX]['FIELD']":  _$NAME                  [ INDEX ]        [" FIELD "]  | [' FIELD ']      |   .FIELD
 		if (variable_index == null) {
 			remapped_variable_name = variable;
 		} else {
-				remapped_variable_name = variable.replace('['
-						+ variable_index[1] + ']', "["
-						+ utterance_name.toLowerCase() + "_temp['phrases']['"
-						+ variable_name.toLowerCase() + "']["
-						+ variable_index[1] + "]]");
+				remapped_variable_name = variable.replace(
+						  '[' + variable_index[1] + ']'
+						, "["
+							+ utterance_name.toLowerCase() + "_temp['phrases']['"
+							+ variable_name.toLowerCase() + "']["
+							+ variable_index[1]
+						+ "]]");
+				//TODO replace try/catch with safe_acc function
+				//     PROBLEM: currently, the format for variable-access is not well defined
+				//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
+				//                 we would need another safe_acc call 
+				//				   ... i.e. need to parse expression for this, but since the format is not well defined
+				//				   we cannot say, for what exactly we should parse...
+				//                 NORMAL VAR EXPR: 		_$a_normal_token[0]
+				//                 ACCESS TO SEMANTICS: 	_$other_utterance[0]['semantic']
+				//                                      but this could also be expressed e.g. as _$other_utterance[0].semantic
+				//                                      ...
+//				remapped_variable_name = variable.replace(
+//						  '[' + variable_index[1] + ']'
+//						, "[safe_acc("
+//							+ utterance_name.toLowerCase() + "_temp, 'phrases', '"
+//							+ variable_name.toLowerCase() + "', "
+//							+ variable_index[1] 
+//							+ ")]"
+//						);
 		}
 		semantic_as_string = semantic_as_string.replace(
 				variable,
 				"' + function(){try{return " + remapped_variable_name
 					+ ";} catch(e){return 'undefined';}}() + '"
+//				"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
 		);
 		variables =  this.variable_regexp.exec(semantic_as_string);
 	}
@@ -404,7 +435,7 @@ GrammarConverter.prototype.doCreateSemanticInterpretationForPhrase = function(ut
 	for (i = 0; i < length; i += 1) {
 		if (typeof(duplicate_helper[splitted_phrase[i]]) == "undefined") {
 			duplicate_helper[splitted_phrase[i]] = 0;
-			result += utterance_name+"_temp['phrases']['"+splitted_phrase[i].toLowerCase()+"'] = {};";
+			result += utterance_name+"_temp['phrases']['"+splitted_phrase[i].toLowerCase()+"'] = [];";
 		} else {
 			duplicate_helper[splitted_phrase[i]] += 1;
 		}
@@ -550,7 +581,7 @@ GrammarConverter.prototype.maskString = function (str) {
 		}
 		//handle NON-ASCII
 		else if (ch < ' ' || ch > '~') {
-			result.push( mask( ch ));
+			mask( ch );
 		} 
 		//handle normal chars
 		else {
@@ -614,7 +645,7 @@ GrammarConverter.prototype.unmaskString = function (str) {
 		pos = i + match[0].length;
 	}
 	
-	if(pos < len-1){
+	if(pos < len){
 		result.push(source.substring(pos));
 	}
 
@@ -760,9 +791,13 @@ GrammarConverter.prototype.encodeUmlauts = function(target, doAlsoEncodeUpperCas
 	//	data = data.replaceAll("\u00FC", "__ue__");//HTML: &#252;
 	//	data = data.replaceAll("\u00F6", "__oe__");//HTML: &#246;
 	//	data = data.replaceAll("\u00DF", "__ss__");//HTML: &#223;
-	str = str.replace(/�/g,'__oe__').replace(/�/g,'__ae__').replace(/�/g,'__ue__').replace(/�/g,'__ss__');
+
+	//	data = data.replaceAll("\u00C4", "__Ae__");//HTML: &#196;
+	//	data = data.replaceAll("\u00DC", "__Ue__");//HTML: &#220;
+	//	data = data.replaceAll("\u00D6", "__Oe__");//HTML: &#214;
+	str = str.replace(/\u00F6/g,'__oe__').replace(/\u00E4/g,'__ae__').replace(/\u00FC/g,'__ue__').replace(/\u00DF/g,'__ss__');
 	if(doAlsoEncodeUpperCase){
-    	str = str.replace(/�/g,'__Oe__').replace(/�/g,'__Ae__').replace(/�/g,'__Ue__');
+    	str = str.replace(/\u00D6/g,'__Oe__').replace(/\u00C4/g,'__Ae__').replace(/\u00DC/g,'__Ue__');
 	}
 	
 	if(isString){
@@ -803,9 +838,9 @@ GrammarConverter.prototype.decodeUmlauts = function(target, doAlsoDecodeUpperCas
 		str = JSON.stringify(target);
 	}
 	
-	str = str.replace(/__oe__/g,'�').replace(/__ae__/g,'�').replace(/__ue__/g,'�').replace(/__ss__/g,'�');
+	str = str.replace(/__oe__/g,'\u00F6').replace(/__ae__/g,'\u00E4').replace(/__ue__/g,'\u00FC').replace(/__ss__/g,'\u00DF');
 	if(doAlsoDecodeUpperCase){
-    	str = str.replace(/__Oe__/g,'�').replace(/__Ae__/g,'�').replace(/__Ue__/g,'�');
+    	str = str.replace(/__Oe__/g,'\u00D6').replace(/__Ae__/g,'\u00C4').replace(/__Ue__/g,'\u00DC');
 	}
 	
 	if(isString){
