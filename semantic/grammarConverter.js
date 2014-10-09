@@ -406,9 +406,9 @@ GrammarConverter.prototype.doCreateSemanticInterpretationForUtterance = function
 //						);
 		}
 		semantic_as_string = semantic_as_string.replace(
-				variable,
-				"' + function(){try{return " + remapped_variable_name
-					+ ";} catch(e){return 'undefined';}}() + '"
+				variables[0],
+				" function(){try{return " + remapped_variable_name
+					+ ";} catch(e){return void(0);}}() "
 //				"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
 		);
 		variables =  this.variable_regexp.exec(semantic_as_string);
@@ -446,8 +446,8 @@ GrammarConverter.prototype.doCreateSemanticInterpretationForPhrase = function(ut
 	}
 	result += "var " + this.variable_prefix + "phrase = %%; " + utterance_name
 			+ "_temp['phrase']=" + this.variable_prefix + "phrase; "
-			+ utterance_name + "_temp['semantic'] = '" + semantic_as_string
-			+ "'; " + this.variable_prefix + utterance_name + "["
+			+ utterance_name + "_temp['semantic'] = " + semantic_as_string
+			+ "; " + this.variable_prefix + utterance_name + "["
 			+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "
 			+ this.variable_prefix + "result = " + utterance_name + "_temp; *]";
 	return result;
