@@ -105,20 +105,35 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 			});
     		
 
+    		//DISABLED @russa: currently disabled, since debugging eval'ed code is problematic
+    		//                 NOTE support for code-naming feature (see below) is currently somewhat broken in FireFox (e.g. location in error-stack is not done correctly) 
 //        	//NOTE: this new loading-mechanism avoids global VARIABLES by
 //    		//	* loading the script as text
 //    		//	* evaluating the script-text (i.e. executing the JavaScript) within an local context
+//    		//  * uses code-naming feature for eval'ed code: //@ sourceURL=...
 //    		//i.e. eval(..) is used ...
+//    		var targetPath = constants.getMediaPluginPath()+filePath;
 //    		$.ajax({
 //                async: true,
 //                dataType: "text",
-//                url: constants.getMediaPluginPath()+filePath,
+//                url: targetPath,
 //                success: function(data){
 //                	
 //                	//add "dummy-export-code" to script-text 
 //                	// -> for "retrieving" the media-plugin implementation as return value from eval(..)
 //            		var LOAD_MODULE_TEMPLATE_POSTFIX = 'var dummy = newMediaPlugin; dummy';
-//                	var newMediaPlugin = eval(data + LOAD_MODULE_TEMPLATE_POSTFIX);
+//            		//use eval code naming feature...
+//            		var codeId = ' sourceURL=' + constants.getMediaPluginPath()+filePath + '\n';
+//            		//... for WebKit:
+//            		var CODE_ID_EXPR1 = '//@';
+//            		// ... and for FireFox:
+//            		var CODE_ID_EXPR2 = '//#';
+//            		
+//                	var newMediaPlugin = eval(data 
+//                			+ CODE_ID_EXPR1 + codeId 
+//                			+ CODE_ID_EXPR2 + codeId 
+//                			+ LOAD_MODULE_TEMPLATE_POSTFIX
+//                	);
 //                	
 //                	if (typeof newMediaPlugin !== 'undefined' && newMediaPlugin){
 //    	    			newMediaPlugin.initialize(function(exportedFunctions){
