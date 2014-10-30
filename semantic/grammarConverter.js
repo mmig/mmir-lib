@@ -190,6 +190,11 @@ GrammarConverter.prototype.parseStopWords = function(){
 	//FIX for encoded chars: if a word begins or ends with an encoded char, \b cannot detect the word's boundaries
 	//	-> FIX if we encounter such words, create a separate RegExpr that uses 
 	//         whitespaces & START-/END-expression for detecting word-boundaries, i.e. something like: (\s|^)(~~ ... words ... ~~)(\s|$)
+	//
+	//  NOTE: the word-boundaries expression \b seems to have no effect in case of non-ASCII chars in general
+	//        (e.g. for Japanese characters / words)
+	//        .... so we would need to use this alternative mechanism (e.g. using whitespaces & START-/END-expr.) 
+	//        even if these characters were not encoded! 
 	var encStartTester = new RegExp("^" + this.enc_regexp_str      ,"gm");
 	var encEndTester   = new RegExp(      this.enc_regexp_str + "$","gm");
 	var enc_stop_words = "";
