@@ -447,7 +447,14 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 				gc = doGetGrammar(lang);
 			}
     		var stop_words_regexp = gc.getStopWordsRegExpr();
-        	return thePhrase.replace(stop_words_regexp, '').trim();
+    		
+    		var str = thePhrase;
+    		var encoded_stop_words_regexp = gc.getStopWordsEncRegExpr();
+    		if(encoded_stop_words_regexp){
+    			str = str.replace(gc.stop_words_regexp_enc, ' ').trim();
+    		}
+    		
+        	return str.replace(stop_words_regexp, '').trim();
     	};
     	
 		var removeStopwordsAltFunc = function removeStopwords_alt(thePhrase, lang, gc){

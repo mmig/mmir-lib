@@ -59,6 +59,10 @@ var GrammarConverter = function(){
 	this.variable_regexp = /"(_\$[^\"]*)"/igm;// /"_$([^\"]*)/igm;
 	this.token_variables = "[*\n  var " + this.variable_prefix
 			+ "result = '';\n";
+
+	//regular expression for detecting encoded chars (see mask/unmask functions)
+	this.enc_regexp_str = "~~([0-9|A-F|a-f]{4})~~";
+	
 	this.tokens_array = new Array();
 	this.stop_words_regexp;
 	
@@ -175,7 +179,7 @@ GrammarConverter.prototype.getStopWords = function(){
 	return this.json_grammar_definition.stop_word;
 };
 
-//(this is the original implementation; has problems if stopwords are at the end of a senctence)
+//this is the original / main implementation for creating the RegExp for stopword removal
 GrammarConverter.prototype.parseStopWords = function(){
 
 	//create RegExp for stop words:
@@ -183,24 +187,59 @@ GrammarConverter.prototype.parseStopWords = function(){
 	var size = json_stop_words.length;
 	var stop_words = "";
 	
+	//FIX for encoded chars: if a word begins or ends with an encoded char, \b cannot detect the word's boundaries
+	//	-> FIX if we encounter such words, create a separate RegExpr that uses 
+	//         whitespaces & START-/END-expression for detecting word-boundaries, i.e. something like: (\s|^)(~~ ... words ... ~~)(\s|$)
+	var encStartTester = new RegExp("^" + this.enc_regexp_str      ,"gm");
+	var encEndTester   = new RegExp(      this.enc_regexp_str + "$","gm");
+	var enc_stop_words = "";
+	var isEncWord = function(str){
+		return encStartTester.test(str) || encEndTester.test(str); 
+	};
+	
+	
 	if(size > 0){
-		stop_words += "\\b(";           //starting at a word-boundary (-> ignore within-word matches)
 		
 		//... then the RegExp matches each stopword:
 		for(var index=0; index < size ; ++index){
 			var stop_word = json_stop_words[index];
-			if (index > 0){
+			
+			//special treatment for word that begin/end with encoded chars:
+			if(isEncWord(stop_word)){
+				if(enc_stop_words.length === 0){
+					enc_stop_words = "(\\s|^)(";
+				}
+				else {
+					enc_stop_words += "|";
+				}
+				
+				enc_stop_words += stop_word;
+				
+				continue;
+			}
+			
+			//... for "normal" stopwords:
+			
+			if (stop_words.length > 0){
 				stop_words +=	"|";    //... if there is already a previous stopword-entry: do add OR-matching ...
 			}
 	
 			stop_words +=	stop_word;  //... add the stopword "stop_word"
 		}
+	}
+	
+	if(stop_words.length > 0){
 		
-		stop_words += ")"
-			       + "\\b"	            //... ending with a word-boundary -> avoid "cutting out" matching partial strings
-		                                //    e.g. without \b: '(in)\s?' would match (and cut out all matches) within "winning" -> "wng"
-			       
-			       + "\\s?";	        //... and optionally: one white-character that follows the stopword
+		stop_words = 
+				 "\\b("             //starting at a word-boundary (-> ignore within-word matches)
+			   
+			+ stop_words 
+			   
+			   + ")"
+		       + "\\b"	            //... ending with a word-boundary -> avoid "cutting out" matching partial strings
+	                                //    e.g. without \b: '(in)\s?' would match (and cut out all matches) within "winning" -> "wng"
+		       
+		       + "\\s?";	        //... and optionally: one white-character that follows the stopword
 	}
 	else {
 		//for empty stopword definition: match empty string
@@ -210,10 +249,19 @@ GrammarConverter.prototype.parseStopWords = function(){
 	this.stop_words_regexp = new RegExp(stop_words,"igm");	//RegExp options: 
 															// ignore-case (i),
 															// match globally i.e. all occurrences in the String (g), 
-															// do not stop at line breaks (m) 
+															// do not stop at line breaks (m)
+	
+	
+	//only create ReExp for special stopwords, if we actually have at least 1 of those:
+	//NOTE for replacement, we need to use a space-char (i.e. replace these with spaces, not empty strings: str.replace(..., ' '); )
+	if(enc_stop_words.length > 0){
+			enc_stop_words += ")(\\s|$)";
+			this.stop_words_regexp_enc = new RegExp(enc_stop_words,"igm");	
+	}
 
-	//initialize the alternative version / regular expression for stopwords:
-	this.parseStopWords_alt();
+	//DISABLED: only create these if necessary (i.e. if getStopWordsRegExpr_alt() is called)
+//	//initialize the alternative version / regular expression for stopwords:
+//	this.parseStopWords_alt();
 };
 
 //initialize alternative version / regular expression for stopwords:
@@ -251,6 +299,32 @@ GrammarConverter.prototype.getStopWordsRegExpr = function(){
 		this.parseStopWords();
 	}
 	return this.stop_words_regexp;
+};
+
+/**
+ * FIX for stopwords that start or end with encoded chars (i.e. non-ASCII chars)
+ * 
+ * This RegExp may be NULL/undefined, if no stopwords exist, that begin/end with encoded chars
+ * i.e. you need to check for NULL, before trying to use this RegExpr.
+ * 
+ *  Usage:
+ *  @example 
+ *  
+ *  //remove normal stopwords:
+ *  var removedStopwordsStr  = someStr.replace( gc.getStopWordsRegExpr(), '');
+ *  
+ *  
+ *  var removedStopwordsStr2 = removedStopwordsStr;
+ *  if(gc.getStopWordsEncRegExpr()){
+ *  	//NOTE replace stopwords with spaces (not with empty String as above, ie. with "normal" stopwords) 
+ *  	removedStopwordsStr2 = gc.getStopWordsEncRegExpr().replace( gc.getStopWordsEncRegExpr(), ' ');
+ *  }
+ */
+GrammarConverter.prototype.getStopWordsEncRegExpr = function(){
+	if(!this.stop_words_regexp){
+		this.parseStopWords();
+	}
+	return 
 };
 
 //alternative version / regular expression for stopwords:
@@ -630,8 +704,8 @@ GrammarConverter.prototype.unmaskString = function (str) {
 	var match, source = str, result = [], pos = 0, i, len = str.length;
 	
 	//RegExpr for: ~~XXXX~~
-	// where XXXX is the unicode HEX number
-	var REGEXPR_ESC = /~~([0-9|A-F|a-f]{4})~~/igm;
+	// where XXXX is the unicode HEX number: ~~([0-9|A-F|a-f]{4})~~
+	var REGEXPR_ESC = new RegExp( this.enc_regexp_str, "igm");
 	
 	while(match = REGEXPR_ESC.exec(source)){
 		i =  match.index;
@@ -694,7 +768,6 @@ GrammarConverter.prototype.unmaskJSON = function (json, isMaskValues, isMaskName
  */
 GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the initializer (i.e. see returned function below)
 	
-	var self = this;
 	var isArray;
 	if(typeof commonUtils !== 'undefined'){
 		isArray = commonUtils.isArray;//FIXME this requires ArrayExtension.js !!!
@@ -710,12 +783,12 @@ GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the
 		//different treatments for: STRING, ARRAY, OBJECT types (and 'REST' type, i.e. all ohters)
 		if(typeof obj === 'string' && isMaskValues){
 			//STRING: encode the string
-			return recodeFunc.call(self, obj);
+			return recodeFunc.call(this, obj);
 		}
 		else if( isArray(obj) ) {
 			//ARRAY: process all entries:
 			for(var i=0, size = obj.length; i < size; ++i){
-				obj[i] = processJSON(obj[i], recodeFunc, isMaskValues, isMaskNames);
+				obj[i] = processJSON.call(this, obj[i], recodeFunc, isMaskValues, isMaskNames);
 			}
 			
 			return obj;
@@ -725,11 +798,12 @@ GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the
 			for(var p in obj){
 				if(obj.hasOwnProperty(p)){
 					
-					obj[p] = processJSON(obj[p], recodeFunc, isMaskValues, isMaskNames);
+					obj[p] = processJSON.call(this, obj[p], recodeFunc, isMaskValues, isMaskNames);
 					
 					//if the property-name should also be encoded:
 					if(typeof p === 'string' && isMaskNames){
-						var masked = recodeFunc.call(self, p);
+						
+						var masked = recodeFunc.call(this, p);
 						if(masked !== p){
 							obj[masked] = obj[p];
 							delete obj[p];
@@ -753,7 +827,7 @@ GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the
 			isMaskNames = this.maskNames;
 		}
 		
-		return processJSON(json, recodeFunc, isMaskValues, isMaskNames);
+		return processJSON.call(this, json, recodeFunc, isMaskValues, isMaskNames);
 	};
 	
 })();
