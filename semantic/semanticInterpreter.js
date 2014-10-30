@@ -25,7 +25,8 @@
  */
 
 
-define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'], 
+define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
+        ], 
 	/**
 	 * @name SemanticInterpreter
 	 * @exports SemanticInterpreter as mmir.SemanticInterpreter
@@ -33,7 +34,7 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
 	 * @class
 	 */
 	function (
-		constants, GrammarConverter, template, jscc
+		constants, GrammarConverter//, template, jscc
 ){
 	
 	/**
@@ -181,7 +182,26 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
         var doSetStopwords = function(id, stopwordArray){
         	doGetGrammar(id).setStopWords(stopwordArray);
         };
-        var doGetGrammar = function(id, doNotResolve){//NOTE: this should stay private
+        /**
+         * HELPER retrieve the executable grammar:
+         * if already loaded, return the grammar instance, otherwise load & compile.
+         * 
+         * @param {String} id
+         * 		the ID (e.g. language code) for the grammar
+         * @param {Boolean} [doNotResolve] OPTIONAL
+         * 		if <code>false</code> AND the request grammar is not loaded, yet
+         * 		then the grammar will NOT be loaded (if omitted or <code>true</code>
+         * 		missing grammars will automatically be loaded and compiled)
+         * @param {Function} [callback] OPTIONAL
+         * 		if grammar has to be loaded (and compiled), the provided callback
+         * 		will be called, after completion.
+         * 
+         * @return {GrammarExecFunction}
+         * 			the exectuable grammar (i.e. execution function), if the grammar is
+         * 			already loaded (if grammar has to loaded and compiled, you need to
+         * 			wait for the callback-call and then re-invoke doGetGrammar()).
+         */
+        var doGetGrammar = function(id, doNotResolve, callback){//NOTE: this should stay private
         	
         	if(!id){
         		if(!currentGrammarId){
@@ -192,10 +212,27 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
         		}
         	}
         	
+        	//shift arguments, if necessary:
+        	if(!callback && typeof doNotResolve === 'function'){
+        		callback = doNotResolve;
+        		doNotResolve = false;
+        	}
+        	
+        	if(!callback){
+        		//TODO do this depending on DEBUG setting
+        		isDefaultCallback = true;
+        		callback = function(){
+        			console.info('created executable grammar for "'+id+'" from source '+jsonGrammarUrl);
+        		};
+        	}
+        	
         	if(!doNotResolve && ! checkHasGrammar(id) ){
         		var jsonGrammarUrl = instance.get_json_grammar_url(id);
         		
-        		createAndAddGrammar(jsonGrammarUrl, id, function(){console.info('created executable grammar for "'+id+'" from source '+jsonGrammarUrl);});
+        		createAndAddGrammar(jsonGrammarUrl, id, callback);
+        	}
+        	else if(callback){
+        		callback();
         	}
         	
         	return grammarImplMap[id];
@@ -242,92 +279,95 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
         	
         	function build_grammar(theConverterInstance){
         	    
+        		require(['jscc'], function(jscc){
                 
-                theConverterInstance.convertJSONGrammar();
-                var grammarDefinition = theConverterInstance.getJSCCGrammar();
-                
-//                grammarDefinitionText = grammarDefinition;
-                
-//                var pure_code, out_code, i;
-
-                //set up the JS/CC compiler:
-                var dfa_table = '';
-//                html_output = new String();
-                error_output = new String();//FIXME impl. & use jcss.getErrorMessage()/Problems()...
-                jscc.reset_all( jscc.EXEC_WEB );
-                jscc.parse_grammar(grammarDefinition);
-              
-                if (jscc.getErrors() == 0) {
-                	jscc.undef();
-                	jscc.unreachable();
-                        
-                    if (jscc.getErrors() == 0) {
-                    	jscc.first();
-                    	jscc.print_symbols();
-                    	dfa_table = jscc.create_subset(jscc.get_nfa_states());
-                    	dfa_table = jscc.minimize_dfa(dfa_table);
-                    	
-                    	jscc.set_dfa_table(dfa_table);//FIXME: check, if this is really necessary
-                        
-                    	jscc.lalr1_parse_table(false);
-                    	jscc.resetErrors();
-                    }
-                }
-             
-                if (jscc.getErrors() > 0 || jscc.getWarnings() > 0 && error_output != "") 
-                    console.error(''+error_output);
-                jscc.resetErrors();
-                jscc.resetWarnings();
-                
-//                console.debug("before replace " + theConverterInstance.PARSER_TEMPLATE);//debug
-             
-                var grammarParser = new String(theConverterInstance.PARSER_TEMPLATE);
-                grammarParser = grammarParser.replace(/##PREFIX##/gi, "");
-                grammarParser = grammarParser.replace(/##HEADER##/gi, jscc.get_code_head());
-                grammarParser = grammarParser.replace(/##TABLES##/gi, jscc.print_parse_tables(jscc.MODE_GEN_JS));
-                grammarParser = grammarParser.replace(/##DFA##/gi, jscc.print_dfa_table(dfa_table));
-                grammarParser = grammarParser.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
-                grammarParser = grammarParser.replace(/##LABELS##/gi, jscc.print_symbol_labels());
-                grammarParser = grammarParser.replace(/##ACTIONS##/gi, jscc.print_actions());
-                grammarParser = grammarParser.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
-                grammarParser = grammarParser.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
-                grammarParser = grammarParser.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
-                grammarParser = grammarParser.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
-                
-                
-                //FIXME attach compiled parser to some other class/object
-                var moduleNameString = '"'+generatedParserLanguageCode+'GrammarJs"';
-                var addGrammarParserExec = 
+	                theConverterInstance.convertJSONGrammar();
+	                var grammarDefinition = theConverterInstance.getJSCCGrammar();
+	                
+	//                grammarDefinitionText = grammarDefinition;
+	                
+	//                var pure_code, out_code, i;
+	
+	                //set up the JS/CC compiler:
+	                var dfa_table = '';
+	//                html_output = new String();
+	                error_output = new String();//FIXME impl. & use jcss.getErrorMessage()/Problems()...
+	                jscc.reset_all( jscc.EXEC_WEB );
+	                jscc.parse_grammar(grammarDefinition);
+	              
+	                if (jscc.getErrors() == 0) {
+	                	jscc.undef();
+	                	jscc.unreachable();
+	                        
+	                    if (jscc.getErrors() == 0) {
+	                    	jscc.first();
+	                    	jscc.print_symbols();
+	                    	dfa_table = jscc.create_subset(jscc.get_nfa_states());
+	                    	dfa_table = jscc.minimize_dfa(dfa_table);
+	                    	
+	                    	jscc.set_dfa_table(dfa_table);//FIXME: check, if this is really necessary
+	                        
+	                    	jscc.lalr1_parse_table(false);
+	                    	jscc.resetErrors();
+	                    }
+	                }
+	             
+	                if (jscc.getErrors() > 0 || jscc.getWarnings() > 0 && error_output != "") 
+	                    console.error(''+error_output);
+	                jscc.resetErrors();
+	                jscc.resetWarnings();
+	                
+	//                console.debug("before replace " + theConverterInstance.PARSER_TEMPLATE);//debug
+	             
+	                var grammarParser = new String(theConverterInstance.PARSER_TEMPLATE);
+	                grammarParser = grammarParser.replace(/##PREFIX##/gi, "");
+	                grammarParser = grammarParser.replace(/##HEADER##/gi, jscc.get_code_head());
+	                grammarParser = grammarParser.replace(/##TABLES##/gi, jscc.print_parse_tables(jscc.MODE_GEN_JS));
+	                grammarParser = grammarParser.replace(/##DFA##/gi, jscc.print_dfa_table(dfa_table));
+	                grammarParser = grammarParser.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
+	                grammarParser = grammarParser.replace(/##LABELS##/gi, jscc.print_symbol_labels());
+	                grammarParser = grammarParser.replace(/##ACTIONS##/gi, jscc.print_actions());
+	                grammarParser = grammarParser.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
+	                grammarParser = grammarParser.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
+	                grammarParser = grammarParser.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
+	                grammarParser = grammarParser.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
+	                
+	                
+	                //FIXME attach compiled parser to some other class/object
+	                var moduleNameString = '"'+generatedParserLanguageCode+'GrammarJs"';
+	                var addGrammarParserExec = 
 //                	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
                 	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
-                	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
+	                	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
                 			//TODO active/use safe_acc (instead of try-catch construct in semantic-result extraction
 //                			+ "var safe_acc = function(obj){\n  \tvar len = arguments.length;\n  \tif(len === 1){\n  \t    return null;\n  \t}\n  \tvar curr = obj, prop = arguments[1], i = 2;\n  \tfor(; i < len; ++i){\n  \tif(obj[prop] != null){\n  \t    obj = obj[prop];\n  \t}\n  \tprop = arguments[i];\n  \t}\n  \tvar res = obj[prop];\n  \treturn typeof res !== 'undefined'? res : null;\n  \t};"
                 			+ grammarParser
-                	+ '\n};\n'
-                	+ 'semanticInterpreter.addGrammar("'
-                		+generatedParserLanguageCode
-                		+'", grammarFunc);\n\n'
-                	+ 'semanticInterpreter.setStopwords("'
-                		+generatedParserLanguageCode+'",'
-                		+JSON.stringify(theConverterInstance.getStopWords())
-                	+ ');\n'
-                	+ 'return grammarFunc;\n'
-//                	+ '});\n'
-//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
-                	+ '})();'//FIXME
-                ;
-                
-                theConverterInstance.setJSGrammar(addGrammarParserExec);
-
-                doAddGrammar(generatedParserLanguageCode, theConverterInstance);
-                
-                eval(addGrammarParserExec);
-                
-                //invoke create&add callback if present:
-                if(callback){
-                	callback();
-                }
+	                	+ '\n};\n'
+	                	+ 'semanticInterpreter.addGrammar("'
+	                		+generatedParserLanguageCode
+	                		+'", grammarFunc);\n\n'
+	                	+ 'semanticInterpreter.setStopwords("'
+	                		+generatedParserLanguageCode+'",'
+	                		+JSON.stringify(theConverterInstance.getStopWords())
+	                	+ ');\n'
+	                	+ 'return grammarFunc;\n'
+	//                	+ '});\n'
+	//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
+	                	+ '})();'//FIXME
+	                ;
+	                
+	                theConverterInstance.setJSGrammar(addGrammarParserExec);
+	
+	                doAddGrammar(generatedParserLanguageCode, theConverterInstance);
+	                
+	                eval(addGrammarParserExec);
+	                
+	                //invoke create&add callback if present:
+	                if(callback){
+	                	callback();
+	                }
+	                
+        		});//END: require([jscc])
                 
             }//END function build_grammar
         	
@@ -352,43 +392,68 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
             }
         }
         
-        var process_asr_semantic = function(phrase, stopwordFunc, langCode){//grammarParserCode){
+        var process_asr_semantic = function(phrase, stopwordFunc, langCode, callback){
 
 			if(!doCheckIsEnabled()){
 				console.warn('SemanticInterpreter.getASRSemantic: currently disabled!');
 				return null;
 			}
 			
-        	var grammarConverter = doGetGrammar(langCode);
+			if(typeof langCode === 'function'){
+				callback = langCode;
+				langCode = void(0);
+			}
+			
+			var grammarReadyCallback;
+			if(callback){
+				grammarReadyCallback = function(){
+					grammarConverter = doGetGrammar(langCode);
+					
+					callback( execGrammar(grammarConverter, phrase, stopwordFunc, langCode) );
+				};
+			}
+			
+        	var grammarConverter = doGetGrammar(langCode, grammarReadyCallback);
         	
-        	if(!grammarConverter){
+        	var execGrammar = function(grammarConverter, phrase, stopwordFunc, langCode){
+	            var strPreparedPhrase = grammarConverter.maskString( phrase.toLowerCase() );
+	            strPreparedPhrase = stopwordFunc(strPreparedPhrase, langCode, grammarConverter);
+	           
+	            if(IS_DEBUG_ENABLED) console.debug('SemanticInterpreter.process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
+	            
+	    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
+	            
+	    		//unmask previously mask non-ASCII chars in all Strings of the returned result:
+	    		result = grammarConverter.unmaskJSON(
+	    				result
+	    		);
+	            
+	            return result;//TODO return copy instead of original instance?
+        	};
+        	
+
+        	if(!grammarConverter && ! grammarReadyCallback){
     			throw 'NoGrammar_'+langCode;
     		}
         	
-            var strPreparedPhrase = grammarConverter.maskString( phrase.toLowerCase() );
-            strPreparedPhrase = stopwordFunc(strPreparedPhrase, langCode);
-           
-            if(IS_DEBUG_ENABLED) console.debug('SemanticInterpreter.process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
-            
-    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
-            
-    		//unmask previously mask non-ASCII chars in all Strings of the returned result:
-    		result = grammarConverter.unmaskJSON(
-    				result
-    		);
-            
-            return result;//TODO return copy instead of original instance? 
+        	if(!grammarReadyCallback){
+        		return execGrammar(grammarConverter, phrase, stopwordFunc, langCode);
+        	}
         };
         
 
-		var removeStopwordsFunc =  function(thePhrase, lang){
-			var gc = doGetGrammar(lang);
+		var removeStopwordsFunc =  function removeStopwords(thePhrase, lang, gc){
+			if(!gc){
+				gc = doGetGrammar(lang);
+			}
     		var stop_words_regexp = gc.getStopWordsRegExpr();
         	return thePhrase.replace(stop_words_regexp, '').trim();
     	};
     	
-		var removeStopwordsAltFunc = function(thePhrase, lang){
-    		var gc = doGetGrammar(lang);
+		var removeStopwordsAltFunc = function removeStopwords_alt(thePhrase, lang, gc){
+			if(!gc){
+				gc = doGetGrammar(lang);
+			}
     		var stop_words_regexp = gc.getStopWordsRegExpr_alt();
         	
 			while (thePhrase.match(stop_words_regexp)) {
@@ -399,6 +464,25 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
 			return thePhrase;
 		};
         
+		var doRemoveStopWords = function(thePhrase, lang, func){
+			if(!doCheckIsEnabled()){
+				console.warn('SemanticInterpreter.'+func.name+': currently disabled!');
+				return null;
+			}
+			
+			var grammarConverter = doGetGrammar(lang);
+        	
+        	if(!grammarConverter){
+    			throw 'NoGrammar_'+langCode;
+    		}
+        	
+            var str = grammarConverter.maskString( thePhrase );
+            
+//			var str = grammarConverter.encodeUmlauts(thePhrase, true);
+			str = func(str, lang, grammarConverter);
+			return grammarConverter.unmaskString( str );//grammarConverter.decodeUmlauts(str, true);
+		};
+		
 		/** @lends SemanticInterpreter.prototype */
         return { // public members
         	/**
@@ -406,14 +490,31 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
              * 					the phrase that will be parsed
              * @param {String} langCode
              * 					the language code (identifier) for the parser/grammar
+             * @param {Function} [callback] OPTIONAL
+             * 					a callback function that receives the return value
+             * 					(instead of receiving the result as return value from
+             * 					 this function directly).
+             * 					The signature for the callback is: <code>callback(result: Object)</code>
+             * 					  (i.e. the result that would be returned by this function itself is
+             * 					   passed as argument into the callback function; see also documentation
+             * 					   for <em>returns</em>).
+             * 					NOTE: in case, the grammar for the requested <code>langCode</code>
+             * 						  is not compiled yet (i.e. not present as executable JavaScript),
+             * 						  the corresponding JSON definition of the grammar needs to be
+             * 					      compiled first, before processing the ASR's semantics is possible.
+             * 						  In this case, a <code>callback</code> function <strong>MUST</strong>
+             * 						  be supplied in order to receive a result (since compilation of the
+             * 					      grammar may be <em>asynchronous</em>).  
              * 
              * @returns {Object}
              * 				the parsing result (as processed by the parser / grammar;
              * 				usually a JSON-like object).
+             * 				WARNING: if a <code>callback</code> function was provided, then
+             * 						 there is no return object.
              */
-            getASRSemantic: function(phrase, langCode){
+            getASRSemantic: function(phrase, langCode, callback){
             	
-            	return process_asr_semantic(phrase, removeStopwordsFunc, langCode);
+            	return process_asr_semantic(phrase, removeStopwordsFunc, langCode, callback);
             	
             },
             /**
@@ -438,43 +539,13 @@ define(['constants', 'grammarConverter', 'grammarParserTemplate', 'jscc'],
              * 					the language code (identifier) for the parser/grammar
              */
 			removeStopwords: function(thePhrase, lang){
-				if(!doCheckIsEnabled()){
-					console.warn('SemanticInterpreter.removeStopwords: currently disabled!');
-					return null;
-				}
-				
-				var grammarConverter = doGetGrammar(lang);
-	        	
-	        	if(!grammarConverter){
-	    			throw 'NoGrammar_'+langCode;
-	    		}
-	        	
-	            var str = grammarConverter.maskString( thePhrase );
-	            
-//				var str = grammarConverter.encodeUmlauts(thePhrase, true);
-				str = removeStopwordsFunc(str, lang);
-				return grammarConverter.unmaskString( str );//grammarConverter.decodeUmlauts(str, true);
+				return doRemoveStopWords(thePhrase, lang, removeStopwordsFunc);
 			},
 			/**
 			 * @deprecated use {@link #removeStopwords} instead
 			 */
 			removeStopwords_alt: function(thePhrase, lang){
-				if(!doCheckIsEnabled()){
-					console.warn('SemanticInterpreter.removeStopwords_alt: currently disabled!');
-					return null;
-				}
-				
-				var grammarConverter = doGetGrammar(lang);
-	        	
-	        	if(!grammarConverter){
-	    			throw 'NoGrammar_'+langCode;
-	    		}
-	        	
-	            var str = grammarConverter.maskString( thePhrase );
-	            
-//				var str = grammarConverter.encodeUmlauts(thePhrase, true);
-				str = removeStopwordsAltFunc(str, lang);
-				return grammarConverter.unmaskString( str );//grammarConverter.decodeUmlauts(str, true);
+				return doRemoveStopWords(thePhrase, lang, removeStopwordsAltFunc);
 			},
 			/** NOTE: the grammar must be compiled first, see getNewInstance(true) */
 			getGrammarDefinitionText: function(id){

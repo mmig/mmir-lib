@@ -40,7 +40,7 @@
 * 
 * @requires mmir.CommonUtils#isArray
 */
-define(['commonUtils', 'jscc'], function(commonUtils){
+define(['commonUtils', 'grammarTemplate'], function(commonUtils, template){
 
 IS_DEBUG_ENABLED = true;//FIXME need to remove this!
 
@@ -78,6 +78,8 @@ var GrammarConverter = function(){
 	this.stop_words_regexp_alt;
 	
 };
+
+GrammarConverter.prototype.PARSER_TEMPLATE = template;
 
 GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback, grammarUrl, doLoadSynchronously){
 	var grammar = '';

@@ -113,7 +113,7 @@ require.config({
     	//grammar related
 		, 'jscc': 'vendor/libs/jscc-amd'
 		, 'grammarConverter': 'semantic/grammarConverter'
-		, 'grammarParserTemplate': 'semantic/grammarParserTemplate'
+		, 'grammarTemplate': 'semantic/grammarTemplate'
 		, 'semanticInterpreter': 'semantic/semanticInterpreter'
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
