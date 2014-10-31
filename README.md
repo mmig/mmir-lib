@@ -44,6 +44,8 @@ later updates from this repository can be fetched from within the referencing pr
  * RequireJS 2.1.9
  * SCION
  * JS/CC 0.30
+ * PEG.js
+ * Jison
  * ANTLR 3
  * CryptoJS MD5 3.1.2
 
