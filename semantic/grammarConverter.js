@@ -39,8 +39,9 @@
 * @category core
 * 
 * @requires mmir.CommonUtils#isArray
+* @requires jQuery#ajax
 */
-define(['commonUtils', 'grammarTemplate'], function(commonUtils, template){
+define(['commonUtils', 'jquery'], function(commonUtils, $){
 
 IS_DEBUG_ENABLED = true;//FIXME need to remove this!
 
@@ -48,22 +49,24 @@ IS_DEBUG_ENABLED = true;//FIXME need to remove this!
  * @class GrammarConverter
  */
 var GrammarConverter = function(){
-	this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
-	this.json_grammar_definition = null;
-	this.grammar_tokens = "/~ --- Token definitions --- ~/\n\n/~ Characters to be ignored ~/\n!   ' |\\t' ;\n\n/~ Non-associative tokens ~/\n";
-	this.grammar_utterances = "";
-	this.grammar_phrases = "phrases:";
-	this.jscc_grammar_definition = "";
-	this.js_grammar_definition = "";
+	
+//	this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
+//	this.grammar_tokens = "/~ --- Token definitions --- ~/\n\n/~ Characters to be ignored ~/\n!   ' |\\t' ;\n\n/~ Non-associative tokens ~/\n";
+//	this.grammar_utterances = "";
+//	this.grammar_phrases = "phrases:";
+//	this.token_variables = "[*\n  var " + this.variable_prefix
+//			+ "result = '';\n";
+//	this.tokens_array = new Array();
+	
 	this.variable_prefix = "_$";
 	this.variable_regexp = /"(_\$[^\"]*)"/igm;// /"_$([^\"]*)/igm;
-	this.token_variables = "[*\n  var " + this.variable_prefix
-			+ "result = '';\n";
-
+	
 	//regular expression for detecting encoded chars (see mask/unmask functions)
 	this.enc_regexp_str = "~~([0-9|A-F|a-f]{4})~~";
-	
-	this.tokens_array = new Array();
+
+	this.jscc_grammar_definition = "";
+	this.js_grammar_definition = "";
+	this.json_grammar_definition = null;
 	this.stop_words_regexp;
 	
 	//default setting for masking value Strings in JSON values (see maskJSON() / unmaskJSON)
@@ -83,77 +86,57 @@ var GrammarConverter = function(){
 	
 };
 
-GrammarConverter.prototype.PARSER_TEMPLATE = template;
-
 GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback, grammarUrl, doLoadSynchronously){
-	var grammar = '';
 	var self = this;
-	var theUrl = grammarUrl;
+	var success = function(data){
+		
+		//DISABLED: old-style masking for umlauts:
+//		data = self.recodeJSON(data, self.encodeUmlauts);
+		
+		//if auto-upgrading is enabled:
+		//   decode old-style umlaut masking before continuing
+		if(self.convertOldFormat){
+			data = self.recodeJSON(data, self.decodeUmlauts);
+		}
+		
+		self.json_grammar_definition = data;
+		
+		if (typeof successCallback == "function") {
+			successCallback(self);
+		}
+	};
+	var error = function(data){
+		alert("failed to load the grammar! error: "+ JSON.stringify(data));
+		if (typeof errorCallback == "function") {
+			errorCallback(self);
+		}
+	};
+	this.loadResource(success, error, grammarUrl, doLoadSynchronously);
+};
+
+GrammarConverter.prototype.loadResource = function(successCallback, errorCallback, resourceUrl, doLoadSynchronously){
+
+	var theUrl = resourceUrl;
 	if(!theUrl){
-		theUrl = 'content/grammar.json'; 
+		if(errorCallback){
+			console.error('GrammarConverter.loadResource: missing URL!');
+			errorCallback(this);
+		}
+		return;///////////////// EARLY EXIT //////////////////////
 	}
+	
 	var isLoadAsync = false;
 	if(typeof doLoadSynchronously !== 'undefined' && doLoadSynchronously === false){
 		isLoadAsync = true;
 	}
+	
 	$.ajax({
 		async: isLoadAsync,
 		dataType: 'json',
 		url:theUrl,
-		success: function(data){
-			
-			//DISABLED: old-style masking for umlauts:
-//			data = self.recodeJSON(data, self.encodeUmlauts);
-			
-			//if auto-upgrading is enabled:
-			//   decode old-style umlaut masking before continuing
-			if(self.convertOldFormat){
-				data = self.recodeJSON(data, self.decodeUmlauts);
-			}
-			
-			self.json_grammar_definition = data;
-			
-			if (typeof successCallback == "function") {
-				successCallback(self);
-			}
-		},
-		error: function(data){
-			alert("failed to load the grammar! error: "+ JSON.stringify(data));
-			if (typeof errorCallback == "function") {
-				errorCallback(self);
-			}
-		}
+		success: successCallback,
+		error: errorCallback
 	});
-};
-
-GrammarConverter.prototype.convertJSONGrammar = function(){
-	
-	this.json_grammar_definition = this.maskJSON(this.json_grammar_definition);
-	
-	this.parseTokens();
-	this.parseUtterances();
-	this.parseStopWords();
-	
-	this.jscc_grammar_definition = this.token_variables
-			+ "*]\n\n"
-			+ this.grammar_tokens
-			+ "\n\n ##\n\n/~ --- Grammar specification --- ~/\n\nutterance:      phrases    [*  "
-			
-			//DISABLE russa: not needed anymore, since no JSON.stringify is used during execution of generated grammar.
-//			+ this.variable_prefix
-//			+ "result['semantic'] = "
-//			+ this.variable_prefix
-//			+ "result['semantic'].replace(/\"{/g,'{').replace(/}\"/g,'}'); "
-			
-			//TODO use LOG LEVEL for activating / deactivating this:
-			+ "console.log("
-			+ this.variable_prefix + "result); "
-			
-			+ "semanticAnnotationResult.result = "
-			+ this.variable_prefix + "result; *] ;\n\n" + this.grammar_utterances
-			+ "\n" + this.grammar_phrases + ";";
-
-	this.json_grammar_definition = this.unmaskJSON(this.json_grammar_definition);
 };
 
 GrammarConverter.prototype.setStopWords = function(stopWordArray){
@@ -177,6 +160,29 @@ GrammarConverter.prototype.getStopWords = function(){
 		return null;
 	}
 	return this.json_grammar_definition.stop_word;
+};
+
+/**
+ * HELPER creates a copy of the stopword list and encodes all non-ASCII chars to their unicode
+ *        representation (e.g. for save storage of stringified stopword list, even if file-encoding
+ *        does not support non-ASCII letters).
+ * 
+ * @returns {Array<String>} a copy of the stopword list, from the current JSON grammar
+ * 							(or empty list, if no grammar is present)
+ */
+GrammarConverter.prototype.getEncodedStopwords = function(){
+	var list = this.getStopWords();
+	if(!list){
+		return [];
+	}
+	
+	//use copy, since recoding works in-place (we do not want to modify the stored stopword list here)
+	list = list.slice(0, list.length);
+	
+	//store stopwords with their Unicode representation (only for non-ASCII chars)
+	return this.recodeJSON(
+			list, this.maskAsUnicode
+	);
 };
 
 //this is the original / main implementation for creating the RegExp for stopword removal
@@ -329,7 +335,7 @@ GrammarConverter.prototype.getStopWordsEncRegExpr = function(){
 	if(!this.stop_words_regexp){
 		this.parseStopWords();
 	}
-	return 
+	return this.stop_words_regexp_enc;
 };
 
 //alternative version / regular expression for stopwords:
@@ -351,6 +357,10 @@ GrammarConverter.prototype.getJSCCGrammar = function(){
 	return  this.jscc_grammar_definition;
 };
 
+GrammarConverter.prototype.setJSCCGrammar = function(rawGrammarSyntax){
+	this.jscc_grammar_definition = rawGrammarSyntax;
+};
+
 /**
  * Get the compiled JavaScript grammar source code.
  * 
@@ -370,169 +380,169 @@ GrammarConverter.prototype.setJSGrammar = function(src_code){
 	 this.js_grammar_definition = src_code;
 };
 
-GrammarConverter.prototype.parseTokens = function(){
-	var self = this;
-	var json_tokens =  this.json_grammar_definition.tokens;
-	
-	for(token_name in json_tokens){
-		
-		var words = json_tokens[token_name];
-		
-		self.token_variables += "  var " + self.variable_prefix
-				+ token_name.toLowerCase() + " = {};\n";
-		
-		var grammar_token ="    '";
-		
-		for(var i=0, size = words.length; i < size ; ++i){
-			if(i > 0){
-				grammar_token += "|";
-			}
-			grammar_token += words[i];
-		}
-		
-		grammar_token += "'    " + token_name + " [* " + self.variable_prefix
-				+ token_name.toLowerCase() + "[%match] = %match; *];\n";
-		
-		self.grammar_tokens += grammar_token;
-	}
-};
-
-GrammarConverter.prototype.parseUtterances = function(){
-	var self = this;
-	var utt_index = 0;
-	var json_utterances =  this.json_grammar_definition.utterances;
-
-	for(utterance_name in json_utterances){
-		var utterance_def = json_utterances[utterance_name];
-		if(utt_index > 0){
-			self.grammar_phrases += "\n\t|";
-		}
-		utt_index++;
-		self.doParseUtterance(utterance_name, utterance_def);
-	}
-};
-
-GrammarConverter.prototype.doParseUtterance = function(utterance_name, utterance_def){
-	var grammar_utterance = utterance_name + ":";
-	var self = this; 
-	self.token_variables += "  var " + self.variable_prefix
-			+ utterance_name.toLowerCase() + " = {};\n";
-	//self.grammar_phrases += utterance_name + "  " +  self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
-	self.grammar_phrases += utterance_name + "  " ;
-	var phrases = utterance_def.phrases;
-	var semantic  = self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
-	
-	for(var index=0,size=phrases.length; index < size; ++index){
-		if(index > 0){
-			grammar_utterance += "\n|";
-		}
-		var phrase = phrases[index];
-		var semantic_interpretation = self.doCreateSemanticInterpretationForPhrase(
-				utterance_name.toLowerCase(), utterance_def, phrase, semantic
-		);
-		grammar_utterance += phrase + semantic_interpretation;
-	}
-	self.grammar_utterances += grammar_utterance + ";\n\n";
-};
-
-
-GrammarConverter.prototype.doCreateSemanticInterpretationForUtterance = function(utterance_name, utterance_def){
-	var semantic = utterance_def.semantic,
-	variable_index, variable_name;
-	
-	if(IS_DEBUG_ENABLED) console.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
-	
-	var semantic_as_string = JSON.stringify(semantic);
-	if( semantic_as_string != null){
-	this.variable_regexp.lastIndex = 0;
-	var variables = this.variable_regexp.exec(semantic_as_string);
-	while (variables != null) {
-		var variable = variables[1],
-		remapped_variable_name = "";
-		
-		if(IS_DEBUG_ENABLED) console.debug("variables " + variable, semantic_as_string);//debug
-		
-		variable_index = /\[(\d+)\]/.exec(variable);
-		variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
-//		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?(\["semantic"\]|\['semantic'\]|\.semantic)?/.exec(variable);
-//		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
-//"_$NAME[INDEX]['FIELD']":  _$NAME                  [ INDEX ]        [" FIELD "]  | [' FIELD ']      |   .FIELD
-		if (variable_index == null) {
-			remapped_variable_name = variable;
-		} else {
-				remapped_variable_name = variable.replace(
-						  '[' + variable_index[1] + ']'
-						, "["
-							+ utterance_name.toLowerCase() + "_temp['phrases']['"
-							+ variable_name.toLowerCase() + "']["
-							+ variable_index[1]
-						+ "]]");
-				//TODO replace try/catch with safe_acc function
-				//     PROBLEM: currently, the format for variable-access is not well defined
-				//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
-				//                 we would need another safe_acc call 
-				//				   ... i.e. need to parse expression for this, but since the format is not well defined
-				//				   we cannot say, for what exactly we should parse...
-				//                 NORMAL VAR EXPR: 		_$a_normal_token[0]
-				//                 ACCESS TO SEMANTICS: 	_$other_utterance[0]['semantic']
-				//                                      but this could also be expressed e.g. as _$other_utterance[0].semantic
-				//                                      ...
+//GrammarConverter.prototype.parseTokens = function(){
+//	var self = this;
+//	var json_tokens =  this.json_grammar_definition.tokens;
+//	
+//	for(token_name in json_tokens){
+//		
+//		var words = json_tokens[token_name];
+//		
+//		self.token_variables += "  var " + self.variable_prefix
+//				+ token_name.toLowerCase() + " = {};\n";
+//		
+//		var grammar_token ="    '";
+//		
+//		for(var i=0, size = words.length; i < size ; ++i){
+//			if(i > 0){
+//				grammar_token += "|";
+//			}
+//			grammar_token += words[i];
+//		}
+//		
+//		grammar_token += "'    " + token_name + " [* " + self.variable_prefix
+//				+ token_name.toLowerCase() + "[%match] = %match; *];\n";
+//		
+//		self.grammar_tokens += grammar_token;
+//	}
+//};
+//
+//GrammarConverter.prototype.parseUtterances = function(){
+//	var self = this;
+//	var utt_index = 0;
+//	var json_utterances =  this.json_grammar_definition.utterances;
+//
+//	for(utterance_name in json_utterances){
+//		var utterance_def = json_utterances[utterance_name];
+//		if(utt_index > 0){
+//			self.grammar_phrases += "\n\t|";
+//		}
+//		utt_index++;
+//		self.doParseUtterance(utterance_name, utterance_def);
+//	}
+//};
+//
+//GrammarConverter.prototype.doParseUtterance = function(utterance_name, utterance_def){
+//	var grammar_utterance = utterance_name + ":";
+//	var self = this; 
+//	self.token_variables += "  var " + self.variable_prefix
+//			+ utterance_name.toLowerCase() + " = {};\n";
+//	//self.grammar_phrases += utterance_name + "  " +  self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
+//	self.grammar_phrases += utterance_name + "  " ;
+//	var phrases = utterance_def.phrases;
+//	var semantic  = self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
+//	
+//	for(var index=0,size=phrases.length; index < size; ++index){
+//		if(index > 0){
+//			grammar_utterance += "\n|";
+//		}
+//		var phrase = phrases[index];
+//		var semantic_interpretation = self.doCreateSemanticInterpretationForPhrase(
+//				utterance_name.toLowerCase(), utterance_def, phrase, semantic
+//		);
+//		grammar_utterance += phrase + semantic_interpretation;
+//	}
+//	self.grammar_utterances += grammar_utterance + ";\n\n";
+//};
+//
+//
+//GrammarConverter.prototype.doCreateSemanticInterpretationForUtterance = function(utterance_name, utterance_def){
+//	var semantic = utterance_def.semantic,
+//	variable_index, variable_name;
+//	
+//	if(IS_DEBUG_ENABLED) console.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
+//	
+//	var semantic_as_string = JSON.stringify(semantic);
+//	if( semantic_as_string != null){
+//	this.variable_regexp.lastIndex = 0;
+//	var variables = this.variable_regexp.exec(semantic_as_string);
+//	while (variables != null) {
+//		var variable = variables[1],
+//		remapped_variable_name = "";
+//		
+//		if(IS_DEBUG_ENABLED) console.debug("variables " + variable, semantic_as_string);//debug
+//		
+//		variable_index = /\[(\d+)\]/.exec(variable);
+//		variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
+////		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?(\["semantic"\]|\['semantic'\]|\.semantic)?/.exec(variable);
+////		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
+////"_$NAME[INDEX]['FIELD']":  _$NAME                  [ INDEX ]        [" FIELD "]  | [' FIELD ']      |   .FIELD
+//		if (variable_index == null) {
+//			remapped_variable_name = variable;
+//		} else {
 //				remapped_variable_name = variable.replace(
 //						  '[' + variable_index[1] + ']'
-//						, "[safe_acc("
-//							+ utterance_name.toLowerCase() + "_temp, 'phrases', '"
-//							+ variable_name.toLowerCase() + "', "
-//							+ variable_index[1] 
-//							+ ")]"
-//						);
-		}
-		semantic_as_string = semantic_as_string.replace(
-				variables[0],
-				" function(){try{return " + remapped_variable_name
-					+ ";} catch(e){return void(0);}}() "
-//				"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
-		);
-		variables =  this.variable_regexp.exec(semantic_as_string);
-	}
-	}
-	return semantic_as_string;
-};
-
-GrammarConverter.prototype.doCreateSemanticInterpretationForPhrase = function(utterance_name, utterance_def, phrase, semantic_as_string){
-	var splitted_phrase = phrase.split(/\s+/),
-	length = splitted_phrase.length,
-	duplicate_helper = {};
-	
-	var result = " [* %% = ";
-	var i = 0;
-	while (i < length){
-		i++;
-		result += "%"+i;
-		if(i < length){
-			result += " + ' ' + ";
-		}
-	}
-	result += "; var "+utterance_name+"_temp = {}; "+utterance_name+"_temp['phrases'] = {};";
-	for (i = 0; i < length; i += 1) {
-		if (typeof(duplicate_helper[splitted_phrase[i]]) == "undefined") {
-			duplicate_helper[splitted_phrase[i]] = 0;
-			result += utterance_name+"_temp['phrases']['"+splitted_phrase[i].toLowerCase()+"'] = [];";
-		} else {
-			duplicate_helper[splitted_phrase[i]] += 1;
-		}
-		result += utterance_name + "_temp['phrases']['"
-					+ splitted_phrase[i].toLowerCase() + "']["
-					+ duplicate_helper[splitted_phrase[i]] + "] = %" + (i + 1)
-					+ "; ";
-	}
-	result += "var " + this.variable_prefix + "phrase = %%; " + utterance_name
-			+ "_temp['phrase']=" + this.variable_prefix + "phrase; "
-			+ utterance_name + "_temp['semantic'] = " + semantic_as_string
-			+ "; " + this.variable_prefix + utterance_name + "["
-			+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "
-			+ this.variable_prefix + "result = " + utterance_name + "_temp; *]";
-	return result;
-};
+//						, "["
+//							+ utterance_name.toLowerCase() + "_temp['phrases']['"
+//							+ variable_name.toLowerCase() + "']["
+//							+ variable_index[1]
+//						+ "]]");
+//				//TODO replace try/catch with safe_acc function
+//				//     PROBLEM: currently, the format for variable-access is not well defined
+//				//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
+//				//                 we would need another safe_acc call 
+//				//				   ... i.e. need to parse expression for this, but since the format is not well defined
+//				//				   we cannot say, for what exactly we should parse...
+//				//                 NORMAL VAR EXPR: 		_$a_normal_token[0]
+//				//                 ACCESS TO SEMANTICS: 	_$other_utterance[0]['semantic']
+//				//                                      but this could also be expressed e.g. as _$other_utterance[0].semantic
+//				//                                      ...
+////				remapped_variable_name = variable.replace(
+////						  '[' + variable_index[1] + ']'
+////						, "[safe_acc("
+////							+ utterance_name.toLowerCase() + "_temp, 'phrases', '"
+////							+ variable_name.toLowerCase() + "', "
+////							+ variable_index[1] 
+////							+ ")]"
+////						);
+//		}
+//		semantic_as_string = semantic_as_string.replace(
+//				variables[0],
+//				" function(){try{return " + remapped_variable_name
+//					+ ";} catch(e){return void(0);}}() "
+////				"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
+//		);
+//		variables =  this.variable_regexp.exec(semantic_as_string);
+//	}
+//	}
+//	return semantic_as_string;
+//};
+//
+//GrammarConverter.prototype.doCreateSemanticInterpretationForPhrase = function(utterance_name, utterance_def, phrase, semantic_as_string){
+//	var splitted_phrase = phrase.split(/\s+/),
+//	length = splitted_phrase.length,
+//	duplicate_helper = {};
+//	
+//	var result = " [* %% = ";
+//	var i = 0;
+//	while (i < length){
+//		i++;
+//		result += "%"+i;
+//		if(i < length){
+//			result += " + ' ' + ";
+//		}
+//	}
+//	result += "; var "+utterance_name+"_temp = {}; "+utterance_name+"_temp['phrases'] = {};";
+//	for (i = 0; i < length; i += 1) {
+//		if (typeof(duplicate_helper[splitted_phrase[i]]) == "undefined") {
+//			duplicate_helper[splitted_phrase[i]] = 0;
+//			result += utterance_name+"_temp['phrases']['"+splitted_phrase[i].toLowerCase()+"'] = [];";
+//		} else {
+//			duplicate_helper[splitted_phrase[i]] += 1;
+//		}
+//		result += utterance_name + "_temp['phrases']['"
+//					+ splitted_phrase[i].toLowerCase() + "']["
+//					+ duplicate_helper[splitted_phrase[i]] + "] = %" + (i + 1)
+//					+ "; ";
+//	}
+//	result += "var " + this.variable_prefix + "phrase = %%; " + utterance_name
+//			+ "_temp['phrase']=" + this.variable_prefix + "phrase; "
+//			+ utterance_name + "_temp['semantic'] = " + semantic_as_string
+//			+ "; " + this.variable_prefix + utterance_name + "["
+//			+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "
+//			+ this.variable_prefix + "result = " + utterance_name + "_temp; *]";
+//	return result;
+//};
 
 /**
  * Set the executable grammar function.
@@ -600,16 +610,22 @@ GrammarConverter.prototype.executeGrammar = function(text){
  * 
  * @param {String} str
  * 				the String to process
+ * @param {String} [prefix] OPTIONAL
+ * 				an alternative prefix used for masking, i.e instead of <code>~~</code>
+ * 				(ignored, if argument has other type than <code>string</code>)
+ * @param {String} [postfix] OPTIONAL
+ * 				an alternative postfix used for masking, i.e instead of <code>~~</code>
+ * 				(ignored, if argument has other type than <code>string</code>)
  * @returns {String} 
  * 				the masked string
  */
-GrammarConverter.prototype.maskString = function (str) {
+GrammarConverter.prototype.maskString = function (str, prefix, postfix) {
 	var i, s, ch, peek, result,
 		next, endline, push, mask,
 		spaces, source = str;
 	
-	var ESC_START = '~~';
-	var ESC_END   = '~~';
+	var ESC_START = typeof prefix  === 'string'? prefix  : '~~';
+	var ESC_END   = typeof postfix === 'string'? postfix : '~~';
 	
 	// Stash the next character and advance the pointer
 	next = function () {
@@ -686,6 +702,24 @@ GrammarConverter.prototype.maskString = function (str) {
 };
 
 /**
+ * HELPER uses #maskString for encoding non-ASCII chars to their Unicode representation,
+ * i.e. <code>\uXXXX</code> where XXXX is the Unicode HEX number.
+ * 
+ * 
+ * SHORTCUT for calling <code>maskString(str, '\\u', '')</code>.
+ * 
+ * @example
+ * //for Japanese "下さい" ("please")
+ * maskAsUnicode("下さい") -> "\u4E0B\u3055\u3044"
+ * 
+ * //... and using default masking:
+ * maskString("下さい") -> "~~4E0B~~~~3055~~~~3044~~"
+ */
+GrammarConverter.prototype.maskAsUnicode = function (str) {
+	return this.maskString(str, '\\u', '');
+};
+
+/**
  * Unmasks <i>masked unicoded characters</i> in a string.
  * 
  * Masked unicode characters are assumed to have the pattern:
@@ -703,14 +737,19 @@ GrammarConverter.prototype.maskString = function (str) {
  * </p>
  * 
  * @param {String} str
+ * @param {RegExp} [detector] OPTIONAL
+ * 				an alternative detector-RegExp:
+ * 				the RegExp must conatin at least one grouping which detects a unicode number (HEX),
+ * 				e.g. default detector is <code>~~([0-9|A-F|a-f]{4})~~</code> (note the grouping
+ * 				for detecting a 4-digit HEX number within the brackets).
  * @returns {String} the unmasked string
  */
-GrammarConverter.prototype.unmaskString = function (str) {
+GrammarConverter.prototype.unmaskString = function (str, detector) {
 	var match, source = str, result = [], pos = 0, i, len = str.length;
 	
 	//RegExpr for: ~~XXXX~~
 	// where XXXX is the unicode HEX number: ~~([0-9|A-F|a-f]{4})~~
-	var REGEXPR_ESC = new RegExp( this.enc_regexp_str, "igm");
+	var REGEXPR_ESC = detector? detector : new RegExp( this.enc_regexp_str, "igm");
 	
 	while(match = REGEXPR_ESC.exec(source)){
 		i =  match.index;

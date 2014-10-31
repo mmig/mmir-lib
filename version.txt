@@ -24,6 +24,52 @@ version notes for MMIR framework code (v 3.0.0)
  --------------
 
 ##################
+ Version 3.1.0
+##################
+
+API CHANGES:
+
+* SemanticInterpreter.getASRSemantic: additional (OPTIONAL) arguement >callback<:
+    getASRSemantic(phrase, langCode, callback)
+  the callback is required, if the grammar is not pre-compiled yet (in this case, the grammar
+  will be compiled, and the ASR semantics will be returned via: callback(result)
+
+----
+
+* changed grammar-generation via JS/CC to lazy-loading
+ * only load JC/CC if a JSON grammar needs to be compiled (normally, grammars are already pre-compiled)
+ 
+* added mechanism for allowing use of different grammar-compilers / -engines
+  * moved code specific for grammar-compilation from SemanticInterpreter to env/grammar/*
+  * added several grammar-generators for grammar-compilers, including the existing JS/CC-generator (moved the specific code from GrammarConverter to the generator):
+    available generators: JS/CC (default), Jison, PEG.js
+  * added config property "grammarCompiler" for setting a specific grammar-compiler (DEFAULT: "jscc"; see SemanticInterpreter.setGrammarEngine() for possible values)
+ 
+* GrammarConverter
+ * added JS/CC grammar template as extra file which will be load through AJAX call (instead of unsing a "hard-coded" stringified version in JavaScript code)
+  * removed grammarParserTemplate.js (which contains the now un-used strigified JS/CC template)
+  * added a "reduced" template (removed un-used functionality from base-template)
+ * BUGFIX added RegExp for stopwords that start or end with encoded chars (normal stopword express will not detect these since encoded chars do not match to word-boundries)
+ * BUGFIX for recodeJSON function: fixed execution context (now the argument recodeFunc will really be exectued in context of the GrammarConverter object)
+* SemanticInterpreter
+ * changed invocation of SemanticInterpreter: add variation that takes a callback function (if a grammar needs to get loaded & compiled, the callback-variant MUST be used the first time that the grammar is used)
+
+* FIX restored mechanism for FILE_FORMAT (was removed in previous commit)
+
+##################
+ Version 3.0.1
+##################
+
+* GrammarConverter
+ * FIX semantic-object access / processing for nested Utterances/phrases
+ * MOD grammar generation: use Array (instead of Object) for holding intermediate/partial matches in result Object (i.e. value of field "phrases")
+ * BUGFIX when unmasking a String: if after masked charater only 1 mcharacter followed, the last character (ie. the one after the masked character) was omitted in the result
+ * BUGFIX for old/deprecated umlauts encodeding/decoding: file grammarConverter.js had been saved with ACII-encoding (now using escaped unicode chars)
+ * FIX on masking a String: during generating result-String ("string-buffer"), prevent process from creating unnecessary, empty entries
+
+* MediaManager: added eval() source-code naming (code is currently disabled)
+
+##################
  Version 3.0.0
 ##################
 

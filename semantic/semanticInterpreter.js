@@ -44,34 +44,32 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 	 * @private
 	 */
 	var instance = null;
-    
+	
 	/**
-	 * The argument name when generating the grammar function:
-	 * the argument holds the raw text that will be parsed by the generated grammar.
-	 * 
-	 * NOTE: this argument/variable name must not collide with any code that is generated for the grammar.
-	 * 
-	 * @constant
-	 * @private
-	 */
-    var INPUT_FIELD_NAME = 'asr_recognized_text';
-    
-    
+     * The version number for the format of generated (JavaScript) grammars.
+     * 
+     * This number is "written into" the generated grammars and then
+     * used as argument, when the grammar adds itself via
+     * <code>addGrammar(id, func, versionNumber)</code>.
+     * 
+     * See generator function build_grammar() within createAndAddGrammar().
+     * 
+     * NOTE: This version number must be increased, when way changes, how 
+     *       grammars are generated.
+     *       Or more precisely: when previously generated grammars cannot
+     *       be used anymore, after the generation mechanism has been changed.
+     * 
+     * @constant
+     * @private
+     */
+    var GRAMMAR_FILE_FORMAT_VERSION = 3;
     
     /**
-     * @param doRecompile (OPTIONAL) IF {Boolean}: if true, the JSON grammar in content\grammar.json will be recompiled (needs to be accessible via AJAX!)
-     * 					IF {String}: the String's contents will be used as a String-representation of the JSON grammar
-     * 					IF {Object}: the Object will be used as JSON representation for the grammar
-     * 
-     * @param {String} [generatedParserLanguageCode]  if param doRecompile is used, this String specifies the 
-     * 					language for the generated grammar-parser.
-     * 					NOTE: this should be a valid ISO language code!
-     * 
      * @constructs SemanticInterpreter
      * @memberOf SemanticInterpreter.prototype
      * @private
      */
-    function constructor(doRecompile, generatedParserLanguageCode){
+    function constructor(){
     
 	    /**
 	     * "map" for grammar implementations (e.g. for different languages)
@@ -105,6 +103,21 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 	     * @private
 	     */
 	    var currentGrammarId = null;
+	    
+	    
+	    var currentGrammarEningeId = null;
+	    var DEFAULT_GRAMMAR_ENGINE = 'jscc';
+	    var GRAMMAR_MODULE_ID_POSTFIX = 'Gen';
+	    
+	    var doSetGrammarEngine = function(id){
+	    	currentGrammarEningeId = id;
+	    };
+	    var doGetGrammarEngine = function(){
+	    	if(currentGrammarEningeId){
+		    	return currentGrammarEningeId;	
+	    	}
+	    	return DEFAULT_GRAMMAR_ENGINE;
+	    };
     	
 	    /**
 	     * Flag for enabling/disabling processing of SemanticInterpreter.
@@ -142,9 +155,25 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 	     * 					IF {Function}: the {Function} {@link GrammarConverter.executeGrammar()} - 
 	     * 									In this case, if no GrammarConverter instance fo <tt>id</tt> is present, a new one will be created; 
 	     * 									The stopwords must already be set, or must additionally be set for the GrammarConverter instance
-	     * 									  (e.g. using {@link mmir.SemanticInterpreter.setStopwords}) 
+	     * 									  (e.g. using {@link mmir.SemanticInterpreter.setStopwords})
+	     * @param {Number} [fileFormatNo] OPTIONAL
+		 * 					If the number given does not match {@link #GRAMMAR_FILE_FORMAT_VERSION}
+		 * 					the file format is assumed to be out-dated and an Error will be thrown.
+		 * 
+	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION. 
 	     */
-    	var doAddGrammar = function(id, grammarImpl){
+    	var doAddGrammar = function(id, grammarImpl, fileFormatNo){
+    		
+    		//check if the added grammar has correct format
+    		if(fileFormatNo && fileFormatNo != GRAMMAR_FILE_FORMAT_VERSION){
+    			
+    			//grammar has old / out-dated format:
+    			throw new Error('Grammar file has wrong format: need grammar file with format version '
+    					+GRAMMAR_FILE_FORMAT_VERSION+', but got: '+fileFormatNo
+    					+ '. Please update generated grammar (delete '
+    					+ constants.getGeneratedGrammarsPath() +' and re-build grammars).'
+    			);
+    		}
         	
     		//the grammar function must be "wrapped" in a GrammarConverter instance
     		// ... if not, do so now:
@@ -260,16 +289,17 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
         
         //TODO move create/build into GrammarConverter
     	/**
-         * @param doRecompile (OPTIONAL) IF {Boolean}: if true, the JSON grammar in content\grammar.json will be recompiled (needs to be accessable through ajax!)
+         * @param {String|JSONObject} doRecompile
          * 					IF {String}: the String's contents will be used as a String-representation of the JSON grammar
-         * 					IF {Object}: the Object will be used as JSON representation for the grammar
-         * 					IF omitted: the current grammar-JSON file will be loaded into the GrammarConverter.json_grammar_definition 
+         * 					IF {Object}: the Object will be used as JSON representation for the grammar 
          * 
-         * @param generatedParserLanguageCode (OPTIONAL) {String} if param doRecompile is used, this String specifies the 
-         * 					language for the generated grammatic-parser. If omitted, the default "de" (German) will be used.
+         * @param {String} [generatedParserLanguageCode] OPTIONAL 
+         * 					if param doRecompile is used, this String specifies the 
+         * 					   language for the generated grammatic-parser. If omitted, the default "de" (German) will be used.
          * 					NOTE: this must be a valid ISO language code!
          * 
-         * @param callback (OPTIONAL) {Function} a callback that is invoked after the grammar was created and added to the SemanticInterpreter. 
+         * @param {Function} [callback] OPTIONAL
+         * 							a callback that is invoked after the grammar was created and added to the SemanticInterpreter. 
          * 							The callback-function will be invoked without arguments, i.e. <code>callback();</code>
          * @function
          */
@@ -277,118 +307,62 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
         	
         	var gc = new GrammarConverter();
         	
-        	function build_grammar(theConverterInstance){
+        	//callback that will be used after the JSON file for the grammar was loaded:
+        	function build_grammar(theConverterInstance){//<- argument is the GrammarConverter instance
         	    
-        		require(['jscc'], function(jscc){
-                
-	                theConverterInstance.convertJSONGrammar();
-	                var grammarDefinition = theConverterInstance.getJSCCGrammar();
-	                
-	//                grammarDefinitionText = grammarDefinition;
-	                
-	//                var pure_code, out_code, i;
-	
-	                //set up the JS/CC compiler:
-	                var dfa_table = '';
-	//                html_output = new String();
-	                error_output = new String();//FIXME impl. & use jcss.getErrorMessage()/Problems()...
-	                jscc.reset_all( jscc.EXEC_WEB );
-	                jscc.parse_grammar(grammarDefinition);
-	              
-	                if (jscc.getErrors() == 0) {
-	                	jscc.undef();
-	                	jscc.unreachable();
-	                        
-	                    if (jscc.getErrors() == 0) {
-	                    	jscc.first();
-	                    	jscc.print_symbols();
-	                    	dfa_table = jscc.create_subset(jscc.get_nfa_states());
-	                    	dfa_table = jscc.minimize_dfa(dfa_table);
-	                    	
-	                    	jscc.set_dfa_table(dfa_table);//FIXME: check, if this is really necessary
-	                        
-	                    	jscc.lalr1_parse_table(false);
-	                    	jscc.resetErrors();
-	                    }
-	                }
-	             
-	                if (jscc.getErrors() > 0 || jscc.getWarnings() > 0 && error_output != "") 
-	                    console.error(''+error_output);
-	                jscc.resetErrors();
-	                jscc.resetWarnings();
-	                
-	//                console.debug("before replace " + theConverterInstance.PARSER_TEMPLATE);//debug
-	             
-	                var grammarParser = new String(theConverterInstance.PARSER_TEMPLATE);
-	                grammarParser = grammarParser.replace(/##PREFIX##/gi, "");
-	                grammarParser = grammarParser.replace(/##HEADER##/gi, jscc.get_code_head());
-	                grammarParser = grammarParser.replace(/##TABLES##/gi, jscc.print_parse_tables(jscc.MODE_GEN_JS));
-	                grammarParser = grammarParser.replace(/##DFA##/gi, jscc.print_dfa_table(dfa_table));
-	                grammarParser = grammarParser.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
-	                grammarParser = grammarParser.replace(/##LABELS##/gi, jscc.print_symbol_labels());
-	                grammarParser = grammarParser.replace(/##ACTIONS##/gi, jscc.print_actions());
-	                grammarParser = grammarParser.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
-	                grammarParser = grammarParser.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
-	                grammarParser = grammarParser.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
-	                grammarParser = grammarParser.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
-	                
-	                
-	                //FIXME attach compiled parser to some other class/object
-	                var moduleNameString = '"'+generatedParserLanguageCode+'GrammarJs"';
-	                var addGrammarParserExec = 
-//                	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
-                	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
-	                	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
-                			//TODO active/use safe_acc (instead of try-catch construct in semantic-result extraction
-//                			+ "var safe_acc = function(obj){\n  \tvar len = arguments.length;\n  \tif(len === 1){\n  \t    return null;\n  \t}\n  \tvar curr = obj, prop = arguments[1], i = 2;\n  \tfor(; i < len; ++i){\n  \tif(obj[prop] != null){\n  \t    obj = obj[prop];\n  \t}\n  \tprop = arguments[i];\n  \t}\n  \tvar res = obj[prop];\n  \treturn typeof res !== 'undefined'? res : null;\n  \t};"
-                			+ grammarParser
-	                	+ '\n};\n'
-	                	+ 'semanticInterpreter.addGrammar("'
-	                		+generatedParserLanguageCode
-	                		+'", grammarFunc);\n\n'
-	                	+ 'semanticInterpreter.setStopwords("'
-	                		+generatedParserLanguageCode+'",'
-	                		+JSON.stringify(theConverterInstance.getStopWords())
-	                	+ ');\n'
-	                	+ 'return grammarFunc;\n'
-	//                	+ '});\n'
-	//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
-	                	+ '})();'//FIXME
-	                ;
-	                
-	                theConverterInstance.setJSGrammar(addGrammarParserExec);
-	
-	                doAddGrammar(generatedParserLanguageCode, theConverterInstance);
-	                
-	                eval(addGrammarParserExec);
-	                
-	                //invoke create&add callback if present:
-	                if(callback){
-	                	callback();
-	                }
-	                
-        		});//END: require([jscc])
+        		var genId   = doGetGrammarEngine();//one of ['jscc' | 'pegjs' | 'jison'];
+        		var genName = genId + GRAMMAR_MODULE_ID_POSTFIX;
+        		
+        		require([genName], function(gen){ 
+        			
+        			//initialize the generator (initialization may be async -> need callback/Promise)
+        			// (-> if already initialized, the then-callback will be invoked immediately)
+        			gen.init().then(function(){
+        				
+        				//actually start compilation of the grammar definition:
+        				// usually this involves 2 steps: 
+        				//    (1) converting the JSON grammar into a specific ParserParser syntax (e.g. JS/CC syntax)
+        				//    (2) compiling this syntax using the corresponding Parser-Generator
+        				// -> the resulting parser-function will then be registered on the SemanticInterpreter instance
+        				//    (using its addGrammar() function) along with the stopword definition (using the setStopwords() function)
+        				gen.compileGrammar(theConverterInstance, generatedParserLanguageCode, GRAMMAR_FILE_FORMAT_VERSION, function(convertedInstance){
+	        		        
+        					//add the grammar-parser-text and grammar-definition-text to the newly registered Grammar-instance
+        					// (-> registering is done within the compileGrammar() function!)
+	        		        var registeredGrammarInstance = doGetGrammar(generatedParserLanguageCode, true);
+	        		        if(registeredGrammarInstance){
+		        		        registeredGrammarInstance.setJSGrammar(convertedInstance.getJSGrammar());
+		        		        registeredGrammarInstance.setJSCCGrammar(convertedInstance.getJSCCGrammar());
+	        		        }
+	        		        else {
+	        		        	console.error('A problem occured during generation of grammar for "'+generatedParserLanguageCode+'"');
+	        		        }
+	        		        
+	        		        //invoke callback if present:
+	        		        if(callback){
+	        		        	callback(registeredGrammarInstance);
+	        		        }
+        				});
+        			});
+        			
+        		});//END: require([jsccGen])
                 
             }//END function build_grammar
         	
-            if(doRecompile === true || doRecompile === 'true'){//FIXME this option must be re-implemented (there is no 'default' grammar any more!)
-            	gc.loadGrammar(build_grammar, function(){ throw 'Could not find JSON grammar file at default location'; } );
-            } else if(typeof doRecompile === 'string'){
+            if(typeof doRecompile === 'string'){// arg. is URL for JSON grammar definition
+            	
             	//interpret STRING as URL for the JSON grammar:
             	gc.loadGrammar(build_grammar, function(err){
             			throw 'Could not find JSON grammar file at "'+doRecompile+'": '+err;
-            		} , doRecompile
+            		}, doRecompile, true
             	);
-            } else if(typeof doRecompile === 'object'){
+            } else if(typeof doRecompile === 'object'){// arg. is JSONObject (ie. JSON grammar defintion)
+            	
             	gc.json_grammar_definition = doRecompile;
             	build_grammar(gc);
+            	
             } else {
-            	//try to use the GrammarConvert's default settings for retrieving a JSON grammar definition
-            	gc.loadGrammar();
-            	doAddGrammar(generatedParserLanguageCode, gc);
-            	if(callback){
-            		callback();
-            	}
+            	console.error('SemanticInterpreter.__createAndAddGrammar: could not build grammar due to missing argumens');
             }
         }
         
@@ -403,17 +377,6 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 				callback = langCode;
 				langCode = void(0);
 			}
-			
-			var grammarReadyCallback;
-			if(callback){
-				grammarReadyCallback = function(){
-					grammarConverter = doGetGrammar(langCode);
-					
-					callback( execGrammar(grammarConverter, phrase, stopwordFunc, langCode) );
-				};
-			}
-			
-        	var grammarConverter = doGetGrammar(langCode, grammarReadyCallback);
         	
         	var execGrammar = function(grammarConverter, phrase, stopwordFunc, langCode){
 	            var strPreparedPhrase = grammarConverter.maskString( phrase.toLowerCase() );
@@ -431,7 +394,17 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 	            return result;//TODO return copy instead of original instance?
         	};
         	
-
+			var grammarReadyCallback;
+			if(callback){
+				grammarReadyCallback = function(){
+					grammarConverter = doGetGrammar(langCode);
+					
+					callback( execGrammar(grammarConverter, phrase, stopwordFunc, langCode) );
+				};
+			}
+			
+        	var grammarConverter = doGetGrammar(langCode, grammarReadyCallback);
+        	
         	if(!grammarConverter && ! grammarReadyCallback){
     			throw 'NoGrammar_'+langCode;
     		}
@@ -615,6 +588,32 @@ define(['constants', 'grammarConverter'//, 'grammarParserTemplate', 'jscc'
 	        },
 	        isEnabled: function(){
 	        	return doCheckIsEnabled();
+	        },
+	        
+	        /**
+	         * Get the ID of the current grammar engine / compiler.
+	         * 
+	         * @default "jcss"
+	         * @returns {String}
+	         * 			the ID of the current grammar engine
+	         */
+	        getGrammarEngine: function(){
+	        	return doGetGrammarEngine();
+	        },
+	        /**
+	         * Set the grammar engine, i.e. the
+	         * compiler engine for the JSON grammar
+	         * 
+	         * NOTE: implementations of the grammar engines are located at env/grammar/
+	         *       The file-name for an implementation should follow the convention: ID+"Generator.js"
+	         *       and should be registered with requirejs with the module-ID: ID+"Gen"
+	         * 
+	         * @param {String} egnineId
+	         * 			the ID for the engine.
+	         * 			Possible values: "jscc", "jison", "pegjs"
+	         */
+	        setGrammarEngine: function(engineId){
+	        	doSetGrammarEngine(engineId);
 	        },
 	        
 	        //FIXME rename/move functions

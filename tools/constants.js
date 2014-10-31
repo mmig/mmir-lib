@@ -80,7 +80,8 @@ function(
 	var speechConfigFileName = "speech.json";
 	var grammarFileName = "grammar.json";
 	var dictionaryFileName = "dictionary.json";
-	var mediaPluginPath = "mmirf/env/media/";
+	var mediaPluginPath = frameworkBasePath + "env/media/";
+	var grammarPluginPath = frameworkBasePath + "env/grammar/";
 	
 	var configurationFileUrl = "config/configuration.json";
 	var directoriesFileUrl = "config/directories.json";
@@ -235,6 +236,17 @@ function(
 			 */
 			getMediaPluginPath: function(){
 				return basePath + mediaPluginPath;
+			},
+			/**
+			 * Returns a string with the path to the Grammar-Plugins
+			 * (ie. engines for grammar generation).
+			 * 
+			 * @function getGrammarPluginPath
+			 * @public
+			 * @returns {String} Grammar Plugin path (
+			 */
+			getGrammarPluginPath: function(){
+				return basePath + grammarPluginPath;
 			},
 			/**
 			 * Returns a string with the path to the directory that contains the generated/executable grammars.

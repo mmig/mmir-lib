@@ -111,10 +111,14 @@ require.config({
 	    , 'parsingResult': 'mvc/parser/parsingResult'
 	    	
     	//grammar related
-		, 'jscc': 'vendor/libs/jscc-amd'
 		, 'grammarConverter': 'semantic/grammarConverter'
-		, 'grammarTemplate': 'semantic/grammarTemplate'
 		, 'semanticInterpreter': 'semantic/semanticInterpreter'
+		, 'jscc':  'vendor/libs/jscc-amd'
+		, 'jison': 'vendor/libs/jison'
+		, 'pegjs': 'vendor/libs/peg-0.8.0'
+		, 'jsccGen':  'env/grammar/jsccGenerator'
+		, 'jisonGen': 'env/grammar/jisonGenerator'
+		, 'pegjsGen': 'env/grammar/pegjsGenerator'
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)
@@ -134,6 +138,8 @@ require.config({
 	    , 'antlr3':         {exports : 'org'}
 		
 		, 'md5':            {exports : 'CryptoJS'}
+		
+		, 'pegjs':       	{exports: 'PEG'}
 		
 		, 'ES3Lexer':       {deps: ['antlr3'], exports: 'ES3Lexer'}
 		, 'ES3Parser':      {deps: ['antlr3'], exports: 'ES3Parser'}

@@ -145,6 +145,11 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 					isSemanticsLoaded = true;
 					
 					mmir.SemanticInterpreter = semanticInterpreter;
+					var grammarEngine = configurationManager.get('grammarCompiler');
+					if(grammarEngine){
+						semanticInterpreter.setGrammarEngine(grammarEngine);
+					}
+					
 					checkInitCompleted();
 				});
 
