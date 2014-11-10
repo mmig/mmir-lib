@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 ../ES3.g3 2013-08-13 18:04:04
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 ES3.g3 2014-11-10 18:43:02
 
 var ES3Parser = function(input, state) {
     if (!state) {
@@ -529,7 +529,7 @@ org.antlr.lang.extend(ES3Parser, org.antlr.runtime.Parser, {
     },
 
     getTokenNames: function() { return ES3Parser.tokenNames; },
-    getGrammarFileName: function() { return "../ES3.g3"; }
+    getGrammarFileName: function() { return "ES3.g3"; }
 });
 org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
@@ -544,7 +544,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:830:1: token : ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral );
+    // ES3.g3:830:1: token : ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral );
     // $ANTLR start "token"
     token: function() {
         var retval = new ES3Parser.token_return();
@@ -562,7 +562,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var StringLiteral5_tree=null;
 
         try {
-            // ../ES3.g3:831:2: ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral )
+            // ES3.g3:831:2: ( reservedWord | Identifier | punctuator | numericLiteral | StringLiteral )
             var alt1=5;
             switch ( this.input.LA(1) ) {
             case NULL:
@@ -696,7 +696,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt1) {
                 case 1 :
-                    // ../ES3.g3:831:4: reservedWord
+                    // ES3.g3:831:4: reservedWord
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_reservedWord_in_token1735);
@@ -709,7 +709,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:832:4: Identifier
+                    // ES3.g3:832:4: Identifier
                     root_0 = this.adaptor.nil();
 
                     Identifier2=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_token1740); 
@@ -720,7 +720,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:833:4: punctuator
+                    // ES3.g3:833:4: punctuator
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_punctuator_in_token1745);
@@ -733,7 +733,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:834:4: numericLiteral
+                    // ES3.g3:834:4: numericLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_numericLiteral_in_token1750);
@@ -746,7 +746,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 5 :
-                    // ../ES3.g3:835:4: StringLiteral
+                    // ES3.g3:835:4: StringLiteral
                     root_0 = this.adaptor.nil();
 
                     StringLiteral5=this.match(this.input,StringLiteral,ES3Parser.FOLLOW_StringLiteral_in_token1755); 
@@ -789,7 +789,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:840:1: reservedWord : ( keyword | futureReservedWord | NULL | booleanLiteral );
+    // ES3.g3:840:1: reservedWord : ( keyword | futureReservedWord | NULL | booleanLiteral );
     // $ANTLR start "reservedWord"
     reservedWord: function() {
         var retval = new ES3Parser.reservedWord_return();
@@ -805,7 +805,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var NULL8_tree=null;
 
         try {
-            // ../ES3.g3:841:2: ( keyword | futureReservedWord | NULL | booleanLiteral )
+            // ES3.g3:841:2: ( keyword | futureReservedWord | NULL | booleanLiteral )
             var alt2=4;
             switch ( this.input.LA(1) ) {
             case BREAK:
@@ -884,7 +884,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt2) {
                 case 1 :
-                    // ../ES3.g3:841:4: keyword
+                    // ES3.g3:841:4: keyword
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_keyword_in_reservedWord1768);
@@ -897,7 +897,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:842:4: futureReservedWord
+                    // ES3.g3:842:4: futureReservedWord
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_futureReservedWord_in_reservedWord1773);
@@ -910,7 +910,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:843:4: NULL
+                    // ES3.g3:843:4: NULL
                     root_0 = this.adaptor.nil();
 
                     NULL8=this.match(this.input,NULL,ES3Parser.FOLLOW_NULL_in_reservedWord1778); 
@@ -921,7 +921,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:844:4: booleanLiteral
+                    // ES3.g3:844:4: booleanLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_booleanLiteral_in_reservedWord1783);
@@ -966,7 +966,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:851:1: keyword : ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | FUNCTION | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH );
+    // ES3.g3:851:1: keyword : ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | FUNCTION | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH );
     // $ANTLR start "keyword"
     keyword: function() {
         var retval = new ES3Parser.keyword_return();
@@ -979,8 +979,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var set10_tree=null;
 
         try {
-            // ../ES3.g3:852:2: ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | FUNCTION | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH )
-            // ../ES3.g3:
+            // ES3.g3:852:2: ( BREAK | CASE | CATCH | CONTINUE | DEFAULT | DELETE | DO | ELSE | FINALLY | FOR | FUNCTION | IF | IN | INSTANCEOF | NEW | RETURN | SWITCH | THIS | THROW | TRY | TYPEOF | VAR | VOID | WHILE | WITH )
+            // ES3.g3:
             root_0 = this.adaptor.nil();
 
             set10=this.input.LT(1);
@@ -1028,7 +1028,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:883:1: futureReservedWord : ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE );
+    // ES3.g3:883:1: futureReservedWord : ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE );
     // $ANTLR start "futureReservedWord"
     futureReservedWord: function() {
         var retval = new ES3Parser.futureReservedWord_return();
@@ -1041,8 +1041,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var set11_tree=null;
 
         try {
-            // ../ES3.g3:884:2: ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE )
-            // ../ES3.g3:
+            // ES3.g3:884:2: ( ABSTRACT | BOOLEAN | BYTE | CHAR | CLASS | CONST | DEBUGGER | DOUBLE | ENUM | EXPORT | EXTENDS | FINAL | FLOAT | GOTO | IMPLEMENTS | IMPORT | INT | INTERFACE | LONG | NATIVE | PACKAGE | PRIVATE | PROTECTED | PUBLIC | SHORT | STATIC | SUPER | SYNCHRONIZED | THROWS | TRANSIENT | VOLATILE )
+            // ES3.g3:
             root_0 = this.adaptor.nil();
 
             set11=this.input.LT(1);
@@ -1090,7 +1090,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:968:1: punctuator : ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS );
+    // ES3.g3:968:1: punctuator : ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS );
     // $ANTLR start "punctuator"
     punctuator: function() {
         var retval = new ES3Parser.punctuator_return();
@@ -1103,8 +1103,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var set12_tree=null;
 
         try {
-            // ../ES3.g3:969:2: ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS )
-            // ../ES3.g3:
+            // ES3.g3:969:2: ( LBRACE | RBRACE | LPAREN | RPAREN | LBRACK | RBRACK | DOT | SEMIC | COMMA | LT | GT | LTE | GTE | EQ | NEQ | SAME | NSAME | ADD | SUB | MUL | MOD | INC | DEC | SHL | SHR | SHU | AND | OR | XOR | NOT | INV | LAND | LOR | QUE | COLON | ASSIGN | ADDASS | SUBASS | MULASS | MODASS | SHLASS | SHRASS | SHUASS | ANDASS | ORASS | XORASS | DIV | DIVASS )
+            // ES3.g3:
             root_0 = this.adaptor.nil();
 
             set12=this.input.LT(1);
@@ -1152,7 +1152,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1023:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral );
+    // ES3.g3:1023:1: literal : ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral );
     // $ANTLR start "literal"
     literal: function() {
         var retval = new ES3Parser.literal_return();
@@ -1171,7 +1171,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RegularExpressionLiteral17_tree=null;
 
         try {
-            // ../ES3.g3:1024:2: ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral )
+            // ES3.g3:1024:2: ( NULL | booleanLiteral | numericLiteral | StringLiteral | RegularExpressionLiteral )
             var alt3=5;
             switch ( this.input.LA(1) ) {
             case NULL:
@@ -1201,7 +1201,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt3) {
                 case 1 :
-                    // ../ES3.g3:1024:4: NULL
+                    // ES3.g3:1024:4: NULL
                     root_0 = this.adaptor.nil();
 
                     NULL13=this.match(this.input,NULL,ES3Parser.FOLLOW_NULL_in_literal2480); 
@@ -1212,7 +1212,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1025:4: booleanLiteral
+                    // ES3.g3:1025:4: booleanLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_booleanLiteral_in_literal2485);
@@ -1225,7 +1225,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1026:4: numericLiteral
+                    // ES3.g3:1026:4: numericLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_numericLiteral_in_literal2490);
@@ -1238,7 +1238,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:1027:4: StringLiteral
+                    // ES3.g3:1027:4: StringLiteral
                     root_0 = this.adaptor.nil();
 
                     StringLiteral16=this.match(this.input,StringLiteral,ES3Parser.FOLLOW_StringLiteral_in_literal2495); 
@@ -1249,7 +1249,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 5 :
-                    // ../ES3.g3:1028:4: RegularExpressionLiteral
+                    // ES3.g3:1028:4: RegularExpressionLiteral
                     root_0 = this.adaptor.nil();
 
                     RegularExpressionLiteral17=this.match(this.input,RegularExpressionLiteral,ES3Parser.FOLLOW_RegularExpressionLiteral_in_literal2500); 
@@ -1292,7 +1292,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1031:1: booleanLiteral : ( TRUE | FALSE );
+    // ES3.g3:1031:1: booleanLiteral : ( TRUE | FALSE );
     // $ANTLR start "booleanLiteral"
     booleanLiteral: function() {
         var retval = new ES3Parser.booleanLiteral_return();
@@ -1305,8 +1305,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var set18_tree=null;
 
         try {
-            // ../ES3.g3:1032:2: ( TRUE | FALSE )
-            // ../ES3.g3:
+            // ES3.g3:1032:2: ( TRUE | FALSE )
+            // ES3.g3:
             root_0 = this.adaptor.nil();
 
             set18=this.input.LT(1);
@@ -1354,7 +1354,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1078:1: numericLiteral : ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral );
+    // ES3.g3:1078:1: numericLiteral : ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral );
     // $ANTLR start "numericLiteral"
     numericLiteral: function() {
         var retval = new ES3Parser.numericLiteral_return();
@@ -1367,8 +1367,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var set19_tree=null;
 
         try {
-            // ../ES3.g3:1079:2: ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral )
-            // ../ES3.g3:
+            // ES3.g3:1079:2: ( DecimalLiteral | OctalIntegerLiteral | HexIntegerLiteral )
+            // ES3.g3:
             root_0 = this.adaptor.nil();
 
             set19=this.input.LT(1);
@@ -1416,7 +1416,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1185:1: primaryExpression : ( THIS | Identifier | amp= IdentifierNameAmpersatStart | literal | arrayLiteral | objectLiteral | lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) );
+    // ES3.g3:1185:1: primaryExpression : ( THIS | Identifier | amp= IdentifierNameAmpersatStart | literal | arrayLiteral | objectLiteral | lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) );
     // $ANTLR start "primaryExpression"
     primaryExpression: function() {
         var retval = new ES3Parser.primaryExpression_return();
@@ -1443,7 +1443,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         try {
-            // ../ES3.g3:1186:2: ( THIS | Identifier | amp= IdentifierNameAmpersatStart | literal | arrayLiteral | objectLiteral | lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
+            // ES3.g3:1186:2: ( THIS | Identifier | amp= IdentifierNameAmpersatStart | literal | arrayLiteral | objectLiteral | lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
             var alt4=7;
             switch ( this.input.LA(1) ) {
             case THIS:
@@ -1483,7 +1483,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt4) {
                 case 1 :
-                    // ../ES3.g3:1186:4: THIS
+                    // ES3.g3:1186:4: THIS
                     root_0 = this.adaptor.nil();
 
                     THIS20=this.match(this.input,THIS,ES3Parser.FOLLOW_THIS_in_primaryExpression3138); 
@@ -1494,7 +1494,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1187:4: Identifier
+                    // ES3.g3:1187:4: Identifier
                     root_0 = this.adaptor.nil();
 
                     Identifier21=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_primaryExpression3143); 
@@ -1505,7 +1505,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1188:4: amp= IdentifierNameAmpersatStart
+                    // ES3.g3:1188:4: amp= IdentifierNameAmpersatStart
                     root_0 = this.adaptor.nil();
 
                     amp=this.match(this.input,IdentifierNameAmpersatStart,ES3Parser.FOLLOW_IdentifierNameAmpersatStart_in_primaryExpression3150); 
@@ -1517,7 +1517,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:1189:4: literal
+                    // ES3.g3:1189:4: literal
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_literal_in_primaryExpression3157);
@@ -1530,7 +1530,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 5 :
-                    // ../ES3.g3:1190:4: arrayLiteral
+                    // ES3.g3:1190:4: arrayLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_arrayLiteral_in_primaryExpression3162);
@@ -1543,7 +1543,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 6 :
-                    // ../ES3.g3:1191:4: objectLiteral
+                    // ES3.g3:1191:4: objectLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_objectLiteral_in_primaryExpression3167);
@@ -1556,7 +1556,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 7 :
-                    // ../ES3.g3:1192:4: lpar= LPAREN expression RPAREN
+                    // ES3.g3:1192:4: lpar= LPAREN expression RPAREN
                     lpar=this.match(this.input,LPAREN,ES3Parser.FOLLOW_LPAREN_in_primaryExpression3174);  
                     stream_LPAREN.add(lpar);
 
@@ -1583,7 +1583,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1192:34: -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
                     {
-                        // ../ES3.g3:1192:37: ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
+                        // ES3.g3:1192:37: ^( PAREXPR[$lpar, \"PAREXPR\"] expression )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(PAREXPR, lpar, "PAREXPR"), root_1);
@@ -1631,7 +1631,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1195:1: arrayLiteral : lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) ;
+    // ES3.g3:1195:1: arrayLiteral : lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) ;
     // $ANTLR start "arrayLiteral"
     arrayLiteral: function() {
         var retval = new ES3Parser.arrayLiteral_return();
@@ -1653,12 +1653,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_arrayItem=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule arrayItem");
         try {
-            // ../ES3.g3:1196:2: (lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
-            // ../ES3.g3:1196:4: lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK
+            // ES3.g3:1196:2: (lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
+            // ES3.g3:1196:4: lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK
             lb=this.match(this.input,LBRACK,ES3Parser.FOLLOW_LBRACK_in_arrayLiteral3202);  
             stream_LBRACK.add(lb);
 
-            // ../ES3.g3:1196:14: ( arrayItem ( COMMA arrayItem )* )?
+            // ES3.g3:1196:14: ( arrayItem ( COMMA arrayItem )* )?
             var alt6=2;
             var LA6_0 = this.input.LA(1);
 
@@ -1674,14 +1674,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt6) {
                 case 1 :
-                    // ../ES3.g3:1196:16: arrayItem ( COMMA arrayItem )*
+                    // ES3.g3:1196:16: arrayItem ( COMMA arrayItem )*
                     this.pushFollow(ES3Parser.FOLLOW_arrayItem_in_arrayLiteral3206);
                     arrayItem27=this.arrayItem();
 
                     this.state._fsp--;
 
                     stream_arrayItem.add(arrayItem27.getTree());
-                    // ../ES3.g3:1196:26: ( COMMA arrayItem )*
+                    // ES3.g3:1196:26: ( COMMA arrayItem )*
                     loop5:
                     do {
                         var alt5=2;
@@ -1694,7 +1694,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         switch (alt5) {
                         case 1 :
-                            // ../ES3.g3:1196:28: COMMA arrayItem
+                            // ES3.g3:1196:28: COMMA arrayItem
                             COMMA28=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_arrayLiteral3210);  
                             stream_COMMA.add(COMMA28);
 
@@ -1736,12 +1736,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1197:2: -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
             {
-                // ../ES3.g3:1197:5: ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
+                // ES3.g3:1197:5: ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARRAY, lb, "ARRAY"), root_1);
 
-                // ../ES3.g3:1197:28: ( arrayItem )*
+                // ES3.g3:1197:28: ( arrayItem )*
                 while ( stream_arrayItem.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_arrayItem.nextTree());
 
@@ -1787,7 +1787,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1200:1: arrayItem : (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) ;
+    // ES3.g3:1200:1: arrayItem : (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) ;
     // $ANTLR start "arrayItem"
     arrayItem: function() {
         var retval = new ES3Parser.arrayItem_return();
@@ -1799,9 +1799,9 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
         var stream_assignmentExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule assignmentExpression");
         try {
-            // ../ES3.g3:1201:2: ( (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) )
-            // ../ES3.g3:1201:4: (expr= assignmentExpression | {...}?)
-            // ../ES3.g3:1201:4: (expr= assignmentExpression | {...}?)
+            // ES3.g3:1201:2: ( (expr= assignmentExpression | {...}?) -> ^( ITEM ( $expr)? ) )
+            // ES3.g3:1201:4: (expr= assignmentExpression | {...}?)
+            // ES3.g3:1201:4: (expr= assignmentExpression | {...}?)
             var alt7=2;
             var LA7_0 = this.input.LA(1);
 
@@ -1819,7 +1819,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt7) {
                 case 1 :
-                    // ../ES3.g3:1201:6: expr= assignmentExpression
+                    // ES3.g3:1201:6: expr= assignmentExpression
                     this.pushFollow(ES3Parser.FOLLOW_assignmentExpression_in_arrayItem3248);
                     expr=this.assignmentExpression();
 
@@ -1830,7 +1830,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1201:34: {...}?
+                    // ES3.g3:1201:34: {...}?
                     if ( !(( this.input.LA(1) == COMMA )) ) {
                         throw new org.antlr.runtime.FailedPredicateException(this.input, "arrayItem", " this.input.LA(1) == COMMA ");
                     }
@@ -1855,12 +1855,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1202:2: -> ^( ITEM ( $expr)? )
             {
-                // ../ES3.g3:1202:5: ^( ITEM ( $expr)? )
+                // ES3.g3:1202:5: ^( ITEM ( $expr)? )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ITEM, "ITEM"), root_1);
 
-                // ../ES3.g3:1202:13: ( $expr)?
+                // ES3.g3:1202:13: ( $expr)?
                 if ( stream_expr.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_expr.nextTree());
 
@@ -1906,7 +1906,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1205:1: objectLiteral : lb= LBRACE ( nameValuePair ( COMMA nameValuePair )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* ) ;
+    // ES3.g3:1205:1: objectLiteral : lb= LBRACE ( nameValuePair ( COMMA nameValuePair )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* ) ;
     // $ANTLR start "objectLiteral"
     objectLiteral: function() {
         var retval = new ES3Parser.objectLiteral_return();
@@ -1928,12 +1928,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_LBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACE");
         var stream_nameValuePair=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule nameValuePair");
         try {
-            // ../ES3.g3:1206:2: (lb= LBRACE ( nameValuePair ( COMMA nameValuePair )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* ) )
-            // ../ES3.g3:1206:4: lb= LBRACE ( nameValuePair ( COMMA nameValuePair )* )? RBRACE
+            // ES3.g3:1206:2: (lb= LBRACE ( nameValuePair ( COMMA nameValuePair )* )? RBRACE -> ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* ) )
+            // ES3.g3:1206:4: lb= LBRACE ( nameValuePair ( COMMA nameValuePair )* )? RBRACE
             lb=this.match(this.input,LBRACE,ES3Parser.FOLLOW_LBRACE_in_objectLiteral3280);  
             stream_LBRACE.add(lb);
 
-            // ../ES3.g3:1206:14: ( nameValuePair ( COMMA nameValuePair )* )?
+            // ES3.g3:1206:14: ( nameValuePair ( COMMA nameValuePair )* )?
             var alt9=2;
             var LA9_0 = this.input.LA(1);
 
@@ -1942,14 +1942,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt9) {
                 case 1 :
-                    // ../ES3.g3:1206:16: nameValuePair ( COMMA nameValuePair )*
+                    // ES3.g3:1206:16: nameValuePair ( COMMA nameValuePair )*
                     this.pushFollow(ES3Parser.FOLLOW_nameValuePair_in_objectLiteral3284);
                     nameValuePair31=this.nameValuePair();
 
                     this.state._fsp--;
 
                     stream_nameValuePair.add(nameValuePair31.getTree());
-                    // ../ES3.g3:1206:30: ( COMMA nameValuePair )*
+                    // ES3.g3:1206:30: ( COMMA nameValuePair )*
                     loop8:
                     do {
                         var alt8=2;
@@ -1962,7 +1962,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         switch (alt8) {
                         case 1 :
-                            // ../ES3.g3:1206:32: COMMA nameValuePair
+                            // ES3.g3:1206:32: COMMA nameValuePair
                             COMMA32=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_objectLiteral3288);  
                             stream_COMMA.add(COMMA32);
 
@@ -2004,12 +2004,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1207:2: -> ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* )
             {
-                // ../ES3.g3:1207:5: ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* )
+                // ES3.g3:1207:5: ^( OBJECT[$lb, \"OBJECT\"] ( nameValuePair )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(OBJECT, lb, "OBJECT"), root_1);
 
-                // ../ES3.g3:1207:30: ( nameValuePair )*
+                // ES3.g3:1207:30: ( nameValuePair )*
                 while ( stream_nameValuePair.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_nameValuePair.nextTree());
 
@@ -2055,7 +2055,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1210:1: nameValuePair : propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) ;
+    // ES3.g3:1210:1: nameValuePair : propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) ;
     // $ANTLR start "nameValuePair"
     nameValuePair: function() {
         var retval = new ES3Parser.nameValuePair_return();
@@ -2072,8 +2072,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_propertyName=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule propertyName");
         var stream_assignmentExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule assignmentExpression");
         try {
-            // ../ES3.g3:1211:2: ( propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) )
-            // ../ES3.g3:1211:4: propertyName COLON assignmentExpression
+            // ES3.g3:1211:2: ( propertyName COLON assignmentExpression -> ^( NAMEDVALUE propertyName assignmentExpression ) )
+            // ES3.g3:1211:4: propertyName COLON assignmentExpression
             this.pushFollow(ES3Parser.FOLLOW_propertyName_in_nameValuePair3323);
             propertyName35=this.propertyName();
 
@@ -2103,7 +2103,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1212:2: -> ^( NAMEDVALUE propertyName assignmentExpression )
             {
-                // ../ES3.g3:1212:5: ^( NAMEDVALUE propertyName assignmentExpression )
+                // ES3.g3:1212:5: ^( NAMEDVALUE propertyName assignmentExpression )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(NAMEDVALUE, "NAMEDVALUE"), root_1);
@@ -2150,7 +2150,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1215:1: propertyName : ( Identifier | StringLiteral | numericLiteral );
+    // ES3.g3:1215:1: propertyName : ( Identifier | StringLiteral | numericLiteral );
     // $ANTLR start "propertyName"
     propertyName: function() {
         var retval = new ES3Parser.propertyName_return();
@@ -2166,7 +2166,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var StringLiteral39_tree=null;
 
         try {
-            // ../ES3.g3:1216:2: ( Identifier | StringLiteral | numericLiteral )
+            // ES3.g3:1216:2: ( Identifier | StringLiteral | numericLiteral )
             var alt10=3;
             switch ( this.input.LA(1) ) {
             case Identifier:
@@ -2189,7 +2189,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt10) {
                 case 1 :
-                    // ../ES3.g3:1216:4: Identifier
+                    // ES3.g3:1216:4: Identifier
                     root_0 = this.adaptor.nil();
 
                     Identifier38=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_propertyName3351); 
@@ -2200,7 +2200,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1217:4: StringLiteral
+                    // ES3.g3:1217:4: StringLiteral
                     root_0 = this.adaptor.nil();
 
                     StringLiteral39=this.match(this.input,StringLiteral,ES3Parser.FOLLOW_StringLiteral_in_propertyName3356); 
@@ -2211,7 +2211,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1218:4: numericLiteral
+                    // ES3.g3:1218:4: numericLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_numericLiteral_in_propertyName3361);
@@ -2256,7 +2256,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1230:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
+    // ES3.g3:1230:1: memberExpression : ( primaryExpression | functionExpression | newExpression );
     // $ANTLR start "memberExpression"
     memberExpression: function() {
         var retval = new ES3Parser.memberExpression_return();
@@ -2270,7 +2270,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1231:2: ( primaryExpression | functionExpression | newExpression )
+            // ES3.g3:1231:2: ( primaryExpression | functionExpression | newExpression )
             var alt11=3;
             switch ( this.input.LA(1) ) {
             case NULL:
@@ -2304,7 +2304,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt11) {
                 case 1 :
-                    // ../ES3.g3:1231:4: primaryExpression
+                    // ES3.g3:1231:4: primaryExpression
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_primaryExpression_in_memberExpression3379);
@@ -2317,7 +2317,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1232:4: functionExpression
+                    // ES3.g3:1232:4: functionExpression
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_functionExpression_in_memberExpression3384);
@@ -2330,7 +2330,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1233:4: newExpression
+                    // ES3.g3:1233:4: newExpression
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_newExpression_in_memberExpression3389);
@@ -2375,7 +2375,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1236:1: newExpression : NEW memberExpression ;
+    // ES3.g3:1236:1: newExpression : NEW memberExpression ;
     // $ANTLR start "newExpression"
     newExpression: function() {
         var retval = new ES3Parser.newExpression_return();
@@ -2389,8 +2389,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var NEW44_tree=null;
 
         try {
-            // ../ES3.g3:1237:2: ( NEW memberExpression )
-            // ../ES3.g3:1237:4: NEW memberExpression
+            // ES3.g3:1237:2: ( NEW memberExpression )
+            // ES3.g3:1237:4: NEW memberExpression
             root_0 = this.adaptor.nil();
 
             NEW44=this.match(this.input,NEW,ES3Parser.FOLLOW_NEW_in_newExpression3400); 
@@ -2437,7 +2437,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1241:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) ;
+    // ES3.g3:1241:1: arguments : LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) ;
     // $ANTLR start "arguments"
     arguments: function() {
         var retval = new ES3Parser.arguments_return();
@@ -2459,12 +2459,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
         var stream_assignmentExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule assignmentExpression");
         try {
-            // ../ES3.g3:1242:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) )
-            // ../ES3.g3:1242:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
+            // ES3.g3:1242:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) )
+            // ES3.g3:1242:4: LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN
             LPAREN46=this.match(this.input,LPAREN,ES3Parser.FOLLOW_LPAREN_in_arguments3416);  
             stream_LPAREN.add(LPAREN46);
 
-            // ../ES3.g3:1242:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
+            // ES3.g3:1242:11: ( assignmentExpression ( COMMA assignmentExpression )* )?
             var alt13=2;
             var LA13_0 = this.input.LA(1);
 
@@ -2473,14 +2473,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt13) {
                 case 1 :
-                    // ../ES3.g3:1242:13: assignmentExpression ( COMMA assignmentExpression )*
+                    // ES3.g3:1242:13: assignmentExpression ( COMMA assignmentExpression )*
                     this.pushFollow(ES3Parser.FOLLOW_assignmentExpression_in_arguments3420);
                     assignmentExpression47=this.assignmentExpression();
 
                     this.state._fsp--;
 
                     stream_assignmentExpression.add(assignmentExpression47.getTree());
-                    // ../ES3.g3:1242:34: ( COMMA assignmentExpression )*
+                    // ES3.g3:1242:34: ( COMMA assignmentExpression )*
                     loop12:
                     do {
                         var alt12=2;
@@ -2493,7 +2493,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         switch (alt12) {
                         case 1 :
-                            // ../ES3.g3:1242:36: COMMA assignmentExpression
+                            // ES3.g3:1242:36: COMMA assignmentExpression
                             COMMA48=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_arguments3424);  
                             stream_COMMA.add(COMMA48);
 
@@ -2535,12 +2535,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1243:2: -> ^( ARGS ( assignmentExpression )* )
             {
-                // ../ES3.g3:1243:5: ^( ARGS ( assignmentExpression )* )
+                // ES3.g3:1243:5: ^( ARGS ( assignmentExpression )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARGS, "ARGS"), root_1);
 
-                // ../ES3.g3:1243:13: ( assignmentExpression )*
+                // ES3.g3:1243:13: ( assignmentExpression )*
                 while ( stream_assignmentExpression.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_assignmentExpression.nextTree());
 
@@ -2586,7 +2586,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1246:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )* ;
+    // ES3.g3:1246:1: leftHandSideExpression : ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )* ;
     // $ANTLR start "leftHandSideExpression"
     leftHandSideExpression: function() {
         var retval = new ES3Parser.leftHandSideExpression_return();
@@ -2614,10 +2614,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_arguments=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule arguments");
         try {
-            // ../ES3.g3:1247:2: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )* )
-            // ../ES3.g3:1248:2: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )*
-            // ../ES3.g3:1248:2: ( memberExpression -> memberExpression )
-            // ../ES3.g3:1249:4: memberExpression
+            // ES3.g3:1247:2: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )* )
+            // ES3.g3:1248:2: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )*
+            // ES3.g3:1248:2: ( memberExpression -> memberExpression )
+            // ES3.g3:1249:4: memberExpression
             this.pushFollow(ES3Parser.FOLLOW_memberExpression_in_leftHandSideExpression3464);
             memberExpression51=this.memberExpression();
 
@@ -2645,7 +2645,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             retval.tree = root_0;
 
 
-            // ../ES3.g3:1251:2: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )*
+            // ES3.g3:1251:2: ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )*
             loop14:
             do {
                 var alt14=4;
@@ -2664,7 +2664,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt14) {
                 case 1 :
-                    // ../ES3.g3:1252:3: arguments
+                    // ES3.g3:1252:3: arguments
                     this.pushFollow(ES3Parser.FOLLOW_arguments_in_leftHandSideExpression3480);
                     arguments52=this.arguments();
 
@@ -2674,7 +2674,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: leftHandSideExpression, arguments
+                    // elements: arguments, leftHandSideExpression
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -2685,7 +2685,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1252:15: -> ^( CALL $leftHandSideExpression arguments )
                     {
-                        // ../ES3.g3:1252:18: ^( CALL $leftHandSideExpression arguments )
+                        // ES3.g3:1252:18: ^( CALL $leftHandSideExpression arguments )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(CALL, "CALL"), root_1);
@@ -2702,7 +2702,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1253:5: LBRACK expression RBRACK
+                    // ES3.g3:1253:5: LBRACK expression RBRACK
                     LBRACK53=this.match(this.input,LBRACK,ES3Parser.FOLLOW_LBRACK_in_leftHandSideExpression3501);  
                     stream_LBRACK.add(LBRACK53);
 
@@ -2718,7 +2718,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: leftHandSideExpression, expression
+                    // elements: expression, leftHandSideExpression
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -2729,7 +2729,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1253:30: -> ^( BYINDEX $leftHandSideExpression expression )
                     {
-                        // ../ES3.g3:1253:33: ^( BYINDEX $leftHandSideExpression expression )
+                        // ES3.g3:1253:33: ^( BYINDEX $leftHandSideExpression expression )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(BYINDEX, "BYINDEX"), root_1);
@@ -2746,7 +2746,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1254:5: DOT Identifier
+                    // ES3.g3:1254:5: DOT Identifier
                     DOT56=this.match(this.input,DOT,ES3Parser.FOLLOW_DOT_in_leftHandSideExpression3524);  
                     stream_DOT.add(DOT56);
 
@@ -2756,7 +2756,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: Identifier, leftHandSideExpression
+                    // elements: leftHandSideExpression, Identifier
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -2767,7 +2767,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1254:21: -> ^( BYFIELD $leftHandSideExpression Identifier )
                     {
-                        // ../ES3.g3:1254:24: ^( BYFIELD $leftHandSideExpression Identifier )
+                        // ES3.g3:1254:24: ^( BYFIELD $leftHandSideExpression Identifier )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(BYFIELD, "BYFIELD"), root_1);
@@ -2823,7 +2823,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1268:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
+    // ES3.g3:1268:1: postfixExpression : leftHandSideExpression ( postfixOperator )? ;
     // $ANTLR start "postfixExpression"
     postfixExpression: function() {
         var retval = new ES3Parser.postfixExpression_return();
@@ -2836,8 +2836,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1269:2: ( leftHandSideExpression ( postfixOperator )? )
-            // ../ES3.g3:1269:4: leftHandSideExpression ( postfixOperator )?
+            // ES3.g3:1269:2: ( leftHandSideExpression ( postfixOperator )? )
+            // ES3.g3:1269:4: leftHandSideExpression ( postfixOperator )?
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_leftHandSideExpression_in_postfixExpression3561);
@@ -2847,7 +2847,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             this.adaptor.addChild(root_0, leftHandSideExpression58.getTree());
              if (this.input.LA(1) == this.theParser.INC || this.input.LA(1) == this.theParser.DEC) this.promoteEOL(null); 
-            // ../ES3.g3:1269:140: ( postfixOperator )?
+            // ES3.g3:1269:140: ( postfixOperator )?
             var alt15=2;
             var LA15_0 = this.input.LA(1);
 
@@ -2856,7 +2856,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt15) {
                 case 1 :
-                    // ../ES3.g3:1269:142: postfixOperator
+                    // ES3.g3:1269:142: postfixOperator
                     this.pushFollow(ES3Parser.FOLLOW_postfixOperator_in_postfixExpression3567);
                     postfixOperator59=this.postfixOperator();
 
@@ -2903,7 +2903,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1272:1: postfixOperator : (op= INC | op= DEC );
+    // ES3.g3:1272:1: postfixOperator : (op= INC | op= DEC );
     // $ANTLR start "postfixOperator"
     postfixOperator: function() {
         var retval = new ES3Parser.postfixOperator_return();
@@ -2916,7 +2916,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var op_tree=null;
 
         try {
-            // ../ES3.g3:1273:2: (op= INC | op= DEC )
+            // ES3.g3:1273:2: (op= INC | op= DEC )
             var alt16=2;
             var LA16_0 = this.input.LA(1);
 
@@ -2934,7 +2934,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt16) {
                 case 1 :
-                    // ../ES3.g3:1273:4: op= INC
+                    // ES3.g3:1273:4: op= INC
                     root_0 = this.adaptor.nil();
 
                     op=this.match(this.input,INC,ES3Parser.FOLLOW_INC_in_postfixOperator3585); 
@@ -2946,7 +2946,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1274:4: op= DEC
+                    // ES3.g3:1274:4: op= DEC
                     root_0 = this.adaptor.nil();
 
                     op=this.match(this.input,DEC,ES3Parser.FOLLOW_DEC_in_postfixOperator3594); 
@@ -2990,7 +2990,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1281:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );
+    // ES3.g3:1281:1: unaryExpression : ( postfixExpression | unaryOperator unaryExpression );
     // $ANTLR start "unaryExpression"
     unaryExpression: function() {
         var retval = new ES3Parser.unaryExpression_return();
@@ -3004,7 +3004,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1282:2: ( postfixExpression | unaryOperator unaryExpression )
+            // ES3.g3:1282:2: ( postfixExpression | unaryOperator unaryExpression )
             var alt17=2;
             var LA17_0 = this.input.LA(1);
 
@@ -3022,7 +3022,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt17) {
                 case 1 :
-                    // ../ES3.g3:1282:4: postfixExpression
+                    // ES3.g3:1282:4: postfixExpression
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_postfixExpression_in_unaryExpression3611);
@@ -3035,7 +3035,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1283:4: unaryOperator unaryExpression
+                    // ES3.g3:1283:4: unaryOperator unaryExpression
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_unaryOperator_in_unaryExpression3616);
@@ -3086,7 +3086,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1286:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT );
+    // ES3.g3:1286:1: unaryOperator : ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT );
     // $ANTLR start "unaryOperator"
     unaryOperator: function() {
         var retval = new ES3Parser.unaryOperator_return();
@@ -3113,7 +3113,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var NOT69_tree=null;
 
         try {
-            // ../ES3.g3:1287:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT )
+            // ES3.g3:1287:2: ( DELETE | VOID | TYPEOF | INC | DEC | op= ADD | op= SUB | INV | NOT )
             var alt18=9;
             switch ( this.input.LA(1) ) {
             case DELETE:
@@ -3152,7 +3152,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt18) {
                 case 1 :
-                    // ../ES3.g3:1287:4: DELETE
+                    // ES3.g3:1287:4: DELETE
                     root_0 = this.adaptor.nil();
 
                     DELETE63=this.match(this.input,DELETE,ES3Parser.FOLLOW_DELETE_in_unaryOperator3631); 
@@ -3163,7 +3163,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1288:4: VOID
+                    // ES3.g3:1288:4: VOID
                     root_0 = this.adaptor.nil();
 
                     VOID64=this.match(this.input,VOID,ES3Parser.FOLLOW_VOID_in_unaryOperator3636); 
@@ -3174,7 +3174,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1289:4: TYPEOF
+                    // ES3.g3:1289:4: TYPEOF
                     root_0 = this.adaptor.nil();
 
                     TYPEOF65=this.match(this.input,TYPEOF,ES3Parser.FOLLOW_TYPEOF_in_unaryOperator3641); 
@@ -3185,7 +3185,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:1290:4: INC
+                    // ES3.g3:1290:4: INC
                     root_0 = this.adaptor.nil();
 
                     INC66=this.match(this.input,INC,ES3Parser.FOLLOW_INC_in_unaryOperator3646); 
@@ -3196,7 +3196,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 5 :
-                    // ../ES3.g3:1291:4: DEC
+                    // ES3.g3:1291:4: DEC
                     root_0 = this.adaptor.nil();
 
                     DEC67=this.match(this.input,DEC,ES3Parser.FOLLOW_DEC_in_unaryOperator3651); 
@@ -3207,7 +3207,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 6 :
-                    // ../ES3.g3:1292:4: op= ADD
+                    // ES3.g3:1292:4: op= ADD
                     root_0 = this.adaptor.nil();
 
                     op=this.match(this.input,ADD,ES3Parser.FOLLOW_ADD_in_unaryOperator3658); 
@@ -3219,7 +3219,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 7 :
-                    // ../ES3.g3:1293:4: op= SUB
+                    // ES3.g3:1293:4: op= SUB
                     root_0 = this.adaptor.nil();
 
                     op=this.match(this.input,SUB,ES3Parser.FOLLOW_SUB_in_unaryOperator3667); 
@@ -3231,7 +3231,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 8 :
-                    // ../ES3.g3:1294:4: INV
+                    // ES3.g3:1294:4: INV
                     root_0 = this.adaptor.nil();
 
                     INV68=this.match(this.input,INV,ES3Parser.FOLLOW_INV_in_unaryOperator3674); 
@@ -3242,7 +3242,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 9 :
-                    // ../ES3.g3:1295:4: NOT
+                    // ES3.g3:1295:4: NOT
                     root_0 = this.adaptor.nil();
 
                     NOT69=this.match(this.input,NOT,ES3Parser.FOLLOW_NOT_in_unaryOperator3679); 
@@ -3285,7 +3285,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1302:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
+    // ES3.g3:1302:1: multiplicativeExpression : unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* ;
     // $ANTLR start "multiplicativeExpression"
     multiplicativeExpression: function() {
         var retval = new ES3Parser.multiplicativeExpression_return();
@@ -3301,8 +3301,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1304:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
-            // ../ES3.g3:1304:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
+            // ES3.g3:1304:2: ( unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )* )
+            // ES3.g3:1304:4: unaryExpression ( ( MUL | DIV | MOD ) unaryExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_unaryExpression_in_multiplicativeExpression3698);
@@ -3311,7 +3311,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, unaryExpression70.getTree());
-            // ../ES3.g3:1304:20: ( ( MUL | DIV | MOD ) unaryExpression )*
+            // ES3.g3:1304:20: ( ( MUL | DIV | MOD ) unaryExpression )*
             loop19:
             do {
                 var alt19=2;
@@ -3324,7 +3324,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt19) {
                 case 1 :
-                    // ../ES3.g3:1304:22: ( MUL | DIV | MOD ) unaryExpression
+                    // ES3.g3:1304:22: ( MUL | DIV | MOD ) unaryExpression
                     set71=input.LT(1);
                     set71=this.input.LT(1);
                     if ( (this.input.LA(1)>=MUL && this.input.LA(1)<=MOD)||this.input.LA(1)==DIV ) {
@@ -3386,7 +3386,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1311:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
+    // ES3.g3:1311:1: additiveExpression : multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* ;
     // $ANTLR start "additiveExpression"
     additiveExpression: function() {
         var retval = new ES3Parser.additiveExpression_return();
@@ -3402,8 +3402,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1313:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
-            // ../ES3.g3:1313:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
+            // ES3.g3:1313:2: ( multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )* )
+            // ES3.g3:1313:4: multiplicativeExpression ( ( ADD | SUB ) multiplicativeExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_multiplicativeExpression_in_additiveExpression3739);
@@ -3412,7 +3412,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, multiplicativeExpression73.getTree());
-            // ../ES3.g3:1313:29: ( ( ADD | SUB ) multiplicativeExpression )*
+            // ES3.g3:1313:29: ( ( ADD | SUB ) multiplicativeExpression )*
             loop20:
             do {
                 var alt20=2;
@@ -3425,7 +3425,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt20) {
                 case 1 :
-                    // ../ES3.g3:1313:31: ( ADD | SUB ) multiplicativeExpression
+                    // ES3.g3:1313:31: ( ADD | SUB ) multiplicativeExpression
                     set74=input.LT(1);
                     set74=this.input.LT(1);
                     if ( (this.input.LA(1)>=ADD && this.input.LA(1)<=SUB) ) {
@@ -3487,7 +3487,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1320:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
+    // ES3.g3:1320:1: shiftExpression : additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* ;
     // $ANTLR start "shiftExpression"
     shiftExpression: function() {
         var retval = new ES3Parser.shiftExpression_return();
@@ -3503,8 +3503,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1322:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
-            // ../ES3.g3:1322:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
+            // ES3.g3:1322:2: ( additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )* )
+            // ES3.g3:1322:4: additiveExpression ( ( SHL | SHR | SHU ) additiveExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_additiveExpression_in_shiftExpression3777);
@@ -3513,7 +3513,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, additiveExpression76.getTree());
-            // ../ES3.g3:1322:23: ( ( SHL | SHR | SHU ) additiveExpression )*
+            // ES3.g3:1322:23: ( ( SHL | SHR | SHU ) additiveExpression )*
             loop21:
             do {
                 var alt21=2;
@@ -3526,7 +3526,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt21) {
                 case 1 :
-                    // ../ES3.g3:1322:25: ( SHL | SHR | SHU ) additiveExpression
+                    // ES3.g3:1322:25: ( SHL | SHR | SHU ) additiveExpression
                     set77=input.LT(1);
                     set77=this.input.LT(1);
                     if ( (this.input.LA(1)>=SHL && this.input.LA(1)<=SHU) ) {
@@ -3588,7 +3588,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1329:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
+    // ES3.g3:1329:1: relationalExpression : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* ;
     // $ANTLR start "relationalExpression"
     relationalExpression: function() {
         var retval = new ES3Parser.relationalExpression_return();
@@ -3604,8 +3604,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1331:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
-            // ../ES3.g3:1331:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // ES3.g3:1331:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )* )
+            // ES3.g3:1331:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_shiftExpression_in_relationalExpression3819);
@@ -3614,7 +3614,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, shiftExpression79.getTree());
-            // ../ES3.g3:1331:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
+            // ES3.g3:1331:20: ( ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression )*
             loop22:
             do {
                 var alt22=2;
@@ -3627,7 +3627,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt22) {
                 case 1 :
-                    // ../ES3.g3:1331:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
+                    // ES3.g3:1331:22: ( LT | GT | LTE | GTE | INSTANCEOF | IN ) shiftExpression
                     set80=input.LT(1);
                     set80=this.input.LT(1);
                     if ( (this.input.LA(1)>=IN && this.input.LA(1)<=INSTANCEOF)||(this.input.LA(1)>=LT && this.input.LA(1)<=GTE) ) {
@@ -3689,7 +3689,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1334:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
+    // ES3.g3:1334:1: relationalExpressionNoIn : shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* ;
     // $ANTLR start "relationalExpressionNoIn"
     relationalExpressionNoIn: function() {
         var retval = new ES3Parser.relationalExpressionNoIn_return();
@@ -3705,8 +3705,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1336:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
-            // ../ES3.g3:1336:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // ES3.g3:1336:2: ( shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )* )
+            // ES3.g3:1336:4: shiftExpression ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_shiftExpression_in_relationalExpressionNoIn3868);
@@ -3715,7 +3715,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, shiftExpression82.getTree());
-            // ../ES3.g3:1336:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
+            // ES3.g3:1336:20: ( ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression )*
             loop23:
             do {
                 var alt23=2;
@@ -3728,7 +3728,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt23) {
                 case 1 :
-                    // ../ES3.g3:1336:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
+                    // ES3.g3:1336:22: ( LT | GT | LTE | GTE | INSTANCEOF ) shiftExpression
                     set83=input.LT(1);
                     set83=this.input.LT(1);
                     if ( this.input.LA(1)==INSTANCEOF||(this.input.LA(1)>=LT && this.input.LA(1)<=GTE) ) {
@@ -3790,7 +3790,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1343:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
+    // ES3.g3:1343:1: equalityExpression : relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* ;
     // $ANTLR start "equalityExpression"
     equalityExpression: function() {
         var retval = new ES3Parser.equalityExpression_return();
@@ -3806,8 +3806,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1345:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
-            // ../ES3.g3:1345:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // ES3.g3:1345:2: ( relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )* )
+            // ES3.g3:1345:4: relationalExpression ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_relationalExpression_in_equalityExpression3918);
@@ -3816,7 +3816,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, relationalExpression85.getTree());
-            // ../ES3.g3:1345:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
+            // ES3.g3:1345:25: ( ( EQ | NEQ | SAME | NSAME ) relationalExpression )*
             loop24:
             do {
                 var alt24=2;
@@ -3829,7 +3829,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt24) {
                 case 1 :
-                    // ../ES3.g3:1345:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
+                    // ES3.g3:1345:27: ( EQ | NEQ | SAME | NSAME ) relationalExpression
                     set86=input.LT(1);
                     set86=this.input.LT(1);
                     if ( (this.input.LA(1)>=EQ && this.input.LA(1)<=NSAME) ) {
@@ -3891,7 +3891,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1348:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
+    // ES3.g3:1348:1: equalityExpressionNoIn : relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* ;
     // $ANTLR start "equalityExpressionNoIn"
     equalityExpressionNoIn: function() {
         var retval = new ES3Parser.equalityExpressionNoIn_return();
@@ -3907,8 +3907,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1350:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
-            // ../ES3.g3:1350:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // ES3.g3:1350:2: ( relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )* )
+            // ES3.g3:1350:4: relationalExpressionNoIn ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_relationalExpressionNoIn_in_equalityExpressionNoIn3959);
@@ -3917,7 +3917,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, relationalExpressionNoIn88.getTree());
-            // ../ES3.g3:1350:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
+            // ES3.g3:1350:29: ( ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn )*
             loop25:
             do {
                 var alt25=2;
@@ -3930,7 +3930,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt25) {
                 case 1 :
-                    // ../ES3.g3:1350:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
+                    // ES3.g3:1350:31: ( EQ | NEQ | SAME | NSAME ) relationalExpressionNoIn
                     set89=input.LT(1);
                     set89=this.input.LT(1);
                     if ( (this.input.LA(1)>=EQ && this.input.LA(1)<=NSAME) ) {
@@ -3992,7 +3992,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1357:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
+    // ES3.g3:1357:1: bitwiseANDExpression : equalityExpression ( AND equalityExpression )* ;
     // $ANTLR start "bitwiseANDExpression"
     bitwiseANDExpression: function() {
         var retval = new ES3Parser.bitwiseANDExpression_return();
@@ -4008,8 +4008,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1359:2: ( equalityExpression ( AND equalityExpression )* )
-            // ../ES3.g3:1359:4: equalityExpression ( AND equalityExpression )*
+            // ES3.g3:1359:2: ( equalityExpression ( AND equalityExpression )* )
+            // ES3.g3:1359:4: equalityExpression ( AND equalityExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_equalityExpression_in_bitwiseANDExpression4006);
@@ -4018,7 +4018,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, equalityExpression91.getTree());
-            // ../ES3.g3:1359:23: ( AND equalityExpression )*
+            // ES3.g3:1359:23: ( AND equalityExpression )*
             loop26:
             do {
                 var alt26=2;
@@ -4031,7 +4031,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt26) {
                 case 1 :
-                    // ../ES3.g3:1359:25: AND equalityExpression
+                    // ES3.g3:1359:25: AND equalityExpression
                     AND92=this.match(this.input,AND,ES3Parser.FOLLOW_AND_in_bitwiseANDExpression4010); 
                     AND92_tree = this.adaptor.create(AND92);
                     root_0 = this.adaptor.becomeRoot(AND92_tree, root_0);
@@ -4085,7 +4085,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1362:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
+    // ES3.g3:1362:1: bitwiseANDExpressionNoIn : equalityExpressionNoIn ( AND equalityExpressionNoIn )* ;
     // $ANTLR start "bitwiseANDExpressionNoIn"
     bitwiseANDExpressionNoIn: function() {
         var retval = new ES3Parser.bitwiseANDExpressionNoIn_return();
@@ -4101,8 +4101,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1364:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
-            // ../ES3.g3:1364:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
+            // ES3.g3:1364:2: ( equalityExpressionNoIn ( AND equalityExpressionNoIn )* )
+            // ES3.g3:1364:4: equalityExpressionNoIn ( AND equalityExpressionNoIn )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_equalityExpressionNoIn_in_bitwiseANDExpressionNoIn4031);
@@ -4111,7 +4111,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, equalityExpressionNoIn94.getTree());
-            // ../ES3.g3:1364:27: ( AND equalityExpressionNoIn )*
+            // ES3.g3:1364:27: ( AND equalityExpressionNoIn )*
             loop27:
             do {
                 var alt27=2;
@@ -4124,7 +4124,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt27) {
                 case 1 :
-                    // ../ES3.g3:1364:29: AND equalityExpressionNoIn
+                    // ES3.g3:1364:29: AND equalityExpressionNoIn
                     AND95=this.match(this.input,AND,ES3Parser.FOLLOW_AND_in_bitwiseANDExpressionNoIn4035); 
                     AND95_tree = this.adaptor.create(AND95);
                     root_0 = this.adaptor.becomeRoot(AND95_tree, root_0);
@@ -4178,7 +4178,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1367:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
+    // ES3.g3:1367:1: bitwiseXORExpression : bitwiseANDExpression ( XOR bitwiseANDExpression )* ;
     // $ANTLR start "bitwiseXORExpression"
     bitwiseXORExpression: function() {
         var retval = new ES3Parser.bitwiseXORExpression_return();
@@ -4194,8 +4194,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1369:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
-            // ../ES3.g3:1369:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
+            // ES3.g3:1369:2: ( bitwiseANDExpression ( XOR bitwiseANDExpression )* )
+            // ES3.g3:1369:4: bitwiseANDExpression ( XOR bitwiseANDExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_bitwiseANDExpression_in_bitwiseXORExpression4058);
@@ -4204,7 +4204,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, bitwiseANDExpression97.getTree());
-            // ../ES3.g3:1369:25: ( XOR bitwiseANDExpression )*
+            // ES3.g3:1369:25: ( XOR bitwiseANDExpression )*
             loop28:
             do {
                 var alt28=2;
@@ -4217,7 +4217,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt28) {
                 case 1 :
-                    // ../ES3.g3:1369:27: XOR bitwiseANDExpression
+                    // ES3.g3:1369:27: XOR bitwiseANDExpression
                     XOR98=this.match(this.input,XOR,ES3Parser.FOLLOW_XOR_in_bitwiseXORExpression4062); 
                     XOR98_tree = this.adaptor.create(XOR98);
                     root_0 = this.adaptor.becomeRoot(XOR98_tree, root_0);
@@ -4271,7 +4271,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1372:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
+    // ES3.g3:1372:1: bitwiseXORExpressionNoIn : bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* ;
     // $ANTLR start "bitwiseXORExpressionNoIn"
     bitwiseXORExpressionNoIn: function() {
         var retval = new ES3Parser.bitwiseXORExpressionNoIn_return();
@@ -4287,8 +4287,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1374:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
-            // ../ES3.g3:1374:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
+            // ES3.g3:1374:2: ( bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )* )
+            // ES3.g3:1374:4: bitwiseANDExpressionNoIn ( XOR bitwiseANDExpressionNoIn )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_bitwiseANDExpressionNoIn_in_bitwiseXORExpressionNoIn4085);
@@ -4297,7 +4297,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, bitwiseANDExpressionNoIn100.getTree());
-            // ../ES3.g3:1374:29: ( XOR bitwiseANDExpressionNoIn )*
+            // ES3.g3:1374:29: ( XOR bitwiseANDExpressionNoIn )*
             loop29:
             do {
                 var alt29=2;
@@ -4310,7 +4310,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt29) {
                 case 1 :
-                    // ../ES3.g3:1374:31: XOR bitwiseANDExpressionNoIn
+                    // ES3.g3:1374:31: XOR bitwiseANDExpressionNoIn
                     XOR101=this.match(this.input,XOR,ES3Parser.FOLLOW_XOR_in_bitwiseXORExpressionNoIn4089); 
                     XOR101_tree = this.adaptor.create(XOR101);
                     root_0 = this.adaptor.becomeRoot(XOR101_tree, root_0);
@@ -4364,7 +4364,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1377:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
+    // ES3.g3:1377:1: bitwiseORExpression : bitwiseXORExpression ( OR bitwiseXORExpression )* ;
     // $ANTLR start "bitwiseORExpression"
     bitwiseORExpression: function() {
         var retval = new ES3Parser.bitwiseORExpression_return();
@@ -4380,8 +4380,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1379:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
-            // ../ES3.g3:1379:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
+            // ES3.g3:1379:2: ( bitwiseXORExpression ( OR bitwiseXORExpression )* )
+            // ES3.g3:1379:4: bitwiseXORExpression ( OR bitwiseXORExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_bitwiseXORExpression_in_bitwiseORExpression4111);
@@ -4390,7 +4390,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, bitwiseXORExpression103.getTree());
-            // ../ES3.g3:1379:25: ( OR bitwiseXORExpression )*
+            // ES3.g3:1379:25: ( OR bitwiseXORExpression )*
             loop30:
             do {
                 var alt30=2;
@@ -4403,7 +4403,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt30) {
                 case 1 :
-                    // ../ES3.g3:1379:27: OR bitwiseXORExpression
+                    // ES3.g3:1379:27: OR bitwiseXORExpression
                     OR104=this.match(this.input,OR,ES3Parser.FOLLOW_OR_in_bitwiseORExpression4115); 
                     OR104_tree = this.adaptor.create(OR104);
                     root_0 = this.adaptor.becomeRoot(OR104_tree, root_0);
@@ -4457,7 +4457,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1382:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
+    // ES3.g3:1382:1: bitwiseORExpressionNoIn : bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* ;
     // $ANTLR start "bitwiseORExpressionNoIn"
     bitwiseORExpressionNoIn: function() {
         var retval = new ES3Parser.bitwiseORExpressionNoIn_return();
@@ -4473,8 +4473,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1384:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
-            // ../ES3.g3:1384:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
+            // ES3.g3:1384:2: ( bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )* )
+            // ES3.g3:1384:4: bitwiseXORExpressionNoIn ( OR bitwiseXORExpressionNoIn )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_bitwiseXORExpressionNoIn_in_bitwiseORExpressionNoIn4137);
@@ -4483,7 +4483,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, bitwiseXORExpressionNoIn106.getTree());
-            // ../ES3.g3:1384:29: ( OR bitwiseXORExpressionNoIn )*
+            // ES3.g3:1384:29: ( OR bitwiseXORExpressionNoIn )*
             loop31:
             do {
                 var alt31=2;
@@ -4496,7 +4496,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt31) {
                 case 1 :
-                    // ../ES3.g3:1384:31: OR bitwiseXORExpressionNoIn
+                    // ES3.g3:1384:31: OR bitwiseXORExpressionNoIn
                     OR107=this.match(this.input,OR,ES3Parser.FOLLOW_OR_in_bitwiseORExpressionNoIn4141); 
                     OR107_tree = this.adaptor.create(OR107);
                     root_0 = this.adaptor.becomeRoot(OR107_tree, root_0);
@@ -4550,7 +4550,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1391:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
+    // ES3.g3:1391:1: logicalANDExpression : bitwiseORExpression ( LAND bitwiseORExpression )* ;
     // $ANTLR start "logicalANDExpression"
     logicalANDExpression: function() {
         var retval = new ES3Parser.logicalANDExpression_return();
@@ -4566,8 +4566,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1393:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
-            // ../ES3.g3:1393:4: bitwiseORExpression ( LAND bitwiseORExpression )*
+            // ES3.g3:1393:2: ( bitwiseORExpression ( LAND bitwiseORExpression )* )
+            // ES3.g3:1393:4: bitwiseORExpression ( LAND bitwiseORExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_bitwiseORExpression_in_logicalANDExpression4167);
@@ -4576,7 +4576,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, bitwiseORExpression109.getTree());
-            // ../ES3.g3:1393:24: ( LAND bitwiseORExpression )*
+            // ES3.g3:1393:24: ( LAND bitwiseORExpression )*
             loop32:
             do {
                 var alt32=2;
@@ -4589,7 +4589,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt32) {
                 case 1 :
-                    // ../ES3.g3:1393:26: LAND bitwiseORExpression
+                    // ES3.g3:1393:26: LAND bitwiseORExpression
                     LAND110=this.match(this.input,LAND,ES3Parser.FOLLOW_LAND_in_logicalANDExpression4171); 
                     LAND110_tree = this.adaptor.create(LAND110);
                     root_0 = this.adaptor.becomeRoot(LAND110_tree, root_0);
@@ -4643,7 +4643,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1396:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
+    // ES3.g3:1396:1: logicalANDExpressionNoIn : bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* ;
     // $ANTLR start "logicalANDExpressionNoIn"
     logicalANDExpressionNoIn: function() {
         var retval = new ES3Parser.logicalANDExpressionNoIn_return();
@@ -4659,8 +4659,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1398:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
-            // ../ES3.g3:1398:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
+            // ES3.g3:1398:2: ( bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )* )
+            // ES3.g3:1398:4: bitwiseORExpressionNoIn ( LAND bitwiseORExpressionNoIn )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_bitwiseORExpressionNoIn_in_logicalANDExpressionNoIn4192);
@@ -4669,7 +4669,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, bitwiseORExpressionNoIn112.getTree());
-            // ../ES3.g3:1398:28: ( LAND bitwiseORExpressionNoIn )*
+            // ES3.g3:1398:28: ( LAND bitwiseORExpressionNoIn )*
             loop33:
             do {
                 var alt33=2;
@@ -4682,7 +4682,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt33) {
                 case 1 :
-                    // ../ES3.g3:1398:30: LAND bitwiseORExpressionNoIn
+                    // ES3.g3:1398:30: LAND bitwiseORExpressionNoIn
                     LAND113=this.match(this.input,LAND,ES3Parser.FOLLOW_LAND_in_logicalANDExpressionNoIn4196); 
                     LAND113_tree = this.adaptor.create(LAND113);
                     root_0 = this.adaptor.becomeRoot(LAND113_tree, root_0);
@@ -4736,7 +4736,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1401:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
+    // ES3.g3:1401:1: logicalORExpression : logicalANDExpression ( LOR logicalANDExpression )* ;
     // $ANTLR start "logicalORExpression"
     logicalORExpression: function() {
         var retval = new ES3Parser.logicalORExpression_return();
@@ -4752,8 +4752,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1403:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
-            // ../ES3.g3:1403:4: logicalANDExpression ( LOR logicalANDExpression )*
+            // ES3.g3:1403:2: ( logicalANDExpression ( LOR logicalANDExpression )* )
+            // ES3.g3:1403:4: logicalANDExpression ( LOR logicalANDExpression )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_logicalANDExpression_in_logicalORExpression4218);
@@ -4762,7 +4762,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, logicalANDExpression115.getTree());
-            // ../ES3.g3:1403:25: ( LOR logicalANDExpression )*
+            // ES3.g3:1403:25: ( LOR logicalANDExpression )*
             loop34:
             do {
                 var alt34=2;
@@ -4775,7 +4775,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt34) {
                 case 1 :
-                    // ../ES3.g3:1403:27: LOR logicalANDExpression
+                    // ES3.g3:1403:27: LOR logicalANDExpression
                     LOR116=this.match(this.input,LOR,ES3Parser.FOLLOW_LOR_in_logicalORExpression4222); 
                     LOR116_tree = this.adaptor.create(LOR116);
                     root_0 = this.adaptor.becomeRoot(LOR116_tree, root_0);
@@ -4829,7 +4829,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1406:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
+    // ES3.g3:1406:1: logicalORExpressionNoIn : logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* ;
     // $ANTLR start "logicalORExpressionNoIn"
     logicalORExpressionNoIn: function() {
         var retval = new ES3Parser.logicalORExpressionNoIn_return();
@@ -4845,8 +4845,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1408:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
-            // ../ES3.g3:1408:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
+            // ES3.g3:1408:2: ( logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )* )
+            // ES3.g3:1408:4: logicalANDExpressionNoIn ( LOR logicalANDExpressionNoIn )*
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_logicalANDExpressionNoIn_in_logicalORExpressionNoIn4244);
@@ -4855,7 +4855,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, logicalANDExpressionNoIn118.getTree());
-            // ../ES3.g3:1408:29: ( LOR logicalANDExpressionNoIn )*
+            // ES3.g3:1408:29: ( LOR logicalANDExpressionNoIn )*
             loop35:
             do {
                 var alt35=2;
@@ -4868,7 +4868,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt35) {
                 case 1 :
-                    // ../ES3.g3:1408:31: LOR logicalANDExpressionNoIn
+                    // ES3.g3:1408:31: LOR logicalANDExpressionNoIn
                     LOR119=this.match(this.input,LOR,ES3Parser.FOLLOW_LOR_in_logicalORExpressionNoIn4248); 
                     LOR119_tree = this.adaptor.create(LOR119);
                     root_0 = this.adaptor.becomeRoot(LOR119_tree, root_0);
@@ -4922,7 +4922,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1415:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
+    // ES3.g3:1415:1: conditionalExpression : logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? ;
     // $ANTLR start "conditionalExpression"
     conditionalExpression: function() {
         var retval = new ES3Parser.conditionalExpression_return();
@@ -4941,8 +4941,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1417:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
-            // ../ES3.g3:1417:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
+            // ES3.g3:1417:2: ( logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )? )
+            // ES3.g3:1417:4: logicalORExpression ( QUE assignmentExpression COLON assignmentExpression )?
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_logicalORExpression_in_conditionalExpression4274);
@@ -4951,7 +4951,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, logicalORExpression121.getTree());
-            // ../ES3.g3:1417:24: ( QUE assignmentExpression COLON assignmentExpression )?
+            // ES3.g3:1417:24: ( QUE assignmentExpression COLON assignmentExpression )?
             var alt36=2;
             var LA36_0 = this.input.LA(1);
 
@@ -4960,7 +4960,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt36) {
                 case 1 :
-                    // ../ES3.g3:1417:26: QUE assignmentExpression COLON assignmentExpression
+                    // ES3.g3:1417:26: QUE assignmentExpression COLON assignmentExpression
                     QUE122=this.match(this.input,QUE,ES3Parser.FOLLOW_QUE_in_conditionalExpression4278); 
                     QUE122_tree = this.adaptor.create(QUE122);
                     root_0 = this.adaptor.becomeRoot(QUE122_tree, root_0);
@@ -5018,7 +5018,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1420:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
+    // ES3.g3:1420:1: conditionalExpressionNoIn : logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? ;
     // $ANTLR start "conditionalExpressionNoIn"
     conditionalExpressionNoIn: function() {
         var retval = new ES3Parser.conditionalExpressionNoIn_return();
@@ -5037,8 +5037,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
          var input = this.input; 
         try {
-            // ../ES3.g3:1422:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
-            // ../ES3.g3:1422:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // ES3.g3:1422:2: ( logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )? )
+            // ES3.g3:1422:4: logicalORExpressionNoIn ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_logicalORExpressionNoIn_in_conditionalExpressionNoIn4304);
@@ -5047,7 +5047,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, logicalORExpressionNoIn126.getTree());
-            // ../ES3.g3:1422:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
+            // ES3.g3:1422:28: ( QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn )?
             var alt37=2;
             var LA37_0 = this.input.LA(1);
 
@@ -5056,7 +5056,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt37) {
                 case 1 :
-                    // ../ES3.g3:1422:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
+                    // ES3.g3:1422:30: QUE assignmentExpressionNoIn COLON assignmentExpressionNoIn
                     QUE127=this.match(this.input,QUE,ES3Parser.FOLLOW_QUE_in_conditionalExpressionNoIn4308); 
                     QUE127_tree = this.adaptor.create(QUE127);
                     root_0 = this.adaptor.becomeRoot(QUE127_tree, root_0);
@@ -5114,7 +5114,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1451:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
+    // ES3.g3:1451:1: assignmentExpression : lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? ;
     // $ANTLR start "assignmentExpression"
     assignmentExpression: function() {
         var retval = new ES3Parser.assignmentExpression_return();
@@ -5132,8 +5132,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         	  var isLhs = new Array();// Object[1];
 
         try {
-            // ../ES3.g3:1457:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
-            // ../ES3.g3:1457:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
+            // ES3.g3:1457:2: (lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )? )
+            // ES3.g3:1457:4: lhs= conditionalExpression ({...}? assignmentOperator assignmentExpression )?
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_conditionalExpression_in_assignmentExpression4344);
@@ -5142,7 +5142,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, lhs.getTree());
-            // ../ES3.g3:1458:2: ({...}? assignmentOperator assignmentExpression )?
+            // ES3.g3:1458:2: ({...}? assignmentOperator assignmentExpression )?
             var alt38=2;
             var LA38_0 = this.input.LA(1);
 
@@ -5155,7 +5155,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt38) {
                 case 1 :
-                    // ../ES3.g3:1458:4: {...}? assignmentOperator assignmentExpression
+                    // ES3.g3:1458:4: {...}? assignmentOperator assignmentExpression
                     if ( !(( this.isLeftHandSideAssign(lhs, isLhs) )) ) {
                         throw new org.antlr.runtime.FailedPredicateException(this.input, "assignmentExpression", " this.isLeftHandSideAssign(lhs, isLhs) ");
                     }
@@ -5211,7 +5211,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1461:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
+    // ES3.g3:1461:1: assignmentOperator : ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS );
     // $ANTLR start "assignmentOperator"
     assignmentOperator: function() {
         var retval = new ES3Parser.assignmentOperator_return();
@@ -5224,8 +5224,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var set133_tree=null;
 
         try {
-            // ../ES3.g3:1462:2: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
-            // ../ES3.g3:
+            // ES3.g3:1462:2: ( ASSIGN | MULASS | DIVASS | MODASS | ADDASS | SUBASS | SHLASS | SHRASS | SHUASS | ANDASS | XORASS | ORASS )
+            // ES3.g3:
             root_0 = this.adaptor.nil();
 
             set133=this.input.LT(1);
@@ -5273,7 +5273,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1465:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
+    // ES3.g3:1465:1: assignmentExpressionNoIn : lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? ;
     // $ANTLR start "assignmentExpressionNoIn"
     assignmentExpressionNoIn: function() {
         var retval = new ES3Parser.assignmentExpressionNoIn_return();
@@ -5291,8 +5291,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         	  var isLhs = new Array();//Object[1];
 
         try {
-            // ../ES3.g3:1471:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
-            // ../ES3.g3:1471:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // ES3.g3:1471:2: (lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )? )
+            // ES3.g3:1471:4: lhs= conditionalExpressionNoIn ({...}? assignmentOperator assignmentExpressionNoIn )?
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_conditionalExpressionNoIn_in_assignmentExpressionNoIn4431);
@@ -5301,7 +5301,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, lhs.getTree());
-            // ../ES3.g3:1472:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
+            // ES3.g3:1472:2: ({...}? assignmentOperator assignmentExpressionNoIn )?
             var alt39=2;
             var LA39_0 = this.input.LA(1);
 
@@ -5314,7 +5314,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt39) {
                 case 1 :
-                    // ../ES3.g3:1472:4: {...}? assignmentOperator assignmentExpressionNoIn
+                    // ES3.g3:1472:4: {...}? assignmentOperator assignmentExpressionNoIn
                     if ( !(( this.isLeftHandSideAssign(lhs, isLhs) )) ) {
                         throw new org.antlr.runtime.FailedPredicateException(this.input, "assignmentExpressionNoIn", " this.isLeftHandSideAssign(lhs, isLhs) ");
                     }
@@ -5370,7 +5370,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1479:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // ES3.g3:1479:1: expression : exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     // $ANTLR start "expression"
     expression: function() {
         var retval = new ES3Parser.expression_return();
@@ -5385,8 +5385,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_assignmentExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule assignmentExpression");
         try {
-            // ../ES3.g3:1480:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // ../ES3.g3:1480:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
+            // ES3.g3:1480:2: (exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // ES3.g3:1480:4: exprs+= assignmentExpression ( COMMA exprs+= assignmentExpression )*
             this.pushFollow(ES3Parser.FOLLOW_assignmentExpression_in_expression4463);
             exprs=this.assignmentExpression();
 
@@ -5396,7 +5396,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             if (org.antlr.lang.isNull(list_exprs)) list_exprs = [];
             list_exprs.push(exprs.getTree());
 
-            // ../ES3.g3:1480:32: ( COMMA exprs+= assignmentExpression )*
+            // ES3.g3:1480:32: ( COMMA exprs+= assignmentExpression )*
             loop40:
             do {
                 var alt40=2;
@@ -5409,7 +5409,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt40) {
                 case 1 :
-                    // ../ES3.g3:1480:34: COMMA exprs+= assignmentExpression
+                    // ES3.g3:1480:34: COMMA exprs+= assignmentExpression
                     COMMA136=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_expression4467);  
                     stream_COMMA.add(COMMA136);
 
@@ -5445,7 +5445,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1481:2: -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.length > 1 ) {
-                // ../ES3.g3:1481:28: ^( CEXPR ( $exprs)+ )
+                // ES3.g3:1481:28: ^( CEXPR ( $exprs)+ )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -5503,7 +5503,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1485:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
+    // ES3.g3:1485:1: expressionNoIn : exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs;
     // $ANTLR start "expressionNoIn"
     expressionNoIn: function() {
         var retval = new ES3Parser.expressionNoIn_return();
@@ -5518,8 +5518,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_assignmentExpressionNoIn=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule assignmentExpressionNoIn");
         try {
-            // ../ES3.g3:1486:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
-            // ../ES3.g3:1486:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
+            // ES3.g3:1486:2: (exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )* -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ ) -> $exprs)
+            // ES3.g3:1486:4: exprs+= assignmentExpressionNoIn ( COMMA exprs+= assignmentExpressionNoIn )*
             this.pushFollow(ES3Parser.FOLLOW_assignmentExpressionNoIn_in_expressionNoIn4508);
             exprs=this.assignmentExpressionNoIn();
 
@@ -5529,7 +5529,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             if (org.antlr.lang.isNull(list_exprs)) list_exprs = [];
             list_exprs.push(exprs.getTree());
 
-            // ../ES3.g3:1486:36: ( COMMA exprs+= assignmentExpressionNoIn )*
+            // ES3.g3:1486:36: ( COMMA exprs+= assignmentExpressionNoIn )*
             loop41:
             do {
                 var alt41=2;
@@ -5542,7 +5542,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt41) {
                 case 1 :
-                    // ../ES3.g3:1486:38: COMMA exprs+= assignmentExpressionNoIn
+                    // ES3.g3:1486:38: COMMA exprs+= assignmentExpressionNoIn
                     COMMA137=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_expressionNoIn4512);  
                     stream_COMMA.add(COMMA137);
 
@@ -5578,7 +5578,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1487:2: -> { $exprs.length > 1 }? ^( CEXPR ( $exprs)+ )
             if ( list_exprs.length > 1 ) {
-                // ../ES3.g3:1487:28: ^( CEXPR ( $exprs)+ )
+                // ES3.g3:1487:28: ^( CEXPR ( $exprs)+ )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(CEXPR, "CEXPR"), root_1);
@@ -5636,7 +5636,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1513:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
+    // ES3.g3:1513:1: semic : ( SEMIC | EOF | RBRACE | EOL | MultiLineComment );
     // $ANTLR start "semic"
     semic: function() {
         var retval = new ES3Parser.semic_return();
@@ -5664,7 +5664,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         	this.promoteEOL(retval);
 
         try {
-            // ../ES3.g3:1522:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
+            // ES3.g3:1522:2: ( SEMIC | EOF | RBRACE | EOL | MultiLineComment )
             var alt42=5;
             switch ( this.input.LA(1) ) {
             case SEMIC:
@@ -5691,7 +5691,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt42) {
                 case 1 :
-                    // ../ES3.g3:1522:4: SEMIC
+                    // ES3.g3:1522:4: SEMIC
                     root_0 = this.adaptor.nil();
 
                     SEMIC138=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_semic4567); 
@@ -5702,7 +5702,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1523:4: EOF
+                    // ES3.g3:1523:4: EOF
                     root_0 = this.adaptor.nil();
 
                     EOF139=this.match(this.input,EOF,ES3Parser.FOLLOW_EOF_in_semic4572); 
@@ -5713,7 +5713,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1524:4: RBRACE
+                    // ES3.g3:1524:4: RBRACE
                     root_0 = this.adaptor.nil();
 
                     RBRACE140=this.match(this.input,RBRACE,ES3Parser.FOLLOW_RBRACE_in_semic4577); 
@@ -5725,7 +5725,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:1525:4: EOL
+                    // ES3.g3:1525:4: EOL
                     root_0 = this.adaptor.nil();
 
                     EOL141=this.match(this.input,EOL,ES3Parser.FOLLOW_EOL_in_semic4584); 
@@ -5736,7 +5736,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 5 :
-                    // ../ES3.g3:1525:10: MultiLineComment
+                    // ES3.g3:1525:10: MultiLineComment
                     root_0 = this.adaptor.nil();
 
                     MultiLineComment142=this.match(this.input,MultiLineComment,ES3Parser.FOLLOW_MultiLineComment_in_semic4588); 
@@ -5779,7 +5779,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1533:1: statement options {k=1; } : ({...}? block | statementTail );
+    // ES3.g3:1533:1: statement options {k=1; } : ({...}? block | statementTail );
     // $ANTLR start "statement"
     statement: function() {
         var retval = new ES3Parser.statement_return();
@@ -5792,12 +5792,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1538:2: ({...}? block | statementTail )
+            // ES3.g3:1538:2: ({...}? block | statementTail )
             var alt43=2;
             alt43 = this.dfa43.predict(this.input);
             switch (alt43) {
                 case 1 :
-                    // ../ES3.g3:1538:4: {...}? block
+                    // ES3.g3:1538:4: {...}? block
                     root_0 = this.adaptor.nil();
 
                     if ( !(( this.input.LA(1) == this.theParser.LBRACE )) ) {
@@ -5813,7 +5813,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1539:4: statementTail
+                    // ES3.g3:1539:4: statementTail
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_statementTail_in_statement4622);
@@ -5858,7 +5858,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1542:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement );
+    // ES3.g3:1542:1: statementTail : ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement );
     // $ANTLR start "statementTail"
     statementTail: function() {
         var retval = new ES3Parser.statementTail_return();
@@ -5882,12 +5882,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1543:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement )
+            // ES3.g3:1543:2: ( variableStatement | emptyStatement | expressionStatement | ifStatement | iterationStatement | continueStatement | breakStatement | returnStatement | withStatement | labelledStatement | switchStatement | throwStatement | tryStatement )
             var alt44=13;
             alt44 = this.dfa44.predict(this.input);
             switch (alt44) {
                 case 1 :
-                    // ../ES3.g3:1543:4: variableStatement
+                    // ES3.g3:1543:4: variableStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_variableStatement_in_statementTail4634);
@@ -5900,7 +5900,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1544:4: emptyStatement
+                    // ES3.g3:1544:4: emptyStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_emptyStatement_in_statementTail4639);
@@ -5913,7 +5913,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1545:4: expressionStatement
+                    // ES3.g3:1545:4: expressionStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_expressionStatement_in_statementTail4644);
@@ -5926,7 +5926,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 4 :
-                    // ../ES3.g3:1546:4: ifStatement
+                    // ES3.g3:1546:4: ifStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_ifStatement_in_statementTail4649);
@@ -5939,7 +5939,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 5 :
-                    // ../ES3.g3:1547:4: iterationStatement
+                    // ES3.g3:1547:4: iterationStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_iterationStatement_in_statementTail4654);
@@ -5952,7 +5952,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 6 :
-                    // ../ES3.g3:1548:4: continueStatement
+                    // ES3.g3:1548:4: continueStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_continueStatement_in_statementTail4659);
@@ -5965,7 +5965,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 7 :
-                    // ../ES3.g3:1549:4: breakStatement
+                    // ES3.g3:1549:4: breakStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_breakStatement_in_statementTail4664);
@@ -5978,7 +5978,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 8 :
-                    // ../ES3.g3:1550:4: returnStatement
+                    // ES3.g3:1550:4: returnStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_returnStatement_in_statementTail4669);
@@ -5991,7 +5991,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 9 :
-                    // ../ES3.g3:1551:4: withStatement
+                    // ES3.g3:1551:4: withStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_withStatement_in_statementTail4674);
@@ -6004,7 +6004,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 10 :
-                    // ../ES3.g3:1552:4: labelledStatement
+                    // ES3.g3:1552:4: labelledStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_labelledStatement_in_statementTail4679);
@@ -6017,7 +6017,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 11 :
-                    // ../ES3.g3:1553:4: switchStatement
+                    // ES3.g3:1553:4: switchStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_switchStatement_in_statementTail4684);
@@ -6030,7 +6030,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 12 :
-                    // ../ES3.g3:1554:4: throwStatement
+                    // ES3.g3:1554:4: throwStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_throwStatement_in_statementTail4689);
@@ -6043,7 +6043,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 13 :
-                    // ../ES3.g3:1555:4: tryStatement
+                    // ES3.g3:1555:4: tryStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_tryStatement_in_statementTail4694);
@@ -6088,7 +6088,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1560:1: block : lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) ;
+    // ES3.g3:1560:1: block : lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) ;
     // $ANTLR start "block"
     block: function() {
         var retval = new ES3Parser.block_return();
@@ -6106,12 +6106,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_LBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACE");
         var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
         try {
-            // ../ES3.g3:1561:2: (lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) )
-            // ../ES3.g3:1561:4: lb= LBRACE ( statement )* RBRACE
+            // ES3.g3:1561:2: (lb= LBRACE ( statement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* ) )
+            // ES3.g3:1561:4: lb= LBRACE ( statement )* RBRACE
             lb=this.match(this.input,LBRACE,ES3Parser.FOLLOW_LBRACE_in_block4709);  
             stream_LBRACE.add(lb);
 
-            // ../ES3.g3:1561:14: ( statement )*
+            // ES3.g3:1561:14: ( statement )*
             loop45:
             do {
                 var alt45=2;
@@ -6124,7 +6124,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt45) {
                 case 1 :
-                    // ../ES3.g3:1561:14: statement
+                    // ES3.g3:1561:14: statement
                     this.pushFollow(ES3Parser.FOLLOW_statement_in_block4711);
                     statement158=this.statement();
 
@@ -6157,12 +6157,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1562:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
             {
-                // ../ES3.g3:1562:5: ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
+                // ES3.g3:1562:5: ^( BLOCK[$lb, \"BLOCK\"] ( statement )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(BLOCK, lb, "BLOCK"), root_1);
 
-                // ../ES3.g3:1562:28: ( statement )*
+                // ES3.g3:1562:28: ( statement )*
                 while ( stream_statement.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_statement.nextTree());
 
@@ -6208,7 +6208,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1569:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
+    // ES3.g3:1569:1: variableStatement : VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) ;
     // $ANTLR start "variableStatement"
     variableStatement: function() {
         var retval = new ES3Parser.variableStatement_return();
@@ -6229,8 +6229,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_variableDeclaration=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule variableDeclaration");
         var stream_semic=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule semic");
         try {
-            // ../ES3.g3:1570:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
-            // ../ES3.g3:1570:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
+            // ES3.g3:1570:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
+            // ES3.g3:1570:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
             VAR160=this.match(this.input,VAR,ES3Parser.FOLLOW_VAR_in_variableStatement4743);  
             stream_VAR.add(VAR160);
 
@@ -6240,7 +6240,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             stream_variableDeclaration.add(variableDeclaration161.getTree());
-            // ../ES3.g3:1570:28: ( COMMA variableDeclaration )*
+            // ES3.g3:1570:28: ( COMMA variableDeclaration )*
             loop46:
             do {
                 var alt46=2;
@@ -6253,7 +6253,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt46) {
                 case 1 :
-                    // ../ES3.g3:1570:30: COMMA variableDeclaration
+                    // ES3.g3:1570:30: COMMA variableDeclaration
                     COMMA162=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_variableStatement4749);  
                     stream_COMMA.add(COMMA162);
 
@@ -6292,7 +6292,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1571:2: -> ^( VAR ( variableDeclaration )+ )
             {
-                // ../ES3.g3:1571:5: ^( VAR ( variableDeclaration )+ )
+                // ES3.g3:1571:5: ^( VAR ( variableDeclaration )+ )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_VAR.nextNode(), root_1);
@@ -6345,7 +6345,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1574:1: variableDeclaration : Identifier ( ASSIGN assignmentExpression )? ;
+    // ES3.g3:1574:1: variableDeclaration : Identifier ( ASSIGN assignmentExpression )? ;
     // $ANTLR start "variableDeclaration"
     variableDeclaration: function() {
         var retval = new ES3Parser.variableDeclaration_return();
@@ -6361,15 +6361,15 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var ASSIGN166_tree=null;
 
         try {
-            // ../ES3.g3:1575:2: ( Identifier ( ASSIGN assignmentExpression )? )
-            // ../ES3.g3:1575:4: Identifier ( ASSIGN assignmentExpression )?
+            // ES3.g3:1575:2: ( Identifier ( ASSIGN assignmentExpression )? )
+            // ES3.g3:1575:4: Identifier ( ASSIGN assignmentExpression )?
             root_0 = this.adaptor.nil();
 
             Identifier165=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_variableDeclaration4779); 
             Identifier165_tree = this.adaptor.create(Identifier165);
             this.adaptor.addChild(root_0, Identifier165_tree);
 
-            // ../ES3.g3:1575:15: ( ASSIGN assignmentExpression )?
+            // ES3.g3:1575:15: ( ASSIGN assignmentExpression )?
             var alt47=2;
             var LA47_0 = this.input.LA(1);
 
@@ -6378,7 +6378,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt47) {
                 case 1 :
-                    // ../ES3.g3:1575:17: ASSIGN assignmentExpression
+                    // ES3.g3:1575:17: ASSIGN assignmentExpression
                     ASSIGN166=this.match(this.input,ASSIGN,ES3Parser.FOLLOW_ASSIGN_in_variableDeclaration4783); 
                     ASSIGN166_tree = this.adaptor.create(ASSIGN166);
                     root_0 = this.adaptor.becomeRoot(ASSIGN166_tree, root_0);
@@ -6429,7 +6429,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1578:1: variableDeclarationNoIn : Identifier ( ASSIGN assignmentExpressionNoIn )? ;
+    // ES3.g3:1578:1: variableDeclarationNoIn : Identifier ( ASSIGN assignmentExpressionNoIn )? ;
     // $ANTLR start "variableDeclarationNoIn"
     variableDeclarationNoIn: function() {
         var retval = new ES3Parser.variableDeclarationNoIn_return();
@@ -6445,15 +6445,15 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var ASSIGN169_tree=null;
 
         try {
-            // ../ES3.g3:1579:2: ( Identifier ( ASSIGN assignmentExpressionNoIn )? )
-            // ../ES3.g3:1579:4: Identifier ( ASSIGN assignmentExpressionNoIn )?
+            // ES3.g3:1579:2: ( Identifier ( ASSIGN assignmentExpressionNoIn )? )
+            // ES3.g3:1579:4: Identifier ( ASSIGN assignmentExpressionNoIn )?
             root_0 = this.adaptor.nil();
 
             Identifier168=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_variableDeclarationNoIn4801); 
             Identifier168_tree = this.adaptor.create(Identifier168);
             this.adaptor.addChild(root_0, Identifier168_tree);
 
-            // ../ES3.g3:1579:15: ( ASSIGN assignmentExpressionNoIn )?
+            // ES3.g3:1579:15: ( ASSIGN assignmentExpressionNoIn )?
             var alt48=2;
             var LA48_0 = this.input.LA(1);
 
@@ -6462,7 +6462,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt48) {
                 case 1 :
-                    // ../ES3.g3:1579:17: ASSIGN assignmentExpressionNoIn
+                    // ES3.g3:1579:17: ASSIGN assignmentExpressionNoIn
                     ASSIGN169=this.match(this.input,ASSIGN,ES3Parser.FOLLOW_ASSIGN_in_variableDeclarationNoIn4805); 
                     ASSIGN169_tree = this.adaptor.create(ASSIGN169);
                     root_0 = this.adaptor.becomeRoot(ASSIGN169_tree, root_0);
@@ -6513,7 +6513,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1586:1: emptyStatement : SEMIC ;
+    // ES3.g3:1586:1: emptyStatement : SEMIC ;
     // $ANTLR start "emptyStatement"
     emptyStatement: function() {
         var retval = new ES3Parser.emptyStatement_return();
@@ -6526,8 +6526,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var SEMIC171_tree=null;
 
         try {
-            // ../ES3.g3:1587:2: ( SEMIC )
-            // ../ES3.g3:1587:4: SEMIC
+            // ES3.g3:1587:2: ( SEMIC )
+            // ES3.g3:1587:4: SEMIC
             root_0 = this.adaptor.nil();
 
             SEMIC171=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_emptyStatement4827); 
@@ -6565,7 +6565,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1600:1: expressionStatement : expression semic ;
+    // ES3.g3:1600:1: expressionStatement : expression semic ;
     // $ANTLR start "expressionStatement"
     expressionStatement: function() {
         var retval = new ES3Parser.expressionStatement_return();
@@ -6578,8 +6578,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1601:2: ( expression semic )
-            // ../ES3.g3:1601:4: expression semic
+            // ES3.g3:1601:2: ( expression semic )
+            // ES3.g3:1601:4: expression semic
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_expression_in_expressionStatement4846);
@@ -6627,7 +6627,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1608:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
+    // ES3.g3:1608:1: ifStatement : IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) ;
     // $ANTLR start "ifStatement"
     ifStatement: function() {
         var retval = new ES3Parser.ifStatement_return();
@@ -6654,8 +6654,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
         try {
-            // ../ES3.g3:1610:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
-            // ../ES3.g3:1610:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
+            // ES3.g3:1610:2: ( IF LPAREN expression RPAREN statement ({...}? ELSE statement )? -> ^( IF expression ( statement )+ ) )
+            // ES3.g3:1610:4: IF LPAREN expression RPAREN statement ({...}? ELSE statement )?
             IF174=this.match(this.input,IF,ES3Parser.FOLLOW_IF_in_ifStatement4866);  
             stream_IF.add(IF174);
 
@@ -6677,7 +6677,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             stream_statement.add(statement178.getTree());
-            // ../ES3.g3:1610:42: ({...}? ELSE statement )?
+            // ES3.g3:1610:42: ({...}? ELSE statement )?
             var alt49=2;
             var LA49_0 = this.input.LA(1);
 
@@ -6690,7 +6690,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt49) {
                 case 1 :
-                    // ../ES3.g3:1610:44: {...}? ELSE statement
+                    // ES3.g3:1610:44: {...}? ELSE statement
                     if ( !(( this.input.LA(1) == this.theParser.ELSE )) ) {
                         throw new org.antlr.runtime.FailedPredicateException(this.input, "ifStatement", " this.input.LA(1) == this.theParser.ELSE ");
                     }
@@ -6712,7 +6712,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: IF, statement, expression
+            // elements: statement, expression, IF
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -6723,7 +6723,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1611:2: -> ^( IF expression ( statement )+ )
             {
-                // ../ES3.g3:1611:5: ^( IF expression ( statement )+ )
+                // ES3.g3:1611:5: ^( IF expression ( statement )+ )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_IF.nextNode(), root_1);
@@ -6777,7 +6777,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1618:1: iterationStatement : ( doStatement | whileStatement | forStatement );
+    // ES3.g3:1618:1: iterationStatement : ( doStatement | whileStatement | forStatement );
     // $ANTLR start "iterationStatement"
     iterationStatement: function() {
         var retval = new ES3Parser.iterationStatement_return();
@@ -6791,7 +6791,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1619:2: ( doStatement | whileStatement | forStatement )
+            // ES3.g3:1619:2: ( doStatement | whileStatement | forStatement )
             var alt50=3;
             switch ( this.input.LA(1) ) {
             case DO:
@@ -6812,7 +6812,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt50) {
                 case 1 :
-                    // ../ES3.g3:1619:4: doStatement
+                    // ES3.g3:1619:4: doStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_doStatement_in_iterationStatement4915);
@@ -6825,7 +6825,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1620:4: whileStatement
+                    // ES3.g3:1620:4: whileStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_whileStatement_in_iterationStatement4920);
@@ -6838,7 +6838,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1621:4: forStatement
+                    // ES3.g3:1621:4: forStatement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_forStatement_in_iterationStatement4925);
@@ -6883,7 +6883,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1624:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
+    // ES3.g3:1624:1: doStatement : DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) ;
     // $ANTLR start "doStatement"
     doStatement: function() {
         var retval = new ES3Parser.doStatement_return();
@@ -6911,8 +6911,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_semic=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule semic");
         try {
-            // ../ES3.g3:1625:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
-            // ../ES3.g3:1625:4: DO statement WHILE LPAREN expression RPAREN semic
+            // ES3.g3:1625:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
+            // ES3.g3:1625:4: DO statement WHILE LPAREN expression RPAREN semic
             DO184=this.match(this.input,DO,ES3Parser.FOLLOW_DO_in_doStatement4937);  
             stream_DO.add(DO184);
 
@@ -6957,7 +6957,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1626:2: -> ^( DO statement expression )
             {
-                // ../ES3.g3:1626:5: ^( DO statement expression )
+                // ES3.g3:1626:5: ^( DO statement expression )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_DO.nextNode(), root_1);
@@ -7004,7 +7004,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1629:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
+    // ES3.g3:1629:1: whileStatement : WHILE LPAREN expression RPAREN statement ;
     // $ANTLR start "whileStatement"
     whileStatement: function() {
         var retval = new ES3Parser.whileStatement_return();
@@ -7023,8 +7023,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN194_tree=null;
 
         try {
-            // ../ES3.g3:1630:2: ( WHILE LPAREN expression RPAREN statement )
-            // ../ES3.g3:1630:4: WHILE LPAREN expression RPAREN statement
+            // ES3.g3:1630:2: ( WHILE LPAREN expression RPAREN statement )
+            // ES3.g3:1630:4: WHILE LPAREN expression RPAREN statement
             root_0 = this.adaptor.nil();
 
             WHILE191=this.match(this.input,WHILE,ES3Parser.FOLLOW_WHILE_in_whileStatement4974); 
@@ -7079,7 +7079,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1674:1: forStatement : FOR LPAREN forControl RPAREN statement ;
+    // ES3.g3:1674:1: forStatement : FOR LPAREN forControl RPAREN statement ;
     // $ANTLR start "forStatement"
     forStatement: function() {
         var retval = new ES3Parser.forStatement_return();
@@ -7098,8 +7098,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN199_tree=null;
 
         try {
-            // ../ES3.g3:1675:2: ( FOR LPAREN forControl RPAREN statement )
-            // ../ES3.g3:1675:4: FOR LPAREN forControl RPAREN statement
+            // ES3.g3:1675:2: ( FOR LPAREN forControl RPAREN statement )
+            // ES3.g3:1675:4: FOR LPAREN forControl RPAREN statement
             root_0 = this.adaptor.nil();
 
             FOR196=this.match(this.input,FOR,ES3Parser.FOLLOW_FOR_in_forStatement4998); 
@@ -7154,7 +7154,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1678:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
+    // ES3.g3:1678:1: forControl : ( forControlVar | forControlExpression | forControlSemic );
     // $ANTLR start "forControl"
     forControl: function() {
         var retval = new ES3Parser.forControl_return();
@@ -7168,7 +7168,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1679:2: ( forControlVar | forControlExpression | forControlSemic )
+            // ES3.g3:1679:2: ( forControlVar | forControlExpression | forControlSemic )
             var alt51=3;
             switch ( this.input.LA(1) ) {
             case VAR:
@@ -7213,7 +7213,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt51) {
                 case 1 :
-                    // ../ES3.g3:1679:4: forControlVar
+                    // ES3.g3:1679:4: forControlVar
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_forControlVar_in_forControl5021);
@@ -7226,7 +7226,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1680:4: forControlExpression
+                    // ES3.g3:1680:4: forControlExpression
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_forControlExpression_in_forControl5026);
@@ -7239,7 +7239,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1681:4: forControlSemic
+                    // ES3.g3:1681:4: forControlSemic
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_forControlSemic_in_forControl5031);
@@ -7284,7 +7284,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1684:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) ;
+    // ES3.g3:1684:1: forControlVar : VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) ;
     // $ANTLR start "forControlVar"
     forControlVar: function() {
         var retval = new ES3Parser.forControlVar_return();
@@ -7315,8 +7315,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_variableDeclarationNoIn=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule variableDeclarationNoIn");
         try {
-            // ../ES3.g3:1685:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) )
-            // ../ES3.g3:1685:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
+            // ES3.g3:1685:2: ( VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) ) )
+            // ES3.g3:1685:4: VAR variableDeclarationNoIn ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
             VAR204=this.match(this.input,VAR,ES3Parser.FOLLOW_VAR_in_forControlVar5042);  
             stream_VAR.add(VAR204);
 
@@ -7326,7 +7326,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             stream_variableDeclarationNoIn.add(variableDeclarationNoIn205.getTree());
-            // ../ES3.g3:1686:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
+            // ES3.g3:1686:2: ( ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) ) | ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ) )
             var alt55=2;
             var LA55_0 = this.input.LA(1);
 
@@ -7344,9 +7344,9 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt55) {
                 case 1 :
-                    // ../ES3.g3:1687:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
-                    // ../ES3.g3:1687:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
-                    // ../ES3.g3:1688:4: IN expression
+                    // ES3.g3:1687:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // ES3.g3:1687:3: ( IN expression -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) ) )
+                    // ES3.g3:1688:4: IN expression
                     IN206=this.match(this.input,IN,ES3Parser.FOLLOW_IN_in_forControlVar5056);  
                     stream_IN.add(IN206);
 
@@ -7359,7 +7359,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: expression, variableDeclarationNoIn, VAR
+                    // elements: variableDeclarationNoIn, expression, VAR
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -7370,12 +7370,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1689:4: -> ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                     {
-                        // ../ES3.g3:1689:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
+                        // ES3.g3:1689:7: ^( FORITER ^( VAR variableDeclarationNoIn ) ^( EXPR expression ) )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // ../ES3.g3:1689:18: ^( VAR variableDeclarationNoIn )
+                        // ES3.g3:1689:18: ^( VAR variableDeclarationNoIn )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(stream_VAR.nextNode(), root_2);
@@ -7384,7 +7384,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         this.adaptor.addChild(root_1, root_2);
                         }
-                        // ../ES3.g3:1689:51: ^( EXPR expression )
+                        // ES3.g3:1689:51: ^( EXPR expression )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
@@ -7406,10 +7406,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1692:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-                    // ../ES3.g3:1692:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-                    // ../ES3.g3:1693:4: ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )?
-                    // ../ES3.g3:1693:4: ( COMMA variableDeclarationNoIn )*
+                    // ES3.g3:1692:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+                    // ES3.g3:1692:3: ( ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+                    // ES3.g3:1693:4: ( COMMA variableDeclarationNoIn )* SEMIC (ex1= expression )? SEMIC (ex2= expression )?
+                    // ES3.g3:1693:4: ( COMMA variableDeclarationNoIn )*
                     loop52:
                     do {
                         var alt52=2;
@@ -7422,7 +7422,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         switch (alt52) {
                         case 1 :
-                            // ../ES3.g3:1693:6: COMMA variableDeclarationNoIn
+                            // ES3.g3:1693:6: COMMA variableDeclarationNoIn
                             COMMA208=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_forControlVar5104);  
                             stream_COMMA.add(COMMA208);
 
@@ -7444,7 +7444,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     SEMIC210=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_forControlVar5111);  
                     stream_SEMIC.add(SEMIC210);
 
-                    // ../ES3.g3:1693:48: (ex1= expression )?
+                    // ES3.g3:1693:48: (ex1= expression )?
                     var alt53=2;
                     var LA53_0 = this.input.LA(1);
 
@@ -7453,7 +7453,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     }
                     switch (alt53) {
                         case 1 :
-                            // ../ES3.g3:1693:48: ex1= expression
+                            // ES3.g3:1693:48: ex1= expression
                             this.pushFollow(ES3Parser.FOLLOW_expression_in_forControlVar5115);
                             ex1=this.expression();
 
@@ -7469,7 +7469,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     SEMIC211=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_forControlVar5118);  
                     stream_SEMIC.add(SEMIC211);
 
-                    // ../ES3.g3:1693:70: (ex2= expression )?
+                    // ES3.g3:1693:70: (ex2= expression )?
                     var alt54=2;
                     var LA54_0 = this.input.LA(1);
 
@@ -7478,7 +7478,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     }
                     switch (alt54) {
                         case 1 :
-                            // ../ES3.g3:1693:70: ex2= expression
+                            // ES3.g3:1693:70: ex2= expression
                             this.pushFollow(ES3Parser.FOLLOW_expression_in_forControlVar5122);
                             ex2=this.expression();
 
@@ -7494,7 +7494,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: ex2, ex1, VAR, variableDeclarationNoIn
+                    // elements: ex2, variableDeclarationNoIn, VAR, ex1
                     // token labels: 
                     // rule labels: retval, ex2, ex1
                     // token list labels: 
@@ -7507,12 +7507,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1694:4: -> ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                     {
-                        // ../ES3.g3:1694:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                        // ES3.g3:1694:7: ^( FORSTEP ^( VAR ( variableDeclarationNoIn )+ ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // ../ES3.g3:1694:18: ^( VAR ( variableDeclarationNoIn )+ )
+                        // ES3.g3:1694:18: ^( VAR ( variableDeclarationNoIn )+ )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(stream_VAR.nextNode(), root_2);
@@ -7528,12 +7528,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         this.adaptor.addChild(root_1, root_2);
                         }
-                        // ../ES3.g3:1694:52: ^( EXPR ( $ex1)? )
+                        // ES3.g3:1694:52: ^( EXPR ( $ex1)? )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // ../ES3.g3:1694:60: ( $ex1)?
+                        // ES3.g3:1694:60: ( $ex1)?
                         if ( stream_ex1.hasNext() ) {
                             this.adaptor.addChild(root_2, stream_ex1.nextTree());
 
@@ -7542,12 +7542,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         this.adaptor.addChild(root_1, root_2);
                         }
-                        // ../ES3.g3:1694:68: ^( EXPR ( $ex2)? )
+                        // ES3.g3:1694:68: ^( EXPR ( $ex2)? )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // ../ES3.g3:1694:76: ( $ex2)?
+                        // ES3.g3:1694:76: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             this.adaptor.addChild(root_2, stream_ex2.nextTree());
 
@@ -7605,7 +7605,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1699:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) ;
+    // ES3.g3:1699:1: forControlExpression : ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) ;
     // $ANTLR start "forControlExpression"
     forControlExpression: function() {
         var retval = new ES3Parser.forControlExpression_return();
@@ -7632,15 +7632,15 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         	  var isLhs = new Array();//Object[1];
 
         try {
-            // ../ES3.g3:1705:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) )
-            // ../ES3.g3:1705:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
+            // ES3.g3:1705:2: (ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) ) )
+            // ES3.g3:1705:4: ex1= expressionNoIn ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
             this.pushFollow(ES3Parser.FOLLOW_expressionNoIn_in_forControlExpression5188);
             ex1=this.expressionNoIn();
 
             this.state._fsp--;
 
             stream_expressionNoIn.add(ex1.getTree());
-            // ../ES3.g3:1706:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
+            // ES3.g3:1706:2: ({...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) ) | ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) ) )
             var alt58=2;
             var LA58_0 = this.input.LA(1);
 
@@ -7658,12 +7658,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt58) {
                 case 1 :
-                    // ../ES3.g3:1707:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // ES3.g3:1707:3: {...}? ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
                     if ( !(( this.isLeftHandSideIn(ex1, isLhs) )) ) {
                         throw new org.antlr.runtime.FailedPredicateException(this.input, "forControlExpression", " this.isLeftHandSideIn(ex1, isLhs) ");
                     }
-                    // ../ES3.g3:1707:42: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
-                    // ../ES3.g3:1708:4: IN ex2= expression
+                    // ES3.g3:1707:42: ( IN ex2= expression -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) ) )
+                    // ES3.g3:1708:4: IN ex2= expression
                     IN212=this.match(this.input,IN,ES3Parser.FOLLOW_IN_in_forControlExpression5203);  
                     stream_IN.add(IN212);
 
@@ -7689,12 +7689,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1709:4: -> ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                     {
-                        // ../ES3.g3:1709:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
+                        // ES3.g3:1709:7: ^( FORITER ^( EXPR $ex1) ^( EXPR $ex2) )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(FORITER, "FORITER"), root_1);
 
-                        // ../ES3.g3:1709:18: ^( EXPR $ex1)
+                        // ES3.g3:1709:18: ^( EXPR $ex1)
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
@@ -7703,7 +7703,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         this.adaptor.addChild(root_1, root_2);
                         }
-                        // ../ES3.g3:1709:33: ^( EXPR $ex2)
+                        // ES3.g3:1709:33: ^( EXPR $ex2)
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
@@ -7725,13 +7725,13 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1712:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
-                    // ../ES3.g3:1712:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
-                    // ../ES3.g3:1713:4: SEMIC (ex2= expression )? SEMIC (ex3= expression )?
+                    // ES3.g3:1712:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
+                    // ES3.g3:1712:3: ( SEMIC (ex2= expression )? SEMIC (ex3= expression )? -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) ) )
+                    // ES3.g3:1713:4: SEMIC (ex2= expression )? SEMIC (ex3= expression )?
                     SEMIC213=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_forControlExpression5253);  
                     stream_SEMIC.add(SEMIC213);
 
-                    // ../ES3.g3:1713:13: (ex2= expression )?
+                    // ES3.g3:1713:13: (ex2= expression )?
                     var alt56=2;
                     var LA56_0 = this.input.LA(1);
 
@@ -7740,7 +7740,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     }
                     switch (alt56) {
                         case 1 :
-                            // ../ES3.g3:1713:13: ex2= expression
+                            // ES3.g3:1713:13: ex2= expression
                             this.pushFollow(ES3Parser.FOLLOW_expression_in_forControlExpression5257);
                             ex2=this.expression();
 
@@ -7756,7 +7756,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     SEMIC214=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_forControlExpression5260);  
                     stream_SEMIC.add(SEMIC214);
 
-                    // ../ES3.g3:1713:35: (ex3= expression )?
+                    // ES3.g3:1713:35: (ex3= expression )?
                     var alt57=2;
                     var LA57_0 = this.input.LA(1);
 
@@ -7765,7 +7765,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     }
                     switch (alt57) {
                         case 1 :
-                            // ../ES3.g3:1713:35: ex3= expression
+                            // ES3.g3:1713:35: ex3= expression
                             this.pushFollow(ES3Parser.FOLLOW_expression_in_forControlExpression5264);
                             ex3=this.expression();
 
@@ -7781,7 +7781,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: ex1, ex3, ex2
+                    // elements: ex2, ex3, ex1
                     // token labels: 
                     // rule labels: retval, ex3, ex2, ex1
                     // token list labels: 
@@ -7795,12 +7795,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     root_0 = this.adaptor.nil();
                     // 1714:4: -> ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
                     {
-                        // ../ES3.g3:1714:7: ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
+                        // ES3.g3:1714:7: ^( FORSTEP ^( EXPR $ex1) ^( EXPR ( $ex2)? ) ^( EXPR ( $ex3)? ) )
                         {
                         var root_1 = this.adaptor.nil();
                         root_1 = this.adaptor.becomeRoot(this.adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                        // ../ES3.g3:1714:18: ^( EXPR $ex1)
+                        // ES3.g3:1714:18: ^( EXPR $ex1)
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
@@ -7809,12 +7809,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         this.adaptor.addChild(root_1, root_2);
                         }
-                        // ../ES3.g3:1714:33: ^( EXPR ( $ex2)? )
+                        // ES3.g3:1714:33: ^( EXPR ( $ex2)? )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // ../ES3.g3:1714:41: ( $ex2)?
+                        // ES3.g3:1714:41: ( $ex2)?
                         if ( stream_ex2.hasNext() ) {
                             this.adaptor.addChild(root_2, stream_ex2.nextTree());
 
@@ -7823,12 +7823,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         this.adaptor.addChild(root_1, root_2);
                         }
-                        // ../ES3.g3:1714:49: ^( EXPR ( $ex3)? )
+                        // ES3.g3:1714:49: ^( EXPR ( $ex3)? )
                         {
                         var root_2 = this.adaptor.nil();
                         root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
-                        // ../ES3.g3:1714:57: ( $ex3)?
+                        // ES3.g3:1714:57: ( $ex3)?
                         if ( stream_ex3.hasNext() ) {
                             this.adaptor.addChild(root_2, stream_ex3.nextTree());
 
@@ -7886,7 +7886,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1719:1: forControlSemic : SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ;
+    // ES3.g3:1719:1: forControlSemic : SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) ;
     // $ANTLR start "forControlSemic"
     forControlSemic: function() {
         var retval = new ES3Parser.forControlSemic_return();
@@ -7904,12 +7904,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_SEMIC=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token SEMIC");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         try {
-            // ../ES3.g3:1720:2: ( SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
-            // ../ES3.g3:1720:4: SEMIC (ex1= expression )? SEMIC (ex2= expression )?
+            // ES3.g3:1720:2: ( SEMIC (ex1= expression )? SEMIC (ex2= expression )? -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) ) )
+            // ES3.g3:1720:4: SEMIC (ex1= expression )? SEMIC (ex2= expression )?
             SEMIC215=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_forControlSemic5323);  
             stream_SEMIC.add(SEMIC215);
 
-            // ../ES3.g3:1720:13: (ex1= expression )?
+            // ES3.g3:1720:13: (ex1= expression )?
             var alt59=2;
             var LA59_0 = this.input.LA(1);
 
@@ -7918,7 +7918,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt59) {
                 case 1 :
-                    // ../ES3.g3:1720:13: ex1= expression
+                    // ES3.g3:1720:13: ex1= expression
                     this.pushFollow(ES3Parser.FOLLOW_expression_in_forControlSemic5327);
                     ex1=this.expression();
 
@@ -7934,7 +7934,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             SEMIC216=this.match(this.input,SEMIC,ES3Parser.FOLLOW_SEMIC_in_forControlSemic5330);  
             stream_SEMIC.add(SEMIC216);
 
-            // ../ES3.g3:1720:35: (ex2= expression )?
+            // ES3.g3:1720:35: (ex2= expression )?
             var alt60=2;
             var LA60_0 = this.input.LA(1);
 
@@ -7943,7 +7943,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt60) {
                 case 1 :
-                    // ../ES3.g3:1720:35: ex2= expression
+                    // ES3.g3:1720:35: ex2= expression
                     this.pushFollow(ES3Parser.FOLLOW_expression_in_forControlSemic5334);
                     ex2=this.expression();
 
@@ -7972,24 +7972,24 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1721:2: -> ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
             {
-                // ../ES3.g3:1721:5: ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
+                // ES3.g3:1721:5: ^( FORSTEP ^( EXPR ) ^( EXPR ( $ex1)? ) ^( EXPR ( $ex2)? ) )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(FORSTEP, "FORSTEP"), root_1);
 
-                // ../ES3.g3:1721:16: ^( EXPR )
+                // ES3.g3:1721:16: ^( EXPR )
                 {
                 var root_2 = this.adaptor.nil();
                 root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
                 this.adaptor.addChild(root_1, root_2);
                 }
-                // ../ES3.g3:1721:26: ^( EXPR ( $ex1)? )
+                // ES3.g3:1721:26: ^( EXPR ( $ex1)? )
                 {
                 var root_2 = this.adaptor.nil();
                 root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
-                // ../ES3.g3:1721:34: ( $ex1)?
+                // ES3.g3:1721:34: ( $ex1)?
                 if ( stream_ex1.hasNext() ) {
                     this.adaptor.addChild(root_2, stream_ex1.nextTree());
 
@@ -7998,12 +7998,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 this.adaptor.addChild(root_1, root_2);
                 }
-                // ../ES3.g3:1721:42: ^( EXPR ( $ex2)? )
+                // ES3.g3:1721:42: ^( EXPR ( $ex2)? )
                 {
                 var root_2 = this.adaptor.nil();
                 root_2 = this.adaptor.becomeRoot(this.adaptor.create(EXPR, "EXPR"), root_2);
 
-                // ../ES3.g3:1721:50: ( $ex2)?
+                // ES3.g3:1721:50: ( $ex2)?
                 if ( stream_ex2.hasNext() ) {
                     this.adaptor.addChild(root_2, stream_ex2.nextTree());
 
@@ -8052,7 +8052,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1733:1: continueStatement : CONTINUE ( Identifier )? semic ;
+    // ES3.g3:1733:1: continueStatement : CONTINUE ( Identifier )? semic ;
     // $ANTLR start "continueStatement"
     continueStatement: function() {
         var retval = new ES3Parser.continueStatement_return();
@@ -8068,8 +8068,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var Identifier218_tree=null;
 
         try {
-            // ../ES3.g3:1734:2: ( CONTINUE ( Identifier )? semic )
-            // ../ES3.g3:1734:4: CONTINUE ( Identifier )? semic
+            // ES3.g3:1734:2: ( CONTINUE ( Identifier )? semic )
+            // ES3.g3:1734:4: CONTINUE ( Identifier )? semic
             root_0 = this.adaptor.nil();
 
             CONTINUE217=this.match(this.input,CONTINUE,ES3Parser.FOLLOW_CONTINUE_in_continueStatement5388); 
@@ -8077,7 +8077,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.becomeRoot(CONTINUE217_tree, root_0);
 
              if (this.input.LA(1) == this.theParser.Identifier) this.promoteEOL(null); 
-            // ../ES3.g3:1734:92: ( Identifier )?
+            // ES3.g3:1734:92: ( Identifier )?
             var alt61=2;
             var LA61_0 = this.input.LA(1);
 
@@ -8086,7 +8086,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt61) {
                 case 1 :
-                    // ../ES3.g3:1734:92: Identifier
+                    // ES3.g3:1734:92: Identifier
                     Identifier218=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_continueStatement5393); 
                     Identifier218_tree = this.adaptor.create(Identifier218);
                     this.adaptor.addChild(root_0, Identifier218_tree);
@@ -8136,7 +8136,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1746:1: breakStatement : BREAK ( Identifier )? semic ;
+    // ES3.g3:1746:1: breakStatement : BREAK ( Identifier )? semic ;
     // $ANTLR start "breakStatement"
     breakStatement: function() {
         var retval = new ES3Parser.breakStatement_return();
@@ -8152,8 +8152,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var Identifier221_tree=null;
 
         try {
-            // ../ES3.g3:1747:2: ( BREAK ( Identifier )? semic )
-            // ../ES3.g3:1747:4: BREAK ( Identifier )? semic
+            // ES3.g3:1747:2: ( BREAK ( Identifier )? semic )
+            // ES3.g3:1747:4: BREAK ( Identifier )? semic
             root_0 = this.adaptor.nil();
 
             BREAK220=this.match(this.input,BREAK,ES3Parser.FOLLOW_BREAK_in_breakStatement5415); 
@@ -8161,7 +8161,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.becomeRoot(BREAK220_tree, root_0);
 
              if (this.input.LA(1) == this.theParser.Identifier) this.promoteEOL(null); 
-            // ../ES3.g3:1747:89: ( Identifier )?
+            // ES3.g3:1747:89: ( Identifier )?
             var alt62=2;
             var LA62_0 = this.input.LA(1);
 
@@ -8170,7 +8170,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt62) {
                 case 1 :
-                    // ../ES3.g3:1747:89: Identifier
+                    // ES3.g3:1747:89: Identifier
                     Identifier221=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_breakStatement5420); 
                     Identifier221_tree = this.adaptor.create(Identifier221);
                     this.adaptor.addChild(root_0, Identifier221_tree);
@@ -8220,7 +8220,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1767:1: returnStatement : RETURN ( expression )? semic ;
+    // ES3.g3:1767:1: returnStatement : RETURN ( expression )? semic ;
     // $ANTLR start "returnStatement"
     returnStatement: function() {
         var retval = new ES3Parser.returnStatement_return();
@@ -8235,8 +8235,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RETURN223_tree=null;
 
         try {
-            // ../ES3.g3:1768:2: ( RETURN ( expression )? semic )
-            // ../ES3.g3:1768:4: RETURN ( expression )? semic
+            // ES3.g3:1768:2: ( RETURN ( expression )? semic )
+            // ES3.g3:1768:4: RETURN ( expression )? semic
             root_0 = this.adaptor.nil();
 
             RETURN223=this.match(this.input,RETURN,ES3Parser.FOLLOW_RETURN_in_returnStatement5442); 
@@ -8244,7 +8244,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.becomeRoot(RETURN223_tree, root_0);
 
              this.promoteEOL(null); 
-            // ../ES3.g3:1768:39: ( expression )?
+            // ES3.g3:1768:39: ( expression )?
             var alt63=2;
             var LA63_0 = this.input.LA(1);
 
@@ -8253,7 +8253,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt63) {
                 case 1 :
-                    // ../ES3.g3:1768:39: expression
+                    // ES3.g3:1768:39: expression
                     this.pushFollow(ES3Parser.FOLLOW_expression_in_returnStatement5447);
                     expression224=this.expression();
 
@@ -8305,7 +8305,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1775:1: withStatement : WITH LPAREN expression RPAREN statement ;
+    // ES3.g3:1775:1: withStatement : WITH LPAREN expression RPAREN statement ;
     // $ANTLR start "withStatement"
     withStatement: function() {
         var retval = new ES3Parser.withStatement_return();
@@ -8324,8 +8324,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN229_tree=null;
 
         try {
-            // ../ES3.g3:1776:2: ( WITH LPAREN expression RPAREN statement )
-            // ../ES3.g3:1776:4: WITH LPAREN expression RPAREN statement
+            // ES3.g3:1776:2: ( WITH LPAREN expression RPAREN statement )
+            // ES3.g3:1776:4: WITH LPAREN expression RPAREN statement
             root_0 = this.adaptor.nil();
 
             WITH226=this.match(this.input,WITH,ES3Parser.FOLLOW_WITH_in_withStatement5467); 
@@ -8380,7 +8380,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1783:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) ;
+    // ES3.g3:1783:1: switchStatement : SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) ;
     // $ANTLR start "switchStatement"
     switchStatement: function() {
         var retval = new ES3Parser.switchStatement_return();
@@ -8415,8 +8415,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         	  var defaultClauseCount = 0;
 
         try {
-            // ../ES3.g3:1789:2: ( SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) )
-            // ../ES3.g3:1789:4: SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE
+            // ES3.g3:1789:2: ( SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE -> ^( SWITCH expression ( defaultClause )? ( caseClause )* ) )
+            // ES3.g3:1789:4: SWITCH LPAREN expression RPAREN LBRACE ({...}? => defaultClause | caseClause )* RBRACE
             SWITCH231=this.match(this.input,SWITCH,ES3Parser.FOLLOW_SWITCH_in_switchStatement5499);  
             stream_SWITCH.add(SWITCH231);
 
@@ -8435,7 +8435,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             LBRACE235=this.match(this.input,LBRACE,ES3Parser.FOLLOW_LBRACE_in_switchStatement5507);  
             stream_LBRACE.add(LBRACE235);
 
-            // ../ES3.g3:1789:43: ({...}? => defaultClause | caseClause )*
+            // ES3.g3:1789:43: ({...}? => defaultClause | caseClause )*
             loop64:
             do {
                 var alt64=3;
@@ -8451,7 +8451,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt64) {
                 case 1 :
-                    // ../ES3.g3:1789:45: {...}? => defaultClause
+                    // ES3.g3:1789:45: {...}? => defaultClause
                     if ( !(( defaultClauseCount == 0 )) ) {
                         throw new org.antlr.runtime.FailedPredicateException(this.input, "switchStatement", " defaultClauseCount == 0 ");
                     }
@@ -8466,7 +8466,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1789:118: caseClause
+                    // ES3.g3:1789:118: caseClause
                     this.pushFollow(ES3Parser.FOLLOW_caseClause_in_switchStatement5520);
                     caseClause237=this.caseClause();
 
@@ -8488,7 +8488,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: caseClause, defaultClause, SWITCH, expression
+            // elements: defaultClause, caseClause, SWITCH, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8499,19 +8499,19 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1790:2: -> ^( SWITCH expression ( defaultClause )? ( caseClause )* )
             {
-                // ../ES3.g3:1790:5: ^( SWITCH expression ( defaultClause )? ( caseClause )* )
+                // ES3.g3:1790:5: ^( SWITCH expression ( defaultClause )? ( caseClause )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_SWITCH.nextNode(), root_1);
 
                 this.adaptor.addChild(root_1, stream_expression.nextTree());
-                // ../ES3.g3:1790:26: ( defaultClause )?
+                // ES3.g3:1790:26: ( defaultClause )?
                 if ( stream_defaultClause.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_defaultClause.nextTree());
 
                 }
                 stream_defaultClause.reset();
-                // ../ES3.g3:1790:41: ( caseClause )*
+                // ES3.g3:1790:41: ( caseClause )*
                 while ( stream_caseClause.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_caseClause.nextTree());
 
@@ -8557,7 +8557,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1793:1: caseClause : CASE expression COLON ( statement )* ;
+    // ES3.g3:1793:1: caseClause : CASE expression COLON ( statement )* ;
     // $ANTLR start "caseClause"
     caseClause: function() {
         var retval = new ES3Parser.caseClause_return();
@@ -8574,8 +8574,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var COLON241_tree=null;
 
         try {
-            // ../ES3.g3:1794:2: ( CASE expression COLON ( statement )* )
-            // ../ES3.g3:1794:4: CASE expression COLON ( statement )*
+            // ES3.g3:1794:2: ( CASE expression COLON ( statement )* )
+            // ES3.g3:1794:4: CASE expression COLON ( statement )*
             root_0 = this.adaptor.nil();
 
             CASE239=this.match(this.input,CASE,ES3Parser.FOLLOW_CASE_in_caseClause5553); 
@@ -8589,7 +8589,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             this.adaptor.addChild(root_0, expression240.getTree());
             COLON241=this.match(this.input,COLON,ES3Parser.FOLLOW_COLON_in_caseClause5558); 
-            // ../ES3.g3:1794:28: ( statement )*
+            // ES3.g3:1794:28: ( statement )*
             loop65:
             do {
                 var alt65=2;
@@ -8602,7 +8602,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt65) {
                 case 1 :
-                    // ../ES3.g3:1794:28: statement
+                    // ES3.g3:1794:28: statement
                     this.pushFollow(ES3Parser.FOLLOW_statement_in_caseClause5561);
                     statement242=this.statement();
 
@@ -8652,7 +8652,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1797:1: defaultClause : DEFAULT COLON ( statement )* ;
+    // ES3.g3:1797:1: defaultClause : DEFAULT COLON ( statement )* ;
     // $ANTLR start "defaultClause"
     defaultClause: function() {
         var retval = new ES3Parser.defaultClause_return();
@@ -8668,8 +8668,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var COLON244_tree=null;
 
         try {
-            // ../ES3.g3:1798:2: ( DEFAULT COLON ( statement )* )
-            // ../ES3.g3:1798:4: DEFAULT COLON ( statement )*
+            // ES3.g3:1798:2: ( DEFAULT COLON ( statement )* )
+            // ES3.g3:1798:4: DEFAULT COLON ( statement )*
             root_0 = this.adaptor.nil();
 
             DEFAULT243=this.match(this.input,DEFAULT,ES3Parser.FOLLOW_DEFAULT_in_defaultClause5574); 
@@ -8677,7 +8677,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.becomeRoot(DEFAULT243_tree, root_0);
 
             COLON244=this.match(this.input,COLON,ES3Parser.FOLLOW_COLON_in_defaultClause5577); 
-            // ../ES3.g3:1798:20: ( statement )*
+            // ES3.g3:1798:20: ( statement )*
             loop66:
             do {
                 var alt66=2;
@@ -8690,7 +8690,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt66) {
                 case 1 :
-                    // ../ES3.g3:1798:20: statement
+                    // ES3.g3:1798:20: statement
                     this.pushFollow(ES3Parser.FOLLOW_statement_in_defaultClause5580);
                     statement245=this.statement();
 
@@ -8740,7 +8740,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1805:1: labelledStatement : Identifier COLON statement -> ^( LABELLED Identifier statement ) ;
+    // ES3.g3:1805:1: labelledStatement : Identifier COLON statement -> ^( LABELLED Identifier statement ) ;
     // $ANTLR start "labelledStatement"
     labelledStatement: function() {
         var retval = new ES3Parser.labelledStatement_return();
@@ -8758,8 +8758,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
         var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
         try {
-            // ../ES3.g3:1806:2: ( Identifier COLON statement -> ^( LABELLED Identifier statement ) )
-            // ../ES3.g3:1806:4: Identifier COLON statement
+            // ES3.g3:1806:2: ( Identifier COLON statement -> ^( LABELLED Identifier statement ) )
+            // ES3.g3:1806:4: Identifier COLON statement
             Identifier246=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_labelledStatement5597);  
             stream_Identifier.add(Identifier246);
 
@@ -8775,7 +8775,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: Identifier, statement
+            // elements: statement, Identifier
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8786,7 +8786,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1807:2: -> ^( LABELLED Identifier statement )
             {
-                // ../ES3.g3:1807:5: ^( LABELLED Identifier statement )
+                // ES3.g3:1807:5: ^( LABELLED Identifier statement )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(LABELLED, "LABELLED"), root_1);
@@ -8833,7 +8833,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1829:1: throwStatement : THROW expression semic ;
+    // ES3.g3:1829:1: throwStatement : THROW expression semic ;
     // $ANTLR start "throwStatement"
     throwStatement: function() {
         var retval = new ES3Parser.throwStatement_return();
@@ -8848,8 +8848,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var THROW249_tree=null;
 
         try {
-            // ../ES3.g3:1830:2: ( THROW expression semic )
-            // ../ES3.g3:1830:4: THROW expression semic
+            // ES3.g3:1830:2: ( THROW expression semic )
+            // ES3.g3:1830:4: THROW expression semic
             root_0 = this.adaptor.nil();
 
             THROW249=this.match(this.input,THROW,ES3Parser.FOLLOW_THROW_in_throwStatement5632); 
@@ -8902,7 +8902,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1837:1: tryStatement : TRY block ( catchClause ( finallyClause )? | finallyClause ) ;
+    // ES3.g3:1837:1: tryStatement : TRY block ( catchClause ( finallyClause )? | finallyClause ) ;
     // $ANTLR start "tryStatement"
     tryStatement: function() {
         var retval = new ES3Parser.tryStatement_return();
@@ -8919,8 +8919,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var TRY252_tree=null;
 
         try {
-            // ../ES3.g3:1838:2: ( TRY block ( catchClause ( finallyClause )? | finallyClause ) )
-            // ../ES3.g3:1838:4: TRY block ( catchClause ( finallyClause )? | finallyClause )
+            // ES3.g3:1838:2: ( TRY block ( catchClause ( finallyClause )? | finallyClause ) )
+            // ES3.g3:1838:4: TRY block ( catchClause ( finallyClause )? | finallyClause )
             root_0 = this.adaptor.nil();
 
             TRY252=this.match(this.input,TRY,ES3Parser.FOLLOW_TRY_in_tryStatement5656); 
@@ -8933,7 +8933,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             this.adaptor.addChild(root_0, block253.getTree());
-            // ../ES3.g3:1838:15: ( catchClause ( finallyClause )? | finallyClause )
+            // ES3.g3:1838:15: ( catchClause ( finallyClause )? | finallyClause )
             var alt68=2;
             var LA68_0 = this.input.LA(1);
 
@@ -8951,14 +8951,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt68) {
                 case 1 :
-                    // ../ES3.g3:1838:17: catchClause ( finallyClause )?
+                    // ES3.g3:1838:17: catchClause ( finallyClause )?
                     this.pushFollow(ES3Parser.FOLLOW_catchClause_in_tryStatement5663);
                     catchClause254=this.catchClause();
 
                     this.state._fsp--;
 
                     this.adaptor.addChild(root_0, catchClause254.getTree());
-                    // ../ES3.g3:1838:29: ( finallyClause )?
+                    // ES3.g3:1838:29: ( finallyClause )?
                     var alt67=2;
                     var LA67_0 = this.input.LA(1);
 
@@ -8967,7 +8967,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     }
                     switch (alt67) {
                         case 1 :
-                            // ../ES3.g3:1838:29: finallyClause
+                            // ES3.g3:1838:29: finallyClause
                             this.pushFollow(ES3Parser.FOLLOW_finallyClause_in_tryStatement5665);
                             finallyClause255=this.finallyClause();
 
@@ -8984,7 +8984,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1838:46: finallyClause
+                    // ES3.g3:1838:46: finallyClause
                     this.pushFollow(ES3Parser.FOLLOW_finallyClause_in_tryStatement5670);
                     finallyClause256=this.finallyClause();
 
@@ -9031,7 +9031,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1841:1: catchClause : CATCH LPAREN Identifier RPAREN block ;
+    // ES3.g3:1841:1: catchClause : CATCH LPAREN Identifier RPAREN block ;
     // $ANTLR start "catchClause"
     catchClause: function() {
         var retval = new ES3Parser.catchClause_return();
@@ -9051,8 +9051,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN260_tree=null;
 
         try {
-            // ../ES3.g3:1842:2: ( CATCH LPAREN Identifier RPAREN block )
-            // ../ES3.g3:1842:4: CATCH LPAREN Identifier RPAREN block
+            // ES3.g3:1842:2: ( CATCH LPAREN Identifier RPAREN block )
+            // ES3.g3:1842:4: CATCH LPAREN Identifier RPAREN block
             root_0 = this.adaptor.nil();
 
             CATCH257=this.match(this.input,CATCH,ES3Parser.FOLLOW_CATCH_in_catchClause5684); 
@@ -9105,7 +9105,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1845:1: finallyClause : FINALLY block ;
+    // ES3.g3:1845:1: finallyClause : FINALLY block ;
     // $ANTLR start "finallyClause"
     finallyClause: function() {
         var retval = new ES3Parser.finallyClause_return();
@@ -9119,8 +9119,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var FINALLY262_tree=null;
 
         try {
-            // ../ES3.g3:1846:2: ( FINALLY block )
-            // ../ES3.g3:1846:4: FINALLY block
+            // ES3.g3:1846:2: ( FINALLY block )
+            // ES3.g3:1846:4: FINALLY block
             root_0 = this.adaptor.nil();
 
             FINALLY262=this.match(this.input,FINALLY,ES3Parser.FOLLOW_FINALLY_in_finallyClause5707); 
@@ -9167,7 +9167,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1859:1: functionDeclaration : FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) ;
+    // ES3.g3:1859:1: functionDeclaration : FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) ;
     // $ANTLR start "functionDeclaration"
     functionDeclaration: function() {
         var retval = new ES3Parser.functionDeclaration_return();
@@ -9187,8 +9187,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_functionBody=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule functionBody");
         var stream_formalParameterList=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule formalParameterList");
         try {
-            // ../ES3.g3:1860:2: ( FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) )
-            // ../ES3.g3:1860:4: FUNCTION name= Identifier formalParameterList functionBody
+            // ES3.g3:1860:2: ( FUNCTION name= Identifier formalParameterList functionBody -> ^( FUNCTION $name formalParameterList functionBody ) )
+            // ES3.g3:1860:4: FUNCTION name= Identifier formalParameterList functionBody
             FUNCTION264=this.match(this.input,FUNCTION,ES3Parser.FOLLOW_FUNCTION_in_functionDeclaration5731);  
             stream_FUNCTION.add(FUNCTION264);
 
@@ -9210,7 +9210,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: functionBody, formalParameterList, name, FUNCTION
+            // elements: FUNCTION, functionBody, name, formalParameterList
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -9222,7 +9222,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1861:2: -> ^( FUNCTION $name formalParameterList functionBody )
             {
-                // ../ES3.g3:1861:5: ^( FUNCTION $name formalParameterList functionBody )
+                // ES3.g3:1861:5: ^( FUNCTION $name formalParameterList functionBody )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_FUNCTION.nextNode(), root_1);
@@ -9270,7 +9270,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1864:1: functionExpression : FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
+    // ES3.g3:1864:1: functionExpression : FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) ;
     // $ANTLR start "functionExpression"
     functionExpression: function() {
         var retval = new ES3Parser.functionExpression_return();
@@ -9290,12 +9290,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_functionBody=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule functionBody");
         var stream_formalParameterList=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule formalParameterList");
         try {
-            // ../ES3.g3:1865:2: ( FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
-            // ../ES3.g3:1865:4: FUNCTION (name= Identifier )? formalParameterList functionBody
+            // ES3.g3:1865:2: ( FUNCTION (name= Identifier )? formalParameterList functionBody -> ^( FUNCTION ( $name)? formalParameterList functionBody ) )
+            // ES3.g3:1865:4: FUNCTION (name= Identifier )? formalParameterList functionBody
             FUNCTION267=this.match(this.input,FUNCTION,ES3Parser.FOLLOW_FUNCTION_in_functionExpression5766);  
             stream_FUNCTION.add(FUNCTION267);
 
-            // ../ES3.g3:1865:17: (name= Identifier )?
+            // ES3.g3:1865:17: (name= Identifier )?
             var alt69=2;
             var LA69_0 = this.input.LA(1);
 
@@ -9304,7 +9304,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt69) {
                 case 1 :
-                    // ../ES3.g3:1865:17: name= Identifier
+                    // ES3.g3:1865:17: name= Identifier
                     name=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_functionExpression5770);  
                     stream_Identifier.add(name);
 
@@ -9329,7 +9329,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: functionBody, name, FUNCTION, formalParameterList
+            // elements: name, formalParameterList, FUNCTION, functionBody
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -9341,12 +9341,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1866:2: -> ^( FUNCTION ( $name)? formalParameterList functionBody )
             {
-                // ../ES3.g3:1866:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
+                // ES3.g3:1866:5: ^( FUNCTION ( $name)? formalParameterList functionBody )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_FUNCTION.nextNode(), root_1);
 
-                // ../ES3.g3:1866:17: ( $name)?
+                // ES3.g3:1866:17: ( $name)?
                 if ( stream_name.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_name.nextNode());
 
@@ -9394,7 +9394,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1869:1: formalParameterList : LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN -> ^( ARGS ( Identifier )* ) ;
+    // ES3.g3:1869:1: formalParameterList : LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN -> ^( ARGS ( Identifier )* ) ;
     // $ANTLR start "formalParameterList"
     formalParameterList: function() {
         var retval = new ES3Parser.formalParameterList_return();
@@ -9419,12 +9419,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
 
         try {
-            // ../ES3.g3:1870:2: ( LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN -> ^( ARGS ( Identifier )* ) )
-            // ../ES3.g3:1870:4: LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN
+            // ES3.g3:1870:2: ( LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN -> ^( ARGS ( Identifier )* ) )
+            // ES3.g3:1870:4: LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN
             LPAREN270=this.match(this.input,LPAREN,ES3Parser.FOLLOW_LPAREN_in_formalParameterList5803);  
             stream_LPAREN.add(LPAREN270);
 
-            // ../ES3.g3:1870:11: ( Identifier ( COMMA Identifier )* )?
+            // ES3.g3:1870:11: ( Identifier ( COMMA Identifier )* )?
             var alt71=2;
             var LA71_0 = this.input.LA(1);
 
@@ -9433,11 +9433,11 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt71) {
                 case 1 :
-                    // ../ES3.g3:1870:13: Identifier ( COMMA Identifier )*
+                    // ES3.g3:1870:13: Identifier ( COMMA Identifier )*
                     Identifier271=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_formalParameterList5807);  
                     stream_Identifier.add(Identifier271);
 
-                    // ../ES3.g3:1870:24: ( COMMA Identifier )*
+                    // ES3.g3:1870:24: ( COMMA Identifier )*
                     loop70:
                     do {
                         var alt70=2;
@@ -9450,7 +9450,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                         switch (alt70) {
                         case 1 :
-                            // ../ES3.g3:1870:26: COMMA Identifier
+                            // ES3.g3:1870:26: COMMA Identifier
                             COMMA272=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_formalParameterList5811);  
                             stream_COMMA.add(COMMA272);
 
@@ -9489,12 +9489,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1871:2: -> ^( ARGS ( Identifier )* )
             {
-                // ../ES3.g3:1871:5: ^( ARGS ( Identifier )* )
+                // ES3.g3:1871:5: ^( ARGS ( Identifier )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARGS, "ARGS"), root_1);
 
-                // ../ES3.g3:1871:13: ( Identifier )*
+                // ES3.g3:1871:13: ( Identifier )*
                 while ( stream_Identifier.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_Identifier.nextNode());
 
@@ -9540,7 +9540,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1874:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
+    // ES3.g3:1874:1: functionBody : lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) ;
     // $ANTLR start "functionBody"
     functionBody: function() {
         var retval = new ES3Parser.functionBody_return();
@@ -9558,12 +9558,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_LBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACE");
         var stream_sourceElement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule sourceElement");
         try {
-            // ../ES3.g3:1875:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
-            // ../ES3.g3:1875:4: lb= LBRACE ( sourceElement )* RBRACE
+            // ES3.g3:1875:2: (lb= LBRACE ( sourceElement )* RBRACE -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* ) )
+            // ES3.g3:1875:4: lb= LBRACE ( sourceElement )* RBRACE
             lb=this.match(this.input,LBRACE,ES3Parser.FOLLOW_LBRACE_in_functionBody5846);  
             stream_LBRACE.add(lb);
 
-            // ../ES3.g3:1875:14: ( sourceElement )*
+            // ES3.g3:1875:14: ( sourceElement )*
             loop72:
             do {
                 var alt72=2;
@@ -9576,7 +9576,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt72) {
                 case 1 :
-                    // ../ES3.g3:1875:14: sourceElement
+                    // ES3.g3:1875:14: sourceElement
                     this.pushFollow(ES3Parser.FOLLOW_sourceElement_in_functionBody5848);
                     sourceElement275=this.sourceElement();
 
@@ -9609,12 +9609,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1876:2: -> ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
             {
-                // ../ES3.g3:1876:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
+                // ES3.g3:1876:5: ^( BLOCK[$lb, \"BLOCK\"] ( sourceElement )* )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(BLOCK, lb, "BLOCK"), root_1);
 
-                // ../ES3.g3:1876:28: ( sourceElement )*
+                // ES3.g3:1876:28: ( sourceElement )*
                 while ( stream_sourceElement.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_sourceElement.nextTree());
 
@@ -9660,7 +9660,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1883:1: program : ( sourceElement )* ;
+    // ES3.g3:1883:1: program : ( sourceElement )* ;
     // $ANTLR start "program"
     program: function() {
         var retval = new ES3Parser.program_return();
@@ -9672,11 +9672,11 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1884:2: ( ( sourceElement )* )
-            // ../ES3.g3:1884:4: ( sourceElement )*
+            // ES3.g3:1884:2: ( ( sourceElement )* )
+            // ES3.g3:1884:4: ( sourceElement )*
             root_0 = this.adaptor.nil();
 
-            // ../ES3.g3:1884:4: ( sourceElement )*
+            // ES3.g3:1884:4: ( sourceElement )*
             loop73:
             do {
                 var alt73=2;
@@ -9689,7 +9689,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                 switch (alt73) {
                 case 1 :
-                    // ../ES3.g3:1884:4: sourceElement
+                    // ES3.g3:1884:4: sourceElement
                     this.pushFollow(ES3Parser.FOLLOW_sourceElement_in_program5880);
                     sourceElement277=this.sourceElement();
 
@@ -9739,7 +9739,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1892:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
+    // ES3.g3:1892:1: sourceElement options {k=1; } : ({...}? functionDeclaration | statement );
     // $ANTLR start "sourceElement"
     sourceElement: function() {
         var retval = new ES3Parser.sourceElement_return();
@@ -9752,12 +9752,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
         try {
-            // ../ES3.g3:1897:2: ({...}? functionDeclaration | statement )
+            // ES3.g3:1897:2: ({...}? functionDeclaration | statement )
             var alt74=2;
             alt74 = this.dfa74.predict(this.input);
             switch (alt74) {
                 case 1 :
-                    // ../ES3.g3:1897:4: {...}? functionDeclaration
+                    // ES3.g3:1897:4: {...}? functionDeclaration
                     root_0 = this.adaptor.nil();
 
                     if ( !(( this.input.LA(1) == this.theParser.FUNCTION )) ) {
@@ -9773,7 +9773,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1898:4: statement
+                    // ES3.g3:1898:4: statement
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_statement_in_sourceElement5914);
@@ -9818,7 +9818,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1911:1: forControlStatement : FOR LPAREN forControl RPAREN ;
+    // ES3.g3:1911:1: forControlStatement : FOR LPAREN forControl RPAREN ;
     // $ANTLR start "forControlStatement"
     forControlStatement: function() {
         var retval = new ES3Parser.forControlStatement_return();
@@ -9836,8 +9836,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN283_tree=null;
 
         try {
-            // ../ES3.g3:1912:2: ( FOR LPAREN forControl RPAREN )
-            // ../ES3.g3:1912:4: FOR LPAREN forControl RPAREN
+            // ES3.g3:1912:2: ( FOR LPAREN forControl RPAREN )
+            // ES3.g3:1912:4: FOR LPAREN forControl RPAREN
             root_0 = this.adaptor.nil();
 
             FOR280=this.match(this.input,FOR,ES3Parser.FOLLOW_FOR_in_forControlStatement5932); 
@@ -9886,7 +9886,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1914:1: embeddedForControlStatement : forControl EOF -> ^( FOR forControl ) ;
+    // ES3.g3:1914:1: embeddedForControlStatement : forControl EOF -> ^( FOR forControl ) ;
     // $ANTLR start "embeddedForControlStatement"
     embeddedForControlStatement: function() {
         var retval = new ES3Parser.embeddedForControlStatement_return();
@@ -9901,8 +9901,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_EOF=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token EOF");
         var stream_forControl=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule forControl");
         try {
-            // ../ES3.g3:1915:2: ( forControl EOF -> ^( FOR forControl ) )
-            // ../ES3.g3:1915:4: forControl EOF
+            // ES3.g3:1915:2: ( forControl EOF -> ^( FOR forControl ) )
+            // ES3.g3:1915:4: forControl EOF
             this.pushFollow(ES3Parser.FOLLOW_forControl_in_embeddedForControlStatement5951);
             forControl284=this.forControl();
 
@@ -9926,7 +9926,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1916:2: -> ^( FOR forControl )
             {
-                // ../ES3.g3:1916:5: ^( FOR forControl )
+                // ES3.g3:1916:5: ^( FOR forControl )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(FOR, "FOR"), root_1);
@@ -9972,7 +9972,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1923:1: ifExpressionStatement : IF LPAREN expression RPAREN ;
+    // ES3.g3:1923:1: ifExpressionStatement : IF LPAREN expression RPAREN ;
     // $ANTLR start "ifExpressionStatement"
     ifExpressionStatement: function() {
         var retval = new ES3Parser.ifExpressionStatement_return();
@@ -9990,8 +9990,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN289_tree=null;
 
         try {
-            // ../ES3.g3:1924:2: ( IF LPAREN expression RPAREN )
-            // ../ES3.g3:1924:4: IF LPAREN expression RPAREN
+            // ES3.g3:1924:2: ( IF LPAREN expression RPAREN )
+            // ES3.g3:1924:4: IF LPAREN expression RPAREN
             root_0 = this.adaptor.nil();
 
             IF286=this.match(this.input,IF,ES3Parser.FOLLOW_IF_in_ifExpressionStatement5974); 
@@ -10040,7 +10040,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1926:1: embeddedIfExpressionFragment : expression EOF -> ^( IF expression ) ;
+    // ES3.g3:1926:1: embeddedIfExpressionFragment : expression EOF -> ^( IF expression ) ;
     // $ANTLR start "embeddedIfExpressionFragment"
     embeddedIfExpressionFragment: function() {
         var retval = new ES3Parser.embeddedIfExpressionFragment_return();
@@ -10055,8 +10055,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_EOF=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token EOF");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         try {
-            // ../ES3.g3:1927:2: ( expression EOF -> ^( IF expression ) )
-            // ../ES3.g3:1927:4: expression EOF
+            // ES3.g3:1927:2: ( expression EOF -> ^( IF expression ) )
+            // ES3.g3:1927:4: expression EOF
             this.pushFollow(ES3Parser.FOLLOW_expression_in_embeddedIfExpressionFragment5993);
             expression290=this.expression();
 
@@ -10080,7 +10080,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1928:2: -> ^( IF expression )
             {
-                // ../ES3.g3:1928:5: ^( IF expression )
+                // ES3.g3:1928:5: ^( IF expression )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(IF, "IF"), root_1);
@@ -10126,7 +10126,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1937:1: renderControlStatement : RENDER LPAREN callParam COMMA callParam ( COMMA callData )? RPAREN -> ^( RENDER callParam callParam ( callData )? ) ;
+    // ES3.g3:1937:1: renderControlStatement : RENDER LPAREN callParam COMMA callParam ( COMMA callData )? RPAREN -> ^( RENDER callParam callParam ( callData )? ) ;
     // $ANTLR start "renderControlStatement"
     renderControlStatement: function() {
         var retval = new ES3Parser.renderControlStatement_return();
@@ -10155,8 +10155,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         var stream_callData=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callData");
         try {
-            // ../ES3.g3:1938:2: ( RENDER LPAREN callParam COMMA callParam ( COMMA callData )? RPAREN -> ^( RENDER callParam callParam ( callData )? ) )
-            // ../ES3.g3:1938:4: RENDER LPAREN callParam COMMA callParam ( COMMA callData )? RPAREN
+            // ES3.g3:1938:2: ( RENDER LPAREN callParam COMMA callParam ( COMMA callData )? RPAREN -> ^( RENDER callParam callParam ( callData )? ) )
+            // ES3.g3:1938:4: RENDER LPAREN callParam COMMA callParam ( COMMA callData )? RPAREN
             RENDER292=this.match(this.input,RENDER,ES3Parser.FOLLOW_RENDER_in_renderControlStatement6016);  
             stream_RENDER.add(RENDER292);
 
@@ -10178,7 +10178,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             stream_callParam.add(callParam296.getTree());
-            // ../ES3.g3:1938:44: ( COMMA callData )?
+            // ES3.g3:1938:44: ( COMMA callData )?
             var alt75=2;
             var LA75_0 = this.input.LA(1);
 
@@ -10187,7 +10187,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt75) {
                 case 1 :
-                    // ../ES3.g3:1938:45: COMMA callData
+                    // ES3.g3:1938:45: COMMA callData
                     COMMA297=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_renderControlStatement6027);  
                     stream_COMMA.add(COMMA297);
 
@@ -10209,7 +10209,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: callParam, callParam, RENDER, callData
+            // elements: callParam, callParam, callData, RENDER
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -10220,14 +10220,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1939:2: -> ^( RENDER callParam callParam ( callData )? )
             {
-                // ../ES3.g3:1939:5: ^( RENDER callParam callParam ( callData )? )
+                // ES3.g3:1939:5: ^( RENDER callParam callParam ( callData )? )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(stream_RENDER.nextNode(), root_1);
 
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
-                // ../ES3.g3:1939:35: ( callData )?
+                // ES3.g3:1939:35: ( callData )?
                 if ( stream_callData.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_callData.nextTree());
 
@@ -10273,7 +10273,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1946:1: embeddedRenderControlStatement : callParam COMMA callParam ( COMMA callData )? EOF -> ^( RENDER callParam callParam ( callData )? ) ;
+    // ES3.g3:1946:1: embeddedRenderControlStatement : callParam COMMA callParam ( COMMA callData )? EOF -> ^( RENDER callParam callParam ( callData )? ) ;
     // $ANTLR start "embeddedRenderControlStatement"
     embeddedRenderControlStatement: function() {
         var retval = new ES3Parser.embeddedRenderControlStatement_return();
@@ -10296,8 +10296,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         var stream_callData=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callData");
         try {
-            // ../ES3.g3:1947:2: ( callParam COMMA callParam ( COMMA callData )? EOF -> ^( RENDER callParam callParam ( callData )? ) )
-            // ../ES3.g3:1947:4: callParam COMMA callParam ( COMMA callData )? EOF
+            // ES3.g3:1947:2: ( callParam COMMA callParam ( COMMA callData )? EOF -> ^( RENDER callParam callParam ( callData )? ) )
+            // ES3.g3:1947:4: callParam COMMA callParam ( COMMA callData )? EOF
             this.pushFollow(ES3Parser.FOLLOW_callParam_in_embeddedRenderControlStatement6060);
             callParam300=this.callParam();
 
@@ -10313,7 +10313,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             stream_callParam.add(callParam302.getTree());
-            // ../ES3.g3:1947:30: ( COMMA callData )?
+            // ES3.g3:1947:30: ( COMMA callData )?
             var alt76=2;
             var LA76_0 = this.input.LA(1);
 
@@ -10322,7 +10322,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt76) {
                 case 1 :
-                    // ../ES3.g3:1947:31: COMMA callData
+                    // ES3.g3:1947:31: COMMA callData
                     COMMA303=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_embeddedRenderControlStatement6067);  
                     stream_COMMA.add(COMMA303);
 
@@ -10344,7 +10344,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: callParam, callParam, callData
+            // elements: callData, callParam, callParam
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -10355,14 +10355,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1948:2: -> ^( RENDER callParam callParam ( callData )? )
             {
-                // ../ES3.g3:1948:5: ^( RENDER callParam callParam ( callData )? )
+                // ES3.g3:1948:5: ^( RENDER callParam callParam ( callData )? )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(RENDER, "RENDER"), root_1);
 
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
-                // ../ES3.g3:1948:35: ( callData )?
+                // ES3.g3:1948:35: ( callData )?
                 if ( stream_callData.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_callData.nextTree());
 
@@ -10408,7 +10408,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1953:1: embeddedCallStatement : callParam EOF -> ^( ARGS callParam ) ;
+    // ES3.g3:1953:1: embeddedCallStatement : callParam EOF -> ^( ARGS callParam ) ;
     // $ANTLR start "embeddedCallStatement"
     embeddedCallStatement: function() {
         var retval = new ES3Parser.embeddedCallStatement_return();
@@ -10423,8 +10423,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_EOF=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token EOF");
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         try {
-            // ../ES3.g3:1954:2: ( callParam EOF -> ^( ARGS callParam ) )
-            // ../ES3.g3:1954:4: callParam EOF
+            // ES3.g3:1954:2: ( callParam EOF -> ^( ARGS callParam ) )
+            // ES3.g3:1954:4: callParam EOF
             this.pushFollow(ES3Parser.FOLLOW_callParam_in_embeddedCallStatement6100);
             callParam306=this.callParam();
 
@@ -10448,7 +10448,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1955:2: -> ^( ARGS callParam )
             {
-                // ../ES3.g3:1955:5: ^( ARGS callParam )
+                // ES3.g3:1955:5: ^( ARGS callParam )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARGS, "ARGS"), root_1);
@@ -10494,7 +10494,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1961:1: embeddedDataCallStatement : callParam ( COMMA callData )? EOF -> ^( ARGS callParam ( callData )? ) ;
+    // ES3.g3:1961:1: embeddedDataCallStatement : callParam ( COMMA callData )? EOF -> ^( ARGS callParam ( callData )? ) ;
     // $ANTLR start "embeddedDataCallStatement"
     embeddedDataCallStatement: function() {
         var retval = new ES3Parser.embeddedDataCallStatement_return();
@@ -10514,15 +10514,15 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         var stream_callData=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callData");
         try {
-            // ../ES3.g3:1962:2: ( callParam ( COMMA callData )? EOF -> ^( ARGS callParam ( callData )? ) )
-            // ../ES3.g3:1962:4: callParam ( COMMA callData )? EOF
+            // ES3.g3:1962:2: ( callParam ( COMMA callData )? EOF -> ^( ARGS callParam ( callData )? ) )
+            // ES3.g3:1962:4: callParam ( COMMA callData )? EOF
             this.pushFollow(ES3Parser.FOLLOW_callParam_in_embeddedDataCallStatement6126);
             callParam308=this.callParam();
 
             this.state._fsp--;
 
             stream_callParam.add(callParam308.getTree());
-            // ../ES3.g3:1962:14: ( COMMA callData )?
+            // ES3.g3:1962:14: ( COMMA callData )?
             var alt77=2;
             var LA77_0 = this.input.LA(1);
 
@@ -10531,7 +10531,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt77) {
                 case 1 :
-                    // ../ES3.g3:1962:15: COMMA callData
+                    // ES3.g3:1962:15: COMMA callData
                     COMMA309=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_embeddedDataCallStatement6129);  
                     stream_COMMA.add(COMMA309);
 
@@ -10564,13 +10564,13 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1963:2: -> ^( ARGS callParam ( callData )? )
             {
-                // ../ES3.g3:1963:5: ^( ARGS callParam ( callData )? )
+                // ES3.g3:1963:5: ^( ARGS callParam ( callData )? )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARGS, "ARGS"), root_1);
 
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
-                // ../ES3.g3:1963:23: ( callData )?
+                // ES3.g3:1963:23: ( callData )?
                 if ( stream_callData.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_callData.nextTree());
 
@@ -10616,7 +10616,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1968:1: embeddedControllerCallStatement : callParam COMMA callParam EOF -> ^( ARGS callParam callParam ) ;
+    // ES3.g3:1968:1: embeddedControllerCallStatement : callParam COMMA callParam EOF -> ^( ARGS callParam callParam ) ;
     // $ANTLR start "embeddedControllerCallStatement"
     embeddedControllerCallStatement: function() {
         var retval = new ES3Parser.embeddedControllerCallStatement_return();
@@ -10635,8 +10635,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_EOF=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token EOF");
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         try {
-            // ../ES3.g3:1969:2: ( callParam COMMA callParam EOF -> ^( ARGS callParam callParam ) )
-            // ../ES3.g3:1969:4: callParam COMMA callParam EOF
+            // ES3.g3:1969:2: ( callParam COMMA callParam EOF -> ^( ARGS callParam callParam ) )
+            // ES3.g3:1969:4: callParam COMMA callParam EOF
             this.pushFollow(ES3Parser.FOLLOW_callParam_in_embeddedControllerCallStatement6160);
             callParam312=this.callParam();
 
@@ -10669,7 +10669,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1970:2: -> ^( ARGS callParam callParam )
             {
-                // ../ES3.g3:1970:5: ^( ARGS callParam callParam )
+                // ES3.g3:1970:5: ^( ARGS callParam callParam )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARGS, "ARGS"), root_1);
@@ -10716,7 +10716,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1975:1: embeddedControllerDataCallStatement : callParam COMMA callParam ( COMMA callData )? EOF -> ^( ARGS callParam callParam ( callData )? ) ;
+    // ES3.g3:1975:1: embeddedControllerDataCallStatement : callParam COMMA callParam ( COMMA callData )? EOF -> ^( ARGS callParam callParam ( callData )? ) ;
     // $ANTLR start "embeddedControllerDataCallStatement"
     embeddedControllerDataCallStatement: function() {
         var retval = new ES3Parser.embeddedControllerDataCallStatement_return();
@@ -10739,8 +10739,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         var stream_callData=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callData");
         try {
-            // ../ES3.g3:1976:2: ( callParam COMMA callParam ( COMMA callData )? EOF -> ^( ARGS callParam callParam ( callData )? ) )
-            // ../ES3.g3:1976:4: callParam COMMA callParam ( COMMA callData )? EOF
+            // ES3.g3:1976:2: ( callParam COMMA callParam ( COMMA callData )? EOF -> ^( ARGS callParam callParam ( callData )? ) )
+            // ES3.g3:1976:4: callParam COMMA callParam ( COMMA callData )? EOF
             this.pushFollow(ES3Parser.FOLLOW_callParam_in_embeddedControllerDataCallStatement6190);
             callParam316=this.callParam();
 
@@ -10756,7 +10756,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             this.state._fsp--;
 
             stream_callParam.add(callParam318.getTree());
-            // ../ES3.g3:1976:30: ( COMMA callData )?
+            // ES3.g3:1976:30: ( COMMA callData )?
             var alt78=2;
             var LA78_0 = this.input.LA(1);
 
@@ -10765,7 +10765,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             }
             switch (alt78) {
                 case 1 :
-                    // ../ES3.g3:1976:31: COMMA callData
+                    // ES3.g3:1976:31: COMMA callData
                     COMMA319=this.match(this.input,COMMA,ES3Parser.FOLLOW_COMMA_in_embeddedControllerDataCallStatement6197);  
                     stream_COMMA.add(COMMA319);
 
@@ -10798,14 +10798,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             root_0 = this.adaptor.nil();
             // 1977:2: -> ^( ARGS callParam callParam ( callData )? )
             {
-                // ../ES3.g3:1977:5: ^( ARGS callParam callParam ( callData )? )
+                // ES3.g3:1977:5: ^( ARGS callParam callParam ( callData )? )
                 {
                 var root_1 = this.adaptor.nil();
                 root_1 = this.adaptor.becomeRoot(this.adaptor.create(ARGS, "ARGS"), root_1);
 
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
                 this.adaptor.addChild(root_1, stream_callParam.nextTree());
-                // ../ES3.g3:1977:33: ( callData )?
+                // ES3.g3:1977:33: ( callData )?
                 if ( stream_callData.hasNext() ) {
                     this.adaptor.addChild(root_1, stream_callData.nextTree());
 
@@ -10851,7 +10851,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1982:1: embeddedStatementTail : statementTail EOF ;
+    // ES3.g3:1982:1: embeddedStatementTail : statementTail EOF ;
     // $ANTLR start "embeddedStatementTail"
     embeddedStatementTail: function() {
         var retval = new ES3Parser.embeddedStatementTail_return();
@@ -10865,8 +10865,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var EOF323_tree=null;
 
         try {
-            // ../ES3.g3:1983:2: ( statementTail EOF )
-            // ../ES3.g3:1983:4: statementTail EOF
+            // ES3.g3:1983:2: ( statementTail EOF )
+            // ES3.g3:1983:4: statementTail EOF
             root_0 = this.adaptor.nil();
 
             this.pushFollow(ES3Parser.FOLLOW_statementTail_in_embeddedStatementTail6230);
@@ -10913,7 +10913,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1988:1: callParam : (amp= IdentifierNameAmpersatStart | id= Identifier | StringLiteral );
+    // ES3.g3:1988:1: callParam : (amp= IdentifierNameAmpersatStart | id= Identifier | StringLiteral );
     // $ANTLR start "callParam"
     callParam: function() {
         var retval = new ES3Parser.callParam_return();
@@ -10930,7 +10930,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var StringLiteral324_tree=null;
 
         try {
-            // ../ES3.g3:1989:2: (amp= IdentifierNameAmpersatStart | id= Identifier | StringLiteral )
+            // ES3.g3:1989:2: (amp= IdentifierNameAmpersatStart | id= Identifier | StringLiteral )
             var alt79=3;
             switch ( this.input.LA(1) ) {
             case IdentifierNameAmpersatStart:
@@ -10951,7 +10951,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt79) {
                 case 1 :
-                    // ../ES3.g3:1989:4: amp= IdentifierNameAmpersatStart
+                    // ES3.g3:1989:4: amp= IdentifierNameAmpersatStart
                     root_0 = this.adaptor.nil();
 
                     amp=this.match(this.input,IdentifierNameAmpersatStart,ES3Parser.FOLLOW_IdentifierNameAmpersatStart_in_callParam6246); 
@@ -10963,7 +10963,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1990:4: id= Identifier
+                    // ES3.g3:1990:4: id= Identifier
                     root_0 = this.adaptor.nil();
 
                     id=this.match(this.input,Identifier,ES3Parser.FOLLOW_Identifier_in_callParam6255); 
@@ -10975,7 +10975,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1991:4: StringLiteral
+                    // ES3.g3:1991:4: StringLiteral
                     root_0 = this.adaptor.nil();
 
                     StringLiteral324=this.match(this.input,StringLiteral,ES3Parser.FOLLOW_StringLiteral_in_callParam6262); 
@@ -11018,7 +11018,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         return;
     })(),
 
-    // ../ES3.g3:1996:1: callData : ( objectLiteral | callParam | numericLiteral );
+    // ES3.g3:1996:1: callData : ( objectLiteral | callParam | numericLiteral | booleanLiteral );
     // $ANTLR start "callData"
     callData: function() {
         var retval = new ES3Parser.callData_return();
@@ -11029,11 +11029,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
          var objectLiteral325 = null;
          var callParam326 = null;
          var numericLiteral327 = null;
+         var booleanLiteral328 = null;
 
 
         try {
-            // ../ES3.g3:1997:2: ( objectLiteral | callParam | numericLiteral )
-            var alt80=3;
+            // ES3.g3:1997:2: ( objectLiteral | callParam | numericLiteral | booleanLiteral )
+            var alt80=4;
             switch ( this.input.LA(1) ) {
             case LBRACE:
                 alt80=1;
@@ -11048,6 +11049,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             case HexIntegerLiteral:
                 alt80=3;
                 break;
+            case TRUE:
+            case FALSE:
+                alt80=4;
+                break;
             default:
                 var nvae =
                     new org.antlr.runtime.NoViableAltException("", 80, 0, this.input);
@@ -11057,7 +11062,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
             switch (alt80) {
                 case 1 :
-                    // ../ES3.g3:1997:4: objectLiteral
+                    // ES3.g3:1997:4: objectLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_objectLiteral_in_callData6276);
@@ -11070,7 +11075,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 2 :
-                    // ../ES3.g3:1997:20: callParam
+                    // ES3.g3:1997:20: callParam
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_callParam_in_callData6280);
@@ -11083,7 +11088,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
                     break;
                 case 3 :
-                    // ../ES3.g3:1997:32: numericLiteral
+                    // ES3.g3:1997:32: numericLiteral
                     root_0 = this.adaptor.nil();
 
                     this.pushFollow(ES3Parser.FOLLOW_numericLiteral_in_callData6284);
@@ -11092,6 +11097,19 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
                     this.state._fsp--;
 
                     this.adaptor.addChild(root_0, numericLiteral327.getTree());
+
+
+                    break;
+                case 4 :
+                    // ES3.g3:1997:49: booleanLiteral
+                    root_0 = this.adaptor.nil();
+
+                    this.pushFollow(ES3Parser.FOLLOW_booleanLiteral_in_callData6288);
+                    booleanLiteral328=this.booleanLiteral();
+
+                    this.state._fsp--;
+
+                    this.adaptor.addChild(root_0, booleanLiteral328.getTree());
 
 
                     break;
@@ -11801,19 +11819,19 @@ org.antlr.lang.augmentObject(ES3Parser, {
     FOLLOW_callParam_in_renderControlStatement6020: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
     FOLLOW_COMMA_in_renderControlStatement6022: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000000, 0x00000000,0x08300000, 0x00000000]),
     FOLLOW_callParam_in_renderControlStatement6024: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000,0x20000000, 0x00000000]),
-    FOLLOW_COMMA_in_renderControlStatement6027: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
+    FOLLOW_COMMA_in_renderControlStatement6027: new org.antlr.runtime.BitSet([0x00000180, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
     FOLLOW_callData_in_renderControlStatement6029: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000000, 0x00000000,0x20000000, 0x00000000]),
     FOLLOW_RPAREN_in_renderControlStatement6033: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_callParam_in_embeddedRenderControlStatement6060: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
     FOLLOW_COMMA_in_embeddedRenderControlStatement6062: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000000, 0x00000000,0x08300000, 0x00000000]),
     FOLLOW_callParam_in_embeddedRenderControlStatement6064: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
-    FOLLOW_COMMA_in_embeddedRenderControlStatement6067: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
+    FOLLOW_COMMA_in_embeddedRenderControlStatement6067: new org.antlr.runtime.BitSet([0x00000180, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
     FOLLOW_callData_in_embeddedRenderControlStatement6069: new org.antlr.runtime.BitSet([0x00000000, 0x00000000]),
     FOLLOW_EOF_in_embeddedRenderControlStatement6073: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_callParam_in_embeddedCallStatement6100: new org.antlr.runtime.BitSet([0x00000000, 0x00000000]),
     FOLLOW_EOF_in_embeddedCallStatement6102: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_callParam_in_embeddedDataCallStatement6126: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
-    FOLLOW_COMMA_in_embeddedDataCallStatement6129: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
+    FOLLOW_COMMA_in_embeddedDataCallStatement6129: new org.antlr.runtime.BitSet([0x00000180, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
     FOLLOW_callData_in_embeddedDataCallStatement6131: new org.antlr.runtime.BitSet([0x00000000, 0x00000000]),
     FOLLOW_EOF_in_embeddedDataCallStatement6135: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_callParam_in_embeddedControllerCallStatement6160: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
@@ -11823,7 +11841,7 @@ org.antlr.lang.augmentObject(ES3Parser, {
     FOLLOW_callParam_in_embeddedControllerDataCallStatement6190: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
     FOLLOW_COMMA_in_embeddedControllerDataCallStatement6192: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000000, 0x00000000,0x08300000, 0x00000000]),
     FOLLOW_callParam_in_embeddedControllerDataCallStatement6194: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000080, 0x00000000]),
-    FOLLOW_COMMA_in_embeddedControllerDataCallStatement6197: new org.antlr.runtime.BitSet([0x00000000, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
+    FOLLOW_COMMA_in_embeddedControllerDataCallStatement6197: new org.antlr.runtime.BitSet([0x00000180, 0x00000000,0x00000002, 0x00000000,0x08300000, 0x0000001C]),
     FOLLOW_callData_in_embeddedControllerDataCallStatement6199: new org.antlr.runtime.BitSet([0x00000000, 0x00000000]),
     FOLLOW_EOF_in_embeddedControllerDataCallStatement6203: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_statementTail_in_embeddedStatementTail6230: new org.antlr.runtime.BitSet([0x00000000, 0x00000000]),
@@ -11833,7 +11851,8 @@ org.antlr.lang.augmentObject(ES3Parser, {
     FOLLOW_StringLiteral_in_callParam6262: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_objectLiteral_in_callData6276: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
     FOLLOW_callParam_in_callData6280: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
-    FOLLOW_numericLiteral_in_callData6284: new org.antlr.runtime.BitSet([0x00000002, 0x00000000])
+    FOLLOW_numericLiteral_in_callData6284: new org.antlr.runtime.BitSet([0x00000002, 0x00000000]),
+    FOLLOW_booleanLiteral_in_callData6288: new org.antlr.runtime.BitSet([0x00000002, 0x00000000])
 });
 
 })();

@@ -1994,6 +1994,6 @@ callParam
 	MODIFICATION: Additional special case.
  */
 callData
-	: objectLiteral | callParam | numericLiteral
+	: objectLiteral | callParam | numericLiteral | booleanLiteral
 	;
 
