@@ -114,9 +114,12 @@ function initMmir() {
 			 *       then these later options will overwrite the earlier
 			 *       ones.
 			 * 
-			 * 
+			 * @memberOf mmir
+			 * @name config
+			 * @function
 			 * @param {PlainObject} options
 			 * 			options for RequireJS
+			 * @public
 			 */
 			config: function(options){
 				if(_isApplied && typeof require !== 'undefined'){
@@ -127,7 +130,7 @@ function initMmir() {
 				}
 			},
 			
-			/*
+			/**
 			 * Applies settings that were added via
 			 * {@link #config}.
 			 * 
@@ -141,6 +144,9 @@ function initMmir() {
 			 *          RequireJS in <code>mainConfig.js</code>
 			 *          were applied.
 			 * 
+			 * @memberOf mmir
+			 * @name applyConfigs
+			 * @function
 			 * @private this is a semi-private function that 
 			 *          should only be used by the initialization
 			 *          process.
@@ -162,9 +168,12 @@ function initMmir() {
 			 * loaded after configuration in <code>mainConfig.js</code>
 			 * was applied.
 			 * 
+			 * @memberOf mmir
+			 * @name startModule
 			 * @property
 			 * @type String
 			 * @default "main" will load the module specified in main.js
+			 * @public
 			 */
 			startModule: 'main'
 	};
