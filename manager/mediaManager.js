@@ -160,16 +160,15 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     };
     
     /**
-     * @constructs mmir.MediaManager
-     * @memberOf mmir.MediaManager.prototype
-     * @ignore
+     * @constructs MediaManager
+     * @memberOf MediaManager.prototype
+     * @private
      */
     function constructor(){
     	
-    	/** @scope mmir.MediaManager.prototype */
-    	
     	var listener = new Dictionary(); 
     	
+    	/** @lends MediaManager.prototype */
     	return {
     		
     			//TODO add API documentation
@@ -269,6 +268,11 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				}
     	   		},
 
+    	   		/**
+    	   		 * Cancel currently active speech recognition.
+    	   		 * 
+    	   		 * Has no effect, if no recognition is active.
+    	   		 */
     			cancelRecognition: function(successCallBack,failureCallBack){
     	   			if(failureCallBack){
     					failureCallBack("Audio Output: canceling Recognize Speech is not supported.");
@@ -279,7 +283,10 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			},
 ///////////////////////////// audio output API: /////////////////////////////
     	   		
-    	   		playWAV: function(blob, successCallBack, failureCallBack){
+    			/**
+    			 * Play PCM audio data.
+    			 */
+    	   		playWAV: function(blob, onPlayedCallback, failureCallBack){
     	   			if(failureCallBack){
     					failureCallBack("Audio Output: play WAV audio is not supported.");
     				}
@@ -287,7 +294,10 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					console.error("Audio Output: play WAV audio is not supported.");
     				}
     			},
-    			playURL: function(url, successCallback, failureCallBack){
+    			/**
+    			 * Play audio file from the specified URL.
+    			 */
+    			playURL: function(url, onPlayedCallback, failureCallBack){
     	   			if(failureCallBack){
     					failureCallBack("Audio Output: play audio from URL is not supported.");
     				}
@@ -295,7 +305,30 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					console.error("Audio Output: play audio from URL is not supported.");
     				}
     			},
-    			getURLAsAudio: function(url, successCallback, failureCallBack, onLoadedCallBack){
+    			/**
+    			 * Get an audio object for the audio file specified by URL.
+    			 * 
+    			 * The audio object exports the following functions:
+    			 * 
+    			 * play
+    			 * stop
+    			 * release
+    			 * enable
+    			 * disable
+    			 * setVolume
+    			 * getDuration
+    			 * isPaused
+    			 * isEnabled
+    			 * 
+    			 * NOTE: the audio object should only be used, after the <code>onLoadedCallback</code>
+    			 *       was triggered.
+    			 * 
+    			 * @param {String} url
+    			 * @param {Function} [onPlayedCallback] OPTIONAL
+    			 * @param {Function} [failureCallBack] OPTIONAL
+    			 * @param {Function} [onLoadedCallBack] OPTIONAL
+    			 */
+    			getURLAsAudio: function(url, onPlayedCallback, failureCallBack, onLoadedCallBack){
     	   			if(failureCallBack){
     					failureCallBack("Audio Output: create audio from URL is not supported.");
     				}
@@ -306,14 +339,23 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 ///////////////////////////// text-to-speech API: /////////////////////////////
     			
     			/**
-    			 * parameter: string OR string Array OR object with attributes:
-    			 * 		text: string OR string Array, text that should be read aloud
-    			 * 		pauseLength: Length of the pauses between sentences in milliseconds
-    			 * 		forceSingleSentence: boolean, if true, a string Array will be turned into a single string
-    			 * 		split: boolean, if true and the text is a single string, it will be split using a splitter function
-    			 * 		splitter: function, replaces the default splitter-function. It takes a simple string as input and gives a string Array as output
+    			 * Synthesizes ("read out loud") text.
+    			 * 
+    			 * @param {String|Array[String]|PlainObjec} parameter
+    			 * 		if <code>String</code> or <code>Array</code> of <code>String</code>s
+    			 * 			  synthesizes the text of the String, for an Array: each entry is interpreted as "sentence";
+    			 * 				after each sentence, a short pause is inserted before synthesizing the
+    			 * 				the next sentence<br>
+    			 * 		for a <code>PlainObject</code>, the following properties should be used:
+    			 * 		<pre>{
+    			 * 			  text: string OR string Array, text that should be read aloud
+    			 * 			, pauseLength: OPTIONAL Length of the pauses between sentences in milliseconds
+    			 * 			, forceSingleSentence: OPTIONAL boolean, if true, a string Array will be turned into a single string
+    			 * 			, split: OPTIONAL boolean, if true and the text is a single string, it will be split using a splitter function
+    			 * 			, splitter: OPTIONAL function, replaces the default splitter-function. It takes a simple string as input and gives a string Array as output
+    			 * 		}</pre>
     			 */
-    			textToSpeech: function(parameter, successCallBack,failureCallBack){
+    			textToSpeech: function(parameter, onPlayedCallback, failureCallBack){
     	   			if(failureCallBack){
     					failureCallBack("Audio Output: Text To Speech is not supported.");
     				}
@@ -321,6 +363,9 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					console.error("Audio Output: Text To Speech is not supported.");
     				}
     			},
+    			/**
+    			 * Cancel current synthesis.
+    			 */
     			cancelSpeech: function(successCallBack,failureCallBack){
     	   			if(failureCallBack){
     					failureCallBack("Audio Output: canceling Text To Speech is not supported.");
@@ -331,14 +376,19 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			},
     			
 ///////////////////////////// ADDITIONAL (optional) functions: ///////////////////////////// 
-    			
+    			/**
+    			 * Set the volume for the speech synthesis (text-to-speech).
+    			 * 
+    			 * @param {Number} newValue
+    			 * 				TODO specify format / range
+    			 */
     			setTextToSpeechVolume: function(newValue){
     				console.error("Audio Output: set volume for Text To Speech is not supported.");
 				}
     			
     			/**
-    			 * @param eventName String
-    			 * @param eventHandler Function
+    			 * @param {String} eventName
+    			 * @param {Function} eventHandler
     			 */
     			, addListener: function(eventName, eventHandler){
     				var list = listener.get(eventName);
@@ -351,8 +401,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				}
     			}
     			/**
-    			 * @param eventName String
-    			 * @param eventHandler Function
+    			 * @param {String} eventName
+    			 * @param {Function} eventHandler
     			 */
     			, removeListener: function(eventName, eventHandler){
     				var isRemoved = false;
@@ -377,7 +427,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				return isRemoved;
     			}
     			/**
-    			 * @returns Array<Function> of event-handlers; empty, if there are no event handlers for eventName
+    			 * @returns {Array[Function]} of event-handlers; empty, if there are no event handlers for eventName
     			 */
     			, getListeners: function(eventName){
     				var list = listener.get(eventName);
@@ -434,7 +484,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     
     var _stub = {
     	
-    	/** @scope mmir.MediaManager.prototype */
+    	/** @scope MediaManager.prototype */
     	
     	//TODO add for backwards compatibility?:
 //    	create : function(){ return this.init.apply(this, arguments); },
@@ -455,9 +505,24 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          *  
          * 
          * @method init
-         * @param {Array<Object>} [listenerList] OPTIONAL a list of listeners that should be registered
-         * @return {Object} Object containing the instance of the class {@link mmir.MediaManager}
+         * @param {Function} [successCallback] OPTIONAL
+         * 				 callback that gets triggered after the MediaManager instance has been initialized.
+         * @param {Function} [failureCallback] OPTIONAL
+         * 				 a failure callback that gets triggered if an error occurs during initialization.
+         * @param {Array[Object]} [listenerList] OPTIONAL
+         * 				 a list of listeners that should be registered, where each entry is an Object
+         * 				 with properties:
+         * 				 <pre>
+         * 					{
+         * 						name: String the event name,
+         * 						listener: Function the handler function
+         * 					}
+         * 				 </pre>
+         * @return {Object}
+         * 				an Deferred object that gets resolved, after the {@link mmir.MediaManager}
+         * 				has been initialized.
          * @public
+         * 
          */
         init: function(successCallback, failureCallback, listenerList){
         	
@@ -503,6 +568,14 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
             
             return defer.promise(this);
         },
+        /**
+         * Same as {@link #init}.
+         * 
+         * @deprecated use <code>init()</code> instead.
+         * 
+         * @method getInstance
+         * @public
+         */
         getInstance: function(){
             return this.init(null, null);
         },
@@ -512,7 +585,10 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * are added to the visibility of audioInput, and will from now on be applicable by calling
          * mmir.MediaManager.<function name>().
          * 
-         * @deprecated
+         * @deprecated do not use.
+         * @method loadFile
+         * @protected
+         * 
          */
     	loadFile: function(filePath,successCallback, failureCallback){
     		if (instance=== null) {
