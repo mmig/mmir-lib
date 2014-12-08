@@ -35,6 +35,22 @@ later updates from this repository can be fetched from within the referencing pr
     git subtree pull --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
 
 --
+#### Updating mmir-lib in your project
+
+In order to update `mmir-lib` in your project, you should follow these steps
+
+_Note: these directions assume, that your web application is located in the
+       sub-directory `/www` of your project directory._  
+
+ 1. replace the contents of `/www/mmirf` with the new contents of this repository 
+    (e.g. the using `git subtree pull` command)
+ 1. update the _tooling_ in `/build` from the [mmir-tooling][3] repository, by
+   1. replacing `/build` with the new contents of the _mmir-tooling_ repository
+   1. executing the `ANT` build script from within `/build`
+ 1. _delete contents of `/www/gen`_
+ 1. re-build your web application, if necessary (e.g. run `cordova build`)
+
+--
 #### Used Libraries
 
 (see contents of ```/vendor/libs/```)
@@ -68,7 +84,7 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 --
 ##### Version Information
 
- MMIR Version 3.0beta3
+ MMIR Version 3.1.0
 
 
 [1]: https://github.com/mmig/mmir-starter-kit

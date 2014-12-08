@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.0.0)
+version notes for MMIR framework code (v 3.1.0)
 
  * using Cordova 3.5.x library
  * using jQuery 1.11.x library
