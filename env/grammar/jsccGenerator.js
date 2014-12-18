@@ -152,6 +152,19 @@ $.ajax({
 		GrammarConverter.prototype.TEMPLATE = data;
 		
 		deferred.resolve();
+		
+//		jsccGen.init = function(callback){
+//			if(callback){
+//				callback();
+//			}
+//			return {
+//				then: function(callback){
+//					if(callback){
+//						callback();
+//					}
+//				}
+//			};
+//		};
 	},
 	error: function(xhr, status, err){
 		var msg = 'Failed to load grammar template file from "'+templatePath+'": '+status+', ERROR '+err;
@@ -278,8 +291,8 @@ var JsccGrammarConverterExt = {
 			
 			variable_index = /\[(\d+)\]/.exec(variable);
 			variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
-	//			variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?(\["semantic"\]|\['semantic'\]|\.semantic)?/.exec(variable);
-	//			variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
+//			variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?(\["semantic"\]|\['semantic'\]|\.semantic)?/.exec(variable);
+//			variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
 	//"_$NAME[INDEX]['FIELD']":  _$NAME                  [ INDEX ]        [" FIELD "]  | [' FIELD ']      |   .FIELD
 			if (variable_index == null) {
 				remapped_variable_name = variable;
@@ -301,20 +314,20 @@ var JsccGrammarConverterExt = {
 					//                 ACCESS TO SEMANTICS: 	_$other_utterance[0]['semantic']
 					//                                      but this could also be expressed e.g. as _$other_utterance[0].semantic
 					//                                      ...
-	//					remapped_variable_name = variable.replace(
-	//							  '[' + variable_index[1] + ']'
-	//							, "[safe_acc("
-	//								+ utterance_name.toLowerCase() + "_temp, 'phrases', '"
-	//								+ variable_name.toLowerCase() + "', "
-	//								+ variable_index[1] 
-	//								+ ")]"
-	//							);
+//					remapped_variable_name = variable.replace(
+//							  '[' + variable_index[1] + ']'
+//							, "[safe_acc("
+//								+ utterance_name.toLowerCase() + "_temp, 'phrases', '"
+//								+ variable_name.toLowerCase() + "', "
+//								+ variable_index[1] 
+//								+ ")]"
+//							);
 			}
 			semantic_as_string = semantic_as_string.replace(
 					variables[0],
 					" function(){try{return " + remapped_variable_name
 						+ ";} catch(e){return void(0);}}() "
-	//					"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
+//					"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
 			);
 			variables =  this.variable_regexp.exec(semantic_as_string);
 		}
