@@ -88,7 +88,7 @@ var GrammarConverter = function(){
 
 GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback, grammarUrl, doLoadSynchronously){
 	var self = this;
-	var success = function(data){
+	var success = function(data, status, xhr){
 		
 		//DISABLED: old-style masking for umlauts:
 //		data = self.recodeJSON(data, self.encodeUmlauts);
@@ -102,13 +102,13 @@ GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback
 		self.json_grammar_definition = data;
 		
 		if (typeof successCallback == "function") {
-			successCallback(self);
+			successCallback.call(this, self, xhr);
 		}
 	};
-	var error = function(data){
+	var error = function(xhr, status, data){
 		alert("failed to load the grammar! error: "+ JSON.stringify(data));
 		if (typeof errorCallback == "function") {
-			errorCallback(self);
+			errorCallback.call(this, self);
 		}
 	};
 	this.loadResource(success, error, grammarUrl, doLoadSynchronously);
@@ -118,9 +118,9 @@ GrammarConverter.prototype.loadResource = function(successCallback, errorCallbac
 
 	var theUrl = resourceUrl;
 	if(!theUrl){
+		console.error('GrammarConverter.loadResource: missing URL!');
 		if(errorCallback){
-			console.error('GrammarConverter.loadResource: missing URL!');
-			errorCallback(this);
+			errorCallback.call(this, this);
 		}
 		return;///////////////// EARLY EXIT //////////////////////
 	}
