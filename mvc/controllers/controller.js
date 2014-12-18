@@ -203,7 +203,12 @@ define ( [ 'commonUtils', 'helper' ],
 		
 		if(IS_DEBUG_ENABLED) console.debug("should perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		
-	    return this.script[actionName](data);
+	    if(arguments.length > 2){
+	    	return this.script[actionName](data, arguments[2]);
+		}
+		else {
+			return this.script[actionName](data);
+		}
 	};
 
 	/**
@@ -224,7 +229,8 @@ define ( [ 'commonUtils', 'helper' ],
 		    
 			if(IS_DEBUG_ENABLED) console.debug("performing '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		    
-		    return this.script[actionName](data);
+		    return this.perform.apply(this, arguments);
+		    
 		} else if(typeof this.script[actionName] !== 'undefined'){
 			if(IS_DEBUG_ENABLED) console.info("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": no function ("+typeof this.script[actionName]+")");//debug
 		} else {
@@ -245,10 +251,10 @@ define ( [ 'commonUtils', 'helper' ],
 	 */
 	Controller.prototype.performHelper = function(actionName, data){
 		if(arguments.length > 2){
-			return  this.helper.perform(actionName, data, arguments[2]);
+			return this.helper.perform(actionName, data, arguments[2]);
 		}
 		else {
-			return  this.helper.perform(actionName, data);
+			return this.helper.perform(actionName, data);
 		}
 	};
 

@@ -159,6 +159,25 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  */
 	 var partials = new Dictionary();
 
+	 
+	 ///////////////////////////// jQuery Mobile specific fields/settings  /////////////////////////////
+	 /**
+	  * The ID attribute for the content / page-elements.
+	  * 
+	  * <p>
+	  * This is jQuery Mobile specific:
+	  * pages are contained in an element with <code>data-role="page"</code>.
+	  * 
+	  * These elements must have an ID attribute with the value of this constant
+	  * (the actual value will be created and set on rendering the view / layout).
+	  * 
+	  * @property CONTENT_ID
+	  * @type String
+	  * @private
+	  * @constant
+	  */
+	 var CONTENT_ID = "pageContainer";
+	 
 	 /**
 	  * List of elements (jQuery objects) that should be remove from DOM
 	  * after a page has loaded (loaded: after all contents inserted into the
@@ -168,6 +187,11 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  */
 	 var afterViewLoadRemoveList = [];
      
+	 //property names for passing the respected objects from doRenderView() to doRemoveElementsAfterViewLoad()
+	 var FIELD_NAME_VIEW 		= '__view';
+	 var FIELD_NAME_DATA 		= '__renderData';
+	 var FIELD_NAME_CONTROLLER 	= '__ctrl';
+	 
      //function for removing "old" content from DOM (-> remove old, un-used page content)
      var doRemoveElementsAfterViewLoad = function(event, data){
      	//data.toPage: {String|Object} page to which view was changed
@@ -183,22 +207,24 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      		//remove all elements from array
      		afterViewLoadRemoveList.splice(0, size);
      	}
+     	
+     	var ctrl = data.options[FIELD_NAME_CONTROLLER];
+     	var view = data.options[FIELD_NAME_VIEW];
+     	var renderData = data.options[FIELD_NAME_DATA];
+        //trigger "after page loading" hooks on controller:
+        // the hook for all views of the controller MUST be present/implemented:
+		ctrl.perform('on_page_load', renderData, view.getName());
+		//... the hook for single/specific view MAY be present/implemented:
+		ctrl.performIfPresent('on_page_load_'+view.getName(), renderData);
+		
      };
      
-     //DISABLE: old jQuery Mobile API (version <= 1.3.x)
-     //			(with new API, the change-handler is diretly attachted 
-     //			 to the new page, see doRenderView())
-//     //may run in window-/DOM-less environment (e.g. nodejs) 
-//     //  -> only add listener, if document object is present:
-//     if(typeof document !== 'undefined'){
-//     	$( document ).bind( 'pagecontainerchange', doRemoveElementsAfterViewLoad);
-//     }
-
 	 // set jQuery Mobile's default transition to "none":
      // TODO make this configurable (through mmir.ConfigurationManager)?
 	 $.mobile.defaultPageTransition = 'none';
 
-	 
+
+	 ///////////////////////////// END: jQuery Mobile specific fields/settings /////////////////////////////
 	 
 	 /**
 	  * An object containing data for the currently displayed view.<br>
@@ -290,6 +316,21 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  */
 	 var doRenderView = function(ctrlName, viewName, view, ctrl, data){
 		 
+		 //if set to FALSE by one of the hooks (ie. before_page_prepare / before_page_load)
+		 //   will prevent rendering of the view! 
+		 var isContinue;
+		 
+		 //trigger "before page preparing" hooks on controller, if present/implemented: 
+		 isContinue = ctrl.performIfPresent('before_page_prepare', data, viewName);
+		 if(isContinue === false){
+			 return;/////////////////////// EARLY EXIT ////////////////////////
+		 }
+		 
+		 isContinue = ctrl.performIfPresent('before_page_prepare_'+viewName, data);
+		 if(isContinue === false){
+			 return;/////////////////////// EARLY EXIT ////////////////////////
+		 }
+		 
 		 var layout = _instance.getLayout(ctrlName, true);
 
 		 var layoutBody = layout.getBodyContents();
@@ -309,23 +350,23 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 //		 NOTE: this is now done during rendering of body-content                  	layoutBody = mmir.LanguageManager.translateHTML(layoutBody);
 		 //TODO do localization rendering for layout (i.e. none-body- or dialogs-content)
 
-		 var pg = new RegExp("pageContainer", "ig");//TODO make "pageContainer" a CONSTANT
-		 var oldId = "#pageContainer" + pageIndex;
+		 var pg = new RegExp(CONTENT_ID, "ig");
+		 var oldId = "#" + CONTENT_ID + pageIndex;
 
 		 // get old content from page
 		 var oldContent = $(oldId);
-		 if(oldContent.length < 1 && oldId == '#pageContainer0'){
+		 if(oldContent.length < 1 && oldId == '#'+CONTENT_ID+'0'){
 			 //the ID of the first page (pageIndex 0) may have no number postfix
-			 // -> try without numer:
-			 if(IS_DEBUG_ENABLED) console.debug('PresentationManager.doRenderView: removing old content: no old centent found for old ID "'+oldId+'", trying "#pageContainer" instead...');//debug
-			 oldContent = $('#pageContainer');
+			 // -> try without number:
+			 if(IS_DEBUG_ENABLED) console.debug('PresentationManager.doRenderView: removing old content: no old centent found for old ID "'+oldId+'", trying "#'+CONTENT_ID+'" instead...');//debug
+			 oldContent = $('#' + CONTENT_ID);
 		 }
 
 		 //mark old content for removal
 		 afterViewLoadRemoveList.push(oldContent);
 
 		 ++pageIndex;
-		 var newId = "pageContainer" + pageIndex;
+		 var newId = CONTENT_ID + pageIndex;
 
 		 //TODO detect ID-attribute of content-TAG when layout is initialized instead of here
 		 layoutBody = layoutBody.replace(pg, newId);
@@ -335,35 +376,40 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 }
 		 var newPage = $(layoutBody);
 
+		 
 		 //trigger "before page loading" hooks on controller, if present/implemented: 
-		 ctrl.performIfPresent('before_page_load', data);//<- this is triggered for every view in the corresponding controller
-//		 ctrl.performIfPresent('before_page_load_'+viewName, data);//<- TODO should hooks for single/specific views be supported?
-
+		 isContinue = ctrl.performIfPresent('before_page_load', data, viewName);//<- this is triggered for every view in the corresponding controller
+		 if(isContinue === false){
+			 return;/////////////////////// EARLY EXIT ////////////////////////
+		 }
+		 
+		 isContinue = ctrl.performIfPresent('before_page_load_'+viewName, data);
+		 if(isContinue === false){
+			 return;/////////////////////// EARLY EXIT ////////////////////////
+		 }
+		 
 		 //'load' new content into the page (using jQuery mobile)
 		 newPage.appendTo($.mobile.pageContainer);
 
-		 //set transition options, if present:
-		 var changeOptions;
+		 //pass controller- and view-instance to "after page change" handler (jQuery Mobile specific!)
+		 var changeOptions = {};
+		 changeOptions[FIELD_NAME_VIEW] = view;
+		 changeOptions[FIELD_NAME_DATA] = data;
+		 changeOptions[FIELD_NAME_CONTROLLER] = ctrl;
+
+		 
+		 //set transition options, if present (jQuery Mobile specific!):
 		 if(data && typeof data.transition !== 'undefined'){
-			 changeOptions = {
-					 transition: data.transition
-			 };
+			 
+			 changeOptions.transition= data.transition;
 		 }
 		 if(data && typeof data.reverse !== 'undefined'){
-			 if(!changeOptions){
-				 changeOptions = {
-						 reverse: data.reverse
-				 };
-			 }
-			 else {
-				 changeOptions.reverse = data.reverse;
-			 }
+			 
+			 changeOptions.reverse = data.reverse;
 		 }
 		 
 
 		 //change visible page from old to new one (using jQuery mobile)
-         //jQuery Mobile <= 1.3.x API:
-//         $.mobile.changePage("#" + newId, changeOptions);
 		 
          //jQuery Mobile 1.4 API:
          var pageContainer = $(':mobile-pagecontainer');
@@ -373,32 +419,13 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
          pageContainer.pagecontainer('change', '#' + newId, changeOptions);
 
 
-         //trigger "after page loading" hooks on controller:
-         // the hook for all views of the controller MUST be present/implemented:
-		 ctrl.perform('on_page_load', data);
-		 //... the hook for single/specific view MAY be present/implemented:
-		 ctrl.performIfPresent('on_page_load_'+viewName, data);
-
-		 // =====================================================================
-//		 var debug = 0;//debug: set >= 1 for debugging
-//		 if (debug > 0){
-//			 var body_html_array = document.body.innerHTML.split("\n");
-//			 var head_html_array = document.head.innerHTML.split("\n");
-////			 var all = '<html>\n<head>\n'+document.head.innerHTML+'<body>\n'+document.body.innerHTML+'</body>\n</html>\n';
-//			 console.log("=== ===================== html start ===================== ===");
-//			 console.log("<html>\n<head>\n");
-//			 for (var a in head_html_array){
-//				 console.log(head_html_array[a]+"\n");
-//			 }
-//			 console.log("</head>\n");
-//			 console.log("<!-- =====================    body   ===================== -->");
-//			 console.log("<body>\n");
-//			 for (var a in body_html_array){
-//				 console.log(body_html_array[a]+"\n");
-//			 }
-//			 console.log("</body>\n</html>\n");
-//			 console.log("<!-- ===================== html end  ===================== -->");
-//		 }
+         //FIX moved into doRemoveElementsAfterViewLoad()-handler (if transition-animation is used, these must be called from handler!)
+//         //trigger "after page loading" hooks on controller:
+//         // the hook for all views of the controller MUST be present/implemented:
+//		 ctrl.perform('on_page_load', data);
+//		 //... the hook for single/specific view MAY be present/implemented:
+//		 ctrl.performIfPresent('on_page_load_'+viewName, data);
+		 
 	 };
 
 	 
