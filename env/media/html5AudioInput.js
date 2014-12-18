@@ -156,7 +156,7 @@ newMediaPlugin = {
           			//FIXME debug output:
           			console.debug('HTML5-Speech-Recoginition_received ASR: '+jsonText );
 		      		if(jsonText && jsonText.length > 0){//FIXME
-		      				 var jsonResponse = jQuery.parseJSON(jsonText );
+		      				 var jsonResponse = JSON.parse(jsonText);
 		      				 if (jsonResponse.hypotheses.length>0){
 		      					 if(textProcessor){
 		      						 textProcessor(jsonResponse.hypotheses[0].utterance, id);
