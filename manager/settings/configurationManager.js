@@ -45,6 +45,7 @@ define(['constants', 'jquery' ],
 	 * @category core
 	 * 
 	 * @depends jQuery.ajax
+	 * @depends jQuery.isArray
 	 * 
 	 */
 	function (

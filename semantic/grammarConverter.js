@@ -38,8 +38,8 @@
 * @constructor
 * @category core
 * 
-* @requires mmir.CommonUtils#isArray
-* @requires jQuery#ajax
+* @requires mmir.CommonUtils.isArray
+* @requires jQuery.ajax
 */
 define(['commonUtils', 'jquery'], function(commonUtils, $){
 

@@ -12,7 +12,9 @@
  *  
  *  <code>mmir.parser.CLASS_EXTENDER.extend(obj1, obj2)</code>
  * 
- * @module mobileDS.tools
+ * @module mmir.tools
+ * 
+ * @depends jQuery.extend
  * 
  */
 

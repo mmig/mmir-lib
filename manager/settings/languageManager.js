@@ -44,6 +44,11 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 	 * @depends mmir.Constants
 	 * @depends mmir.CommonUtils
 	 * @depends mmir.SemanticInterpreter
+	 * 
+	 * 
+     * @depends jQuery.Deferred
+     * @depends jQuery.ajax
+     * 
 	 */
 	function( 
 			constants, configurationManager, commonUtils, semanticInterpreter

@@ -158,6 +158,11 @@ require.config({
 	
 });//END: require.config({...
 
+
+/** 
+ * @depends jQuery#selector
+ * @depends jQuery.appendTo
+ */
 //FIXME see remark above for shim::presentationManager
 // -> QUICKFIX define the CSS dependency here:
 define('jqmCss', ['jquery'], function loadJqmCss($) {

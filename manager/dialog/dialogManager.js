@@ -53,6 +53,11 @@ define([  'core', 'jquery'
 	 * @depends mmir.ControllerManager
 	 * @depends mmir.PresentationManager
 	 * @depends mmir.ModelManager
+	 * 
+	 * 
+     * @depends jQuery.Deferred
+     * @depends jQuery.extend
+     * 
 	 */
 	function(
 			mmir, $, 

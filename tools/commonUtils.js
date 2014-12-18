@@ -38,15 +38,22 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 	 * @category core
 	 * 
 	 * 
-	 * @depends StringExtensions
-	 * @depends Constants (optionally: jQuery)
-	 * @depends mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
-	 * 
 	 * @class
 	 * @name mmir.CommonUtils
 	 * @static
 	 * 
 	 * @public
+	 * 
+	 * @depends StringExtensions
+	 * @depends Constants (optionally: jQuery)
+	 * @depends mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
+	 * 
+     * @depends jQuery.isArray	 in #isArrayHelper
+     * @depends jQuery.Deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
+     * @depends jQuery.ajax		 in #loadDirectoryStructure
+     * 
+     * 
+     * @depends jQuery	 in #resizeFitToSourroundingBox
 	 */
 	function(
 		constants, stringExt, $, paramsParseFunc

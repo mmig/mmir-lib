@@ -24,6 +24,9 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ *  @depends jQuery.extend
+ */
 
 //FIXME hidden dependencies:
 //  * plugins.queuePlugin: needed for Cordova/Android -> Cordova plugin for execution queue (make this explicitly required?)

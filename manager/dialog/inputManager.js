@@ -47,6 +47,10 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig' ],
 	 * @static
 	 * @class
 	 * 
+	 * 
+     *  @depends jQuery.Deferred
+     *  @depends jQuery.extend
+	 * 
 	 */
 	function(
 		mmir, $, commonUtils,module, engineConfig

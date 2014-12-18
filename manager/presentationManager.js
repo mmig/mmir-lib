@@ -45,6 +45,20 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      *  TODO check for other dependencies on 3rd party libraries (& add missing entries)
      *  
      *  @depends document (DOM object)
+     *  
+     *  @depends jQuery.Deferred
+     *  @depends jQuery.ajax
+     *  @depends jQuery.each
+     *  
+     *  @depends jQuery.parseHTML
+     *  @depends jQuery#selector
+     *  
+     *  @depends jQueryMobile.defaultPageTransition
+     *  @depends jQueryMobile.pageContainer
+     *  @depends jQueryMobile.loading
+     *  @depends jQueryMobile.pageContainer
+     *  
+     *  @depends jQuerySimpleModalDialog
      */
     function ( controllerManager, constants, commonUtils, configurationManager, renderUtils
     		, Layout, View, Partial, Dictionary, checksumUtils, languageManager
