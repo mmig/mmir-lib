@@ -26,7 +26,7 @@
 
 
 
-define( [ 'dictionary', 'constants', 'commonUtils' ],
+define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	/**
 	 * 
 	 * A class for managing the models of the application (MVC-Component). <br>
@@ -43,9 +43,11 @@ define( [ 'dictionary', 'constants', 'commonUtils' ],
 	 * @static
 	 * @category core
 	 * 
+	 * @depends jQuery.Deferred
+	 * 
 	 */
 	function( 
-    		Dictionary,  constants, commonUtils
+    		Dictionary,  constants, commonUtils, $
 ){
 	//next 2 comments are needed by JSDoc so that all functions etc. can
 	// be mapped to the correct class description

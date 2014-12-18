@@ -1,7 +1,11 @@
 ﻿
+/**
+ *  @depends jQuery.Deferred
+ */
+
 //TODO doc
 
-define(['scion', 'scionUtil'], function( scion, scionUtil ) {
+define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
 
 //    var _instance = null;
 
