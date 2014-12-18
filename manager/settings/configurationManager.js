@@ -278,9 +278,13 @@ define(['constants', 'jquery' ],
                 			}
                 		}
                 		
-                		//ASSERT now: path.length == 1
+                		//ASSERT now: path.length === 1
                 		
+                		if(typeof obj[path[0]] === 'undefined'){
+                			return defaultValue;///////////// EARLY EXIT /////////////////////
+                		}
                 		return obj[path[0]];
+                		
                 	}
             	}
             	
