@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.1.0)
+version notes for MMIR framework code (v 3.1.1)
 
  * using Cordova 3.5.x library
  * using jQuery 1.11.x library
@@ -22,6 +22,27 @@ version notes for MMIR framework code (v 3.1.0)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.1.1
+##################
+ 
+API CHANGES (additions):
+
+* added (optional) hooks for controllers: "before_page_prepare" and "before_page_prepare_<ctrl name>" which get called before view-templates are prepared for showing (i.e. before dynamic content in views is rendered)
+  * call-order for hooks is: (1) before_page_prepare*, (2) before_page_load*, (3) on_page_load*
+* controller hooks "on_page_load", "before_page_load", "before_page_prepare" are invoked with additional argument viewName (STRING), e.g. on_page_load(data, viewName)
+* for controller hooks before_* now the return value is evaluated: if present and false (BOOLEAN), then rendering is aborted, i.e. view will not be rendered
+
+* controller.perform now allows 1 additional argument, e.g. perform('action-name', data, ADDITIONAL_ARG)
+
+* GrammarConverter.loadGrammar: the callback functions are now called in context of the GrammarConverter instance and with additional arguments (e.g. in case of error)
+
+----
+
+* REFACTORED element ID for main pageContainer (in index.html) is now defined as private constant CONTENT_ID (in PresentationManager)
+
+* BUGFIX ConfigurationManager.get: defaultValue is now handled correctly
 
 ##################
  Version 3.1.0
