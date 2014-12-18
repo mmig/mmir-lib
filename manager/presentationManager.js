@@ -212,24 +212,28 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      	var view = data.options[FIELD_NAME_VIEW];
      	var renderData = data.options[FIELD_NAME_DATA];
      	
-     	//FIX handle missing view parameter gracefully 
+     	//FIX handle missing ctrl/view parameter gracefully 
      	//     this may occur when doRemoveElementsAfterViewLoad is 
      	//     triggered NOT through doRenderView but by some automatic
      	//	   mechanism, e.g. BACK history event that was not handled
      	//	   by the framework (which ideally should not happen ...)
      	var viewName;
-     	if(view && view.getName){
+     	if(view){
      		viewName = view.getName();
      	}
-     	else {
-     		console.error('PresentationManager.__doRemoveElementsAfterViewLoad: missing parameters for view-name',data.options);
+     	
+     	if(!ctrl){
+     		console.error('PresentationManager.__doRemoveElementsAfterViewLoad: missing controller (and view)!',data.options);
+     		return;
      	}
      	
         //trigger "after page loading" hooks on controller:
         // the hook for all views of the controller MUST be present/implemented:
 		ctrl.perform('on_page_load', renderData, viewName);
 		//... the hook for single/specific view MAY be present/implemented:
-		ctrl.performIfPresent('on_page_load_'+viewName, renderData);
+		if(view){
+			ctrl.performIfPresent('on_page_load_'+viewName, renderData);
+		}
 		
      };
      
