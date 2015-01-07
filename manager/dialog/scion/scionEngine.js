@@ -36,6 +36,12 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
             scion.urlToModel(_url, function(err, model) {
 
                 if (err) {
+                	
+                	var url = '';
+                	var printError = function(){console.error('error for model ',_url, ': ', (url? 'could not load "' + url + '", ' : ''), err, model);};
+                	if(err.always) err.always(function(){url = this.url; printError();});
+                	else printError();
+                	
                     alert('SCXML is not valid!');
                     return;
                 }
