@@ -60,6 +60,16 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, 
 
     		onload : function(scion, deferred) {
 
+    			//FIX (russa) for jQuery > 2.x: extend() uses isPlainObject(), which's impl. changed in 2.x
+    			//                  -> isPlainObject() now requires a constructor that is different from the native Object.constructor
+    			//					   in order to be able to detect, that an object is NOT a plain object
+    			//					   ... but scion does not provide such a non-native constructor for its _scion property
+    			//					   (which causes deep-copy in extend() to run into an infinite loop)
+    			// QUICK-FIX: just attach a dummy constructor function, so that isPlainObject will correctly detect property
+    			//            _scion as not-a-plain-object (this should really be FIXed in the scion library itself...)
+    			//
+    			//TODO russa: check if we really need a deep copy here (maybe we should make a copy TO scion and replace _instance with the ext. scion obj. ...?)
+    			scion['_scion'].constructor = function dummy(){};
     			$.extend(true, _instance, scion);
 
     			_instance.worker = (function(gen) {
