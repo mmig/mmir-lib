@@ -10,8 +10,8 @@
  * <h3>Side Effects</h3>
  * <ul>
  * 	<li>loads the jQuery Mobile CSS file</li>
- * 	<li>defines and loads the RequireJS ID "jqm" (jQuery Mobile)</li>
- * 	<li>defines and loads the RequireJS ID "jqmSimpleModal" (jQuery Mobile plugin SimpleModal)</li>
+ * 	<li>loads the RequireJS module "jqm" (i.e.: jQuery Mobile)</li>
+ * 	<li>loads the RequireJS module "jqmSimpleModal" (i.e.: jQuery Mobile plugin SimpleModal)</li>
  * </ul>
  * 
  * @example
@@ -46,22 +46,6 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 
 	//load CSS for jQuery Mobile:
 	loadCss('mmirf/vendor/styles/jquery.mobile-1.4.3.min.css');
-	
-	require.config({
-		paths:{
-			'jqm' : 			'vendor/libs/jquery.mobile-1.4.3',
-			'jqmSimpleModal':	'vendor/libs/jquery.simplemodal-1.4.4'
-		}//,
-	
-		//DISABLED russa: technically, we need jQuery as dependency, but since we already 
-		//				  have requested jQuery in the definition of this module, we can
-		//				  omit the shim-definitions that would specify jQuery as dependency.
-//		shim : {
-//		      'jqm': ['jquery'],
-//    		  'jqmSimpleModal': ['jquery']
-//		}
-		
-	});
 	
 	var promise = jquery.Deferred();
 	

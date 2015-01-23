@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.3.0)
+version notes for MMIR framework code (v 3.3.1)
 
  * using Cordova 3.5.x library
  * using jQuery 2.1.x library
@@ -22,6 +22,13 @@ version notes for MMIR framework code (v 3.3.0)
  --------------
  Change Log
  --------------
+ 
+##################
+ Version 3.3.1
+##################
+
+BUGFIX changes to make ANT script mmir-parse.xml work again:
+moved requirejs.config for "jqm" and "jqmSimpleModal" to the mainConfig.js again
 
 ##################
  Version 3.3.0

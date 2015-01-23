@@ -64,6 +64,10 @@ require.config({
 	    
 	    //default view-engine (this ID is used in core.viewEngine)
 	    , 'jqmViewEngine': 'env/view/jqmViewEngine'
+	    
+	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
+		, 'jqm' : 			'vendor/libs/jquery.mobile-1.4.3'
+		, 'jqmSimpleModal':	'vendor/libs/jquery.simplemodal-1.4.4'
 
 	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
 	    , 'antlr3' : 'vendor/libs/antlr3-all'
@@ -148,6 +152,10 @@ require.config({
     	, 'contentParser':  {deps: ['antlr3'], exports: 'MmirScriptContentParser'}
     	, 'templateLexer':  {deps: ['antlr3'], exports: 'MmirTemplateLexer'}
     	, 'templateParser': {deps: ['antlr3'], exports: 'MmirTemplateParser'}
+    	
+    	//dependencies for jqmViewEngine (may not be loaded if jqmViewEngine is not loaded)
+    	, 'jqm': ['jquery']
+    	, 'jqmSimpleModal': ['jqm']
 	}
 	
 });//END: require.config({...
