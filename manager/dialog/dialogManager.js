@@ -187,19 +187,7 @@ define([  'core', 'jquery'
 		 * @public
 		 */
 		showDialog : function(ctrlName, dialogId, data) {
-
-//			var eventData;
-//			if (data) {
-//				if (!data.evtdata) {
-//					eventData = { evtdata: data };
-//				}
-//				else {
-//					eventData = data;
-//				}
-//			}
-//			writeLogEntry('showDialog_'+ctrlName+'_'+dialogId, eventData); FIXME disabled logging for BROWSER (how could this be accomplished in Browser?)
-
-			presentationManager.showDialog(ctrlName, dialogId, data);
+			presentationManager.showDialog.apply(presentationManager, arguments);
 		},
 
 		/**
@@ -211,10 +199,7 @@ define([  'core', 'jquery'
 		 * @public
 		 */
 		hideCurrentDialog : function() {
-
-//			writeLogEntry('hideCurrentDialog'); FIXME disabled logging for BROWSER (how could this be accomplished in Browser?)
-
-			presentationManager.hideCurrentDialog();
+			presentationManager.hideCurrentDialog.apply(presentationManager, arguments);
 		},
 		/**
 		 * Shows a "wait" dialog, indicating work-in-progress.
@@ -223,12 +208,6 @@ define([  'core', 'jquery'
 		 * {@link mmir.PresentationManager#showWaitDialog}
 		 * (see documentation in <code>PresentationManager</code>
 		 *  for parameters).
-		 * NOTE: the context for the function-call (i.e. <code>this</code>)
-		 *       is the DialogManager instead of the PresentationManager,
-		 *       when called from here! 
-		 * 
-		 * 
-		 * 
 		 * 
 		 * @function showWaitDialog
 		 * 
@@ -238,17 +217,7 @@ define([  'core', 'jquery'
 		 * @see mmir.PresentationManager#hideWaitDialog
 		 */
 		showWaitDialog : function(text, theme) {
-
-//			if ($('.ui-loading').length == 0) {
-//				//only write log-entry, if waiting-dialog is newly opened with this call
-////				console.debug('[DEBUG] show loading');//FIXM debug
-////				writeLogEntry('showWaitingDialog'); FIXME disabled logging for BROWSER (how could this be accomplished in Browser?)
-//			}
-			
-			//TODO should this function be called really in context of the DialogManager? 
-			//     (but otherwise we cannot use .apply(), thus not forward the arguments generically...)
-			
-			presentationManager.showWaitDialog.apply(this, arguments);
+			presentationManager.showWaitDialog.apply(presentationManager, arguments);
 		},
 
 		/**
@@ -259,10 +228,6 @@ define([  'core', 'jquery'
 		 * {@link mmir.PresentationManager#hideWaitDialog}
 		 * (see documentation in <code>PresentationManager</code>
 		 *  for parameters).
-		 * NOTE: the context for the function-call (i.e. <code>this</code>)
-		 *       is the DialogManager instead of the PresentationManager,
-		 *       when called from here!
-		 *  
 		 *  
 		 * @function hideWaitDialog
 		 * @public
@@ -271,24 +236,18 @@ define([  'core', 'jquery'
 		 * @see mmir.PresentationManager#showWaitDialog
 		 */
 		hideWaitDialog : function() {
-
-//			if ($('.ui-loading').length > 0) {
-//				//only write log-entry, if waiting-dialog is currently open
-////				writeLogEntry('closeWaitingDialog'); FIXME disabled logging for BROWSER (how could this be accomplished in Browser?)
-//			}
-			
-			//TODO should this function be called really in context of the DialogManager? 
-			//     (but otherwise we cannot use .apply(), thus not forward the arguments generically...)
-			presentationManager.hideWaitDialog.apply(this, arguments);
-
+			presentationManager.hideWaitDialog.apply(presentationManager, arguments);
 		},
 
 		/**
 		 * This function displays a view of a controller by calling the
 		 * method {@link mmir.PresentationManager#renderView} of the
-		 * {@link mmir.PresentationManager}.<br>
-		 * And after rendering binds event listeners to all buttons of
-		 * the view.
+		 * {@link mmir.PresentationManager}.
+		 * <br>
+		 * And after rendering, the function set via #setOnPageRenderedHandler will
+		 * called in context of the controller instance with arguments:
+		 * <code>Controller.onPageRenderedFunc(ctrlName, viewName, data)</code>
+		 * 
 		 * 
 		 * @function render
 		 * @param {String}
@@ -303,18 +262,11 @@ define([  'core', 'jquery'
 		 */
 		render : function(ctrlName, viewName, data) {
 			
-			//@russa: what is this for
-//			var _data = {};
-//			_data.timestamp = new Date().getTime();
-//			_data.ctrl = ctrlName;
-//			_data.name = viewName;
-//			_data.args = data;
-			
 			presentationManager.renderView(ctrlName, viewName, data);
 
 			if (typeof onPageRenderedFunc === 'function') {
-				
-				onPageRenderedFunc(ctrlName, viewName, data);
+				var ctrl = controllerManager.getController(ctrlName);
+				onPageRenderedFunc.call(ctrl, ctrlName, viewName, data);
 			}
 		},
 		/**
