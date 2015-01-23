@@ -844,7 +844,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    			 
 	    			var dataArgs = createInternalData(data);
 	    			
-	    			return renderContentElement(contentElement, renderingBuffer, dataArgs);
+	    			return renderContentElement(htmlContentString, renderingBuffer, dataArgs);
 	    		},
 	    		
 	    		/**
