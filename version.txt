@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.2.0)
+version notes for MMIR framework code (v 3.3.0)
 
  * using Cordova 3.5.x library
  * using jQuery 2.1.x library
@@ -22,6 +22,19 @@ version notes for MMIR framework code (v 3.2.0)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.3.0
+##################
+
+Modularized the "view engine" from the PresentationManager (no API changes):
+the jQuery Mobile based view-engine can now be replaced with some other mechanism more easily.
+
+ * extracted all "view engine" code into separate module at mmirf/env/view/jqmViewEngine.js
+ * removed main dependencies for jQuery Mobile, jQuery Mobile SimpleDialog etc. to new module
+ * set default view-engine in property on core-module (i.e. global variable mmir):
+   * property: "viewEngine": "jqmViewEngine"
+ * TODO: extract template-parsing code into separate module
 
 ##################
  Version 3.2.0

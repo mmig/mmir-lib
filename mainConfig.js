@@ -32,7 +32,6 @@ require.config({
 	    // lib
  	    , 'jquery': 'vendor/libs/jquery-2.1.3'
  	    , 'scion': 'vendor/libs/scion-amd'
-// 	    , 'cordova': 'vendor/libs/cordova-2.8.1'
 	    
 	    // globals and AMDs
  	    , 'constants': 'tools/constants'
@@ -63,8 +62,8 @@ require.config({
 	    
 	    , 'presentationManager':  'manager/presentationManager'
 	    
-	    , 'jqm': 'vendor/libs/jquery.mobile-1.4.3'
-	    , 'jqmSimpleModal': 'vendor/libs/jquery.simplemodal-1.4.4'
+	    //default view-engine (this ID is used in core.viewEngine)
+	    , 'jqmViewEngine': 'env/view/jqmViewEngine'
 
 	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
 	    , 'antlr3' : 'vendor/libs/antlr3-all'
@@ -134,10 +133,8 @@ require.config({
 	},//END: paths : {...
 
 	shim : {
-	    
-	      'jqm':            ['jquery']
-	    
-	    , 'antlr3':         {exports : 'org'}
+		
+	    'antlr3':         {exports : 'org'}
 		
 		, 'md5':            {exports : 'CryptoJS'}
 		
@@ -151,32 +148,9 @@ require.config({
     	, 'contentParser':  {deps: ['antlr3'], exports: 'MmirScriptContentParser'}
     	, 'templateLexer':  {deps: ['antlr3'], exports: 'MmirTemplateLexer'}
     	, 'templateParser': {deps: ['antlr3'], exports: 'MmirTemplateParser'}
-    	
-    	//TODO implement explicit mechanism for declaring & loading dependencies (JS & CSS)
-    	//QUICKFIX hardcode impl.-specific dependencies here:
-    	, 'presentationManager': ['jqmCss', 'jqmSimpleModal']
-
 	}
 	
 });//END: require.config({...
-
-
-/** 
- * @depends jQuery#selector
- * @depends jQuery.appendTo
- */
-//FIXME see remark above for shim::presentationManager
-// -> QUICKFIX define the CSS dependency here:
-define('jqmCss', ['jquery'], function loadJqmCss($) {
-	
-	$("<link/>", {
-	    rel: "stylesheet",
-	    type: "text/css",
-	    href: "mmirf/vendor/styles/jquery.mobile-1.4.3.min.css"
-	}).appendTo("head");
-	
-});
-
 
 require(['core'], function(core){
 	var startModule = core.startModule;

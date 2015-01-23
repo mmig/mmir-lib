@@ -175,7 +175,21 @@ function initMmir() {
 			 * @default "main" will load the module specified in main.js
 			 * @public
 			 */
-			startModule: 'main'
+			startModule: 'main',
+
+			/**
+			 * Name / ID / load-path (requirejs) for the module
+			 * that handles the views (i.e. "rendering" that is
+			 * change from one view to the next).
+			 * 			 
+			 * @memberOf mmir
+			 * @name viewEngine
+			 * @property
+			 * @type String
+			 * @default "jqmViewEngine" will load the default view-engine that uses jQuery Mobile
+			 * @public
+			 */
+			viewEngine: 'jqmViewEngine'
 	};
 	
 	if(typeof define === 'function'){
