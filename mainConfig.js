@@ -30,7 +30,7 @@ require.config({
  	    , 'main': 'main'
  	    
 	    // lib
- 	    , 'jquery': 'vendor/libs/jquery-1.11.1'
+ 	    , 'jquery': 'vendor/libs/jquery-2.1.3'
  	    , 'scion': 'vendor/libs/scion-amd'
 // 	    , 'cordova': 'vendor/libs/cordova-2.8.1'
 	    

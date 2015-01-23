@@ -1,8 +1,8 @@
 ﻿
-version notes for MMIR framework code (v 3.1.1)
+version notes for MMIR framework code (v 3.2.0)
 
  * using Cordova 3.5.x library
- * using jQuery 1.11.x library
+ * using jQuery 2.1.x library
  * using jQuery Mobile 1.4.x library
  
  
@@ -22,6 +22,23 @@ version notes for MMIR framework code (v 3.1.1)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.2.0
+##################
+
+ * updated jQuery to version 2.1.3
+
+ * added utility function for loading CSS files (that is: for creating LINK tags), as module "loadCss":
+   * module impl. at mmirf/tools/loadCss.js
+   * use by require'ing the module, e.g.: require(['loadCss'], function(loadCss){ loadCss('some.css'); });
+
+ * FIX scionEngine
+	* avoid endless recursion/loop when copying the scion instance with jQuery version >= 2.x
+	* extended error information
+
+ * MODIFICATION PresentationManager
+    * processing of hook-invocation on Controllers (on_page_load, before_page_load, etc) is handled more gracefully (no error if some parameters are missing) 
 
 ##################
  Version 3.1.1
