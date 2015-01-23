@@ -125,6 +125,8 @@ require.config({
 		, 'md5' : 'vendor/libs/md5'
 		, 'checksumUtils' : 'tools/checksumUtils'
 
+		//utility function for loading LINK tags (i.e. CSS files) into the current document
+		, 'loadCss' : 'tools/loadCss'
 
 	    , 'commonUtilsCompatibility' : 'tools/extensions/CommonUtilsCompatibility'
 	    , 'languageManagerCompatibility' : 'tools/extensions/LanguageManagerCompatibility'
