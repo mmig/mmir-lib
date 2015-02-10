@@ -31,11 +31,18 @@
 //FIXME hidden dependencies:
 //  * plugins.queuePlugin: needed for Cordova/Android -> Cordova plugin for execution queue (make this explicitly required?)
 //
-define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, $) {
+define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEngine, $) {
 
-//	var _instance = null;
+	
+	var printDebugStates = function(ctx){
+		ctx._log.debug(ctx.name, 'current state: ' + JSON.stringify(ctx.getStates()));
+		ctx._log.debug(ctx.name, 'active states: ' + JSON.stringify(ctx.getActiveStates()));
+		ctx._log.debug(ctx.name, 'active events: ',+ JSON.stringify(ctx.getActiveEvents()));
+		ctx._log.debug(ctx.name, 'active transitions: '+ JSON.stringify(ctx.getStates()) + ":"+ JSON.stringify(ctx.getActiveTransitions()));
+	};
 
-    var _browser = function(_instance){ return {
+//	var _browser = function(_instance){ return {
+    var _defaultFactory = function(_instance, envFactory){ return {
 
     		name : 'extended_engine',
 
@@ -43,15 +50,8 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, 
 
     		onraise : function() {
 
-    			if (IS_DEBUG_ENABLED) {
-    				
-    				console.debug('[%s] current state:', _instance.name, _instance.getStates());// debug
-
-    				console.debug('[%s] active states:', _instance.name, _instance.getActiveStates());// debug
-
-    				console.debug('[%s] active events:', _instance.name, _instance.getActiveEvents());// debug
-
-    				console.debug('[%s] active transitions:', _instance.name, _instance.getStates() + ":"+ JSON.stringify(_instance.getActiveTransitions()));// debug
+    			if (this._log.isd()) {
+    				printDebugStates(_instance);
     			};
 
     		},
@@ -72,33 +72,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, 
     			scion['_scion'].constructor = function dummy(){};
     			$.extend(true, _instance, scion);
 
-    			_instance.worker = (function(gen) {
-    				
-    				var scionQueueWorker = new Worker(
-    						constants.getWorkerPath()+ 'ScionQueueWorker.js'
-    				);
-    				
-    				scionQueueWorker.onmessage = function(e) {
-    					
-    					if (e.data.command == "toDo") {
-    						
-    						console.log('raising:' + e.data.toDo.event);//FIXME DEBUG
-    						
-    						gen(e.data.toDo.event, e.data.toDo.eventData);
-
-    						// @chsc03: attention if something goes wrong along the transition,
-    						// the worker is not ready for any incoming jobs
-    						_instance.worker.postMessage({
-    							command : 'readyForJob'
-    						});
-
-    						_instance.onraise();
-    					}
-    				};
-
-    				return scionQueueWorker;
-    				
-    			}(_instance.gen));
+    			_instance.worker = envFactory.createWorker(_instance, _instance.gen);//_instance._genFuncFactory(_instance, _instance.gen);
 
     			//FIXME @russa: is this a general functionality? should this be removed?
     			if (!_instance.evalScript){
@@ -113,201 +87,191 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, 
     			deferred.resolve(_instance);
     			
     		},//END: onload
-
-    		raise : function(event, eventData) {
-
-    			if (eventData)
-    				console.log('new Job:' + event);
-
-    			_instance.worker.postMessage({
-    				command : 'newJob',
-    				job : {
-    					event : event,
-    					eventData : eventData
-    				}
-    			});
-    		}
+    		
+    		raise: envFactory.createRaise(_instance)
     	};
     };
     
+    
+    var _browserFactory = {
+		createWorker: function(_instance, gen) {
 
-	var _createCordovaRaiseFunc = (function(){
-		
-		//"global" queue (i.e. queue for all engines)
-		var callBackList = [];
-		
-		function successCallBackHandler(args){
-			if (args.length=2){
-//    			console.debug('QueuePlugin: success '+ JSON.stringify(args[0]) + ', '+JSON.stringify(args[1]));
-				callBackList[args[0]](args[1]);
-			}
+			var scionQueueWorker = new Worker(
+					constants.getWorkerPath()+ 'ScionQueueWorker.js'
+			);
+
+			scionQueueWorker.onmessage = function(e) {
+
+				if (e.data.command == "toDo") {
+
+					_instance._log.debug('raising:' + e.data.toDo.event);
+
+					gen(e.data.toDo.event, e.data.toDo.eventData);
+
+					// @chsc03: attention if something goes wrong along the transition,
+					// the worker is not ready for any incoming jobs
+					this.postMessage({
+						command : 'readyForJob'
+					});
+
+					_instance.onraise();
+				}
+			};
+
+			return scionQueueWorker;
+
+		},
+		createRaise: function(_instance){
+			return function(event, eventData) {
+
+				if (eventData){
+					this._log.debug('new Job:' + event);
+				}
+
+				_instance.worker.postMessage({
+					command : 'newJob',
+					job : {
+						event : event,
+						eventData : eventData
+					}
+				});
+			};
 		}
-		return{
-	    	newSCIONExtension: function(_instance, gen, failureCallBack){
-	    		var id = callBackList.length;
-	    		callBackList.push(function(data){
-//	    				console.log('raising:'+ data.event);
-	    				var generatedState = gen(data.event, data.eventData);
-//	    				console.debug('QueuePlugin: processed event '+id+' for '+ data.event+' -> new state: '+JSON.stringify(generatedState)+ ' at ' + _instance.url);
-	    				plugins.queuePlugin.readyForJob(id, successCallBackHandler, failureCallBack);
-	    				
-	    				_instance.onraise();
-	    		});
-	    		plugins.queuePlugin.newQueue(id, function(args){
-	    				console.debug('QueuePlugin: entry '+id+' created.' + ' at ' + _instance.url);
-	    			},failureCallBack
-	    		);
-	    		
-	    		return {
-	    			raiseCordova: function (event, eventData){
-//		    			console.debug('QueuePlugin: new Job: '+ id + ' at ' + _instance.url);
-		    			plugins.queuePlugin.newJob(id, {event: event, eventData: eventData}, successCallBackHandler,failureCallBack);
-		    		}
-	    		};
-	    	}
-		};//END: return
-	})();//END: _createCordovaRaiseFunc
-	
-    var _cordova = function(_instance){ return {
 
-    		name : 'extended_engine',
+    };
+    
+    var _androidFactory = {
+		createWorker: (function initWorkerFactory() {
 
-    		doc : null,
+			//"global" ID-list for all queues (i.e. ID-list for all engines)
+			var callBackList = [];
 
-    		onraise : function() {
+			function successCallBackHandler(args){
+				if (args.length=2){
+//  				console.debug('QueuePlugin: success '+ JSON.stringify(args[0]) + ', '+JSON.stringify(args[1]));//DEBUG
+					callBackList[args[0]](args[1]);
+				}
+			}
 
-    			if (IS_DEBUG_ENABLED) {
-    				
-    				console.debug('[%s] current state:', _instance.name, _instance.getStates());// debug
 
-    				console.debug('[%s] active states:', _instance.name, _instance.getActiveStates());// debug
 
-    				console.debug('[%s] active events:', _instance.name, _instance.getActiveEvents());// debug
+			return function workerFactory(_instance, gen){
 
-    				console.debug('[%s] active transitions:', _instance.name, _instance.getStates() + ":"+ JSON.stringify(_instance.getActiveTransitions()));// debug
-    			};
+				var id = callBackList.length;
 
-    		},
+				function failureFallbackHandler(err){
 
-    		evalScript : true,
-
-    		onload : function(scion, deferred) {
-
-    			$.extend(true, _instance, scion);
-
-    			_instance.worker = _createCordovaRaiseFunc.newSCIONExtension(_instance, _instance.gen, function(){
-    				
-    				console.error('failed to initialize SCION extension for ANDROID evn');
-    				_instance.worker = (function(gen){
-    					return { 
-    						raiseCordova: function fallback(event, eventData){
+					_instance._log.error('failed to initialize SCION extension for ANDROID evn');
+					_instance.worker = (function(gen){
+						return { 
+							raiseCordova: function fallback(event, eventData){
 								setTimeout(function(){
 									gen(event, eventData);
 								}, 1);
 							}
 						};
-    				})();//END: fallback
-    				
-    			});
-
-    			_instance.start();
-
-    			deferred.resolve(_instance);
-    			
-    		},//END: onload
-
-    		raise : function(event, eventData) {
-
-    			if (eventData)
-    				console.log('new Job:' + event);
-
-    			_instance.worker.raiseCordova(event, eventData);
-    		}
-    	};
-    };
-    
-    var _stub = function(_instance){ return {
-
-			name : 'extended_engine',
-	
-			doc : null,
-	
-			onraise : function() {
-	
-				if (IS_DEBUG_ENABLED) {
-					
-					console.debug('[%s] current state:', _instance.name, _instance.getStates());// debug
-	
-					console.debug('[%s] active states:', _instance.name, _instance.getActiveStates());// debug
-	
-					console.debug('[%s] active events:', _instance.name, _instance.getActiveEvents());// debug
-	
-					console.debug('[%s] active transitions:', _instance.name, _instance.getStates() + ":"+ JSON.stringify(_instance.getActiveTransitions()));// debug
-				};
-	
-			},
-	
-			evalScript : true,
-	
-			onload : function(scion, deferred) {
-	
-				$.extend(true, _instance, scion);
-	
-				_instance.worker = (function(gen) {
-					
-					return { 
-						raiseStubImpl: function fallback(event, eventData){
-							setTimeout(function(){
-								gen(event, eventData);
-							}, 1);
-						}
-					};
-					
-				}(_instance.gen));
-	
-				//FIXME @russa: is this a general functionality? should this be removed?
-				if (!_instance.evalScript){
-					_instance.ignoreScript();
+					})();//END: fallback
 				}
-	
-				// delete _instance.gen;
-				delete _instance.evalScript;
-	
-				_instance.start();
-	
-				deferred.resolve(_instance);
+
+				callBackList.push(function(data){
+					if(_instance._log.isv()) _instance._log.debug('raising:'+ data.event);
+					var generatedState = gen(data.event, data.eventData);
+					if(_instance._log.isv()) _instance._log.debug('QueuePlugin: processed event '+id+' for '+ data.event+' -> new state: '+JSON.stringify(generatedState)+ ' at ' + _instance.url);
+					plugins.queuePlugin.readyForJob(id, successCallBackHandler, failureFallbackHandler);
+
+					_instance.onraise();
+				});
+				plugins.queuePlugin.newQueue(id, function(args){
+					if(_instance._log.isv()) _instance._log.debug('QueuePlugin: entry '+id+' created.' + ' at ' + _instance.url);
+				}, failureFallbackHandler
+				);
+
+				return {
+					raiseCordova: function (event, eventData){
+						if(_instance._log.isv()) _instance._log.debug('QueuePlugin: new Job: '+ id + ' at ' + _instance.url);
+						plugins.queuePlugin.newJob(id, {event: event, eventData: eventData}, successCallBackHandler,failureFallbackHandler);
+					}
+				};
 				
-			},//END: onload
-	
-			raise : function(event, eventData) {
-	
-				if (eventData)
-					console.log('new Job:' + event);
-	
-				_instance.worker.raiseStubImpl(event, eventData);
-			}
-		};
+			};//END: workerFactory(_instance, gen)
+
+		})(),//END: initWorkerFactory()
+		
+		createRaise: function(_instance){
+			return function(event, eventData) {
+
+				if (eventData) _instance._log.log('new Job:' + event);
+
+				_instance.worker.raiseCordova(event, eventData);
+			};
+		}
+
     };
+
     
-    function getScionConfig(){
+    var _stubFactory = {
+		createWorker: function(_instance, gen) {
+
+			return { 
+				raiseStubImpl: function fallback(event, eventData){
+					setTimeout(function(){
+						gen(event, eventData);
+					}, 1);
+				}
+			};
+
+		},
+		createRaise: function(_instance){
+			return function(event, eventData) {
+
+				if (eventData) _instance._log.log('new Job:' + event);
+
+				_instance.worker.raiseStubImpl(event, eventData);
+			};
+		}
+    };
+
+    function getScionEnvFactory(){
     	
     	var hasWebWorkers = typeof window.Worker !== 'undefined';
     	
     	//TODO make this configurable? through ConfigurationManager?
     	if(hasWebWorkers){
-    		return _browser;
+    		return _browserFactory; //_browser;
     	}
     	else {
     		var isCordovaEnv = !constants.isBrowserEnv();
         	if(isCordovaEnv){
-        		return _cordova;
+        		return _androidFactory;//_cordova;
         	}
         	else {
-        		return _stub;
+        		return _stubFactory;//_stub;
         	}	
     	}
     	
     }
+    
+    //dummy logger that does nothing:
+    // the engine-creator should replace this with a "real" implementation
+    // e.g. something like this (see also init() in dialogManager):
+    //
+    //  engine = require('engineConfig')('some-url', 'some-mode');
+    //  engine._log = require('logger').create('my-module-id');
+    //
+    function noop(){};
+    function deny(){return false;};
+    var nolog = {
+    	d: noop,
+    	debug: noop,
+    	e: noop,
+    	error: noop,
+    	log: noop,
+    	error: noop,
+    	isVerbose: deny,
+    	isv: deny,
+    	isDebug: deny,
+    	isd: deny
+    };
     
 	return function(url, _mode) {
 
@@ -327,13 +291,16 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, scionEngine, 
 //			break;
 //		}
 		
-		var scionConfig = getScionConfig();
+		var baseFactory = _defaultFactory;
+		var scionEnvConfig = getScionEnvFactory();
 
-		var _instance = {url: url};
-		scionConfig = scionConfig(_instance);
+		var _instance = {url: url,_log: nolog};
+//		var scionConfig = scionEnvConfig(_instance);
+		var scionConfig = baseFactory( _instance,  scionEnvConfig);
 		
 		scionConfig.doc = url;
-		_instance = scionEngine(scionConfig, _instance);
+		_instance = createScionEngine(scionConfig, _instance);
+		
 		return _instance;
 	};
 
