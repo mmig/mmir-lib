@@ -11,13 +11,16 @@
  * @depends jQuery.Deferred
  * @depends jQuery.extend
  */
-define(['jison', 'constants', 'grammarConverter', 'jquery'], function(jison, constants, GrammarConverter, $){
+define(['jison', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'], function(jison, constants, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
 var deferred = $.Deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
+
+//init logger
+var logger = Logger.create(module);
 
 /**
  * The argument name when generating the grammar function:
@@ -369,7 +372,7 @@ var JisonGrammarConverterExt = {
 		var semantic = utterance_def.semantic,
 		variable_index, variable_name;
 		
-		if(IS_DEBUG_ENABLED) console.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
+		if(logger.isDebug()) logger.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
 		
 		var semantic_as_string = JSON.stringify(semantic);
 		if( semantic_as_string != null){
@@ -379,7 +382,7 @@ var JisonGrammarConverterExt = {
 			var variable = variables[1],
 			remapped_variable_name = "";
 			
-			if(IS_DEBUG_ENABLED) console.debug("variables " + variable, semantic_as_string);//debug
+			if(logger.isDebug()) logger.debug("variables " + variable, semantic_as_string);//debug
 			
 			variable_index = /\[(\d+)\]/.exec(variable);
 			variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];

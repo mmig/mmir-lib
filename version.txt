@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.3.1)
+version notes for MMIR framework code (v 3.4.0)
 
  * using Cordova 3.5.x library
  * using jQuery 2.1.x library
@@ -22,7 +22,32 @@ version notes for MMIR framework code (v 3.3.1)
  --------------
  Change Log
  --------------
- 
+
+##################
+ Version 3.4.0
+##################
+
+Logging:
+ * added logger factory
+ * extended core.js and mainConfig.js for setting up logger factory
+   * enable / disable logging (through the factory) completely
+   * set the default log-level
+ * simplified function for creating a logger for a requirejs module
+   * uses module's ID as logger-name
+   * uses module-specific log-level for the module, if defined in requirejs' config (see mainConfig.js for examples)
+ * FIX removed variable IS_DEBUG_ENABLED (using logging factory instead)
+ * TODO add "trace mode" for logger (i.e. log from where the logger functions were called) 
+ * TODO replace console.log() etc with logger calls
+
+PresentationManager:
+ * added function callRenderEngine: allows to call custom functions on specific implementations of the rendering-engine
+
+loadCss (tools):
+ * extended API: now, alternatively, an options-object can be used as arguments; options are added as attributes to the created link
+
+webkitAudioInput (env/media):
+ * added "mic-levels" / RMS calculation using the microphone input (getUserMedia)
+
 ##################
  Version 3.3.1
 ##################

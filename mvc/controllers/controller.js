@@ -25,14 +25,16 @@
  */
 
 
-define ( [ 'commonUtils', 'helper' ],
+define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	/**
 	 * @name Controller
 	 * @class
 	 */
 	function (
-			commonUtils, Helper
+			commonUtils, Helper, Logger, module
 ){
+	
+	var logger = Logger.create(module);
 	
 	/** @scope Controller.prototype */
 	/**
@@ -152,11 +154,11 @@ define ( [ 'commonUtils', 'helper' ],
 		//get contents of the helper directory:
 		var dirContents = commonUtils.getDirectoryContents(path);
 		if(!dirContents){
-			console.warn('Could not determine contents for directory "'+path+'"');
+			logger.warn('Could not determine contents for directory "'+path+'"');
 			return; ////////////////////// EARLY EXIT //////////////////////////////
 		}
 		else if(! commonUtils.isArray(dirContents) || dirContents.length < 1){
-			console.warn('Invalid information for contents of directory "'+path+'": '+dirContents);
+			logger.warn('Invalid information for contents of directory "'+path+'": '+dirContents);
 			return; ////////////////////// EARLY EXIT //////////////////////////////
 		}
 		
@@ -170,20 +172,20 @@ define ( [ 'commonUtils', 'helper' ],
 		}
 		
 		if( ! helperIsSpecified){
-			if(IS_DEBUG_ENABLED) console.debug("[HELPER] no helper available (not implemented) at '"+ helperPath+"'");//debug
+			if(logger.isVerbose()) logger.v("[HELPER] no helper available (not implemented) at '"+ helperPath+"'");
 			return; ////////////////////// EARLY EXIT //////////////////////////////
 		}
 		
 		//if there is a file: load the helper
 		commonUtils.getLocalScript(helperPath, function(data, textStatus, jqxhr){
 			
-				if(IS_DEBUG_ENABLED) console.debug("[HELPER] load "+ helperPath);//debug
+				if(logger.isVerbose()) logger.v("[HELPER] load "+ helperPath);//debug
 				
 				self.helper =   new Helper(self, name);//new window["GoogleMapHelper"]();
 			},
 			function(exception) {
 				// print out an error message
-				console.warn("[WARN] Could not load helper -> " + exception + ": '" + helperPath + "'"); //failure
+				logger.error("[WARN] Could not load helper -> '"+ helperPath + "'", exception); //failure
 			}
 		);
 	};
@@ -201,7 +203,7 @@ define ( [ 'commonUtils', 'helper' ],
 	 */
 	Controller.prototype.perform = function(actionName, data){
 		
-		if(IS_DEBUG_ENABLED) console.debug("should perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
+		if(logger.isVerbose()) logger.v("should perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		
 	    if(arguments.length > 2){
 	    	return this.script[actionName](data, arguments[2]);
@@ -227,14 +229,14 @@ define ( [ 'commonUtils', 'helper' ],
 	Controller.prototype.performIfPresent = function(actionName, data){
 		if(typeof this.script[actionName] === 'function'){
 		    
-			if(IS_DEBUG_ENABLED) console.debug("performing '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
+			if(logger.isVerbose()) logger.v("performing '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		    
 		    return this.perform.apply(this, arguments);
 		    
 		} else if(typeof this.script[actionName] !== 'undefined'){
-			if(IS_DEBUG_ENABLED) console.info("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": no function ("+typeof this.script[actionName]+")");//debug
+			if(logger.isVerbose()) logger.info("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": no function ("+typeof this.script[actionName]+")");//debug
 		} else {
-			if(IS_DEBUG_ENABLED) console.debug("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": not implemented (undefined)");//debug
+			if(logger.isVerbose()) logger.debug("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": not implemented (undefined)");//debug
 		}
 	};
 

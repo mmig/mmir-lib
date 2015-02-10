@@ -25,7 +25,7 @@
  */
 
 
-define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter'],
+define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter', 'logger', 'module'],
 		
 	/**
 	 * A class for managing the language of the application. <br>
@@ -51,7 +51,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
      * 
 	 */
 	function( 
-			constants, configurationManager, commonUtils, semanticInterpreter
+			constants, configurationManager, commonUtils, semanticInterpreter, Logger, module
 ){
 			//next 2 comments are needed by JSDoc so that all functions etc. can
 			// be mapped to the correct class description
@@ -70,6 +70,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @private
 		     */
 		    var instance = null;
+		    
+		    var logger = Logger.create(module);
 
 		    /**
 		     * JSON object containing the contents of a dictionary file - which are
@@ -216,11 +218,11 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		            }
 
 		            if (grammarLang) {
-		                console.warn('Could not find grammar for selected language ' + lang + ', using grammar for language ' + grammarLang + ' instead.');
+		                logger.warn('Could not find grammar for selected language ' + lang + ', using grammar for language ' + grammarLang + ' instead.');
 		                semanticInterpreter.setCurrentGrammar(grammarLang);
 		            }
 					else {
-		                console.warn('Could not find any grammar for one of [' + languages.join(', ') + '], disabling SemanticInterpret.');
+		                logger.warn('Could not find any grammar for one of [' + languages.join(', ') + '], disabling SemanticInterpret.');
 		                semanticInterpreter.setEnabled(false);
 		            }
 		        }
@@ -249,12 +251,15 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		            dataType : "json",
 		            url : path,
 		            success : function(data) {
-		                // console.log("[LanguageManager] Success. " + data);
-		                currentSpeechConfig = data;// jQuery.parseJSON(data);
-		                // console.log("[LanguageManager] " + JSON.stringify(dictionary));
+		                
+		            	if(logger.isVerbose()) logger.v("[LanguageManager] Success. " + data);
+		                
+		            	currentSpeechConfig = data;// jQuery.parseJSON(data);
+		                
+		                if(logger.isVerbose()) logger.v("[LanguageManager] " + JSON.stringify(dictionary));
 		            },
 		            error : function(xhr, statusStr, error) {
-		                console.error("[LanguageManager] Error loading speech configuration from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
+		                logger.error("[LanguageManager] Error loading speech configuration from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
 		            }
 		        });
 		        return currentLanguage;
@@ -285,7 +290,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                dictionary = data;
 		            },
 		            error : function(xhr, statusStr, error) {
-		                console.error("[LanguageManager] Error loading language dictionary from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
+		                logger.error("[LanguageManager] Error loading language dictionary from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
 		            }
 		        });
 		        return currentLanguage;
@@ -310,7 +315,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		        }
 				else {
 		            translated = "undefined";
-		            console.warn("[Dictionary] '" + textVarName + "' not found in " + JSON.stringify(dictionary));
+		            logger.warn("[Dictionary] '" + textVarName + "' not found in " + JSON.stringify(dictionary));
 		        }
 		        return translated;
 		    }
@@ -344,7 +349,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				            if (appLang) {
 				            	
 				                lang = appLang;
-				                console.info("[LanguageManager] No language argument specified: using language from configuration '" + appLang + "'.");
+				                logger.info("[LanguageManager] No language argument specified: using language from configuration '" + appLang + "'.");
 				                
 				            }
 				            else {
@@ -354,7 +359,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				            	if (appLang) {
 				            
 					                lang = appLang;
-					                console.info("[LanguageManager] No language argument specified: using language from mmir.constants '" + appLang + "'.");
+					                logger.info("[LanguageManager] No language argument specified: using language from mmir.constants '" + appLang + "'.");
 					            }
 				            	else {
 					            	
@@ -365,7 +370,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 					                		
 					                		lang = appLang;
 					                		
-					                		console.info("[LanguageManager] No language argument specified: used determinLanguage() for selecting language '" + appLang + "'.");
+					                		logger.info("[LanguageManager] No language argument specified: used determinLanguage() for selecting language '" + appLang + "'.");
 					                	}
 					                }
 					                
@@ -374,7 +379,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				            }//END: else(config::lang)
 				        
 			        		if(!lang){
-			        			console.warn("[LanguageManager.init] No language specified. And no language could be read from directory '" + constants.getLanguagePath() + "'.");
+			        			logger.warn("[LanguageManager.init] No language specified. And no language could be read from directory '" + constants.getLanguagePath() + "'.");
 			        		}
 			        		
 				        }//END: if(!lang && !currentLanguage)
@@ -383,7 +388,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				        // get all the languages/dictionaries by name
 				        languages = commonUtils.getDirectoryContents(constants.getLanguagePath());
 
-				        if (IS_DEBUG_ENABLED) console.debug("[LanguageManager] Found dictionaries for: " + JSON.stringify(languages));// debug
+				        if (logger.isDebug()) logger.debug("[LanguageManager] Found dictionaries for: " + JSON.stringify(languages));// debug
 
 				        loadDictionary(lang);   
 				        loadSpeechConfig(lang);
@@ -649,8 +654,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		            setNextLanguage : function() {
 		                var indexCurrentLanguage = languages.indexOf(currentLanguage);
 
-		                if (IS_DEBUG_ENABLED)
-		                    console.debug("[LanguageManager] Current language is " + currentLanguage);// debug
+		                if (logger.isVerbose()) logger.v("[LanguageManager] Current language is " + currentLanguage);
 
 		                if (indexCurrentLanguage > -1) {
 		                    indexCurrentLanguage = indexCurrentLanguage + 1;
@@ -659,8 +663,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                    }
 		                    currentLanguage = languages[indexCurrentLanguage];
 
-		                    if (IS_DEBUG_ENABLED)
-		                        console.debug("[LanguageManager] Next language is " + currentLanguage);// debug
+		                    if (logger.isVerbose()) logger.v("[LanguageManager] Next language is " + currentLanguage);
+		                    
 		                    loadSpeechConfig(currentLanguage);
 		                    return loadDictionary(currentLanguage);
 		                }

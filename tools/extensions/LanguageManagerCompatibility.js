@@ -161,8 +161,7 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
              */
             var changeLanguage = function(newLang, doReRenderView) {
 
-                if (IS_DEBUG_ENABLED)
-                    console.debug("[Language] selected " + newLang);// debug
+                console.debug("[Language] selected " + newLang);// debug
 
                 // instance.setLanguage(newLang);
                 this.setLanguage(newLang);

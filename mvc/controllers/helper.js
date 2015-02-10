@@ -93,7 +93,7 @@ define(
 	 */
 	Helper.prototype.perform = function(actionName, data){
 		
-		if(IS_DEBUG_ENABLED) console.debug("should perform '" + actionName + "' of '" + this.name + "'" + ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
+//		if(logger.isv()) logger.v("should perform '" + actionName + "' of '" + this.name + "'" + ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		
 		if(arguments.length > 2){
 		    return this.script[actionName](this.controller, data, arguments[2]);

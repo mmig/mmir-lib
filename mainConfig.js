@@ -12,14 +12,22 @@ require.config({
 	        scxmlDoc: 'config/statedef/inputDescriptionSCXML.xml'
 	        // simple | mode 
 	        , mode: 'extended'
+	        //EXAMPLE: set module-specific log-level to 'info'
+//		    , logLevel: 'info'
 	    }
 	    
 	    , 'dialogManager': {
 	        scxmlDoc: 'config/statedef/dialogDescriptionSCXML.xml'
 	        // simple | mode 
 	        , mode: 'extended'
-
+	        //EXAMPLE: set module-specific log-level to 'verbose'
+//		    , logLevel: 'verbose'
 	    }
+
+        //EXAMPLE: set module-specific log-level to 'warn' 
+	    //         log-levels: 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled'
+	    //         or number:     0           1        2        3         4           5           6
+//	    , 'view': { logLevel: 'warn' }
 	    
 	}
 
@@ -161,11 +169,31 @@ require.config({
 });//END: require.config({...
 
 require(['core'], function(core){
+	
+	//get the "entry-point", i.e. module-name/-id that will be loaded (default: "main") 
 	var startModule = core.startModule;
 	
+	//setup the logger implementation:
+	// one of ['logger' | 'loggerDisabled']
+	var logConfig = {paths:{'logger': 'tools/logger'}};
+	if(core.debug === false){
+		//this will load a "disabled" logger implementation with no-op functions etc.
+		logConfig.paths.logger += 'Disabled';
+	}
+	//if the "functional" logger is set: retrieve/set the default log-level:
+	else if(typeof core.logLevel !== 'undefined'){
+		logConfig.config = {'logger': {logLevel: core.logLevel}};
+	}
+	//"append" the logger-config
+	core.config(logConfig);
+	
+	
+	//apply all configs / modifications that were made on the core-module
 	core.applyConfig();
 	
-	require([startModule]);
+	
+	//finally: trigger framework loading
+	require(['logger',startModule]);
 });
 
 }());//END: (function(){...

@@ -43,8 +43,6 @@
 */
 define(['commonUtils', 'jquery'], function(commonUtils, $){
 
-IS_DEBUG_ENABLED = true;//FIXME need to remove this!
-
 /**
  * @class GrammarConverter
  */
@@ -450,7 +448,7 @@ GrammarConverter.prototype.setJSGrammar = function(src_code){
 //	var semantic = utterance_def.semantic,
 //	variable_index, variable_name;
 //	
-//	if(IS_DEBUG_ENABLED) console.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
+//	if(logger.isDebug()) logger.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
 //	
 //	var semantic_as_string = JSON.stringify(semantic);
 //	if( semantic_as_string != null){
@@ -460,7 +458,7 @@ GrammarConverter.prototype.setJSGrammar = function(src_code){
 //		var variable = variables[1],
 //		remapped_variable_name = "";
 //		
-//		if(IS_DEBUG_ENABLED) console.debug("variables " + variable, semantic_as_string);//debug
+//		if(logger.isDebug()) logger.debug("variables " + variable, semantic_as_string);//debug
 //		
 //		variable_index = /\[(\d+)\]/.exec(variable);
 //		variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];

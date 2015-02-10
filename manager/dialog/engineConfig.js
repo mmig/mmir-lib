@@ -260,13 +260,16 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
     //
     function noop(){};
     function deny(){return false;};
+//	function pw(){console.warn.apply(console,arguments);};
+	function pe(){console.error.apply(console,arguments);};
     var nolog = {
     	d: noop,
     	debug: noop,
-    	e: noop,
-    	error: noop,
+    	w: noop,//pw,
+    	warn: noop,//pw,
+    	e: pe,
+    	error: pe,
     	log: noop,
-    	error: noop,
     	isVerbose: deny,
     	isv: deny,
     	isDebug: deny,

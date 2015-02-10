@@ -638,7 +638,7 @@ Layout.prototype.stringify = function(){
 //	    
 //	    body += "</div></body>";
 //	    
-//	    if(IS_DEBUG_ENABLED) console.debug("body : " + body);//debug
+//	    if(logger.isv()) logger.v("body : " + body);//debug
 //	    
 //	    return body;
 //	};

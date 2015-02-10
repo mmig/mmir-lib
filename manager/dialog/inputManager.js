@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig' ],
+define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 	/**
 	 * The InputManager handles input events.
 	 * 
@@ -53,7 +53,7 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig' ],
 	 * 
 	 */
 	function(
-		mmir, $, commonUtils,module, engineConfig
+		mmir, $, commonUtils,module, engineConfig, Logger
 ){
 
 	//next 2 comments are needed by JSDoc so that all functions etc. can
@@ -108,6 +108,9 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig' ],
 			
 			//create a SCION engine:
 			var engine = engineConfig(url, mode);
+			
+			this._log = Logger.create(module);
+			engine._log = Logger.create(module.id+'Engine', module.config().logLevel);
 
 //			var _self = this;
 

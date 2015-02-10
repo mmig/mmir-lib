@@ -30,7 +30,7 @@
  */
 
 
-define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
+define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', 'module'],
 	/**
 	 * A Utility class to support various functions.<br>
 	 * 
@@ -56,7 +56,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
      * @depends jQuery	 in #resizeFitToSourroundingBox
 	 */
 	function(
-		constants, stringExt, $, paramsParseFunc
+		constants, stringExt, $, paramsParseFunc, Logger, module
 ) {
 	/** @scope mmir.CommonUtils.prototype */
 	/**
@@ -65,6 +65,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 	 */
 	
 	var instance = null;
+	
+	var logger = Logger.create(module);
 
     /**
      * JSON-Object containing the directory Structure of the application. Only
@@ -344,16 +346,16 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 					  },
 					  function(status, fileName, msg){
 					      if (status === 'info') {
-					    	  console.info('[loadAllCordovaPlugins] "'+ fileName + '": ' + msg);
+					    	  if(logger.isInfo()) logger.info('CommonUtils', 'loadAllCordovaPlugins', 'loaded "'+ fileName + '": ' + msg);
 					      }
 						  else if (status === 'warning') {
-							  console.warn('[loadAllCordovaPlugins] "'+ fileName + '": ' + msg);
+							  if(logger.isWarn()) logger.warn('CommonUtils', 'loadAllCordovaPlugins', 'loading "'+ fileName + '": ' + msg);
 					      }
 						  else if (status === 'error') {
-							  console.error('[loadAllCordovaPlugins] "'+ fileName + '": ' + msg);
+							  logger.error('CommonUtils', 'loadAllCordovaPlugins', 'loading "'+ fileName + '": ' + msg);
 					      }
 						  else {
-							  console.error('[loadAllCordovaPlugins] '+ status + ' (UNKNOWN STATUS) -> "'+ fileName + '": ' + msg);
+							  logger.error('CommonUtils', 'loadAllCordovaPlugins', status + ' (UNKNOWN STATUS) -> "'+ fileName + '": ' + msg);
 					      }
 					  }
 				);
@@ -393,16 +395,16 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 					},
 					function loadCompiledGrammarsStatus(status, fileName, msg) {
 						if (status === 'info') {
-							console.info('[loadCompiledGrammars] "'+ fileName + '": ' + msg);
+							if(logger.isInfo()) logger.info('CommonUtils', 'loadCompiledGrammars', 'loaded "'+ fileName + '": ' + msg);
 						}
 						else if (status === 'warning') {
-							console.warn('[loadCompiledGrammars] "'+ fileName + '": ' + msg);
+							if(logger.isWarn()) logger.warn('CommonUtils', 'loadCompiledGrammars', 'loading "'+ fileName + '": ' + msg);
 						}
 						else if (status === 'error') {
-							console.error('[loadCompiledGrammars] "' + fileName + '": ' + msg);
+							logger.error('CommonUtils', 'loadCompiledGrammars', 'loading "' + fileName + '": ' + msg);
 						}
 						else {
-							console.error('[loadCompiledGrammars] ' + status + ' (UNKNOWN STATUS) -> "' + fileName + '": ' + msg);
+							logger.error('CommonUtils', 'loadCompiledGrammars', status + ' (UNKNOWN STATUS) -> "' + fileName + '": ' + msg);
 						}
 					}
 				);
@@ -528,7 +530,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 	//								statusCallback('warning', fileName, 'provided callback for COMPLETION is not a function: '+completedCallback);
 	//							}
 	//							else {
-	//								console.warn('[loadImpl] callback for COMPLETION is not a function: '+completedCallback);
+	//								logger.warn('[loadImpl] callback for COMPLETION is not a function: '+completedCallback);
 	//							}
 	//						}
 							_defer.resolve();
@@ -551,7 +553,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 								}
 								else {
 									// print out an error message
-									console.error('[loadImpl] Could not load "' + librariesPath+fileName + '": ' + exception);
+									logger.error('[loadImpl] Could not load "' + librariesPath+fileName + '": ', exception);
 								}
 								
 								//NOTE: in case of an error, will still try to load the other files from the list:
@@ -562,8 +564,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 					}
 				};//END: doLoadImplFile(name,index)
 				
-				//console.log('about to load all libraries from path "'+librariesPath+'"...');//FIXM debug
-				
+				if(logger.isVerbose()) logger.verbose('about to load all libraries from path "'+librariesPath+'"...');
 				
 				if(size < 1){
 					//if there are no files to resolve: 
@@ -655,7 +656,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 		     * @public
 		     */
 		    getLocalScript : function(scriptUrl, success, fail) {
-				var head = document.getElementsByTagName("head")[0];
+				var head = document.getElementsByTagName('head')[0];
 				script = document.createElement('script');
 				script.type = 'text/javascript';
 				script.src = scriptUrl;
@@ -669,8 +670,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 						fail.apply(this, arguments);
 					}
 					else {
-	
-						console.error("Insert Script Failed - " + scriptUrl + ": " + e);
+						logger.error('CommonUtils', 'getLocalScript', 'Loading Script Failed from "' + scriptUrl + '"', e);
 					}
 				};
 				head.appendChild(script);
@@ -696,7 +696,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 				try {
 					retValue = this.directoryStructure[pathname];
 				} catch (e) {
-					console.warn(e);
+					logger.error(e);
 					retValue = null;
 				}
 				return retValue;
@@ -720,7 +720,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 		    getDirectoryContentsWithFilter : function(pathname, filter) {
 				var retValue = new Array();
 	
-				var tmpfilter = "^" + filter.replace(".", "\\.").replace("*", ".*").replace("\$", "\\$") + "$"; // e.g.,// "^.*\.js$"
+				var tmpfilter = '^' + filter.replace('.', '\\.').replace('*', '.*').replace('\$', '\\$') + '$'; // e.g.,// '^.*\.js$'
 	
 				var filterRegExp = new RegExp(tmpfilter, 'gi');
 	
@@ -729,7 +729,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 				try {
 					var tmp = this.directoryStructure[pathname];
 					if (tmp == undefined) {
-						console.warn("[" + pathname + " / " + filter+ "] not found.");
+						if(logger.isWarn()) logger.warn('CommonUtils', 'getDirectoryContentsWithFilter', '[' + pathname + ' / ' + filter + ']  not found.');
 						retValue = null;
 					} 
 					else {
@@ -740,7 +740,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 						}
 					}
 				} catch (e) {
-					console.error("[" + pathname + " / " + filter + "] " + e);
+					logger.error('CommonUtils', 'getDirectoryContentsWithFilter', '[' + pathname + ' / ' + filter + '] ', e);
 					retValue = null;
 				}
 				return retValue;
@@ -966,17 +966,18 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 		     * @returns {Boolean} <code>true</code> if a network connection is enabled
 		     */
 		    checkNetworkConnection : function() {
-	//        	console.log("Check network status.");
+		    	
+	        	if(logger.isVerbose()) logger.verbose("Checking network status...");
 				
 				if(typeof navigator === 'undefined'){
-					console.error('Cannot check network status: navigator object is not available!');
+					logger.error('Cannot check network status: navigator object is not available!');
 					return 'UNKNOWN';
 				}
 				
 				//ASSERT: navigator exists
 				
 				if(!navigator.connection){
-					console.warn('Cannot check network status: object navigator.connection is not available');
+					if(logger.isInfo()) logger.warn('Cannot check network status: object navigator.connection is not available');
 					if(typeof navigator.onLine !== 'undefined'){
 						return navigator.onLine;
 					}
@@ -1032,24 +1033,24 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 					dataType: "json",
 					url: directoryFileUrl,
 					success: function(data){
-						if(IS_DEBUG_ENABLED) console.log("DirectoryListing.getDirectoryStructure: loaded file from "+directoryFileUrl);
+						if(logger.isVerbose()) logger.verbose("DirectoryListing.getDirectoryStructure: loaded file from "+directoryFileUrl);
 						
 						if(data){
-							if(IS_DEBUG_ENABLED) console.log("DirectoryListing.getDirectoryStructure: Succeeded to load directory structure from '"+directoryFileUrl+"'! Data: "+ JSON.stringify(data));
+							if(logger.isVerbose()) logger.verbose("DirectoryListing.getDirectoryStructure: Succeeded to load directory structure from '"+directoryFileUrl+"'! Data: "+ JSON.stringify(data));
 							
 							self.directoryStructure = data;
 							
-							if(IS_DEBUG_ENABLED) console.debug("[getDirectoryStructure] finished.");//debug
+							if(logger.isVerbose()) logger.verbose("[getDirectoryStructure] finished.");//debug
 							
 							_defer.resolve(self);
 						}
 					},
 					error: function(jqXHR, textStatus, errorThrown){
-						if(IS_DEBUG_ENABLED) console.log("DirectoryListing.getDirectoryStructure: failed to load file from '"+directoryFileUrl+"'! Status "+textStatus+": "+ errorThrown+ ", "+JSON.stringify(jqXHR));
+						if(logger.isVerbose()) logger.verbose("DirectoryListing.getDirectoryStructure: failed to load file from '"+directoryFileUrl+"'! Status "+textStatus+": "+ errorThrown+ ", "+JSON.stringify(jqXHR));
 						
 						var msg = "[ERROR] " + textStatus+": failed to load file from '"+directoryFileUrl+"' - "+ errorThrown;
 						if( ! errorFunc){
-							console.error(msg);
+							logger.error('CommonUtils', 'loadDirectoryStructure', msg);
 						}
 						
 						_defer.fail(msg);
@@ -1080,13 +1081,13 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc'],
 //						self.directoryStructure = dirStruct;
 //						
 //						if (!success){
-//							console.info("[getDirectoryStructure] finished: " + JSON.stringify(dirStruct));//debug
+//							logger.info("[getDirectoryStructure] finished: " + JSON.stringify(dirStruct));//debug
 //						}
 //						_defer.resolve(instance);
 //					}, 
 //					function(e){
 //						if (!errorFunc){
-//							console.error("ERROR [getDirectoryStructure]: " + e);
+//							logger.error("ERROR [getDirectoryStructure]: " + e);
 //						}
 //						_defer.fail(e);
 //					}

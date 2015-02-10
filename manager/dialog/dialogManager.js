@@ -25,7 +25,7 @@
  */
 
 define([  'core', 'jquery'
-        , 'commonUtils', 'module', 'engineConfig', 'controllerManager', 'presentationManager'
+        , 'commonUtils', 'module', 'engineConfig', 'controllerManager', 'presentationManager', 'logger'
         , 'modelManager' 
 	], 
 	/**
@@ -61,7 +61,7 @@ define([  'core', 'jquery'
 	 */
 	function(
 			mmir, $, 
-			commonUtils, module, engineConfig, controllerManager, presentationManager
+			commonUtils, module, engineConfig, controllerManager, presentationManager, Logger
 ) {
 
 	//next 2 comments are needed by JSDoc so that all functions etc. can
@@ -130,7 +130,7 @@ define([  'core', 'jquery'
 //			_data.name = actionName;
 //			_data.args = data;
 			
-			// if(IS_DEBUG_ENABLED) console.debug("going to perform ('" + ctrlName + "','" + actionName + "')");//debug
+			// if(logger.isDebug()) logger.debug("going to perform ('" + ctrlName + "','" + actionName + "')");//debug
 
 			return controllerManager.perform(ctrlName, actionName, data);
 		},
@@ -326,6 +326,9 @@ define([  'core', 'jquery'
 			
 			//create a SCION engine:
 			var engine = engineConfig(url, mode);
+			
+			this._log = Logger.create(module);
+			engine._log = Logger.create(module.id+'Engine', module.config().logLevel);
 
 //			var _self = this;
 

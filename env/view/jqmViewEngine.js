@@ -214,7 +214,6 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 			if(oldContent.length < 1 && oldId == '#'+CONTENT_ID+'0'){
 				//the ID of the first page (pageIndex 0) may have no number postfix
 				// -> try without number:
-//				if(IS_DEBUG_ENABLED) console.debug('PresentationManager[jqmViewEngine].doRenderView: removing old content: no old centent found for old ID "'+oldId+'", trying "#'+CONTENT_ID+'" instead...');//debug
 				oldContent = jq('#' + CONTENT_ID);
 			}
 

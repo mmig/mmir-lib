@@ -26,7 +26,7 @@
 
 
 
-define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionary'],
+define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionary', 'logger', 'module'],
 	/**
 	 * The MediaManager gives access to audio in- and output functionality.
 	 * 
@@ -48,7 +48,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * TODO remove / change dependency on forBrowser: constants.isBrowserEnv()!!!
 	 */
 	function(
-		jQuery, constants, commonUtils, configurationManager, Dictionary
+		jQuery, constants, commonUtils, configurationManager, Dictionary, Logger, module
 ){
 	//next 2 comments are needed by JSDoc so that all functions etc. can
 	// be mapped to the correct class description
@@ -166,11 +166,15 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      */
     function constructor(){
     	
-    	var listener = new Dictionary(); 
+    	var listener = new Dictionary();
+    	
+    	var logger = Logger.create(module);
     	
     	/** @lends MediaManager.prototype */
     	return {
     		
+    			_log: logger,
+    			
     			//TODO add API documentation
     		
     			//... these are the standard audioInput procedures, that should be implemented by a loaded file

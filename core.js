@@ -189,7 +189,59 @@ function initMmir() {
 			 * @default "jqmViewEngine" will load the default view-engine that uses jQuery Mobile
 			 * @public
 			 */
-			viewEngine: 'jqmViewEngine'
+			viewEngine: 'jqmViewEngine',
+			
+			
+			/**
+			 * Property for enabling / disabling logging:
+			 * if set to <code>true</code> (or omitted), the default Logger implementation <code>tools/logger.js</code>
+			 * will be loaded as "logger" module.
+			 * 
+			 * If set to <code>false</code> the "dummy" Logger implementation <code>tools/loggerDisabled.js</code> will
+			 * be loaded as "logger" module which essentially will create no logging output.
+			 * 			 
+			 * @memberOf mmir
+			 * @name debug
+			 * @property
+			 * @type Boolean
+			 * @default true
+			 * @public
+			 * 
+			 * @see #logLevel
+			 */
+			debug: true,
+			
+			/**
+			 * Property for the log-level of the Logger module:
+			 * if set, and property <code>debug</code> is <code>true</code>, then the logger module
+			 * will use the log-level as default log-level.
+			 * 
+			 * If omitted, the Logger's implementation defaults will be used.
+			 * 
+			 * If set, the property must be either a Number or a String with one of the following values:
+			 * 
+			 * 0: "verbose"
+			 * 1: "debug"
+			 * 2: "info"
+			 * 3: "warn"
+			 * 4: "error"
+			 * 5: "critical"
+			 * 6: "disabled"
+			 * 
+			 * NOTE: if you want to disable logging completely, use {@link #debug}.
+			 *       Setting the logLevel to "disabled" will still allow specific module's to create logging output
+			 *       (if their log-level is set appropriately)
+			 * 			 
+			 * @memberOf mmir
+			 * @name debug
+			 * @property
+			 * @type Integer | String
+			 * @default "debug"
+			 * @public
+			 * 
+			 * @see #debug
+			 */
+			logLevel: 'debug'
 	};
 	
 	if(typeof define === 'function'){

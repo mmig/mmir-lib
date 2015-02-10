@@ -7,8 +7,6 @@
 
 define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
 
-//    var _instance = null;
-
     /**
      * An array containing all states active.
      * 
@@ -28,21 +26,30 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
             	, _defer = $.Deferred();
             
             if (typeof _url === 'undefined') {
-                console.error('URL is missing!');
+            	instanceContext._log.error('URL is missing!');
                 return;
             }
 
-
+            var self = this;
+            
             scion.urlToModel(_url, function(err, model) {
 
                 if (err) {
                 	
                 	var url = '';
-                	var printError = function(){console.error('error for model ',_url, ': ', (url? 'could not load "' + url + '", ' : ''), err, model);};
+                	var printError = function(){
+                		console.error('error for SCXML model at ',_url, ': ',
+                				(url? 'could not load "' + url + '" ' : ''),
+                				(err.statusText? ': ' + err.statusText : ''),
+                				err,
+                				model
+                		);
+                	};
                 	if(err.always) err.always(function(){url = this.url; printError();});
                 	else printError();
                 	
-                    alert('SCXML is not valid!');
+//                    alert('SCXML is not valid!');
+                	_defer.fail(err);
                     return;
                 }
 
@@ -53,70 +60,35 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
                 var listener = {
                     onEntry : function(stateName) {
                         statesActive.push(stateName);
-                        if (IS_DEBUG_ENABLED) console.debug('SCXML State Entry: "' + stateName + '"');// debug
+                        if (instanceContext._log.isDebug()) instanceContext._log.debug('SCXML State Entry: "' + stateName + '"');// debug
                     },
                     onExit : function(stateName) {
                         statesActive.pop();
 
-                        if (IS_DEBUG_ENABLED) console.debug('SCXML State Exit: "' + stateName + '"');// debug
+                        if (instanceContext._log.isDebug()) instanceContext._log.debug('SCXML State Exit: "' + stateName + '"');// debug
                     },
                     onTransition : function(sourceState, targetStatesArray) {
                         
-                    	if (IS_DEBUG_ENABLED) console.debug('SCXML State Transition: "' + sourceState + '"->"' + targetStatesArray + '"');// debug
+                    	if (instanceContext._log.isDebug()) instanceContext._log.debug('SCXML State Transition: "' + sourceState + '"->"' + targetStatesArray + '"');// debug
 
                         if (targetStatesArray && targetStatesArray.length > 1) {
-                            console.warn('SCXML State Transition: multiple target states!');
+                        	instanceContext._log.warn('SCXML State Transition: multiple target states!');
                         }
                     }
                 };
 
                 _interpreter.registerListener(listener);
-                // _interpreter.start();
+
+                if (self.onload) {
+                	var _scion = scionUtil( _interpreter );
+                	if(!self.evalScript) self.scion.ignoreScript();
+                	self.onload( _scion, _defer );
+                } else {
+                	deferred.resolve(instanceContext);
+                }
                 
             });//END: scion.urlToModel(...
 
-            // needed when interpreter.start is executed outside the
-            // scion.urlToModel callback!
-            // not clear if there is evident need to start the interpreter
-            // inside the mmir code
-            var isTimeout = false;
-            var startTime = new Date();
-            var timeout = 10000;
-            
-            function isReady() {
-                isTimeout = new Date() - startTime > timeout;
-                if (!_interpreter && !isTimeout) {
-                    setTimeout(function(context) {
-                        isReady.call(context);
-                    }, 50, this);
-                }
-                else if (_interpreter) {
-                    if (this.onload) {
-                    	var scion = scionUtil( _interpreter );
-                    	if(!this.evalScript) this.scion.ignoreScript();
-                    	this.onload( scion, _defer );
-                    }
-                }
-                else {
-                    if (confirm) {
-                        var result = confirm('Could not initialize ScxmlEngine (time out).\nContinue to wait another\n ' + (timeout / 1000).toFixed(3) + ' seconds?');
-                        if (result) {
-                            startTime = new Date();
-                            setTimeout(function(context) {
-                                isReady.call(context);
-                            }, 50, this);
-                        }
-                        else {
-                            console.error('Could not initialize ScxmlEngine (time out).');
-                        }
-                    }
-                    else {
-                        console.error('Could not initialize ScxmlEngine (time out).');
-                    }
-                }
-            };//END: isReady(){...
-
-            isReady.call(this);
             
             return _defer.promise();
             
@@ -148,8 +120,15 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
      * 				all properties and functions from this object will be attached
      * 				to the returned SCION engine (i.e. the <code>context</code> object).
      * @param {Object} context
-     * 				The context object: the SCION engine will be attached to 
-     * 				this object.
+     * 				The context object: the SCION engine will be attached to this object.
+     * 				The context object must have a property <code>_log</code> with the
+     * 				following attributes (may be empty non-function):
+     * 				<code>_log.isDebug() : Boolean</code>  (this SHOULD NOT print / show any message)
+     * 				<code>_log.debug(String) : void</code> (this SHOULD NOT print / show any message)
+     * 				<code>_log.warn(String) : void</code>  (this MAY print / show a warning message)
+     * 				<code>_log.error(String) : void</code> (this SHOULD print / show an error message)
+     * 				or use a Logger instance (see /tools/logger.js) that is setup for the module
+     * 				that calls this function (see e.g. /manager/dialog/dialogManager::init).
      * @returns {Object} the created SCION engine object
      */
 	return function (configuration , context){

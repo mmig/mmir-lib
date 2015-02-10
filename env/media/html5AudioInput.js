@@ -254,10 +254,10 @@ newMediaPlugin = {
     			
 //    			silenceDetection = new Worker(configurationManager.get([_pluginName, "silenceDetectorPath"]));
 //    			silenceDetection.onmessage = function (e){
-//    				if(IS_DEBUG_ENABLED) console.log(e.data);
+//    				console.log(e.data);
 //    				if (e.data=='Send partial!'){
 //    					recorder && recorder.exportWAV(function(blob, id){
-//    						if(IS_DEBUG_ENABLED) console.log("wav exported");
+//    						console.log("wav exported");
 //    						if(blob.size>2000000) {
 //    							alert("Message too large. You need to pause from time to time.");
 //    							console.log("Message too large. You need to pause from time to time.");
@@ -281,7 +281,7 @@ newMediaPlugin = {
 //    				if (e.data=='Silence detected!'){
 //    					// send record to server!
 //    					recorder && recorder.exportWAV(function(blob, id){
-//    						if(IS_DEBUG_ENABLED) console.log("wav exported");
+//    						console.log("wav exported");
 //    						if(blob.size>2000000) {
 //    							alert("Message too large. You need to pause from time to time.");
 //    							console.log("Message too large. You need to pause from time to time.");
@@ -300,10 +300,10 @@ newMediaPlugin = {
 //    	    					webSocketSend("analyze "+ inputId);
 //    	    					hasActiveId = false;
 //
-//    	              			//FIXME debug output:
+//    	              			//debug output:
 //    	              			console.debug('HTML5-Speech-Recoginition_sent audio to recognizer... ');
 //    	              			
-//    	              			//FIXME test
+//    	              			//test
 //    	              			Recorder.forceDownload( blob, "myRecording" + ((inputId<10)?"0":"") + inputId + ".wav" );
 //    						}
 //    					}, buffer,inputId);
@@ -328,7 +328,7 @@ newMediaPlugin = {
     			
     			silenceDetection = recorder.processor;
     			recorder.beforeonmessage = function (e){
-    				if(IS_DEBUG_ENABLED) console.log(e.data);
+    				if(mediaManagerInstance._log.isDebug()) mediaManagerInstance._log.log(e.data);
     				
     				var isProcessed = false;
     				if (e.data=='Send partial!'){
@@ -336,7 +336,7 @@ newMediaPlugin = {
     					isProcessed = true;
     					
     					recorder && recorder.exportWAV(function(blob, id){
-    						if(IS_DEBUG_ENABLED) console.log("wav exported");
+    						if(mediaManagerInstance._log.isDebug()) mediaManagerInstance._log.log("wav exported");
 //    						if(blob.size>2000000) {
 //    							alert("Message too large. You need to pause from time to time.");
 //    							console.log("Message too large. You need to pause from time to time.");
@@ -363,7 +363,7 @@ newMediaPlugin = {
     					
     					// send record to server!
     					recorder && recorder.exportWAV(function(blob, id){
-    						if(IS_DEBUG_ENABLED) console.log("wav exported");
+    						if(mediaManagerInstance._log.isDebug()) mediaManagerInstance._log.log("wav exported");
     						if(blob.size>2000000) {
     							//TODO trigger callback / listener instead of aler-box
     							alert("Message too large. You need to pause from time to time.");

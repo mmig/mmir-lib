@@ -100,7 +100,7 @@ define(['constants', 'jquery' ],
 	    		url: constants.getConfigurationFileUrl(),
 	    		success: function(data){
 	    			
-	    			if(IS_DEBUG_ENABLED) console.debug("ConfigurationManager.constructor: loaded language settings from "+constants.getConfigurationFileUrl());//debug
+//	    			console.debug("ConfigurationManager.constructor: loaded language settings from "+constants.getConfigurationFileUrl());//debug
 	    			
 					if(data){
 	    				configData = data;
