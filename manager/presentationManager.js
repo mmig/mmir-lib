@@ -26,11 +26,10 @@
 
 
 
-define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'//, 'renderUtils'
+define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'//DISABLED: now loaded on-demand (see init()) -> 'renderUtils'
          , 'layout', 'view', 'partial', 'dictionary', 'checksumUtils', 'languageManager'
          , 'jquery', 'core'//, 'module'
-         , 'stringExtension', 'parserModule'//, 'jqm'
-        
+         , 'stringExtension', 'parserModule'
     ],
     
     /**
@@ -203,8 +202,20 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      function createPartialKey(ctrl, partial){
      	return createLookupKey(ctrl, partial, partialSeparator);
      }
-	 
-   //MOD modularize view-engine jqm
+     
+
+	 /**
+	  * Default implementation for the rendering-engine:
+	  * 
+	  * does nothing but writing an error message to the console,
+	  * if any of its functions is invoked.
+	  * 
+	  * The rendering engine can be set via {@link mmir.PresentationManager#setRenderEngine}.
+	  * 
+	  * @property _renderEngine
+	  * @type Object
+	  * @private
+	  */
      var _renderEngine = {
     		 /**
     		  * The function that actually renders the View.<br>
@@ -266,6 +277,18 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
     			 console.error('PresentationManager.hideWaitDialog: no rendering engine set!');
     		 }
      };
+	 /**
+	  * Reference to the rendering-engine implementation / instance.
+	  * 
+	  * This reference should not be accessed directly.
+	  * Custom functions of the rendering implementation can be
+	  * invoked via {@link mmir.PresentationManager#callRenderEngine}.
+	  * 
+	  * @property _engine
+	  * @type Object
+	  * @private
+	  */
+     _renderEngine._engine = _renderEngine;
 	 
 	 var _instance = {
 			/** @scope mmir.PresentationManager.prototype  */
@@ -547,6 +570,10 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * The functions of <code>theRenderEngine</code> will be called in
              * context of the PresentationManager.
              * 
+             * Custom functions of the specific rendering engine implementation 
+             * (i.e. non-standard functions) can be call via {@link #callRenderEngine}.
+             * 
+             * 
              * <br>
              * By default, the rendering-engine as defined by the module ID/path in
              * <code>core.viewEngine</code> will be loaded and set during initialization
@@ -556,8 +583,20 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * The implementation of the default view-engine is at
              * <code>mmirf/env/view/presentation/jqmViewEngine.js</code>.
              * 
+             * @param {Object} theRenderEngine
+             * 			the render-engine for views
+             * 
              * @function setRenderEngine
              * @public
+             * 
+             * @see #render
+             * @see #showDialog
+             * @see #hideCurrentDialog
+             * @see #showWaitDialog
+             * @see #hideWaitDialog
+             * 
+             * @see #callRenderEngine
+             * 
              */
             setRenderEngine: function(theRenderEngine){
             	_renderEngine.render 			= theRenderEngine.render;
@@ -565,6 +604,43 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             	_renderEngine.hideCurrentDialog	= theRenderEngine.hideCurrentDialog;
             	_renderEngine.showWaitDialog	= theRenderEngine.showWaitDialog;
             	_renderEngine.hideWaitDialog	= theRenderEngine.hideWaitDialog;
+            	_renderEngine._engine			= theRenderEngine;
+            },
+            /**
+             * This function allows to call custom functions of the rendering-engine
+             * that was set via {@link #setRenderEngine}.
+             * 
+             * IMPORTANT:
+             * note that the function will be invoked in context of rendering-engine
+             * (i.e. <code>this</code> references will refer to rendering-engine
+             * and not to the PresentationManager instance.
+             * For example, when <code>mmir.PresentationManager.callRenderEngine('hideWaitDialog')</code>
+             * is called, any <code>this</code> references within the <code>hideWaitDialog</code>
+             * implementation would refer to object, that was set in <code>setRenderEngine(object)</code>.
+             * In comparison, when called as <code>mmir.PresentationManager.hideWaitDialog()</code> the
+             * <code>this</code> references refer to the mmir.PresentationManager instance.
+             * 
+             * <br>
+             * NOTE that calling non-existing functions on the rendering-engine 
+             *      will cause an error.
+             * 
+             * @param {String} funcName
+             * 			the name of the function, that should be invoked on the rendering
+             * 			engine.
+             * @param {Array<any>} [args] OPTIONAL
+             * 			the arguments for <code>funcName</code> invoked
+             *          via <code>Function.apply(renderingEngine, args)</code>, e.g.
+             * 			for <code>args = [param1, param2, param3]</code> the
+             * 			function will be called with
+             * 			<code>funcName(param1, param2, param3)</code>
+             * 			(note that the function receives 3 arguments, and
+             *           not 1 Array-argument).
+             * 
+             * @function callRenderEngine
+             * @public
+             */
+            callRenderEngine: function(funcName, args){
+            	return _renderEngine._engine[funcName].apply(_renderEngine._engine, args);
             },
             
             //exported properties / constants:
