@@ -30,12 +30,7 @@
 newMediaPlugin = {
 
 		/** @scope media.plugin.webkitAudioInput.prototype */
-		initialize: function(callBack, logvalue){
-			
-			
-			
-			
-			
+		initialize: function(callBack, mediaManager, logvalue){
 			
 			var html5Navigator = navigator;
 			var _audioContext, nonFunctional = false;
@@ -58,11 +53,16 @@ newMediaPlugin = {
 				nonFunctional = true;
 			}
 			
+			var isMicLevelsEnabled = true;//TODO make this configurable?...
 			var MIC_MAX_VAL = 2;//FIXME verify / check if this is really the maximal possible value...
 			var MIC_MAX_NORM_VAL = -90;// -90 dB ... ???
+			var MIC_QUERY_INTERVALL = 128;
+			var LEVEL_CHANGED_THRESHOLD = 1.5;
+			var MIC_CHANGED_EVT_NAME = 'miclevelchanged';
+			
 			var normalize = function (v){
 				return MIC_MAX_NORM_VAL * v / MIC_MAX_VAL;
-			}
+			};
 			var getRms = function (buffer, size){
 				if(!buffer || size === 0){
 					return 0;
@@ -83,11 +83,16 @@ newMediaPlugin = {
 				
 				return Math.sqrt(avgMeansq);
 			};
+			var hasChanged = function(value, previousValue){
+				var res = typeof previousValue === 'undefined' || Math.abs(value - previousValue) > LEVEL_CHANGED_THRESHOLD;
+				return res;
+			};
 			var _currentInputStream;
 			var _audioAnalyzer;
 			function _startUserMedia(inputstream){
 				console.log('webkitAudioInput: start analysing audio input...');
 				var buffer = 0;
+				var prevDb;
 				
 				_currentInputStream = inputstream;
 				var inputNode = _audioContext.createMediaStreamSource(_currentInputStream);
@@ -154,39 +159,82 @@ newMediaPlugin = {
 					  var db = rms;
 //					  console.info('audio rms '+rms);
 					  
-					  _currentMicValues.push({v: db, t: new Date().getTime()});
-					  
-					  if(_currentInputStream){
-						  setTimeout(updateAnalysis, 50);
+//					  _currentMicValues.push({v: db, t: new Date().getTime()});
+					  if(hasChanged(db, prevDb)){
+//						  console.info('audio rms changed: '+prevDb+' -> '+db);
+						  prevDb = db;
+						  mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
 					  }
-				  }
+					  
+					  
+					  if(_isAnalysisActive && _currentInputStream){
+						  setTimeout(updateAnalysis, MIC_QUERY_INTERVALL);
+					  }
+				  };
 				  updateAnalysis();
 				  ///////////////////// VIZ ///////////////////
 				  
 			}
-			function doGetUserAudio(){
-				html5Navigator.__getUserMedia({audio: true}, _startUserMedia, function(e) {console.error(e)});
+			
+			var _isAnalysisActive = false;
+			function _startAudioAnalysis(){
+				if(_isAnalysisActive === true){
+					return;
+				}
+				_isAnalysisActive = true;
+				html5Navigator.__getUserMedia({audio: true}, _startUserMedia, function(e) {
+					console.error("webkitAudioInput: failed _startAudioAnalysis, error for getUserMedia ", e);
+					_isAnalysisActive = false;
+				});
 			}
-			function doStopUserAudio(){
+			function _stopAudioAnalysis(){
 				if(_currentInputStream){
 					var stream = _currentInputStream;
 					_currentInputStream = void(0);
 					stream.stop();
+					_isAnalysisActive = false;
 //					_currentMicMax = void(0);
 //					_currentMicMin = void(0);
 //					_currentMicAvg = void(0);
 //					_currentMicTime = void(0);
 					
-					_currentMicValues.splice(0, _currentMicValues.length);
+//					_currentMicValues.splice(0, _currentMicValues.length);
 					console.log('webkitAudioInput: stopped analysing audio input!');
 				}
+				else if(_isAnalysisActive === true){
+					console.warn('webkitAudioInput: stopped analysing audio input process, but no valid audio stream present!');
+					_isAnalysisActive = false;
+				}
 			}
+			
+			//start/stop audio-analysis if listeners get added/removed
+			function _updateMicLevelAnalysis(actionType, handler){
+
+				//start analysis now, if necessary
+				if(		actionType 			=== 'added' && 
+						recording 			=== true && 
+						_isAnalysisActive 	=== false && 
+						isMicLevelsEnabled 	=== true
+				){
+					_startAudioAnalysis();
+				}
+				//stop analysis, if there is no listener anymore 
+				else if(actionType 			=== 'removed' && 
+						_isAnalysisActive 	=== true && 
+						mediaManager.hasListeners(MIC_CHANGED_EVT_NAME) === false
+				){
+					_stopAudioAnalysis();
+				}
+			}
+			//observe changes on listener-list for mic-levels-changed-event
+			mediaManager._addListenerObserver(MIC_CHANGED_EVT_NAME, _updateMicLevelAnalysis);
+			
 //			var _currentMicMax;
 //			var _currentMicMin;
 //			var _currentMicAvg;
 //			var _currentMicTime;
 			
-			var _currentMicValues = [];
+//			var _currentMicValues = [];
 			
 			
 			
@@ -264,7 +312,6 @@ newMediaPlugin = {
             // 3 - logs, info, warning, errors
             // 4 - debugs, logs, info, warning, errors
             var loglevel = 4;//FIXME logvalue | 0;
-            var self = this;
             
             var _prevResult;
             /**
@@ -296,7 +343,7 @@ newMediaPlugin = {
             	
             	// [2]: result type
             	if(eventResultsObject.isFinal){
-            		res.push(RESULT_TYPES.FINAL);
+            		res.push(recording? RESULT_TYPES.INTERMEDIATE : RESULT_TYPES.FINAL);
             	}
             	else {
             		res.push(RESULT_TYPES.INTERIM);
@@ -410,7 +457,17 @@ newMediaPlugin = {
                 
                 // Audio capture failed.
             	case "audio-capture":
-                    // do not restart!
+            		// if analysing-audio for microphone levels (via getUserMedia)
+            		//    is enabled, the error may have been caused by the browser/device
+            		//    due to the fact, that it does not allow multiple/parallel access
+            		//    to the microphone resource...
+            		// -> try once again, but with disabled analysing-audio feature:
+            		if(isMicLevelsEnabled === true){
+            			isMicLevelsEnabled = false;
+            			return true;
+            		}
+            		
+                    // ...otherwise: do not restart!
                 
                 // Some network communication that was required to complete the recognition failed.
             	case "network":
@@ -459,7 +516,7 @@ newMediaPlugin = {
                         console.error("[newMediaPlugin.Error] event " + event.error);
                     }
                 }
-            }
+            };
             
             // set remaining event-handler functions
             recognition.onaudiostart = function(event){
@@ -472,42 +529,44 @@ newMediaPlugin = {
                 	console.debug("[newMediaPlugin.Debug] " + "Audio START");
                 	console.debug("[newMediaPlugin.Debug] " + "active: " + active);
                 }
-
-                doGetUserAudio();
-            }
+                
+                if(isMicLevelsEnabled === true){
+                	_startAudioAnalysis();
+                }
+            };
             recognition.onspeechstart = function(event){
                 if (loglevel >= 4){
                 	console.debug("[newMediaPlugin.Debug] " + "Speech START");
                 }
-            }
+            };
             recognition.onsoundstart  = function(event){
                 if (loglevel >= 4){
                 	console.debug("[newMediaPlugin.Debug] " + "Sound  START");
                 }
-            }
+            };
             recognition.onaudioend = function(event){
                 active = false;
                 if (loglevel >= 4){
                 	console.debug("[newMediaPlugin.Debug] " + "Audio END");
                 }
 
-                doStopUserAudio();
-            }
+                _stopAudioAnalysis();
+            };
             recognition.onspeechend = function(event){
                 if (loglevel >= 4){
                 	console.debug("[newMediaPlugin.Debug] " + "Speech END");
                 }
-            }
+            };
             recognition.onsoundend  = function(event){
                 if (loglevel >= 4){
                 	console.debug("[newMediaPlugin.Debug] " + "Sound  END");
                 }
-            }
+            };
             recognition.onstart  = function(event){
                 if (loglevel >= 4){
                 	console.debug("[newMediaPlugin.Debug] " + "asr START");
                 }
-            }
+            };
             recognition.onend  = function(event){
                 active = false;
                 if (loglevel >= 4){
@@ -528,7 +587,7 @@ newMediaPlugin = {
                 	//... and trigger the callback:
                 	theCallback.call(recording, event);
                 }
-            }
+            };
             
             recognition.onerror = default_error_function;
             
@@ -577,6 +636,8 @@ newMediaPlugin = {
                     
                     recognition.onerror = default_error_function;
                     
+                    var self = this;
+                    
                     // - see https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#speechreco-event
                     recognition.onresult = function (event) {
                         var finalResult = '';
@@ -604,7 +665,7 @@ newMediaPlugin = {
                                 // final_recognition_result += " " + finalResult;
                                 final_recognition_result += finalResult;
 //                                currentSuccessCallback && currentSuccessCallback(finalResult);
-                                currentSuccessCallback && currentSuccessCallback.apply(this, helper_extract_results(evtResults) );
+                                currentSuccessCallback && currentSuccessCallback.apply(self, helper_extract_results(evtResults) );
                                 
                             } else {
 
@@ -615,14 +676,14 @@ newMediaPlugin = {
                                 
                                 //audio-input already closed --> this is the last invocation of the callback, so send final result
                                 if (recording == false){
-                                    currentSuccessCallback && currentSuccessCallback(final_recognition_result);
+                                    currentSuccessCallback && currentSuccessCallback.call(self,final_recognition_result);
                                 }
                             }
                             
                         }
                         //for intermediate result (only if we have a callback):
                         else if (intermediate_results == true && currentSuccessCallback){
-                            currentSuccessCallback.apply(this, helper_extract_results(evtResults) );
+                            currentSuccessCallback.apply(self, helper_extract_results(evtResults) );
                         }
                     };
                     
@@ -697,7 +758,7 @@ newMediaPlugin = {
                     	if(successCallback && !isSuccessTriggered){
                     		console.info('stopRecord: calling success callback onstop (without last ASR result)');//FIXME debug
                     		isSuccessTriggered = true;
-                        	successCallback('');
+                        	successCallback.call(self,'');
                         }
                     };
                     
@@ -707,6 +768,8 @@ newMediaPlugin = {
                 cancelRecognition: function(successCallback,failureCallback){
                     recording = false;
                     aborted = true;
+                    
+                    var self = this;
                     // callback used if an error occurred - includes abort
                     // gets event as argument - see https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#speechreco-error
                     // * if aborted - call successCallback
@@ -715,12 +778,12 @@ newMediaPlugin = {
                         if ((event.error == "aborted") && (aborted == true)){
                             aborted = false;
                             recognition.onerror = default_error_function;
-                            successCallback && successCallback(event.error);
+                            successCallback && successCallback.call(self,event.error);
                         } else {
                             // currentFailureCallback(event.error);
-                            default_error_function(event.error);
+                            default_error_function.call(self,event.error);
                         }
-                    }
+                    };
 
                     recognition.abort();
                 },
@@ -730,7 +793,7 @@ newMediaPlugin = {
                 // FIX: no end event, if recognize() is stopped via stopRecord()
 				recognize: function(successCallback,failureCallback){
 					
-                    console.warn("DO NOT USE AT THE MOMENT\nUnexpected behavior: if recognition is stopped (via 'stopRecord()'), the 'end' is not thrown. The recognizer is still active, but not usable.")
+                    console.warn("DO NOT USE AT THE MOMENT\nUnexpected behavior: if recognition is stopped (via 'stopRecord()'), the 'end' is not thrown. The recognizer is still active, but not usable.");
                 
                     if (active == true){
                         if (loglevel >= 1){
@@ -806,25 +869,25 @@ newMediaPlugin = {
                 setLoglevel: function(logvalue){
                     loglevel = logvalue | 0;
                     return loglevel;
-                },
-                // default: set loglevel to 0
-                getMicLevels: function(cb){
-                	var value;
-//                	if(typeof _currentMicTime === 'undefined'){
-//                		value = [];
-//                	}
-//                	else {
-//                		value = [{v: _currentMicMax, t: _currentMicTime }];
-//                	}
-
-            		value = _currentMicValues.splice(0, _currentMicValues.length);
-                	
-                	if(cb){
-                		cb.call(this, value);
-                	}
-                	
-                	return value;
                 }
+//                // default: set loglevel to 0
+//                getMicLevels: function(cb){
+//                	var value;
+////                	if(typeof _currentMicTime === 'undefined'){
+////                		value = [];
+////                	}
+////                	else {
+////                		value = [{v: _currentMicMax, t: _currentMicTime }];
+////                	}
+//
+//            		value = _currentMicValues.splice(0, _currentMicValues.length);
+//                	
+//                	if(cb){
+//                		cb.call(this, value);
+//                	}
+//                	
+//                	return value;
+//                }
 //                , getRecognition: function(){
 //                    return recognition;
 //                }
