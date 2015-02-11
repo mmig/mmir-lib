@@ -166,15 +166,80 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      */
     function constructor(){
     	
+    	//map of listeners for event X
     	var listener = new Dictionary();
+    	//map of listener-observers (get notified if listener for event X gets added/removed)
+    	var listenerObserver = new Dictionary();
     	
-    	var logger = Logger.create(module);
+		/** exported as addListener() and on() */
+    	var addListenerImpl = function(eventName, eventHandler){
+			var list = listener.get(eventName);
+			if(!list){
+				list = [eventHandler];
+				listener.put(eventName, list);
+			}
+			else {
+				list.push(eventHandler);
+			}
+
+			//notify listener-observers for this event-type
+			this._notifyObservers(eventName, 'added', eventHandler);
+		};
+		/** exported as removeListener() and off() */
+    	var removeListenerImpl = function(eventName, eventHandler){
+			var isRemoved = false;
+			var list = listener.get(eventName);
+			if(list){
+				var size = list.length;
+				for(var i = size - 1; i >= 0; --i){
+					if(list[i] ===  eventHandler){
+						
+						//move all handlers after i by 1 index-position ahead:
+						for(var j = size - 1; j > i; --j){
+							list[j-1] = list[j];
+						}
+						//remove last array-element
+						list.splice(size-1, 1);
+						
+						//notify listener-observers for this event-type
+						this._notifyObservers(eventName, 'removed', eventHandler);
+						
+						isRemoved = true;
+						break;
+					}
+				}
+			}
+			return isRemoved;
+		};
+		
+		
+		/**
+		 * The logger for the MediaManager.
+		 * 
+		 * Exported as <code>_log</code> by the MediaManager instance.
+		 */
+		var logger = Logger.create(module);//initialize with requirejs-module information
     	
     	/** @lends MediaManager.prototype */
     	return {
-    		
-    			_log: logger,
     			
+    			/**
+    			 * A logger for the MediaManager.
+    			 * 
+    			 * This logger MAY be used by media-plugins and / or tools and helpers
+    			 * related to the MediaManager.
+    			 * 
+    			 * This logger SHOULD NOT be used by "code" that non-related to the
+    			 * MediaManager 
+    			 * 
+				 * @name _log
+				 * @property
+				 * @type mmir.Logger
+				 * @default mmir.Logger (logger instance for mmir.MediaManager)
+				 * @public
+    			 */
+    			_log: logger,
+    		
     			//TODO add API documentation
     		
     			//... these are the standard audioInput procedures, that should be implemented by a loaded file
@@ -391,30 +456,140 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 				}
     			
     			/**
-    			 * @param {String} eventName
-    			 * @param {Function} eventHandler
+    	    	 * Adds the handler-function for the event.
+    	    	 * 
+    	    	 * This function calls {@link #_notifyObservers} for the eventName with
+    	    	 * <code>actionType "added"</code>.
+    	    	 * 
+    	    	 * 
+    	    	 * Event names (and firing events) are specific to the loaded media plugins.
+    	    	 * 
+    	    	 * TODO list events that the default media-plugins support
+    	    	 *   * "miclevelchanged": fired by AudioInput plugins that support querying the microphone (audio input) levels
+    	    	 * 
+    	    	 * A plugin can tigger / fire events using the helper {@link #_fireEvent}
+    	    	 * of the MediaManager.
+    	    	 * 
+    	    	 * 
+    	    	 * Media plugins may observe registration / removal of listeners
+    	    	 * via {@link #_addListenerObserver} and {@link #_removeListenerObserver}.
+    	    	 * Or get and iterate over listeners via {@link #getListeners}.
+    	    	 * 
+    	    	 * 
+    	    	 * 
+    	    	 * 
+    	    	 * @param {String} eventName
+    	    	 * @param {Function} eventHandler
+    	    	 */
+    			, addListener: addListenerImpl
+    			/**
+    	    	 * Removes the handler-function for the event.
+    	    	 * 
+    	    	 * Calls {@link #_notifyObservers} for the eventName with
+    	    	 * <code>actionType "removed"</code>, if the handler
+    	    	 * was actually removed.
+    	    	 * 
+    	    	 * @param {String} eventName
+    	    	 * @param {Function} eventHandler
+    	    	 * 
+    	    	 * @returns {Boolean}
+    	    	 * 		<code>true</code> if the handler function was actually 
+    	    	 * 		removed, and <code>false</code> otherwise.
+    	    	 */
+    			, removeListener: removeListenerImpl
+    			/** @see {@link #addListener} */
+    			, on:addListenerImpl
+    			/** @see {@link #removeListener} */
+    			, off: removeListenerImpl
+    			/**
+    			 * Get list of registered listeners / handlers for an event.
+    			 * 
+    			 * @returns {Array[Function]} of event-handlers. 
+    			 * 				Empty, if there are no event handlers for eventName
     			 */
-    			, addListener: function(eventName, eventHandler){
+    			, getListeners: function(eventName){
     				var list = listener.get(eventName);
-    				if(!list){
-    					list = [eventHandler];
-    					listener.put(eventName, list);
+    				if(list && list.length){
+    					//return copy of listener-list
+    					return list.slice(0,list.length);
     				}
-    				else {
-    					list.push(eventHandler);
+    				return [];
+    			}
+    			/**
+    			 * Check if at least one listener / handler is  registered for the event.
+    			 * 
+    			 * @returns {Boolean} <code>true</code> if at least 1 handler is registered 
+    			 * 					  for eventName; otherwise <code>false</code>.
+    			 */
+    			, hasListeners: function(eventName){
+    				var list = listener.get(eventName);
+    				return list && list.length > 0;
+    			}
+    			/**
+    			 * Helper for firing / triggering an event.
+    			 * This should only be used by media plugins (that handle the eventName).
+    			 * 
+    	    	 * @param {String} eventName
+    	    	 * @param {Array} argsArray
+    	    	 * 					the list of arguments with which the event-handlers
+    	    	 * 					will be called.
+    			 */
+    			, _fireEvent: function(eventName, argsArray){
+    				var list = listener.get(eventName);
+    				if(list && list.length){
+    					for(var i=0, size = list.length; i < size; ++i){
+    						list[i].apply(this, argsArray);
+    					}
+    				}
+    			}
+    			/** @private */
+    			, _notifyObservers: function(eventName, actionType, eventHandler){//actionType: one of "added" | "removed"
+    				var list = listenerObserver.get(eventName);
+    				if(list && list.length){
+    					for(var i=0, size = list.length; i < size; ++i){
+    						list[i](actionType,eventHandler);
+    					}
     				}
     			}
     			/**
-    			 * @param {String} eventName
-    			 * @param {Function} eventHandler
+    			 * Add an observer for registration / removal of event-handler.
+    			 * 
+    			 * The observer gets notified,when handlers are registered / removed for the event.
+    			 * 
+    			 * The observer-callback function will be called with the following
+    			 * arguments
+    			 * 
+    			 * <code>(eventName, ACTION_TYPE, eventHandler)</code>
+    			 * where
+    			 * <ul>
+    			 *  <li>eventName: String the name of the event that should be observed</li>
+    			 *  <li>ACTION_TYPE: the type of action: "added" if the handler was 
+    			 *      registered for the event, "removed" if the the handler was removed
+    			 *  </li>
+    			 *  <li>eventHandler: the handler function that was registered or removed</li>
+    			 * </ul> 
+    			 * 
+    	    	 * @param {String} eventName
+    	    	 * @param {Function} observerCallback
     			 */
-    			, removeListener: function(eventName, eventHandler){
+    			, _addListenerObserver: function(eventName, observerCallback){
+    				var list = listenerObserver.get(eventName);
+    				if(!list){
+    					list = [observerCallback];
+    					listenerObserver.put(eventName, list);
+    				}
+    				else {
+    					list.push(observerCallback);
+    				}
+    			}
+    			
+    			, _removeListenerObserver: function(eventName, observerCallback){
     				var isRemoved = false;
-    				var list = listener.get(eventName);
+    				var list = listenerObserver.get(eventName);
     				if(list){
     					var size = list.length;
     					for(var i = size - 1; i >= 0; --i){
-    						if(list[i] ===  eventHandler){
+    						if(list[i] ===  observerCallback){
     							
     							//move all handlers after i by 1 index-position ahead:
     							for(var j = size - 1; j > i; --j){
@@ -429,16 +604,6 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					}
     				}
     				return isRemoved;
-    			}
-    			/**
-    			 * @returns {Array[Function]} of event-handlers; empty, if there are no event handlers for eventName
-    			 */
-    			, getListeners: function(eventName){
-    				var list = listener.get(eventName);
-    				if(list){
-    					return list;
-    				}
-    				return [];
     			}
     			
     	};//END: return{...
