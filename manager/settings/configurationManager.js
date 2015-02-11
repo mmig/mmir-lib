@@ -116,6 +116,16 @@ define(['constants', 'jquery' ],
     	_loadConfigFile();
         
         /**
+         * "Normalizes" a string or an array into a path:
+         * the result is a single, flat array where each string has
+         * been separated at dots (i.e. each path component is a separate entry).
+         * 
+         * @example 
+         *   //result is ['dot', 'separated', 'list']
+         *   _getAsPath('dot.separated.list');
+         *   _getAsPath(['dot', 'separated.list']);
+         *   _getAsPath(['dot', 'separated', 'list']);
+         * 
          * @private
          * @param {String|Array<String>} propertyName
          * 				resolves a dot-separated property-name into an array.
@@ -130,53 +140,69 @@ define(['constants', 'jquery' ],
         		path = propertyName.split('.');
         	}
         	else {
-        		
-        		var entry;
-        		var increase = 0;
-        		var size = propertyName.length;
-        		var tempPath;
-        		
-        		for(var i=0; i < size; ++i){
-        			
-        			entry = propertyName[i];
-        			tempPath = entry.split('.');
-        			
-        			//if entry contained dot-separated path:
-        			// replace original entry with the new sub-path
-        			if(tempPath.length > 1){
-        				propertyName[i] = tempPath;
-        				increase += (tempPath.length - 1);
-        			}
-        		}
-        		
-        		//if sup-paths were inserted: flatten the array
-        		if(increase > 0){
-        			
-        			//create new array that can hold all entries
-        			var newPath = new Array(size + increase);
-        			var index = 0;
-        			for(var i=0; i < size; ++i){
-
-            			entry = propertyName[i];
-        				
-            			//flatten sub-paths into the new array:
-        				if( $.isArray(entry) ){
-        					
-	    	        		for(var j=0, len=entry.length; j < len; ++j){
-	    	        			newPath[index++] = entry[j];
-	    					}
-        				}
-        				else {
-        					//for normal entries: just insert 
-        					newPath[index++] = entry;
-        				}
-        			}
-        			
-        			path = newPath;
-        		}
+        		path = _toPathArray(propertyName);
         	}
         	
         	return path;
+        }
+        
+        /**
+         * "Normalizes" an array of Strings by separating
+         * each String at dots and creating one single (flat) array where
+         * each path-component is a single entry.
+         * 
+         * @private
+         * @param {Array<String>} pathList
+         * 				resolves an array with paths, i.e. dot-separated property-names
+         * 				into a single, flat array where each path component is a separate Strings
+         */
+        function _toPathArray(pathList){
+        		
+    		var entry;
+    		var increase = 0;
+    		var size = pathList.length;
+    		var tempPath;
+    		
+    		for(var i=0; i < size; ++i){
+    			
+    			entry = pathList[i];
+    			tempPath = entry.split('.');
+    			
+    			//if entry contained dot-separated path:
+    			// replace original entry with the new sub-path
+    			if(tempPath.length > 1){
+    				pathList[i] = tempPath;
+    				increase += (tempPath.length - 1);
+    			}
+    		}
+    		
+    		//if sup-paths were inserted: flatten the array
+    		if(increase > 0){
+    			
+    			//create new array that can hold all entries
+    			var newPath = new Array(size + increase);
+    			var index = 0;
+    			for(var i=0; i < size; ++i){
+
+        			entry = pathList[i];
+    				
+        			//flatten sub-paths into the new array:
+    				if( $.isArray(entry) ){
+    					
+    	        		for(var j=0, len=entry.length; j < len; ++j){
+    	        			newPath[index++] = entry[j];
+    					}
+    				}
+    				else {
+    					//for normal entries: just insert 
+    					newPath[index++] = entry;
+    				}
+    			}
+    			
+    			pathList = newPath;
+    		}
+        	
+    		return pathList;
         }
     	
         
