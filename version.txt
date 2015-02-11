@@ -35,18 +35,37 @@ Logging:
  * simplified function for creating a logger for a requirejs module
    * uses module's ID as logger-name
    * uses module-specific log-level for the module, if defined in requirejs' config (see mainConfig.js for examples)
- * FIX removed variable IS_DEBUG_ENABLED (using logging factory instead)
+ * FIX removed ("partially" global) variable IS_DEBUG_ENABLED (using logging factory instead)
  * TODO add "trace mode" for logger (i.e. log from where the logger functions were called) 
  * TODO replace console.log() etc with logger calls
 
 PresentationManager:
  * added function callRenderEngine: allows to call custom functions on specific implementations of the rendering-engine
 
+MediaManager:
+ * for use in media-plugins (env/media/)
+  * added helper for firing / triggering events: _fireEvent(..)
+  * added support for "observering listeners", i.e. observing registration / removal of event-listeners
+   * see _addListenerObserver() and _removeListenerObserver()
+   * notification by callback function with arguments: (eventName, ["added" | "removed"], eventHadlerFunction) 
+ * add aliases for addListener(..) and removeListener(..): on(..) / off(..)
+
 loadCss (tools):
  * extended API: now, alternatively, an options-object can be used as arguments; options are added as attributes to the created link
 
 webkitAudioInput (env/media):
  * added "mic-levels" / RMS calculation using the microphone input (getUserMedia)
+ * CHANGED experimental "mic-levels" functionality
+  * changed API from "polling style" (get...) to "pushing style" (on...)
+  * removed (experimental) getMicLevels() polling function
+  * implemented listener-mechanism for event "miclevelchanged"
+   * uses MediaManager's listener-management (add/remove)
+   * calculates "change in microphone levels" and notifies registered listeners upon change
+  * optimization: only open microphone (getUserMedia) if listeners for "miclevelchanged" are registered; close audio from getUserMedia, if there are no listeners for "miclevelchanged" anymore (also handles new registrations / removals during active recognition)
+ * FIX disable "mic-levels" functionality in case of an "audio-capture" error (some browsers/devices may not support getUserMedia in combination with webkitSpeechRecognition's audio capturing(?))
+ * FIX recognize function: now creates additional arguments for callback (not just the text-result as before)
+ * FIX calling callback functions in context of the MediaManager instance
+ * added some dev-doc-comments
 
 ##################
  Version 3.3.1
