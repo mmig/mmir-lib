@@ -655,8 +655,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
 		/** @scope mmir.MediaManager.prototype */
 
-		checksumUtils = require('checksumUtils');//FIXME why is this undefined on loading? dependency cycle? really, this should already be available, since it is mentioned in the deps of define()....
-
 		delete _instance.init;//FIXME should init be deleted?
 
 		/**
@@ -700,7 +698,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		//util for checking if pre-compiled views are up-to-date
 		// (i.e.: can we use the pre-compiled view, or do we need to use the template file and compile it on-the-fly)
 		//TODO should this also be configurable -> up-to-date check (e.g. use pre-compiled views without checking for changes)
-		var checksumUtils = checksumUtils.init();
+		checksumUtils = checksumUtils.init();
 
 		/**
 		 * Read the checksum file that was created when the pre-compiled view was created:
