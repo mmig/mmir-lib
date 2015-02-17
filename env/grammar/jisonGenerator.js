@@ -494,10 +494,18 @@ var JisonGrammarConverterExt = {
 		return phraseStr + " %{\n\t   " + pharseMatchResult +  "; " + semanticProcResult + "; \n\t%} ";
 	},
 	_checkIfNotRegExpr: function(token){
+		
 		//test for character-group
-		if( ! /([^\\]\[)|(^\[).*?[^\\]\]/.test(token))
-			//test for group
-			return ! /([^\\]\()|(^\().*?[^\\]\)/.test(token);
+		if( ! /([^\\]\[)|(^\[).*?[^\\]\]/.test(token)){
+			
+			//test for grouping
+			if( ! /([^\\]\()|(^\().*?[^\\]\)/.test(token) ){
+			
+				//try for single-characters that occur in reg-expr FIXME this may procude false-positives!!!
+				return ! /[\?|\*|\+|\^|\|\\]/.test(token); //excluded since these may be more common in natural text: . $
+			}
+		}
+		
 		return false;
 	},
 	_convertRegExpr: function(token){
@@ -520,6 +528,13 @@ var JisonGrammarConverterExt = {
 
 					//if changed from STRING -> non-STRING, then "close" string first:
 					if(isString){
+
+						//for "optional" expression: modify previous entry to be a single character-sequence
+						// ...cars'?  -> ...car' 's'?
+						if(ch === '?' && sb.length > 0){//TODO also for '+', '*', ...???
+							sb[ sb.length - 1 ] = '" "' + sb[ sb.length - 1 ];
+						}
+						
 						sb.push("\" ");
 						isString = false;
 					}
