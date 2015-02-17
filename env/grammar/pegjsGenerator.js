@@ -11,13 +11,16 @@
  * @depends jQuery.Deferred
  * @depends jQuery.extend
  */
-define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery'], function(pegjs, constants, configManager, GrammarConverter, $){
+define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
 var deferred = $.Deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
+
+//create logger
+var logger = Logger.create(module);
 
 /**
  * The argument name when generating the grammar function:
@@ -58,14 +61,7 @@ var pegjsGen = {
         //load options from configuration:
         var config = configManager.get(pluginName, true, {});
         //combine with default default options:
-        var options = $.extend({}, DEFAULT_OPTIONS, config); 
-        
-//        //TODO make this configurable?
-//        var options = {
-//        	cache:    false,
-//    		optimize: "speed",
-//    		output:   "source"
-//    	};
+        var options = $.extend({}, DEFAULT_OPTIONS, config);
         
         var hasError = false;
         var grammarParser;
@@ -345,7 +341,7 @@ var PegJsGrammarConverterExt = {
 		var semantic = utterance_def.semantic,
 		variable_index, variable_name;
 		
-		if(IS_DEBUG_ENABLED) console.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
+		if(logger.isDebug()) logger.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
 		
 		var semantic_as_string = JSON.stringify(semantic);
 		if( semantic_as_string != null){
@@ -355,7 +351,7 @@ var PegJsGrammarConverterExt = {
 			var variable = variables[1],
 			remapped_variable_name = "";
 			
-			if(IS_DEBUG_ENABLED) console.debug("variables " + variable, semantic_as_string);//debug
+			if(logger.isDebug()) logger.debug("variables " + variable, semantic_as_string);//debug
 			
 			variable_index = /\[(\d+)\]/.exec(variable);
 			variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
