@@ -11,7 +11,7 @@
  * @depends jQuery.Deferred
  * @depends jQuery.extend
  */
-define(['jison', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'], function(jison, constants, GrammarConverter, $, Logger, module){
+define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(jison, constants, configManager, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
@@ -32,6 +32,12 @@ var logger = Logger.create(module);
  * @private
  */
 var INPUT_FIELD_NAME = 'asr_recognized_text';
+
+var DEFAULT_OPTIONS = {
+		type: 'lalr'//'lr0' | 'slr' | 'lr' | 'll' | default: lalr
+};
+var pluginName = 'grammar.jison';
+
 
 var jisonGen = {
 	init: function(callback){
@@ -54,8 +60,10 @@ var jisonGen = {
         theConverterInstance.convertJSONGrammar();
         var grammarDefinition = theConverterInstance.getJSCCGrammar();
         
-        //TODO make configurable?
-        var options = {type: 'lalr'};//'lr0' | 'slr' | 'lr' | 'll' | default: lalr
+        //load options from configuration:
+        var config = configManager.get(pluginName, true, {});
+        //combine with default default options:
+        var options = $.extend({}, DEFAULT_OPTIONS, config);
         
         var hasError = false;
         var grammarParser;
