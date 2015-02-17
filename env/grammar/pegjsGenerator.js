@@ -11,16 +11,13 @@
  * @depends jQuery.Deferred
  * @depends jQuery.extend
  */
-define(['pegjs', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'], function(pegjs, constants, GrammarConverter, $, Logger, module){
+define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery'], function(pegjs, constants, configManager, GrammarConverter, $){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
 var deferred = $.Deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
-
-//create logger
-var logger = Logger.create(module);
 
 /**
  * The argument name when generating the grammar function:
@@ -32,6 +29,13 @@ var logger = Logger.create(module);
  * @private
  */
 var INPUT_FIELD_NAME = 'asr_recognized_text';
+
+var DEFAULT_OPTIONS = {
+	cache:    false,
+	optimize: "speed",
+	output:   "source"
+};
+var pluginName = 'grammar.pegjs';
 
 var pegjsGen = {
 	init: function(callback){
@@ -51,12 +55,16 @@ var pegjsGen = {
 		theConverterInstance.convertJSONGrammar();
         var grammarDefinition = theConverterInstance.getJSCCGrammar();
         
-        //TODO make this configurable?
-        var options = {
-        	cache:    false,
-    		optimize: "speed",
-    		output:   "source"
-    	};
+        var config = configManager.get(pluginName, true, {});
+        
+        var options = $.extend({}, DEFAULT_OPTIONS, config); 
+        
+//        //TODO make this configurable?
+//        var options = {
+//        	cache:    false,
+//    		optimize: "speed",
+//    		output:   "source"
+//    	};
         
         var hasError = false;
         var grammarParser;
@@ -336,7 +344,7 @@ var PegJsGrammarConverterExt = {
 		var semantic = utterance_def.semantic,
 		variable_index, variable_name;
 		
-		if(logger.isDebug()) logger.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
+		if(IS_DEBUG_ENABLED) console.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
 		
 		var semantic_as_string = JSON.stringify(semantic);
 		if( semantic_as_string != null){
@@ -346,7 +354,7 @@ var PegJsGrammarConverterExt = {
 			var variable = variables[1],
 			remapped_variable_name = "";
 			
-			if(logger.isDebug()) logger.debug("variables " + variable, semantic_as_string);//debug
+			if(IS_DEBUG_ENABLED) console.debug("variables " + variable, semantic_as_string);//debug
 			
 			variable_index = /\[(\d+)\]/.exec(variable);
 			variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
@@ -453,10 +461,18 @@ var PegJsGrammarConverterExt = {
 		return phraseStr + " {\n\t   " + pharseMatchResult +  "; " + semanticProcResult + "; return _m; \n\t} ";
 	},
 	_checkIfNotRegExpr: function(token){
+		
 		//test for character-group
-		if( ! /([^\\]\[)|(^\[).*?[^\\]\]/.test(token))
-			//test for group
-			return ! /([^\\]\()|(^\().*?[^\\]\)/.test(token);
+		if( ! /([^\\]\[)|(^\[).*?[^\\]\]/.test(token)){
+			
+			//test for grouping
+			if( ! /([^\\]\()|(^\().*?[^\\]\)/.test(token) ){
+			
+				//try for single-characters that occur in reg-expr FIXME this may procude false-positives!!!
+				return ! /[\?|\*|\+|\^|\|\\]/.test(token); //excluded since these may be more common in natural text: . $
+			}
+		}
+		
 		return false;
 	},
 	_convertRegExpr: function(token){
@@ -479,6 +495,13 @@ var PegJsGrammarConverterExt = {
 
 					//if changed from STRING -> non-STRING, then "close" string first:
 					if(isString){
+						
+						//for "optional" expression: modify previous entry to be a single character-sequence
+						// ...cars'?  -> ...car' 's'?
+						if(ch === '?' && sb.length > 0){//TODO also for '+', '*', ...???
+							sb[ sb.length - 1 ] = '\' \'' + sb[ sb.length - 1 ];
+						}
+						
 						sb.push("' ");
 						isString = false;
 					}
