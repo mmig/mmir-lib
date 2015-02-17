@@ -232,7 +232,7 @@ var JisonGrammarConverterExt = {
 		this.json_grammar_definition = this.maskJSON(this.json_grammar_definition);
 		
 		this.token_variables += "  var semanticAnnotationResult = {};\n"
-			+ "  var _flatten = function(match){ if(!match.join){ return match;} for(var i=0, size = match.length; i < size; ++i){if(match[i].join){match[i] = _flatten(match[i])}} return match.join('') };\n"
+			+ "  var _flatten = function(match){ if(!match.join){ return match;} for(var i=0, size = match.length; i < size; ++i){if(!match[i]){continue;}if(match[i].join){match[i] = _flatten(match[i])}} return match.join('') };\n"
 			+ "  var _tok = function(field, match){ match = _flatten(match); field[match] = match; return match;}\n"
 		;
 		
