@@ -249,8 +249,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         		doNotResolve = false;
         	}
         	
-        	if(!callback){
-        		//TODO do this depending on DEBUG setting
+        	var isDefaultCallback = false;
+        	if(!callback && logger.isInfo()){
+        		//create a "debug-info callback"
         		isDefaultCallback = true;
         		callback = function(){
         			if(logger.isInfo()) logger.info('created executable grammar for "'+id+'" from source '+jsonGrammarUrl);
@@ -262,7 +263,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         		
         		createAndAddGrammar(jsonGrammarUrl, id, callback);
         	}
-        	else if(callback){
+        	else if(callback && !isDefaultCallback){
         		callback();
         	}
         	
