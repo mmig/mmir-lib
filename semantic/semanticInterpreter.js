@@ -539,7 +539,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 				return doGetGrammar(id).getJSGrammar();//grammarParser;
 			},
 			getGrammarConverter: function(id){
-				return doGetGrammar(id);
+				return doGetGrammar(id, true);//<- if no grammar is loaded for this ID, do NOT try to load it!
 			},
 			
 			createGrammar: function(rawGrammarSrc, id, callback){
