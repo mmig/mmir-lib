@@ -14,9 +14,13 @@ var _quit = function(errors){
 	//only print errors if > 0 (or STRING)
 	console.log('JS/CC loaded/finished! '+ (errors != null? (typeof errors == 'number'? (errors > 0? 'number of ERRORs ' + errors : ''): 'ERROR ' + errors): ''));
 };
-var _error = function _defErrorImpl( msg ){ console.error('JS/CC ERROR: '+msg); }
-var _warning = function _defWarningImpl( msg ){ console.warn('JS/CC WARNING: '+msg); }
-var _print = function _defPrintImpl( msg ){  console.log('JS/CC INFO: '+msg); }
+function __defErrorImpl( msg ){   console.error('JS/CC ERROR: '+msg); };
+function __defWarningImpl( msg ){ console.warn('JS/CC WARNING: '+msg); };
+function __defPrintImpl( msg ){   console.log('JS/CC INFO: '+msg); };
+
+var _error   = __defErrorImpl;
+var _warning = __defWarningImpl;
+var _print   = __defPrintImpl;
 ////////////////////////////////////////// MOD END //////////////////////
 	
 
@@ -4713,13 +4717,13 @@ _quit( errors );
 			return _print;
 		}
 		, is_printError_default: function(){
-			return _error && _error.name === '_defErrorImpl';
+			return _error === __defErrorImpl;
 		}
 		, is_printWarning_default: function(){
-			return _warning && _warning.name === '_defWarningImpl';
+			return _warning === __defWarningImpl;
 		}
 		, is_printInfo_default: function(){
-			return _print && _print.name === '_defPrintImpl';
+			return _print === __defPrintImpl;
 		}
 	};
 });//END: define(function() {...
