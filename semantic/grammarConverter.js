@@ -59,6 +59,9 @@ var GrammarConverter = function(){
 	this.variable_prefix = "_$";
 	this.variable_regexp = /"(_\$[^\"]*)"/igm;// /"_$([^\"]*)/igm;
 	
+	this.entry_token_field = "tok";//must consist of ASCI "word chars", i.e. not whitepaces, numbers etc.
+	this.entry_index_field = "i";//must consist of ASCI "word chars", i.e. not whitepaces, numbers etc.
+	
 	//regular expression for detecting encoded chars (see mask/unmask functions)
 	this.enc_regexp_str = "~~([0-9|A-F|a-f]{4})~~";
 

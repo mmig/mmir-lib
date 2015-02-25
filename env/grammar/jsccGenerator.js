@@ -33,9 +33,16 @@ function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name
 		log[level].apply(log, args);
 	};
 }
-jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
-jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
-jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
+//only set print-message function, if it is not already set
+if(jscc.is_printError_default()){
+	jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
+}
+if(jscc.is_printWarning_default()){
+	jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
+}
+if(jscc.is_printInfo_default()){
+	jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
+}
 
 var templatePath = constants.getGrammarPluginPath() + 'grammarTemplate_reduced.tpl';
 
@@ -62,6 +69,8 @@ var jsccGen = {
         
 		//attach functions for JS/CC conversion/generation to the converter-instance: 
 		$.extend(theConverterInstance, JsccGrammarConverterExt);
+		//attach the JS/CC template to the converter instance
+		theConverterInstance.TEMPLATE = this.template;
 		
 		//start conversion: create grammar in JS/CC syntax (from the JSON definition):
 		theConverterInstance.init();
@@ -211,8 +220,6 @@ $.ajax({
 		
 		jsccGen.template = data;
 		
-		GrammarConverter.prototype.TEMPLATE = data;
-		
 		deferred.resolve();
 		
 //		jsccGen.init = function(callback){
@@ -238,7 +245,7 @@ $.ajax({
 ////////////////////////////////////// JS/CC specific extensions to GrammarConverter ////////////////////////////////
 
 var JsccGrammarConverterExt = {
-		
+	/** @memberOf JsccGrammarConverterExt */
 	init: function(){
 
 		this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
@@ -365,7 +372,7 @@ var JsccGrammarConverterExt = {
 								+ utterance_name.toLowerCase() + "_temp['phrases']['"
 								+ variable_name.toLowerCase() + "']["
 								+ variable_index[1]
-							+ "]]");
+							+ "]."+this.entry_token_field+"]");
 					//TODO replace try/catch with safe_acc function
 					//     PROBLEM: currently, the format for variable-access is not well defined
 					//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
@@ -420,11 +427,15 @@ var JsccGrammarConverterExt = {
 			}
 			result += utterance_name + "_temp['phrases']['"
 						+ phraseList[i].toLowerCase() + "']["
-						+ duplicate_helper[phraseList[i]] + "] = %" + (i + 1)
-						+ "; ";
+						+ duplicate_helper[phraseList[i]] + "] = {"
+							+ this.entry_token_field + ": %" + (i + 1) + ","
+							+ this.entry_index_field + ": " + i
+						+"};\n\t\t";
 		}
-		result += "var " + this.variable_prefix + "phrase = %%; " + utterance_name
-				+ "_temp['phrase']=" + this.variable_prefix + "phrase; "
+		result += "var " + this.variable_prefix + "phrase = %%; " 
+				+ utterance_name + "_temp['phrase']=" + this.variable_prefix + "phrase; "
+				+ utterance_name + "_temp['utterance']='" + utterance_name + "'; "
+				+ utterance_name + "_temp['engine']='jscc'; "//FIXME debug
 				+ utterance_name + "_temp['semantic'] = " + semantic_as_string
 				+ "; " + this.variable_prefix + utterance_name + "["
 				+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "

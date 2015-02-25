@@ -23,14 +23,16 @@ deferred.resolve();
 //init logger
 var logger = Logger.create(module);
 
-//setup logger for compile errors
-jison.printError = function(){
-	var args = $.makeArray(arguments);
-	//prepend "location-information" to logger-call:
-	args.unshift('jison', 'compile');
-	//output log-message:
-	logger.error.apply(logger, args);
-};
+//setup logger for compile errors (if not already set)
+if(! jison.printError){
+	jison.printError = function(){
+		var args = $.makeArray(arguments);
+		//prepend "location-information" to logger-call:
+		args.unshift('jison', 'compile');
+		//output log-message:
+		logger.error.apply(logger, args);
+	};
+}
 
 /**
  * The argument name when generating the grammar function:
@@ -219,7 +221,7 @@ var jisonGen = {
 ////////////////////////////////////// Jison specific extensions to GrammarConverter ////////////////////////////////
 
 var JisonGrammarConverterExt = {
-		
+	/** @memberOf JisonGrammarConverterExt */
 	init: function(){
 		
 		this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
@@ -416,7 +418,7 @@ var JisonGrammarConverterExt = {
 								+ utterance_name.toLowerCase() + "_temp['phrases']['"
 								+ variable_name.toLowerCase() + "']["
 								+ variable_index[1]
-							+ "]]");
+							+ "]."+this.entry_token_field+"]");
 					//TODO replace try/catch with safe_acc function
 					//     PROBLEM: currently, the format for variable-access is not well defined
 					//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
@@ -490,12 +492,16 @@ var JisonGrammarConverterExt = {
 			}
 			semanticProcResult += utterance_name + "_temp['phrases']['"
 						+ phraseList[i].toLowerCase() + "']["
-						+ duplicate_helper[phraseList[i]] + "] = " + this._PARTIAL_MATCH_PREFIX + num
-						+ ";\n\t\t";
+						+ duplicate_helper[phraseList[i]] + "] = {"
+							+ this.entry_token_field + ": " + this._PARTIAL_MATCH_PREFIX + num + ","
+							+ this.entry_index_field + ": " + (num-1)
+						+"};\n\t\t";
 		}
 		
-		semanticProcResult += "var " + this.variable_prefix + "phrase = $$; " + utterance_name
-				+ "_temp['phrase']=" + this.variable_prefix + "phrase; "
+		semanticProcResult += "var " + this.variable_prefix + "phrase = $$; " 
+				+ utterance_name + "_temp['phrase']=" + this.variable_prefix + "phrase; "
+				+ utterance_name + "_temp['utterance']='" + utterance_name + "'; "
+				+ utterance_name + "_temp['engine']='jison'; "//FIXME debug
 				+ utterance_name + "_temp['semantic'] = " + semantic_as_string
 				+ "; " + this.variable_prefix + utterance_name + "["
 				+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "
