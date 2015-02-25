@@ -10,6 +10,7 @@
  * @depends Jison
  * @depends jQuery.Deferred
  * @depends jQuery.extend
+ * @depends jQuery.makeArray
  */
 define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(jison, constants, configManager, GrammarConverter, $, Logger, module){
 
@@ -21,6 +22,15 @@ deferred.resolve();
 
 //init logger
 var logger = Logger.create(module);
+
+//setup logger for compile errors
+jison.printError = function(){
+	var args = $.makeArray(arguments);
+	//prepend "location-information" to logger-call:
+	args.unshift('jison', 'compile');
+	//output log-message:
+	logger.error.apply(logger, args);
+};
 
 /**
  * The argument name when generating the grammar function:
@@ -179,7 +189,7 @@ var jisonGen = {
         		jison.printError(evalMsg);
         	}
         	else {
-        		console.error(evalMsg);
+        		logger.error('jison', 'evalCompiled', evalMsg, err);
         	}
         	
         	if(! hasError){

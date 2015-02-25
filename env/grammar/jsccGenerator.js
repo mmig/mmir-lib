@@ -11,6 +11,7 @@
  * @depends jQuery.Deferred
  * @depends jQuery.extend
  * @depends jQuery.ajax
+ * @depends jQuery.makeArray
  */
 define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'], function(jscc, constants, GrammarConverter, $, Logger, module){
 
@@ -20,6 +21,21 @@ var deferred = $.Deferred();
 
 //create logger
 var logger = Logger.create(module);
+
+
+//setup logger for compile-messages
+function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name*/, libMakeArray/*helper-lib: provides function makeArray(obj); e.g. jquery*/){
+	return function(){
+		var args = libMakeArray.makeArray(arguments);
+		//prepend "location-information" to logger-call:
+		args.unshift('JSCC', 'compile');
+		//output log-message:
+		log[level].apply(log, args);
+	};
+}
+jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
+jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
+jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
 
 var templatePath = constants.getGrammarPluginPath() + 'grammarTemplate_reduced.tpl';
 
@@ -48,7 +64,7 @@ var jsccGen = {
 		$.extend(theConverterInstance, JsccGrammarConverterExt);
 		
 		//start conversion: create grammar in JS/CC syntax (from the JSON definition):
-		theConverterInstance.init();	
+		theConverterInstance.init();
         theConverterInstance.convertJSONGrammar();
         var grammarDefinition = theConverterInstance.getJSCCGrammar();
 

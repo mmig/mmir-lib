@@ -10,6 +10,7 @@
  * @depends PEG.js
  * @depends jQuery.Deferred
  * @depends jQuery.extend
+ * @depends jQuery.makeArray
  */
 define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
 
@@ -21,6 +22,15 @@ deferred.resolve();
 
 //create logger
 var logger = Logger.create(module);
+
+//setup logger for compile errors
+pegjs.printError = function(){
+	var args = $.makeArray(arguments);
+	//prepend "location-information" to logger-call:
+	args.unshift('PEGjs', 'compile');
+	//output log-message:
+	logger.error.apply(logger, args);
+};
 
 /**
  * The argument name when generating the grammar function:
@@ -175,7 +185,7 @@ var pegjsGen = {
         		pegjs.printError(evalMsg);
         	}
         	else {
-        		console.error(evalMsg);
+        		logger.error('PEGjs', 'evalCompiled', evalMsg, err);
         	}
         	
         	if(! hasError){
