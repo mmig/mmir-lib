@@ -14,9 +14,9 @@ var _quit = function(errors){
 	//only print errors if > 0 (or STRING)
 	console.log('JS/CC loaded/finished! '+ (errors != null? (typeof errors == 'number'? (errors > 0? 'number of ERRORs ' + errors : ''): 'ERROR ' + errors): ''));
 };
-function _error( msg ){ console.error('JS/CC ERROR: '+msg); }
-function _warning( msg ){ console.warn('JS/CC WARNING: '+msg); }
-function _print( msg ){  console.log('JS/CC INFO: '+msg); }
+var _error = function _defErrorImpl( msg ){ console.error('JS/CC ERROR: '+msg); }
+var _warning = function _defWarningImpl( msg ){ console.warn('JS/CC WARNING: '+msg); }
+var _print = function _defPrintImpl( msg ){  console.log('JS/CC INFO: '+msg); }
 ////////////////////////////////////////// MOD END //////////////////////
 	
 
@@ -4702,6 +4702,24 @@ _quit( errors );
 		}
 		, set_printInfo: function(printFunc){
 			_print = printFunc;
+		}
+		, get_printError: function(){
+			return _error;
+		}
+		, get_printWarning: function(){
+			return _warning;
+		}
+		, get_printInfo: function(){
+			return _print;
+		}
+		, is_printError_default: function(){
+			return _error && _error.name === '_defErrorImpl';
+		}
+		, is_printWarning_default: function(){
+			return _warning && _warning.name === '_defWarningImpl';
+		}
+		, is_printInfo_default: function(){
+			return _print && _print.name === '_defPrintImpl';
 		}
 	};
 });//END: define(function() {...

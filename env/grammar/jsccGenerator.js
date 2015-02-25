@@ -28,7 +28,7 @@ function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name
 	return function(){
 		var args = libMakeArray.makeArray(arguments);
 		//prepend "location-information" to logger-call:
-		args.unshift('JSCC', 'compile');
+		args.unshift('JS/CC', 'compile');
 		//output log-message:
 		log[level].apply(log, args);
 	};
@@ -67,12 +67,23 @@ var jsccGen = {
 		theConverterInstance.init();
         theConverterInstance.convertJSONGrammar();
         var grammarDefinition = theConverterInstance.getJSCCGrammar();
+        var grammarParserStr;
 
         //set up the JS/CC compiler:
         var dfa_table = '';
         error_output = new String();//FIXME impl. & use jcss.getErrorMessage()/Problems()...
         jscc.reset_all( jscc.EXEC_WEB );
-        jscc.parse_grammar(grammarDefinition);
+        
+        var isParsingFailed = false;
+        try {
+        	jscc.parse_grammar(grammarDefinition);
+        } catch (err){
+        	var msg = 'Error while compiling grammar: ' + (err.stack?err.stack:err);
+        	isParsingFailed = msg;
+        	
+        	msg = '[INVALID GRAMMAR] ' + msg;
+        	grammarParserStr = 'var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;';//FIXME
+        }
       
         if (jscc.getErrors() == 0) {
         	jscc.undef();
@@ -92,25 +103,26 @@ var jsccGen = {
         }
      
         if (jscc.getErrors() > 0 || jscc.getWarnings() > 0 && error_output != "") 
-            console.error(''+error_output);
+            logger.error('JSCC', 'compile', error_output);
         jscc.resetErrors();
         jscc.resetWarnings();
         
 //                console.debug("before replace " + theConverterInstance.PARSER_TEMPLATE);//debug
      
-        var grammarParserStr = this.template;
-        grammarParserStr = grammarParserStr.replace(/##PREFIX##/gi, "");
-        grammarParserStr = grammarParserStr.replace(/##HEADER##/gi, jscc.get_code_head());
-        grammarParserStr = grammarParserStr.replace(/##TABLES##/gi, jscc.print_parse_tables(jscc.MODE_GEN_JS));
-        grammarParserStr = grammarParserStr.replace(/##DFA##/gi, jscc.print_dfa_table(dfa_table));
-        grammarParserStr = grammarParserStr.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
-        grammarParserStr = grammarParserStr.replace(/##LABELS##/gi, jscc.print_symbol_labels());
-        grammarParserStr = grammarParserStr.replace(/##ACTIONS##/gi, jscc.print_actions());
-        grammarParserStr = grammarParserStr.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
-        grammarParserStr = grammarParserStr.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
-        grammarParserStr = grammarParserStr.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
-        grammarParserStr = grammarParserStr.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
-        
+        if( ! isParsingFailed){
+	        grammarParserStr = this.template;
+	        grammarParserStr = grammarParserStr.replace(/##PREFIX##/gi, "");
+	        grammarParserStr = grammarParserStr.replace(/##HEADER##/gi, jscc.get_code_head());
+	        grammarParserStr = grammarParserStr.replace(/##TABLES##/gi, jscc.print_parse_tables(jscc.MODE_GEN_JS));
+	        grammarParserStr = grammarParserStr.replace(/##DFA##/gi, jscc.print_dfa_table(dfa_table));
+	        grammarParserStr = grammarParserStr.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
+	        grammarParserStr = grammarParserStr.replace(/##LABELS##/gi, jscc.print_symbol_labels());
+	        grammarParserStr = grammarParserStr.replace(/##ACTIONS##/gi, jscc.print_actions());
+	        grammarParserStr = grammarParserStr.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
+	        grammarParserStr = grammarParserStr.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
+	        grammarParserStr = grammarParserStr.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
+	        grammarParserStr = grammarParserStr.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
+        }
         
         //FIXME attach compiled parser to some other class/object
         var moduleNameString = '"'+instanceId+'GrammarJs"';
@@ -148,8 +160,39 @@ var jsccGen = {
         theConverterInstance.setJSGrammar(addGrammarParserExec);
 
 //        doAddGrammar(instanceId, theConverterInstance);
-//        
-        eval(addGrammarParserExec);
+        
+        try{
+        
+        	eval(addGrammarParserExec);
+        	
+        } catch (err) {
+
+        	//TODO russa: generate meaningful error message with details about error location
+        	//			  eg. use esprima (http://esprima.org) ...?
+        	//			... as optional dependency (see deferred initialization above?)
+        	
+        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
+        	
+        	if(jscc.get_printError()){
+        		jscc.get_printError()(evalMsg);
+        	}
+        	else {
+        		logger.error('JS/CC', 'evalCompiled', evalMsg, err);
+        	}
+        	
+        	if(! hasError){
+            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
+            	var parseDummyFunc = (function(msg, error){ 
+            		return function(){ console.error(msg); console.error(error); throw msg;};
+            	})(evalMsg, err);
+            	
+            	parseDummyFunc.hasErrors = true;
+            	
+            	//theConverterInstance = doGetGrammar(instanceId);
+            	theConverterInstance.setGrammarFunction(parseDummyFunc);
+        	}
+        	
+        }
 //        
         //invoke callback if present:
         if(callback){
