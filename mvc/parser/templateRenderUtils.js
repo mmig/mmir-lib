@@ -449,8 +449,8 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    			data[PARAM_ARGS_NAME] = prevArgs;
 	    		}
 	    		
-	    		if(!text){
-	    			console.warn('RenderUtils.renderHelper: no result for '+containingContentElement.getController().getName()+'-helper >'+name+'<');
+	    		if(typeof text !== 'string'){
+	    			console.warn('RenderUtils.renderHelper: no STRING result for '+containingContentElement.getController().getName()+'::Helper >'+name+'<');
 	    		}
 	    		else {
 	    			//TODO HTML escape for toString before pushing the result (?)
