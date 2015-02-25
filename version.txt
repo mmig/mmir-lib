@@ -1,7 +1,7 @@
 ﻿
-version notes for MMIR framework code (v 3.4.0)
+version notes for MMIR framework code (v 3.5.0)
 
- * using Cordova 3.5.x library
+ * using Cordova 3.x.x library
  * using jQuery 2.1.x library
  * using jQuery Mobile 1.4.x library
  
@@ -22,6 +22,45 @@ version notes for MMIR framework code (v 3.4.0)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.5.0
+##################
+
+Grammar Compilers (env/grammar/)
+ * added configuration-method for grammar-compiler-options
+   * for pegjs- and jison-engines
+   * configuration via configuration.json, e.g.:
+     "grammar": { "jison": { <jison options> }},
+ * extended meta-data for grammar result object
+   * added meta-data 'utterance': name of the matched utterance
+   * added meta-data 'engine': name of the grammar-compiler that was used to create the grammar
+   * extended meta-data for 'phrases' entries to include ordering information:
+     * use object instead of string
+     * field 'tok': the string that matched the token (as before)
+     * field 'i': the zero-based index of where in the phrase the token occurs
+ * MODIFICATION extended detection/acceptance of regular-expressions in jison- and pegjs-engines
+   * allow optional-operator (?), and multiple-operators (*+) without character-group or grouping
+   * FIX for conversion of optional-operator in combination with STRINGs
+ * BUGFIX for partial matching in phrases (helper function _flatten now accepts non-matched parts, e.g. for optional tokens)
+ * FIX use loggers for compile-error messages (if no custom-function for that was set on the compiler yet); instead of using raw console-output
+ * BUGFIX for JS/CC compiler: handle errors during compilation (has now same behavior as other engines/compilers)
+ * extendend jscc-amd API: added functions for getting/checking print-compile-message-functions (print error, print info etc)
+
+SemanticInterperter:
+ * BUGFIX avoid using generated callback in doGetGrammar
+ * BUGFIX for getGrammarConverter(ID): do not try to resolve (i.e. load) grammars, if the ID is not registered yet
+
+Template rendering (mvc/parser/templateRenderUtils.js)
+ * BUGFIX print warning for missing helper result only, if we do not get a string (instead of a FALSY result, as before)
+
+##################
+ Version 3.4.1
+##################
+
+BUGFIXES
+ * FIXED BUG (and removed HACK for workaround) in PresentationManager.init: removed duplicate declaration of checksumUtils variable
+ 
 
 ##################
  Version 3.4.0
