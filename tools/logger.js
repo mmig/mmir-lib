@@ -56,7 +56,7 @@
  * 
  * @see mmir.Logging
  */
-define(['dictionary', 'module'], function(Dictionary, module){
+define(['dictionary', 'stacktrace', 'module'], function(Dictionary, stacktrace, module){
 	
 var _loggers = new Dictionary();
 //var logLevels = new Dictionary();
@@ -291,6 +291,38 @@ function print(loggerName, logLevel, msg){
 }
 
 
+//enable tracing?
+var tmpTraceConfig = module.config().trace;
+if(tmpTraceConfig !== false || (typeof tmpTraceConfig === 'object' && tmpTraceConfig.trace === true)){
+
+	var pnTraceOptions = tmpTraceConfig === true? void(0) : tmpTraceConfig;
+	var isFullStackDepth = pnTraceOptions && pnTraceOptions.depth === "full";
+	
+	var pnOriginal = print;
+	
+	//do enable tracing: append stacktrace to messages in print-function
+	if(isFullStackDepth){
+		//NOTE code duplication for the sake of a more efficient print function
+		print = function printFullStack(loggerName, logLevel, msg){
+			if(typeof msg === 'undefined' || msg === null){
+				msg = '';
+			}
+			msg += '\n  ' + stacktrace(pnTraceOptions).slice(5).join('\n  ');
+			pnOriginal.call(this, loggerName, logLevel, msg);
+		};
+	}
+	else {
+		//NOTE code duplication for the sake of a more efficient print function
+		print = function printStack(loggerName, logLevel, msg){
+			if(typeof msg === 'undefined' || msg === null){
+				msg = '';
+			}
+			msg += '\n  ' + stacktrace(pnTraceOptions)[5];
+			pnOriginal.call(this, loggerName, logLevel, msg);
+		};
+	}
+
+}
 
 /**
  * Constructor-Method of Class {@link mmir.Logger}<br>

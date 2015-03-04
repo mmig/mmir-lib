@@ -180,9 +180,39 @@ require(['core'], function(core){
 		//this will load a "disabled" logger implementation with no-op functions etc.
 		logConfig.paths.logger += 'Disabled';
 	}
-	//if the "functional" logger is set: retrieve/set the default log-level:
-	else if(typeof core.logLevel !== 'undefined'){
-		logConfig.config = {'logger': {logLevel: core.logLevel}};
+	//if the "functional" logger is set, configure it:
+	else{
+		
+		//retrieve/set the default log-level:
+		if(typeof core.logLevel !== 'undefined'){
+			logConfig.config = {'logger': {logLevel: core.logLevel}};
+		}
+		
+		//set up the stacktrace for log messages (or not)
+		var isEnableTrace = true;
+		if(typeof core.logTrace !== 'undefined'){
+			isEnableTrace = core.logTrace;
+		}
+		
+		//normalize config object
+		if(!logConfig.config){
+			logConfig.config = {};
+		}
+		if(!logConfig.config['logger']){
+			logConfig.config['logger'] = {};
+		}
+		
+		if(isEnableTrace === true || (isEnableTrace && isEnableTrace.trace === true)){
+			//add module ID for stacktrace library
+			logConfig.paths['stacktrace'] = 'vendor/libs/stacktrace-v0.6.4';
+			logConfig.config['logger'].trace = isEnableTrace;
+		}
+		else {
+			//define dummy module for stacktrace library (will not be used!)
+			define('stacktrace', function(){ return function(){}; });
+			logConfig.config['logger'].trace = false;
+		}
+
 	}
 	//"append" the logger-config
 	core.config(logConfig);

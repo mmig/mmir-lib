@@ -233,7 +233,7 @@ function initMmir() {
 			 *       (if their log-level is set appropriately)
 			 * 			 
 			 * @memberOf mmir
-			 * @name debug
+			 * @name logLevel
 			 * @property
 			 * @type Integer | String
 			 * @default "debug"
@@ -241,7 +241,40 @@ function initMmir() {
 			 * 
 			 * @see #debug
 			 */
-			logLevel: 'debug'
+			logLevel: 'debug',
+			
+			/**
+			 * Property for enabling / disabling trace output in the Logger module:
+			 * if set to <code>true</code>, and property <code>debug</code> is <code>true</code>, then 
+			 * the logger module will print a stack-trace for each log-message.
+			 * 
+			 * If set to a configuration object:
+			 * <pre>
+			 * {
+			 * 		"trace": [true | false],	//same as the Boolean primitive for logTrace
+			 * 		"depth": ["full" | other]	//OPTIONAL: if "full" then the complete stack trace is printed,
+			 * 									// otherwise only the first stack-entry (i.e. the calling function)
+			 * 									// is printed.
+			 * 									//DEFAULT: other
+			 * }
+			 * </pre>
+			 * 
+			 * i.e. <code>{trace: true}</code> would be the same as using <code>true</code> (or omitting this property).
+			 * 
+			 * 
+			 * The default value (also if omitted!) is <code>true</code>.
+			 * 			 
+			 * @memberOf mmir
+			 * @name logTrace
+			 * @property
+			 * @type Boolean | PlainObject
+			 * @default true
+			 * @public
+			 * 
+			 * @see #debug
+			 * @see #logLevel
+			 */
+			logTrace: true	//{trace: true, depth: 'full'}
 	};
 	
 	if(typeof define === 'function'){
