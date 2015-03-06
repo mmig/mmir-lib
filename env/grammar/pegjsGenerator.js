@@ -314,7 +314,7 @@ var PegJsGrammarConverterExt = {
 		var utt_index = 0;
 		var json_utterances =  this.json_grammar_definition.utterances;
 
-		for(utterance_name in json_utterances){
+		for(var utterance_name in json_utterances){
 			var utterance_def = json_utterances[utterance_name];
 			if(utt_index > 0){
 				self.grammar_phrases += "\n\t/";
