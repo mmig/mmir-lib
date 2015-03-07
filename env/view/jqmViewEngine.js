@@ -2,10 +2,14 @@
 /**
  * View engine that uses jQuery Mobile for loading the views as new jQM pages.
  * 
+ * <p>
+ * 
  * The render-functions supports the jQM page-transitions.
  * 
+ * <p>
+ * 
  * NOTE: loading the module will in effect load all jQuery Mobile functionality
- *       (and its side effects, e.g. auto-enhancement of HTML elements, e.g. for input/text)
+ *       (and its side effects, such as auto-enhancement of HTML elements, e.g. for input/text)
  * 
  * <h3>Side Effects</h3>
  * <ul>
@@ -15,11 +19,12 @@
  * </ul>
  * 
  * @example
- * //use page-transition with effect 'slide' (animated as not reversed motion)
+ * //use page-transition with effect 'slide' (animated as not-reversed motion)
  * mmir.DialogManager.render('theController', 'theView', {transition: 'slide', reverse: false});
  * 
  * @class
  * @name jqmViewEngine
+ * @exports jqmViewEngine as mmir.env.jqmViewEngine
  * @static 
  *  
  * Libraries:

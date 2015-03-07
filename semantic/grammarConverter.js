@@ -44,6 +44,7 @@
 define(['commonUtils', 'jquery'], function(commonUtils, $){
 
 /**
+ * @name GrammarConverter
  * @class GrammarConverter
  */
 var GrammarConverter = function(){

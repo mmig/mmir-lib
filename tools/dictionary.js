@@ -45,6 +45,8 @@ function Dictionary() {
 	 * 
 	 * @property map
 	 * @private
+	 * 
+	 * @memberOf Dictionary#
 	 */
 	var map = {};
 
@@ -53,6 +55,8 @@ function Dictionary() {
 	 * 
 	 * @property keyList
 	 * @private
+	 * 
+	 * @memberOf Dictionary#
 	 */
 	var keyList = [];
 
@@ -63,6 +67,8 @@ function Dictionary() {
 	 * @property KEY_PREFIX
 	 * @static
 	 * @private
+	 * 
+	 * @memberOf Dictionary#
 	 */
 	var KEY_PREFIX = '$$';
 
@@ -73,6 +79,8 @@ function Dictionary() {
 	 * 
 	 * @function lookupKey
 	 * @private
+	 * 
+	 * @memberOf Dictionary#
 	 */
 	var lookupKey = function(key) {
 		return KEY_PREFIX + key;
@@ -91,6 +99,8 @@ function Dictionary() {
 		 *            value the value to store
 		 * 
 		 * @public
+		 * 
+		 * @memberOf Dictionary.prototype
 		 */
 		put : function(key, value) {
 

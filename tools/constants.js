@@ -46,52 +46,174 @@ define(['env'],
 function(
 		env
 ){
-	 /**
-     * Object containing the instance of the class constants 
-     * 
-     * @property instance
-     * @type mmir.Constants#constructor
-     * @private
-     */
-    var instance = null;
 	
+	/**
+	 * #@+
+	 * @private
+	 */
+	
+	/**
+	 * Object containing the instance of the class constants 
+	 * 
+	 * @property instance
+	 * @type mmir.Constants#constructor
+	 * @private
+	 */
+	var instance = null;
+	
+	/**
+	 * @memberOf Constants#
+	 */
 	var isBrowserEnv = false;
 
 	// needed basepath
+	/**
+	 * the base path for the "invoking" app (i.e. where the main HTML file is located)
+	 * @memberOf Constants#
+	 */
     var basePath = "";
 	
-	// Paths
+    ///////////////////////////////////////////////////// Paths /////////////////////////////////////////////////////
+    
+    /**
+	 * the base path of the (i.e. this) library
+	 * @memberOf Constants#
+	 */
 	var frameworkBasePath = "mmirf/";
 	
+	/**
+	 * the path for WebWorkers
+	 * @memberOf Constants#
+	 */
 	var workerPath = frameworkBasePath + "workers/";
+	/**
+	 * the path for plugins
+	 *  
+	 * TODO deprecated? since Cordova 3.x brings its own loading mechanism now...
+	 * 
+	 * @memberOf Constants#
+	 */
 	var pluginsPath = frameworkBasePath + "plugins/";
+	/**
+	 * the path for Extensions (i.e. extending JavaScript base classes)
+	 * @memberOf Constants#
+	 */
 	var extensionsPath = frameworkBasePath + "tools/extensions/";
+	/**
+	 * the path to the audio file containing the default beep sound.
+	 * @memberOf Constants#
+	 */
 	var beepURL = frameworkBasePath + "vendor/sounds/beep-notification.mp3";
+	/**
+	 * the path to the app's controllers
+	 * @memberOf Constants#
+	 */
 	var controllerPath = "controllers/";
+	/**
+	 * the path to the app's controller helpers
+	 * @memberOf Constants#
+	 */
 	var helperPath = "helpers/";
+	/**
+	 * the path to the language resources root directory
+	 * @memberOf Constants#
+	 */
 	var languagePath = "config/languages/";
+	/**
+	 * the path to the app's models
+	 * @memberOf Constants#
+	 */
 	var modelPath = "models/";
+	/**
+	 * the path to the app's layouts
+	 * @memberOf Constants#
+	 */
 	var layoutPath = "views/layouts/";//before changing this: see also use of 'layouts' sub-dir-name in build/lib/mmir-build/ant/StandaloneTemplateParserExec.js
+	/**
+	 * the path to the app's view root directory
+	 * @memberOf Constants#
+	 */
 	var viewPath = "views/";
+	/**
+	 * the path to the app's generated (compiled JS) views
+	 * @memberOf Constants#
+	 */
 	var genViewPath = "gen/views/";
+	/**
+	 * the path to the app's generated (compiled JS) layouts
+	 * @memberOf Constants#
+	 */
 	var genLayoutPath = "gen/views/layouts/";//before changing this: see also use of 'layouts' sub-dir-name in build/lib/mmir-build/ant/StandaloneTemplateParserExec.js
+	/**
+	 * the path to the app's generated (compiled JS) grammars
+	 * @memberOf Constants#
+	 */
 	var genGrammarsPath = "gen/grammar/";
-	
-	var speechConfigFileName = "speech.json";
-	var grammarFileName = "grammar.json";
-	var dictionaryFileName = "dictionary.json";
+
+	/**
+	 * the path to media plugins / modules
+	 * @memberOf Constants#
+	 */
 	var mediaPluginPath = frameworkBasePath + "env/media/";
+	/**
+	 * the path to grammar engine implementations / modules
+	 * @memberOf Constants#
+	 */
 	var grammarPluginPath = frameworkBasePath + "env/grammar/";
 	
+	///////////////////////////////////////////////////// Resource Names /////////////////////////////////////////////////////
+    
+	/**
+	 * the name of speech (output) configuration files
+	 * @memberOf Constants#
+	 */
+	var speechConfigFileName = "speech.json";
+	/**
+	 * the name of (JSON) grammar files, i.e. "grammar definitions"
+	 * @memberOf Constants#
+	 */
+	var grammarFileName = "grammar.json";
+	/**
+	 * the name of language dictionary files
+	 * @memberOf Constants#
+	 */
+	var dictionaryFileName = "dictionary.json";
+	/**
+	 * the name of the app's configuration file
+	 * @memberOf Constants#
+	 */
 	var configurationFileUrl = "config/configuration.json";
+	/**
+	 * the name of the app's directory-/file-information file
+	 * @memberOf Constants#
+	 */
 	var directoriesFileUrl = "config/directories.json";
 	
+	
+	////////////////////////////////////////////////// General Constant Values///////////////////////////////////////////////////
+    
+	/**
+	 * the default language setting
+	 * @memberOf Constants#
+	 */
 	var language = "en";
 	
 	// Prefixes
+	
+	/**
+	 * the prefix for partial-view file-names
+	 * @memberOf Constants#
+	 */
 	var partialsPrefix = '~';
+	/**
+	 * the postfix for controller-helper file-names
+	 * @memberOf Constants#
+	 */
 	var helperSuffix = "Helper";
 	
+	/**
+	 * @memberOf Constants#
+	 */
 	function setBasePath(isBrowserEnvParam){
 		// if not on browser: basepath must be different
 		if(typeof isBrowserEnvParam === 'string'){
@@ -121,8 +243,8 @@ function(
 	
 	/**
 	 * Constructor-Method of Class {@link Constants}<br>
-	 * @constructs Constants
-	 * @memberOf Constants.prototype
+	 * 
+	 * @memberOf mmir.Constants.prototype
 	 * @private
 	 */
     function constructor(forBrowserParameter){
@@ -136,6 +258,8 @@ function(
 			 * @function getBasePath
 			 * @public
 			 * @returns {String} base path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getBasePath: function(){
 				return basePath;
@@ -355,6 +479,11 @@ function(
 				return this;
 			},
 			
+			/**
+	         * @function
+	         * @returns {Boolean}
+	         * @public
+	         */
 			isBrowserEnv: function(){//FIXME replace with real environment-setting/-mechanism
 				return isBrowserEnv;
 			},

@@ -25,16 +25,32 @@
  */
 
 
+
+define( 
 /**
  * A "silent" replacement for the Logger factory.<br>
+ * Has the same interaface (functions etc.) as {@link mmir.Logging}.
+ * 
+ * <p>
+ * 
+ * This logging module allows to disable logging completely.
+ * 
+ * <p>
+ * 
+ * Which logging module is used, can be configured in core
+ * module in {@link mmir}.
+ *  
  * 
  * @example <code>mmir.Logging.create('SomeClass')</code>
- * @class mmir.Logging
- * @category core
+ * @class DisabledLogging
+ * @name DisabledLogging
+ * @exports DisabledLogging as mmir.DisabledLogging
+ * @category tools
+ * @static
  * 
  * @see mmir.Logging
  */
-define( function(){
+function(){
 
 /**
  * logging levels
@@ -55,8 +71,16 @@ function noop(){}
 function deny(){return false;}
 
 /**
- * Constructor-Method of Class {@link mmir.Logger}<br>
+ * Constructor-Method of Class DisabledLogger:
+ * This logger implementation will never print logging output.
+ * 
+ * Has the same interface (functions etc) as {@link Logger},
+ * but <code>isXXX</code> functions will always return <code>false</code>
+ * and the logging-functions will never do anything (i.e. these are
+ * <em>no-op</em> functions).
+ * 
  * @constructor
+ * @name DisabledLogger
  */
 function Logger(){}
 
@@ -95,10 +119,19 @@ Logger.prototype = {//public instance members (basically all NO-OPs)
     isc: deny
 };
 
+/**
+ * @memberOf mmir.DisabledLogging.prototype
+ */
 var _defaultLogger = new Logger();
 
 return {//public API
 	
+	/**
+	 * Will alway return the default logger for this logging module
+	 * @returns {DisabledLogger}
+	 * 
+	 * @memberOf mmir.DisabledLogging.prototype
+	 */
     create: function(){
         return _defaultLogger;
     },

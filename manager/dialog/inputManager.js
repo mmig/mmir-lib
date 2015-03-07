@@ -64,12 +64,17 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 	 * @memberOf mmir.InputManager.prototype 
 	 */
 	
+	/**
+	 * @memberOf mmir.InputManager#
+	 */
 	var _instance = {
 
 		/** @scope mmir.InputManager.prototype */
 		
 		/** 
 		 * @deprecated instead: use mmir.InputManager object directly.
+		 * 
+		 * @memberOf mmir.InputManager.prototype
 		 */
 		getInstance : function() {
 			return this;
@@ -99,6 +104,13 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 
 	return $.extend(true, _instance, {
 
+		/**
+		 * @function
+		 * @name init
+		 * @returns {Deferred}
+		 * 
+		 * @memberOf mmir.InputManager.prototype
+		 */
 		init : function() {
 			delete this.init;
 			

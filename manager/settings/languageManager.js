@@ -68,9 +68,16 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @property instance
 		     * @type Object
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    var instance = null;
 		    
+		    /**
+		     * @private
+		     * @type Logger
+		     * @memberOf LanguageManager#
+		     */
 		    var logger = Logger.create(module);
 
 		    /**
@@ -80,6 +87,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @property dictionary
 		     * @type JSON
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    var dictionary = null;
 
@@ -89,6 +98,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @property currentLanguage
 		     * @type String
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    var currentLanguage = null;
 
@@ -98,6 +109,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @property currentSpeechConfig
 		     * @type JSON-Object
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    var currentSpeechConfig = null;
 
@@ -107,6 +120,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @property languages
 		     * @type Array
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    var languages = null;
 
@@ -121,6 +136,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @private
 		     * @example @localize('current_language')
 		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    var keyword_current_language = 'current_language';
 
@@ -133,6 +149,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     *            lang The language of the dictionary which should be loaded.
 		     * @returns {String} The (new) current language
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    function setLanguage(lang) {
 		        if ((lang) && (currentLanguage != lang)) {
@@ -143,6 +161,10 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		        return currentLanguage;
 		    }
 
+		    /**
+		     * @function
+		     * @memberOf LanguageManager#
+		     */
 		    function doCheckExistsGrammar(lang) {
 		        var langFiles = null;
 		        var retValue = false;
@@ -181,6 +203,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @returns {String} The current grammar language
 		     * @async
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    function requestGrammar(lang, doSetNextBestAlternative) {
 
@@ -239,6 +263,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @returns {String} The (new) current language
 		     * @async
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    function loadSpeechConfig(lang) {
 
@@ -275,6 +301,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * @returns {String} The (new) current language
 		     * @async
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    function loadDictionary(lang) {
 
@@ -304,6 +332,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     *            textVarName The keyword which should be looked up
 		     * @returns {String} the translation of the keyword
 		     * @private
+		     * 
+		     * @memberOf LanguageManager#
 		     */
 		    function internalGetText(textVarName) {
 		        var translated = "";
@@ -324,7 +354,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		     * Constructor-Method of Singleton mmir.LanguageManager.<br>
 		     * 
 		     * @constructs LanguageManager
-		     * @memberOf LanguageManager.prototype
+		     * @memberOf LanguageManager#
 		     * @private
 		     * 
 		     */
@@ -339,6 +369,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		        	 * @param {String} [lang] OPTIONAL
 		        	 * 				a language code for setting the current language and
 		        	 * 				selecting the corresponding language resources
+		        	 * 
+		        	 * @memberOf LanguageManager.prototype
 		        	 */
 		        	init: function(lang){
 		        		

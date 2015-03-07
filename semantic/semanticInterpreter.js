@@ -38,13 +38,25 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 ){
 	
 	/**
+	 * #@+
+	 * @private
+	 */
+	
+	/**
 	 * The instance for the singleton SemanticInterpreter
 	 * 
 	 * @type SemanticInterpreter
 	 * @private
+	 * 
+     * @memberOf SemanticInterpreter#
 	 */
 	var instance = null;
 
+	/**
+	 * @private
+	 * @type Logger
+     * @memberOf SemanticInterpreter#
+	 */
 	var logger = Logger.create(module);
 	
 	/**
@@ -63,21 +75,32 @@ define(['constants', 'grammarConverter', 'logger', 'module'
      * 
      * @constant
      * @private
+     * 
+     * @memberOf SemanticInterpreter#
      */
     var GRAMMAR_FILE_FORMAT_VERSION = 3;
     
+    /** #@-*/
+    
     /**
      * @constructs SemanticInterpreter
-     * @memberOf SemanticInterpreter.prototype
+     * @memberOf SemanticInterpreter#
      * @private
      */
     function constructor(){
+    	
+    	/**
+    	 * #@+
+    	 * @private
+    	 */
     
 	    /**
 	     * "map" for grammar implementations (e.g. for different languages)
 	     * 
 	     * @property grammarImplMap
 	     * @private
+	     * 
+	     * @memberOf SemanticInterpreter#
 	     */
 	    var grammarImplMap = {};
 	    /**
@@ -87,6 +110,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * 
 	     * @property grammarImplList
 	     * @private
+	     * 
+	     * @memberOf SemanticInterpreter#
 	     */
 	    var grammarImplList = [];
 	    
@@ -102,18 +127,40 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * 		 as JSON grammar file (which must be available at <tt>/config/languages/[ID]/grammar.json</tt>
 	     * 
 	     * @property currentGrammarId
+	     * @type String
 	     * @private
+	     * 
+	     * @memberOf SemanticInterpreter#
 	     */
 	    var currentGrammarId = null;
 	    
-	    
+	    /**
+	     * @type String
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var currentGrammarEningeId = null;
+	    /**
+	     * @type String
+	     * @constant
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var DEFAULT_GRAMMAR_ENGINE = 'jscc';
+	    /**
+	     * @type String
+	     * @constant
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var GRAMMAR_MODULE_ID_POSTFIX = 'Gen';
 	    
+	    /**
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var doSetGrammarEngine = function(id){
 	    	currentGrammarEningeId = id;
 	    };
+	    /**
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var doGetGrammarEngine = function(){
 	    	if(currentGrammarEningeId){
 		    	return currentGrammarEningeId;	
@@ -133,12 +180,21 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * @property _isEnabled
 	     * @type Boolean
 	     * @private
+	     * @memberOf SemanticInterpreter#
 	     */
 	    var _isEnabled = false;
 	    
+
+	    /**
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var doSetEnabled = function(isEnabled){
         	_isEnabled = isEnabled;
         };
+
+	    /**
+	     * @memberOf SemanticInterpreter#
+	     */
         var doCheckIsEnabled = function(){
         	return _isEnabled;
         };
@@ -162,7 +218,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 		 * 					If the number given does not match {@link #GRAMMAR_FILE_FORMAT_VERSION}
 		 * 					the file format is assumed to be out-dated and an Error will be thrown.
 		 * 
-	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION. 
+	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION.
+	     * 
+	     * @memberOf SemanticInterpreter#
 	     */
     	var doAddGrammar = function(id, grammarImpl, fileFormatNo){
     		
@@ -210,6 +268,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         	doSetEnabled(true);
         };
         
+        /**
+	     * @memberOf SemanticInterpreter#
+         */
         var doSetStopwords = function(id, stopwordArray){
         	doGetGrammar(id).setStopWords(stopwordArray);
         };
@@ -231,6 +292,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
          * 			the exectuable grammar (i.e. execution function), if the grammar is
          * 			already loaded (if grammar has to loaded and compiled, you need to
          * 			wait for the callback-call and then re-invoke doGetGrammar()).
+         * 
+	     * @memberOf SemanticInterpreter#
          */
         var doGetGrammar = function(id, doNotResolve, callback){//NOTE: this should stay private
         	
@@ -269,9 +332,15 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         	
         	return grammarImplMap[id];
         };
+        /**
+	     * @memberOf SemanticInterpreter#
+         */
         var checkHasGrammar = function(id){
         	return typeof grammarImplMap[id] !== 'undefined';
         };
+        /**
+	     * @memberOf SemanticInterpreter#
+         */
         var doRemoveGrammar = function(id){
         	
         	if( checkHasGrammar(id) ){
@@ -305,6 +374,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
          * 							a callback that is invoked after the grammar was created and added to the SemanticInterpreter. 
          * 							The callback-function will be invoked without arguments, i.e. <code>callback();</code>
          * @function
+         * 
+	     * @memberOf SemanticInterpreter#
          */
         function createAndAddGrammar(doRecompile, generatedParserLanguageCode, callback){
         	
@@ -369,6 +440,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
             }
         }
         
+        /**
+	     * @memberOf SemanticInterpreter#
+         */
         var process_asr_semantic = function(phrase, stopwordFunc, langCode, callback){
 
 			if(!doCheckIsEnabled()){
@@ -417,7 +491,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         	}
         };
         
-
+        /**
+	     * @memberOf SemanticInterpreter#
+         */
 		var removeStopwordsFunc =  function removeStopwords(thePhrase, lang, gc){
 			if(!gc){
 				gc = doGetGrammar(lang);
@@ -433,6 +509,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         	return str.replace(stop_words_regexp, '').trim();
     	};
     	
+    	/**
+	     * @memberOf SemanticInterpreter#
+    	 */
 		var removeStopwordsAltFunc = function removeStopwords_alt(thePhrase, lang, gc){
 			if(!gc){
 				gc = doGetGrammar(lang);
@@ -446,7 +525,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 			
 			return thePhrase;
 		};
-        
+        /**
+	     * @memberOf SemanticInterpreter#
+         */
 		var doRemoveStopWords = function(thePhrase, lang, func){
 			if(!doCheckIsEnabled()){
 				logger.warn('SemanticInterpreter.'+func.name+': currently disabled!');
@@ -466,8 +547,20 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 			return grammarConverter.unmaskString( str );//grammarConverter.decodeUmlauts(str, true);
 		};
 		
-		/** @lends SemanticInterpreter.prototype */
-        return { // public members
+		/** #@- */
+		
+        var _tmpInstance = { // public members
+        		
+        	/**  @scope SemanticInterpreter# */
+
+			/**
+			 * @deprecated use {@link #removeStopwords} instead
+             * @memberOf SemanticInterpreter.prototype
+	         * @public
+			 */
+			removeStopwords_alt: function(thePhrase, lang){
+				return doRemoveStopWords(thePhrase, lang, removeStopwordsAltFunc);
+			},
         	/**
              * @param {String} phrase
              * 					the phrase that will be parsed
@@ -494,6 +587,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
              * 				usually a JSON-like object).
              * 				WARNING: if a <code>callback</code> function was provided, then
              * 						 there is no return object.
+             * 
+	         * @public
              */
             getASRSemantic: function(phrase, langCode, callback){
             	
@@ -501,6 +596,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
             	
             },
             /**
+	         * @public
              * @deprecated use {@link #getASRSemantic} instead
              */
             getASRSemantic_alt: function(phrase, langCode){
@@ -520,28 +616,37 @@ define(['constants', 'grammarConverter', 'logger', 'module'
              * 					the Phrase for which stopwords should be removed
              * @param {String} lang
              * 					the language code (identifier) for the parser/grammar
+             * 
+	         * @public
              */
 			removeStopwords: function(thePhrase, lang){
 				return doRemoveStopWords(thePhrase, lang, removeStopwordsFunc);
 			},
-			/**
-			 * @deprecated use {@link #removeStopwords} instead
-			 */
-			removeStopwords_alt: function(thePhrase, lang){
-				return doRemoveStopWords(thePhrase, lang, removeStopwordsAltFunc);
-			},
-			/** NOTE: the grammar must be compiled first, see getNewInstance(true) */
+			/** NOTE: the grammar must be compiled first, see getNewInstance(true)  @public */
 			getGrammarDefinitionText: function(id){
 				return doGetGrammar(id).getJSCCGrammar();//grammarDefinitionText;
 			},
-			/** NOTE: the grammar must be compiled first, see getNewInstance(true) */
+			/** NOTE: the grammar must be compiled first, see getNewInstance(true)  @public*/
 			getGrammarParserText: function(id){
 				return doGetGrammar(id).getJSGrammar();//grammarParser;
 			},
+			/**
+			 * 
+	         * @public
+			 * @param {String} id
+			 * @returns {GrammarConverter}
+			 */
 			getGrammarConverter: function(id){
 				return doGetGrammar(id, true);//<- if no grammar is loaded for this ID, do NOT try to load it!
 			},
-			
+			/**
+			 * 
+	         * @public
+			 * @param {String|JSONObject} rawGrammarSrc
+			 * @param {String} id
+			 * @param {Function} [callback]
+			 * @returns {SemanticInterpreter.prototype}
+			 */
 			createGrammar: function(rawGrammarSrc, id, callback){
 				
 				if(!id){
@@ -552,11 +657,26 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 				
 				return this;
 			},
-			
+			/**  
+			 * @public
+			 * @function
+			 */
 	        addGrammar: doAddGrammar,
+			/**  
+			 * @public
+			 * @function
+			 */
 	        setStopwords: doSetStopwords,
 //	        getGrammar: doGetGrammar, <- set to private
+			/**  
+			 * @public
+			 * @function
+			 */
 	        hasGrammar: checkHasGrammar,
+			/**  
+			 * @public
+			 * @function
+			 */
 	        removeGrammar: doRemoveGrammar,
 
 	        /**
@@ -582,13 +702,16 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	        	//   if no corresponding compiled JS-grammar is available yet) 
 	        	doSetEnabled(true);
 	        },
+			/**  @public  */
 	        getCurrentGrammar: function(){
 	        	return currentGrammarId;
 	        },
-	        
+
+			/**  @public  */
 	        setEnabled: function(isEnabled){
 	        	doSetEnabled(isEnabled);
 	        },
+			/**  @public  */
 	        isEnabled: function(){
 	        	return doCheckIsEnabled();
 	        },
@@ -599,6 +722,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	         * @default "jcss"
 	         * @returns {String}
 	         * 			the ID of the current grammar engine
+	         * @public
 	         */
 	        getGrammarEngine: function(){
 	        	return doGetGrammarEngine();
@@ -614,6 +738,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	         * @param {String} egnineId
 	         * 			the ID for the engine.
 	         * 			Possible values: "jscc", "jison", "pegjs"
+	         * @public
 	         */
 	        setGrammarEngine: function(engineId){
 	        	doSetGrammarEngine(engineId);
@@ -626,7 +751,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	        	
 	        	return configLangPath + id + '/' +jsonGrammarFileName;
 	        }
-        };
+        };//END: var _tmpInstance = {...
+        
+        return _tmpInstance;
     }
     
     instance = new constructor();

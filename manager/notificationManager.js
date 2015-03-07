@@ -43,7 +43,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	/** @scope mmir.NotificationManager.prototype */
 	/**
 	 * #@+
-	 * @memberOf mmir.NotificationManager.prototype 
+	 * @memberOf mmir.NotificationManager#
 	 */
 	
 	
@@ -63,6 +63,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	 * Constructor-Method of Singleton mmir.NotificationManager.<br> 
 	 * 
 	 * @constructs NotificationManager
+	 * @memberOf mmir.NotificationManager#
 	 */
     function constructor(){
     	
@@ -78,9 +79,21 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * @function
     	 * @private
     	 * @param {Number} milliseconds
+    	 * @memberOf mmir.NotificationManager#
     	 */
     	var doVibrate = null;
     	
+    	/**
+    	 * Initialize the NotificationManager.
+    	 * 
+    	 * At the moment this set the internal vibrate-function,
+    	 * if available in the current execution environment
+    	 * (or with a dummy function, if not).
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 * @private
+    	 * @function
+    	 */
     	var _init = function(){
 	    	if(isCordovaEnv){
 	    		
@@ -111,12 +124,52 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	
     	//SOUND / BEEP initialization:
     	
+    	/**
+    	 * @private
+    	 * @property
+    	 * @type Number
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	var beepVolume = 1.0;
+    	
+    	/**
+    	 * The Audio object for the <em>beep</em> sound.
+    	 * 
+    	 * @private
+    	 * @property
+    	 * @type AudioObject
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	var beepAudio = null;
     	
+    	/**
+    	 * Dictionary that manages the currently loaded sounds
+    	 * 
+    	 * @private
+    	 * @property
+    	 * @type Dictionary
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	//TODO add option for limiting size of soundMap (-> e.g. how many resources are max. cached/occupied for Android) 
     	var soundMap = new Dictionary();
     	
+    	/**
+    	 * Factory function for creating "sounds objects",
+    	 * i.e. extend the basic Audio objects with needed functions/properties
+    	 * 
+    	 * @private
+    	 * @function
+    	 * 
+    	 * @param {AudioObject} audioObj
+    	 * @param {String} name
+    	 * 
+    	 * @returns {NotificationSound} the extended audio object, i.e. a NotificationSound
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	var initNotificationSound = function(audioObj, name){
     		audioObj.name = name;
     		audioObj.setVolume(beepVolume);
@@ -201,11 +254,43 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 			return audioObj;
     	};
     	
+    	/**
+    	 * Helper for creating an Audio object
+    	 * 
+    	 * @private
+    	 * @function
+    	 * 
+    	 * @param {String} url
+    	 * @param {Function} success
+    	 * @param {Function} fail
+    	 * @param {Function} init
+    	 * 
+    	 * @returns {AudioObject} audio object
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	function createAudio(url, success, fail, init){
     		return mediaManager.getURLAsAudio(url, success, fail, init);
     	}
     	
-    	
+    	/**
+    	 * Helper for "registering" a NotificationSound.
+    	 * 
+    	 * Stores the sound object in {@link #soundMap}
+    	 * with the ID <code>name</code>.
+    	 * 
+    	 * The sound object will be initialized on first
+    	 * retrieval, ie. {@link #doGetSoundFromMap}
+    	 * 
+    	 * @private
+    	 * @function
+    	 * 
+    	 * @param {String} name
+    	 * @param {String} theUrl
+    	 * @param {Boolean} isKeepOnPause
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	function initAudioSoundEntry(name, theUrl, isKeepOnPause){
     		var config = {url: theUrl, audio: null};
     		if(isKeepOnPause){
@@ -214,6 +299,20 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     		soundMap.put(name, config);
     	}
     	
+    	/**
+    	 * Helper for retrieving an existing sound from
+    	 * the {@link #soundMap}.
+    	 * 
+    	 * Initializes the sound if necessary.
+    	 * 
+    	 * @private
+    	 * @function
+    	 * 
+    	 * @param {String} name
+    	 * @param {Function} onErrorCallback
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	function doGetSoundFromMap(name, onErrorCallback){
     		var audioObj = null;
     		var audioUrl = null;
@@ -258,6 +357,22 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     		};
     	}
     	
+    	/**
+    	 * Helper for playing a registered notification sound.
+    	 * 
+    	 * Initializes the sound if necessary.
+    	 * 
+    	 * @private
+    	 * @function
+    	 * 
+    	 * @param {String} name
+    	 * 				ID of the sound
+    	 * @param {Number} times 
+    	 * @param {Function} onFinishedCallback
+    	 * @param {Function} onErrorCallback
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	function playAudioSound(name, times, onFinishedCallback, onErrorCallback){
     		
     		var soundEntry = doGetSoundFromMap(name, onErrorCallback);
@@ -344,6 +459,21 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     		
     	}
     	
+    	/**
+    	 * Helper for stop playing a registered notification sound.
+    	 * 
+    	 * Initializes the sound if necessary.
+    	 * 
+    	 * @private
+    	 * @function
+    	 * 
+    	 * @param {String} name
+    	 * 				ID of the sound
+    	 * @param {Function} onFinishedCallback
+    	 * @param {Function} onErrorCallback
+    	 * 
+    	 * @memberOf mmir.NotificationManager#
+    	 */
     	function stopAudioSound(name, onFinishedCallback, onErrorCallback){
     		
     		var soundEntry = doGetSoundFromMap(name, onErrorCallback);
@@ -434,12 +564,19 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
         	 * @function vibrate
         	 * @param milliseconds {Number} duration for vibration in milliseconds
         	 * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
         	 */
             vibrate: function(milliseconds){
             	if (isHapticEnabled && doVibrate){
             		doVibrate(milliseconds);
             	}
             },
+            /**
+        	 * @function isVibrateEnabled
+        	 * @returns {Boolean}
+        	 * @public
+        	 */
             isVibrateEnabled: function(){
             	if (isHapticEnabled && doVibrate){
             		return true;
@@ -448,6 +585,11 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             		return false;
             	}
             },
+            /**
+        	 * @function isVibrateAvailable
+        	 * @returns {Boolean}
+        	 * @public
+        	 */
             isVibrateAvailable: function(){
             	if (doVibrate){
             		return true;
@@ -456,6 +598,12 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             		return false;
             	}
             },
+            /**
+        	 * @function setVibrateEnabled
+        	 * @public
+        	 * 
+        	 * @param {Boolean} enabled
+        	 */
             setVibrateEnabled: function(enabled){
             	isHapticEnabled = enabled;
             },
@@ -568,7 +716,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	 * 
 	 * @function
 	 * @name getInstance
-	 * @memberOf mmir.NotificationManager.prototype 
+	 * @memberOf mmir.NotificationManager#
 	 */
 	instance.getInstance = function(){
 		return instance;

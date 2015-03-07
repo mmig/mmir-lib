@@ -71,13 +71,30 @@ define([  'core', 'jquery'
 	 * #@+
 	 * @memberOf mmir.DialogManager.prototype 
 	 */
-		
+	
+	/**
+	 * @property
+	 * @private
+	 * @type Function
+	 * 
+	 * @see {@link mmir.DialogManager#getOnPageRenderedHandler}
+	 * @see {@link mmir.DialogManager#setOnPageRenderedHandler}
+	 * 
+	 * @memberOf mmir.DialogManager#
+	 */
+	var onPageRenderedFunc;
+	
+	/**
+	 * @memberOf mmir.DialogManager# 
+	 */
 	var _instance = {
 
 		/** @scope mmir.DialogManager.prototype */
 		
 		/** 
 		 * @deprecated instead: use mmir.DialogManager object directly.
+		 * 
+		 * @memberOf mmir.DialogManager.prototype
 		 */
 		getInstance : function() {
 			return this;

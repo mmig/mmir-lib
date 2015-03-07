@@ -66,6 +66,8 @@ define(['constants', 'jquery' ],
      * @property instance
      * @type Object
      * @private
+     * 
+	 * @memberOf mmir.ConfigurationManager#
      */
     var instance = null;
     
@@ -76,6 +78,7 @@ define(['constants', 'jquery' ],
 	 * @memberOf mmir.ConfigurationManager.prototype
 	 * @private
 	 * 
+	 * @memberOf mmir.ConfigurationManager#
 	 */
     function constructor(){
 
@@ -86,13 +89,19 @@ define(['constants', 'jquery' ],
 		 * @property configData
 		 * @type Object
 		 * @private
+		 * 
+		 * @memberOf mmir.ConfigurationManager#
     	 */
     	var configData = null;
     	
+    	
+    	/**
+    	 * Helper that loads configuration file synchronously.
+    	 * 
+		 * @memberOf mmir.ConfigurationManager#
+    	 */
     	//FIXME change implementation to async-loading?
     	//		-> would need to add init()-function, with callback and/or return Deferred.promise
-    	
-        //load configuration file synchronously:
     	function _loadConfigFile(){
 	        $.ajax({
 	    		async: false,
@@ -132,6 +141,7 @@ define(['constants', 'jquery' ],
          * 				If <code>propertyName</code> is an Array, all contained
          * 				String entries will be resolved, if necessary
          * 				
+		 * @memberOf mmir.ConfigurationManager#
          */
         function _getAsPath(propertyName){
         	
@@ -155,6 +165,8 @@ define(['constants', 'jquery' ],
          * @param {Array<String>} pathList
          * 				resolves an array with paths, i.e. dot-separated property-names
          * 				into a single, flat array where each path component is a separate Strings
+         * 
+		 * @memberOf mmir.ConfigurationManager#
          */
         function _toPathArray(pathList){
         		
@@ -206,8 +218,8 @@ define(['constants', 'jquery' ],
         }
     	
         
-        return { 
-
+        return {
+        	
         	// public members
         	
 			/**
@@ -224,6 +236,8 @@ define(['constants', 'jquery' ],
 			 * @function getLanguage
 			 * @returns {String} The currently used language
 			 * @public
+			 * 
+			 * @memberOf mmir.ConfigurationManager.prototype
 			 */
             getLanguage: function(){
                 return require('languageManager').getInstance().getLanguage();
@@ -472,7 +486,7 @@ define(['constants', 'jquery' ],
 	 * 
 	 * @function
 	 * @name getInstance
-	 * @memberOf mmir.ConfigurationManager.prototype 
+	 * @memberOf mmir.ConfigurationManager#
 	 */
 	instance.getInstance = function(){
 		return instance;

@@ -63,6 +63,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * @property controllers
 	 * @type Dictionary
 	 * @private
+	 * 
+	 * @memberOf mmir.ControllerManager#
 	 */
 	var controllers = new Dictionary();
 	
@@ -78,6 +80,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * @returns {Promise}
 	 * 				a Deferred.promise that will get fulfilled when controllers are loaded
 	 * @private
+	 * 
+	 * @memberOf mmir.ControllerManager#
 	 */
 	function _init(callback) {
 
@@ -95,6 +99,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		/**
 		 * HELPER FUNC: remove file extension from file-name
 		 * @private
+		 * 
+		 * @memberOf mmir.ControllerManager#
 		 */
 		function removeFileExt(fileName){
 	    	return fileName.replace(/\.[^.]+$/g,'');
@@ -102,6 +108,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		/**
 		 * HELPER FUNC: convert first letter to upper case
 		 * @private
+		 * 
+		 * @memberOf mmir.ControllerManager#
 		 */
 	    function firstToUpperCase(name){
 	    	return name[0].toUpperCase()+name.substr(1);
@@ -126,6 +134,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		 * 				the info-object: if a path for the generated file exists,
 		 * 				a property <code>genPath</code> (String) with the path as value is added.
 		 * @private
+		 * 
+		 * @memberOf mmir.ControllerManager#
 		 */
 	    function addGenPath(genDirPath, infoObj, fileNamePrefix){
 	    	
@@ -201,6 +211,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		 * 
 		 * @depends mmir.CommonUtils
 		 * @depends mmir.Constants
+		 * 
+		 * @memberOf mmir.ControllerManager#
 		 */
 	    function getControllerResources(controllerName, controllerPath){
 	    	
@@ -372,7 +384,6 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
      * @type Object
      * @private
 	 * @augments mmir.ControllerManager
-	 * @memberOf mmir.ControllerManager.prototype
 	 * @ignore
      */
 	var _instance = {
@@ -384,6 +395,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			 * @deprecated use directly: instead of <code>mmir.ControllerManager.getInstance()</code> use <code>mmir.ControllerManager</code>
 			 * 
 			 * NOTE: The ControllerManager must be initialized, before it can be used! (see {@link ControllerManager#init})
+			 * 
+			 * @memberOf mmir.ControllerManager.prototype
 			 */
 			getInstance : function () {
 

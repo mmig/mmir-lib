@@ -71,6 +71,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      * @property _pageIndex
      * @type Integer
      * @public
+	 * @memberOf mmir.PresentationManager#
      */
 	var _pageIndex = 0;
 
@@ -92,6 +93,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @type String
 	  * @private
 	  * @constant
+	  * @memberOf mmir.PresentationManager#
 	  */
 	 var DEFAULT_LAYOUT_NAME = 'Default';
 	 
@@ -112,6 +114,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @type String
 	  * @private
 	  * @constant
+	  * @memberOf mmir.PresentationManager#
 	  * 
 	  * @example var isUsePrecompiledViews = mmir.Constants.get(CONFIG_PRECOMPILED_VIEWS_MODE);
 	  * 
@@ -125,6 +128,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _layouts
 	  * @type Dictionary
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  */
 	 var _layouts = new Dictionary();
 
@@ -134,6 +138,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _views
 	  * @type Dictionary
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  */
 	 var _views = new Dictionary();
 
@@ -143,6 +148,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _partials
 	  * @type Dictionary
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  */
 	 var _partials = new Dictionary();
 
@@ -154,6 +160,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _currentView
 	  * @type Object
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  */
 	 var _currentView = {};
 
@@ -166,6 +173,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _previousView
 	  * @type Object
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  * 
 	  * @deprecated do not use
 	  */
@@ -178,6 +186,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _currentDialog
 	  * @type Object
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  * 
 	  * @see #_instance#showDialog
 	  * @see #_instance#hideCurrentDialog
@@ -215,6 +224,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * @property _renderEngine
 	  * @type Object
 	  * @private
+	  * @memberOf mmir.PresentationManager#
 	  */
      var _renderEngine = {
     		 /**
@@ -249,6 +259,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
     		  * At the end the <b>on_page_load</b> action of the <em>controller</em> is performed.
     		  * 
     		  * @function render
+    		  * @memberOf mmir.PresentationManager._renderingEngine
     		  * 
     		  * @param {String}
     		  *            ctrlName Name of the controller
@@ -295,6 +306,8 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 
 			/**
 			 * @deprecated instead: use mmir.PresentationManager directly
+			 * 
+			 * @memberOf mmir.PresentationManager.prototype
 			 */
 			getInstance: function () {
 				return this;

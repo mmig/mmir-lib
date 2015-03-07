@@ -38,7 +38,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	 * @category core
 	 * 
 	 * 
-	 * @class
+	 * @class mmir.CommonUtils
 	 * @name mmir.CommonUtils
 	 * @static
 	 * 

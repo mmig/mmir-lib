@@ -55,28 +55,37 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	/** @scope mmir.MediaManager.prototype */
 	/**
 	 * #@+
-	 * @memberOf mmir.MediaManager.prototype 
+	 * @memberOf mmir.MediaManager.prototype
 	 */
 
     var instance = null;
     
-    //default configuration for env-settings "browser" and "cordova":
-    //
-    // -> may be overwritten by settings in the configuration file.
-    // e.g. adding the following JSON data to config/configuration.json:
-    //
-	//    "mediaManager": {
-	//    	"plugins": {
-	//    		"browser": ["html5AudioOutput.js",
-	//    		            "html5AudioInput.js",
-	//    		            "maryTextToSpeech.js"
-	//    		],
-	//    		"cordova": ["cordovaAudioOutput.js",
-	//    		            "nuanceAudioInput.js",
-	//    		            "nativeTextToSpeech.js"
-	//    		]
-	//    	}
-	//    }
+    /**
+     * default configuration for env-settings "browser" and "cordova":
+     * 
+     *  -> may be overwritten by settings in the configuration file.
+     *  e.g. adding the following JSON data to config/configuration.json:
+     * <pre>
+	 *     "mediaManager": {
+	 *     	"plugins": {
+	 *     		"browser": ["html5AudioOutput.js",
+	 *     		            "html5AudioInput.js",
+	 *     		            "maryTextToSpeech.js"
+	 *     		],
+	 *     		"cordova": ["cordovaAudioOutput.js",
+	 *     		            "nuanceAudioInput.js",
+	 *     		            "nativeTextToSpeech.js"
+	 *     		]
+	 *     	}
+	 *     }
+	 * </pre>
+	 * 
+	 * @private
+	 * @property
+	 * @type PlainObject
+	 * 
+	 * @memberOf mmir.MediaManager#
+	 */
     var pluginsToLoad = {
     		'browser': ['html5AudioOutput.js',
     		            'html5AudioInput.js',
@@ -88,7 +97,19 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     		]
     };
     
-    var loadPlugin = function loadPlugin (filePath, successCallback, failureCallback){
+    /**
+     * Load an media-module implementation from plugin file.
+     * 
+     * @param {String} filePath
+     * @param {Function} successCallback
+     * @param {Function} failureCallback
+     * 
+     * @private
+	 * @function
+	 * 
+	 * @memberOf mmir.MediaManager#
+	 */
+    var loadPlugin = function loadPlugin(filePath, successCallback, failureCallback){
     	try {
     		commonUtils.loadScript(constants.getMediaPluginPath() + filePath, function(){
 	    		if (typeof newMediaPlugin !== 'undefined' && newMediaPlugin){
@@ -237,6 +258,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 				 * @type mmir.Logger
 				 * @default mmir.Logger (logger instance for mmir.MediaManager)
 				 * @public
+				 * 
+				 * @memberOf MediaManager#
     			 */
     			_log: logger,
     		
