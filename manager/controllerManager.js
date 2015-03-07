@@ -43,7 +43,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * @name mmir.ControllerManager
 	 * @static
 	 * 
-	 * @depends jQuery.Deferred
+	 * @requires jQuery.Deferred
 	 */
 	function( 
 		Dictionary, Controller, constants, commonUtils, $
@@ -209,8 +209,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		 *           if the corresponding file exists
 		 * //NOTE 2: layout may be NULL
 		 * 
-		 * @depends mmir.CommonUtils
-		 * @depends mmir.Constants
+		 * @requires mmir.CommonUtils
+		 * @requires mmir.Constants
 		 * 
 		 * @memberOf mmir.ControllerManager#
 		 */

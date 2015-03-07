@@ -39,7 +39,7 @@ define(['md5'],
 	 * @exports ChecksumUtils as mmir.tools.ChecksumUtils
 	 * @static
 	 * 
-	 * @depends CryptoJS (MD5, see https://code.google.com/p/crypto-js/)
+	 * @requires CryptoJS (MD5, see https://code.google.com/p/crypto-js/)
 	 */
 	function(
 		CryptoJS

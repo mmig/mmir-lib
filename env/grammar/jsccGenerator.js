@@ -7,11 +7,11 @@
  * @see http://jscc.phorward-software.com/
  * 
  * 
- * @depends JS/CC
- * @depends jQuery.Deferred
- * @depends jQuery.extend
- * @depends jQuery.ajax
- * @depends jQuery.makeArray
+ * @requires JS/CC
+ * @requires jQuery.Deferred
+ * @requires jQuery.extend
+ * @requires jQuery.ajax
+ * @requires jQuery.makeArray
  */
 define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'], function(jscc, constants, GrammarConverter, $, Logger, module){
 

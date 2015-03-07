@@ -43,7 +43,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * @static
 	 * @category core
 	 * 
-	 * @depends jQuery.Deferred
+	 * @requires jQuery.Deferred
 	 * 
 	 */
 	function( 

@@ -32,7 +32,7 @@ define(
      * </li>
      * </ul>
      * 
-     * @depends document (DOM element)
+     * @requires document (DOM element)
      * 
      * @param {mmir.CommonUtils} compatibilitySelf
      * 			the instance of mmir.CommonUtils to which the compatibility functions etc.
@@ -47,7 +47,7 @@ define(
 	 * 		setCompatibility(mmir.CommonUtils);
 	 * });
 	 * 
-     * @depends document (DOM element)
+     * @requires document (DOM element)
 	 * 
 	 * @public
 	 */
@@ -63,7 +63,7 @@ define(
      * NOTE that once set to compatibility mode, it cannot be reset to
      * non-compatibility mode.
      * 
-     * @depends document (DOM element)
+     * @requires document (DOM element)
      * 
      * @param {mmir.CommonUtils} compatibilitySelf
      * 			the instance of mmir.CommonUtils to which the compatibility functions etc.

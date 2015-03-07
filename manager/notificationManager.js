@@ -32,8 +32,8 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	 * @static
 	 * @class
 	 * 
-	 * @depends Dictionary
-	 * @depends mmir.MediaManager
+	 * @requires Dictionary
+	 * @requires mmir.MediaManager
 	 */
 	function(
 		module, constants, mediaManager, Dictionary

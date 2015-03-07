@@ -34,7 +34,7 @@
  * 
  * @module mobileDS.tools
  * 
- * @depends antlr3-all.js as <code>org</code> (see comment above)
+ * @requires antlr3-all.js as <code>org</code> (see comment above)
  * 
  */
 

@@ -44,16 +44,16 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	 * 
 	 * @public
 	 * 
-	 * @depends StringExtensions
-	 * @depends Constants (optionally: jQuery)
-	 * @depends mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
+	 * @requires StringExtensions
+	 * @requires Constants (optionally: jQuery)
+	 * @requires mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
 	 * 
-     * @depends jQuery.isArray	 in #isArrayHelper
-     * @depends jQuery.Deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
-     * @depends jQuery.ajax		 in #loadDirectoryStructure
+     * @requires jQuery.isArray	 in #isArrayHelper
+     * @requires jQuery.Deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
+     * @requires jQuery.ajax		 in #loadDirectoryStructure
      * 
      * 
-     * @depends jQuery	 in #resizeFitToSourroundingBox
+     * @requires jQuery	 in #resizeFitToSourroundingBox
 	 */
 	function(
 		constants, stringExt, $, paramsParseFunc, Logger, module
@@ -959,7 +959,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * TODO implement with HTML5 functions (in addition to / instead of
 		     * cordova)?
 		     * 
-		     * @depends Cordova: org.apache.cordova.network-information
+		     * @requires Cordova: org.apache.cordova.network-information
 		     * 
 		     * @function checkNetworkConnection
 		     * @public
@@ -1108,8 +1108,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * non-compatibility mode.
 		     * 
 		     * @async
-		     * @depends jQuery.Deferred
-		     * @depends mmir.CommonUtils.setToCompatibilityModeExtension
+		     * @requires jQuery.Deferred
+		     * @requires mmir.CommonUtils.setToCompatibilityModeExtension
 		     * 
 		     * @param {Function} [success]
 		     * 				a callback function that is invoked, after compatibility mode

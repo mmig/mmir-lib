@@ -19,9 +19,9 @@
  * <code>options.onload</code>: (Function) OPTIONAL callback for onload event (see above)
  * <code>options.&lt;property&gt;</code>: (any) OPTIONAL any additional properties will be added to the created LINK object "as-is"
  * 
- * @depends document
- * @depends document.head
- * @depends document.createElement( link )
+ * @requires document
+ * @requires document.head
+ * @requires document.createElement( link )
  */
 define(function loadJqmCss() {
 	

@@ -42,8 +42,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @exports MediaManager as mmir.MediaManager
 	 * @static
 	 * 
-	 * @depends jQuery.extend
-	 * @depends jQuery.Deferred
+	 * @requires jQuery.extend
+	 * @requires jQuery.Deferred
 	 * 
 	 * TODO remove / change dependency on forBrowser: constants.isBrowserEnv()!!!
 	 */

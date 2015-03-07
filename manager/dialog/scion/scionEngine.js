@@ -1,6 +1,6 @@
 ﻿
 /**
- *  @depends jQuery.Deferred
+ *  @requires jQuery.Deferred
  */
 
 //TODO doc

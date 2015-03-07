@@ -44,8 +44,8 @@ define(['constants', 'jquery' ],
 	 * 
 	 * @category core
 	 * 
-	 * @depends jQuery.ajax
-	 * @depends jQuery.isArray
+	 * @requires jQuery.ajax
+	 * @requires jQuery.isArray
 	 * 
 	 */
 	function (
@@ -231,7 +231,7 @@ define(['constants', 'jquery' ],
 			 * 
 			 * @deprecated use {@link mmir.LanguageManager#getLanguage}() instead!
 			 * 
-			 * @depends mmir.LanguageManager
+			 * @requires mmir.LanguageManager
 			 * 
 			 * @function getLanguage
 			 * @returns {String} The currently used language
@@ -251,7 +251,7 @@ define(['constants', 'jquery' ],
 			 * 
 			 * @deprecated use {@link mmir.LanguageManager#setLanguage}(lang) instead!
 			 * 
-			 * @depends mmir.LanguageManager
+			 * @requires mmir.LanguageManager
 			 * 
 			 * @function setLanguage
 			 * @param {String} lang The language which is to be used

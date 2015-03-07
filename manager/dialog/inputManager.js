@@ -48,8 +48,8 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 	 * @class
 	 * 
 	 * 
-     *  @depends jQuery.Deferred
-     *  @depends jQuery.extend
+     *  @requires jQuery.Deferred
+     *  @requires jQuery.extend
 	 * 
 	 */
 	function(

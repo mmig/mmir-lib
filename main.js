@@ -42,11 +42,11 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
    * @name main
    * @exports main as mmir.main
    * 
-   * @depends jQuery.Deferred
+   * @requires jQuery.Deferred
    * 
-   * @depends jQuery#selector	(for initial CSS/script injections; TODO change mechanism)
-   * @depends jQuery.is			(for initial script injections; TODO change mechanism)
-   * @depends jQuery.append		(for initial CSS injections; TODO change mechanism)
+   * @requires jQuery#selector	(for initial CSS/script injections; TODO change mechanism)
+   * @requires jQuery.is			(for initial script injections; TODO change mechanism)
+   * @requires jQuery.append		(for initial CSS injections; TODO change mechanism)
    * 
    */
   function(mmir, env, envInit, $, constants, commonUtils, configurationManager, languageManager

@@ -7,10 +7,10 @@
  * @see http://pegjs.majda.cz/
  * 
  * 
- * @depends PEG.js
- * @depends jQuery.Deferred
- * @depends jQuery.extend
- * @depends jQuery.makeArray
+ * @requires PEG.js
+ * @requires jQuery.Deferred
+ * @requires jQuery.extend
+ * @requires jQuery.makeArray
  */
 define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
 

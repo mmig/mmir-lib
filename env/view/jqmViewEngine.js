@@ -32,20 +32,20 @@
  *  - jQuery Mobile (jQuery plugin, >= 1.2.0); $.mobile
  *  - SimpleModal (jQuery plugin, >= v1.4.2); $.modal
  *  
- *  @depends document (DOM object)
+ *  @requires document (DOM object)
  *  
- *  @depends jQuery.Deferred
+ *  @requires jQuery.Deferred
  *  
- *  @depends jQuery.parseHTML
- *  @depends jQuery.appendTo
- *  @depends jQuery#selector
+ *  @requires jQuery.parseHTML
+ *  @requires jQuery.appendTo
+ *  @requires jQuery#selector
  *  
- *  @depends jQueryMobile.defaultPageTransition
- *  @depends jQueryMobile.pageContainer
- *  @depends jQueryMobile.loading
- *  @depends jQueryMobile.pageContainer
+ *  @requires jQueryMobile.defaultPageTransition
+ *  @requires jQueryMobile.pageContainer
+ *  @requires jQueryMobile.loading
+ *  @requires jQueryMobile.pageContainer
  *  
- *  @depends jQuerySimpleModalDialog
+ *  @requires jQuerySimpleModalDialog
  */
 define(['jquery', 'loadCss'],function(jquery, loadCss){
 
@@ -293,7 +293,7 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 			/**
              * Closes a modal window / dialog.<br>
              * 
-             * @depends jQuery Mobile SimpleModal
+             * @requires jQuery Mobile SimpleModal
              * 
              * @function hideCurrentDialog
              * @public
@@ -310,8 +310,8 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
             /**
              * Opens the requested dialog.<br>
              * 
-             * @depends jQuery Mobile SimpleModal
-             * @depends mmir.ControllerManager
+             * @requires jQuery Mobile SimpleModal
+             * @requires mmir.ControllerManager
              * 
              * 
              * @function showDialog
@@ -378,8 +378,8 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 			 * 
 			 * @public
 			 * 
-			 * @depends jQuery Mobile: <code>$.mobile.loading</code>
-			 * @depends mmir.LanguageManager
+			 * @requires jQuery Mobile: <code>$.mobile.loading</code>
+			 * @requires mmir.LanguageManager
 			 * 
 			 * @see #hideWaitDialog
 			 */
@@ -410,7 +410,7 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 			 * @function hideWaitDialog
 			 * @public
 			 * 
-			 * @depends jQuery Mobile: <code>$.mobile.loading</code>
+			 * @requires jQuery Mobile: <code>$.mobile.loading</code>
 			 * 
 			 * @see #showWaitDialog
 			 */

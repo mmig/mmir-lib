@@ -40,11 +40,11 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      * Libraries:
      *  - jQuery (>= v1.6.2); ajax, each
      *  
-     *  @depends document (DOM object)
+     *  @requires document (DOM object)
      *  
-     *  @depends jQuery.Deferred
-     *  @depends jQuery.ajax
-     *  @depends jQuery.each
+     *  @requires jQuery.Deferred
+     *  @requires jQuery.ajax
+     *  @requires jQuery.each
      *  
      */
     function ( controllerManager, constants, commonUtils, configurationManager//, renderUtils
@@ -530,7 +530,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * 
              * @deprecated you should use {@link #render} with appropriate parameters instead.
              * 
-             * @depends mmir.DialogManager
+             * @requires mmir.DialogManager
              * 
              * @function reRenderView
              * @public
@@ -550,7 +550,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * 
              * @deprecated you should use {@link #render} with appropriate parameters instead.
              * 
-             * @depends mmir.DialogManager
+             * @requires mmir.DialogManager
              * 
              * @function renderPreviousView
              * @public

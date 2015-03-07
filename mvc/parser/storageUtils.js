@@ -5,7 +5,7 @@
  *
  * Dependencies:
  * 
- *  @depends jQuery.extend 
+ *  @requires jQuery.extend 
  *  
  *  alternatively: set <code>mobileDS.parser.CLASS_EXTENDER</code> with an object that 
  *  exposes a function <tt>extend(obj1,obj1)</tt>, i.e.
@@ -14,7 +14,7 @@
  * 
  * @module mmir.tools
  * 
- * @depends jQuery.extend
+ * @requires jQuery.extend
  * 
  */
 
@@ -159,7 +159,7 @@ parser.restoreObject = function(storedObject, isTriggerPublish, fileFormatNo){
  * 
  * @returns {Array<String>} the modified <tt>stringBuffer</tt>
  * 
- * @depends JSON.stringify
+ * @requires JSON.stringify
  * 
  * @example
  * 

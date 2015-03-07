@@ -7,10 +7,10 @@
  * @see https://github.com/zaach/jison
  * 
  * 
- * @depends Jison
- * @depends jQuery.Deferred
- * @depends jQuery.extend
- * @depends jQuery.makeArray
+ * @requires Jison
+ * @requires jQuery.Deferred
+ * @requires jQuery.extend
+ * @requires jQuery.makeArray
  */
 define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(jison, constants, configManager, GrammarConverter, $, Logger, module){
 

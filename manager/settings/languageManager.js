@@ -41,13 +41,13 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 	 * @category core
 	 * 
 	 * 
-	 * @depends mmir.Constants
-	 * @depends mmir.CommonUtils
-	 * @depends mmir.SemanticInterpreter
+	 * @requires mmir.Constants
+	 * @requires mmir.CommonUtils
+	 * @requires mmir.SemanticInterpreter
 	 * 
 	 * 
-     * @depends jQuery.Deferred
-     * @depends jQuery.ajax
+     * @requires jQuery.Deferred
+     * @requires jQuery.ajax
      * 
 	 */
 	function( 
@@ -760,8 +760,8 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		             * non-compatibility mode.
 		             * 
 		             * @async
-				     * @depends jQuery.Deferred
-				     * @depends mmir.LanguageManager.setToCompatibilityModeExtension
+				     * @requires jQuery.Deferred
+				     * @requires mmir.LanguageManager.setToCompatibilityModeExtension
 				     * 
 				     * @param {Function} [success]
 				     * 				a callback function that is invoked, after compatibility mode

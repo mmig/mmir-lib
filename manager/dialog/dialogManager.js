@@ -50,13 +50,13 @@ define([  'core', 'jquery'
 	 * @static
 	 * @class
 	 * 
-	 * @depends mmir.ControllerManager
-	 * @depends mmir.PresentationManager
-	 * @depends mmir.ModelManager
+	 * @requires mmir.ControllerManager
+	 * @requires mmir.PresentationManager
+	 * @requires mmir.ModelManager
 	 * 
 	 * 
-     * @depends jQuery.Deferred
-     * @depends jQuery.extend
+     * @requires jQuery.Deferred
+     * @requires jQuery.extend
      * 
 	 */
 	function(

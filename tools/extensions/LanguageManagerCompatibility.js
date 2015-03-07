@@ -110,8 +110,8 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
              * @deprecated used for old template format
              * 
              * 
-             * @depends mmir.CommonUtils
-             * @depends requires that CommonUtils is set to
+             * @requires mmir.CommonUtils
+             * @requires requires that CommonUtils is set to
              *           setToCompatibilityMode:
              *           {@link mmir.CommonUtils#setToCompatibilityMode}
              */
@@ -146,8 +146,8 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
              * a menu to choose the application language.<br>
              * This should better be implemented as a partial. </div>
              * 
-             * @depends mmir.PresentationManager
-             * @depends mmir.DialogManager
+             * @requires mmir.PresentationManager
+             * @requires mmir.DialogManager
              * 
              * @function changeLanguage
              * @param {String}

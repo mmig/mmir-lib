@@ -25,7 +25,7 @@
  */
 
 /**
- *  @depends jQuery.extend
+ *  @requires jQuery.extend
  */
 
 //FIXME hidden dependencies:

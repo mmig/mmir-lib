@@ -53,9 +53,9 @@ define (['commonUtils', 'viewConstants', 'yield', 'storageUtils' ],
  * 			May be empty: in this case the processed contents must be
  * 						  added manually (cf. parser.StorageUtils)
  * 
- * @depends if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+ * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
  * 			
- * @depends if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+ * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
  * 
  * @category core
  */
