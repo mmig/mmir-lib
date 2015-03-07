@@ -28,11 +28,23 @@
 define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
         	, 'ES3Lexer', 'ES3Parser', 'contentLexer', 'contentParser'
         	, 'scriptLexer', 'scriptParser', 'antlr3'
-        ], function ( 
+        ],
+        /**
+         * Main implementation for parsing (view) templates.
+         * 
+         * @class TemplateProcessor
+         * @name TemplateProcessor
+         * @exports TemplateProcessor as mmir.parser.TemplateProcessor
+         * @static
+         * @public
+         * 
+         * @depends ParserUtils#printInfo ("hidden" dependency when printing log-messages; accessed through the passed-in theLexerInstance)
+         */
+        function ( 
         	  mmir, commonUtils, parser, ParsingResult
         	, ES3Lexer, ES3Parser, MmirScriptContentLexer, MmirScriptContentParser
         	, MmirScriptLexer, MmirScriptParser, org
-){//hidden dependency: templateParserUtils (for parser.printInfo
+){//hidden dependency: templateParserUtils (for parser.printInfo)
 
 		//TODO move to separate file (extension-file):
 		//START extensions
@@ -65,83 +77,232 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 		};
 		//END extensions
 	
+		
+		/**
+		 * @property
+		 * @type TemplateParser
+		 * @memberOf mmir.parser.TemplateProcessor#
+		 */
 		var parserModule = parser;
+		
 		/**
 		 * "Processor" for the template parse-results:
 		 * 
 		 * This function is used by the generated (antlr) parsers.
 		 * 
-		 * @name mmir.parser.TemplateProcessor
-		 * @class
+		 * @memberOf mmir.parser.TemplateProcessor#
+		 * @constructor
+		 * @ignore
 		 */
-		parser.extendMmirTemplateProcessor = function(theLexerInstance) {
+		function _extend(theLexerInstance) {
 
 			/** @scope mmir.parser.TemplateProcessor.prototype */
 			/**
 			 * #@+
 			 * @memberOf mmir.parser.TemplateProcessor.prototype
+			 * @private
 			 */
 			
-			theLexerInstance.INTERNAL_INCLUDE_SCRIPT 	= parser.element.INCLUDE_SCRIPT;
-			theLexerInstance.INTERNAL_INCLUDE_STYLE 	= parser.element.INCLUDE_STYLE;
-			theLexerInstance.INTERNAL_LOCALIZE 			= parser.element.LOCALIZE;
-			theLexerInstance.INTERNAL_YIELD_DECLARATION = parser.element.YIELD_DECLARATION;
-			theLexerInstance.INTERNAL_YIELD_CONTENT 	= parser.element.YIELD_CONTENT;
-			theLexerInstance.INTERNAL_BLOCK 			= parser.element.BLOCK;
-			theLexerInstance.INTERNAL_STATEMENT 		= parser.element.STATEMENT;
-			theLexerInstance.INTERNAL_HELPER 			= parser.element.HELPER;
-			theLexerInstance.INTERNAL_IF 				= parser.element.IF;
-			theLexerInstance.INTERNAL_ELSE 				= parser.element.ELSE;
-			theLexerInstance.INTERNAL_FOR 				= parser.element.FOR;
-			theLexerInstance.INTERNAL_RENDER 			= parser.element.RENDER;
-			theLexerInstance.INTERNAL_ESCAPE_ENTER		= parser.element.ESCAPE_ENTER;
-			theLexerInstance.INTERNAL_ESCAPE_EXIT 		= parser.element.ESCAPE_EXIT;
 			
-			theLexerInstance.INTERNAL_FOR_TYPE_ITER		= parser.element.FOR_TYPE_ITER;
-			theLexerInstance.INTERNAL_FOR_TYPE_STEP		= parser.element.FOR_TYPE_STEP;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_INCLUDE_SCRIPT 				= parser.element.INCLUDE_SCRIPT;
+			theLexerInstance.INTERNAL_INCLUDE_SCRIPT 	= INTERNAL_INCLUDE_SCRIPT;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_INCLUDE_STYLE 					= parser.element.INCLUDE_STYLE;
+			theLexerInstance.INTERNAL_INCLUDE_STYLE 	= INTERNAL_INCLUDE_STYLE;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_LOCALIZE 						= parser.element.LOCALIZE;
+			theLexerInstance.INTERNAL_LOCALIZE 			= INTERNAL_LOCALIZE;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_YIELD_DECLARATION 				= parser.element.YIELD_DECLARATION;
+			theLexerInstance.INTERNAL_YIELD_DECLARATION = INTERNAL_YIELD_DECLARATION;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_YIELD_CONTENT 					= parser.element.YIELD_CONTENT;
+			theLexerInstance.INTERNAL_YIELD_CONTENT 	= INTERNAL_YIELD_CONTENT;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_BLOCK 							= parser.element.BLOCK;
+			theLexerInstance.INTERNAL_BLOCK 			= INTERNAL_BLOCK;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_STATEMENT 						= parser.element.STATEMENT;
+			theLexerInstance.INTERNAL_STATEMENT 		= INTERNAL_STATEMENT;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_HELPER 						= parser.element.HELPER;
+			theLexerInstance.INTERNAL_HELPER 			= INTERNAL_HELPER;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_IF 							= parser.element.IF;
+			theLexerInstance.INTERNAL_IF 				= INTERNAL_IF;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_ELSE 							= parser.element.ELSE;
+			theLexerInstance.INTERNAL_ELSE 				= INTERNAL_ELSE;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_FOR 				= parser.element.FOR;
+			theLexerInstance.INTERNAL_FOR 				= INTERNAL_FOR;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_RENDER 						= parser.element.RENDER;
+			theLexerInstance.INTERNAL_RENDER 			= INTERNAL_RENDER;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_ESCAPE_ENTER					= parser.element.ESCAPE_ENTER;
+			theLexerInstance.INTERNAL_ESCAPE_ENTER		= INTERNAL_ESCAPE_ENTER;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_ESCAPE_EXIT 					= parser.element.ESCAPE_EXIT;
+			theLexerInstance.INTERNAL_ESCAPE_EXIT 		= INTERNAL_ESCAPE_EXIT;
 
-			theLexerInstance.INTERNAL_VAR_DECLARATION   = parser.element.VAR_DECLARATION;
-			theLexerInstance.INTERNAL_VAR_REFERENCE     = parser.element.VAR_REFERENCE;
-			
-			theLexerInstance.INTERNAL_COMMENT           = parser.element.COMMENT;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_FOR_TYPE_ITER					= parser.element.FOR_TYPE_ITER;
+			theLexerInstance.INTERNAL_FOR_TYPE_ITER		= INTERNAL_FOR_TYPE_ITER;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_FOR_TYPE_STEP					= parser.element.FOR_TYPE_STEP;
+			theLexerInstance.INTERNAL_FOR_TYPE_STEP		= INTERNAL_FOR_TYPE_STEP;
 
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_VAR_DECLARATION   = parser.element.VAR_DECLARATION;
+			theLexerInstance.INTERNAL_VAR_DECLARATION   = INTERNAL_VAR_DECLARATION;
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_VAR_REFERENCE    				 = parser.element.VAR_REFERENCE;
+			theLexerInstance.INTERNAL_VAR_REFERENCE     = INTERNAL_VAR_REFERENCE;
+
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			var INTERNAL_COMMENT         				  = parser.element.COMMENT;
+			theLexerInstance.INTERNAL_COMMENT           = INTERNAL_COMMENT;
+
+			/**
+			 * @type Number
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			//"shortcut" for accessing the IF-type
 			var IF_TYPE = theLexerInstance.INTERNAL_IF;
-			
+
 			//internal "static" definitions for parsing mode/type
-			theLexerInstance.PARSER_SCRIPT_BLOCK 	= 0;
-			theLexerInstance.PARSER_SCRIPT_STATMENT = 2;
-			theLexerInstance.PARSER_SCRIPT_CONTENT 	= 4;
-			theLexerInstance.PARSER_JS_CODE	 		= 8;
-			
-			theLexerInstance.isDebug = true;
-			
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
+			var PARSER_SCRIPT_BLOCK 				= 0;
+			theLexerInstance.PARSER_SCRIPT_BLOCK 	= PARSER_SCRIPT_BLOCK;
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
+			var PARSER_SCRIPT_STATMENT 				= 2;
+			theLexerInstance.PARSER_SCRIPT_STATMENT = PARSER_SCRIPT_STATMENT;
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
+			var PARSER_SCRIPT_CONTENT 				= 4;
+			theLexerInstance.PARSER_SCRIPT_CONTENT 	= PARSER_SCRIPT_CONTENT;
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
+			var PARSER_JS_CODE	 					= 8;
+			theLexerInstance.PARSER_JS_CODE	 		= PARSER_JS_CODE;
+
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
+			var isDebug = true;
+			theLexerInstance.isDebug = isDebug;
+
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.SCRIPT_CHANNEL = 1;
 			//theLexerInstance.nesting = 0;
 			
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.scriptBlocks = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.scriptStatements = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.includeScripts = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.includeStyles = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.locales = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.helpers = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.renderPartials = new Array();
 
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.escape = new Array();
-			
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.ifs = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.fors = new Array();
-			
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.yields = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.yieldContents = new Array();
-			
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.vars = new Array();
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.comments = new Array();
-			
+
+			/**  @memberOf mmir.parser.TemplateProcessor#  */
 			theLexerInstance.lastParsedElement =  null;
 			
+			/**
+			 * @function
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			var isArray = commonUtils.isArray;
 			
+			/**
+			 * @param tokenType
+			 * @param parser
+			 * 
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			var getTokenName = (function(){
 				
 				var _jsTokens = null;
@@ -157,6 +318,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			})();
 			//theLexerInstance.getTokenName = getTokenName;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function getFirstChild(treeNode, strChildType, parser){
 				var type = getTokenName(treeNode.getType(), parser);
 				if(type === strChildType){
@@ -178,6 +342,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				}
 			}
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function extractBoundries(subTree, buffer){
 				
 				var start = subTree.getToken().getStartIndex();
@@ -209,6 +376,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				}
 			}
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function getBoundries(treeNode){
 				
 				return {
@@ -217,6 +387,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				};
 			}
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function getStringFor(boundriesObj, tokens, offset){
 				
 				if(!boundriesObj){
@@ -228,7 +401,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				return tokens.toString().substring(start,end+1);
 				
 			}
-			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function getStringForSubTree(treeNode, tokens, offset){
 				
 				var start = treeNode.getToken().getStartIndex() - offset;
@@ -237,6 +412,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				
 			}
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function createJSObjectFrom(parseElement, parentObject, parser){
 				
 				var type = getTokenName(parseElement.getType(), parser);
@@ -287,6 +465,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			//theLexerInstance.createJSObjectFrom = createJSObjectFrom;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processBlock(parsingObj, result, tokens){
 			
 				parsingObj.scriptContent = result;
@@ -301,6 +482,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processBlock = processBlock;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processStatement(parsingObj, result, tokens){
 			
 				parsingObj.scriptContent = result;
@@ -315,6 +499,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processStatement = processStatement;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processIncludeScript (parsingObj, result, tokens, parser){
 			
 				var tree = result.tree;
@@ -333,6 +520,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processIncludeScript = processIncludeScript;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processIncludeStyle(parsingObj, result, tokens, parser){
 			
 				var tree = result.tree;
@@ -351,6 +541,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processIncludeStyle = processIncludeStyle;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processLocalize(parsingObj, result, tokens, parser){
 			
 				var tree = result.tree;
@@ -369,6 +562,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processLocalize = processLocalize;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processDeclareVar(parsingObj, result, tokens, parser){
 				
 				var tree = result.tree;
@@ -387,6 +583,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processDeclareVar = processDeclareVar;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processHelperFunction(parsingObj, result, tokens, parser){
 			
 				var tree = result.tree;
@@ -418,6 +617,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processHelperFunction = processHelperFunction;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processRenderPartial(parsingObj, result, tokens, parser){
 			
 				//parsingObj.controllerName = result.controller;
@@ -459,6 +661,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processRenderPartial = processRenderPartial;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processYieldDeclaration(parsingObj, result, tokens, parser){
 			
 				var tree = result.tree;
@@ -477,6 +682,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processYieldDeclaration = processYieldDeclaration;
 
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processYieldContentParam (parsingObj, result, tokens, parser){
 			
 				var tree = result.tree;
@@ -493,6 +701,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processYieldContentParam = processYieldContentParam;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processYieldContent (parsingObj, result, tokens){
 			
 				parsingObj.content = result;
@@ -507,6 +718,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processYieldContent = processYieldContent;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processIfExpr (parsingObj, result, tokens, parser){
 			
 				//TODO validate expr! (e.g. detect assignments to undeclared variables...)
@@ -525,6 +739,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processIfExpr = processIfExpr;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processIfContent (parsingObj, result, tokens){
 			
 				parsingObj.content = result;
@@ -539,6 +756,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processIfContent = processIfContent;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processElse (parsingObj, result, tokens){
 			
 				parsingObj.content = result;
@@ -573,6 +793,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processElse = processElse;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processForControl (parsingObj, result, tokens, parser){
 			
 				//TODO validate expr! (e.g. detect assignments to undeclared variables...)
@@ -606,6 +829,9 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processForControl = processForControl;
 			
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
 			function processForContent (parsingObj, result, tokens){
 			
 				parsingObj.content = result;
@@ -620,7 +846,10 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 			}
 			theLexerInstance.processForContent = processForContent;
 			
-			var getLexerFor = function (self, parserType, input){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function getLexerFor(self, parserType, input){
 				if(self.PARSER_SCRIPT_BLOCK === parserType){
 					var scriptLexer = new MmirScriptLexer(input);
 					scriptLexer.setBlockMode();
@@ -641,7 +870,10 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				return null;
 			};
 			
-			var getParserFor = function (self, parserType, tokens){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function getParserFor(self, parserType, tokens){
 				if(self.PARSER_SCRIPT_BLOCK === parserType){
 					return new MmirScriptParser(tokens);
 				}
@@ -658,7 +890,10 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				return null;
 			};
 			
-			var doEnter = function (parserType, self, currentChannel, entryFunc, processFunc, parseResultObject, msg){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function doEnter(parserType, self, currentChannel, entryFunc, processFunc, parseResultObject, msg){
 				
 				if(!entryFunc){
 					entryFunc = 'main';
@@ -750,7 +985,10 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 				return result;
 			};
 			
-			theLexerInstance.processEscape = function (replacementText, msg){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function processEscape(replacementText, msg){
 				
 				if(msg && typeof self !== 'undefined' && self.isDebug){//debug
 					theLexerInstance.printInfo(msg);
@@ -762,8 +1000,12 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 						
 				return result;
 			};
+			theLexerInstance.processEscape = processEscape; 
 			
-			theLexerInstance.processComment = function (msg){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function processComment(msg){
 				
 				if(msg && typeof self !== 'undefined' && self.isDebug){//debug
 					theLexerInstance.printInfo(msg);
@@ -774,29 +1016,48 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 						
 				return result;
 			};
+			theLexerInstance.processComment = processComment;
 			
-			theLexerInstance.enterBlock = function (currentChannel, entryFunc, processFunc, msg, parseResultObject){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function enterBlock(currentChannel, entryFunc, processFunc, msg, parseResultObject){
 				return doEnter(theLexerInstance.PARSER_SCRIPT_BLOCK, theLexerInstance, currentChannel, entryFunc, processFunc, parseResultObject, msg);
 			};
+			theLexerInstance.enterBlock = enterBlock;
 			
-			theLexerInstance.enterScript = function (currentChannel, entryFunc, processFunc, msg, parseResultObject){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function enterScript(currentChannel, entryFunc, processFunc, msg, parseResultObject){
 				return doEnter(theLexerInstance.PARSER_SCRIPT_STATEMENT, theLexerInstance, currentChannel, entryFunc, processFunc, parseResultObject, msg);
 			};
+			theLexerInstance.enterScript = enterScript;
 			
-			theLexerInstance.enterContent = function (currentChannel, entryFunc, processFunc, msg, parseResultObject){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function enterContent(currentChannel, entryFunc, processFunc, msg, parseResultObject){
 				return doEnter(theLexerInstance.PARSER_SCRIPT_CONTENT, theLexerInstance, currentChannel, entryFunc, processFunc, parseResultObject, msg);
 			};
+			theLexerInstance.enterContent = enterContent;
 			
-			theLexerInstance.enterJavaScript = function (currentChannel, entryFunc, processFunc, msg, parseResultObject){
+			/**
+			 * @memberOf mmir.parser.TemplateProcessor#
+			 */
+			function enterJavaScript(currentChannel, entryFunc, processFunc, msg, parseResultObject){
 				return doEnter(theLexerInstance.PARSER_JS_CODE, theLexerInstance, currentChannel, entryFunc, processFunc, parseResultObject, msg);
 			};
+			theLexerInstance.enterJavaScript = enterJavaScript; 
 			
 			/** #@- */
 
 		};//END: extendMmirTemplateProcessor(){
 		
+		parser.extendMmirTemplateProcessor = _extend;
 		
-		return parser.extendMmirTemplateProcessor;
+		
+		return _extend;
 		
 	});//END: define
 	

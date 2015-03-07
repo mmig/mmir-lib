@@ -59,62 +59,91 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
     	, MmirScriptLexer, MmirScriptParser, org
 ){
 
+	/** 
+	 * #@+
+	 * @private
+	 */
+	
 	////////////////////////////////////helper for debugging / printing error details ////////////////////////
 
-	//-2: internal debug
-	//-1: interanl info
-	// 0: debug
-	// 1: info
-	// 2: warn
-	// 3: error
-	//TODO make this set-able (export getter/setter? use configurationManager?)
+	/**
+	 * -2: internal debug
+	 * -1: interanl info
+	 *  0: debug
+	 *  1: info
+	 *  2: warn
+	 *  3: error
+	 * TODO make this set-able (export getter/setter? use configurationManager?)
+	 * 
+	 * @memberOf ParserUtils#
+	 */
 	var errorLevel = 2;
 	
 
 	/**
 	 * HELPER print internal debug messages during parsing (VERY VERBOSE)
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.print = function(msg){//FIXME
+	function _print(msg){//FIXME
 		if ( errorLevel <= -2 ) console.log(msg);
 	};
+	parser.print = _print;
 
 	/**
 	 * HELPER print internal, informational messages during parsing (VERBOSE)
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.printInfo = function(prefix, msg){//FIXME
+	function _printInfo(prefix, msg){//FIXME
 		if (  errorLevel <= -1 ) console.info(parser.parserCreatePrintMessage(prefix,msg));
 	};
+	parser.printInfo = _printInfo;
 
 	/**
 	 * HELPER print debug messages during parsing
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.parserPrintDebug = function(prefix, msg, source){//FIXME
+	function _parserPrintDebug(prefix, msg, source){//FIXME
 		if (  errorLevel <= 0  ) console.debug(parser.parserCreatePrintMessage(prefix,msg, source));
 	};
+	parser.parserPrintDebug = _parserPrintDebug;
 
 	/**
 	 * HELPER print informational messages during parsing
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.parserPrintInfo = function(prefix, msg, source){//FIXME
+	function _parserPrintInfo(prefix, msg, source){//FIXME
 		if (  errorLevel <= 1  ) console.info(parser.parserCreatePrintMessage(prefix,msg, source));
 	};
+	parser.parserPrintInfo = _parserPrintInfo;
 	
 	/**
 	 * HELPER print warnings during parsing
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.parserPrintWarning = function(prefix, msg, source){//FIXME
+	function _parserPrintWarning(prefix, msg, source){//FIXME
 		if (  errorLevel <= 2  ) console.warn(parser.parserCreatePrintMessage(prefix,msg, source));
 	};
+	parser.parserPrintWarning = _parserPrintWarning;
 
 	/**
 	 * HELPER print errors during parsing
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.parserPrintError = function(prefix, msg, source){
+	function _parserPrintError(prefix, msg, source){
 		if (  errorLevel <= 3  ) console.error(parser.parserCreatePrintMessage(prefix,msg, source));
 	};
+	parser.parserPrintError = _parserPrintError;
 	
 	/**
 	 * HELPER: attach internal print-functions to all classes (ie. prototypes) in the list
+	 * 
+	 * @memberOf ParserUtils#
 	 */
 	var _attachInternalPrintFunc = function(list){
 		var _prototype;
@@ -131,7 +160,11 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		MmirTemplateLexer, ES3Lexer, ES3Parser, MmirScriptContentLexer, MmirScriptContentParser
 		, MmirScriptLexer, MmirScriptParser
 	]);
-
+	
+	/**
+	 * @type View
+	 * @memberOf ParserUtils#
+	 */
 	var _currentParsedView = null;//FIXME make this an argument in the printXXX functions (e.g. the current mechanism will not work, if templates are parsed concurrently/in parallel/using threads)
 	
 	/**
@@ -160,8 +193,10 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	 * @param {Object} [viewObj] OPTIONAL
 	 * 					currently not used!
 	 * 					(will replace _currentParsedView in the future!)
+	 * 
+	 * @memberOf ParserUtils#
 	 */
-	parser.parserCreatePrintMessage = (function(){//return function(prefix, msg, tokenSource, viewObj)
+	var parserCreatePrintMessage = (function(){//return function(prefix, msg, tokenSource, viewObj)
 		
 		/**
 		 *
@@ -179,6 +214,9 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		 * @param {Number} lineNo the line number (first line is 1)
 		 * 
 		 * @private? used by parserCreatePrintMessage
+		 * 
+		 * 
+		 * @memberOf ParserUtils.parserCreatePrintMessage
 		 */
 		var getIndexForLine = (function(){
 			
@@ -229,7 +267,9 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		 * @param {String} str the string
 		 * @param {Number} index the char index for which to find the line number (first line is 1)
 		 * 
-		 * @private? used by extractErrorPosition
+		 * @private used by extractErrorPosition
+		 * 
+		 * @memberOf ParserUtils.parserCreatePrintMessage
 		 * 
 		 */
 		var getLineForIndex = (function(){
@@ -274,6 +314,8 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		 * @private used by parserCreatePrintMessage()
 		 *
 		 * @function extractErrorPosition
+		 * 
+		 * @memberOf ParserUtils.parserCreatePrintMessage
 		 */
 		var extractErrorPosition = (function(){
 			
@@ -488,7 +530,9 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 			}
 		};//END parserCreatePrintMessage
 		
-	})();
+	})();//END var parserCreatePrintMessage = ...
+	
+	parser.parserCreatePrintMessage = parserCreatePrintMessage; 
 	
 	//////////////////////////////////// END: helper for debugging, error details etc. ////////////////////////
 
@@ -498,9 +542,14 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	     * @property instance
 	     * @type Object
 	     * @private
+	     * 
+	     * @memberOf ParserUtils#
 	     */
 	    var instance = null;
 
+	    /**
+	     * @memberOf ParserUtils#
+	     */
 	    var isDebug = true;//TODO read/set from configuration
 	    
 	    MmirTemplateLexer.prototype.emitErrorMessage = function(msg) {
@@ -532,6 +581,9 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 			parser.parserPrintError('[ERROR] ContentParser: ',msg, this.getTokenStream().getTokenSource());
 		};
 		
+		/**
+	     * @memberOf ParserUtils#
+		 */
 		function internalParse(text) {
 
 		    var input = new org.antlr.runtime.ANTLRStringStream(text);//FIXME change, how dependency 'antlr3' is exported?
@@ -565,6 +617,9 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 			return result;
 		}
 		
+		/**
+	     * @memberOf ParserUtils#
+		 */
 		function internalParseJS(text, entryRuleName, offset) {
 		  	
 		  	var input = new org.antlr.runtime.ANTLRStringStream(text);
@@ -634,6 +689,7 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		 * @memberOf ParserUtils.prototype
 		 * @private
 		 * @ignore
+		 * 
 		 */
 	    function constructor(){
 	        //private members (currently none)
@@ -641,13 +697,20 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	    	/** @lends ParserUtils.prototype */
 	    	return {
 	        	//public members:
+	    		
+	    		/** 
+	    		 * #@+
+	    		 * @public
+	    		 */
 
 	    		/**
 	    		 * Parse a text as view template (e.g. *.ehtml files). 
 	    		 * 
 	    		 * @param {String} rawTemplateString the text that should be parsed
 	    		 * @param {Object} [view] (optional) the view to which the <tt>rawTemplateString</tt> belongs (only used for error messages)
-	    		 * @returns {mmir.parser.ParsingResult} the parsing result 
+	    		 * @returns {mmir.parser.ParsingResult} the parsing result
+	    		 * 
+	    		 * @memberOf mmir.parser.ParserUtils.prototype
 	    		 */
 	    		parse: function(rawTemplateString, view){
 	    			
@@ -704,7 +767,7 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	     * 
 		 * @function
 		 * @name getInstance
-	     * @memberOf ParserUtils.prototype
+	     * @memberOf ParserUtils#
 	     */
 	    instance.getInstance = function(){
 	    	return this;
