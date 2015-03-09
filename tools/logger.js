@@ -883,8 +883,12 @@ var instance = {//public API
 	 * If a logger for <code>loggerName</code> already exists,
 	 * the existing logger is returned (instead of creating a new one).
 	 * 
-	 * @param {String} [loggerName]
-	 * 			a name / ID for the logger that should be created / retrieved.
+	 * @param {String|Object} [loggerName]
+	 * 			If String: a name / ID for the logger that should be created / retrieved.<br>
+	 * 			If Object: an requirejs <code>module</code> object, i.e. should contain properties
+	 * 							<code>id</code> (String) which will set the <code>loggerName</code>, and a property/function 
+	 * 							<code>config</code> (Function) that returns an object with property
+	 * 							<code>logLevel</code> (i.e. <code>config().logLevel</code> should be valid).<br>
 	 * 			If omitted, the default logger will be returned.
 	 * @param {String} [logLevel]
 	 * 			a name / ID for the logger that should be created / retrieved.
