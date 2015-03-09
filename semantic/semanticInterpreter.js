@@ -744,6 +744,14 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	        	doSetGrammarEngine(engineId);
 	        },
 	        
+	        /**
+	         * @returns {Number} the current version number that this SemanticInterpreter
+	         * 				instance supports, for the file format of compiled grammars.
+	         */
+	        getFileVersion: function(){
+	        	return GRAMMAR_FILE_FORMAT_VERSION;
+	        },
+	        
 	        //FIXME rename/move functions
 	        get_json_grammar_url: function(id){
 	        	var configLangPath = constants.getLanguagePath();
