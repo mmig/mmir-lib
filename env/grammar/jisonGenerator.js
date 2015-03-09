@@ -1,30 +1,78 @@
 
+
+define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
+ * <p>
  * This generator uses Jison for compiling the JSON grammar.
  * 
- * @see https://github.com/zaach/jison
+ * <p>
+ * The generator for compiling the JSON grammar definitions in <code>www/config/languages/&lt;language code&gt;/grammar.json</code>
+ * can be configured in <code>www/config/configuration.json</code>:<br>
+ * <pre>
+ * {
+ *   ...
+ *   "grammarCompiler": "jison",
+ *   ...
+ * }</pre>
  * 
+ * 
+ * @see <a href="https://github.com/zaach/jison">https://github.com/zaach/jison</a>
+ * 
+ * @class
+ * @constant
+ * @public
+ * @name JisonGenerator
+ * @exports JisonGenerator as mmir.env.grammar.JisonGenerator
  * 
  * @requires Jison
  * @requires jQuery.Deferred
  * @requires jQuery.extend
  * @requires jQuery.makeArray
- */
-define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(jison, constants, configManager, GrammarConverter, $, Logger, module){
+ */		
+function(jison, constants, configManager, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
+/**
+ * Deferred object that will be returned - for async-initialization:
+ * the deferred object will be resolved, when this module has been initialized.
+ * 
+ * @property
+ * @private
+ * @type Deferred
+ * @memberOf JisonGenerator#
+ */
 var deferred = $.Deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
 
-//init logger
+
+/**
+ * The Logger for the jison generator.
+ * 
+ * @property
+ * @private
+ * @type Logger
+ * @memberOf JisonGenerator#
+ * 
+ * @see mmir.Logging
+ */
 var logger = Logger.create(module);
 
 //setup logger for compile errors (if not already set)
 if(! jison.printError){
+	/**
+	 * The default logging / error-print function for jison.
+	 * 
+	 * @private
+	 * @name printError
+	 * @function
+	 * @memberOf JisonGenerator.jison#
+	 * 
+	 * @see mmir.Logging
+	 */
 	jison.printError = function(){
 		var args = $.makeArray(arguments);
 		//prepend "location-information" to logger-call:
@@ -42,23 +90,89 @@ if(! jison.printError){
  * 
  * @constant
  * @private
+ * @memberOf JisonGenerator#
  */
 var INPUT_FIELD_NAME = 'asr_recognized_text';
 
+/**
+ * The default options for the jison compiler.
+ * 
+ * To overwrite the default options, configure the following property in <code>www/config/configuration.json</code>:<br>
+ * <pre>
+ * {
+ *   ...
+ *   "grammar": {
+ *   	...
+ *   	"jison": {
+ *   		"type": "your configuration setting!"
+ *   	}
+ *   	...
+ *   },
+ *   ...
+ * }</pre>
+ * 
+ * Valid settings are:
+ * <code>type = 'lr0' | 'slr' | 'lr' | 'll' | 'lalr'</code>
+ * 
+ * 
+ * @constant
+ * @private
+ * @default type := 'lalr'
+ * @memberOf JisonGenerator#
+ */
 var DEFAULT_OPTIONS = {
 		type: 'lalr'//'lr0' | 'slr' | 'lr' | 'll' | default: lalr
 };
+
+/**
+ * Name for this plugin/grammar-generator (e.g. used for looking up configuration values in configuration.json).
+ * @constant
+ * @private
+ * @memberOf JisonGenerator#
+ */
 var pluginName = 'grammar.jison';
 
-
+/**
+ * Exported (public) functions for the jison grammar-engine.
+ * @public
+ * @type GrammarGenerator
+ * @memberOf JisonGenerator#
+ */
 var jisonGen = {
+	/** @scope JisonGenerator.prototype */
+		
+	/**
+	 * @param {Function} [callback] OPTIONAL
+	 * 			the callback that is triggered, when the engine is initialized
+	 * @returns {Deferred}
+	 * 			a promise that is resolved, when the engine is initialized
+	 * 			(NOTE: if you use the same function for the <code>callback</code> AND the promise,
+	 * 			       then the function will be invoked twice!)
+	 * 
+	 * @memberOf mmir.env.grammar.JisonGenerator.prototype
+	 */
 	init: function(callback){
 		if(callback){
 			deferred.always(callback);
 		}
 		return deferred;
 	},
+	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
 	isAsyncCompilation: function(){ return false; },
+	/**
+	 * The function for compiling a JSON grammar:
+	 * 
+	 * 
+	 * @param {GrammarConverter} theConverterInstance
+	 * @param {String} instanceId
+	 * 				the ID for the compiled grammar (usually this is a language code)
+	 * @param {Number} fileFormatVersion
+	 * 				the version of the file format (this is a constant within {@link mmir.SemanticInterpreter}
+	 * @param callback
+	 * @returns {GrammarConverter}
+	 * 			the grammar instance with attached with the compiled function for executing the
+	 * 			grammar to the instance's {@link GrammarConvert#executeGrammar} property/function. 
+	 */
 	compileGrammar: function(theConverterInstance, instanceId, fileFormatVersion, callback){
         
 		//attach functions for PEG.js conversion/generation to the converter-instance: 
@@ -219,7 +333,12 @@ var jisonGen = {
 
 
 ////////////////////////////////////// Jison specific extensions to GrammarConverter ////////////////////////////////
-
+/**
+ * jison specific extension / implementation for {@link GrammarConverter} instances
+ * 
+ * @type GrammarConverter
+ * @memberOf JisonGenerator#
+ */
 var JisonGrammarConverterExt = {
 	/** @memberOf JisonGrammarConverterExt */
 	init: function(){

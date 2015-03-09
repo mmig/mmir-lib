@@ -25,18 +25,21 @@
  */
 
 
-/**
- * @name media.plugin.html5AudioOutput
- */
 newMediaPlugin = {
 
-		/** @scope media.plugin.html5AudioOutput.prototype */
-		
+		/**  @memberOf Html5AudioOutput# */
 		initialize: function(callBack, mediaManagerInstance){
 			
+			/**  @memberOf Html5AudioOutput# */
 			var _pluginName = 'html5AudioOutput';
 
+			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
+				/**
+				 * @public
+				 * @memberOf Html5AudioOutput.prototype
+				 * @see mmir.MediaManager#playWAV
+				 */
 				playWAV: function(blob, successCallback, failureCallback){
 					try {
 						blobURL = window.webkitURL.createObjectURL(blob);
@@ -51,6 +54,11 @@ newMediaPlugin = {
 						}
 					}
 				},
+				/**
+				 * @public
+				 * @memberOf Html5AudioOutput.prototype
+				 * @see mmir.MediaManager#playURL
+				 */
 				playURL: function(url, onEnd, failureCallBack, successCallback){
 					try {
 
@@ -67,11 +75,28 @@ newMediaPlugin = {
 						}
 					}
 				},
+				/**
+				 * @public
+				 * @memberOf Html5AudioOutput.prototype
+				 * @see mmir.MediaManager#getURLAsAudio
+				 */
 				getURLAsAudio: function(url, onEnd,  failureCallback, successCallback){
 					try {
 
+						/**
+						 * @private
+						 * @memberOf AudioHtml5Impl#
+						 */
 						var enabled = true;
+						/**
+						 * @private
+						 * @memberOf AudioHtml5Impl#
+						 */
 						var ready = false;
+						/**
+						 * @private
+						 * @memberOf AudioHtml5Impl#
+						 */
 						var my_media = new Audio(url,null,failureCallback);
 
 						my_media.addEventListener('ended', function(){
@@ -84,7 +109,11 @@ newMediaPlugin = {
 								onEnd.apply(mediaImpl, arguments);
 							}
 						}, false);
-
+						
+						/**
+						 * @private
+						 * @memberOf AudioHtml5Impl#
+						 */
 						var canPlayCallback = function(){
 							ready = true;
 //							console.log("sound is ready!");
@@ -100,8 +129,29 @@ newMediaPlugin = {
 						};
 						my_media.addEventListener('canplay', canPlayCallback, false);
 
-
+						/**
+						 * The Audio abstraction that is returned by {@link mmir.MediaManager#getURLAsAudio}.
+						 * 
+						 * <p>
+						 * NOTE: when an audio object is not used anymore, its {@link #release} method should
+						 * 		 be called.
+						 * 
+						 * <p>
+						 * This is the same interface as {@link AudioCordovaImpl}.
+						 * 
+						 * @class
+						 * @name AudioHtml5Impl
+						 * @public
+						 */
 						var mediaImpl = {
+								/**
+								 * Play audio.
+								 * 
+								 * @public
+								 * @name play
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								play: function(){
 									if (enabled){
 										// if (ready){
@@ -112,6 +162,14 @@ newMediaPlugin = {
 
 									};
 								},
+								/**
+								 * Stop playing audio.
+								 * 
+								 * @public
+								 * @name stop
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								stop: function(){
 									if(enabled){
 										if(my_media.stop){
@@ -134,18 +192,43 @@ newMediaPlugin = {
 										}
 									}
 								},
+								/**
+								 * Enable audio (should only be used internally).
+								 * 
+								 * @public
+								 * @name enable
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								enable: function(){
 									if(my_media != null){
 										enabled = true;
 									}
 									return enabled;
 								},
+								/**
+								 * Disable audio (should only be used internally).
+								 * 
+								 * @public
+								 * @name disable
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								disable: function(){
 									if(enabled){
 										this.stop();
 										enabled = false;
 									}
 								},
+								/**
+								 * Release audio: should be called when the audio
+								 * file is not used any more.
+								 * 
+								 * @public
+								 * @name release
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								release: function(){
 									if(enabled && ! this.isPaused()){
 										this.stop();
@@ -153,23 +236,67 @@ newMediaPlugin = {
 									enabled= false;
 									my_media=null;
 								},
+								/**
+								 * Set the volume of this audio file
+								 * 
+								 * @param {Number} value
+								 * 			the new value for the volume:
+								 * 			a number between [0.0, 1.0]
+								 * 
+								 * @public
+								 * @name setVolume
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								setVolume: function(value){
 									if(my_media){
 										my_media.volume = value;
 									}
 								},
+								/**
+								 * Get the duration of the audio file
+								 * 
+								 * @returns {Number} the duration in MS (or -1 if unknown)
+								 * 
+								 * @public
+								 * @name getDuration
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								getDuration: function(){
 									if(my_media){
 										return my_media.duration;
 									}
 									return -1;
 								},
+								/**
+								 * Check if audio is currently paused.
+								 * 
+								 * NOTE: "paused" is a different status than "stopped".
+								 * 
+								 * @returns {Boolean} TRUE if paused, FALSE otherwise
+								 * 
+								 * @public
+								 * @name isPaused
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								isPaused: function(){
 									if(my_media){
 										return my_media.paused;
 									}
 									return false;
 								},
+								/**
+								 * Check if audio is currently enabled
+								 * 
+								 * @returns {Boolean} TRUE if enabled
+								 * 
+								 * @public
+								 * @name isEnabled
+								 * @function
+								 * @memberOf AudioHtml5Impl.prototype
+								 */
 								isEnabled: function(){
 									return enabled;
 								}

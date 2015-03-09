@@ -1,29 +1,79 @@
 
+define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
+ * <p>
  * This generator uses JS/CC for compiling the JSON grammar.
  * 
- * @see http://jscc.phorward-software.com/
+ * <p>
+ * The generator for compiling the JSON grammar definitions in <code>www/config/languages/&lt;language code&gt;/grammar.json</code>
+ * can be configured in <code>www/config/configuration.json</code>:<br>
+ * <pre>
+ * {
+ *   ...
+ *   "grammarCompiler": "jscc",
+ *   ...
+ * }</pre>
  * 
+ * <em>NOTE: this is the default grammar engine (if there is no setting in 
+ * 			 <code>configuration.json</code>, then this engine will be used)
+ * </em> 
+ * 
+ * @see <a href="http://jscc.phorward-software.com/">http://jscc.phorward-software.com/</a>
+ * 
+ * @class
+ * @constant
+ * @public
+ * @name JsccGenerator
+ * @exports JsccGenerator as mmir.env.grammar.JsccGenerator
  * 
  * @requires JS/CC
  * @requires jQuery.Deferred
  * @requires jQuery.extend
  * @requires jQuery.ajax
  * @requires jQuery.makeArray
- */
-define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'], function(jscc, constants, GrammarConverter, $, Logger, module){
+ */		
+function(jscc, constants, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
+/**
+ * Deferred object that will be returned - for async-initialization:
+ * the deferred object will be resolved, when this module has been initialized.
+ * 
+ * @property
+ * @private
+ * @type Deferred
+ * @memberOf JsccGenerator#
+ * 
+ * @see #_loadTemplate
+ */
 var deferred = $.Deferred();
 
-//create logger
+/**
+ * The Logger for the JS/CC generator.
+ * 
+ * @property
+ * @private
+ * @type Logger
+ * @memberOf JsccGenerator#
+ * 
+ * @see mmir.Logging
+ */
 var logger = Logger.create(module);
 
 
 //setup logger for compile-messages
+/**
+ * HELPER for creating default logging / error-print functions
+ * 
+ * @function
+ * @private
+ * @memberOf JsccGenerator#
+ * 
+ * @see mmir.Logging
+ */
 function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name*/, libMakeArray/*helper-lib: provides function makeArray(obj); e.g. jquery*/){
 	return function(){
 		var args = libMakeArray.makeArray(arguments);
@@ -33,17 +83,47 @@ function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name
 		log[level].apply(log, args);
 	};
 }
-//only set print-message function, if it is not already set
+//only set print-message function, if it is not already set 
+//  (i.e. if JS/CC still has its default print function set)
 if(jscc.is_printError_default()){
+	/**
+	 * The default logging function for printing compilation errors.
+	 * @private
+	 * @name set_printError
+	 * @function
+	 * @memberOf JsccGenerator.jscc#
+	 */
 	jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
 }
 if(jscc.is_printWarning_default()){
+	/**
+	 * The default logging function for printing compilation warnings.
+	 * @private
+	 * @name set_printWarning
+	 * @function
+	 * @memberOf JsccGenerator.jscc#
+	 */
 	jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
 }
 if(jscc.is_printInfo_default()){
+	/**
+	 * The default logging function for printing compilation information.
+	 * @private
+	 * @name set_printInfo
+	 * @function
+	 * @memberOf JsccGenerator.jscc#
+	 */
 	jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
 }
 
+/**
+ * The URL to the JS/CC template file (generated code-text will be "embedded" in this template)
+ * 
+ * @property
+ * @private
+ * @type String
+ * @memberOf JsccGenerator#
+ */
 var templatePath = constants.getGrammarPluginPath() + 'grammarTemplate_reduced.tpl';
 
 /**
@@ -54,17 +134,51 @@ var templatePath = constants.getGrammarPluginPath() + 'grammarTemplate_reduced.t
  * 
  * @constant
  * @private
+ * @memberOf JsccGenerator#
  */
 var INPUT_FIELD_NAME = 'asr_recognized_text';
 
+/**
+ * Exported (public) functions for the JS/CC grammar-engine.
+ * @public
+ * @type GrammarGenerator
+ * @memberOf JsccGenerator#
+ */
 var jsccGen = {
+	/** @scope JsccGenerator.prototype */
+	
+	/**
+	 * @param {Function} [callback] OPTIONAL
+	 * 			the callback that is triggered, when the engine is initialized
+	 * @returns {Deferred}
+	 * 			a promise that is resolved, when the engine is initialized
+	 * 			(NOTE: if you use the same function for the <code>callback</code> AND the promise,
+	 * 			       then the function will be invoked twice!)
+	 * 
+	 * @memberOf mmir.env.grammar.JsccGenerator.prototype
+	 */
 	init: function(callback){
 		if(callback){
 			deferred.always(callback);
 		}
 		return deferred;
 	},
+	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
 	isAsyncCompilation: function(){ return false; },
+	/**
+	 * The function for compiling a JSON grammar:
+	 * 
+	 * 
+	 * @param {GrammarConverter} theConverterInstance
+	 * @param {String} instanceId
+	 * 				the ID for the compiled grammar (usually this is a language code)
+	 * @param {Number} fileFormatVersion
+	 * 				the version of the file format (this is a constant within {@link mmir.SemanticInterpreter}
+	 * @param callback
+	 * @returns {GrammarConverter}
+	 * 			the grammar instance with attached with the compiled function for executing the
+	 * 			grammar to the instance's {@link GrammarConvert#executeGrammar} property/function. 
+	 */
 	compileGrammar: function(theConverterInstance, instanceId, fileFormatVersion, callback){
         
 		//attach functions for JS/CC conversion/generation to the converter-instance: 
@@ -80,7 +194,6 @@ var jsccGen = {
 
         //set up the JS/CC compiler:
         var dfa_table = '';
-        error_output = new String();//FIXME impl. & use jcss.getErrorMessage()/Problems()...
         jscc.reset_all( jscc.EXEC_WEB );
         
         var isParsingFailed = false;
@@ -111,8 +224,14 @@ var jsccGen = {
             }
         }
      
-        if (jscc.getErrors() > 0 || jscc.getWarnings() > 0 && error_output != "") 
-            logger.error('JSCC', 'compile', error_output);
+        if (jscc.getErrors() > 0 || jscc.getWarnings() > 0){
+            logger.error(
+            		'JSCC', 'compile', 'there occured' 
+            		+ (jscc.getWarnings() > 0? jscc.getWarnings() + ' warning(s)' : '')
+            		+ (jscc.getErrors() > 0? jscc.getErrors() + ' error(s)' : '')
+            		+ ' during compilation.'
+            );
+        }
         jscc.resetErrors();
         jscc.resetWarnings();
         
@@ -212,38 +331,55 @@ var jsccGen = {
 	}
 };
 
-$.ajax({
-	url: templatePath,
-	dataType: 'text',
-	async: true,
-	success: function(data){
-		
-		jsccGen.template = data;
-		
-		deferred.resolve();
-		
-//		jsccGen.init = function(callback){
-//			if(callback){
-//				callback();
-//			}
-//			return {
-//				then: function(callback){
-//					if(callback){
-//						callback();
-//					}
-//				}
-//			};
-//		};
-	},
-	error: function(xhr, status, err){
-		var msg = 'Failed to load grammar template file from "'+templatePath+'": '+status+', ERROR '+err;
-		console.error(msg);
-		deferred.reject(msg);
-	}
-});
+/**
+ * Initializes the grammar-engine:
+ * 
+ * loads the template and resolves the engine as initialzed.
+ * 
+ * @param {String} url
+ * 			URL to the template file
+ * @param {GrammarGenerator} jsccGenerator
+ * 			the JS/CC grammar generator instance
+ * @param {Deferred} promise
+ * 			the {@link #deferred} for resolving the generator
+ * 			as initialized.
+ *  
+ * 
+ * @private
+ * @function
+ * @memberOf JsccGenerator#
+ */
+function _loadTemplate(url, jsccGenerator, promise){
+	$.ajax({
+		url: url,
+		dataType: 'text',
+		async: true,
+		success: function(data){
+			
+			jsccGenerator.template = data;
+			
+			promise.resolve();
+			
+		},
+		error: function(xhr, status, err){
+			var msg = 'Failed to load grammar template file from "'+templatePath+'": '+status+', ERROR '+err;
+			console.error(msg);
+			promise.reject(msg);
+		}
+	});
+}
+
+//load the JS/CC template and resolve this module as "initialzed":
+_loadTemplate(templatePath, jsccGen, deferred);
 
 ////////////////////////////////////// JS/CC specific extensions to GrammarConverter ////////////////////////////////
 
+/**
+ * JS/CC specific extension / implementation for {@link GrammarConverter} instances
+ * 
+ * @type GrammarConverter
+ * @memberOf JsccGenerator#
+ */
 var JsccGrammarConverterExt = {
 	/** @memberOf JsccGrammarConverterExt */
 	init: function(){

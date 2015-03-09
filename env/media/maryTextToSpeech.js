@@ -26,16 +26,32 @@
 
 
 newMediaPlugin = {
-		initialize: function(callBack){
+		/**  @memberOf MaryTextToSpeech# */
+		initialize: function(callBack, mediaManager){
 			
+			/**  @memberOf MaryTextToSpeech# */
 			var _pluginName = 'maryTextToSpeech';
 			
+			/** 
+			 * @type mmir.LanguageManager
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var languageManager = require('languageManager');
+			/** 
+			 * @type mmir.ConfigurationManager
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var configurationManager = require('configurationManager');
-			var mediaManager = require('mediaManager');
+			/** 
+			 * @type mmir.CommonUtils
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var commonUtils = require('commonUtils');
 			
+			/**  @memberOf MaryTextToSpeech# */
 			var volume = 1.0;
+			
+			/**  @memberOf MaryTextToSpeech# */
 			var _setVolume = function(val){
 				volume = val;
 				
@@ -46,11 +62,17 @@ newMediaPlugin = {
 				}
 			};
 			
-
-			//EXPERIMENTAL: command-queue in case TTS is currently in use
-			// -> if TTS invoked, but currently not ready: add to queue
-			// -> after processing current TTS: process next on queue
+			/////////////////////////// EXPERIMENTAL: command-queue for queuing up TTS requests (instead of discarding when already busy) ////////
+			/**  
+			 * EXPERIMENTAL: command-queue in case TTS is currently in use
+			 * -> if TTS invoked, but currently not ready: add to queue
+			 * -> after processing current TTS: process next on queue
+			 *  
+			 * @memberOf MaryTextToSpeech# 
+			 */
 			var commandQueue = [];
+			/** EXPERIMENTAL: command-queue
+			 * @memberOf MaryTextToSpeech# */
 			var addToCommandQueue = function(args){
 				
 				//copy argument list:
@@ -62,6 +84,8 @@ newMediaPlugin = {
 				
 				commandQueue.push(list);
 			};
+			/** EXPERIMENTAL: command-queue
+			 * @memberOf MaryTextToSpeech# */
 			var processNextInCommandQueue = function(){
 				
 				isReady = false;
@@ -75,27 +99,71 @@ newMediaPlugin = {
 				}
 				
 			};
+			/** EXPERIMENTAL: command-queue
+			 * @memberOf MaryTextToSpeech# */
 			var clearCommandQueue = function(args){
 				commandQueue.splice(0, commandQueue.length);
 			};
-			//END: command queue
+//			///////////////////////// END: command-queue ////////////////////////////////// 
 			
+			/**
+			 * @function
+			 * @memberOf MaryTextToSpeech# */
 			var onEndCallBack= null;
+			/**
+			 * @function
+			 * @memberOf MaryTextToSpeech# */
 			var currentFailureCallBack = null;
+			/**  @memberOf MaryTextToSpeech# */
 			var isReady= true;
+			/** internal field for single-sentence audio-object.
+			 * Used in {@link #ttsSingleSentence}
+			 * @type AudioImpl
+			 * @memberOf MaryTextToSpeech# */
 			var ttsMedia = null;
+			/**  @memberOf MaryTextToSpeech# */
 			var playIndex = 0;
+			/**  @memberOf MaryTextToSpeech# */
 			var firstSentence = true;
+			/**  @memberOf MaryTextToSpeech# */
 			var loadIndex = 0;
+			/**  @memberOf MaryTextToSpeech# */
 			var isLoading = false;
+			/** 
+			 * number of audio-objects that should be pre-fetched/buffered
+			 * when in sentence-mode.
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var bufferSize = 3;
+			/** internal field for list of "sentence audio-object".
+			 * Used in {@link #ttsSentenceArray}
+			 * @type Array<AudioImpl>
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var audioArray = [];
+			/** internal field for list of (text) sentences to be played.
+			 * Used in {@link #ttsSentenceArray}
+			 * @type Array<String>
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var sentenceArray = [];
+			/**  
+			 * In sentence mode: pause (in milli-seconds) between reading sentences.
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var pauseDuration = 500;
+			/** 
+			 * HELPER for splitting a single String into "sentences", i.e. Array of Strings
+			 * @param {String} text
+			 * 			the input String
+			 * @returns {Array<String>} a list of strings
+			 * @memberOf MaryTextToSpeech#
+			 */
 			var defaultSplitter = function(text){
 				text = text.replace(/\.\s|\?\s|\!\s/g,"#");
 				return text.split("#");
 			};
+			/**  @memberOf MaryTextToSpeech# */
 			var generateTTSURL = function(text){
 				text = encodeURIComponent(text);
 				var lang = languageManager.getLanguageConfig(_pluginName);
@@ -105,7 +173,8 @@ newMediaPlugin = {
 				
 				return configurationManager.get([_pluginName, "serverBasePath"])+'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
 			};
-			
+
+			/**  @memberOf MaryTextToSpeech# */
 			var playNext = function playNext(){
 				
 				playIndex++;
@@ -129,6 +198,8 @@ newMediaPlugin = {
 					processNextInCommandQueue();
 				}
 			};
+			
+			/**  @memberOf MaryTextToSpeech# */
 			var ttsSingleSentence = function(text, onEnd, failureCallBack, onLoad){
 				
 				try {
@@ -169,6 +240,8 @@ newMediaPlugin = {
 				}
 				
 			};
+
+			/**  @memberOf MaryTextToSpeech# */
 			var ttsSentenceArray = function(sentences, onEnd, failureCallBack, onInit){
 				{
 					try {
@@ -207,6 +280,8 @@ newMediaPlugin = {
 					}
 				}
 			};
+
+			/**  @memberOf MaryTextToSpeech# */
 			var loadNext = function loadNext(onInit){//TODO not onInit is currently only used for the very first sentence ...
 				if (isLoading) return null;
 				//FIXME need to handle case that loadingIndex is not within buffer-size ...
@@ -258,7 +333,13 @@ newMediaPlugin = {
 				}
 			};
 			
+			/**  @memberOf MaryTextToSpeech# */
 			var _instance = {
+				/**
+				 * @public
+				 * @memberOf MaryTextToSpeech.prototype
+				 * @see mmir.MediaManager#textToSpeech
+				 */
 				textToSpeech: function(parameter, successCallback, failureCallback, onInit){
 					var errMsg;
 					if (!isReady) {
@@ -326,6 +407,11 @@ newMediaPlugin = {
 						}
 					}
 				},
+				/**
+				 * @public
+				 * @memberOf MaryTextToSpeech.prototype
+				 * @see mmir.MediaManager#cancelSpeech
+				 */
 				cancelSpeech: function(successCallBack, failureCallBack){
 					console.debug('cancel tts...');
 					try {
@@ -364,11 +450,17 @@ newMediaPlugin = {
 							failureCallBack();
 					}
 				},
+				/**
+				 * @public
+				 * @memberOf MaryTextToSpeech.prototype
+				 * @see mmir.MediaManager#setTextToSpeechVolume
+				 */
 				setTextToSpeechVolume: function(newValue){
 					_setVolume(newValue);
 				}
 			};//END: _instance = { ...
 			
+			//invoke the passed-in initializer-callback and export the public functions:
 			callBack(_instance);
 		}
 };

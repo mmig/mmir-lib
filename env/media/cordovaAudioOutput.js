@@ -24,18 +24,21 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-/**
- * @name media.plugin.cordovaAudioInput
- */
 newMediaPlugin = {
-		/** @scope media.plugin.cordovaAudioInput.prototype */
-		initialize: function(callBack){
+		/**  @memberOf CordovaAudioOutput# */
+		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled
 			
+			/**  @memberOf CordovaAudioOutput# */
 			var _pluginName = 'codovaAudioOutput';
 			
+			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
-				
-				playWav: function(blob, successCallback, failureCallback){
+				/**
+				 * @public
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#playWAV
+				 */
+				playWAV: function(blob, successCallback, failureCallback){
 					try {
 						var blobURL = window.URL.createObjectURL(blob);
 						var my_media = new Media(
@@ -58,7 +61,11 @@ newMediaPlugin = {
 						}
 					}
 				},
-				
+				/**
+				 * @public
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#playURL
+				 */
 				playURL: function(url, successCallback, failureCallback){
 					try {
 //						console.log(url);
@@ -82,15 +89,25 @@ newMediaPlugin = {
 						}
 					}
 				},
-				
+				/**
+				 * @public
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#getURLAsAudio
+				 */
 				getURLAsAudio: function(url, onEnd, failureCallback, onCanPlay){
 					
 					try {
-//						console.log(url);
-						var my_media = null;
-
+						
+						/**
+						 * @private
+						 * @memberOf AudioCordovaImpl#
+						 */
 						var playStatus = 0;
-						my_media = new Media(
+						/**
+						 * @private
+						 * @memberOf AudioCordovaImpl#
+						 */
+						var my_media = new Media(
 								url
 								,null //DEBUG: function(){console.log('native onReady CB');}
 								,failureCallback
@@ -118,13 +135,50 @@ newMediaPlugin = {
 									}
 								}
 						);
+						
+						/**
+						 * @private
+						 * @memberOf AudioCordovaImpl#
+						 */
 						var enabled = true;
+						
+						
+						/**
+						 * The Audio abstraction that is returned by {@link mmir.MediaManager#getURLAsAudio}.
+						 * 
+						 * <p>
+						 * NOTE: when an audio object is not used anymore, its {@link #release} method should
+						 * 		 be called.
+						 * 
+						 * <p>
+						 * This is the same interface as {@link AudioHtml5Impl}.
+						 * 
+						 * @class
+						 * @name AudioCordovaImpl
+						 * @public
+						 */
 						var mediaImpl = {
+								/**
+								 * Play audio.
+								 * 
+								 * @public
+								 * @name play
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								play: function(){
 									if (enabled){
 										my_media.play();
 									}
 								},
+								/**
+								 * Stop playing audio.
+								 * 
+								 * @public
+								 * @name stop
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								stop: function(){
 									//use "manual" stop instead of Cordova's stop
 									//in order to allow "forgiving" behavior when audio is already stopped
@@ -149,15 +203,43 @@ newMediaPlugin = {
 //									}
 ////									my_media.stop();
 								},
+								/**
+								 * Enable audio (should only be used internally).
+								 * 
+								 * @public
+								 * @name enable
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								enable: function(){
 									enabled = true;
 								},
+								/**
+								 * Disable audio (should only be used internally).
+								 * 
+								 * @public
+								 * @name disable
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								disable: function(){
 									if(enabled){
 										this.stop();
 										enabled = false;
 									}
 								},
+								/**
+								 * Release audio: should be called when the audio
+								 * file is not used any more.
+								 * 
+								 * NOTE Android has limited resources available - not releasing resources
+								 *      may result in not being able to instantiate new (audio) resources.
+								 * 
+								 * @public
+								 * @name release
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								release: function(){
 									if(enabled && ! this.isPaused()){
 										this.stop();
@@ -168,23 +250,67 @@ newMediaPlugin = {
 									}
 
 								},
+								/**
+								 * Set the volume of this audio file
+								 * 
+								 * @param {Number} value
+								 * 			the new value for the volume:
+								 * 			a number between [0.0, 1.0]
+								 * 
+								 * @public
+								 * @name setVolume
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								setVolume: function(value){
 									if(my_media){
 										my_media.setVolume(value);
 									}
 								},
+								/**
+								 * Get the duration of the audio file
+								 * 
+								 * @returns {Number} the duration in MS (or -1 if unknown)
+								 * 
+								 * @public
+								 * @name getDuration
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								getDuration: function(){
 									if(my_media){
 										return my_media.duration;
 									}
 									return -1;
 								},
+								/**
+								 * Check if audio is currently paused.
+								 * 
+								 * NOTE: "paused" is a different status than "stopped".
+								 * 
+								 * @returns {Boolean} TRUE if paused, FALSE otherwise
+								 * 
+								 * @public
+								 * @name isPaused
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								isPaused: function(){
 									if(my_media){
 										return playStatus == 3;
 									}
 									return false;
 								},
+								/**
+								 * Check if audio is currently enabled
+								 * 
+								 * @returns {Boolean} TRUE if enabled
+								 * 
+								 * @public
+								 * @name isEnabled
+								 * @function
+								 * @memberOf AudioCordovaImpl.prototype
+								 */
 								isEnabled: function(){
 									return enabled;
 								}

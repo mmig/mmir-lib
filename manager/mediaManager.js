@@ -58,6 +58,11 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @memberOf mmir.MediaManager.prototype
 	 */
 
+	/**
+	 * The instance that holds the singleton MediaManager object.
+	 * @private
+	 * @memberOf mmir.MediaManager#
+	 */
     var instance = null;
     
     /**
@@ -187,12 +192,30 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      */
     function constructor(){
     	
-    	//map of listeners for event X
+    	/**
+    	 * map of listeners: 
+    	 * 		event(String) -&gt; listener(Function)
+    	 * 
+		 * @private
+    	 * @memberOf MediaManager.prototype
+    	 */
     	var listener = new Dictionary();
-    	//map of listener-observers (get notified if listener for event X gets added/removed)
+    	
+    	/**
+    	 * map of listener-observers:
+    	 *  observers get notified if a listener for event X gets added/removed
+    	 * 
+		 * @private
+    	 * @memberOf MediaManager.prototype
+    	 */
     	var listenerObserver = new Dictionary();
     	
-		/** exported as addListener() and on() */
+		/** 
+		 * exported as addListener() and on()
+		 * 
+		 * @private
+		 * @memberOf MediaManager.prototype
+		 */
     	var addListenerImpl = function(eventName, eventHandler){
 			var list = listener.get(eventName);
 			if(!list){
@@ -206,7 +229,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 			//notify listener-observers for this event-type
 			this._notifyObservers(eventName, 'added', eventHandler);
 		};
-		/** exported as removeListener() and off() */
+		/**
+		 * exported as removeListener() and off()
+		 *  
+		 * @private
+		 * @memberOf MediaManager.prototype
+		 */
     	var removeListenerImpl = function(eventName, eventHandler){
 			var isRemoved = false;
 			var list = listener.get(eventName);
@@ -238,6 +266,9 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 		 * The logger for the MediaManager.
 		 * 
 		 * Exported as <code>_log</code> by the MediaManager instance.
+		 * 
+		 * @private
+		 * @memberOf MediaManager.prototype
 		 */
 		var logger = Logger.create(module);//initialize with requirejs-module information
     	
@@ -245,11 +276,13 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	return {
     			
     			/**
-    			 * A logger for the MediaManager.
+    			 * A logger for the MediaManager and its plugins/modules.
     			 * 
+    			 * <p>
     			 * This logger MAY be used by media-plugins and / or tools and helpers
     			 * related to the MediaManager.
     			 * 
+    			 * <p>
     			 * This logger SHOULD NOT be used by "code" that non-related to the
     			 * MediaManager 
     			 * 
@@ -478,6 +511,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				console.error("Audio Output: set volume for Text To Speech is not supported.");
 				}
     			
+
+///////////////////////////// MediaManager "managing" functions: ///////////////////////////// 
     			/**
     	    	 * Adds the handler-function for the event.
     	    	 * 
@@ -503,6 +538,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	    	 * 
     	    	 * @param {String} eventName
     	    	 * @param {Function} eventHandler
+    	    	 * 
+    	    	 * @function
     	    	 */
     			, addListener: addListenerImpl
     			/**
@@ -518,11 +555,19 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	    	 * @returns {Boolean}
     	    	 * 		<code>true</code> if the handler function was actually 
     	    	 * 		removed, and <code>false</code> otherwise.
+    	    	 * 
+    	    	 * @function
     	    	 */
     			, removeListener: removeListenerImpl
-    			/** @see {@link #addListener} */
+    			/** 
+    			 * @function
+    			 * @see #addListener
+    			 */
     			, on:addListenerImpl
-    			/** @see {@link #removeListener} */
+    			/** 
+    			 * @function
+    			 * @see #removeListener
+    			 */
     			, off: removeListenerImpl
     			/**
     			 * Get list of registered listeners / handlers for an event.
@@ -556,6 +601,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	    	 * @param {Array} argsArray
     	    	 * 					the list of arguments with which the event-handlers
     	    	 * 					will be called.
+    	    	 * @protected
     			 */
     			, _fireEvent: function(eventName, argsArray){
     				var list = listener.get(eventName);
@@ -565,7 +611,19 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					}
     				}
     			}
-    			/** @private */
+    			/** 
+    			 * Helper for notifying listener-observers about changes (adding/removing listeners).
+    			 * This should only be used by media plugins (that handle the eventName).
+    			 * 
+    			 * @param {String} eventName
+    			 * @param {String} actionType
+    			 * 					the change-type that occurred for the event/event-handler:
+    			 * 					one of <code>["added" | "removed"]</code>.
+    	    	 * @param {Function} eventHandler
+    	    	 * 					the event-handler function that has changed.
+    	    	 * 
+    			 * @protected
+    			 */
     			, _notifyObservers: function(eventName, actionType, eventHandler){//actionType: one of "added" | "removed"
     				var list = listenerObserver.get(eventName);
     				if(list && list.length){
@@ -639,6 +697,30 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     // if FALSEy: use 'browser' config
     //
     // NOTE: this setting/paramater is overwritten, if the configuration has a property 'mediaPlugins' set!!!
+    /**
+     * HELPER for init-function:
+     * 	determines, which plugins (i.e. files) should be loaded.
+     * 
+     * <p>
+     * has 2 default configuarions:<br>
+     * if isCordovaEnvironment TRUE: use 'cordova' config<br>
+     * if FALSEy: use 'browser' config
+     * <p>
+     * OR<br>
+     * loads the list for the current environment (cordova or browser) that is set in configuration.json via <br>
+     * <pre>
+     * "mediaManager": {
+     * 		"cordova": [...],
+     * 		"browser": [...]
+     * } 
+     * </pre>
+     * 
+     * @returns {Array<String>}
+     * 				the list of plugins which should be loaded
+     * 
+	 * @private
+	 * @memberOf mmir.MediaManager#
+     */
     function getPluginsToLoad(isCordovaEnvironment){
     	var env = null;
     	var pluginArray = [];
@@ -657,7 +739,11 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	
     	return pluginArray;
     }
-    
+    /**
+     * 
+	 * @private
+	 * @memberOf mmir.MediaManager#
+     */
     function loadAllPlugins(pluginArray, successCallback,failureCallback){
     	if (pluginArray == null || pluginArray.length<1){
     		if (successCallback) {
@@ -714,6 +800,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * 				an Deferred object that gets resolved, after the {@link mmir.MediaManager}
          * 				has been initialized.
          * @public
+         * 
+         * @memberOf mmir.MediaManager.prototype
          * 
          */
         init: function(successCallback, failureCallback, listenerList){

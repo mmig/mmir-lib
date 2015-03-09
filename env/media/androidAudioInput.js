@@ -26,18 +26,40 @@
 
 
 newMediaPlugin = {
-
+		/**  @memberOf AndroidAudioInput# */
 		initialize: function(initCallBack, mediaManager){
-
+			/**  @memberOf AndroidAudioInput# */
 			var _pluginName = 'androidAudioInput';
-
+			/** 
+			 * @type mmir.LanguageManager
+			 * @memberOf AndroidAudioInput#
+			 */
 			var languageManager = require('languageManager');
 
+			/**  @memberOf AndroidAudioInput# */
 			var id = 0;
+			/**  
+			 * @type Function
+			 * @memberOf AndroidAudioInput#
+			 */
 			var currentSuccessCallback;
+			/**  
+			 * @type Function
+			 * @memberOf AndroidAudioInput#
+			 */
 			var currentFailureCallback;
+			/**  @memberOf AndroidAudioInput# */
 			var intermediate_results = true;
+			/**  @memberOf AndroidAudioInput# */
 			var repeat = false;
+			/**
+			 * The last received result (or undefined, if there is none).
+			 * 
+			 * [ text : String, score : Number, type : result_types, alternatives : Array, unstable : String ]
+			 * 
+			 * @type Array
+			 * @memberOf AndroidAudioInput#
+			 */
 			var last_result = void(0);
 
 			//Nuance Error Codes:
@@ -70,6 +92,12 @@ newMediaPlugin = {
 //		    /** Insufficient permissions */
 //		    public static final int ERROR_INSUFFICIENT_PERMISSIONS = 9;
 
+			/**
+			 * Error codes (returned by the native/Cordova plugin)
+			 * @type Enum
+			 * @constant
+			 * @memberOf AndroidAudioInput#
+			 */
 			var error_codes_enum = {
 					"NETWORK_TIMEOUT":			1, //Nuance: SERVER_CONNECTION
 					"NETWORK":					2, //Nuance: SERVER_RETRY
@@ -84,6 +112,13 @@ newMediaPlugin = {
 					"UNKNOWN":					10 //Nuance -> 0
 			};
 
+			/**
+			 * Result types (returned by the native/Cordova plugin)
+			 * 
+			 * @type Enum
+			 * @constant
+			 * @memberOf AndroidAudioInput#
+			 */
 			var result_types = {
 					"FINAL": 				"FINAL",
 					"INTERIM": 				"INTERIM",
@@ -93,18 +128,37 @@ newMediaPlugin = {
 					"RECORDING_DONE": 		"RECORDING_DONE"
 			};
 
+			/**
+			 * Wait indicator during speech input:
+			 * <p>
+			 * provides 2 functions:<br>
+			 * 
+			 * <code>preparing()</code>: if called, the implementation indicates that the "user should wait"<br>
+			 * <code>ready()</code>: if called, the implementation stops indicating that the "user should wait" (i.e. that the system is ready for user input now)<br>
+			 * 
+			 * @type InputWaitIndicator
+			 * @memberOf AndroidAudioInput#
+			 */
 			//FIXME application-dependent / jQuery-dependent mechanism for WAIT-feedback (i.e. when recognizer prepares to get ready)
 			var _wait = (function($){
 
+				/** @private
+				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
 				var speech_input_wait_div_id = 
 					typeof SPEECH_INPUT_WAIT_DLG_ID !== 'undefined'? //FIXME custom-mechanism for optionally setting this using a global variable
 							SPEECH_INPUT_WAIT_DLG_ID : 
 								"speech-input-wait-dlg";//<- default ID FIXME application dependent!?
 
+				/** @private
+				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
 				var speech_input_wait_div;
 
+				/** @private
+				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
 				var speech_input_wait_div_parent_selector = 'body';
 
+				/** @private
+				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
 				var getHtml = function(divId, msgStr){
 
 					return '<div id="'
@@ -114,7 +168,8 @@ newMediaPlugin = {
 					+ '</h1></div>';
 
 				};
-
+				/** @private
+				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
 				var show_wait_on_result = function(){
 
 					if ( $(speech_input_wait_div_parent_selector + '>.ui-loader:visible').length < 1){
@@ -141,7 +196,8 @@ newMediaPlugin = {
 					}
 
 				};
-
+				/** @private
+				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
 				var hide_wait_on_result = function(){
 					if ($('#'+speech_input_wait_div_id).length > 0){
 						// element inserted
@@ -152,10 +208,14 @@ newMediaPlugin = {
 				return {
 					/**
 					 * show / activate feedback for "start preparing"
+					 * @function
+					 * @memberOf AndroidAudioInput.InputWaitIndicator#
 					 */
 					preparing:     show_wait_on_result,
 					/**
 					 * hide / activate feedback for "preparing done"
+					 * @function
+					 * @memberOf AndroidAudioInput.InputWaitIndicator#
 					 */
 					ready: hide_wait_on_result
 				};
@@ -163,10 +223,21 @@ newMediaPlugin = {
 			})(jQuery);
 			////////////////////////////////// END: application dependent WAIT feedback //////////////////
 
-
+			/**
+			 * MIC-LEVELS: Name for the event that is emitted, when the input-mircophone's level change.
+			 * 
+			 * @private
+			 * @constant
+			 * @memberOf AndroidAudioInput#
+			 */
 			var MIC_CHANGED_EVT_NAME = 'miclevelchanged';
 			
-			//start/stop audio-analysis if listeners get added/removed
+			/**
+			 * MIC-LEVELS: start/stop audio-analysis if listeners get added/removed.
+			 * 
+			 * @private
+			 * @memberOf AndroidAudioInput#
+			 */
 			function _updateMicLevelListeners(actionType, handler){
 				//add to plugin-listener-list
 				if(actionType=== 'added'){
@@ -184,7 +255,11 @@ newMediaPlugin = {
 				window.plugins.androidSpeechPlugin.onMicLevelChanged(list[i]);
 			}
 			
-
+			/**
+			 * HELPER invoke current callback function with last recognition results.
+			 * @private
+			 * @memberOf AndroidAudioInput#
+			 */
 			var call_callback_with_last_result = function(){
 				if(typeof last_result !== "undefined") {
 					if (currentSuccessCallback){
@@ -199,8 +274,13 @@ newMediaPlugin = {
 			};
 
 			/**
-			 * successcallback(asr_result, asr_score, asr_type, asr_alternatives) OR in case of error:
+			 * Creates the wrapper for the success-back:
+			 * 
+			 * successcallback(asr_result, asr_score, asr_type, asr_alternatives, asr_unstable) OR in case of error:
 			 * successcallback(asr_result, asr_score, asr_type, asr_error_code, asr_error_suggestion)
+			 * 
+			 * @private
+			 * @memberOf AndroidAudioInput#
 			 */
 			var successCallbackWrapper = function successCallbackWrapper (cb){
 				
@@ -306,7 +386,12 @@ newMediaPlugin = {
 				});
 			};
 
-			
+			/**
+			 * creates the wrapper for the failure callback
+			 * 
+			 * @private
+			 * @memberOf AndroidAudioInput#
+			 */
 			var failureCallbackWrapper = function failureCallbackWrapper (cb){
 				
 				return (function (res){
@@ -449,7 +534,13 @@ newMediaPlugin = {
 				});
 			};
 
+			//invoke the passed-in initializer-callback and export the public functions:
 			initCallBack ({
+				/**
+				 * @public
+				 * @memberOf AndroidAudioInput.prototype
+				 * @see mmir.MediaManager#startRecord
+				 */
 				startRecord: function(successCallback, failureCallback, intermediateResults){
 
 					currentFailureCallback = failureCallback;
@@ -467,6 +558,11 @@ newMediaPlugin = {
 							intermediate_results
 					);
 				},
+				/**
+				 * @public
+				 * @memberOf AndroidAudioInput.prototype
+				 * @see mmir.MediaManager#stopRecord
+				 */
 				stopRecord: function(successCallback,failureCallback){
 					repeat = false;
 					window.plugins.androidSpeechPlugin.stopRecord(
@@ -474,6 +570,11 @@ newMediaPlugin = {
 							failureCallbackWrapper(failureCallback)
 					);
 				},
+				/**
+				 * @public
+				 * @memberOf AndroidAudioInput.prototype
+				 * @see mmir.MediaManager#recognize
+				 */
 				recognize: function(successCallback,failureCallback){
 					repeat = false;
 
@@ -485,6 +586,11 @@ newMediaPlugin = {
 							failureCallbackWrapper(failureCallback)
 					);
 				},
+				/**
+				 * @public
+				 * @memberOf AndroidAudioInput.prototype
+				 * @see mmir.MediaManager#cancelRecognition
+				 */
 				cancelRecognition: function(successCallBack,failureCallBack){
 					last_result = void(0);
 					repeat = false;
@@ -493,14 +599,6 @@ newMediaPlugin = {
 					
 					window.plugins.androidSpeechPlugin.cancel(successCallBack, failureCallBack);
 				}
-//				,getMicLevels: function(successCallback,failureCallback){
-//
-//					window.plugins.androidSpeechPlugin.getMicLevels(
-//							successCallback,
-//							failureCallback
-//					);
-//					
-//				}
 			});
 
 

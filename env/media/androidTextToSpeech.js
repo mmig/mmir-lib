@@ -26,15 +26,28 @@
 
 
 newMediaPlugin = {
-		initialize: function(callBack){
+		/**  @memberOf AndroidTextToSpeech# */
+		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled
 			
+			/**  @memberOf AndroidTextToSpeech# */
 			var _pluginName = 'androidTextToSpeech';
-			
+			/** 
+			 * @type mmir.LanguageManager
+			 * @memberOf AndroidTextToSpeech#
+			 */
 			var languageManager = require('languageManager');
+			/** 
+			 * @type mmir.CommonUtils
+			 * @memberOf AndroidTextToSpeech#
+			 */
 			var commonUtils = require('commonUtils');
-			
+			/** 
+			 * @type String
+			 * @memberOf AndroidTextToSpeech#
+			 */
 			var language;
 			
+			//initialize the TTS plugin (with the current language setting)
 			window.plugins.androidTtsPlugin.startup(
 				
 				function(data){
@@ -61,7 +74,13 @@ newMediaPlugin = {
 			);
 			//TODO destructor: register onpause/exit handler that shuts down the TTS engine
 			
+			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
+					/**
+					 * @public
+					 * @memberOf AndroidTextToSpeech.prototype
+					 * @see mmir.MediaManager#textToSpeech
+					 */
 				    textToSpeech: function (parameter, successCallBack, failureCallBack, startCallBack){
 				    	
 				    	var text;
@@ -98,6 +117,11 @@ newMediaPlugin = {
 				    	}
 				    	
 				    },
+				    /**
+					 * @public
+					 * @memberOf AndroidTextToSpeech.prototype
+					 * @see mmir.MediaManager#cancelSpeech
+					 */
 	    			cancelSpeech: function(successCallBack,failureCallBack){
 	    				
 				    	window.plugins.androidTtsPlugin.cancel(

@@ -26,17 +26,37 @@
 
 
 newMediaPlugin = {
-		initialize: function(callBack){
+		/**  @memberOf NuanceAndroidTextToSpeech# */
+		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled
 			
+			/**  @memberOf NuanceAndroidTextToSpeech# */
 			var _pluginName = 'nuanceTextToSpeech';
 			
-			//separator char for language- / country-code
+			/**
+			 * separator char for language- / country-code (specific to Nuance language config / codes)
+			 *   
+			 * @memberOf NuanceAndroidTextToSpeech#
+			 */
 			var _langSeparator = '_';
 			
+			/** 
+			 * @type mmir.LanguageManager
+			 * @memberOf NuanceAndroidTextToSpeech#
+			 */
 			var languageManager = require('languageManager');
-			var commonUtils = require('commonUtils');  
+			/** 
+			 * @type mmir.CommonUtils
+			 * @memberOf NuanceAndroidTextToSpeech#
+			 */
+			var commonUtils = require('commonUtils');
 			
+			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
+					/**
+					 * @public
+					 * @memberOf NuanceAndroidTextToSpeech.prototype
+					 * @see mmir.MediaManager#textToSpeech
+					 */
 				    textToSpeech: function (parameter, successCallBack, failureCallBack, startCallBack){
 				    	try{
 				    		
@@ -72,6 +92,11 @@ newMediaPlugin = {
 				    	}
 				    	
 				    },
+				    /**
+					 * @public
+					 * @memberOf NuanceAndroidTextToSpeech.prototype
+					 * @see mmir.MediaManager#cancelSpeech
+					 */
 	    			cancelSpeech: function(successCallBack,failureCallBack){
 	    				//FIXME currently, NuancePlugin returns failure on successful cancel-performance, so we call the function with switched failure, success arguments...
 	    				//			-> switch back, when NuancePlugin returns PluginResults correctly... 

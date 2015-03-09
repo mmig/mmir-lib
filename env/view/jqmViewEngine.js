@@ -1,10 +1,13 @@
 
+
+define(['jquery', 'loadCss'],
 /**
  * View engine that uses jQuery Mobile for loading the views as new jQM pages.
  * 
  * <p>
  * 
  * The render-functions supports the jQM page-transitions.
+ * The default (jQuery Mobile) transition is <code>none</code>.
  * 
  * <p>
  * 
@@ -18,13 +21,44 @@
  * 	<li>loads the RequireJS module "jqmSimpleModal" (i.e.: jQuery Mobile plugin SimpleModal)</li>
  * </ul>
  * 
+ * <p>
+ * 
+ * <h3>Replacing the Default ViewEngine</h3>
+ * 
+ * This render engine can be replaced by alternative rendering engines, by
+ * 
+ * <ul>
+ * 	<li>implementing the interface for rendering engine: the requirejs module should export
+ * 		an object with the public functions as described by {@link mmir.PresentationManager#_renderEngine}.</li>
+ * 	<li>register the engine with its module ID and configure MMIR to use it:
+ * 		<ul>
+ * 			<li>register the new rendering-engine file:<br>
+ * 				<code>mmir.config({paths: {'module ID': 'path/to/file/name'}})</code>
+ * 			</li>
+ * 			<li>configure MMIR to use it by setting the new module ID to {@link mmir.viewEngine}:<br>
+ * 				<code>mmir.viewEngine = 'module ID';</code>
+ * 			</li>
+ * 			<li>NOTE: the call to <code>mmir.config</code> and setting the module ID to <code>viewEngine</code>
+ * 				must happen <em>after</em> the <code>mmirf/core.js</code>
+ * 				file is loaded, but <em>before</em> <code>mmirf/vendor/libs/require.js</code>
+ * 				is loaded! (see <code>index.html</code>)
+ * 			</li>
+ * 			<li>NOTE: the path to the app's root directory is <code>../</code></li>
+ * 			<li>NOTE: the <code>file name</code> must be <strong>without</strong> the file extension</li>
+ * 		</ul>
+ *  </li>
+ * </ul>
+ * 
+ * 
  * @example
  * //use page-transition with effect 'slide' (animated as not-reversed motion)
  * mmir.DialogManager.render('theController', 'theView', {transition: 'slide', reverse: false});
  * 
+ * 
+ * 
  * @class
- * @name jqmViewEngine
- * @exports jqmViewEngine as mmir.env.jqmViewEngine
+ * @name JqmViewEngine
+ * @exports JqmViewEngine as mmir.env.view.JqmViewEngine
  * @static 
  *  
  * Libraries:
@@ -46,12 +80,25 @@
  *  @requires jQueryMobile.pageContainer
  *  
  *  @requires jQuerySimpleModalDialog
+ *  
+ *  @see mmir.PresentationManager#setRenderEngine
+ *  @see mmir.PresentationManager#callRenderEngine
+ *  @see mmir.viewEngine
  */
-define(['jquery', 'loadCss'],function(jquery, loadCss){
+function(jquery, loadCss){
 
 	//load CSS for jQuery Mobile:
 	loadCss('mmirf/vendor/styles/jquery.mobile-1.4.3.min.css');
 	
+	/**
+	 * Deferred object that will be returned; for async-initialization:
+	 * the deferred object will be resolved, when this module has been initialized.
+	 * 
+	 * @private
+	 * @property
+	 * @type Deferred
+	 * @memberOf JqmViewEngine#
+	 */
 	var promise = jquery.Deferred();
 	
 	require(['jquery', 'renderUtils', 'languageManager', 'controllerManager',
@@ -65,6 +112,9 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 		 * DOM and after all page transitions have been executed).
 		 * 
 		 * @private
+		 * @property
+		 * @type Array<jQueryObject>
+		 * @memberOf JqmViewEngine#
 		 */
 		var afterViewLoadRemoveList = [];
 
@@ -78,19 +128,89 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 		 * These elements must have an ID attribute with the value of this constant
 		 * (the actual value will be created and set on rendering the view / layout).
 		 * 
-		 * @property CONTENT_ID
+		 * @property
 		 * @type String
 		 * @public
 		 * @constant
+		 * @memberOf JqmViewEngine#
 		 */
 		var CONTENT_ID = "pageContainer";
 
 		//property names for passing the respected objects from doRenderView() to doRemoveElementsAfterViewLoad()
+		/**
+		 * Property name for passing the respected objects from
+		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
+		 * 
+		 * Internal ID for field name that holds the {@link View}.
+		 * 
+		 * @property
+		 * @type String
+		 * @private
+		 * @constant
+		 * @memberOf JqmViewEngine#
+		 */
 		var FIELD_NAME_VIEW 		 = '__view';
+		/**
+		 * Property name for passing the respected objects from
+		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
+		 * 
+		 * Internal ID for field name that holds the rendering data object.
+		 * 
+		 * @property
+		 * @type String
+		 * @private
+		 * @constant
+		 * @memberOf JqmViewEngine#
+		 * 
+		 * @see mmir.PresentationManager#render
+		 * @see mmir.DialogManager#render
+		 */
 		var FIELD_NAME_DATA 		 = '__renderData';
+		/**
+		 * Property name for passing the respected objects from
+		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
+		 * 
+		 * Internal ID for field name that holds the {@link Controller}.
+		 * 
+		 * @property
+		 * @type String
+		 * @private
+		 * @constant
+		 * @memberOf JqmViewEngine#
+		 */
 		var FIELD_NAME_CONTROLLER 	 = '__ctrl';
 
-		//function for removing "old" content from DOM (-> remove old, un-used page content)
+		//
+		/**
+		 * Function for removing "old" content from DOM (-> remove old, un-used page content).
+		 * 
+		 * This function is registered to jQuery Mobile's onpagechange event and will be executed
+		 * after each page-change (i.e. render-call).
+		 * 
+		 * This function
+		 * <ul>
+		 * 	<li>calls <code>on_page_load</code> on the view's controller</li>
+		 * 	<li>calls <code>on_page_load&lt;VIEW NAME&gt;</code> on the view's controller (if it exists)</li>
+		 * 	<li>removes the DOM content of the previous view from the document</li>
+		 * <ul>
+		 * 
+		 * @param {Event} event
+		 * 				the event triggered by a (jQuery Mobile) page-change
+		 * @data {PlainObject} data
+		 * 				the data object. The data object holds the property
+		 * 				<code>data.options</code> that is set by {@link doRenderView}
+		 * 				when triggering the page change.
+		 * 				this options object holds 3 properties:
+		 * 				<pre>{
+		 * 					FIELD_NAME_CONTROLLER: Controller,  //the Controller of the View which is rendered (if NULL, an error will be printed to the console!)
+		 * 					FIELD_NAME_VIEW:       View,        //View which is rendered
+		 * 					FIELD_NAME_DATA:       Object,      //the data object with which render() was invoked
+		 * 				}</pre>
+		 *  
+		 * @function
+		 * @private
+		 * @memberOf JqmViewEngine#
+		 */
 		var doRemoveElementsAfterViewLoad = function(event, data){
 			//data.toPage: {String|Object} page to which view was changed
 			//data.options: the configuration for the page change
@@ -173,7 +293,10 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 		 *            							DEFAULT: "none".
 		 *            <code>reverse</code>: whether the animation should in "forward" (FALSE) direction, or "backwards" (TRUE)
 		 *            						DEFAULT: FALSE
-		 *            
+		 *
+		 * @function
+		 * @private
+		 * @memberOf JqmViewEngine#
 		 */
 		var doRenderView = function(ctrlName, viewName, view, ctrl, data){
 
@@ -288,7 +411,27 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
 
 		};
 		
+		//the exported functions (i.e. the rendering-engine interface):
 		promise.resolve({
+			
+			/**
+			 * @scope JqmViewEngine.prototype
+			 */
+			/**
+			 * #@+
+			 * @public
+			 */
+			
+			/**
+			 * Public render function - see {@link mmir.env.view.JqmViewEngine#doRenderView}
+			 *  
+			 * @public
+			 * @function
+			 * @borrows mmir.env.view.JqmViewEngine#doRenderView
+			 * @memberOf mmir.env.view.JqmViewEngine.prototype
+			 * 
+			 * @see mmir.env.view.JqmViewEngine#doRenderView
+			 */
 			render: doRenderView,
 			/**
              * Closes a modal window / dialog.<br>
@@ -297,6 +440,7 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
              * 
              * @function hideCurrentDialog
              * @public
+			 * @see #showDialog
              */
             hideCurrentDialog : function() {
                 
@@ -325,6 +469,7 @@ define(['jquery', 'loadCss'],function(jquery, loadCss){
              * @returns {Object} the instance of the current dialog that was opened
              * 
              * @public
+			 * @see #hideCurrentDialog
              */
             showDialog : function(ctrlName, dialogId, data) {
 

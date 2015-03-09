@@ -172,7 +172,7 @@ function initMmir() {
 			 * @name startModule
 			 * @property
 			 * @type String
-			 * @default "main" will load the module specified in main.js
+			 * @default {String} "main" will load the module specified in main.js
 			 * @public
 			 */
 			startModule: 'main',

@@ -1,30 +1,77 @@
 
+define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
+ * <p>
  * This generator uses PEG.js for compiling the JSON grammar.
  * 
- * @see http://pegjs.majda.cz/
+ * <p>
+ * The generator for compiling the JSON grammar definitions in <code>www/config/languages/&lt;language code&gt;/grammar.json</code>
+ * can be configured in <code>www/config/configuration.json</code>:<br>
+ * <pre>
+ * {
+ *   ...
+ *   "grammarCompiler": "pegjs",
+ *   ...
+ * }</pre>
  * 
+ * 
+ * 
+ * @see <a href="http://pegjs.majda.cz/">http://pegjs.majda.cz/</a>
+ * 
+ * @class
+ * @constant
+ * @public
+ * @name PegJsGenerator
+ * @exports PegJsGenerator as mmir.env.grammar.PegJsGenerator
  * 
  * @requires PEG.js
  * @requires jQuery.Deferred
  * @requires jQuery.extend
  * @requires jQuery.makeArray
- */
-define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'], function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
+ */		
+function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
+/**
+ * Deferred object that will be returned - for async-initialization:
+ * the deferred object will be resolved, when this module has been initialized.
+ * 
+ * @property
+ * @private
+ * @type Deferred
+ * @memberOf PegJsGenerator#
+ */
 var deferred = $.Deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
 
-//create logger
+/**
+ * The Logger for the PEGjs generator.
+ * 
+ * @property
+ * @private
+ * @type Logger
+ * @memberOf PegJsGenerator#
+ * 
+ * @see mmir.Logging
+ */
 var logger = Logger.create(module);
 
 //setup logger for compile errors, if not already set
 if(! pegjs.printError){
+	/**
+	 * The default logging / error-print function for PEGjs.
+	 * 
+	 * @private
+	 * @name printError
+	 * @function
+	 * @memberOf PegJsGenerator.pegjs#
+	 * 
+	 * @see mmir.Logging
+	 */
 	pegjs.printError = function(){
 		var args = $.makeArray(arguments);
 		//prepend "location-information" to logger-call:
@@ -42,24 +89,92 @@ if(! pegjs.printError){
  * 
  * @constant
  * @private
+ * @function
+ * @memberOf PegJsGenerator#
  */
 var INPUT_FIELD_NAME = 'asr_recognized_text';
 
+/**
+ * The default options for the PEGjs compiler.
+ * 
+ * To overwrite the default options, configure the following property in <code>www/config/configuration.json</code>:<br>
+ * <pre>
+ * {
+ *   ...
+ *   "grammar": {
+ *   	...
+ *   	"pegjs": {
+ *   		"cache": [true | false], 			// "If true, makes the parser cache results, avoiding exponential parsing time in pathological cases but making the parser slower" - DEFAULT false
+ *   		"optimize": ["speed" | "size"], 	//optimizing the generated parser for speed or (code) size - DEFAULT "speed"
+ *   		"output": ["source" | "parser"], 	//should not be changed!!! whether to return TEXT or evaluated JavaScript - DEFAULT: "source"
+ *   		"allowedStartRules": RULE_NAMES 	//should not be changed!!! - DEFAULT: not set
+ *   	}
+ *   	...
+ *   },
+ *   ...
+ * }</pre>
+ * 
+ * 
+ * @constant
+ * @private
+ * @default cache := false, optimize := 'speed', output := 'source' allowedStartRules := undefined
+ * @memberOf PegJsGenerator#
+ */
 var DEFAULT_OPTIONS = {
 	cache:    false,
 	optimize: "speed",
 	output:   "source"
 };
+
+/**
+ * Name for this plugin/grammar-generator (e.g. used for looking up configuration values in configuration.json).
+ * @constant
+ * @private
+ * @memberOf PegJsGenerator#
+ */
 var pluginName = 'grammar.pegjs';
 
+/**
+ * Exported (public) functions for the PEGjs grammar-engine.
+ * @public
+ * @type GrammarGenerator
+ * @memberOf PegJsGenerator#
+ */
 var pegjsGen = {
+	/** @scope PegJsGenerator.prototype */
+	
+	/**
+	 * @param {Function} [callback] OPTIONAL
+	 * 			the callback that is triggered, when the engine is initialized
+	 * @returns {Deferred}
+	 * 			a promise that is resolved, when the engine is initialized
+	 * 			(NOTE: if you use the same function for the <code>callback</code> AND the promise,
+	 * 			       then the function will be invoked twice!)
+	 * 
+	 * @memberOf mmir.env.grammar.PegJsGenerator.prototype
+	 */
 	init: function(callback){
 		if(callback){
 			deferred.always(callback);
 		}
 		return deferred;
 	},
+	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
 	isAsyncCompilation: function(){ return false; },
+	/**
+	 * The function for compiling a JSON grammar:
+	 * 
+	 * 
+	 * @param {GrammarConverter} theConverterInstance
+	 * @param {String} instanceId
+	 * 				the ID for the compiled grammar (usually this is a language code)
+	 * @param {Number} fileFormatVersion
+	 * 				the version of the file format (this is a constant within {@link mmir.SemanticInterpreter}
+	 * @param callback
+	 * @returns {GrammarConverter}
+	 * 			the grammar instance with attached with the compiled function for executing the
+	 * 			grammar to the instance's {@link GrammarConvert#executeGrammar} property/function. 
+	 */
 	compileGrammar: function(theConverterInstance, instanceId, fileFormatVersion, callback){
         
 		//attach functions for PEG.js conversion/generation to the converter-instance: 
@@ -215,7 +330,12 @@ var pegjsGen = {
 
 
 ////////////////////////////////////// PEG.js specific extensions to GrammarConverter ////////////////////////////////
-
+/**
+ * PEGjs specific extension / implementation for {@link GrammarConverter} instances
+ * 
+ * @type GrammarConverter
+ * @memberOf PegJsGenerator#
+ */
 var PegJsGrammarConverterExt = {
 	/** @memberOf PegJsGrammarConverterExt */
 	init: function(){
