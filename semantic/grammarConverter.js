@@ -786,6 +786,7 @@ GrammarConverter.prototype.unmaskJSON = function (json, isMaskValues, isMaskName
 /**
  * Recodes Strings of a JSON-like object.
  * 
+ * @function
  * @param {Object} json 
  * 					the JSON-like object (i.e. PlainObject)
  * 
