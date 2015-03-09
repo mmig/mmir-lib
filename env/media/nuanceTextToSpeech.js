@@ -24,7 +24,9 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
+/**
+ * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin, version 0.4.1
+ */
 newMediaPlugin = {
 		/**  @memberOf NuanceAndroidTextToSpeech# */
 		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled

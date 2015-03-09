@@ -24,7 +24,9 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
+/**
+ * part of Cordova plugin: de.dfki.iui.mmir.speech.AndroidSpeech, version 0.3.1
+ */
 newMediaPlugin = {
 		/**  @memberOf AndroidTextToSpeech# */
 		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled

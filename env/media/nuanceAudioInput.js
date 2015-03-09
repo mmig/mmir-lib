@@ -24,7 +24,9 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
+/**
+ * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin, version 0.4.1
+ */
 newMediaPlugin = {
 		/**  @memberOf NuanceAndroidAudioInput# */
 		initialize: function(callBack, mediaManager){
