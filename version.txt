@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.6.0rc2)
+version notes for MMIR framework code (v 3.6.0rc3)
 
  * using Cordova 3.x.x library
  * using jQuery 2.1.x library
@@ -24,7 +24,7 @@ version notes for MMIR framework code (v 3.6.0rc2)
  --------------
 
 ##################
- Version 3.6.0rc2
+ Version 3.6.0rc3
 ##################
 
 API Changes
@@ -53,8 +53,16 @@ Logger (tools/logger):
 
 JSDoc
  * updated JSDoc comments
- * FIX some wrong JSDoc comments
+ * FIX for some incorrect JSDoc comments
  * added several comments for enabling Eclipse to detect file structure (e.g. for JavaScript Outline View)
+ * made comments compatible with JSDoc3 ( >= 3.4.0dev, NOTE: some additional plugins are required for correct (symbolic) link generation)
+ 
+BUGFIX
+ * CommonUtils: fixed un-intentional global variable (script)
+ 
+REFACTOR
+ * some structural (non-functional) changes
+  * mainly in parserModule, parsingResult, strorageUtils, templateProcessor, renderUtils, paramsParseFunc
 
 ##################
  Version 3.5.0
