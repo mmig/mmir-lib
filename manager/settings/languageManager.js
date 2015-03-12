@@ -38,8 +38,6 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 	 * @memberOf mmir
 	 * @class
 	 * 
-	 * @category core
-	 * 
 	 * 
 	 * @requires mmir.Constants
 	 * @requires mmir.CommonUtils

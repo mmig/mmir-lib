@@ -26,22 +26,25 @@
 
 
 /**
-* The GrammarConverter object initializes the grammar for the voice recognition.
+* The GrammarConverter object initializes the grammar for processing
+* <em>natural language text</em>, e.g. from the voice recognition.
 * 
-* @class GrammarConverter
-* @constructor
-* @category core
+* @class
+* @name GrammarConverter
 * 
 * @requires mmir.CommonUtils.isArray
 * @requires jQuery.ajax
 */
 define(['commonUtils', 'jquery'], function(commonUtils, $){
 
+
+
 /**
- * @name GrammarConverter
- * @class GrammarConverter
+ * @ignore
+ * 
+ * @constructs GrammarConverter
  */
-var GrammarConverter = function(){
+function GrammarConverter(){
 	
 //	this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
 //	this.grammar_tokens = "/~ --- Token definitions --- ~/\n\n/~ Characters to be ignored ~/\n!   ' |\\t' ;\n\n/~ Non-associative tokens ~/\n";

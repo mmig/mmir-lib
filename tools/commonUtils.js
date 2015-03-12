@@ -29,9 +29,6 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	/**
 	 * A Utility class to support various functions.<br>
 	 * 
-	 * @example <code>mmir.CommonUtils.isArray(list)</code>
-	 * @category core
-	 * 
 	 * 
 	 * @class mmir.CommonUtils
 	 * @name mmir.CommonUtils
@@ -49,6 +46,10 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
      * 
      * 
      * @requires jQuery	 in #resizeFitToSourroundingBox
+     * 
+     * 
+     * @example var isList = mmir.CommonUtils.isArray(list);
+	 * 
 	 */
 	function(
 		constants, stringExt, $, paramsParseFunc, Logger, module
@@ -250,10 +251,11 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * comment is specified within a String or data-definition (i.e. the
 		     * comment is matched regardless were its defined).
 		     * 
-		     * @example <code> <!-- some comment --></code>
 		     * @type String|RegExp
 		     * @public
 	    	 * @memberOf mmir.CommonUtils.prototype
+	    	 * 
+		     * @example <!-- some comment -->
 		     */
 		    regexHTMLComment : /<!--([\r\n]|.)*?-->/igm,
 	
@@ -840,8 +842,6 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * double-quotes, so that the returned value can be used as a JSON
 		     * value, e.g. </br>
 		     * 
-		     * @example <code>var jsonValue = toJSONStringValue(someValue);
-		     *  var data = JSON.parse('"theValue":"' + jsonValue + '"');</code>
 		     * @function
 		     * @param {Object}
 		     *            theObjectValue the object to convert to a JSON String
@@ -850,6 +850,10 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * @returns {String} the String value
 		     * @public
 	    	 * @memberOf mmir.CommonUtils.prototype
+	    	 * 
+		     * @example
+		     *  var jsonValue = mmir.CommonUtils.toJSONStringValue(someValue);
+		     *  var data = JSON.parse('"theValue":"' + jsonValue + '"');
 		     */
 		    toJSONStringValue : function(theObjectValue) {
 				if (typeof theObjectValue !== 'undefined' && theObjectValue !== null) {
@@ -872,9 +876,6 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * value, also does replace all newlines with the HTML-equivalent
 		     * '&lt;br/&gt;', e.g.
 		     * 
-		     * @example <code> var jsonValue = toJSONStringValue(someValue);
-		     *  var data = JSON.parse('"theValue":"' + jsonValue + '"');
-		     *  ...</code>
 		     * @function
 		     * @param {Object}
 		     *            theObjectValue the object to convert to a JSON String
@@ -883,6 +884,11 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * @returns {String} the String value
 		     * @public
 	    	 * @memberOf mmir.CommonUtils.prototype
+	    	 * 
+		     * @example 
+		     *  var jsonValue = mmir.CommonUtils.convertJSONStringValueToHTML(someValue);
+		     *  var data = JSON.parse('"theValue":"' + jsonValue + '"');
+		     *  ...
 		     */
 		    convertJSONStringValueToHTML : function(str) {
 				if (typeof str !== 'undefined' && str !== null) {

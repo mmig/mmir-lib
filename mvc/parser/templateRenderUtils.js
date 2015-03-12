@@ -32,8 +32,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
    /**
     * A Utility class for rendering parsed (eHTML) templates, or more specifically ParsingResult objects.<br>
     * 
-    * @example <code>mmir.parser.RenderUtils.render(parseResult, contentElementList);</code>
-    * @category parser
+    * @example mmir.parser.RenderUtils.render(parseResult, contentElementList);
     * 
     * @class RenderUtils
     * @name mmir.parser.RenderUtils

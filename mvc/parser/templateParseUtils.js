@@ -28,11 +28,11 @@
 /**
  * A Utility class for parsing (eHTML) templates.<br>
  * 
- * @example <code>mmir.ParserUtils.getInstance()</code>
  * @class ParserUtils
- * @category parser
  * 
  * @see mmir.parser.ParserUtils#constructor
+ * 
+ * @example mmir.ParserUtils.parse(str, view)
  */
 //mmir.parser.ParserUtils = (function(){});
 
@@ -604,7 +604,7 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		  	
 		  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);//FIXME change, how dependency 'antlr3' is exported?
 
-			var result 				= new Object();
+			var result 				= {};
 			result.rawTemplateText 	= tokens.toString();
 			result.scripts 			= lexer.includeScripts;
 			result.styles 			= lexer.includeStyles;

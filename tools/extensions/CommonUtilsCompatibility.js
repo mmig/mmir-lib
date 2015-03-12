@@ -229,7 +229,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>  <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %></code>
+		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -255,7 +255,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>  {::address = address + " " + {:curr_poi_data}.query('addressBean/housenumber')}</code>
+		 * @example   {::address = address + " " + {:curr_poi_data}.query('addressBean/housenumber')}
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -278,7 +278,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>{:curr_poi_data}</code>
+		 * @example {:curr_poi_data}
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -301,7 +301,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>{::address = address + "&lt;br/&gt;"}</code>
+		 * @example {::address = address + "&lt;br/&gt;"}
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -315,7 +315,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>{::address = address + "&lt;br/&gt;"}</code>
+		 * @example {::address = address + "&lt;br/&gt;"}
 		 *          or
 		 *          <code>{::address = {:anotherVariable} + "&lt;br/&gt;"}</code>
 		 * @type String|RegExp
@@ -347,7 +347,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code> <%= value_of(languageMenu::header, true) %></code>
+		 * @example  <%= value_of(languageMenu::header, true) %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -372,7 +372,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code> <%= value_of(languageMenu::header, true) %></code>
+		 * @example  <%= value_of(languageMenu::header, true) %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -390,7 +390,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>  <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %></code>
+		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -414,7 +414,7 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example <code>  <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %></code>
+		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -576,7 +576,9 @@ define(
 		/**
 		 * Convert a duration (in seconds) into a String representation.
 		 * 
-		 * @example <code>2:09:19 h</code>, <code>12:05 min</code>
+		 * @example 
+		 * 	2:09:19 h
+		 *  12:05 min
 		 * 
 		 * @function
 		 * @param {Integer}

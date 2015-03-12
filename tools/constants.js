@@ -41,7 +41,7 @@ define(['env'],
  * @static
  * @class
  * 
- * @example <code>mmir.Constants</code>
+ * @example var appBase = mmir.Constants.getBasePath();
  */
 function(
 		env

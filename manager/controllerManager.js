@@ -37,7 +37,6 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * 
 	 * This "class" is structured as a singleton - so that only one instance is in use.<br>
 	 * 
-	 * @category core
 	 * 
 	 * @class
 	 * @name mmir.ControllerManager

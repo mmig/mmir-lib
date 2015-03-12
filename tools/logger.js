@@ -55,7 +55,6 @@ define(['dictionary', 'stacktrace', 'module'],
  * @class
  * @name Logging
  * @memberOf mmir
- * @category tools
  * @static
  * 
  * @see Logger

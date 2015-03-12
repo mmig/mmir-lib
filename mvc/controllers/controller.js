@@ -32,8 +32,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * Also holds information about views and partials associated with the controller.
 	 * 
 	 * @param {String} name Name of the Controller
-	 * @param {Object} jsonDef Information about the controllers views and partials 
-	 * @category core
+	 * @param {Object} jsonDef Information about the controllers views and partials
 	 * 
 	 * @name Controller
 	 * @class
@@ -62,8 +61,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * 
 	 * @constructs Controller
 	 * @param {String} name Name of the Controller
-	 * @param {Object} jsonDef Information about the controllers views and partials 
-	 * @category core
+	 * @param {Object} jsonDef Information about the controllers views and partials
 	 */
 	function Controller(name, jsonDef){
 //	    console.log("controller name " + name);

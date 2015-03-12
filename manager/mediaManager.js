@@ -267,7 +267,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 		 */
 		var logger = Logger.create(module);//initialize with requirejs-module information
     	
-    	/** @lends MediaManager.prototype */
+    	/** @lends mmir.MediaManager.prototype */
     	return {
     			
     			/**
@@ -429,15 +429,17 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * 
     			 * The audio object exports the following functions:
     			 * 
-    			 * play
-    			 * stop
-    			 * release
-    			 * enable
-    			 * disable
-    			 * setVolume
-    			 * getDuration
-    			 * isPaused
-    			 * isEnabled
+    			 * <pre>
+    			 * play()
+    			 * stop()
+    			 * release()
+    			 * enable()
+    			 * disable()
+    			 * setVolume(number)
+    			 * getDuration()
+    			 * isPaused()
+    			 * isEnabled()
+    			 * </pre>
     			 * 
     			 * NOTE: the audio object should only be used, after the <code>onLoadedCallback</code>
     			 *       was triggered.
@@ -446,6 +448,10 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * @param {Function} [onPlayedCallback] OPTIONAL
     			 * @param {Function} [failureCallBack] OPTIONAL
     			 * @param {Function} [onLoadedCallBack] OPTIONAL
+    			 * 
+    			 * @returns {mmir.env.media.IAudio} the audio
+    			 * 
+    			 * @see {mmir.env.media.IAudio#_constructor}
     			 */
     			getURLAsAudio: function(url, onPlayedCallback, failureCallBack, onLoadedCallBack){
     	   			if(failureCallBack){
