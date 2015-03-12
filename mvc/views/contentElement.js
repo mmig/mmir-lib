@@ -76,13 +76,31 @@ define(['languageManager', 'parserModule', 'storageUtils'],
  */
 function ContentElement(group, view, parser, renderer){
 
+	/**
+	 * the "localizer" i.e. for handeling internationalization / localized Strings
+	 * 
+	 * @protected
+	 * @type mmir.LanguageManager
+	 * @memberOf ContentElement#
+	 */
 	this.localizer  = languageManager;
 	
 	if(arguments.length === 0){
 		return this;
 	}
 	
-	//TODO externalize as constant
+	
+	/**
+	 * dummy name, if the ContentElement does not have a name:
+	 * only ContentElements that represent Views and Partials have names -
+	 * other sub-elements (@if,@for etc) do not have their own name/identifier.
+	 * 
+	 * TODO externalize as constant
+	 * 
+	 * @private
+	 * @constant
+	 * @memberOf ContentElement#
+	 */
 	var SUB_ELEMENT_NAME = "@fragment";
 	
 	this.parser     = parser;
@@ -138,32 +156,119 @@ function ContentElement(group, view, parser, renderer){
 		this.parentOffset = 0;
 	}
 	
+	/**
+	 * The ParsingResult that represents this ContentElement
+	 * 
+	 * @private
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 */
 	var parsingResult = parser.parse(this.definition, this);
-	
+	/**
+	 * The "raw" template text.
+	 * 
+	 * @protected
+	 * @type String
+	 * @memberOf ContentElement#
+	 * 
+	 */
 	this.definition 	= parsingResult.rawTemplateText;
-	
+	/**
+	 * List of the "localize" statements in the template.
+	 * 
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.LOCALIZE
+	 */
 	this.localizations 	= parsingResult.localizations;
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.ESCAPE_ENTER
+	 * @see mmir.parser.element.ESCAPE_EXIT
+	 */
 	this.escapes        = parsingResult.escapes;
-	
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.HELPER
+	 */
 	this.helpers		= parsingResult.helpers;
-
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.BLOCK
+	 */
 	this.scriptBlocks     = parsingResult.scriptBlocks;
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.STATEMENT
+	 */
 	this.scriptStatements = parsingResult.scriptStatements;
-////	this.includeScripts   = parsingResult.includeScripts;
-////	this.includeStyles    = parsingResult.includeStyles;
+////	this.includeScripts   = parsingResult.includeScripts; @see mmir.parser.element.INCLUDE_SCRIPT
+////	this.includeStyles    = parsingResult.includeStyles; @see mmir.parser.element.INCLUDE_STYLE
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.RENDER
+	 */
 	this.partials         = parsingResult.partials;
-	
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.IF
+	 */
 	this.ifs              = parsingResult.ifs;
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.FOR
+	 */
 	this.fors             = parsingResult.fors;
-	
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.VAR_DECLARATION
+	 */
 	this.vars             = parsingResult.vars;
-
+	/**
+	 * @protected
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 * 
+	 * @see mmir.parser.element.COMMENT
+	 */
 	this.comments         = parsingResult.comments;
 	
-//	this.yields           = parsingResult.yields;
-//	this.contentFors    = parsingResult.contentFors;
+//	this.yields           = parsingResult.yields; @see mmir.parser.element.YIELD_DECLARATION
+//	this.contentFors    = parsingResult.contentFors; @see mmir.parser.element.YIELD_CONTENT
 	
 	//create ALL array and sort localizations etc. ...
+	/**
+	 * create ALL array and sort it, i.e. for localizations etc. ...
+	 * @private
+	 * @type Array<mmir.parser.ParsingResult>
+	 * @memberOf ContentElement#
+	 */
 	var all = this.localizations.concat(
 			this.escapes, 
 			this.helpers,
@@ -180,14 +285,26 @@ function ContentElement(group, view, parser, renderer){
 //			this.contentFors
 	);
 	
-	//sorting function -> sort elements by occurrence in raw template text
-	var sortAscByStart=function(parsedElem1, parsedElem2){
+	/**
+	 * HELPER sorting function -> sort elements by occurrence in raw template text
+	 * @private
+	 * @function
+	 * @memberOf ContentElement#
+	 */
+	var sortAscByStart = function(parsedElem1, parsedElem2){
 		return parsedElem1.getStart() - parsedElem2.getStart();
 	};
 	all.sort(sortAscByStart);
 
 	this.allContentElements = all;
 	
+	/**
+	 * HELPER check if a ContentElement has "dynamic content"
+	 * 
+	 * @private
+	 * @function
+	 * @memberOf ContentElement#
+	 */
 	var checkHasDynamicContent = function(contentElement){
 		return	(contentElement.localizations 		&& contentElement.localizations.length 		> 0)
 			|| 	(contentElement.helpers 			&& contentElement.helpers.length 			> 0)
@@ -208,7 +325,16 @@ function ContentElement(group, view, parser, renderer){
 	
 	/**
 	 * Error for parsing problems with detailed location information (i.e. where the parsing problem occured).
-	 *  
+	 * 
+	 * @property {String} name		the error name, that triggered the ScriptEvalError
+	 * @property {String} message	the message of the error that triggered the ScriptEvalError
+	 * @property {String} stack		the error stack (if available)
+	 * 
+	 * @property {String} details	the detailed message of the ScriptEvalError including the positional information and the error that triggered it
+	 * @property {Number} offset	the offset (number of characters) of the ContentElement where the error occurred (in relation to its parent/owning Element)
+	 * @property {Number} start		the starting position for the content (number of characters) within the ContentElement's <code>rawText</code>
+	 * @property {Number} end		the end position for the content (number of characters) within the ContentElement's <code>rawText</code>
+	 * 
 	 * @class
 	 * @name ScriptEvalError
 	 */
@@ -246,6 +372,15 @@ function ContentElement(group, view, parser, renderer){
 				this
 		);
 		
+		/**
+		 * Get the detailed error message with origin information.
+		 * 
+		 * @public
+		 * @returns {String} the detailed error message
+		 * @see #details
+		 * 
+		 * @var {Function} ScriptEvalError#getDetails
+		 */
 		this.getDetails = function(){
 			return this.errorDetails;
 		};
@@ -253,9 +388,21 @@ function ContentElement(group, view, parser, renderer){
 		return this;
 	};
 	
-	//this creates a function for embedded JavaScript code:
-	//	using a function pre-compiles codes, in order to avoid parsing the code  
-	//  (by execution environment) each time the template is rendered
+	/**
+	 * HELPER: this creates a function for embedded JavaScript code:
+	 *  		using a function pre-compiles codes - this avoids (re-) parsing the code  
+	 *   		(by the execution environment) each time that the template is rendered.
+	 *   
+	 * @param {String} strFuncBody
+	 * 			the JavaScript code for the function body
+	 * @param {String} strFuncName
+	 * 			the name for the function
+	 * @returns {Function} the evaluated function with one input argument (see <code>DATA_NAME</code>)
+	 * 
+	 * @private
+	 * @function
+	 * @memberOf ContentElement#
+	 */
 	var createJSEvalFunction = function(strFuncBody, strFuncName){
 		
 		//COMMENT: using new Function(..) may yield less performance than eval('function...'), 
@@ -682,7 +829,7 @@ ContentElement.prototype.toHtml = function(){
  * 
  * @param renderingBuffer {Array} of Strings (if <code>null</code> a new buffer will be created)
  * @param data {Any} (optional) the event data with which the rendering was invoked
- * @returns {Array} of Strings the renderingBuffer with the contents of this object added at the end
+ * @returns {Array<String>} of Strings the renderingBuffer with the contents of this object added at the end
  * 
  * @public
  */
