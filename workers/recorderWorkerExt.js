@@ -23,6 +23,9 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @module workers/recorderExt
+ */
 
 var recLength = 0,
   recBuffersL = [],
@@ -259,6 +262,7 @@ function getBuffersFor(id) {
 /**
  * sets the config and echos back
  * @param config
+ * @private
  */
 function initDetection(config){
   if (config.sampleRate){
@@ -293,6 +297,7 @@ function initDetection(config){
  * and a real pause (min. <pauseCount> silent blobs in a row) afterwards. In this case it dictates a pause. 
  * If some time has gone by without any real input, it sends a signal to clear the buffers.
  * @param inputBuffer
+ * @private
  */
 function isSilent(inputBuffer){
 	if (recording){
@@ -352,6 +357,7 @@ function isSilent(inputBuffer){
 
 /**
  * resets everything and switches the worker to recording mode.
+ * @private
  */
 function start(){
 	silenceCount=0;

@@ -18,13 +18,13 @@ define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  * 
  * 
  * 
- * @see <a href="http://pegjs.majda.cz/">http://pegjs.majda.cz/</a>
+ * @see PEGjs homepage at <a href="http://pegjs.majda.cz/">http://pegjs.majda.cz/</a>
  * 
  * @class
  * @constant
  * @public
  * @name PegJsGenerator
- * @exports PegJsGenerator as mmir.env.grammar.PegJsGenerator
+ * @memberOf mmir.env.grammar
  * 
  * @requires PEG.js
  * @requires jQuery.Deferred
@@ -39,7 +39,6 @@ function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
  * Deferred object that will be returned - for async-initialization:
  * the deferred object will be resolved, when this module has been initialized.
  * 
- * @property
  * @private
  * @type Deferred
  * @memberOf PegJsGenerator#
@@ -51,7 +50,6 @@ deferred.resolve();
 /**
  * The Logger for the PEGjs generator.
  * 
- * @property
  * @private
  * @type Logger
  * @memberOf PegJsGenerator#

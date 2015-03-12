@@ -47,40 +47,61 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 ) {
 	
 		/**
-		 * #@+
-		 * @private
-		 */
-	
-		/**
 	     * Object containing the instance of the class RenderUtils 
 	     * 
-	     * @property instance
 	     * @type RenderUtils
-	     * @private
 	     * 
+	     * @private
 	     * @memberOf mmir.parser.RenderUtils#
 	     */
 	    var instance = null;
 	    		
-		//internal "constants" for the RENDERING mode
-	    /** @memberOf mmir.parser.RenderUtils# */
+	  //internal "constants" for the RENDERING mode
+	    /**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var RENDER_MODE_LAYOUT 			= 0;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var RENDER_MODE_PARTIAL 		= 2;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var RENDER_MODE_VIEW_CONTENT 	= 4;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var RENDER_MODE_VIEW_DIALOGS 	= 8;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var RENDER_MODE_JS_SOURCE       = 16;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var RENDER_MODE_JS_SOURCE_FORCE_VAR_PREFIX = 32;
 		
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var DATA_NAME       = parser.element.DATA_NAME;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var PARAM_DATA_NAME = parser.element.DATA_ARGUMENT_NAME;
-		/** @memberOf mmir.parser.RenderUtils# */
+		/**
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
 		var PARAM_ARGS_NAME = parser.element.ARGUMENT_ARGUMENT_NAME;
 
 	    
@@ -88,6 +109,8 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 		 * HELPER for detecting if an object is an Array
 		 * 
 		 * @function
+		 * 
+	     * @private
 		 * @memberOf mmir.parser.RenderUtils#
 		 * 
 		 * @see mmir.CommonUtils#isArray
@@ -106,6 +129,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 		 * theArray.sort(sortAscByStart);
 		 * </code>
 		 * 
+	     * @private
 		 * @memberOf mmir.parser.RenderUtils#
 		 */
 		var sortAscByStart=function(parsedElem1, parsedElem2){
@@ -126,6 +150,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	/** 
 	    	 * @type mmir.LanguageManager
 	    	 * @name localizer
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	var localizer = languageManager;
@@ -141,6 +166,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * NOTE: this does not actually render the layout for "viewing"
 	    	 *       (see renderContent(..))!
 	    	 * 
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 * @name renderLayoutImpl
 	    	 */
@@ -197,6 +223,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * to replacementObjectsList are check: if a name does not start with @, then the name will prepended with @ before
 	    	 * rendering.
 	    	 * 
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 * @name renderJSSourceImpl
 	    	 */
@@ -297,6 +324,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * 						the event data with which the rendering was invoked is accessible via <DATA_NAME>[<PARAM_DATA_NAME>] 
 	    	 * @returns {Array} of Strings the renderingBuffer where the contents of this object are added at the end of the Array
 	    	 * 
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 * @name renderContentElementImpl
 	    	 */
@@ -351,6 +379,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * HELPER creates a new rendering buffer if neccessary
 	    	 * @returns {Array} rendering buffer
 	    	 * 
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function getRenderingBuffer(renderingBuffer){
@@ -361,6 +390,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderElement(elem, contentForArray, renderingMode, rawTemplateText, renderingBuffer, data, /*optional: */ containingContentElement) {
@@ -428,6 +458,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderRaw(elem, renderingMode, rawTemplateText, renderingBuffer){
@@ -439,6 +470,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderIncludeScript(elem, renderingMode, rawTemplateText, renderingBuffer, data){
@@ -452,6 +484,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderIncludeStyle(elem, renderingMode, rawTemplateText, renderingBuffer, data){
@@ -465,6 +498,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderLocalize(elem, renderingMode, rawTemplateText, renderingBuffer, data){
@@ -487,6 +521,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderHelper(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -529,6 +564,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderPartial(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -595,6 +631,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderIf(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -617,6 +654,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderFor(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -694,6 +732,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderScriptBlock(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -711,6 +750,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderScriptStatement(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -729,6 +769,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderVarDeclaration(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -766,6 +807,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderVarReference(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement){
@@ -799,6 +841,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderEscape(elem, renderingMode, rawTemplateText, renderingBuffer){
@@ -815,6 +858,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderComment(elem, renderingMode, rawTemplateText, renderingBuffer){
@@ -832,6 +876,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function getContentForYield(name, contentForArray){
@@ -844,6 +889,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function renderYield(elem, contentForArray, renderingMode, rawTemplateText, renderingBuffer, data){
@@ -875,6 +921,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	}
 	    	
 	    	/**
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function evaluate(evalStatement, data, element, containingContentElement){
@@ -886,6 +933,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 
 	    	/**
 	    	 * HELPER for creating the data-object
+	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 */
 	    	function createInternalData(eventData){
@@ -901,16 +949,9 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 				return dataArgs;
 	    	}
 	    	
-	    	/** #@- */
-	    	
 	    	/** @lends mmir.parser.RenderUtils.prototype */
 	    	return {
 	        	//public members:
-	    		
-	    		/** 
-	    		 * #@+
-	    		 * @public
-	    		 */
 	    		
 	    		/**
 	    		 * Renders a layout in preparation for displaying content:
@@ -921,6 +962,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * @param {ContentElement[]} [contentForArray]
 	    		 * @returns {String} the prepared layout content
 	    		 * 
+	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
 	    		 */
 	    		renderLayout: function(parseResult, contentForArray){
@@ -939,6 +981,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * @param {Object} [data] a JSON object which's fields will be available during rendering/evaluation of the template expressions
 	    		 * @returns {String} the evalutated and rendered view-content
 	    		 * 
+	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
 	    		 */
 	    		renderViewContent: function(htmlContentString, yieldDeclarationsArray, contentForObjectsArray, data){
@@ -959,6 +1002,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * @param {String[]} [renderingBuffer] if provided, the partial rendering results will be appended to this Array
 	    		 * @returns {String} the evalutated and rendered ContentElement; if <tt>renderingBuffer</tt> was provided and not empty, the result will be prepended with the concatenated contents of the Array's Strings
 	    		 * 
+	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
 	    		 */
 	    		renderContentElement: function(htmlContentString, data, renderingBuffer/*optional*/){
@@ -980,6 +1024,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * @param {Object} [data] a JSON object which's fields will be available during rendering/evaluation of the template expressions
 	    		 * @returns {String} the evalutated and rendered dialog-content
 	    		 * 
+	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
 	    		 */
 	    		renderViewDialogs: function(htmlContentString, yieldDeclarationsArray, contentForObjectsArray, data){
@@ -1006,6 +1051,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	        	 * @param {mmir.parser.ParsingResult[]} replacementObjectsList
 	        	 * @param {Boolean} [isForcePrefix]
 	        	 * 
+	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
 	        	 */
 	    		renderJS: function(rawJSSourceCode, replacementObjectsList, isForcePrefix){
@@ -1024,6 +1070,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	     * 
 		 * @function
 		 * @name getInstance
+		 * @public
 	     * @memberOf mmir.parser.RenderUtils#
 	     */
 	    instance.getInstance = function(){

@@ -10,7 +10,6 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
     /**
      * An array containing all states active.
      * 
-     * @property statesActive
      * @type Array
      * @private
      */

@@ -26,7 +26,7 @@ define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'],
  * @constant
  * @public
  * @name JsccGenerator
- * @exports JsccGenerator as mmir.env.grammar.JsccGenerator
+ * @memberOf mmir.env.grammar
  * 
  * @requires JS/CC
  * @requires jQuery.Deferred
@@ -42,7 +42,6 @@ function(jscc, constants, GrammarConverter, $, Logger, module){
  * Deferred object that will be returned - for async-initialization:
  * the deferred object will be resolved, when this module has been initialized.
  * 
- * @property
  * @private
  * @type Deferred
  * @memberOf JsccGenerator#
@@ -54,7 +53,6 @@ var deferred = $.Deferred();
 /**
  * The Logger for the JS/CC generator.
  * 
- * @property
  * @private
  * @type Logger
  * @memberOf JsccGenerator#
@@ -119,7 +117,6 @@ if(jscc.is_printInfo_default()){
 /**
  * The URL to the JS/CC template file (generated code-text will be "embedded" in this template)
  * 
- * @property
  * @private
  * @type String
  * @memberOf JsccGenerator#

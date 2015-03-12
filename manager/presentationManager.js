@@ -52,13 +52,8 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             , $, core//, module
 ) {
 	
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.PresentationManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.PresentationManager.prototype 
-	 */
 	
 	/**
      * Counter that keeps track of the number of times, that a view is rendered
@@ -68,7 +63,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      * 		 such a unique ID, by increasing the number on each page-change
      * 		 (i.e. by rendering a view) and appending it to the page's ID/name.
      * 
-     * @property _pageIndex
      * @type Integer
      * @public
 	 * @memberOf mmir.PresentationManager#
@@ -89,7 +83,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  *       name <code>Default</code>, the file name
 	  *       must be <code>default.ehtml</code>.
 	  * 
-	  * @property DEFAULT_LAYOUT_NAME
 	  * @type String
 	  * @private
 	  * @constant
@@ -110,7 +103,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * NOTE2: There may be no value set at all in the configuration for this property.
 	  * 	   In this case you should assume that it was set to <code>false</code>. 
 	  * 
-	  * @property CONFIG_PRECOMPILED_VIEWS_MODE
 	  * @type String
 	  * @private
 	  * @constant
@@ -125,7 +117,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	 /**
 	  * Array of layouts of the application
 	  * 
-	  * @property _layouts
 	  * @type Dictionary
 	  * @private
 	  * @memberOf mmir.PresentationManager#
@@ -135,7 +126,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	 /**
 	  * Array of all the views of the application
 	  * 
-	  * @property _views
 	  * @type Dictionary
 	  * @private
 	  * @memberOf mmir.PresentationManager#
@@ -145,7 +135,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	 /**
 	  * Array of all the partials of the application
 	  * 
-	  * @property _partials
 	  * @type Dictionary
 	  * @private
 	  * @memberOf mmir.PresentationManager#
@@ -157,8 +146,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * It contains: name of the corresponding controller, name of the view
 	  * and optionally data for the view
 	  * 
-	  * @property _currentView
-	  * @type Object
+	  * @type View
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  */
@@ -170,8 +158,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * It contains: name of the corresponding controller, name of the view
 	  * and optionally data for the view
 	  * 
-	  * @property _previousView
-	  * @type Object
+	  * @type View
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  * 
@@ -183,18 +170,30 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * The currently displayed dialog object, if a dialog is displayed. Used
 	  * mainly to close the dialog.
 	  * 
-	  * @property _currentDialog
 	  * @type Object
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  * 
-	  * @see #_instance#showDialog
-	  * @see #_instance#hideCurrentDialog
+	  * @see mmir.PresentationManager#showDialog
+	  * @see mmir.PresentationManager#hideCurrentDialog
 	  */
 	 var _currentDialog = null;
 	 
+	 /**
+	  * @private
+	  * @memberOf mmir.PresentationManager#
+	  */
 	 var viewSeparator 		= '#';
+	 /**
+	  * @type String
+	  * @private
+	  * @memberOf mmir.PresentationManager#
+	  */
      var partialSeparator 	= commonUtils.getPartialsPrefix();
+     /**
+	  * @private
+	  * @memberOf mmir.PresentationManager#
+	  */
      function createLookupKey(ctrl, viewObj, separator){
      	if(typeof ctrl.getName !== 'undefined'){
      		ctrl = ctrl.getName();
@@ -205,9 +204,17 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      	//TODO remove all >partialSeparator< from partial-string beginning
      	return ctrl+separator+viewObj;
      }
+     /**
+	  * @private
+	  * @memberOf mmir.PresentationManager#
+	  */
      function createViewKey(ctrl, view){
      	return createLookupKey(ctrl, view, viewSeparator);
      }
+     /**
+	  * @private
+	  * @memberOf mmir.PresentationManager#
+	  */
      function createPartialKey(ctrl, partial){
      	return createLookupKey(ctrl, partial, partialSeparator);
      }
@@ -221,8 +228,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * 
 	  * The rendering engine can be set via {@link mmir.PresentationManager#setRenderEngine}.
 	  * 
-	  * @property _renderEngine
-	  * @type Object
+	  * @type RenderEngine
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  */
@@ -258,7 +264,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
     		  * 
     		  * At the end the <b>on_page_load</b> action of the <em>controller</em> is performed.
     		  * 
-    		  * @function render
+    		  * @function
     		  * @memberOf mmir.PresentationManager._renderingEngine
     		  * 
     		  * @param {String}
@@ -295,7 +301,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	  * Custom functions of the rendering implementation can be
 	  * invoked via {@link mmir.PresentationManager#callRenderEngine}.
 	  * 
-	  * @property _engine
 	  * @type Object
 	  * @private
 	  */
@@ -320,7 +325,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             /**
              * This function returns a layout object by name.<br>
              * 
-             * @function getLayout
+             * @function
              * @param {String}
              *            layoutName Name of the layout which should be returned
              * @param {Boolean}
@@ -330,6 +335,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              *            layout could be found
              * @returns {Object} The requested layout, "false" if not found
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             getLayout : function(layoutName, doUseDefaultIfMissing) {
                 var layout = false;
@@ -346,13 +352,20 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 return layout;
             },
 
+            /**
+             * 
+             * @param {String|Controller} ctrlName
+             * @param {String|View} view
+             * @public
+			 * @memberOf mmir.PresentationManager.prototype
+             */
             addView : function(ctrlName, view) {
                 _views.put(createViewKey(ctrlName, view), view);
             },
             /**
              * This function returns a view object by name.<br>
              * 
-             * @function getView
+             * @function
              * @param {String}
              *            controllerName Name of the controller for the view
              * @param {String}
@@ -360,6 +373,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * @returns {Object} The requested view, <tt>false</tt> if not
              *          found
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             getView : function(controllerName, viewName) {
                 viewName = createViewKey(controllerName, viewName);
@@ -372,7 +386,14 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 }
                 return view;
             },
-            
+            /**
+             * 
+             * @param {String|Controller} ctrlName
+             * @param {String|Partial} partial
+             * 
+             * @public
+			 * @memberOf mmir.PresentationManager.prototype
+             */
             addPartial: function(ctrlName, partial){
             	_partials.put(createPartialKey(ctrlName, partial), partial);
             },
@@ -380,13 +401,14 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             /**
              * This function returns a partial object by name.<br>
              * 
-             * @function getPartial
+             * @function
              * @param {String}
              *            controllerName Name of the controller for the view
              * @param {String}
              *            viewName Name of the partial which should be returned
              * @returns {Object} The requested partial, "false" if not found
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             getPartial : function(controllerName, partialName) {
                 var partial = false;
@@ -413,8 +435,9 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * Closes a modal window / dialog (if one is open).
              * <br>
              * 
-             * @function hideCurrentDialog
+             * @function
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             hideCurrentDialog : function() {
 				_renderEngine.hideCurrentDialog.apply(this,arguments);
@@ -424,7 +447,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * Opens the dialog for ID <code>dialogId</code>.
              * <br>
              * 
-             * @function showDialog
+             * @function
              * @param {String} ctrlName
              *            the Name of the controller
              * @param {String} dialogId
@@ -435,6 +458,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * @returns {Object} the instance of the opened dialog (void or falsy dialog was not opened)
              * 
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             showDialog : function(ctrlName, dialogId, data) {
             	_currentDialog = _renderEngine.showDialog.apply(this,arguments);
@@ -444,7 +468,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			/**
 			 * Shows a "wait" dialog, i.e. "work in progress" notification.
 			 * 
-			 * @function showWaitDialog
+			 * @function
 			 * 
 			 * @param {String} [text] OPTIONAL
 			 * 				the text that should be displayed.
@@ -454,8 +478,9 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * 				a data / options object
 			 * 
 			 * @public
+			 * @memberOf mmir.PresentationManager.prototype
 			 * 
-			 * @see #hideWaitDialog
+			 * @see mmir.PresentationManager#hideWaitDialog
 			 */
 			showWaitDialog : function(text, data) {
 				_renderEngine.showWaitDialog.apply(this,arguments);
@@ -464,10 +489,11 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			/**
 			 * Hides / closes the "wait" dialog.
 			 * 
-			 * @function hideWaitDialog
+			 * @function
 			 * @public
+			 * @memberOf mmir.PresentationManager.prototype
 			 * 
-			 * @see #showWaitDialog
+			 * @see mmir.PresentationManager#showWaitDialog
 			 */
 			hideWaitDialog : function() {
 				_renderEngine.hideWaitDialog.apply(this,arguments);
@@ -479,7 +505,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * {@link #doRenderView} method. Also
 			 * stores the previous and current view with parameters.<br>
 			 * 
-			 * @function renderView
+			 * @function
 			 * @param {String}
 			 *            ctrlName Name of the controller
 			 * @param {String}
@@ -497,6 +523,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 *            <code>reverse</code>: whether the animation should in "forward" (FALSE) direction, or "backwards" (TRUE)
 			 *            						DEFAULT: FALSE
 			 * @public
+			 * @memberOf mmir.PresentationManager.prototype
 			 */
             renderView : function(ctrlName, viewName, data) {
             	
@@ -526,14 +553,15 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
             /**
              * Renders the current view again, using the
-             * {@link #render} method.
+             * {@link #renderView} method.
              * 
-             * @deprecated you should use {@link #render} with appropriate parameters instead.
+             * @deprecated you should use {@link #renderView} with appropriate parameters instead.
              * 
              * @requires mmir.DialogManager
              * 
-             * @function reRenderView
+             * @function
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             reRenderView : function() {
                 if (_currentView) {
@@ -548,12 +576,13 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * {@link mmir.DialogManager#render} method.
              * 
              * 
-             * @deprecated you should use {@link #render} with appropriate parameters instead.
+             * @deprecated you should use {@link #renderView} with appropriate parameters instead.
              * 
              * @requires mmir.DialogManager
              * 
-             * @function renderPreviousView
+             * @function
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             renderPreviousView : function() {
                 if (_previousView) {
@@ -563,6 +592,10 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 }
             },        
 	
+            /**
+             * @function
+			 * @memberOf mmir.PresentationManager.prototype
+             */
             init: init,
             
             /**
@@ -599,16 +632,17 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * @param {Object} theRenderEngine
              * 			the render-engine for views
              * 
-             * @function setRenderEngine
+             * @function
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              * 
-             * @see #render
-             * @see #showDialog
-             * @see #hideCurrentDialog
-             * @see #showWaitDialog
-             * @see #hideWaitDialog
+             * @see mmir.PresentationManager#renderView
+             * @see mmir.PresentationManager#showDialog
+             * @see mmir.PresentationManager#hideCurrentDialog
+             * @see mmir.PresentationManager#showWaitDialog
+             * @see mmir.PresentationManager#hideWaitDialog
              * 
-             * @see #callRenderEngine
+             * @see mmir.PresentationManager#callRenderEngine
              * 
              */
             setRenderEngine: function(theRenderEngine){
@@ -649,14 +683,21 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * 			(note that the function receives 3 arguments, and
              *           not 1 Array-argument).
              * 
-             * @function callRenderEngine
+             * @function
              * @public
+			 * @memberOf mmir.PresentationManager.prototype
              */
             callRenderEngine: function(funcName, args){
             	return _renderEngine._engine[funcName].apply(_renderEngine._engine, args);
             },
             
             //exported properties / constants:
+            /**
+             * @public
+             * @type Integer
+             * @constant
+			 * @memberOf mmir.PresentationManager.prototype
+             */
             pageIndex:		_pageIndex
 		};//END:  return{...
 //	})();//END: (function(){...
@@ -760,7 +801,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * This function loads the layouts for every controller and puts the
 		 * name of the layouts into the <b>_layouts</b> array.
 		 * 
-		 * @function loadLayouts
+		 * @function
 		 * @private
 		 * 
 		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
@@ -874,7 +915,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * an instance of a view class and puts the view instance in the
 		 * <b>_views</b> array.<br>
 		 * 
-		 * @function loadViews
+		 * @function
 		 * @private
 		 * @async
 		 * 
@@ -909,7 +950,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * reference of a function which loads the files one after another - not
 		 * asynchronously.</b>
 		 * 
-		 * @function loadPartials
+		 * @function
 		 * @private
 		 * @async
 		 * 
@@ -1008,7 +1049,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 *         which are necessary to process the raw template content.
 		 * 
 		 * @private
-		 * @function doParseTemplate
+		 * @function
 		 * 
 		 * @param {Controller} controller
 		 * 		the controller to which the template files belong.
@@ -1088,7 +1129,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * <p>
 		 * Uses {@link doloadTemplateFile} for loading single template files.
 		 * 
-		 * @function doProcessTemplateList
+		 * @function
 		 * @private
 		 * @async
 		 * 
@@ -1189,7 +1230,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 		determine, if all templates (e.g. from a list) have been (asynchronously)
 		 * 		loaded.
 		 * 
-		 * @function doProcessTemplateList
+		 * @function
 		 * @private
 		 * @async
 		 */
@@ -1286,6 +1327,5 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		return defer.promise(_instance);
 
 	};//END: init()
-
-	/** #@- */
+	
 });

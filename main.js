@@ -40,7 +40,8 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
    * 
    * @class
    * @name main
-   * @exports main as mmir.main
+   * @memberof mmir
+   * @private
    * 
    * @requires jQuery.Deferred
    * 

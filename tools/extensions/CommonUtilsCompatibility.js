@@ -85,20 +85,14 @@ define(
      *          this.get_params_as_dict
      */
     return setToCompatibilityMode = function(compatibilitySelf) {
-    	/** @scope mmir.CommonUtils.setToCompatibilityModeExtension.prototype */
     	
-    	/**
-    	 * #@+
-    	 * @memberOf mmir.CommonUtils.setToCompatibilityModeExtension.prototype
-    	 */
+    	/** @scope mmir.CommonUtils.setToCompatibilityModeExtension.prototype *///for jsdoc2
     	
-
     	
 		/**
 		 * Array of strings for the conversion of month represented by integers
 		 * to strings Default Language for months is english, 'en'
 		 * 
-		 * @property months
 		 * @type Object
 		 * @private
 		 */
@@ -116,7 +110,9 @@ define(
 			'11': 'November',
 			'12': 'December'
     	};
-    	
+    	/**
+    	 * @private
+    	 */
     	compatibilitySelf.months.de = {
 			'01': 'Januar',
 			'02': 'Februar',
@@ -136,7 +132,6 @@ define(
 //		 * The instance that holds the extensions for compatibility
 //		 * mode, which really is the CommonUtils instance.
 //		 * 
-//		 * @property compatibilitySelf
 //		 * @type 
 //		 * @private
 //		 */
@@ -147,7 +142,6 @@ define(
 		 * as of now there is no element with the id "log" in the
 		 * index.html
 		 * 
-		 * @property debugNode
 		 * @type Element
 		 * @private
 		 * @deprecated unused
@@ -158,7 +152,6 @@ define(
 		 * Regular Expression to identify a styleSheet-tag for the
 		 * transformation of ehtml to html
 		 * 
-		 * @property styleSheetRegExp
 		 * @type String|RegExp
 		 * @private
 		 * @deprecated unused
@@ -169,7 +162,6 @@ define(
 		 * Regular Expression to identify a javascript for the
 		 * transformation of ehtml to html
 		 * 
-		 * @property javaScriptRegExp
 		 * @type String|RegExp
 		 * @private
 		 * @deprecated unused
@@ -182,7 +174,6 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @property contentForRegExp
 		 * @type String|RegExp
 		 * @private
 		 */
@@ -194,7 +185,6 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @property renderPartialRegExp
 		 * @type String|RegExp
 		 * @private
 		 */
@@ -206,7 +196,6 @@ define(
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @property translationRegExpString
 		 * @type String|RegExp
 		 * @private
 		 */
@@ -216,7 +205,6 @@ define(
 		// * The Prefix for the names of view-files - currently unused
 		// and deprecated.
 		// *
-		// * @property viewsPrefix
 		// * @type String
 		// * @private
 		// * @deprecated has no further value
@@ -242,7 +230,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code>  <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %></code>
-		 * @property partial_name_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -269,7 +256,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code>  {::address = address + " " + {:curr_poi_data}.query('addressBean/housenumber')}</code>
-		 * @property partial_var_pattern_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -293,7 +279,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code>{:curr_poi_data}</code>
-		 * @property partial_var_pattern_simpleobject_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -317,7 +302,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code>{::address = address + "&lt;br/&gt;"}</code>
-		 * @property partial_var_pattern_dataobject_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -334,7 +318,6 @@ define(
 		 * @example <code>{::address = address + "&lt;br/&gt;"}</code>
 		 *          or
 		 *          <code>{::address = {:anotherVariable} + "&lt;br/&gt;"}</code>
-		 * @property partial_var_pattern_assignment_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -343,7 +326,6 @@ define(
 
 		// /**
 		// * Deprecated regular expression for partials.
-		// * @property partial_var_pattern_object_with_function_regex
 		// * @type String|RegExp
 		// * @public
 		// * @deprecated unused
@@ -366,7 +348,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code> <%= value_of(languageMenu::header, true) %></code>
-		 * @property value_of_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -392,7 +373,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code> <%= value_of(languageMenu::header, true) %></code>
-		 * @property value_of_path_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -411,7 +391,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code>  <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %></code>
-		 * @property render_partial_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -436,7 +415,6 @@ define(
 		 * @deprecated old template syntax format
 		 * 
 		 * @example <code>  <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %></code>
-		 * @property partial_parameter_regex
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -447,7 +425,7 @@ define(
 		 * Appends a log-message to the main document (index.html) and
 		 * prints it in the console
 		 * 
-		 * @function log
+		 * @function
 		 * @param {String}
 		 *            clazz A prefix for the output of the log message
 		 *            in the console
@@ -474,7 +452,7 @@ define(
 		 * @deprecated used for parsing/rendering old template syntax
 		 *             format
 		 * 
-		 * @function ehtml2Html
+		 * @function
 		 * @param {String}
 		 *            eHtmlTag A string that should be transformed from
 		 *            ehtml to html
@@ -506,7 +484,7 @@ define(
 		 * Similar to the jQuery.getScript() function - appending a url
 		 * of a javascript-source to the header of the main document.
 		 * 
-		 * @function appendJsSrcToHeader
+		 * @function
 		 * @param {String}
 		 *            scriptSrc source of javascript-file
 		 * @public
@@ -525,7 +503,7 @@ define(
 
 		// /**
 		// * Get the prefix for views.
-		// * @function getViewsPrefix
+		// * @function
 		// * @public
 		// * @returns {String} The Prefix for the file names of views
 		// * @deprecated This function is unused and superfluous
@@ -538,7 +516,7 @@ define(
 		/**
 		 * Gets the Regular Expression for translation tags.
 		 * 
-		 * @function getTranslationRegExp
+		 * @function
 		 * @public
 		 * @returns {String} The regular expression for matching a
 		 *          translation-tag - used inside a ehtml-String
@@ -554,7 +532,7 @@ define(
 		 * @example converts <code>2012-07-23 16:37:33.0</code> into
 		 *          &rarr; <code>23. July 2012</code>
 		 * 
-		 * @function get_date_as_string
+		 * @function
 		 * @param {String}
 		 *            the date String in format
 		 *            <code>yyyy-mm-dd HH:mm:ss.S</code>
@@ -600,7 +578,7 @@ define(
 		 * 
 		 * @example <code>2:09:19 h</code>, <code>12:05 min</code>
 		 * 
-		 * @function get_duration_as_string
+		 * @function
 		 * @param {Integer}
 		 *            the duration in seconds
 		 * @return {String} a String representation for the duration
@@ -642,6 +620,6 @@ define(
 		compatibilitySelf.convert_json_to_HTML_string = compatibilitySelf.convertJSONStringToHTML;
 		compatibilitySelf.get_params_as_dict = compatibilitySelf.parseParamsToDictionary;
 
-		/** #@- */
     };// END: setToCompatibilityModeExtension
+    
 });

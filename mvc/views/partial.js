@@ -26,20 +26,34 @@
 
 
 define ( ['commonUtils', 'contentElement', 'storageUtils'],  
+	//this comment is needed by jsdoc2 [copy of comment for: function Partial(...]
 	/**
+	 * The Partial class is a containing the definition of the partial and methods to access the definition.
+	 * 
+	 * @param {Object} ctrl 
+	 * 			Controller instance / object
+	 * @param {String} name
+	 * 			Name of the Partial 
+	 * @param {String} definition
+	 * 			Partial description, i.e. the raw template code that will be processed.
+	 * 			May be empty: in this case the processed contents must be
+	 * 						  added manually (cf. parser.StorageUtils)
+	 * 
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * 
 	 * @name Partial
 	 * @class
 	 */
 	function (
 			commonUtils, ContentElement, parser
 ){
-	/** @scope Partial.prototype */
-	/**
-	 * #@+
-	 * @memberOf Partial.prototype
-	 */
+	/** @scope Partial.prototype *///for jsdoc2
 	
+	//set to @ignore in order to avoid doc-duplication in jsdoc3
 	/**
+	 * @ignore
+	 * 
 	 * The Partial class is a containing the definition of the partial and methods to access the definition.
 	 * 
 	 * @constructs Partial
@@ -55,7 +69,6 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
 	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
 	 * 
-	 * @category core
 	 */
 	function Partial(ctrl, name, definition){
 //	    var HTMLCommentRegExp = /<!--[\s\S]*?-->/g;
@@ -85,7 +98,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	/**
 	 * Gets the definition of a partial.
 	 * 
-	 * @function getDefinition
+	 * @function
 	 * @returns {String} The partial description string
 	 */
 	Partial.prototype.getDefinition = function(){
@@ -95,7 +108,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	/**
 	 * Gets the name of a partial. 
 	 * 
-	 * @function getName
+	 * @function
 	 * @returns {String} The name of the partial
 	 */
 	Partial.prototype.getName = function(){
@@ -105,7 +118,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	/**
 	 * Gets the controller of a partial - each partial is assigned to a specific controller, although they can be used from different controllers.
 	 * 
-	 * @function getController
+	 * @function
 	 * @returns {Object} The controller of the partial
 	 */
 	Partial.prototype.getController = function(){
@@ -115,7 +128,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	/**
 	 * Gets the {@link mmir.ContentElement}, i.e. the content that this instance represents.
 	 * 
-	 * @function getContentElement
+	 * @function
 	 * @returns {mmir.ContentElement} The ContentElement object
 	 */
 	Partial.prototype.getContentElement = function(){
@@ -197,8 +210,6 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	};
 
 	return Partial;
-	
-	/** #@- */
 	
 });
 

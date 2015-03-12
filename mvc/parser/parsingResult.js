@@ -32,14 +32,13 @@
  *  * OPTIONALLY: ANTLR TokenStream (antlr3-all.js)
  *                (if present, the constructor may be able to automatically derive start/end properties from given argument)
  * 
- * @module mobileDS.tools
  * 
  * @requires antlr3-all.js as <code>org</code> (see comment above)
  * 
  */
 
-define(['parserModule'], function(parser){
-
+define(['parserModule'], 
+//this comment is needed by jsdoc2 [copy of comment for: function ParsingResult(...]
 /**
  * ParsingResult represents an element that was detected during parsing.
  * 
@@ -179,16 +178,173 @@ define(['parserModule'], function(parser){
  * 
  * <p>
  * 
- * @class ParsingResult
- * @param {org.antlr.runtime.CommonTokenStream} thetokens (optional) the TokenStream that corresponds to this parsed element;
+ * @param {org.antlr.runtime.CommonTokenStream|org.antlr.runtime.Token} [thetokens] OPTIONAL
+ * 					if <code>org.antlr.runtime.CommonTokenStream</code>:	
+ * 												the TokenStream that corresponds to this parsed element;
  * 												when provided, the TokenStream is used to set the start- and end-
- * 												property of the new instance.
- * 		  {org.antlr.runtime.Token} thetokens (optional) if the parameter is a single Token object, then the start- and end-
+ * 												property of the new instance.<br>
+ * 		  			if <code>org.antlr.runtime.Token</code>:
+ * 												if the parameter is a single Token object, then the start- and end-
+ * 												property for the new instance is set by this token object
+ * @class
+ * @name ParsingResult
+ * @memberOf mmir.parser
+ */		
+function(parser){
+//set to @ignore in order to avoid doc-duplication in jsdoc3
+/**
+ * @ignore
+ * 
+ * ParsingResult represents an element that was detected during parsing.
+ * 
+ * <p>
+ * The detected element is referenced by the properties <code>start</code> and <code>end</code>
+ * that refer to the start-index and end-index within the parsed text.
+ * 
+ * <p>
+ * The ParsingResult has a <code>type</code> property which refers to the kind of element
+ * that was detected (see constants in {@link mmir.parser.element}).
+ * 
+ * <p>
+ * In addition, the ParsingResult may have several properties that depend of its type. In general,
+ * these properties refer to detected parts of the element (e.g. for a invocation-statement, these
+ * may refer to its arguments).
+ * 
+ * 
+ * <p>
+ * Properties for <strong>INCLUDE_SCRIPT</strong> type:
+ * <ul>
+ * 	<li><strong>scriptPath</strong>: the path / URL to the resource</li>
+ * 	<li><strong>scriptPathType</strong>: the type of the <tt>scriptPath</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * </ul>
+ * <p>
+ * Properties for <strong>INCLUDE_STYLE</strong> type:
+ * <ul>
+ * 	<li><strong>stylePath</strong>: </li>
+ * 	<li><strong>stylePathType</strong>: the type of the <tt>stylePath</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * </ul>
+ * <p>
+ * Properties for <strong>LOCALIZE</strong> type:
+ * <ul>
+ * 	<li><strong>name</strong>: the name/identifier for the localized String</li>
+ * 	<li><strong>nameType</strong>: the type of the <tt>name</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * </ul>
+ * <p>
+ * Properties for <strong>YIELD_DECLARATION</strong> type:
+ * <ul>
+ * 	<li><strong>name</strong>: the name/identifier for the yield section</li>
+ * 	<li><strong>nameType</strong>: the type of the <tt>name</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * </ul>
+ * Properties for <strong>BLOCK</strong> type:
+ * <ul>
+ * 	<li><strong>scriptContent</strong> {String}: <tt>OPTIONALLY</tt> the script code as a String</li>
+ * 	<li><strong>scriptEval</strong> {Function}: the compiled script code in form of a function. The 
+ * 							function takes one argument: the current data-object.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>STATEMENT</strong> type:
+ * <ul>
+ * 	<li><strong>scriptContent</strong> {String}: <tt>OPTIONALLY</tt> the script code as a String</li>
+ * 	<li><strong>scriptEval</strong> {Function}: the compiled script code in form of a function. The 
+ * 							function takes one argument: the current data-object.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>HELPER</strong> type:
+ * <ul>
+ * 	<li><strong>helper</strong>: the name of the helper function</li>
+ * 	<li><strong>helperType</strong>: the type of the <tt>helper</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * 	<li><strong>argsEval</strong> {Function}: OPTIONALLY compiled getter Function for retrieving the current ARGS 
+ * 			(optional argument) of the helper expression. The function takes one argument: the current data-object.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>IF</strong> type:
+ * <ul>
+ * 	<li><strong>ifEval</strong> {Function}: the condition statement, that was compiled into a Function. The 
+ * 							function takes one argument: the current data-object.</li>
+ * 	<li><strong>content</strong> {ContentElement}: the HTML / template content that should be render, in case the
+ * 					if-expression evaluates to <code>true</code>.</li>
+ *  <li><strong>elseContent</strong> {@link mmir.parser.ParsingResult}: OPTIONALLY a ParsingResult
+ *  					representing an else-expression, see {@link mmir.parser.element.ELSE}.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>ELSE</strong> type:
+ * <ul>
+ * 	<li><strong>content</strong> {ContentElement}: the HTML / template content that should be render, in case the
+ * 					if-expression (to which the else-expression belongs) evaluates to <code>false</code>.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>FOR</strong> type:
+ * <ul>
+ * 	<li><strong>forControlType</strong> {String}: the type of for-loop, either <code>FORITER</code> or <code>FORSTEP</code></li>
+ * 	<li><strong>forInitEval</strong> {Function}: the initialization statement of the for-expression, compiled into
+ * 									a Function. The function takes one argument: the current data-object.</li>
+ * 		
+ * 	<li><code>FORITER</code>: <code>@for(PROP in OBJ){ ... }@</code>
+ * 	 <ul>
+ * 		<li><strong>forIterator</strong> {Object}: an iterator object with functions <code>hasNext() : Boolean</code> and
+ * 					<code>next() : String</code> (which returns the name of the property currently iterated).</li>
+ * 		<li><strong>forPropName</strong> {String}: the variable name for the property which is currently iterated over.</li>
+ * 	 </ul>
+ * 	</li>
+ * 	<li><code>FORSTEP</code>: <code>@for(INIT; CONDITION; INCREMENT){ ... }@</code>
+ * 	 <ul>
+ * 		<li><strong>forConditionEval</strong> {Function}: the condition statement of the for-expression, compiled into
+ * 											a Function. The function takes one argument: the current data-object.</li>
+ * 		<li><strong>forIncrementEval</strong> {Function}: the increment statement of the for-expression, compiled into
+ * 											a Function. The function takes one argument: the current data-object.</li>
+ * 	 </ul>
+ * 	</li>
+ * 	<li><strong>content</strong> {ContentElement}: the HTML / template content that should be rendered
+ * 								 during each iteration of the for-loop.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>RENDER</strong> type:
+ * <ul>
+ * 	<li><strong>partial</strong>: the name of the partial view</li>
+ * 	<li><strong>partialType</strong>: the type of the <tt>partial</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * 	<li><strong>controller</strong>: the name of the controller, to which the partial view definition belongs</li>
+ * 	<li><strong>controllerType</strong>: the type of the <tt>controller</tt>
+ * 		 field: one of <code>StringLiteral</code>, <code>Identifier</code>, <code>IdentifierNameAmpersatStart</code></li>
+ * 	<li><strong>argsEval</strong> {Function}: OPTIONALLY compiled getter Function for retrieving the current ARGS 
+ * 								(optional argument) of the render expression. The function takes one argument: the current data-object.</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>ESCAPE_ENTER</strong> type:
+ * <ul>
+ * 	<li><strong>text</strong> {String}: the text that will be rendered (i.e. without the escape-character(s) itself).</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>ESCAPE_EXIT</strong> type:
+ * <ul>
+ * 	<li><strong>text</strong> {String}: the text that will be rendered (i.e. without the escape-character(s) itself).</li>
+ * </ul>
+ * <p>
+ * Properties for <strong>VAR_DECLARATION</strong> type:
+ * <ul>
+ * 	<li><strong>name</strong>: the name for the variable (without the leading <tt>@</tt> of template variables)</li>
+ * 	<li><strong>nameType</strong>: the type of the <tt>name</tt> field: <code>StringLiteral</code></li>
+ * </ul>
+ * 
+ * <p>
+ * 
+ * @constructs ParsingResult
+ * @param {org.antlr.runtime.CommonTokenStream|org.antlr.runtime.Token} [thetokens] OPTIONAL
+ * 					if <code>org.antlr.runtime.CommonTokenStream</code>:	
+ * 												the TokenStream that corresponds to this parsed element;
+ * 												when provided, the TokenStream is used to set the start- and end-
+ * 												property of the new instance.<br>
+ * 		  			if <code>org.antlr.runtime.Token</code>:
+ * 												if the parameter is a single Token object, then the start- and end-
  * 												property for the new instance is set by this token object
  * 
- * @category parser
  */
-parser.ParsingResult = function (thetokens){
+function ParsingResult (thetokens){
 	var isSet = false;
 	
 	//try to extract start-/end-indexes from the argument:
@@ -238,13 +394,13 @@ parser.ParsingResult = function (thetokens){
 /**
  * Set the start position (index) for this parsed element with regard to the TokenStream of the complete input.
  * 
- * @function setStartFrom
+ * @function
  * @param {org.antlr.runtime.CommonTokenStream} thetokens (optional) the TokenStream that corresponds to this parsed element;
  * 												when provided, the TokenStream is used to set the start-property of this object.
  * 
  * @public
  */
-parser.ParsingResult.prototype.setStartFrom = function(thetokens){
+ParsingResult.prototype.setStartFrom = function(thetokens){
 	//NOTE: must invoke getTokens() for initializing size() etc.!
 	if(thetokens.getTokens() && thetokens.size() > 0){
 		this.start = thetokens.getTokens()[0].getStartIndex();
@@ -257,13 +413,14 @@ parser.ParsingResult.prototype.setStartFrom = function(thetokens){
 /**
  * Set the end position (index) for this parsed element with regard to the TokenStream of the complete input.
  * 
- * @function setEndFrom
+ * @function
  * @param {org.antlr.runtime.CommonTokenStream} thetokens (optional) the TokenStream that corresponds to this parsed element;
  * 												when provided, the TokenStream is used to set the end-property of this object.
  * 
  * @public
+ * @alias mmir.parser.ParsingResult
  */
-parser.ParsingResult.prototype.setEndFrom = function(thetokens){
+ParsingResult.prototype.setEndFrom = function(thetokens){
 	//NOTE: must invoke getTokens() for initializing size() etc.!
 	if(thetokens.getTokens() && thetokens.size() > 0){
 		this.end = thetokens.getTokens()[thetokens.size()-1].getStopIndex();
@@ -272,10 +429,10 @@ parser.ParsingResult.prototype.setEndFrom = function(thetokens){
 		this.end = -1;
 	}
 };
-parser.ParsingResult.prototype.getStart = function(){
+ParsingResult.prototype.getStart = function(){
 	return this.start;
 };
-parser.ParsingResult.prototype.getEnd = function(){
+ParsingResult.prototype.getEnd = function(){
 	return this.end;
 };
 
@@ -284,19 +441,19 @@ parser.ParsingResult.prototype.getEnd = function(){
  * 
  * The type corresponds to one of the type defined in {mmir.parser.element}.
  * 
- * @function setEndFrom
+ * @function
  * @return {mmir.parser.element} the type for this ParsingResult
  * 
  * @public
  */
-parser.ParsingResult.prototype.getType = function(){
+ParsingResult.prototype.getType = function(){
 	return this.type;
 };
 
 //helper function for converting properties to the correct value.
 // By default, the ParsingResult only contains "raw" property values.
 // Which properties are available, depends on the type of the ParsingResult (see templateProcessor.js)
-parser.ParsingResult.prototype.getValue = function(rawPropertyValue, proptertyType, data){
+ParsingResult.prototype.getValue = function(rawPropertyValue, proptertyType, data){
 	
 	if(proptertyType === 'StringLiteral'){
 		return rawPropertyValue.substring(1, rawPropertyValue.length-1);
@@ -332,116 +489,116 @@ parser.ParsingResult.prototype.getValue = function(rawPropertyValue, proptertyTy
 		return rawPropertyValue;
 };
 
-parser.ParsingResult.prototype.hasVarReferences = function(){
+ParsingResult.prototype.hasVarReferences = function(){
 	return false;//TODO implement this
 };
 
-parser.ParsingResult.prototype.isScriptTag = function(){
+ParsingResult.prototype.isScriptTag = function(){
 	if( parser.element.INCLUDE_SCRIPT === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isStyleTag = function(){
+ParsingResult.prototype.isStyleTag = function(){
 	if( parser.element.INCLUDE_STYLE === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isLocalize = function(){
+ParsingResult.prototype.isLocalize = function(){
 	if( parser.element.LOCALIZE === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isYield = function(){
+ParsingResult.prototype.isYield = function(){
 	if( parser.element.YIELD_DECLARATION === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isYieldContent = function(){
+ParsingResult.prototype.isYieldContent = function(){
 	if( parser.element.YIELD_CONTENT === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isScriptBlock = function(){
+ParsingResult.prototype.isScriptBlock = function(){
 	if( parser.element.BLOCK === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isScriptStatement = function(){
+ParsingResult.prototype.isScriptStatement = function(){
 	if( parser.element.STATEMENT === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isHelper = function(){
+ParsingResult.prototype.isHelper = function(){
 	if( parser.element.HELPER === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isIf = function(){
+ParsingResult.prototype.isIf = function(){
 	if( parser.element.IF === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.hasElse = function(){
+ParsingResult.prototype.hasElse = function(){
 	if(this.isIf() && typeof this.elseContent != 'undefined'){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isElse = function(){
+ParsingResult.prototype.isElse = function(){
 	if( parser.element.ELSE === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isFor = function(){
+ParsingResult.prototype.isFor = function(){
 	if( parser.element.FOR === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isRender = function(){
+ParsingResult.prototype.isRender = function(){
 	if( parser.element.RENDER === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isEscapeEnter = function(){
+ParsingResult.prototype.isEscapeEnter = function(){
 	if( parser.element.ESCAPE_ENTER === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isEscapeExit = function(){
+ParsingResult.prototype.isEscapeExit = function(){
 	if( parser.element.ESCAPE_EXIT === this.getType() ){
 		return true;
 	}
 	return false;
 };
 
-parser.ParsingResult.prototype.isEscape = function(){
+ParsingResult.prototype.isEscape = function(){
 	return this.isEscapeEnter() || this.isEscapeExit();
 };
 
@@ -452,7 +609,7 @@ parser.ParsingResult.prototype.isEscape = function(){
  * 
  * @see #getType
  */
-parser.ParsingResult.prototype.getTypeName = function(){
+ParsingResult.prototype.getTypeName = function(){
 	
 	if(this.typeName){
 		return this.typeName;/////////////////// EARLY EXIT //////////////////////////
@@ -468,23 +625,23 @@ parser.ParsingResult.prototype.getTypeName = function(){
 	return void(0);
 };
 
-parser.ParsingResult.prototype.hasCallData = function(){
+ParsingResult.prototype.hasCallData = function(){
 	return typeof this.dataPos !== 'undefined';
 };
 
-parser.ParsingResult.prototype.getCallDataStart = function(){
+ParsingResult.prototype.getCallDataStart = function(){
 	return this.dataPos.start;
 };
 
-parser.ParsingResult.prototype.getCallDataEnd = function(){
+ParsingResult.prototype.getCallDataEnd = function(){
 	return this.dataPos.end;
 };
 
-parser.ParsingResult.prototype.getCallDataType = function(){
+ParsingResult.prototype.getCallDataType = function(){
 	return this.dataType;
 };
 
-parser.ParsingResult.prototype.stringify = function(){
+ParsingResult.prototype.stringify = function(){
 	
 	//TODO use constants for lists
 	
@@ -568,6 +725,8 @@ parser.ParsingResult.prototype.stringify = function(){
 	sb.push(' })');
 	return sb.join('');
 };
+
+parser.ParsingResult = ParsingResult;
 
 return parser.ParsingResult;
 

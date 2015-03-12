@@ -39,7 +39,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * 
 	 * @class
 	 * @name MediaManager
-	 * @exports MediaManager as mmir.MediaManager
+	 * @memberOf mmir
 	 * @static
 	 * 
 	 * @requires jQuery.extend
@@ -50,18 +50,13 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	function(
 		jQuery, constants, commonUtils, configurationManager, Dictionary, Logger, module
 ){
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.MediaManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.MediaManager.prototype
-	 */
 
 	/**
 	 * The instance that holds the singleton MediaManager object.
 	 * @private
-	 * @memberOf mmir.MediaManager#
+	 * @memberOf MediaManager#
 	 */
     var instance = null;
     
@@ -86,10 +81,9 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * </pre>
 	 * 
 	 * @private
-	 * @property
 	 * @type PlainObject
 	 * 
-	 * @memberOf mmir.MediaManager#
+	 * @memberOf MediaManager#
 	 */
     var pluginsToLoad = {
     		'browser': ['html5AudioOutput.js',
@@ -112,7 +106,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      * @private
 	 * @function
 	 * 
-	 * @memberOf mmir.MediaManager#
+	 * @memberOf MediaManager#
 	 */
     var loadPlugin = function loadPlugin(filePath, successCallback, failureCallback){
     	try {
@@ -189,6 +183,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      * @constructs MediaManager
      * @memberOf MediaManager.prototype
      * @private
+     * @ignore
      */
     function constructor(){
     	
@@ -287,12 +282,11 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * MediaManager 
     			 * 
 				 * @name _log
-				 * @property
 				 * @type mmir.Logger
 				 * @default mmir.Logger (logger instance for mmir.MediaManager)
 				 * @public
 				 * 
-				 * @memberOf MediaManager#
+				 * @memberOf mmir.MediaManager#
     			 */
     			_log: logger,
     		
@@ -466,7 +460,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			/**
     			 * Synthesizes ("read out loud") text.
     			 * 
-    			 * @param {String|Array[String]|PlainObjec} parameter
+    			 * @param {String|Array<String>|PlainObject} parameter
     			 * 		if <code>String</code> or <code>Array</code> of <code>String</code>s
     			 * 			  synthesizes the text of the String, for an Array: each entry is interpreted as "sentence";
     			 * 				after each sentence, a short pause is inserted before synthesizing the
@@ -572,7 +566,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			/**
     			 * Get list of registered listeners / handlers for an event.
     			 * 
-    			 * @returns {Array[Function]} of event-handlers. 
+    			 * @returns {Array<Function>} of event-handlers. 
     			 * 				Empty, if there are no event handlers for eventName
     			 */
     			, getListeners: function(eventName){
@@ -787,7 +781,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * 				 callback that gets triggered after the MediaManager instance has been initialized.
          * @param {Function} [failureCallback] OPTIONAL
          * 				 a failure callback that gets triggered if an error occurs during initialization.
-         * @param {Array[Object]} [listenerList] OPTIONAL
+         * @param {Array<Object>} [listenerList] OPTIONAL
          * 				 a list of listeners that should be registered, where each entry is an Object
          * 				 with properties:
          * 				 <pre>
@@ -851,10 +845,11 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
         /**
          * Same as {@link #init}.
          * 
-         * @deprecated use <code>init()</code> instead.
+         * @deprecated access MediaManger directly via <code>mmir.MediaManager.someFunction</code> - <em>&tl;internal: for initialization use <code>init()</code> instead&gt;</em>
          * 
-         * @method getInstance
+         * @function
          * @public
+         * @memberOf mmir.MediaManager.prototype
          */
         getInstance: function(){
             return this.init(null, null);
@@ -866,8 +861,9 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * mmir.MediaManager.<function name>().
          * 
          * @deprecated do not use.
-         * @method loadFile
+         * @function
          * @protected
+         * @memberOf mmir.MediaManager.prototype
          * 
          */
     	loadFile: function(filePath,successCallback, failureCallback){
@@ -881,7 +877,5 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     };
     
     return _stub;
-	
-	/** #@- */
     
 });//END: define(..., function(){...

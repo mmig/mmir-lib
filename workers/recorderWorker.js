@@ -23,7 +23,6 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 var recLength = 0,
   recBuffersL = [],
   recBuffersR = [],

@@ -151,10 +151,11 @@ newMediaPlugin = {
 						 * 		 be called.
 						 * 
 						 * <p>
-						 * This is the same interface as {@link AudioHtml5Impl}.
+						 * This is the same interface as {@link mmir.env.media.AudioHtml5Impl}.
 						 * 
 						 * @class
 						 * @name AudioCordovaImpl
+						 * @memberOf mmir.env.media
 						 * @public
 						 */
 						var mediaImpl = {
@@ -164,7 +165,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name play
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								play: function(){
 									if (enabled){
@@ -177,7 +178,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name stop
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								stop: function(){
 									//use "manual" stop instead of Cordova's stop
@@ -209,7 +210,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name enable
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								enable: function(){
 									enabled = true;
@@ -220,7 +221,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name disable
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								disable: function(){
 									if(enabled){
@@ -238,7 +239,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name release
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								release: function(){
 									if(enabled && ! this.isPaused()){
@@ -260,7 +261,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name setVolume
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								setVolume: function(value){
 									if(my_media){
@@ -275,7 +276,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name getDuration
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								getDuration: function(){
 									if(my_media){
@@ -293,7 +294,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name isPaused
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								isPaused: function(){
 									if(my_media){
@@ -309,7 +310,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name isEnabled
 								 * @function
-								 * @memberOf AudioCordovaImpl.prototype
+								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								isEnabled: function(){
 									return enabled;

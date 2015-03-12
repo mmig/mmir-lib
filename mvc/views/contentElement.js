@@ -25,22 +25,37 @@
  */
 
 define(['languageManager', 'parserModule', 'storageUtils'],
+	//this comment is needed by jsdoc2 [copy of comment for: function ContentElement(...]
 	/**
-	 * @name ContentElement
+	 * The ContentElement represents "content" parts of a view; it may itself contain one or more ContentElements.
+	 * 
+	 * This class holds the name of the content-field (used via the yield-tag in the layouts: content, header, footer, dialogs, ...)
+	 * and its definition as HTML-String.
+	 * 
 	 * @class
+	 * @name ContentElement
+	 * @public
+	 * 
+	 * @param {Array|Object} group
+	 * 				 an array or object with properties <code>name</code> {String}, and <code>content</code> {String}
+	 * @param {Object} view 
+	 * 				the view that owns this ContentElement-element 
+	 * @param {mmir.parser.ParserUtils} parser 
+	 * 				for the the content (optional) if supplied this object must have a function <code>parse({String})</code> (see templateParseUtil)
+	 * @param {mmir.parser.RenderUtils} renderer
+	 * 				 for the the content (optional) if supplied, a <code>parser</code> must also be supplied; the renderer must have a function <code>parse({String})</code> (see templateRenderUtil)
 	 * 
 	 */
 	function(
 			languageManager, parser_context
 ){//NOTE: dependency storageUtils is actually accessed through parser_context (i.e. it attaches its functions to parserModule)
 	
-/** @scope ContentElement.prototype */
-/**
- * #@+
- * @memberOf ContentElement.prototype
- */
+/** @scope ContentElement.prototype *///for jsdoc2
 	
+//set to @ignore in order to avoid doc-duplication in jsdoc3
 /**
+ * @ignore
+ * 
  * The ContentElement represents "content" parts of a view; it may itself contain one or more ContentElements.
  * 
  * This class holds the name of the content-field (used via the yield-tag in the layouts: content, header, footer, dialogs, ...)
@@ -98,20 +113,19 @@ function ContentElement(group, view, parser, renderer){
 		/**
 		 * The offset of the ContentElement's raw String-content
 		 * in relation to its parent ContentElement. 
-		 * 
+		 * <p>
 		 * I.e. only when ContentElements are nested with other ContentElements.
-		 * 
+		 * <p>
 		 * For nested ContentElements, the offset always refers to outermost
 		 * ContentElement, e.g.
-		 * 
+		 * <pre>
 		 *   content
 		 *   ContentElement_1
 		 *   	ContentElement_2.parentOffset: offset to ContentElement_1
 		 *   		...
-		 *   			ContentElement_i.parentOffset: offset to ContentElement_1
+		 *   			ContentElement_i.parentOffset: offset to ContentElement_1</pre>
 		 * 
-		 * @property parentOffset
-		 * @type {Number} 
+		 * @type Number
 		 * @private
 		 */
 		this.parentOffset = group.offset;
@@ -192,6 +206,12 @@ function ContentElement(group, view, parser, renderer){
 	// (--> i.e. has to be evaluated on each rendering, or -if not- can be statically rendered once)
 	this.internalHasDynamicContent = checkHasDynamicContent(this);
 	
+	/**
+	 * Error for parsing problems with detailed location information (i.e. where the parsing problem occured).
+	 *  
+	 * @class
+	 * @name ScriptEvalError
+	 */
 	var ScriptEvalError = function(error, strScript, contentElement, parsingElement){
 		
 		var err = Error.apply(this, arguments);
@@ -613,7 +633,7 @@ function ContentElement(group, view, parser, renderer){
 /**
  * Gets the name of a {@link mmir.ContentElement} object (content, header, footer, dialogs, ...).
  * 
- * @function getName
+ * @function
  * @returns {String} Name - used by yield tags in layout
  * @public
  */ 
@@ -624,7 +644,7 @@ ContentElement.prototype.getName = function(){
 /**
  * Gets the owner for this ContentElement, i.e. the {@link mmir.View} object.
  * 
- * @function getView
+ * @function
  * @returns {mmir.View} the owning View
  * @public
  */ 
@@ -635,7 +655,7 @@ ContentElement.prototype.getView = function(){
 /**
  * Gets the controller for this ContentElement.
  * 
- * @function getName
+ * @function
  * @returns {mmir.Controller} the Controller of the owning view
  * @public
  */ 
@@ -648,7 +668,7 @@ ContentElement.prototype.getController = function(){
  * 
  * TODO remove this?
  * 
- * @function toHtml
+ * @function
  * @returns {String} The HTML content.
  * @public
  */
@@ -663,6 +683,8 @@ ContentElement.prototype.toHtml = function(){
  * @param renderingBuffer {Array} of Strings (if <code>null</code> a new buffer will be created)
  * @param data {Any} (optional) the event data with which the rendering was invoked
  * @returns {Array} of Strings the renderingBuffer with the contents of this object added at the end
+ * 
+ * @public
  */
 ContentElement.prototype.toStrings = function(renderingBuffer, data){
 
@@ -670,31 +692,63 @@ ContentElement.prototype.toStrings = function(renderingBuffer, data){
 	
 };
 
+/**
+ * @public
+ * @returns {String} the raw text from which this content element was parsed
+ * @see #getDefinition
+ * 
+ * @public
+ */
 ContentElement.prototype.getRawText = function(){
     return this.definition;
 };
-
+/**
+ * @deprecated use {@link #getRawText} instead
+ * @returns {String} the raw text from which this content element was parsed
+ * @see #getRawText
+ * 
+ * @public
+ */
 ContentElement.prototype.getDefinition = function(){
     return this.definition;
 };
-
+/**
+ * @returns {Number} the start position for this content Element within {@link #getRawText}
+ * @public
+ */
 ContentElement.prototype.getStart = function(){
     return this.start;
 };
-
+/**
+ * @returns {Number} the end position for this content Element within {@link #getRawText}
+ * @public
+ */
 ContentElement.prototype.getEnd = function(){
     return this.end;
 };
 
-//FIXME add to storage? (this should only be relevant for parsing, which is not neccessary in case of store/restore...)
+//FIXME add to storage? (this should only be relevant for parsing, which is not necessary in case of store/restore...)
 ContentElement.prototype.getOffset = function(){
     return this.parentOffset;
 };
 
+/**
+ * @returns {Boolean} returns <code>true</code> if this ContentElement conatains dynamic content,
+ * 					i.e. if it needs to be "evaluated" for rendering 
+ * 					(otherwise, its plain text representation can be used for rendering)
+ * @public
+ */
 ContentElement.prototype.hasDynamicContent = function(){
     return this.internalHasDynamicContent; 
 };
 
+/**
+ * create a String representation for this content element.
+ * @returns {String} the string-representation
+ * @public
+ * 
+ * @requires StorageUtils
+ */
 ContentElement.prototype.stringify = function(){
 	
 	//TODO use constants for lists
@@ -824,7 +878,5 @@ ContentElement.prototype.stringify = function(){
 };
 
 return ContentElement;
-
-/**  #@- */
 
 });//END: define(..., function(){

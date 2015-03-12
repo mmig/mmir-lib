@@ -26,6 +26,8 @@
 
 /**
  * part of Cordova plugin: de.dfki.iui.mmir.speech.AndroidSpeech, version 0.3.1
+ * @version 0.3.1
+ * @ignore
  */
 newMediaPlugin = {
 		/**  @memberOf AndroidTextToSpeech# */

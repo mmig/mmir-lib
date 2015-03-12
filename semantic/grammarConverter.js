@@ -25,12 +25,6 @@
  */
 
 
-
-/**
-* @module mmir.semantic
-* 
-*/
-
 /**
 * The GrammarConverter object initializes the grammar for the voice recognition.
 * 

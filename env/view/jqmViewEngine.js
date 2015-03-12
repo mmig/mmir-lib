@@ -58,7 +58,7 @@ define(['jquery', 'loadCss'],
  * 
  * @class
  * @name JqmViewEngine
- * @exports JqmViewEngine as mmir.env.view.JqmViewEngine
+ * @memberOf mmir.env.view
  * @static 
  *  
  * Libraries:
@@ -95,7 +95,6 @@ function(jquery, loadCss){
 	 * the deferred object will be resolved, when this module has been initialized.
 	 * 
 	 * @private
-	 * @property
 	 * @type Deferred
 	 * @memberOf JqmViewEngine#
 	 */
@@ -112,7 +111,6 @@ function(jquery, loadCss){
 		 * DOM and after all page transitions have been executed).
 		 * 
 		 * @private
-		 * @property
 		 * @type Array<jQueryObject>
 		 * @memberOf JqmViewEngine#
 		 */
@@ -128,7 +126,6 @@ function(jquery, loadCss){
 		 * These elements must have an ID attribute with the value of this constant
 		 * (the actual value will be created and set on rendering the view / layout).
 		 * 
-		 * @property
 		 * @type String
 		 * @public
 		 * @constant
@@ -143,7 +140,6 @@ function(jquery, loadCss){
 		 * 
 		 * Internal ID for field name that holds the {@link View}.
 		 * 
-		 * @property
 		 * @type String
 		 * @private
 		 * @constant
@@ -156,7 +152,6 @@ function(jquery, loadCss){
 		 * 
 		 * Internal ID for field name that holds the rendering data object.
 		 * 
-		 * @property
 		 * @type String
 		 * @private
 		 * @constant
@@ -172,7 +167,6 @@ function(jquery, loadCss){
 		 * 
 		 * Internal ID for field name that holds the {@link Controller}.
 		 * 
-		 * @property
 		 * @type String
 		 * @private
 		 * @constant
@@ -271,7 +265,7 @@ function(jquery, loadCss){
 		 * removed.<br>
 		 * At the end the <b>on_page_load</b> action is performed.
 		 * 
-		 * @function doRenderView
+		 * @function
 		 * 
 		 * @param {String}
 		 *            ctrlName Name of the controller
@@ -414,23 +408,18 @@ function(jquery, loadCss){
 		//the exported functions (i.e. the rendering-engine interface):
 		promise.resolve({
 			
-			/**
-			 * @scope JqmViewEngine.prototype
-			 */
-			/**
-			 * #@+
-			 * @public
-			 */
+			/** @scope JqmViewEngine.prototype */
 			
 			/**
-			 * Public render function - see {@link mmir.env.view.JqmViewEngine#doRenderView}
+			 * Public render function - see {@link #doRenderView}
 			 *  
 			 * @public
-			 * @function
-			 * @borrows mmir.env.view.JqmViewEngine#doRenderView
 			 * @memberOf mmir.env.view.JqmViewEngine.prototype
 			 * 
-			 * @see mmir.env.view.JqmViewEngine#doRenderView
+			 * @function
+			 * @borrows #doRenderView
+			 * 
+			 * @see #doRenderView
 			 */
 			render: doRenderView,
 			/**
@@ -438,9 +427,12 @@ function(jquery, loadCss){
              * 
              * @requires jQuery Mobile SimpleModal
              * 
-             * @function hideCurrentDialog
+             * @function
              * @public
+			 * @memberOf mmir.env.view.JqmViewEngine.prototype
+             * 
 			 * @see #showDialog
+			 * @see mmir.PresentationManager#showDialog
              */
             hideCurrentDialog : function() {
                 
@@ -458,7 +450,7 @@ function(jquery, loadCss){
              * @requires mmir.ControllerManager
              * 
              * 
-             * @function showDialog
+             * @function
              * @param {String}
              *            ctrlName Name of the controller
              * @param {String}
@@ -469,7 +461,10 @@ function(jquery, loadCss){
              * @returns {Object} the instance of the current dialog that was opened
              * 
              * @public
+			 * @memberOf mmir.env.view.JqmViewEngine.prototype
+             * 
 			 * @see #hideCurrentDialog
+			 * @see mmir.PresentationManager#hideCurrentDialog
              */
             showDialog : function(ctrlName, dialogId, data) {
 
@@ -509,7 +504,7 @@ function(jquery, loadCss){
 			/**
 			 * Shows a "wait" dialog, i.e. "work in progress" notification.
 			 * 
-			 * @function showWaitDialog
+			 * @function
 			 * 
 			 * @param {String} [text] OPTIONAL
 			 * 				the text that should be displayed.
@@ -522,11 +517,13 @@ function(jquery, loadCss){
 			 * 					  must also be supplied.
 			 * 
 			 * @public
+			 * @memberOf mmir.env.view.JqmViewEngine.prototype
 			 * 
 			 * @requires jQuery Mobile: <code>$.mobile.loading</code>
 			 * @requires mmir.LanguageManager
 			 * 
 			 * @see #hideWaitDialog
+			 * @see mmir.PresentationManager#hideWaitDialog
 			 */
 			showWaitDialog : function(text, theme) {
 
@@ -552,12 +549,14 @@ function(jquery, loadCss){
 			/**
 			 * Hides / closes the "wait" dialog.
 			 * 
-			 * @function hideWaitDialog
+			 * @function
 			 * @public
+			 * @memberOf mmir.env.view.JqmViewEngine.prototype
 			 * 
 			 * @requires jQuery Mobile: <code>$.mobile.loading</code>
 			 * 
 			 * @see #showWaitDialog
+			 * @see mmir.PresentationManager#showWaitDialog
 			 */
 			hideWaitDialog : function() {
 

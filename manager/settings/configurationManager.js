@@ -38,11 +38,10 @@ define(['constants', 'jquery' ],
 	 * 
 	 * This "class" is structured as a singleton - so that only one instance is in use.<br>
 	 * 
-	 * @class
-	 * @name mmir.ConfigurationManager
+	 * @name ConfigurationManager
+	 * @memberOf mmir 
 	 * @static
-	 * 
-	 * @category core
+	 * @class
 	 * 
 	 * @requires jQuery.ajax
 	 * @requires jQuery.isArray
@@ -52,45 +51,36 @@ define(['constants', 'jquery' ],
 		constants, $
 ){
 	
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
-	/** @scope mmir.ConfigurationManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.ConfigurationManager.prototype 
-	 */
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
+	/** @scope ConfigurationManager.prototype */
 
     /**
      * Object containing the instance of the class {@link mmir.ConfigurationManager}.
      * 
-     * @property instance
      * @type Object
      * @private
      * 
-	 * @memberOf mmir.ConfigurationManager#
+	 * @memberOf ConfigurationManager#
      */
     var instance = null;
     
 	/**
 	 * Constructor-Method of Singleton mmir.ConfigurationManager.
 	 * 
-	 * @constructs mmir.ConfigurationManager
-	 * @memberOf mmir.ConfigurationManager.prototype
 	 * @private
 	 * 
-	 * @memberOf mmir.ConfigurationManager#
+	 * @memberOf ConfigurationManager#
 	 */
     function constructor(){
 
-    	/** @scope mmir.ConfigurationManager.prototype */
+    	/** @scope ConfigurationManager.prototype */
     	
     	/**
     	 * the configuration data (i.e. properties)
-		 * @property configData
 		 * @type Object
 		 * @private
 		 * 
-		 * @memberOf mmir.ConfigurationManager#
+		 * @memberOf ConfigurationManager#
     	 */
     	var configData = null;
     	
@@ -98,7 +88,8 @@ define(['constants', 'jquery' ],
     	/**
     	 * Helper that loads configuration file synchronously.
     	 * 
-		 * @memberOf mmir.ConfigurationManager#
+    	 * @private
+		 * @memberOf ConfigurationManager#
     	 */
     	//FIXME change implementation to async-loading?
     	//		-> would need to add init()-function, with callback and/or return Deferred.promise
@@ -141,7 +132,7 @@ define(['constants', 'jquery' ],
          * 				If <code>propertyName</code> is an Array, all contained
          * 				String entries will be resolved, if necessary
          * 				
-		 * @memberOf mmir.ConfigurationManager#
+		 * @memberOf ConfigurationManager#
          */
         function _getAsPath(propertyName){
         	
@@ -166,7 +157,7 @@ define(['constants', 'jquery' ],
          * 				resolves an array with paths, i.e. dot-separated property-names
          * 				into a single, flat array where each path component is a separate Strings
          * 
-		 * @memberOf mmir.ConfigurationManager#
+		 * @memberOf ConfigurationManager#
          */
         function _toPathArray(pathList){
         		
@@ -217,7 +208,7 @@ define(['constants', 'jquery' ],
     		return pathList;
         }
     	
-        
+        /** @lends ConfigurationManager */
         return {
         	
         	// public members
@@ -233,11 +224,11 @@ define(['constants', 'jquery' ],
 			 * 
 			 * @requires mmir.LanguageManager
 			 * 
-			 * @function getLanguage
+			 * @function
 			 * @returns {String} The currently used language
 			 * @public
 			 * 
-			 * @memberOf mmir.ConfigurationManager.prototype
+			 * @memberOf ConfigurationManager.prototype
 			 */
             getLanguage: function(){
                 return require('languageManager').getInstance().getLanguage();
@@ -253,7 +244,7 @@ define(['constants', 'jquery' ],
 			 * 
 			 * @requires mmir.LanguageManager
 			 * 
-			 * @function setLanguage
+			 * @function
 			 * @param {String} lang The language which is to be used
 			 * @public
 			 */
@@ -263,7 +254,7 @@ define(['constants', 'jquery' ],
 			/**
 			 * Returns the value of a property.
 			 *  
-			 * @function get
+			 * @function
 			 * @param {String} propertyName
 			 * 					The name of the property.
 			 * 					NOTE: If the property does not exists at the root-level,
@@ -333,7 +324,7 @@ define(['constants', 'jquery' ],
 			/**
 			 * Sets a property to a given value.
 			 *  
-			 * @function set
+			 * @function
 			 * @param {String|Array<String>} propertyName
 			 * 				
 			 * 				The name of the property.
@@ -400,6 +391,7 @@ define(['constants', 'jquery' ],
              * the String <code>"false"</code> will be converted to
              * Boolean value <code>false</code>.
              * 
+             * @public
              * @param {any} [defaultValue] OPTIONAL
              * 
              * 			if a default value is specified and there exists
@@ -442,6 +434,7 @@ define(['constants', 'jquery' ],
              * If the value has not the type <code>"string"</code>, it will
              * be converted by <code>JSON.stringify</code>.
              * 
+             * @public
              * @param {any} [defaultValue] OPTIONAL
              * 			if a default value is specified and there exists
              * 			no property <code>propertyName</code>, the
@@ -486,13 +479,12 @@ define(['constants', 'jquery' ],
 	 * 
 	 * @function
 	 * @name getInstance
-	 * @memberOf mmir.ConfigurationManager#
+	 * @public
+	 * @memberOf ConfigurationManager#
 	 */
 	instance.getInstance = function(){
 		return instance;
 	};
 	
 	return instance;
-
-	/** #@- */
 });

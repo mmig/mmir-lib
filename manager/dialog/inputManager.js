@@ -56,13 +56,8 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 		mmir, $, commonUtils,module, engineConfig, Logger
 ){
 
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.InputManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.InputManager.prototype 
-	 */
 	
 	/**
 	 * @memberOf mmir.InputManager#
@@ -83,7 +78,7 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 		/**
 		 * This function raises an event. 
 		 * 
-		 * @function raise
+		 * @function
 		 * @param {String} eventName
 		 * 				The name of the event which is to be raised
 		 * @param {Object} [eventData] OPTIONAL
@@ -152,7 +147,5 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 			}).promise();
 		}
 	});
-	
-	/** #@- */
 
 });

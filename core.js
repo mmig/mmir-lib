@@ -12,6 +12,7 @@
  * @name mmir
  * @export initMmir as mmir
  * @class
+ * @namespace
  * 
  * @returns the module instance <code>mmir</code>
  * 
@@ -26,13 +27,33 @@ function initMmir() {
 	}
 	
     
-    //STATE: state variable for indicating "doc is already loaded" (this needs to be set/reset manually)
+	/**
+	 * STATE: state variable for indicating "doc is already loaded" (this needs to be set/reset manually)
+	 * @memberOf mmir.internal
+	 * @private
+	 */	
 	var _isReady = false;
+	/**
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	var _funcList = [];
+	/**
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	function dequeue () { return _funcList.shift(); };
+	/**
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	function isEmpty () { return _funcList.length === 0; };
-	//param func OPTIONAL
-	//			if func is present, func will be used instead of dequeueing a callback from the queue
+	/**
+	 * @param {Function} [func] OPTIONAL
+	 *			if func is present, func will be used instead of dequeueing a callback from the queue
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	function deqExex (func) {
 		if(!func){
 			func = dequeue();
@@ -42,9 +63,24 @@ function initMmir() {
 		func.call(mmir);
 	};
 	
-	//STATE: state variable for indicating "configs for requirejs are already applied"
+	/**
+	 * STATE: state variable for indicating "configs for requirejs are already applied"
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	var _isApplied = false;
+	/**
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	var _configList = [];
+	/**
+	 * Applies all <code>config</code>s (that were added by
+	 * {@link mmir.config}) to the requirejs instance.
+	 * 
+	 * @memberOf mmir.internal
+	 * @private
+	 */
 	function applyConfigs(){
 		
 		if(typeof require === 'undefined'){
@@ -60,6 +96,30 @@ function initMmir() {
 	
 	var mmir = {
 			
+			/**
+			 * Set the framework to "initialized" status (i.e. will
+			 * trigger the "ready" event/callbacks)
+			 * 
+			 * <p>
+			 * WARNING: use this only, if you know what
+			 *          you are doing -- normally this
+			 *          functions is only called once
+			 *          during initialization by the
+			 *          framework to signal that all
+			 *          settings, classes, set-up etc
+			 *          for the framework are now 
+			 *          initialized.
+			 * <p>
+			 * 
+			 * NOTE: this is a semi-private function that 
+			 *          should only be used by the initialization
+			 *          process.
+			 * 
+			 * @memberOf mmir
+			 * @name setInitialized
+			 * @function
+			 * @private
+			 */
 			setInitialized : function() {
 				
 				_isReady = true;
@@ -109,7 +169,7 @@ function initMmir() {
 			 * 
 			 * <p>
 			 * NOTE: the options added here will be applied in the order
-			 *       the were added, i.e. if a later option specifies
+			 *       they were added, i.e. if a later option specifies
 			 *       settings that were already set by a previous call,
 			 *       then these later options will overwrite the earlier
 			 *       ones.
@@ -143,13 +203,16 @@ function initMmir() {
 			 *          configuration settings for 
 			 *          RequireJS in <code>mainConfig.js</code>
 			 *          were applied.
+			 * <p>
+			 * 
+			 * NOTE: this is a semi-private function that 
+			 *          should only be used by the initialization
+			 *          process.
 			 * 
 			 * @memberOf mmir
 			 * @name applyConfigs
 			 * @function
-			 * @private this is a semi-private function that 
-			 *          should only be used by the initialization
-			 *          process.
+			 * @protected
 			 */
 			applyConfig: applyConfigs,
 			
@@ -160,7 +223,7 @@ function initMmir() {
 			 * 
 			 * <p>
 			 * This module should first start-up the framework and
-			 * then signal the application (via {@link #setInitialized}
+			 * then signal the application (via {@link mmir.setInitialized})
 			 * that it is ready to be used, i.e. fully initialized now.
 			 * 
 			 * <p>
@@ -170,9 +233,8 @@ function initMmir() {
 			 * 
 			 * @memberOf mmir
 			 * @name startModule
-			 * @property
 			 * @type String
-			 * @default {String} "main" will load the module specified in main.js
+			 * @default {String} "main" will load the module specified in /main.js
 			 * @public
 			 */
 			startModule: 'main',
@@ -184,7 +246,6 @@ function initMmir() {
 			 * 			 
 			 * @memberOf mmir
 			 * @name viewEngine
-			 * @property
 			 * @type String
 			 * @default "jqmViewEngine" will load the default view-engine that uses jQuery Mobile
 			 * @public
@@ -202,12 +263,11 @@ function initMmir() {
 			 * 			 
 			 * @memberOf mmir
 			 * @name debug
-			 * @property
 			 * @type Boolean
 			 * @default true
 			 * @public
 			 * 
-			 * @see #logLevel
+			 * @see mmir.logLevel
 			 */
 			debug: true,
 			
@@ -228,18 +288,17 @@ function initMmir() {
 			 * 5: "critical"
 			 * 6: "disabled"
 			 * 
-			 * NOTE: if you want to disable logging completely, use {@link #debug}.
+			 * NOTE: if you want to disable logging completely, use {@link mmir.debug}.
 			 *       Setting the logLevel to "disabled" will still allow specific module's to create logging output
 			 *       (if their log-level is set appropriately)
 			 * 			 
 			 * @memberOf mmir
 			 * @name logLevel
-			 * @property
 			 * @type Integer | String
 			 * @default "debug"
 			 * @public
 			 * 
-			 * @see #debug
+			 * @see mmir.debug
 			 */
 			logLevel: 'debug',
 			
@@ -266,13 +325,12 @@ function initMmir() {
 			 * 			 
 			 * @memberOf mmir
 			 * @name logTrace
-			 * @property
 			 * @type Boolean | PlainObject
 			 * @default true
 			 * @public
 			 * 
-			 * @see #debug
-			 * @see #logLevel
+			 * @see mmir.debug
+			 * @see mmir.logLevel
 			 */
 			logTrace: true	//{trace: true, depth: 'full'}
 	};

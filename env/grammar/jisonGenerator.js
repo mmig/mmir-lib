@@ -24,7 +24,7 @@ define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  * @constant
  * @public
  * @name JisonGenerator
- * @exports JisonGenerator as mmir.env.grammar.JisonGenerator
+ * @memberOf mmir.env.grammar
  * 
  * @requires Jison
  * @requires jQuery.Deferred
@@ -39,7 +39,6 @@ function(jison, constants, configManager, GrammarConverter, $, Logger, module){
  * Deferred object that will be returned - for async-initialization:
  * the deferred object will be resolved, when this module has been initialized.
  * 
- * @property
  * @private
  * @type Deferred
  * @memberOf JisonGenerator#
@@ -52,7 +51,6 @@ deferred.resolve();
 /**
  * The Logger for the jison generator.
  * 
- * @property
  * @private
  * @type Logger
  * @memberOf JisonGenerator#

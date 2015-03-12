@@ -6,9 +6,21 @@ define(function() {
 	/**
      * Convert parameter-part of an URL to a "dictionary", containing
      * the parameter keys and values
+     * <p>
      * 
-     * @example <code>?id=5&name=heinz&name=kunz</code> &rarr;
-     *          <code>dict['id']=5, dict['name'] = ['heinz', 'kunz']</code>
+     * 	<code>?id=5&name=heinz&name=kunz</code> &rarr;
+     * 	<pre>
+     * 	{
+     * 	  id: "5",
+     * 	  name: ["heinz", "kunz"],
+     *    
+     * 	  //utility functions
+     * 	  has: function(key) : Boolean,
+     * 	  isMultiple: function(key) : Boolean,// is entry an Array of values
+     * 	  getKeys: function() : String[],     // get list of all keys
+     * 	}
+     * 	</pre>
+     * <p>
      * 
      * The returnd "dictionary" has the following functions:
      * <ul>
@@ -21,11 +33,12 @@ define(function() {
      * entries</li>
      * </ul>
      * 
-     * @function parseParamsToDictionary
-     * @param {String}
+     * @function
+     * @param {String} urlParamsPartStrings
      *            the parameter-part of the URL, i.e. <code>&...</code>
-     * @return {Object} an "dictionary" for the parameters
+     * @return {Object} a "dictionary" for the parameters
      * @public
+	 * @memberOf mmir.CommonUtils.prototype
      */
     function parseParamsToDictionary(urlParamsPartStrings) {
 		var dict = new Object();
@@ -34,13 +47,13 @@ define(function() {
 			return typeof dict[key] !== 'undefined';
 		};
 		dict.isMultiple = function(key) {
-			// use not-allowed-as-part-of-parameter-name char & as
+			// use not-allowed-as-part-of-parameter-name character '&' as
 			// prefix for meta-data 'isMultiple' on field 'key':
-			return typeof dict['&' + key] !== 'undefined' && dict['&' + key] === true;
+			return dict['&' + key] === true;
 		};
 		// use not-allowed-as-part-of-parameter-name char & as prefix
 		// for meta-data 'keys-list':
-		dict['&&keys'] = new Array();
+		dict['&&keys'] = [];
 		dict.getKeys = function() {
 			return dict['&&keys'];
 		};

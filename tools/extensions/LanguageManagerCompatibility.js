@@ -77,18 +77,12 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
          */
         return setToCompatibilityMode = function(compatibilitySelf) {
         	
-        	/** @scope mmir.LanguageManager.setToCompatibilityModeExtension.prototype */
-        	
-        	/**
-        	 * #@+
-        	 * @memberOf mmir.LanguageManager.setToCompatibilityModeExtension.prototype
-        	 */
+        	/** @scope mmir.LanguageManager.setToCompatibilityModeExtension.prototype *///for jsdoc2
         	
 //            /**
 //             * The instance that holds the extensions for compatibility
 //             * mode, which really is the LanguageManager instance.
 //             * 
-//             * @property compatibilitySelf
 //             * @type mmir.LanguageManager
 //             * @private
 //             */
@@ -98,7 +92,7 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
              * This function is used to localize the view description
              * (ehtml) before they are displayed.
              * 
-             * @function translateHTML
+             * @function
              * @param {String}
              *            html The (HTML) string which is to be localized
              *            into the currently used language
@@ -149,7 +143,7 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
              * @requires mmir.PresentationManager
              * @requires mmir.DialogManager
              * 
-             * @function changeLanguage
+             * @function
              * @param {String}
              *            newLang The new language which is to be used
              *            henceforth
@@ -176,7 +170,6 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
             compatibilitySelf.getCurrentLanguage = compatibilitySelf.getLanguage;
             compatibilitySelf.cycleLanguages = compatibilitySelf.setNextLanguage;
             
-            /** #@- */
-            
         };//END: setToCompatibilityMode()
+        
 });

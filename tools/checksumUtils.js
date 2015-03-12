@@ -25,18 +25,13 @@
  */
 
 
-/**
- * @module mmir.tools
- * 
- */
-
 define(['md5'],
 	/**
 	 * A Utility class for creating / reading checksum (files).<br>
 	 * 
 	 * @name ChecksumUtils
 	 * @class
-	 * @exports ChecksumUtils as mmir.tools.ChecksumUtils
+	 * @memberOf mmir.tools
 	 * @static
 	 * 
 	 * @requires CryptoJS (MD5, see https://code.google.com/p/crypto-js/)

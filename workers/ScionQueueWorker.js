@@ -30,7 +30,8 @@
  * New events for SCION are queued in order to allow raising new events from within SCION-event-processing.
  * 
  * <p>
- * This "threaded queue" receives messages from {@link mobileDS.SCIONExtension}.
+ * This "threaded queue" receives messages from the "Android environment engine" of
+ * {@link mmir.DialogEngine} - see manager/dialog/engineConfig.js::_androidFactory.
  * 
  * <p>
  * The message / work flow is as follows:
@@ -42,10 +43,7 @@
  * 	</li>
  * </ul>
  * 
- * @see mobileDS.SCIONExtension
- * 
- * @class ScionQueueWorker
- * @namespace mobileDS.SCIONExtension
+ * @module workers/scionRaiseQueue
  */
 
 /**
@@ -57,10 +55,11 @@ var queue = [],
 /**
  * Handler for received messages.
  * 
- * @function onmessage
+ * @function
  * @param {Object} e the message object with<br>
  * 			{String} e.data.command the message type / name (e.g. <tt>readyForJob</tt>)<br>
  * 			{Object} [e.data.job] the job object (e.g. in case of command <tt>newJob</tt> the job that will be queued)
+ * 
  * @public
  */
 self.onmessage = function(e){
@@ -87,7 +86,7 @@ self.onmessage = function(e){
  * 	{Object} e.data.toDo the job object (that was added before to the queue with command / message <tt>newJob</tt>)
  *  
  * 
- * @function distributeJobs
+ * @function
  * @private
  */
 function distributeJobs(){

@@ -24,23 +24,17 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-
 define(['constants', 'grammarConverter', 'logger', 'module'
         ], 
 	/**
 	 * @name SemanticInterpreter
-	 * @exports SemanticInterpreter as mmir.SemanticInterpreter
+	 * @memberOf mmir
 	 * @static
 	 * @class
 	 */
 	function (
 		constants, GrammarConverter, Logger, module
 ){
-	
-	/**
-	 * #@+
-	 * @private
-	 */
 	
 	/**
 	 * The instance for the singleton SemanticInterpreter
@@ -80,24 +74,18 @@ define(['constants', 'grammarConverter', 'logger', 'module'
      */
     var GRAMMAR_FILE_FORMAT_VERSION = 3;
     
-    /** #@-*/
     
     /**
      * @constructs SemanticInterpreter
      * @memberOf SemanticInterpreter#
      * @private
+     * @ignore
      */
     function constructor(){
     	
-    	/**
-    	 * #@+
-    	 * @private
-    	 */
-    
 	    /**
 	     * "map" for grammar implementations (e.g. for different languages)
 	     * 
-	     * @property grammarImplMap
 	     * @private
 	     * 
 	     * @memberOf SemanticInterpreter#
@@ -108,8 +96,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * 
 	     * This list contains the "keys" of all current entries in <tt>grammarImplMap</tt>.
 	     * 
-	     * @property grammarImplList
 	     * @private
+	     * @type Array<String>
 	     * 
 	     * @memberOf SemanticInterpreter#
 	     */
@@ -126,7 +114,6 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * 		 as compiled JS file (which must be already loaded, i.e. already present in <tt>grammarImplMap</tt>), or
 	     * 		 as JSON grammar file (which must be available at <tt>/config/languages/[ID]/grammar.json</tt>
 	     * 
-	     * @property currentGrammarId
 	     * @type String
 	     * @private
 	     * 
@@ -136,29 +123,34 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	    
 	    /**
 	     * @type String
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var currentGrammarEningeId = null;
 	    /**
 	     * @type String
 	     * @constant
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var DEFAULT_GRAMMAR_ENGINE = 'jscc';
 	    /**
 	     * @type String
 	     * @constant
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var GRAMMAR_MODULE_ID_POSTFIX = 'Gen';
 	    
 	    /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var doSetGrammarEngine = function(id){
 	    	currentGrammarEningeId = id;
 	    };
 	    /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var doGetGrammarEngine = function(){
@@ -177,7 +169,6 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * 
 	     *  Setting a language, automatically enables the the SemanticInterpreter.
 	     * 
-	     * @property _isEnabled
 	     * @type Boolean
 	     * @private
 	     * @memberOf SemanticInterpreter#
@@ -186,6 +177,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	    
 
 	    /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var doSetEnabled = function(isEnabled){
@@ -193,6 +185,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         };
 
 	    /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
         var doCheckIsEnabled = function(){
@@ -220,6 +213,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 		 * 
 	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION.
 	     * 
+	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
     	var doAddGrammar = function(id, grammarImpl, fileFormatNo){
@@ -269,6 +263,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         };
         
         /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
         var doSetStopwords = function(id, stopwordArray){
@@ -293,6 +288,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
          * 			already loaded (if grammar has to loaded and compiled, you need to
          * 			wait for the callback-call and then re-invoke doGetGrammar()).
          * 
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
         var doGetGrammar = function(id, doNotResolve, callback){//NOTE: this should stay private
@@ -333,12 +329,14 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         	return grammarImplMap[id];
         };
         /**
+         * @private
 	     * @memberOf SemanticInterpreter#
          */
         var checkHasGrammar = function(id){
         	return typeof grammarImplMap[id] !== 'undefined';
         };
         /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
         var doRemoveGrammar = function(id){
@@ -375,6 +373,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
          * 							The callback-function will be invoked without arguments, i.e. <code>callback();</code>
          * @function
          * 
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
         function createAndAddGrammar(doRecompile, generatedParserLanguageCode, callback){
@@ -441,6 +440,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         }
         
         /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
         var process_asr_semantic = function(phrase, stopwordFunc, langCode, callback){
@@ -492,6 +492,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         };
         
         /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
 		var removeStopwordsFunc =  function removeStopwords(thePhrase, lang, gc){
@@ -510,6 +511,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
     	};
     	
     	/**
+	     * @private
 	     * @memberOf SemanticInterpreter#
     	 */
 		var removeStopwordsAltFunc = function removeStopwords_alt(thePhrase, lang, gc){
@@ -526,6 +528,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 			return thePhrase;
 		};
         /**
+	     * @private
 	     * @memberOf SemanticInterpreter#
          */
 		var doRemoveStopWords = function(thePhrase, lang, func){
@@ -547,11 +550,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 			return grammarConverter.unmaskString( str );//grammarConverter.decodeUmlauts(str, true);
 		};
 		
-		/** #@- */
-		
         var _tmpInstance = { // public members
         		
-        	/**  @scope SemanticInterpreter# */
+        	/**  @scope SemanticInterpreter# *///for jsdoc2
 
 			/**
 			 * @deprecated use {@link #removeStopwords} instead
@@ -771,6 +772,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	 * 
 	 * @function
 	 * @name getInstance
+	 * @public
      * @memberOf SemanticInterpreter.prototype
 	 */
 	instance.getInstance = function(){

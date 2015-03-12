@@ -26,7 +26,22 @@
 
 
 define (['commonUtils', 'viewConstants', 'yield', 'storageUtils' ],
+	//this comment is needed by jsdoc2 [copy of comment for: function Layout(...]
 	/**
+	 * The Layout class 
+	 * The constructor parses the layout and divides them into containers (headerContents, bodyContents, dialogsContents).
+	 * 
+	 * @param {String} name
+	 * 			Name of the Layout (usually the same name as the Layout's controller).
+	 * @param {String} definition
+	 * 			Layout description, i.e. the raw template code that will be processed.
+	 * 			May be empty: in this case the processed contents must be
+	 * 						  added manually (cf. parser.StorageUtils)
+	 * 
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+	 * 			
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * 
 	 * @name Layout
 	 * @class
 	 */
@@ -34,14 +49,11 @@ define (['commonUtils', 'viewConstants', 'yield', 'storageUtils' ],
 		commonUtils, ViewConstants, YieldDeclaration, storageUtils
 ) {
 	
+/** @scope Layout.prototype *///for jsdoc2
 
-/** @scope Layout.prototype */
+//set to @ignore in order to avoid doc-duplication in jsdoc3
 /**
- * #@+
- * @memberOf Layout.prototype
- */
-	
-/**
+ * @ignore
  * The Layout class 
  * The constructor parses the layout and divides them into containers (headerContents, bodyContents, dialogsContents).
  * 
@@ -57,7 +69,6 @@ define (['commonUtils', 'viewConstants', 'yield', 'storageUtils' ],
  * 			
  * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
  * 
- * @category core
  */
 function Layout(name, definition, remote, ignoreMissingBody){
 //		console.log("[Layout] initialize '"+name+"'.");
@@ -72,7 +83,6 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		/**
 	     * The definition string of the layout (ehtml-format, taken from assets/www/views/layout/*.ehtml)
 	     * 
-	     * @property def
 	     * @type Object
 	     * @public
 	     */
@@ -81,7 +91,6 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		/**
 	     * The name of the layout. 
 	     * 
-	     * @property name
 	     * @type String
 	     * @public
 	     */
@@ -90,7 +99,6 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		/**
 	     * This variable holds the contents of the header part of the layout.
 	     * 
-	     * @property headerContents
 	     * @type String
 	     * @public
 	     * @deprecated unused
@@ -100,7 +108,6 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		/**
 	     * This variable holds the contents of the body part of the layout.
 	     * 
-	     * @property bodyContents
 	     * @type String
 	     * @public
 	     * @deprecated unused
@@ -110,7 +117,6 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		/**
 	     * This variable holds the contents of the dialogs part of the layout.
 	     * 
-	     * @property dialogsContents
 	     * @type String
 	     * @public
 	     */
@@ -119,7 +125,6 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		/**
 	     * An associative array holding the contents of the different containers: header, body, footer and dialogs
 	     * 
-	     * @property yields
 	     * @type Array
 	     * @public
 	     */
@@ -429,7 +434,7 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	/**
 	 * This methods returns an associative array holding the contents of the different containers: header, body, footer and dialogs.
 	 * 
-	 * @function getYields
+	 * @function
 	 * @returns {Array} An associative array holding the contents of the different containers: header, body, footer and dialogs
 	 * @public
 	 */
@@ -440,7 +445,7 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	/**
 	 * This methods returns the contents of the header part of the layout.
 	 * 
-	 * @function getHeaderContents
+	 * @function
 	 * @returns {String} The contents of the header part of the layout
 	 * @public
 	 */
@@ -451,7 +456,7 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	/**
 	 * This methods returns the contents of the dialog part of the layout.
 	 * 
-	 * @function getDialogsContents
+	 * @function
 	 * @returns {String} The contents of the dialog part of the layout
 	 * @public
 	 */
@@ -462,7 +467,7 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	/**
 	 * This methods returns the contents of the body part of the layout.
 	 * 
-	 * @function getBodyContents
+	 * @function
 	 * @returns {String} The contents of the body part of the layout
 	 * @public
 	 */
@@ -473,7 +478,7 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	/**
 	 * Gets the name of the layout.
 	 * 
-	 * @function getName
+	 * @function
 	 * @returns {String} The name of the layout.
 	 * @public
 	 */
@@ -554,7 +559,7 @@ Layout.prototype.stringify = function(){
 //	 * 
 //	 * TODO check this implementation -> is it conform with code for handling eHTML templates?
 //	 * 
-//	 * @function parseHead
+//	 * @function
 //	 * @param {Object} jsonDef definition of the header
 //	 * @returns {String} The header
 //	 * @deprecated unused
@@ -588,7 +593,7 @@ Layout.prototype.stringify = function(){
 //	 * 
 //	 * TODO check this implementation -> is it conform with code for handling eHTML templates?
 //	 * 
-//	 * @function parseBody
+//	 * @function
 //	 * @param {Object} jsonDef definition of the body
 //	 * @returns {String} The body
 //	 * @deprecated this function refers to the outdated/unsed JSON-format for defining layout/views
@@ -645,5 +650,4 @@ Layout.prototype.stringify = function(){
 
 	return Layout;
 	
-	/**  #@- */
 });

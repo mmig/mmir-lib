@@ -39,9 +39,8 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * 
 	 * @class
 	 * @name ModelManager
-	 * @exports ModelManager as mmir.ModelManager
+	 * @memberOf mmir
 	 * @static
-	 * @category core
 	 * 
 	 * @requires jQuery.Deferred
 	 * 
@@ -49,19 +48,13 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	function( 
     		Dictionary,  constants, commonUtils, $
 ){
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ModelManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.ModelManager.prototype 
-	 */
 
 	// private members
     /**
      * Array of models
      * 
-     * @property models
      * @type Dictionary
      * @private
      * 
@@ -97,7 +90,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * 
 	 * This function returns the fully qualified model name (including namespace(s)).
 	 * 
-	 * @function getFullModelName
+	 * @function
 	 * @param {String}
 	 *            modelClassName the model's class-name (i.e. without namespace)
 	 * @returns {String} fully qualified name for the model
@@ -118,7 +111,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * 
 	 * This function returns all loaded models. 
 	 * 
-	 * @function getModels
+	 * @function
 	 * @returns {Array<String>} all loaded model names
 	 * @public
 	 * @memberOf mmir.ModelManager#
@@ -132,7 +125,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * {@link mmir.ModelManager#foundModelsCallBack} to load all
 	 * models in the path specified by *modelPath*.
 	 * 
-	 * @function loadModels
+	 * @function
 	 * @param {Function}
 	 *            myCallbackFunction The callback function from the constructor
 	 *            which shall be called after the initialization of the
@@ -213,7 +206,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
          * Otherwise the model-object itself is returned (e.g. for 
          * singleton pattern models).
          * 
-         * @function doGetModelInstance
+         * @function
          * @private
          * 
 		 * @see mmir.ModelManager#getModelByName
@@ -316,7 +309,6 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	/**
 	 * Object containing the instance of the class {@link mmir.ModelManager}
 	 * 
-	 * @property instance
 	 * @type Object
 	 * @private
 	 * @ignore
@@ -340,7 +332,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 			/**
 			 * This function gets the model by name.
 			 * 
-			 * @function getModel
+			 * @function
 			 * @param {String}
 			 *            modelName Name of the model which should be returned
 			 * @returns {Object} The model if found, null else
@@ -365,7 +357,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 			/**
 			 * This function returns all loaded models.
 			 * 
-			 * @function getModels
+			 * @function
 			 * @returns {Array} All loaded models
 			 * @public
 			 */
@@ -390,7 +382,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 			 * 
 			 * NOTE: use EITHER callback-function OR returned Promise -- do not use both!
 			 * 
-			 * @function create
+			 * @function
 			 * @param {Function} [callbackFunction] 
 			 * 					The function which should be called after loading all controllers
 			 * @returns {Promise} 
@@ -408,7 +400,5 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	};
 
 	return _instance;
-	
-	/** #@- */
 	
 });

@@ -29,7 +29,7 @@
 define( 
 /**
  * A "silent" replacement for the Logger factory.<br>
- * Has the same interaface (functions etc.) as {@link mmir.Logging}.
+ * Has the same interface (functions etc.) as {@link mmir.Logging}.
  * 
  * <p>
  * 
@@ -39,16 +39,24 @@ define(
  * 
  * Which logging module is used, can be configured in core
  * module in {@link mmir}.
- *  
  * 
- * @example <code>mmir.Logging.create('SomeClass')</code>
- * @class DisabledLogging
+ * <div class="box important">
+ * 	<b>Note:</b> after configuration
+ * 	of {@link mmir.debug} with <code>false</code>, this
+ * 	logging module, i.e. the <code>DisabledLogging</code> factory with
+ * 	its <code>DisabledLogger</code> implementation, will be available 
+ * 	via <code>mmir.Logging</code>(and <u><strong>not</strong></u> as 
+ * 	<em>mmir.DisabledLogger</em>).
+ * </div>
+ * 
+ * @class
  * @name DisabledLogging
- * @exports DisabledLogging as mmir.DisabledLogging
- * @category tools
+ * @memberOf mmir
  * @static
  * 
  * @see mmir.Logging
+ * 
+ * @example mmir.Logging.create('SomeClass')
  */
 function(){
 
@@ -65,17 +73,27 @@ function(){
  */
 
 
-/** NO-OP */
+/** 
+ * NO-OP function
+ * @private
+ * @memberOf DisabledLogging#
+ */
 function noop(){}
-/** @returns false **/
+/** 
+ * DENY function
+ * @returns {Boolean} <code>false</code> (always)
+ * 
+ * @private
+ * @memberOf DisabledLogging#
+ */
 function deny(){return false;}
 
 /**
  * Constructor-Method of Class DisabledLogger:
  * This logger implementation will never print logging output.
  * 
- * Has the same interface (functions etc) as {@link Logger},
- * but <code>isXXX</code> functions will always return <code>false</code>
+ * Has the same interface (functions etc) as {@link Logger} of the {@link mmir.Logging} factory,
+ * but <em>isXXX</em> functions will always return <code>false</code>
  * and the logging-functions will never do anything (i.e. these are
  * <em>no-op</em> functions).
  * 
@@ -85,74 +103,229 @@ function deny(){return false;}
 function Logger(){}
 
 
-Logger.prototype = {//public instance members (basically all NO-OPs)
+Logger.prototype =
+/** @lends DisabledLogger# */
+{//public instance members (basically all NO-OPs or DENYs)
+	
+	/** 
+	 * @public
+	 * @function
+	 */
     getLevel : function(){
     	//always return "disabled" level:
     	return 6;
     },
+    /** 
+	 * @public
+	 * @function
+	 */
     setLevel : noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     log: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     verbose: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     debug: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     info: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     warn: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     error: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     critical: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     iVerbose: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isDebug: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isInfo: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isWarn: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isError: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isCritical: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isDisabled: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     v: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     d: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     i: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     w: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     e: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     c: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     isv: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isd: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isi: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isw: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     ise: deny,
+    /** 
+	 * @public
+	 * @function
+	 */
     isc: deny
 };
 
 /**
- * @memberOf mmir.DisabledLogging.prototype
+ * @private
+ * @memberOf mmir.DisabledLogging#
  */
 var _defaultLogger = new Logger();
 
-return {//public API
+return /** @lends mmir.DisabledLogging# */ {//public API
 	
 	/**
-	 * Will alway return the default logger for this logging module
+	 * Will always return the default logger for this logging module
 	 * @returns {DisabledLogger}
 	 * 
+	 * @public
 	 * @memberOf mmir.DisabledLogging.prototype
 	 */
     create: function(){
         return _defaultLogger;
     },
+    /** 
+	 * @public
+	 */
     get: function(){
         return _defaultLogger;
     },
+    /** 
+	 * @public
+	 * @function
+	 */
     setDefaultLogLevel: noop,
+    /** 
+	 * @public
+	 */
     getDefaultLogLevel: function(){
     	return 6;
     },
+    /** 
+	 * @public
+	 * @function
+	 */
     log: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     verbose: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     debug: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     info: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     warn: noop,
+    /** 
+	 * @public
+	 * @function
+	 */
     error: noop,
 //    isDebug: deny,
 //    isInfo: deny,
 //    isWarn: deny,
 //    isError: deny
-    isDisabledLogger: true//special property for identifying the disabled logger-factory
+    /** 
+     * Special property for identifying the disabled logger-factory
+	 * @public
+	 */
+    isDisabledLogger: true
 };
     
 });

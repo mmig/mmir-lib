@@ -137,10 +137,11 @@ newMediaPlugin = {
 						 * 		 be called.
 						 * 
 						 * <p>
-						 * This is the same interface as {@link AudioCordovaImpl}.
+						 * This is the same interface as {@link mmir.env.media.AudioCordovaImpl}.
 						 * 
 						 * @class
 						 * @name AudioHtml5Impl
+						 * @memberOf mmir.env.media
 						 * @public
 						 */
 						var mediaImpl = {
@@ -150,7 +151,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name play
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								play: function(){
 									if (enabled){
@@ -168,7 +169,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name stop
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								stop: function(){
 									if(enabled){
@@ -198,7 +199,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name enable
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								enable: function(){
 									if(my_media != null){
@@ -212,7 +213,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name disable
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								disable: function(){
 									if(enabled){
@@ -227,7 +228,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name release
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								release: function(){
 									if(enabled && ! this.isPaused()){
@@ -246,7 +247,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name setVolume
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								setVolume: function(value){
 									if(my_media){
@@ -261,7 +262,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name getDuration
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								getDuration: function(){
 									if(my_media){
@@ -279,7 +280,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name isPaused
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								isPaused: function(){
 									if(my_media){
@@ -295,7 +296,7 @@ newMediaPlugin = {
 								 * @public
 								 * @name isEnabled
 								 * @function
-								 * @memberOf AudioHtml5Impl.prototype
+								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								isEnabled: function(){
 									return enabled;

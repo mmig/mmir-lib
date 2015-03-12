@@ -51,11 +51,10 @@ define(['dictionary', 'stacktrace', 'module'],
  *    var sameLogger = Logger.create(module.id);
  *    
  *  });
- * 
  *  
- * @class Logging
+ * @class
  * @name Logging
- * @exports Logging as mmir.Logging
+ * @memberOf mmir
  * @category tools
  * @static
  * 
@@ -440,6 +439,7 @@ if(tmpTraceConfig !== false || (typeof tmpTraceConfig === 'object' && tmpTraceCo
  * 					the log-level.
  * 					If omitted, the logger will use
  * 					the default log-level
+ *  
  * @see #getAsLevel
  * @see #getLevel
  */
@@ -460,8 +460,9 @@ function Logger(theName, theLevel){
 	}
 }
 
-
-Logger.prototype = {//public instance members
+Logger.prototype =
+/** @lends Logger# */
+{//public instance members
 	
 	/**
 	 * Get the current log-level:
@@ -749,6 +750,7 @@ Logger.prototype = {//public instance members
  * Alias for {@link #log}.
  * 
  * @public
+ * @var {Function} Logger#l
  */
 Logger.prototype.l = function(){
 	return this.log.apply(this, arguments);
@@ -758,6 +760,7 @@ Logger.prototype.l = function(){
  * Alias for {@link #verbose}.
  * 
  * @public
+ * @var {Function} Logger#v
  */
 Logger.prototype.v = function(){
 	return this.verbose.apply(this, arguments);
@@ -767,6 +770,7 @@ Logger.prototype.v = function(){
  * Alias for {@link #debug}.
  * 
  * @public
+ * @var {Function} Logger#d
  */
 Logger.prototype.d = function(){
 	return this.debug.apply(this, arguments);
@@ -776,6 +780,7 @@ Logger.prototype.d = function(){
  * Alias for {@link #info}.
  * 
  * @public
+ * @var {Function} Logger#i
  */
 Logger.prototype.i = function(){
 	return this.info.apply(this, arguments);
@@ -785,6 +790,7 @@ Logger.prototype.i = function(){
  * Alias for {@link #warn}.
  * 
  * @public
+ * @var {Function} Logger#w
  */
 Logger.prototype.w = function(){
 	return this.warn.apply(this, arguments);
@@ -794,6 +800,7 @@ Logger.prototype.w = function(){
  * Alias for {@link #error}.
  * 
  * @public
+ * @var {Function} Logger#e
  */
 Logger.prototype.e = function(){
 	return this.error.apply(this, arguments);
@@ -803,15 +810,21 @@ Logger.prototype.e = function(){
  * Alias for {@link #critical}.
  * 
  * @public
+ * @var {Function} Logger#c
  */
 Logger.prototype.c = function(){
 	return this.critical.apply(this, arguments);
 };
 
 /**
+ * @scope Logger#
+ */
+
+/**
  * Alias for {@link #isVerbose}.
  * 
  * @public
+ * @var {Function} Logger#isv
  */
 Logger.prototype.isv = function(){
 	return this.isVerbose.apply(this, arguments);
@@ -821,6 +834,7 @@ Logger.prototype.isv = function(){
  * Alias for {@link #isDebug}.
  * 
  * @public
+ * @var {Function} Logger#isd
  */
 Logger.prototype.isd = function(){
 	return this.isDebug.apply(this, arguments);
@@ -830,6 +844,7 @@ Logger.prototype.isd = function(){
  * Alias for {@link #isInfo}.
  * 
  * @public
+ * @var {Function} Logger#isi
  */
 Logger.prototype.isi = function(){
 	return this.isInfo.apply(this, arguments);
@@ -839,6 +854,7 @@ Logger.prototype.isi = function(){
  * Alias for {@link #isWarn}.
  * 
  * @public
+ * @var {Function} Logger#isw
  */
 Logger.prototype.isw = function(){
 	return this.isWarn.apply(this, arguments);
@@ -848,6 +864,7 @@ Logger.prototype.isw = function(){
  * Alias for {@link #isError}.
  * 
  * @public
+ * @var {Function} Logger#ise
  */
 Logger.prototype.ise = function(){
 	return this.isError.apply(this, arguments);
@@ -857,6 +874,7 @@ Logger.prototype.ise = function(){
  * Alias for {@link #isCritical}.
  * 
  * @public
+ * @var {Function} Logger#isc
  */
 Logger.prototype.isc = function(){
 	return this.isCrictial.apply(this, arguments);
@@ -865,17 +883,22 @@ Logger.prototype.isc = function(){
 
 /**
  * @private
+ * @type Logger
  * @memberOf mmir.Logging#
  */
 var _defaultLogger = new Logger();
 //default logger always has default/global log-level:
+/**
+ * @inheritdoc
+ */
 _defaultLogger.getLevel = function(){
 	return _level;
 };
 
 //the instance for the Logging factory:
-var instance = {//public API
-	/** @scope mmir.Logging.prototype */
+var instance =
+/** @lends mmir.Logging.prototype */
+{//public API
 		
 	/**
 	 * Creates a {@link Logger} instance.

@@ -25,32 +25,36 @@
  */
 
 
-/**
- * @module mmir.mvc.views
- */
-
 define(['parsingResult', 'storageUtils'],
+	//this comment is needed by jsdoc2 [copy of comment for: function YieldDeclaration(...]
 	/**
+	 * The YieldDeclaration class holds the name of the yield-declaration (which is a place-holder for the contentFor-fields and is used in the layouts: content, header, footer, dialogs, ...)
+	 * and its starting and ending position within the content-definition.
+	 * 
+	 * @param {Object} parsingElement with properties <code>name</code> {String}, <code>start</code> {Integer}, <code>end</code> {Integer}
+	 * @param {Integer} contentAreaType the type of the content area within the layout that this yield-declaration refers to (e.g. ViewConstants.CONTENT_AREA_BODY )
+	 * 
+	 * borrows the getValue function from ParsingResult:
+	 * 	@requires mmir.parser.ParsingResult#getValue
+	 * 
 	 * @name YieldDeclaration
 	 * @class
 	 */
 	function(
 		ParsingResult, parser
 ) {
-	/** @scope YieldDeclaration.prototype */
-	/**
-	 * #@+
-	 * @memberOf YieldDeclaration.prototype
-	 */
+	/** @scope YieldDeclaration.prototype *///for jsdoc2
 	
+	//set to @ignore in order to avoid doc-duplication in jsdoc3
 	/**
+	 * @ignore
+	 * 
 	 * The YieldDeclaration class holds the name of the yield-declaration (which is a place-holder for the contentFor-fields and is used in the layouts: content, header, footer, dialogs, ...)
 	 * and its starting and ending position within the content-definition.
 	 * 
 	 * @constructs YieldDeclaration
 	 * @param {Object} parsingElement with properties <code>name</code> {String}, <code>start</code> {Integer}, <code>end</code> {Integer}
 	 * @param {Integer} contentAreaType the type of the content area within the layout that this yield-declaration refers to (e.g. ViewConstants.CONTENT_AREA_BODY )
-	 * @category core
 	 * 
 	 * borrows the getValue function from ParsingResult:
 	 * 	@requires mmir.parser.ParsingResult#getValue
@@ -76,7 +80,7 @@ define(['parsingResult', 'storageUtils'],
 	/**
 	 * Gets the name of a {@link mmir.YieldDeclaration} object (e.g. content, header, footer, dialogs, ...).
 	 * 
-	 * @function getName
+	 * @function
 	 * @returns {String} Name - used by yield tags in layout
 	 * @public
 	 */ 
@@ -91,7 +95,7 @@ define(['parsingResult', 'storageUtils'],
 	/**
 	 * Gets the type of the content area that this {@link mmir.YieldDeclaration} object refers to (i.e. "areas" in the layout, e.g. bodyContents, dialogsContent).
 	 * 
-	 * @function getAreaType
+	 * @function
 	 * @returns {Integer} Content area type (see {@link mmir.Layout}, e.g. ViewConstants.CONTENT_AREA_BODY)
 	 * @public
 	 */ 
@@ -102,7 +106,7 @@ define(['parsingResult', 'storageUtils'],
 	/**
 	 * Gets the start position (index) of a {@link mmir.YieldDeclaration} object.
 	 * 
-	 * @function getStart
+	 * @function
 	 * @returns {Integer} Start position of the Yield within the content (e.g. the bodyContent or the dialogsContent)
 	 * @public
 	 */ 
@@ -113,7 +117,7 @@ define(['parsingResult', 'storageUtils'],
 	/**
 	 * Gets the end position (index) of a {@link mmir.YieldDeclaration} object.
 	 * 
-	 * @function getEnd
+	 * @function
 	 * @returns {Integer} End position of the Yield within the content (e.g. the bodyContent or the dialogsContent)
 	 * @public
 	 */ 
@@ -173,5 +177,4 @@ define(['parsingResult', 'storageUtils'],
 		
 	return YieldDeclaration;
 	
-	/** #@- */
 });

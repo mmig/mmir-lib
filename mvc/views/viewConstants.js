@@ -7,6 +7,13 @@ define(function(){
 	 * area-types etc.
 	 * 
 	 * @class ViewConstants
+	 * @name ViewConstants
+	 * 
+	 * @property {Number} CONTENT_AREA_HEAD				value: <code>0</code>
+	 * @property {Number} CONTENT_AREA_BODY				value: <code>2</code>
+	 * @property {Number} CONTENT_AREA_DIALOGS			value: <code>4</code>
+	 * @property {String} REMOTE_RESOURCES_ATTR_NAME	value: <code>"loc"</code>
+	 * @property {String} REMOTE_RESOURCES_ATTR_VALUE	value: <code>"remote"</code>
 	 * 
 	 */
 	var ViewConstants = function(){};

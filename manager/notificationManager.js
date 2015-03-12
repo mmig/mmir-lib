@@ -28,7 +28,8 @@
 define(['module', 'constants', 'mediaManager', 'dictionary'], 
 	/**
 	 * 
-	 * @name mmir.NotificationManager
+	 * @name NotificationManager
+	 * @memberOf mmir
 	 * @static
 	 * @class
 	 * 
@@ -38,22 +39,25 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	function(
 		module, constants, mediaManager, Dictionary
 ){
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
-	/** @scope mmir.NotificationManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.NotificationManager#
-	 */
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
+	/** @scope mmir.NotificationManager.prototype *///for jsdoc2
 	
 	
     //private members
 	
 	
-	//TODO replace by "real" ENV mechanism ... instead of !forBrowser / ! constants.isBrowserEnv()
+	/**
+	 * TODO replace by "real" ENV mechanism ... instead of !forBrowser / ! constants.isBrowserEnv()
+	 * 
+	 * @private
+	 * @memberOf NotificationManager#
+	 */
 	var isCordovaEnv = ! constants.isBrowserEnv();
 	
-	/** @private */
+	/**
+	 * @private
+	 * @memberOf NotificationManager#
+	 */
     var instance = null;
     
     
@@ -63,13 +67,22 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	 * Constructor-Method of Singleton mmir.NotificationManager.<br> 
 	 * 
 	 * @constructs NotificationManager
-	 * @memberOf mmir.NotificationManager#
+	 * @memberOf NotificationManager#
+	 * @ignore
 	 */
     function constructor(){
     	
+    	/**
+    	 * @private
+    	 * @memberOf NotificationManager.prototype
+    	 */
     	var INIT = 'init';
     	
-    	//VIBRATE initialization:
+    	/**
+    	 * VIBRATE initialization status
+    	 * @private
+    	 * @memberOf NotificationManager.prototype
+    	 */
     	var isHapticEnabled = true;
 
     	/**
@@ -79,7 +92,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * @function
     	 * @private
     	 * @param {Number} milliseconds
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	var doVibrate = null;
     	
@@ -90,7 +103,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * if available in the current execution environment
     	 * (or with a dummy function, if not).
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 * @private
     	 * @function
     	 */
@@ -126,10 +139,9 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	
     	/**
     	 * @private
-    	 * @property
     	 * @type Number
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	var beepVolume = 1.0;
     	
@@ -137,10 +149,9 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * The Audio object for the <em>beep</em> sound.
     	 * 
     	 * @private
-    	 * @property
     	 * @type AudioObject
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	var beepAudio = null;
     	
@@ -148,10 +159,9 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * Dictionary that manages the currently loaded sounds
     	 * 
     	 * @private
-    	 * @property
     	 * @type Dictionary
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	//TODO add option for limiting size of soundMap (-> e.g. how many resources are max. cached/occupied for Android) 
     	var soundMap = new Dictionary();
@@ -168,7 +178,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * 
     	 * @returns {NotificationSound} the extended audio object, i.e. a NotificationSound
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	var initNotificationSound = function(audioObj, name){
     		audioObj.name = name;
@@ -267,7 +277,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * 
     	 * @returns {AudioObject} audio object
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	function createAudio(url, success, fail, init){
     		return mediaManager.getURLAsAudio(url, success, fail, init);
@@ -289,7 +299,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * @param {String} theUrl
     	 * @param {Boolean} isKeepOnPause
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	function initAudioSoundEntry(name, theUrl, isKeepOnPause){
     		var config = {url: theUrl, audio: null};
@@ -311,7 +321,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * @param {String} name
     	 * @param {Function} onErrorCallback
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	function doGetSoundFromMap(name, onErrorCallback){
     		var audioObj = null;
@@ -371,7 +381,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * @param {Function} onFinishedCallback
     	 * @param {Function} onErrorCallback
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	function playAudioSound(name, times, onFinishedCallback, onErrorCallback){
     		
@@ -472,7 +482,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     	 * @param {Function} onFinishedCallback
     	 * @param {Function} onErrorCallback
     	 * 
-    	 * @memberOf mmir.NotificationManager#
+    	 * @memberOf NotificationManager.prototype
     	 */
     	function stopAudioSound(name, onFinishedCallback, onErrorCallback){
     		
@@ -553,6 +563,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     		);
     	}
     	
+		/** @lends NotificationManager */
     	return { //public members and methods
     		/** @scope mmir.NotificationManager.prototype */
             
@@ -561,7 +572,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
         	 * 
         	 * <p>Note: The device / execution environment may not support haptic vibration feedback 
         	 * 
-        	 * @function vibrate
+        	 * @function
         	 * @param milliseconds {Number} duration for vibration in milliseconds
         	 * @public
         	 * 
@@ -573,7 +584,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             	}
             },
             /**
-        	 * @function isVibrateEnabled
+        	 * @function
         	 * @returns {Boolean}
         	 * @public
         	 */
@@ -586,7 +597,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             	}
             },
             /**
-        	 * @function isVibrateAvailable
+        	 * @function
         	 * @returns {Boolean}
         	 * @public
         	 */
@@ -599,7 +610,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             	}
             },
             /**
-        	 * @function setVibrateEnabled
+        	 * @function
         	 * @public
         	 * 
         	 * @param {Boolean} enabled
@@ -610,7 +621,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             /**
              * Opens a (native) notification dialog.
              * 
-             * @function alert
+             * @function
              * @public
              */
             alert: function(message, alertCallback, title, buttonName){
@@ -619,7 +630,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             /**
              * Opens a (native) confirmation dialog.
              * 
-             * @function confirm
+             * @function
              * @public
              */
             confirm: function(message, confirmCallback, title, buttonLabels){
@@ -628,7 +639,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             /**
              * Trigger a beep notification sound.
              * 
-             * @function beep
+             * @function
              * @param times {Number} how many times should to beep repeated
              * @public
              */
@@ -670,7 +681,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
             /**
              * Trigger a sound notification by NAME (needs to be created first).
              * 
-             * @function playSound
+             * @function
              * @param name {String} the name / identifier for the sound (if NULL, beep notification is used)
              * @param times {Number} how many times should to beep repeated
              * @public
@@ -723,7 +734,5 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 	};
     		
     return instance;
-    
-    /** #@- */
     
 });//END: define(..., function(){...

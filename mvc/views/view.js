@@ -24,21 +24,37 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define ( ['commonUtils', 'contentElement', 'storageUtils'], 
+define ( ['commonUtils', 'contentElement', 'storageUtils'],
+	//this comment is needed by jsdoc2 [copy of comment for: function View(...]
 	/**
+	 * The View class is a kind of interface-class which gives access to the methods and data of a helper (which itself belongs to a controller)<br>
+	 * Apart from initializing some properties, the constructor also parses the view description and looks for needed helper methods.
+	 * 
+	 * @constructs View
+	 * @param {Object} ctrl 
+	 * 			Controller instance / object
+	 * @param {String} name
+	 * 			Name of the View 
+	 * @param {String} definition
+	 * 			View description, i.e. the raw template code that will be processed.
+	 * 			May be empty: in this case the processed contents must be
+	 * 						  added manually (cf. parser.StorageUtils)
+	 * 
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * 
 	 * @name View
 	 * @class
 	 */
 	function(
 			commonUtils, ContentElement, parser
 ){
-/** @scope View.prototype */
+/** @scope View.prototype *///for jsdoc2
+
+//set to @ignore in order to avoid doc-duplication in jsdoc3
 /**
- * #@+
- * @memberOf View.prototype
- */	
-	
-/**
+ * @ignore
+ * 
  * The View class is a kind of interface-class which gives access to the methods and data of a helper (which itself belongs to a controller)<br>
  * Apart from initializing some properties, the constructor also parses the view description and looks for needed helper methods.
  * 
@@ -55,7 +71,6 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
  * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
  * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
  * 
- * @category core
  */
  function View(ctrl, name, definition){
     
@@ -68,8 +83,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
     /**
      * The controller to which this view belongs.
      * 
-     * @property controller
-     * @type Object
+     * @type Controller
      * @public
      */
     this.controller = ctrl;
@@ -77,7 +91,6 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
     /**
      * The description of the view in eHTML.
      * 
-     * @property def
      * @type String
      * @public
      */
@@ -86,7 +99,6 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
     /**
      * The name of the view.
      * 
-     * @property name
      * @type String
      * @public
      */
@@ -96,8 +108,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
     /**
      * An array of all the views {@link mmir.ContentElement} objects.<br>
      * 
-     * @property contentFors
-     * @type Array
+     * @type Array<ContentElement>
      * @public
      */
     this.contentFors = new Array();
@@ -109,7 +120,6 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
      * 
      * @deprecated helper methods must now explicitly called in template definition (using syntax <code>@helper(name,args)</code>)
      * 
-     * @property helperMethods
      * @type Array
      * @public
      */
@@ -132,7 +142,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 /**
  * Gets the definition of a view.
  * 
- * @function getDefinition
+ * @function
  * @returns {String} The view description string
  */
 View.prototype.getDefinition = function(){
@@ -143,7 +153,7 @@ View.prototype.getDefinition = function(){
 /**
  * Gets the name of a view. 
  * 
- * @function getName
+ * @function
  * @returns {String} The name of the view
  */
 View.prototype.getName = function(){
@@ -153,7 +163,7 @@ View.prototype.getName = function(){
 /**
  * Gets the name of a view. 
  * 
- * @function getController
+ * @function
  * @returns {Object} The controller for the view
  */
 View.prototype.getController = function(){
@@ -164,7 +174,7 @@ View.prototype.getController = function(){
 /**
  * Gets a specific {@link mmir.ContentElement} object by name. 
  * 
- * @function getContentElement
+ * @function
  * @param {String} name Name of the ContentElement object
  * @returns {object} The wanted ContentElement object or null
  */
@@ -183,7 +193,7 @@ View.prototype.getContentElement = function( name){
 /**
  * Gets an array of all helper methods. 
  * 
- * @function getHelperMethods
+ * @function
  * @returns {Array} Array of all helper methods
  */
 View.prototype.getHelperMethods = function(){
@@ -290,7 +300,7 @@ View.prototype.stringify = function(){
  * 
  * @deprecated helper methods must now explicitly called in template definition (using syntax <code>@helper(name,args)</code>)
  * 
- * @function getHelperMethods
+ * @function
  * @returns {Array} Array of all helper methods
  */
 View.prototype.getHelperMethods = function(){
@@ -302,7 +312,7 @@ View.prototype.getHelperMethods = function(){
  * 
  * @deprecated helper methods must now explicitly called in template definition (using syntax <code>@helper(name,args)</code>)
  * 
- * @function executeHelperMethods
+ * @function
  * @param {Object} data Parameter to pass to the helper methods
  */
 View.prototype.executeHelperMethods = function(data){
@@ -313,8 +323,4 @@ View.prototype.executeHelperMethods = function(data){
 
 return View;
 
-/** #@- */
-
 });//END: define(..., function(){
-
-

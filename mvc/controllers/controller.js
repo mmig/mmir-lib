@@ -26,7 +26,15 @@
 
 
 define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
+	//this comment is needed by jsdoc2 [copy of comment for: function Controller(...]
 	/**
+	 * The Controller Class is a kind of interface-class which gives access to the methods of a controller and its helper. <br>
+	 * Also holds information about views and partials associated with the controller.
+	 * 
+	 * @param {String} name Name of the Controller
+	 * @param {Object} jsonDef Information about the controllers views and partials 
+	 * @category core
+	 * 
 	 * @name Controller
 	 * @class
 	 */
@@ -34,15 +42,21 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 			commonUtils, Helper, Logger, module
 ){
 	
+	/**
+	 * @private
+	 * @type Logger
+	 * @memberOf Controller#
+	 * @see mmir.Logging#create
+	 */
 	var logger = Logger.create(module);
 	
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope Controller.prototype */
-	/**
-	 * #@+
-	 * @memberOf Controller.prototype
-	 */
 	
+	//set to @ignore in order to avoid doc-duplication in jsdoc3
 	/**
+	 * @ignore
+	 * 
 	 * The Controller Class is a kind of interface-class which gives access to the methods of a controller and its helper. <br>
 	 * Also holds information about views and partials associated with the controller.
 	 * 
@@ -60,7 +74,6 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 		this.script.methodController(parameter);
 
 	     * 
-	     * @property script
 	     * @type Object
 	     * @public
 	     */
@@ -70,7 +83,6 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	    /**
 	     * The json definition of the views and partials associated with the controller. Also contains paths to controller and its views/partials. 
 	     * 
-	     * @property def
 	     * @type Object
 	     * @public
 	     */
@@ -79,7 +91,6 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	    /**
 	     * The name of the controller. 
 	     * 
-	     * @property name
 	     * @type String
 	     * @public
 	     */
@@ -90,8 +101,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	    /**
 	     * An array holding the names of all views associated with the controller.  
 	     * 
-	     * @property views
-	     * @type Array
+	     * @type Array<String>
 	     * @public
 	     */
 	    this.views = new Array();
@@ -104,8 +114,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	    /**
 	     * An array holding the names of all partials associated with the controller.  
 	     * 
-	     * @property partials
-	     * @type Array
+	     * @type Array<String>
 	     * @public
 	     */
 	    this.partials = new Array();
@@ -115,15 +124,13 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	    /**
 	     * The instance of the with the controller associated helper.  
 	     * 
-	     * @property helper
-	     * @type Object
+	     * @type Helper
 	     * @public
 	     */
 	    this.helper;
 	    
 	    /**
-	     * The layout for this controller (if undefined, the default layout should be used)
-	     * @property layout
+	     * The layout (info) for this controller (if undefined, the default layout should be used)
 	     * @type Object
 	     */
 	    this.layout = this.def.layout;
@@ -133,7 +140,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	/**
 	 * This function loads the helper of the controller - if it exists.
 	 * 
-	 * @function loadHelper
+	 * @function
 	 * @param {String} name Name of the Helper to be loaded
 	 * @param {String} helperPath Path to the helper file to load  
 	 * @public
@@ -195,7 +202,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * This function performs an action of a controller - which is represented by this instance of the Controller <br>
 	 * class - by calling the method from the corresponding controller, e.g. assets/www/controllers/application.js   
 	 * 
-	 * @function perform
+	 * @function
 	 * @param {String} actionName Name of the method to be executed
 	 * @param {Object} data Data to pass to the method of the controller as argument
 	 * @returns {Object} The return value of the executed method 
@@ -220,7 +227,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * In difference to perform(..), the method does not trigger an ERROR, if the action does not exist / is not implemented.
 	 * As a consequence, this method refers to "optionally" implemented functions, whereas perform(..) refers to mandatory functions.
 	 * 
-	 * @function perform
+	 * @function
 	 * @param {String} actionName Name of the method to be executed
 	 * @param {Object} data Data to pass to the method of the controller as argument
 	 * @returns {Object} The return value of the executed method 
@@ -245,7 +252,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * This function performs a helper action of a controller by calling the appropriate method<br>
 	 * {@link Helper#perform} of the instance of the helper class associated with the controller.
 	 * 
-	 * @function performHelper
+	 * @function
 	 * @param {String} actionName Name of the helper method to be executed
 	 * @param {Object} data Data to pass to the helper method as argument
 	 * @returns {Object} The return value of the executed method 
@@ -264,7 +271,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	/**
 	 * Returns the helper of the controller instance.
 	 * 
-	 * @function getHelper
+	 * @function
 	 * @returns {Object} The helper instance 
 	 * @public
 	 */
@@ -277,7 +284,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * Stores all names of the views of the controller by iterating over the array of the views definition.<br>
 	 * This function is called by the constructor of the {@link mmir.Controller} class.
 	 * 
-	 * @function parseViews
+	 * @function
 	 * @param {Array} viewDefs Array of the json-definition of the controllers views - containing name of the views and their corresponding path to the js-files
 	 * @public
 	 */
@@ -294,7 +301,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * Stores all names of the partials of the controller by iterating over the array of the partials definition.<br>
 	 * This function is called by the constructor of the {@link mmir.Controller} class.
 	 * 
-	 * @function parseViews
+	 * @function
 	 * @param {Array} partialDefs Array of the json-definition of the controllers partials - containing name of the partials and their corresponding path to the js-files
 	 * @public
 	 */
@@ -310,7 +317,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	/**
 	 * Returns the view names for the controller instance.
 	 * 
-	 * @function getViewNames
+	 * @function
 	 * @returns {Array<String>} An array of the controllers views 
 	 * @public
 	 */
@@ -327,7 +334,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * {String} name
 	 * {String} path
 	 * 
-	 * @function getViews
+	 * @function
 	 * @returns {Array<Object>} An array of the controllers views 
 	 * @public
 	 */
@@ -338,7 +345,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	/**
 	 * Returns the partial names for the controller instance.
 	 * 
-	 * @function getPartialNames
+	 * @function
 	 * @returns {Array<String>} An array of the controllers partials 
 	 * @public
 	 */
@@ -355,7 +362,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * {String} name
 	 * {String} path
 	 * 
-	 * @function getPartials
+	 * @function
 	 * @returns {Array<Object>} An array of the controllers partials 
 	 * @public
 	 */
@@ -375,7 +382,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * {String} path
 	 * {String} fileName
 	 * 
-	 * @function getLayout
+	 * @function
 	 * @returns {Object} The controller's layout (may be undefined) 
 	 * @public
 	 */
@@ -390,7 +397,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * 
 	 * If undefined, the default layout should be used.
 	 * 
-	 * @function getLayoutName
+	 * @function
 	 * @returns {String} The controller's layout name (may be undefined) 
 	 * @public
 	 */
@@ -401,7 +408,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	/**
 	 * Returns the name of the controller instance.
 	 * 
-	 * @function getName
+	 * @function
 	 * @returns {String} The name of the controller 
 	 * @public
 	 */
@@ -411,5 +418,4 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 
 	return Controller;
 	
-	/** #@- */
 });

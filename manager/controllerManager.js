@@ -48,19 +48,13 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	function( 
 		Dictionary, Controller, constants, commonUtils, $
 ){
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ControllerManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.ControllerManager.prototype 
-	 */
 	
 	// private members
 	/**
 	 * Array of controller-instances
 	 * 
-	 * @property controllers
 	 * @type Dictionary
 	 * @private
 	 * 
@@ -74,7 +68,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * Load all Controllers from /controller
 	 * that are specified in /config/directories.json
 	 * 
-	 * @function _init
+	 * @function
 	 * @param {Function} [callback] OPTIONAL
 	 * 				an optional callback that will be triggered after the controllers where loaded
 	 * @returns {Promise}
@@ -152,7 +146,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		 * This function gets the controller file names and builds a JSON object containing information about
 		 * the location, file name etc. for the controller itself, its views, partials, layout, and helper.
 		 * 
-		 * @function getControllerResources
+		 * @function
 		 * @param {String} controllerName
 		 * 					the name of the Controller (must start with an upper case letter).
 		 * @param {String} controllerPath
@@ -380,14 +374,13 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	/**
      * Object containing the instance of the class {@link mmir.ControllerManager} 
      * 
-     * @property _instance
      * @type Object
      * @private
 	 * @augments mmir.ControllerManager
 	 * @ignore
      */
 	var _instance = {
-			/** @scope mmir.ControllerManager.prototype */
+			/** @scope mmir.ControllerManager.prototype *///for jsdoc2
 
 			/**
 			 * Get instance of ControllerManager.
@@ -408,7 +401,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			/**
 			 * This function gets the controller by name. 
 			 * 
-			 * @function getController
+			 * @function
 			 * @param {String} ctrlName Name of the controller which should be returned
 			 * @returns {Object} controller if found, null else
 			 * @public
@@ -425,7 +418,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			/**
 			 * This function returns names of all loaded controllers. 
 			 * 
-			 * @function getControllerNames
+			 * @function
 			 * @returns {Array<String>} Names of all loaded controllers
 			 * @public
 			 */
@@ -438,7 +431,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			/**
 			 * This function performs an action of a controller. 
 			 * 
-			 * @function perform
+			 * @function
 			 * @param {String} ctrlName Name of the controller to which the action belongs
 			 * @param {String} actionName Name of the action that should be performed
 			 * @param {Object} data optional data that can be submitted to the action
@@ -459,7 +452,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			/**
 			 * This function performs an action of a helper-class for a controller. 
 			 * 
-			 * @function performHelper
+			 * @function
 			 * @param {String} ctrlName Name of the controller to which the helper action belongs
 			 * @param {String} actionName Name of the action that should be performed by the helper
 			 * @param {Object} data optional data that can be submitted to the action
@@ -497,7 +490,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			 * <code> callbackFunction(controllerManagerInstance) </code>
 			 * </div>
 			 * 
-			 * @function init
+			 * @function
 			 * 
 			 * @param {Function} [callback] OPTIONAL
 			 * 				an optional callback that will be triggered after the controllers where loaded
@@ -524,8 +517,6 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	};
 	/**@ignore*/
 	return _instance;
-	
-	/** #@- */
 	
 });
 

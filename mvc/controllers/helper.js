@@ -26,25 +26,30 @@
 
 
 define(
+	//this comment is needed by jsdoc2 [copy of comment for: function Helper(...]
 	/**
+	 * The Helper Class is a kind of interface-class which gives access to the methods and data of a helper (which itself belongs to a controller)<br>
+	 * 
+	 * @param {Controller} ctrl Controller instance / object
+	 * @param {String} name Name of the Helper
+	 * 
 	 * @name Helper
 	 * @class
 	 */
 	function(
 ){
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope Helper.prototype */
+	
+	//set to @ignore in order to avoid doc-duplication in jsdoc3
 	/**
-	 * #@+
-	 * @memberOf Helper.prototype
-	 */
-		
-	/**
+	 * @ignore
+	 * 
 	 * The Helper Class is a kind of interface-class which gives access to the methods and data of a helper (which itself belongs to a controller)<br>
 	 * 
 	 * @constructs Helper
-	 * @param {Object} ctrl Controller instance / object
-	 * @param {String} name Name of the Helper 
-	 * @category core
+	 * @param {Controller} ctrl Controller instance / object
+	 * @param {String} name Name of the Helper
 	 */
 	function Helper(ctrl, name){
 	    /**
@@ -54,7 +59,6 @@ define(
 		this.script.methodController(parameter);
 
 	     * 
-	     * @property script
 	     * @type Object
 	     * @public
 	     */
@@ -64,7 +68,6 @@ define(
 		/**
 	     * The name of the helper. 
 	     * 
-	     * @property name
 	     * @type String
 	     * @public
 	     */
@@ -73,8 +76,7 @@ define(
 		/**
 	     * The controller to which this helper belongs.
 	     * 
-	     * @property controller
-	     * @type Object
+	     * @type Controller
 	     * @public
 	     */
 		this.controller = ctrl;
@@ -85,7 +87,7 @@ define(
 	/**
 	 * This function performs an action of a helper.<br>
 	 * 
-	 * @function perform
+	 * @function
 	 * @param {String} actionName Name of the method to be executed
 	 * @param {Object} data Data to pass to the method of the helper as argument
 	 * @returns {Object} The return value of the executed method 
@@ -105,8 +107,6 @@ define(
 
 
 	return Helper;
-	
-	/** #@- */
 	
 });//END: define(...
 

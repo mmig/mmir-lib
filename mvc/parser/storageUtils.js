@@ -1,4 +1,7 @@
 
+
+
+define(['jquery', 'parserModule'],
 /**
  * Extends the parser-module with helper functions for
  * storing/restoring compiled templates (eHTML -> layout, view, partial etc)
@@ -7,20 +10,25 @@
  * 
  *  @requires jQuery.extend 
  *  
- *  alternatively: set <code>mobileDS.parser.CLASS_EXTENDER</code> with an object that 
+ *  alternatively: set <code>mmir.parser.CLASS_EXTENDER</code> with an object that 
  *  exposes a function <tt>extend(obj1,obj1)</tt>, i.e.
  *  
  *  <code>mmir.parser.CLASS_EXTENDER.extend(obj1, obj2)</code>
  * 
- * @module mmir.tools
+ * @class
+ * @name StorageUtils
+ * @memberOf mmir.parser
  * 
- * @requires jQuery.extend
- * 
- */
+ */		
+function($, parser){
 
-define(['jquery', 'parserModule'], function($, parser){
-	
-parser.STORAGE_FILE_FORMAT_NUMBER = 2;
+/**
+ * @public
+ * @constant
+ * @memberOf mmir.parser
+ */
+var STORAGE_FILE_FORMAT_NUMBER = 2;
+parser.STORAGE_FILE_FORMAT_NUMBER = STORAGE_FILE_FORMAT_NUMBER;
 
 /**
  * Creates the appropriate object from a JSON-like <tt>storedObject</tt>.
@@ -48,6 +56,7 @@ parser.STORAGE_FILE_FORMAT_NUMBER = 2;
  * @function
  * @static
  * @public
+ * @memberOf mmir.parser
  * 
  * @param {Object} storedObject 
  * 				    a JSON-like object with fields and functions (which will be transfered to the returned object).
@@ -67,8 +76,9 @@ parser.STORAGE_FILE_FORMAT_NUMBER = 2;
  * 			set with all properties (fields and functions) from <tt>storedObject</tt>.
  * 
  * @throws Error if <code>fileFormatNo</code> does not match STORAGE_FILE_FORMAT_NUMBER.
+ * 
  */
-parser.restoreObject = function(storedObject, isTriggerPublish, fileFormatNo){
+function restoreObject(storedObject, isTriggerPublish, fileFormatNo){
 	
 	if(isTriggerPublish && fileFormatNo != parser.STORAGE_FILE_FORMAT_NUMBER){
 		
@@ -115,6 +125,7 @@ parser.restoreObject = function(storedObject, isTriggerPublish, fileFormatNo){
 	
 	return obj;
 };
+parser.restoreObject = restoreObject;
 
 /**
  * Creates String-representations (JSON-like) for the specified properties and appends them to the StringBuffer.
@@ -140,6 +151,7 @@ parser.restoreObject = function(storedObject, isTriggerPublish, fileFormatNo){
  * @function
  * @static
  * @public
+ * @memberOf mmir.parser
  * 
  * @param {Object} obj 
  * 				the object, that contains the properties for which String representations should be generated.
@@ -173,7 +185,7 @@ parser.restoreObject = function(storedObject, isTriggerPublish, fileFormatNo){
  * //str will be: "some:\"properties\","
  * 
  */
-parser.appendStringified = function(obj, propertyNames, stringBuffer, propertyNamePostfix, valueFunc){
+function appendStringified(obj, propertyNames, stringBuffer, propertyNamePostfix, valueFunc){
 	
 	//"shift" arguments, if necessary
 	if(typeof propertyNamePostfix === 'function' && ! valueFunc){
@@ -210,6 +222,7 @@ parser.appendStringified = function(obj, propertyNames, stringBuffer, propertyNa
 	
 	return stringBuffer;
 };
+parser.appendStringified = appendStringified;
 
 return parser;
 

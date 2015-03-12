@@ -64,16 +64,10 @@ define([  'core', 'jquery'
 			commonUtils, module, engineConfig, controllerManager, presentationManager, Logger
 ) {
 
-	//next 2 comments are needed by JSDoc so that all functions etc. can
-	// be mapped to the correct class description
+	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.DialogManager.prototype */
-	/**
-	 * #@+
-	 * @memberOf mmir.DialogManager.prototype 
-	 */
 	
 	/**
-	 * @property
 	 * @private
 	 * @type Function
 	 * 
@@ -103,7 +97,7 @@ define([  'core', 'jquery'
 		/**
 		 * This function raises an event. 
 		 * 
-		 * @function raise
+		 * @function
 		 * @param {String} eventName
 		 * 				The name of the event which is to be raised
 		 * @param {Object} [eventData] OPTIONAL
@@ -125,7 +119,7 @@ define([  'core', 'jquery'
 		 * the method {@link mmir.ControllerManager#perform} of the
 		 * {@link mmir.ControllerManager}
 		 * 
-		 * @function perform
+		 * @function
 		 * @param {String}
 		 *            ctrlName Name of the controller to which the
 		 *            action belongs
@@ -158,7 +152,7 @@ define([  'core', 'jquery'
 		 * {@link mmir.ControllerManager#performHelper} of the
 		 * {@link mmir.ControllerManager}
 		 * 
-		 * @function performHelper
+		 * @function
 		 * @param {String}
 		 *            ctrlName Name of the controller to which the
 		 *            helper action belongs
@@ -192,7 +186,7 @@ define([  'core', 'jquery'
 		 * the method {@link mmir.PresentationManager#showDialog} of the
 		 * {@link mmir.PresentationManager}
 		 * 
-		 * @function showDialog
+		 * @function
 		 * @param {String}
 		 *            ctrlName Name of the controller to which the
 		 *            dialog belongs
@@ -212,7 +206,7 @@ define([  'core', 'jquery'
 		 * method {@link mmir.PresentationManager#hideCurrentDialog} of
 		 * the {@link mmir.PresentationManager}
 		 * 
-		 * @function hideCurrentDialog
+		 * @function
 		 * @public
 		 */
 		hideCurrentDialog : function() {
@@ -226,7 +220,7 @@ define([  'core', 'jquery'
 		 * (see documentation in <code>PresentationManager</code>
 		 *  for parameters).
 		 * 
-		 * @function showWaitDialog
+		 * @function
 		 * 
 		 * @public
 		 * 
@@ -246,7 +240,7 @@ define([  'core', 'jquery'
 		 * (see documentation in <code>PresentationManager</code>
 		 *  for parameters).
 		 *  
-		 * @function hideWaitDialog
+		 * @function
 		 * @public
 		 * 
 		 * @see mmir.PresentationManager#hideWaitDialog
@@ -266,7 +260,7 @@ define([  'core', 'jquery'
 		 * <code>Controller.onPageRenderedFunc(ctrlName, viewName, data)</code>
 		 * 
 		 * 
-		 * @function render
+		 * @function
 		 * @param {String}
 		 *            ctrlName Name of the controller to which the view
 		 *            belongs
@@ -290,7 +284,7 @@ define([  'core', 'jquery'
 		 * Get the current on-page-rendered hook function (if it was
 		 * set).
 		 * 
-		 * @function getOnPageRenderedHandler
+		 * @function
 		 * @param {Function}
 		 *            the onPageRendered handler (NOTE: this may not be
 		 *            set, i.e. <tt>undefined</tt>)
@@ -319,7 +313,7 @@ define([  'core', 'jquery'
 		 * <code>{Object} [data]</code> <em>Optional</em> data that
 		 * can be submitted to the generation of the view
 		 * 
-		 * @function setOnPageRenderedHandler
+		 * @function
 		 * @param {Function}
 		 *            onPageRenderedHook a callback function that will
 		 *            be executed after a view was rendered i.e. after a
@@ -377,7 +371,5 @@ define([  'core', 'jquery'
 		}//END: init()
 
 	});//END $.extend(...
-	
-	/** #@- */
 
 });//END: define(...
