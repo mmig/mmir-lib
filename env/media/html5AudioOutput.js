@@ -142,15 +142,15 @@ newMediaPlugin = {
 						 * @class
 						 * @name AudioHtml5Impl
 						 * @memberOf mmir.env.media
+						 * @implements mmir.env.media.IAudio
 						 * @public
 						 */
 						var mediaImpl = {
 								/**
 								 * Play audio.
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name play
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								play: function(){
@@ -166,9 +166,8 @@ newMediaPlugin = {
 								/**
 								 * Stop playing audio.
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name stop
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								stop: function(){
@@ -196,9 +195,8 @@ newMediaPlugin = {
 								/**
 								 * Enable audio (should only be used internally).
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name enable
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								enable: function(){
@@ -210,9 +208,8 @@ newMediaPlugin = {
 								/**
 								 * Disable audio (should only be used internally).
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name disable
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								disable: function(){
@@ -225,9 +222,8 @@ newMediaPlugin = {
 								 * Release audio: should be called when the audio
 								 * file is not used any more.
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name release
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								release: function(){
@@ -244,9 +240,8 @@ newMediaPlugin = {
 								 * 			the new value for the volume:
 								 * 			a number between [0.0, 1.0]
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name setVolume
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								setVolume: function(value){
@@ -259,9 +254,8 @@ newMediaPlugin = {
 								 * 
 								 * @returns {Number} the duration in MS (or -1 if unknown)
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name getDuration
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								getDuration: function(){
@@ -277,9 +271,8 @@ newMediaPlugin = {
 								 * 
 								 * @returns {Boolean} TRUE if paused, FALSE otherwise
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name isPaused
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								isPaused: function(){
@@ -293,9 +286,8 @@ newMediaPlugin = {
 								 * 
 								 * @returns {Boolean} TRUE if enabled
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name isEnabled
-								 * @function
 								 * @memberOf mmir.env.media.AudioHtml5Impl.prototype
 								 */
 								isEnabled: function(){

@@ -156,15 +156,15 @@ newMediaPlugin = {
 						 * @class
 						 * @name AudioCordovaImpl
 						 * @memberOf mmir.env.media
+						 * @implements mmir.env.media.IAudio
 						 * @public
 						 */
 						var mediaImpl = {
 								/**
 								 * Play audio.
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name play
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								play: function(){
@@ -175,9 +175,8 @@ newMediaPlugin = {
 								/**
 								 * Stop playing audio.
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name stop
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								stop: function(){
@@ -207,9 +206,8 @@ newMediaPlugin = {
 								/**
 								 * Enable audio (should only be used internally).
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name enable
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								enable: function(){
@@ -218,9 +216,8 @@ newMediaPlugin = {
 								/**
 								 * Disable audio (should only be used internally).
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name disable
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								disable: function(){
@@ -236,9 +233,8 @@ newMediaPlugin = {
 								 * NOTE Android has limited resources available - not releasing resources
 								 *      may result in not being able to instantiate new (audio) resources.
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name release
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								release: function(){
@@ -258,9 +254,8 @@ newMediaPlugin = {
 								 * 			the new value for the volume:
 								 * 			a number between [0.0, 1.0]
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name setVolume
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								setVolume: function(value){
@@ -273,9 +268,8 @@ newMediaPlugin = {
 								 * 
 								 * @returns {Number} the duration in MS (or -1 if unknown)
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name getDuration
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								getDuration: function(){
@@ -291,9 +285,8 @@ newMediaPlugin = {
 								 * 
 								 * @returns {Boolean} TRUE if paused, FALSE otherwise
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name isPaused
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								isPaused: function(){
@@ -307,9 +300,8 @@ newMediaPlugin = {
 								 * 
 								 * @returns {Boolean} TRUE if enabled
 								 * 
-								 * @public
+								 * @inheritdoc
 								 * @name isEnabled
-								 * @function
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
 								 */
 								isEnabled: function(){
