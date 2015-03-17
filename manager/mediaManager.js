@@ -56,6 +56,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	/**
 	 * The instance that holds the singleton MediaManager object.
 	 * @private
+	 * @type MediaManager
 	 * @memberOf MediaManager#
 	 */
     var instance = null;
@@ -70,11 +71,15 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 *     	"plugins": {
 	 *     		"browser": ["html5AudioOutput.js",
 	 *     		            "html5AudioInput.js",
-	 *     		            "maryTextToSpeech.js"
+	 *     		            "maryTextToSpeech.js",
+	 *     		            {"mod": "webkitAudioInput.js",    "ctx": "chrome"}
 	 *     		],
 	 *     		"cordova": ["cordovaAudioOutput.js",
 	 *     		            "nuanceAudioInput.js",
-	 *     		            "nativeTextToSpeech.js"
+	 *     		            "nuanceTextToSpeech.js",
+	 *     		            {"mod": "androidAudioInput.js",   "ctx": "native"},
+	 *     		            {"mod": "androidTextToSpeech.js", "ctx": "native"},
+	 *     		            {"mod": "maryTextToSpeech.js",    "ctx": "web"}
 	 *     		]
 	 *     	}
 	 *     }
@@ -91,8 +96,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     		            'maryTextToSpeech.js'
     		],
     		'cordova': ['cordovaAudioOutput.js',
-    		            'nuanceAudioInput.js',
-    		            'nativeTextToSpeech.js'
+    		            'androidAudioInput.js',
+    		            'maryTextToSpeech.js'
     		]
     };
     
@@ -102,21 +107,88 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      * @param {String} filePath
      * @param {Function} successCallback
      * @param {Function} failureCallback
+     * @param {String} [execId]
      * 
      * @private
 	 * @function
 	 * 
 	 * @memberOf MediaManager#
 	 */
-    var loadPlugin = function loadPlugin(filePath, successCallback, failureCallback){
+    var loadPlugin = function loadPlugin(filePath, successCallback, failureCallback, execId){
     	try {
+    		
     		commonUtils.loadScript(constants.getMediaPluginPath() + filePath, function(){
+    			
 	    		if (typeof newMediaPlugin !== 'undefined' && newMediaPlugin){
+	    			
 	    			newMediaPlugin.initialize(function(exportedFunctions){
+	    				
+	    				if(execId){
+	    					
+	    					//create new "execution context" if necessary
+	    					if(typeof instance.ctx[execId] === 'undefined'){
+	    						
+	    						instance.ctx[execId] = {};
+	    						
+	    					}
+	    					
+	    					//import functions and properties into execution-context:
+    						var func;
+	    					for(var p in exportedFunctions){
+	    						
+	    						if(exportedFunctions.hasOwnProperty(p)){
+	    							
+	    							//only allow extension of the execution-context, no overwriting:
+	    							if(typeof instance.ctx[execId][p] === 'undefined'){
+	    								
+	    								func = exportedFunctions[p];
+		    							if(typeof func === 'function'){
+		    								
+		    								//need to "re-map" the execution context for the functions,
+		    								// so that "they think" they are actually executed within the MediaManager instance
+			    							
+		    								(function(mediaManagerInstance, originalFunc, name, context){
+		    									//NOTE need closure to "preserve" values of for-iteration
+		    									mediaManagerInstance.ctx[context][name] = function(){
+//					    								console.log('executing '+context+'.'+name+', in context '+mediaManagerInstance,mediaManagerInstance);//DEBUG
+				    								return originalFunc.apply(mediaManagerInstance, arguments);
+				    							};
+		    								})(instance, func, p, execId);
+		    								
+		    							}
+		    							else {
+		    								//for non-functions: just attach to the new "sub-context"
+			    							instance.ctx[execId][p] = func;
+		    							}
+		    							
+	    							} else {
+	    								
+	    								//if there already is a function/property for this in the execution-context,
+	    								// print out an error:
+	    								
+	    	    						logger.error('MediaManager', 'loadPlugin', 
+	    	    							'cannot load implemantion for '+p+' of plugin "'+filePath+
+	    	    								'" into execution-context "'+execId+
+	    	    								'": context already exists!'
+	    	    						);
+	    	    						
+	    	    					}
+	    							
+	    							
+	    						}//END if(exportedFunctions<own>)
+	    						
+	    					}//END for(p in exprotedFunctions)
+		    					
+	    					
+	    				}//END if(execId)
+	    				else {
 	    					jQuery.extend(true,instance,exportedFunctions);
 	    					newMediaPlugin = null;
-							if (successCallback) successCallback();
-	    			}, instance);
+	    				}
+	    				
+						if (successCallback) successCallback();
+						
+	    			}, instance, execId);
 	    		}
 	    		else {
 	        		console.error('Error loading MediaPlugin '+filePath + ' - no newMediaPlugin set!');
@@ -266,6 +338,18 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 		 * @memberOf MediaManager.prototype
 		 */
 		var logger = Logger.create(module);//initialize with requirejs-module information
+		
+
+		/**
+		 * Default execution context for functions:
+		 * 
+		 * if not <code>falsy</code>, then functions will be executed in this context by default.
+		 * 
+		 * @private
+		 * @type String
+		 * @memberOf MediaManager.prototype
+		 */
+		var defaultExecId = void(0);
     	
     	/** @lends mmir.MediaManager.prototype */
     	return {
@@ -289,6 +373,20 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 				 * @memberOf mmir.MediaManager#
     			 */
     			_log: logger,
+    			
+    			/**
+    			 * Execution context for plugins
+    			 * 
+    			 * TODO add doc
+    			 * 
+				 * @name ctx
+				 * @type mmir.Logger
+				 * @default Object (empty context, i.e. plugins are loaded into the "root context", and no plugins loaded into the execution context)
+				 * @public
+				 * 
+				 * @memberOf mmir.MediaManager#
+    			 */
+    			ctx: {},
     		
     			//TODO add API documentation
     		
@@ -686,6 +784,192 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				}
     				return isRemoved;
     			}
+    			/**
+    			 * Executes function <code>funcName</code> in "sub-module" <code>ctx</code>
+    			 * with arguments <code>args</code>.
+    			 * 
+    			 * <p>
+    			 * If there is no <code>funcName</code> in "sub-module" <code>ctx</code>,
+    			 * then <code>funcName</code> from the "main-module" (i.e. from the MediaManager
+    			 * instance itself) will be used.
+    			 * 
+    			 * @param {String} ctx
+    			 * 			the execution context, i.e. "sub-module", in which to execute funcName.<br>
+    			 * 			If <code>falsy</code>, the "root-module" will used as execution context.
+    			 * @param {String} funcName
+    			 * 			the function name
+    			 * @param {Array} args
+    			 * 			the arguments for function "packaged" in an array
+    			 * 
+    			 * @throws {ReferenceError}
+    			 * 			if <code>funcName</code> does not exist in the requested Execution context.<br>
+    			 * 			Or if <code>ctx</code> is not <code>falsy</code> but there is no valid execution
+    			 * 			context <code>ctx</code> in MediaManager.
+    			 * 
+    			 * @example
+    			 * 
+    			 *  //same as mmir.MediaManager.ctx.android.textToSpeech("...", function...):
+    			 * 	mmir.MediaManager.perform("android", "textToSpeech", ["some text to read out loud",
+    			 * 		function onFinished(){ console.log("finished reading."); }
+    			 * 	]);
+    			 * 
+    			 *  //same as mmir.MediaManager.textToSpeech("...", function...)
+    			 *  //... IF the defaultExecId is falsy 
+    			 *  //    (i.e. un-changed or set to falsy value via setDefaultExec())
+    			 * 	mmir.MediaManager.perform(null, "textToSpeech", ["some text to read out loud",
+    			 * 		function onFinished(){ console.log("finished reading."); }
+    			 * 	]);
+    			 * 
+    			 */
+    			, perform: function(ctx, funcName, args){
+    				
+    				var func;
+    				
+    				if(!ctx){
+    					
+    					if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+    						func =  this.ctx[defaultExecId][funcName];
+    					}
+    					
+        				
+    				}
+    				else if(ctx && typeof this.ctx[ctx] !== 'undefined') {
+
+        				if(typeof this.ctx[ctx][funcName] !== 'undefined') {
+        					func = this.ctx[ctx][funcName];
+        				}
+        				
+    				} else {
+    					throw new ReferenceError('There is no context for "'+ctx+'" in MediaManager.ctx!');///////////////////////////// EARLY EXIT ////////////////////
+    				}
+    				
+    				
+    				if(!func){
+						func = this[funcName];
+    				}
+    				
+    				
+    				if(typeof func === 'undefined'){
+    					throw new ReferenceError('There is no function '+funcName+' in MediaManager'+(ctx? ' context ' + ctx : (defaultExecId? ' default context ' + defaultExecId : '')) + '!');///////////////////////////// EARLY EXIT ////////////////////
+    				}
+    				
+    				return func.apply(this, args);
+    			}
+    			/**
+    			 * Returns function <code>funcName</code> from "sub-module" <code>ctx</code>.
+    			 * 
+    			 * <p>
+    			 * If there is no <code>funcName</code> in "sub-module" <code>ctx</code>,
+    			 * then <code>funcName</code> from the "main-module" (i.e. from the MediaManager
+    			 * instance itself) will be returned.
+    			 * 
+    			 * <p>
+    			 * NOTE that the returned functions will always execute within the context of the
+    			 * MediaManager instance (i.e. <code>this</code> will refer to the MediaManager instance).
+    			 * 
+    			 * 
+    			 * @param {String} ctx
+    			 * 			the execution context, i.e. "sub-module", in which to execute funcName.<br>
+    			 * 			If <code>falsy</code>, the "root-module" will used as execution context.
+    			 * @param {String} funcName
+    			 * 			the function name
+    			 * 
+    			 * @throws {ReferenceError}
+    			 * 			if <code>funcName</code> does not exist in the requested Execution context.<br>
+    			 * 			Or if <code>ctx</code> is not <code>falsy</code> but there is no valid execution
+    			 * 			context <code>ctx</code> in MediaManager.
+    			 * 
+    			 * @example
+    			 * 
+    			 *  //same as mmir.MediaManager.ctx.android.textToSpeech("...", function...):
+    			 * 	mmir.MediaManager.getFunc("android", "textToSpeech")("some text to read out loud",
+    			 * 		function onFinished(){ console.log("finished reading."); }
+    			 * 	);
+    			 * 
+    			 *  //same as mmir.MediaManager.textToSpeech("...", function...):
+    			 *  //... IF the defaultExecId is falsy 
+    			 *  //    (i.e. un-changed or set to falsy value via setDefaultExec())
+    			 * 	mmir.MediaManager.getFunc(null, "textToSpeech")("some text to read out loud",
+    			 * 		function onFinished(){ console.log("finished reading."); }
+    			 * 	);
+    			 * 
+    			 */
+    			, getFunc: function(ctx, funcName){//this function performs worse for the "root execution" context, than perform(), since an additional wrapper function must be created
+    				
+    				var isRoot = false;
+    				
+    				if(!ctx){
+    					
+    					if(!defaultExecId){
+    						isRoot = true;
+    					}
+    					else {
+    						if(typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+    							return this.ctx[defaultExecId][funcName];/////////// EARLY EXIT //////////////////
+    						}
+    						else {
+        						isRoot = true;
+    						}
+    					}
+    				}
+    				
+    				if(ctx && typeof this.ctx[ctx] !== 'undefined'){
+	    				if(!isRoot && typeof this.ctx[ctx][funcName] !== 'undefined'){
+	    					return this.ctx[ctx][funcName];///////////////////////////// EARLY EXIT ////////////////////
+	    				}
+    				}
+    				else {
+        				throw new ReferenceError('There is no context for "'+ctx+'" in MediaManager.ctx!');///////////////////////////// EARLY EXIT ////////////////////
+    				}
+    				
+    				//-> return the implementation of the "root execution context"
+    				
+    				if(typeof instance[funcName] === 'undefined'){
+    					throw new ReferenceError('There is no function '+funcName+' in MediaManager'+(ctx? ' context ' + ctx : (defaultExecId? ' default context ' + defaultExecId : '')) + '!');///////////////////////////// EARLY EXIT ////////////////////
+    				}
+    				
+					//need to create proxy function, in order to preserve correct execution context
+					// (i.e. the MediaManager instance)
+					return function() {
+						return instance[funcName].apply(instance, arguments);
+					};
+    				
+    			},
+    			/**
+    			 * Set the default execution context.
+    			 * 
+    			 * If not explicitly set, or set to a <code>falsy</code> value,
+    			 * then the "root" execution context is the default context.
+    			 * 
+    			 * @param {String} ctxId
+    			 * 		the new default excution context for loaded media modules
+    			 * 		(if <code>falsy</code> the default context will be the "root context")
+    			 * 
+    			 * @throws {ReferenceError}
+    			 * 			if <code>ctxId</code> is no valid context
+    			 * 
+    			 * @example
+    			 * 
+    			 * //if context "nuance" exists:
+    			 * mmir.MediaManager.setDefaultCtx("nuance")
+    			 * 
+    			 * // -> now the following calls are equal to mmir.MediaManager.ctx.nuance.textToSpeech("some text")
+    			 * mmir.MediaManager.perform(null, "textToSpeech", ["some text"]);
+    			 * mmir.MediaManager.getFunc(null, "textToSpeech")("some text");
+    			 * 
+    			 * //reset to root context:
+    			 * mmir.MediaManager.setDefaultCtx("nuance");
+    			 * 
+    			 * // -> now the following call is equal to mmir.MediaManager.textToSpeech("some text") again
+    			 * mmir.MediaManager.perform("textToSpeech", ["some text"]);
+    			 * 
+    			 */
+    			setDefaultCtx: function(ctxId){
+    				if(ctxId && typeof instance.ctx[ctxId] === 'undefined'){
+    					throw new ReferenceError('There is no context for "'+ctxId+'" in MediaManager.ctx!');///////////////////////////// EARLY EXIT ////////////////////
+    				}
+    				defaultExecId = ctxId;
+    			}
     			
     	};//END: return{...
     	
@@ -714,6 +998,30 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      * 		"browser": [...]
      * } 
      * </pre>
+     * 
+     * <p>
+     * Each entry may either be a String (file name of the plugin) or an Object with
+     * properties
+     * <pre>
+     * 	mod: <file name for the module> //String
+     * 	ctx: <an ID for the module>     //String
+     * </pre>
+     * 
+     * If <b>String</b>: the functions of the loaded plugin will be attached to the MediaManager instance:
+     * <code>mmir.MediaManager.thefunction()</code>
+     * <br>
+     * If <b>{mod: plugin,ctx: theContextId}</b>: the functions of the loaded plugin will be attached to the "sub-module"
+     * to the MediaManager instance <em>(NOTE the execution context of the function will remain within 
+     * the MediaManager instance, i.e. <code>this</code> will still refer to the MediaManager instance)</em>:
+     * <code>mmir.MediaManager.theId.thefunction()</code>
+     * 
+     * <p>
+     * If plugins are loaded with an ID, you can use 
+     * <code>mmir.MediaManager.getFunc(ctxId, func)(the, arguments)</code> or
+     * <code>mmir.MediaManager.perform(ctxId, func, [the, arguments])</code>:
+     * If the "sub-module" ctxId does not have the function func (i.e. no MediaManager.ctx.ctxId.func exists), then the default function
+     * in MediaManager will be executed (i.e.  MediaManager.func(the, arguments) ).
+     * 
      * 
      * @returns {Array<String>}
      * 				the list of plugins which should be loaded
@@ -745,17 +1053,26 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @memberOf mmir.MediaManager#
      */
     function loadAllPlugins(pluginArray, successCallback,failureCallback){
+    	
     	if (pluginArray == null || pluginArray.length<1){
     		if (successCallback) {
     			successCallback();
     		}
     		return;
     	}
+    	
+    	var ctxId;
     	var newPluginName = pluginArray.pop();
+    	if(newPluginName.ctx && newPluginName.mod){
+    		ctxId = newPluginName.ctx;
+    		newPluginName = newPluginName.mod;
+    	}
+    	
     	loadPlugin(newPluginName, function (){
     		console.log(newPluginName+' loaded!');
     		loadAllPlugins(pluginArray,successCallback, failureCallback);},
-    		failureCallback
+    		failureCallback,
+    		ctxId
     	);
     }
     	
@@ -836,8 +1153,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
                 
                 var isCordovaEnvironment = ! constants.isBrowserEnv();//FIXME implement mechanism for configuring this!!
                 
-            	var pluginArray = getPluginsToLoad(isCordovaEnvironment);
-                loadAllPlugins(pluginArray,deferredSuccess, deferredFailure);
+            	var pluginConfig = getPluginsToLoad(isCordovaEnvironment);
+                loadAllPlugins(pluginConfig,deferredSuccess, deferredFailure);
 
             }
             else if(listenerList){
@@ -872,12 +1189,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * @memberOf mmir.MediaManager.prototype
          * 
          */
-    	loadFile: function(filePath,successCallback, failureCallback){
+    	loadFile: function(filePath,successCallback, failureCallback, execId){
     		if (instance=== null) {
     			this.init();
     		}
     		
-    		loadPlugin(filePath,sucessCallback, failureCallback);
+    		loadPlugin(filePath,sucessCallback, failureCallback, execId);
 			
     	}
     };
