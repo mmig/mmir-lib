@@ -837,6 +837,9 @@ GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the
 			
 			return obj;
 		}
+		else if(obj === null) {//NOTE null is typeof object!
+			return null;
+		}	
 		else if(typeof obj === 'object') {
 			//OBJECT: process all the object's properties (but only, if they are not inherited)
 			for(var p in obj){

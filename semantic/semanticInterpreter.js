@@ -431,6 +431,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
             	);
             } else if(typeof doRecompile === 'object'){// arg. is JSONObject (ie. JSON grammar defintion)
             	
+            	//ASSERT if doRecompile === null => throws error!
+            	
             	gc.json_grammar_definition = doRecompile;
             	build_grammar(gc);
             	

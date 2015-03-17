@@ -745,7 +745,7 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	    		parseJS: function(rawTemplateString, parseEntryRuleName, view, inViewOffset){
 	    			
 	    			//in case only 2 or 3 arguments are present: is 2nd the View object?
-	    			if(!inViewOffset && typeof parseEntryRuleName !== 'string' && typeof parseEntryRuleName === 'object'){
+	    			if(!inViewOffset && typeof parseEntryRuleName !== 'string' && parseEntryRuleName !== null && typeof parseEntryRuleName === 'object'){
 	    				
 	    				if(typeof view === 'number'){
 	    					inViewOffset = view;

@@ -345,7 +345,7 @@ function print(loggerName, logLevel, msg){
  * @memberOf Logger.prototype
  */
 var tmpTraceConfig = module.config().trace;
-if(tmpTraceConfig !== false || (typeof tmpTraceConfig === 'object' && tmpTraceConfig.trace === true)){
+if(tmpTraceConfig !== false || (tmpTraceConfig !== null && typeof tmpTraceConfig === 'object' && tmpTraceConfig.trace === true)){
 
 	/**
 	 * options object for tracing
