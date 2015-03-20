@@ -3496,7 +3496,7 @@ org.antlr.runtime.CommonTokenStream.prototype = {
             stop = this.tokens.length-1;
         }
         for (i = start; i <= stop; i++) {
-            t = this.tokens[i];
+//            t = this.tokens[i]; //MOD BUGFIX russa: t is not used AND pushed into the global namespace!!!
             buf = buf + this.tokens[i].getText();
         }
         return buf;
