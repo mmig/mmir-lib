@@ -189,6 +189,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 						if (successCallback) successCallback();
 						
 	    			}, instance, execId);
+	    			
+	    			//"delete" global var for media plugin after loading
+	    			// TODO remove when/if other loading mechanism is established
+//	    			newMediaPlugin = void(0);
+	    			delete newMediaPlugin;
+	    			
 	    		}
 	    		else {
 	        		console.error('Error loading MediaPlugin '+filePath + ' - no newMediaPlugin set!');
@@ -250,6 +256,35 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	}
 	
     };
+    
+//    /**
+//     * "Register" a media-module implementation to the MediaManager.
+//     * 
+//     * @param {MediaPlugin} newMediaPlugin
+//     * 				The new media-plugin which must have the
+//     * 				function <code>initialize</code>:
+//     * 				The initializer function will be called with 3 arguments:
+//     * 				(callbackFuntion(mediaPlugin: Object), instance: MediaManager, execId: String)
+//     * 
+//     * 				the first argument (this callback-function from the MediaManager)
+//     * 				should be invoked by the media-plugin when it has it finished 
+//     * 				initializing in its <code>initializeFunc</code>.
+//     * 				The callback must be invoked with on argument:
+//     * 				(mediaPlugin: Object)
+//     * 				where mediaPlugin is an object with all the functions and properties,
+//     * 				that the media-plugin exports to the MediaManager.
+//     * 
+//     * @private
+//	 * @function
+//	 * 
+//	 * @memberOf MediaManager#
+//	 */
+//    function registerMediaPlugin(newMediaPlugin, successCallback, failureCallback, execId){
+//    	TODO move code from loadPlugin here:
+//    	* export this as MediaManager.registerPlugin
+//    	* media-plugins should call registerPlugin on MediaManager (instead of creating object newMediaPlugin)
+//    	* open problem: how can success-callback for MediaManager-initialization be handled this way? (should be called after all plugins have themselves initialized)
+//    }
     
     /**
      * @constructs MediaManager
