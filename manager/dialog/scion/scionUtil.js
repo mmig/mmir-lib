@@ -10,7 +10,7 @@ define(['dictionary', 'stringExtension'], function(Dictionary) {
 		 */
 
 		var _states = [], _transitions = new Dictionary();
-		_events = new Dictionary();
+		var _events = new Dictionary();
 		
 
 		(function() {
