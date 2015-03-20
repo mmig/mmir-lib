@@ -16,7 +16,12 @@ define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  *   ...
  * }</pre>
  * 
+ * <p>
+ * PEGjs supports grammar generation for:
+ * PEG (Parsing Expression Grammar)
  * 
+ * NOTE: PEG is a different formalism than "classical" context-free grammar definitions/formalisms; 
+ * see also <a href="http://en.wikipedia.org/wiki/Parsing_expression_grammar">explanation of PEG in Wikipedia</a>
  * 
  * @see PEGjs homepage at <a href="http://pegjs.majda.cz/">http://pegjs.majda.cz/</a>
  * 

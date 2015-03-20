@@ -20,6 +20,12 @@ define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'],
  * 			 <code>configuration.json</code>, then this engine will be used)
  * </em> 
  * 
+ *  <p>
+ * JS/CC supports grammar generation for:
+ * LALR(1)
+ * 
+ * (in difference to jison, JS/CC supports backtracking to certain extend)
+ * 
  * @see <a href="http://jscc.phorward-software.com/">http://jscc.phorward-software.com/</a>
  * 
  * @class

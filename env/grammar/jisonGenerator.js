@@ -17,6 +17,12 @@ define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  *   ...
  * }</pre>
  * 
+ * <p>
+ * jison supports grammar generation for:
+ * LALR(1), LR(0), SLR(1), LL(1) 
+ * [and experimental support for LR(1)]
+ * 
+ * see <a href="http://zaach.github.io/jison/docs/#parsing-algorithms">jison documentation</a>
  * 
  * @see <a href="https://github.com/zaach/jison">https://github.com/zaach/jison</a>
  * 
