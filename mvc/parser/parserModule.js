@@ -47,7 +47,7 @@ define(
 ){
 
 	
-parser = {
+var parser = {
 	/**
 	 * @namespace
 	 * @name mmir.parser.element
