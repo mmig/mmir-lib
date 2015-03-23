@@ -25,8 +25,8 @@
  */
 
 /**
- * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin, version 0.4.1
- * @version 0.4.1
+ * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin
+ * @version 0.5.0
  * @ignore
  */
 newMediaPlugin = {
@@ -67,6 +67,31 @@ newMediaPlugin = {
 			 * @memberOf NuanceAndroidAudioInput#
 			 */
 			var last_result = void(0);
+			
+			/**
+			 * activate / deactivate improved feedback mode:
+			 * <br>
+			 * If activated, this will take effect during start-/stop-Record mode <em>with</em> intermediate results.
+			 * <p>
+			 * 
+			 * This deals with the fact, that the Nuance recognizer has a very noticeable pause between stopping the recording
+			 * and re-starting the recording for the next voice input. 
+			 * 
+			 * The improved feedback mode will return recognition results NOT immediately when they are received, but
+			 * when the recognition has restarted (i.e. listens again) - or when it stops 
+			 * (i.e. stopRecognition is called or error occurred).
+			 * 
+			 * 
+			 * This can improve user interactions, since the results will only be shown, when the recognizer is active again,
+			 * i.e. users do not have to actively interpret the START prompt (if it is active!) or other WAIT indicators
+			 * during the time when recording stops and restarts again (i.e. when input-recording is inactive).
+			 * 
+			 * Instead they are "prompted" by the appearing text of the last recognition result.
+			 * 
+			 * @memberOf NuanceAndroidAudioInput#
+			 * @default false: improved feedback mode is enabled by default
+			 */
+			var disable_improved_feedback_mode = false;
 
 			/**
 			 * Error codes (returned by the native/Cordova plugin)
@@ -257,7 +282,7 @@ newMediaPlugin = {
 			var successCallbackWrapper = function successCallbackWrapper (cb){
 				return (function (res){
 					
-					console.log("nuanceAudioInput: " + JSON.stringify(res));//FIXME DEBUG
+//					console.log("nuanceAudioInput: " + JSON.stringify(res));//FIXM DEBUG
 
 					var asr_result = null;
 					var asr_score = -1;
@@ -299,6 +324,11 @@ newMediaPlugin = {
 							_wait.preparing();
 							// save the last result and start recognition again
 							last_result = [asr_result, asr_score, asr_type, asr_alternatives];
+							
+							//if improved-feedback-mode is disabled: immediately call success-callback with results
+							if(disable_improved_feedback_mode === true){
+								call_callback_with_last_result();
+							}
 
 							window.plugins.nuancePlugin.recognizeNoEOS(
 									languageManager.getLanguageConfig(_pluginName),
@@ -436,13 +466,21 @@ newMediaPlugin = {
 				 * @memberOf NuanceAndroidAudioInput.prototype
 				 * @see mmir.MediaManager#startRecord
 				 */
-				startRecord: function(successCallback, failureCallback, intermediateResults){
+				startRecord: function(successCallback, failureCallback, intermediateResults, isDisableImprovedFeedback){
 
 					currentFailureCallback = failureCallback;
 					currentSuccessCallback = successCallback;
 					repeat = true;
 					// HACK: maybe there is a better way to determine intermediate_results with false as standard? similar to webkitAudioInput
 					intermediate_results = (intermediateResults === false) ? false : true;
+					
+					//EXPERIMENTAL: allow disabling the improved feedback mode
+					if(isDisableImprovedFeedback === true){
+						disable_improved_feedback_mode = isDisableImprovedFeedback;
+					}
+					else {
+						disable_improved_feedback_mode = false;
+					}
 
 					_wait.preparing();
 

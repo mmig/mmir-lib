@@ -25,8 +25,8 @@
  */
 
 /**
- * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin, version 0.4.1
- * @version 0.4.1
+ * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin
+ * @version 0.5.0
  * @ignore
  */
 newMediaPlugin = {
@@ -68,7 +68,7 @@ newMediaPlugin = {
 				    		if((typeof parameter !== 'undefined')&& commonUtils.isArray(parameter) ){
 				    			//TODO implement pausing similar to maryTextToSpeech.js (i.e. in JS code); use XML?
 				    			
-				    			text = parameter.join('\n');//FIXME may need 2 newlines here: in some cases the Nuance TTS does not make pause, when there is only 1 newline (why?!?...)
+				    			text = parameter.join('\n\n');//FIXME may need 2 newlines here: in some cases the Nuance TTS does not make pause, when there is only 1 newline (why?!?...)
 				    			
 				    		}
 				    		else {
