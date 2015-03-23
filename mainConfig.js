@@ -1,13 +1,15 @@
 (function () {//execute in anonymous namespace/closure:
-    
-require.config({
+
+/** @memberOf mmir.require */
+var mmirf_config = {
 	
+	/** @memberOf mmir.require.config */		
 	baseUrl: './mmirf'
 		
 	//TODO this should be defined/"defineable" somewhere else (outside the framework-scope) 
 	, config: {
 		
-
+		/** @memberOf mmir.require.config.moduleConfig */
 	    'inputManager': {
 	        scxmlDoc: 'config/statedef/inputDescriptionSCXML.xml'
 	        // simple | mode 
@@ -32,7 +34,7 @@ require.config({
 	}
 
 	, paths : {
-	    
+		/** @memberOf mmir.require.config.paths */
 	    // core
 		  'core': 'core'
  	    , 'main': 'main'
@@ -146,6 +148,7 @@ require.config({
 
 	shim : {
 		
+		/** @memberOf mmir.require.config.shim */
 	    'antlr3':         {exports : 'org'}
 		
 		, 'md5':            {exports : 'CryptoJS'}
@@ -166,7 +169,9 @@ require.config({
     	, 'jqmSimpleModal': ['jqm']
 	}
 	
-});//END: require.config({...
+};//END: require.config({...
+
+require.config(mmirf_config);
 
 require(['core'], function(core){
 	
@@ -219,7 +224,7 @@ require(['core'], function(core){
 	
 	
 	//apply all configs / modifications that were made on the core-module
-	core.applyConfig();
+	core.applyConfig(mmirf_config);
 	
 	
 	//finally: trigger framework loading

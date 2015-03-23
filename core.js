@@ -78,10 +78,16 @@ function initMmir() {
 	 * Applies all <code>config</code>s (that were added by
 	 * {@link mmir.config}) to the requirejs instance.
 	 * 
+	 * @param {PlainObject} mainConfig
+	 * 			the main configuration for the framework
+	 * 			(this is used as reference for merging config options if necessary - see also mainConfig.js)
+	 * 
 	 * @memberOf mmir.internal
 	 * @private
+	 * 
+	 * @see #mergeModuleConfigs
 	 */
-	function applyConfigs(){
+	function applyConfigs(mainConfig){
 		
 		if(typeof require === 'undefined'){
 			return;
@@ -89,10 +95,135 @@ function initMmir() {
 		
 		
 		_isApplied = true;
+		var conf;
 		while(_configList.length > 0){
-			require.config( _configList.shift() );
+			conf = mergeModuleConfigs(_configList.shift(), mainConfig);
+			require.config( conf );
 		}
 	}
+	
+	/**
+	 * Helper for merging additional module-configurations with the (requirejs) main-config
+	 * of the framework.
+	 * 
+	 * <p>
+	 * This allows to add module configurations outside the main-configuration (otherwise: 
+	 * requirejs by default overwrites additional module-config settings).
+	 * 
+	 * <p>
+	 * Merge behavior: if values in <code>mainConfig.config</code> exists, the primitive values
+	 * 				   are overwritten with values from <code>conf.config</code> and object-values
+	 * 				   are merged (recursively). Arrays are treated as primitive values (i.e. 
+	 * 				   overwritten, not merged/extended).
+	 * 
+	 * <p>
+	 * Note: removes <code>conf.config</code> if present and merges the values
+	 *       into <code>mainConfig.config</code>.
+	 * 
+	 * @param {PlainObject} conf
+	 * 			the additional configuration options
+	 * @param {PlainObject} mainConfig
+	 * 			the main configuration for the framework
+	 * 			(this is used as reference for merging config options if necessary - see mainConfig.js)
+	 * 
+	 * @return {PlainObject} the <code>conf</code> setting.
+	 * 			If necessary (i.e. if <code>conf.config</code> was present), the module-configuration
+	 * 			was merged with the main-configuration
+	 * 
+	 * @memberOf mmir.internal
+	 * @private
+	 */
+	function mergeModuleConfigs(conf, mainConfig){
+		if(!mainConfig || !conf || !mainConfig.config || !conf.config || typeof mainConfig.config !== 'object' || typeof conf.config !== 'object'){
+			return conf;
+		}
+		//ASSERT mainConfig.config and conf.config exist
+		
+		for(var cname in conf.config){
+			if(conf.config.hasOwnProperty(cname)){
+			    //merge property cname into mainConfig
+				doMergeInto(conf.config, mainConfig.config, cname);
+//				//remove merge property from conf.config
+//				conf.config[cname] = void(0);
+			}
+		}
+		
+		//lastly: remove the conf.config property itself
+		conf.config = void(0);
+
+		return conf;
+	}
+	
+	/**
+	 * Helper for recursively merging config values from <code>conf1</code> into
+	 * <code>conf2</code> (and removing merged values from <code>conf1</code>).
+	 * 
+	 * @param {PlainObject} conf1
+	 * 			the configuration object from which to take values (and removing them after merging)
+	 * @param {PlainObject} conf2
+	 * 			the configuration object to which values are merged
+	 * @param {String} name
+	 * 			the name of the property in <code>conf1</code> that should be merged into <code>conf2</code>
+	 * 
+	 * @return {PlainObject} the <code>conf1</code> were properties are removed, that were merged to conf2.
+	 * 
+	 * @memberOf mmir.internal
+	 * @private
+	 */
+	function doMergeInto(conf1, conf2, name){
+		
+		var v = conf1[name];
+		
+		if(typeof conf2[name] === 'undefined' || typeof v !== typeof conf2[name] || typeof v !== 'object'){
+			
+			//if not set in conf2 OR types differ OR value is primitive:
+			//    use first value (i.e. overwrite 2nd)
+			//    -> just write value to conf2
+			conf2[name] = v;
+			
+//			//remove property from conf1
+//			conf1[name] = void(0);
+
+			return conf1; ////////////////////////// EARLY EXIT ////////////
+		}
+		
+		//ASSERT v has type object AND conf2 has an object value too
+		
+		//-> recursively merge
+		for(var cname in conf1[name]){
+			if(conf1[name].hasOwnProperty(cname)){
+			    //merge cname into conf2
+				doMergeInto(conf1[name], conf2[name], cname);
+//				//delete merged property from conf1:
+//                conf1[name][cname] = void(0);
+			}
+		}
+
+        return conf1;
+	}
+	
+	/**
+	 * Helper for detecting array type.
+	 * 
+	 * @param {any} obj
+	 * 			the object which should be checked
+	 * 
+	 * @return {Boolean} <code>true</code> if <code>obj</code> is an Array
+	 * 
+	 * @memberOf mmir.internal
+	 * @private
+	 */
+	var isArray = (function(){
+		if(typeof Array.isArray === 'function'){
+			return Array.isArray;
+		}
+		else {
+			return function(arr){
+				//workaround if Array.isArray is not available: use specified result for arrays of Object's toString() function
+				Object.prototype.toString.call(arr,arr) === '[object Array]';
+			};
+		}
+	})();
 	
 	var mmir = {
 			
@@ -180,6 +311,27 @@ function initMmir() {
 			 * @param {PlainObject} options
 			 * 			options for RequireJS
 			 * @public
+			 * 
+			 * @example
+			 * 
+			 * //IMPORTANT these calls need to done, AFTER core.js is loaded, but BEFORE require.js+mainConfig.js is loaded
+			 * //(see example index.html in starter-kit)
+			 * 
+			 * //set specific log-level for module "moduleName":
+			 * mmir.config({config: { 'moduleName': {logLevel: 'warn'}}});
+			 * 
+			 * //modify default log-levels for dialogManager and inputManager:
+			 * mmir.config({config: { 'dialogManager': {logLevel: 'warn'}, 'inputManager': {logLevel: 'warn'}}});
+			 * 
+			 * //... or using alternative SCXML definition for dialog-engine:
+			 * mmir.config({config: { 'dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
+			 * 
+			 * //overwrite module location (BEWARE: you should know what you are doing, if you use this)
+			 * mmir.config({paths: {'jquery': 'content/libs/zepto'}};
+			 * 
+			 * 
+			 * //add ID and location for own module (NOTE: need to omit file-extension ".js" in location! see requirejs docs):
+			 * mmir.config({paths: {'customAppRouter': 'content/libs/router'}};
 			 */
 			config: function(options){
 				if(_isApplied && typeof require !== 'undefined'){
