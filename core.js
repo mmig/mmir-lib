@@ -139,24 +139,34 @@ function initMmir() {
 		}
 		//ASSERT mainConfig.config and conf.config exist
 		
+		var count = 0, merged = 0;
 		for(var cname in conf.config){
 			if(conf.config.hasOwnProperty(cname)){
+				
+				++count;
+				
 			    //merge property cname into mainConfig
-				doMergeInto(conf.config, mainConfig.config, cname);
-//				//remove merge property from conf.config
-//				conf.config[cname] = void(0);
+				if(doMergeInto(conf.config, mainConfig.config, cname)){
+					//remove merge property from conf.config
+					conf.config[cname] = void(0);
+					++merged;
+				}
 			}
 		}
 		
-		//lastly: remove the conf.config property itself
-		conf.config = void(0);
+		//lastly: remove the conf.config property itself, if
+		//        all of its properties were merged
+		if(count === merged){
+			conf.config = void(0);
+		}
 
 		return conf;
 	}
 	
 	/**
 	 * Helper for recursively merging config values from <code>conf1</code> into
-	 * <code>conf2</code> (and removing merged values from <code>conf1</code>).
+	 * <code>conf2</code> (and removing merged values from <code>conf1</code>) IF
+	 * an object-property <code>name</code> already exists in <code>conf2</code>.
 	 * 
 	 * @param {PlainObject} conf1
 	 * 			the configuration object from which to take values (and removing them after merging)
@@ -165,7 +175,7 @@ function initMmir() {
 	 * @param {String} name
 	 * 			the name of the property in <code>conf1</code> that should be merged into <code>conf2</code>
 	 * 
-	 * @return {PlainObject} the <code>conf1</code> were properties are removed, that were merged to conf2.
+	 * @return {Boolean} <code>true</code> if property <code>name</code> was merged into conf2.
 	 * 
 	 * @memberOf mmir.internal
 	 * @private
@@ -177,14 +187,9 @@ function initMmir() {
 		if(typeof conf2[name] === 'undefined' || typeof v !== typeof conf2[name] || typeof v !== 'object'){
 			
 			//if not set in conf2 OR types differ OR value is primitive:
-			//    use first value (i.e. overwrite 2nd)
-			//    -> just write value to conf2
-			conf2[name] = v;
-			
-//			//remove property from conf1
-//			conf1[name] = void(0);
+			//    overwrite value in conf2 by applying conf1 unmodified through requirejs.config()
 
-			return conf1; ////////////////////////// EARLY EXIT ////////////
+			return false; ////////////////////////// EARLY EXIT ////////////
 		}
 		
 		//ASSERT v has type object AND conf2 has an object value too
@@ -194,36 +199,35 @@ function initMmir() {
 			if(conf1[name].hasOwnProperty(cname)){
 			    //merge cname into conf2
 				doMergeInto(conf1[name], conf2[name], cname);
-//				//delete merged property from conf1:
-//                conf1[name][cname] = void(0);
 			}
 		}
 
-        return conf1;
+        return true;
 	}
 	
-	/**
-	 * Helper for detecting array type.
-	 * 
-	 * @param {any} obj
-	 * 			the object which should be checked
-	 * 
-	 * @return {Boolean} <code>true</code> if <code>obj</code> is an Array
-	 * 
-	 * @memberOf mmir.internal
-	 * @private
-	 */
-	var isArray = (function(){
-		if(typeof Array.isArray === 'function'){
-			return Array.isArray;
-		}
-		else {
-			return function(arr){
-				//workaround if Array.isArray is not available: use specified result for arrays of Object's toString() function
-				Object.prototype.toString.call(arr,arr) === '[object Array]';
-			};
-		}
-	})();
+	//DISABLED: un-used for now
+//	/**
+//	 * Helper for detecting array type.
+//	 * 
+//	 * @param {any} obj
+//	 * 			the object which should be checked
+//	 * 
+//	 * @return {Boolean} <code>true</code> if <code>obj</code> is an Array
+//	 * 
+//	 * @memberOf mmir.internal
+//	 * @private
+//	 */
+//	var isArray = (function(){
+//		if(typeof Array.isArray === 'function'){
+//			return Array.isArray;
+//		}
+//		else {
+//			return function(arr){
+//				//workaround if Array.isArray is not available: use specified result for arrays of Object's toString() function
+//				Object.prototype.toString.call(arr,arr) === '[object Array]';
+//			};
+//		}
+//	})();
 	
 	var mmir = {
 			
