@@ -83,6 +83,12 @@ newMediaPlugin = {
 			 * @constant
 			 * @memberOf WebkitAudioInput# */
 			var MIC_MAX_NORM_VAL = -90;// -90 dB ... ???
+			
+			/** MIC-LEVELS: normalization factor for values: adjust value, so that is 
+			 *              more similar to the results from the other input-modules
+			 * @constant
+			 * @memberOf WebkitAudioInput# */
+			var MIC_NORMALIZATION_FACTOR = 3.5;//adjust value, so that is more similar to the results from the other input-modules
 			/** MIC-LEVELS: time interval / pauses between calculating level changes
 			 * @constant
 			 * @memberOf WebkitAudioInput# */
@@ -237,6 +243,10 @@ newMediaPlugin = {
 					  if(hasChanged(db, prevDb)){
 //						  console.info('audio rms changed: '+prevDb+' -> '+db);
 						  prevDb = db;
+						  
+						  //adjust value
+						  db *= MIC_NORMALIZATION_FACTOR;
+						  
 						  mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
 					  }
 					  
@@ -598,7 +608,7 @@ newMediaPlugin = {
             	switch(type){
             	case "no-speech":
                     if (loglevel >= 1){
-                        console.info("[newMediaPlugin.Warn] event " + type);
+                        console.info("[webkitAudioInput.Warn] event " + type);
                     }
                     // no errorcallback, just restart (if in RECORD mode)...
                     return true;
@@ -645,7 +655,7 @@ newMediaPlugin = {
                     // do not automatically restart!, change the language
                     aborted = true;
                     if (loglevel >= 1){
-                        console.warn("[newMediaPlugin.Warn] event " + type);
+                        console.warn("[webkitAudioInput.Warn] event " + type);
                     }
                     currentFailureCallback && currentFailureCallback(event.error);
                     return true;
@@ -669,7 +679,7 @@ newMediaPlugin = {
                     if (currentFailureCallback){
                         currentFailureCallback(event.error);
                     } else {
-                        console.error("[newMediaPlugin.Error] event " + event.error);
+                        console.error("[webkitAudioInput.Error] event " + event.error);
                     }
                 }
             };
@@ -692,8 +702,8 @@ newMediaPlugin = {
                 // TODO: check if this is really correct
 //                restart_counter=0;
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "Audio START");
-                	console.debug("[newMediaPlugin.Debug] " + "active: " + active);
+                	console.debug("[webkitAudioInput.Debug] Audio START");
+                	console.debug("[webkitAudioInput.Debug] active: " + active);
                 }
                 
                 if(isMicLevelsEnabled === true){
@@ -703,20 +713,20 @@ newMediaPlugin = {
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onspeechstart = function(event){
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "Speech START");
+                	console.debug("[webkitAudioInput.Debug] Speech START");
                 }
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onsoundstart  = function(event){
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "Sound  START");
+                	console.debug("[webkitAudioInput.Debug] Sound  START");
                 }
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onaudioend = function(event){
                 active = false;
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "Audio END");
+                	console.debug("[webkitAudioInput.Debug] Audio END");
                 }
 
                 _stopAudioAnalysis();
@@ -724,19 +734,19 @@ newMediaPlugin = {
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onspeechend = function(event){
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "Speech END");
+                	console.debug("[webkitAudioInput.Debug] Speech END");
                 }
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onsoundend  = function(event){
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "Sound  END");
+                	console.debug("[webkitAudioInput.Debug] Sound  END");
                 }
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onstart  = function(event){
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "asr START");
+                	console.debug("[webkitAudioInput.Debug] asr START");
                 }
             };
             /**
@@ -751,8 +761,8 @@ newMediaPlugin = {
             recognition.onend  = function(event){
                 active = false;
                 if (loglevel >= 4){
-                	console.debug("[newMediaPlugin.Debug] " + "asr END");
-                	console.debug("[newMediaPlugin.Debug] " + "active: " + active);
+                	console.debug("[webkitAudioInput.Debug] asr END");
+                	console.debug("[webkitAudioInput.Debug] active: " + active);
                 }
                 // TODO: check if it is alright if we stop restarting the asr when reset_counter is greater than 3
                 // --> this would mean, we can never start the asr again in this instance... bad choice
@@ -797,11 +807,22 @@ newMediaPlugin = {
 				startRecord: function(successCallback, failureCallback, intermediateResults){
                     
                     // TODO: failureCallback parameter
+					var errMsg;
                     if (active == true){
-                        if (loglevel >= 1){
-                            console.warn("[newMediaPlugin.Warn] " + "Voice recognition already running.");
+                    	
+                    	errMsg = "[webkitAudioInput.Warn] Voice recognition already running.";
+                        
+                        if(failureCallback){
+                        	
+                        	failureCallback(errMsg);
+                        	
+                        	if (loglevel >= 1){
+                                console.warn(errMsg);
+                            }
                         }
-                        failureCallback("already running");
+                        else {
+                        	console.warn(errMsg);
+                        }
                         return;
                     }
                     
@@ -843,22 +864,22 @@ newMediaPlugin = {
 
                         var evtResults = event.results[event.resultIndex];
                         if (loglevel >= 4){
-//                            console.debug("[newMediaPlugin.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD] + " ("+event.results[event.resultIndex][0].confidence+")");
+//                            console.debug("[webkitAudioInput.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD] + " ("+event.results[event.resultIndex][0].confidence+")");
                             
-                            console.debug("[newMediaPlugin.Debug] " + "interim: " + JSON.stringify(event.results));
+                            console.debug("[webkitAudioInput.Debug]  interim: " + JSON.stringify(event.results));
                         }
 
                         // if event.results[event.resultIndex].isFinal is true, then there is a pause.
                         if (evtResults.isFinal) {
                             if (loglevel >= 4){
-                                console.debug("[newMediaPlugin.Debug] " + "final");
+                                console.debug("[webkitAudioInput.Debug]  final");
                             }
 
                             finalResult = evtResults[0][EVENT_RESULT_FIELD];
                             
                             if (intermediate_results == true){
                             	
-                            	//INTERMEDIATE results mode: only message last ASR to callback: 
+                            	//INTERMEDIATE results mode: only message last ASR to callback:
                             	
                                 // call callback method with result
                                 // final_recognition_result += " " + finalResult;
@@ -887,7 +908,26 @@ newMediaPlugin = {
                     };
                     
                     // start the recognition
-                    recognition.start();
+                    try{
+                    	
+                    	recognition.start();
+                    	
+                    } catch (exc){
+                    	
+                    	errMsg = "[webkitAudioInput.Error] Could not start voice recognition: "+ exc;
+                        
+                        if(failureCallback){
+                        	
+                        	failureCallback(errMsg,exc);
+
+                            if (loglevel >= 1){
+                                console.error(errMsg, exc);
+                            }
+                        }
+                        else {
+                        	console.error(errMsg, exc);
+                        }
+                    }
 				},
 				/**
 				 * @public
@@ -909,14 +949,14 @@ newMediaPlugin = {
                             var finalResult = '';
 
                             if (loglevel >= 4){
-                                console.debug("[newMediaPlugin.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
+                                console.debug("[webkitAudioInput.Debug] interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
                             }
                             
                             var evtResults = event.results[event.resultIndex];
                             // if event.results[event.resultIndex].isFinal is true, then there is a pause.
                             if (evtResults.isFinal) {
                                 if (loglevel >= 4){
-                                    console.debug("[newMediaPlugin.Debug] " + "final");
+                                    console.debug("[webkitAudioInput.Debug] final");
                                 }
 
                                 finalResult = evtResults[0][EVENT_RESULT_FIELD];
@@ -934,7 +974,7 @@ newMediaPlugin = {
                                     
                                     if(successCallback){
                                     	if(isSuccessTriggered){
-                                    		console.error('stopRecord: success callback was already triggered!');//FIXME debug
+                                    		console.warn('stopRecord: success callback was already triggered!');//FIXME debug
                                     	}
                                     	isSuccessTriggered = true;
                                     	successCallback.call(self, final_recognition_result);
@@ -959,13 +999,32 @@ newMediaPlugin = {
                     //		(NOTE: the onstop()-listener does not seem to get called ...)
                     recognition._stopRecordCallback = function(){
                     	if(successCallback && !isSuccessTriggered){
-                    		console.info('stopRecord: calling success callback onstop (without last ASR result)');//FIXME debug
+//                    		console.debug('stopRecord: calling success callback onstop (without last ASR result)');//FIXM debug
                     		isSuccessTriggered = true;
                         	successCallback.call(self,'');
                         }
                     };
                     
-                    recognition.stop();
+                    try{
+                    	
+                    	recognition.stop();
+                    	
+                    } catch (exc){
+                    	
+                    	var errMsg = "[webkitAudioInput.Error] Could not stop voice recognition: "+ exc;
+                        
+                        if(failureCallback){
+                        	
+                        	failureCallback(errMsg);
+                        	
+                        	if (loglevel >= 1){
+                                console.error(errMsg, exc);
+                            }
+                        }
+                        else {
+                        	console.error(errMsg, exc);
+                        }
+                    }
 				},
                 
 
@@ -985,13 +1044,25 @@ newMediaPlugin = {
 					
                     console.warn("DO NOT USE AT THE MOMENT\nUnexpected behavior: if recognition is stopped (via 'stopRecord()'), the 'end' is not thrown. The recognizer is still active, but not usable.");
                 
+                    var errMsg;
                     if (active == true){
-                        if (loglevel >= 1){
-                            console.warn("[newMediaPlugin.Warn] " + "Voice recognition already running.");
+                    	
+                    	errMsg = "[webkitAudioInput.Warn] Voice recognition already running.";
+                        
+                        if(failureCallback){
+                        	
+                        	failureCallback(errMsg);
+                        	
+                        	if (loglevel >= 1){
+                                console.warn(errMsg);
+                            }
                         }
-                        failureCallback("already running");
+                        else {
+                        	console.warn(errMsg);
+                        }
                         return;
                     }
+                    
                     aborted = false;
                     recording = true;
                     
@@ -1026,13 +1097,13 @@ newMediaPlugin = {
 //                        var finalResult = '';
 
                         if (loglevel >= 4){
-                            console.debug("[newMediaPlugin.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
+                            console.debug("[webkitAudioInput.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
                         }
 
                         // if event.results[event.resultIndex].isFinal is true, then there is a pause.
                         if (event.results[event.resultIndex].isFinal) {
                             if (loglevel >= 4){
-                                console.debug("[newMediaPlugin.Debug] " + "final");
+                                console.debug("[webkitAudioInput.Debug] " + "final");
                             }
 
 //                            finalResult = event.results[event.resultIndex][0][EVENT_RESULT_FIELD];
@@ -1050,7 +1121,26 @@ newMediaPlugin = {
                     };
                     
                     // start the recognition
-                    recognition.start();
+                    try{
+                    	
+                    	recognition.start();
+                    	
+                    } catch (exc){
+                    	
+                    	errMsg = "[webkitAudioInput.Error] Could not start voice recognition: "+ exc;
+                        
+                        if(failureCallback){
+                        	
+                        	failureCallback(errMsg, exc);
+
+                            if (loglevel >= 1){
+                                console.error(errMsg, exc);
+                            }
+                        }
+                        else {
+                        	console.error(errMsg, exc);
+                        }
+                    }
 				},
 				/**
 				 * @public
