@@ -25,8 +25,8 @@
  */
 
 /**
- * part of Cordova plugin: de.dfki.iui.mmir.speech.AndroidSpeech, version 0.3.1
- * @version 0.3.1
+ * part of Cordova plugin: de.dfki.iui.mmir.speech.AndroidSpeech
+ * @version 0.4.0
  * @ignore
  */
 newMediaPlugin = {
@@ -65,6 +65,31 @@ newMediaPlugin = {
 			 * @memberOf AndroidAudioInput#
 			 */
 			var last_result = void(0);
+
+			/**
+			 * activate / deactivate improved feedback mode:
+			 * <br>
+			 * If activated, this will take effect during start-/stop-Record mode <em>with</em> intermediate results.
+			 * <p>
+			 * 
+			 * This deals with the fact, that the Nuance recognizer has a very noticeable pause between stopping the recording
+			 * and re-starting the recording for the next voice input. 
+			 * 
+			 * The improved feedback mode will return recognition results NOT immediately when they are received, but
+			 * when the recognition has restarted (i.e. listens again) - or when it stops 
+			 * (i.e. stopRecognition is called or error occurred).
+			 * 
+			 * 
+			 * This can improve user interactions, since the results will only be shown, when the recognizer is active again,
+			 * i.e. users do not have to actively interpret the START prompt (if it is active!) or other WAIT indicators
+			 * during the time when recording stops and restarts again (i.e. when input-recording is inactive).
+			 * 
+			 * Instead they are "prompted" by the appearing text of the last recognition result.
+			 * 
+			 * @memberOf AndroidAudioInput#
+			 * @default false: improved feedback mode is enabled by default
+			 */
+			var disable_improved_feedback_mode = false;
 
 			//Nuance Error Codes:
 //			var error_codes_enum = {
@@ -290,7 +315,7 @@ newMediaPlugin = {
 				
 				return (function (res){
 					
-					console.log("androidAudioInput"+(repeat? "(REPEAT_MODE)" : "")+": " + JSON.stringify(res));//FIXME DEBUG
+//					console.log("androidAudioInput"+(repeat? "(REPEAT_MODE)" : "")+": " + JSON.stringify(res));//FIXM DEBUG
 
 					var asr_result = null;
 					var asr_score = -1;
@@ -325,7 +350,7 @@ newMediaPlugin = {
 							call_callback_with_last_result();
 						} else if (asr_type === result_types.RECORDING_DONE){
 							// Do nothing right now at the recording done event
-							console.log("androidAudioInput"+(repeat? "(REPEAT_MODE)" : "")+": RECORDING_DONE, last_result: " + JSON.stringify(last_result));//FIXME DEBUG
+//							console.log("androidAudioInput"+(repeat? "(REPEAT_MODE)" : "")+": RECORDING_DONE, last_result: " + JSON.stringify(last_result));//FIXM DEBUG
 							
 						} else if (asr_type === result_types.FINAL){
 							// its the final result
@@ -347,6 +372,11 @@ newMediaPlugin = {
 							// (callback for intermediate results will be triggered on next RECORDING_BEGIN)
 							last_result = [asr_result, asr_score, asr_type, asr_alternatives, asr_unstable];
 
+							//if improved-feedback-mode is disabled: immediately call success-callback with results
+							if(disable_improved_feedback_mode === true){
+								call_callback_with_last_result();
+							}
+							
 							window.plugins.androidSpeechPlugin.recognizeNoEOS(
 									languageManager.getLanguageConfig(_pluginName),
 									successCallbackWrapper(currentSuccessCallback),
@@ -422,7 +452,7 @@ newMediaPlugin = {
 						}
 					}
 
-					console.error("androidAudioInput ERROR \""+error_msg+"\" (code "+error_code+", type "+error_type+")...");
+					console.info("androidAudioInput ERROR \""+error_msg+"\" (code "+error_code+", type "+error_type+")...");
 					
 					_wait.ready();
 
@@ -545,7 +575,7 @@ newMediaPlugin = {
 				 * @memberOf AndroidAudioInput.prototype
 				 * @see mmir.MediaManager#startRecord
 				 */
-				startRecord: function(successCallback, failureCallback, intermediateResults){
+				startRecord: function(successCallback, failureCallback, intermediateResults, isDisableImprovedFeedback){
 
 					currentFailureCallback = failureCallback;
 					currentSuccessCallback = successCallback;
@@ -553,6 +583,14 @@ newMediaPlugin = {
 					// HACK: maybe there is a better way to determine intermediate_results with false as standard? similar to webkitAudioInput
 					intermediate_results = (intermediateResults === false) ? false : true;
 
+					//EXPERIMENTAL: allow disabling the improved feedback mode
+					if(isDisableImprovedFeedback === true){
+						disable_improved_feedback_mode = isDisableImprovedFeedback;
+					}
+					else {
+						disable_improved_feedback_mode = false;
+					}
+					
 					_wait.preparing();
 
 					window.plugins.androidSpeechPlugin.recognizeNoEOS(
