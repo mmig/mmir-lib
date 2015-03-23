@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.6.0rc3)
+version notes for MMIR framework code (v 3.6.0rc4)
 
  * using Cordova 3.x.x library
  * using jQuery 2.1.x library
@@ -24,11 +24,11 @@ version notes for MMIR framework code (v 3.6.0rc3)
  --------------
 
 ##################
- Version 3.6.0rc3
+ Version 3.6.0rc4
 ##################
 
 API Changes
- * location for silenceDetection.js changed: moved from /mmirf/env/media to /mmirf/workers
+ * MODIFICATION: location for silenceDetection.js changed: moved from /mmirf/env/media to /mmirf/workers
    currently this file is un-used; for old implementations, change setting in configuration.json:
    {
    	...
@@ -37,9 +37,52 @@ API Changes
    		"silenceDetectorPath": "mmirf/workers/silenceDetection.js", //old value: "mmirf/env/media/silenceDetection.js"
    		...
    	}...
+ 
+ * MODIFICATION: externalized preparing/wait functionality from media audio-input plugins (prevously in internal/private _wait implementation)
+   * added property to MediaManger: waitReadyImpl
+     * if set, then its preparing/ready functions are exported to MediaManager's _preparing/_ready functions, i.e. set object with:
+         preparing: function(moduleName : String)
+         ready: function(moduleName : String)
+       these functions will be called by module implementations when they are preparing (i.e. user should wait) or are ready for further input/processing
+     * if not set, MediaManager's _preparing/_ready functions are NO-OP functions
+     * media plugins may invoke preparing/ready functions via MediaManager._prepare(moduleName) and MediaManager._ready(moduleName)
+   * added implementation for "standalone wait dialog" (extracted wait overlay from jQuery Mobile 1.4.x)
+   * added media module env/media/waitReadyIndicator.js which "standalone wait dialog" and sets MediaManager's waitReadyImpl property
+   * changed MediaManager's default modules to include waitReadyIndicator.js (i.e. is loaded by default for the preparing() / ready() implementation)
+ * ADDITION: mmir.config() now allows setting options for modules
+   * module settings are merged with default framework settings (previously they were overwritten causing errors if required settings were missing)
+   * for example can be used for setting specific log-levels:
+     mmir.config({config: { 'moduleName': {logLevel: 'warn'}}});
+   * allows to modify settings for dialogManager and inputManager (which currently have required settings in the default settings), e.g. modify log-level:
+     mmir.config({config: { 'dialogManager': {logLevel: 'warn'}, 'inputManager': {logLevel: 'warn'}}});
+     or using alternative SCXML definition (overwriting the default setting)
+     mmir.config({config: { 'dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
+ * ADDITION: MediaManager now allows to load multiple modules for same functionality (e.g. two modules for text-to-speech) by using "execution contexts":
+   example: in configuration.json specify the context for a media module using {"mod": "moduleFile.js", "ctx": "thecontext"}, 
+            e.g. the following configuration will load a 2nd speech-input module into context "html"
+            
+   "mediaManager": {
+    	"plugins": {
+    		"browser": ["html5AudioOutput.js",
+    		            "webkitAudioInput.js",
+    		            "maryTextToSpeech.js",
+    		            {"mod": "html5AudioInput.js","ctx": "html" }
+    		],
+    		...
+    		
+    		the 'default module' for speech-input is available - same as before - without the "context prefix" (i.e. the following will use module functions from "webkitAudioInput.js")
+    		    mmir.MediaManager.recognize(...
+    		and the 2nd module for speech-input can then be used via its context (this will use module functions from "html5AudioInput.js"):
+    		    mmir.MediaManager.ctx.html.recognize(...
+    see also related functions to this new feature in MediaManager:
+     * perform(ctx, fname, args)
+     * getFunc(ctx, fname)
+     * setDefaultCtx
+    		
+  
 
 
-Added new modules for speech input on Android platform (env/media/android*.js)
+Added new modules for speech input on Android platform v0.4.0 (env/media/android*.js)
  * added framework integration for Android Speech Plugin (Cordova Plugin)
    * NOTE: the Cordova Android Speech Plugin must be installed in the targeted Cordova project first, before the new modules can be used
  * added text-to-speech module (android)
@@ -47,9 +90,19 @@ Added new modules for speech input on Android platform (env/media/android*.js)
  * use/select the new modules via /www/config/configuration.json, by changing the array-entries in property mediaManager.plugins.cordova, e.g. to
    ["cordovaAudioOutput.js", "androidAudioInput.js", "androidTextToSpeech.js"]
 
+Media modules (env/media/)
+ * webkitAudioInput: added normalization-factor for mic-levels (to make values more similar with results from other audio-input plugins)
+ * nuanceAudioInput:
+  * updated to plugin v0.5.0
+  * suppress start-prompt in sentence-wise input mode
+  * added option for disabling delayed results (i.e. disabling "improved feedback mode")
+
 Logger (tools/logger):
  * added trace functionality (using stacktrace.js)
  * configurable via core.js (see #logTrace)
+ 
+NotificationManager:
+ * added implementations for alert() and confirm() for non-Cordova environments
 
 JSDoc
  * updated JSDoc comments
@@ -59,6 +112,7 @@ JSDoc
  
 BUGFIX
  * CommonUtils: fixed un-intentional global variable (script)
+ * in some places (i.e. where this was still missing): explicitly handle / not handle cases where a var is typeof object, but NULL
  
 REFACTOR
  * some structural (non-functional) changes
