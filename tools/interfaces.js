@@ -284,3 +284,50 @@ var INotificationSound = {
 	 */
 	fireError : function(error){}
 };
+
+
+/**
+ * Audio object that is used for the sound notifications
+ * by the {@link mmir.MediaManager}.
+ * 
+ * @interface
+ * @name IWaitReadyIndicator
+ * @memberOf mmir.env.media
+ * 
+ * @see mmir.MediaManager#readyWaitImpl
+ */
+var IWaitReadyIndicator = {
+	/**
+	 * Indicates that the media plugin <code>pluginName</code> is preparing
+	 * something and that the user should wait.
+	 * 
+	 * <p>
+	 * For example, an implementation could show a wait dialog / overlay when this function is called.
+	 * 
+	 * @param {String} moduleName
+	 * 			the module name from which the function was invoked
+	 * 
+	 * @public
+	 * @memberOf mmir.env.media.IWaitReadyIndicator.prototype
+	 * 
+	 * @see mmir.MediaManager#_preparing
+	 */
+    preparing: function (moduleName){},
+    /**
+     * Indicates that the media plugin <code>pluginName</code> is now ready
+	 * and that the user can begin interacting.
+	 * 
+	 * <p>
+	 * For example, an implementation could hide a wait dialog / overlay when this function is called
+	 * (that was previously shown with {@link #preparing}).
+	 * 
+	 * @param {String} moduleName
+	 * 			the module name from which the function was invoked
+     * 
+	 * @public
+	 * @memberOf mmir.env.media.IWaitReadyIndicator.prototype
+	 * 
+	 * @see mmir.MediaManager#_ready
+	 */
+	ready: function(moduleName){}
+};

@@ -91,11 +91,13 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @memberOf MediaManager#
 	 */
     var pluginsToLoad = {
-    		'browser': ['html5AudioOutput.js',
+    		'browser': ['waitReadyIndicator.js',
+    		            'html5AudioOutput.js',
     		            'html5AudioInput.js',
     		            'maryTextToSpeech.js'
     		],
-    		'cordova': ['cordovaAudioOutput.js',
+    		'cordova': ['waitReadyIndicator.js',
+    		            'cordovaAudioOutput.js',
     		            'androidAudioInput.js',
     		            'maryTextToSpeech.js'
     		]
@@ -422,6 +424,44 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 				 * @memberOf mmir.MediaManager#
     			 */
     			ctx: {},
+    			
+    			/**
+    			 * Wait indicator, e.g. for speech input:
+    			 * <p>
+    			 * provides 2 functions:<br>
+    			 * 
+    			 * <code>preparing()</code>: if called, the implementation indicates that the "user should wait"<br>
+    			 * <code>ready()</code>: if called, the implementation stops indicating that the "user should wait" (i.e. that the system is ready for user input now)<br>
+    			 * 
+    			 * <p>
+    			 * If not set (or functions are not available) will do nothing
+    			 * 
+    			 * @type mmir.env.media.IWaitReadyIndicator
+    			 * @memberOf mmir.MediaManager#
+    			 * 
+    			 * @default Object (no implementation set)
+    			 * 
+    			 * @see #_preparing
+    			 * @see #_ready
+    			 * 
+    			 * @example
+    			 * //define custom wait/ready implementation:
+    			 * var impl = {
+    			 * 	preparing: function(str){
+    			 * 		console.log('Media module '+str+' is preparing...');
+    			 * 	},
+    			 * 	ready: function(str){
+    			 * 		console.log('Media module '+str+' is ready now!');
+    			 * 	}
+    			 * };
+    			 * 
+    			 * //configure MediaManager to use custom implementation:
+    			 * mmir.MediaManager.waitReadyImpl = impl;
+    			 * 
+    			 * //-> now plugins that call  mmir.MediaManager._preparing() and  mmir.MediaManager._ready()
+    			 * //   will invoke the custom implementation's functions.
+    			 */
+    			waitReadyImpl: {},
     		
     			//TODO add API documentation
     		
@@ -1004,6 +1044,53 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					throw new ReferenceError('There is no context for "'+ctxId+'" in MediaManager.ctx!');///////////////////////////// EARLY EXIT ////////////////////
     				}
     				defaultExecId = ctxId;
+    			},
+    			/**
+    	    	 * This function is called by media plugin implementations (i.e. modules)
+    	    	 * to indicate that they are preparing something and that the user should
+    	    	 * wait.
+    	    	 * 
+    	    	 * <p>
+    	    	 * The actual implementation for <code>_preparing(String)</code> is given by
+    	    	 * {@link #waitReadyImpl}.preparing (if not set, then calling <code>_preparing(String)</code>
+    	    	 * will have no effect.
+    	    	 * 
+    	    	 * @param {String} moduleName
+    	    	 * 			the module name from which the function was invoked
+    	    	 * 
+    	    	 * @function
+    	    	 * @protected
+    	    	 * 
+    	    	 * @see #waitReadyImpl
+    	    	 * @see #_ready
+    	    	 */
+    			_preparing: function(moduleName){
+    				if(this.waitReadyImpl && this.waitReadyImpl.preparing){
+    					this.waitReadyImpl.preparing(moduleName);
+    				}
+    			},
+    			/**
+    	    	 * This function is called by media plugin implementations (i.e. modules)
+    	    	 * to indicate that they are now ready and that the user can start interacting.
+    	    	 * 
+    	    	 * <p>
+    	    	 * The actual implementation for <code>_ready(String)</code> is given by the
+    	    	 * {@link #waitReadyImpl} implementation (if not set, then calling <code>_ready(String)</code>
+    	    	 * will have no effect.
+    	    	 * 
+    	    	 * @param {String} moduleName
+    	    	 * 			the module name from which the function was invoked
+    	    	 * 
+    	    	 * @function
+    	    	 * @protected
+    	    	 * 
+    	    	 * @see #waitReadyImpl
+    	    	 * @see #_ready
+    	    	 */
+    			_ready: function(moduleName){
+    				if(this.waitReadyImpl && this.waitReadyImpl.ready){
+    					this.waitReadyImpl.ready(moduleName);
+    				}
     			}
     			
     	};//END: return{...

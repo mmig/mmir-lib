@@ -26,12 +26,13 @@
 
 /**
  * part of Cordova plugin: de.dfki.iui.mmir.speech.AndroidSpeech
- * @version 0.4.0
+ * @version 0.5.0
  * @ignore
  */
 newMediaPlugin = {
 		/**  @memberOf AndroidAudioInput# */
 		initialize: function(initCallBack, mediaManager){
+			
 			/**  @memberOf AndroidAudioInput# */
 			var _pluginName = 'androidAudioInput';
 			/** 
@@ -156,101 +157,14 @@ newMediaPlugin = {
 					"RECORDING_BEGIN": 		"RECORDING_BEGIN",
 					"RECORDING_DONE": 		"RECORDING_DONE"
 			};
-
-			/**
-			 * Wait indicator during speech input:
-			 * <p>
-			 * provides 2 functions:<br>
-			 * 
-			 * <code>preparing()</code>: if called, the implementation indicates that the "user should wait"<br>
-			 * <code>ready()</code>: if called, the implementation stops indicating that the "user should wait" (i.e. that the system is ready for user input now)<br>
-			 * 
-			 * @type InputWaitIndicator
-			 * @memberOf AndroidAudioInput#
-			 */
-			//FIXME application-dependent / jQuery-dependent mechanism for WAIT-feedback (i.e. when recognizer prepares to get ready)
-			var _wait = (function($){
-
-				/** @private
-				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
-				var speech_input_wait_div_id = 
-					typeof SPEECH_INPUT_WAIT_DLG_ID !== 'undefined'? //FIXME custom-mechanism for optionally setting this using a global variable
-							SPEECH_INPUT_WAIT_DLG_ID : 
-								"speech-input-wait-dlg";//<- default ID FIXME application dependent!?
-
-				/** @private
-				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
-				var speech_input_wait_div;
-
-				/** @private
-				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
-				var speech_input_wait_div_parent_selector = 'body';
-
-				/** @private
-				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
-				var getHtml = function(divId, msgStr){
-
-					return '<div id="'
-					+ divId
-					+ '" class="ui-loader ui-corner-all ui-body-a ui-loader-verbose"><span class="ui-icon ui-icon-loading spin"></span><h1>'
-					+ msgStr
-					+ '</h1></div>';
-
-				};
-				/** @private
-				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
-				var show_wait_on_result = function(){
-
-					if ( $(speech_input_wait_div_parent_selector + '>.ui-loader:visible').length < 1){
-
-						speech_input_wait_div = $('#'+speech_input_wait_div_id);
-
-//						console.log("FOUND: " + speech_input_wait_div.length);
-
-						//use externalized language String "loadingText" for message:
-						var msgText = languageManager.getText('loadingText');
-						
-						if (speech_input_wait_div.length < 1){
-							// element not inserted yet
-							$(speech_input_wait_div_parent_selector).append(//speech_input_wait_div_src);
-									getHtml(speech_input_wait_div_id, msgText)
-							);
-							speech_input_wait_div = $('#'+speech_input_wait_div_id);
-						}
-						else {
-							$('h1', speech_input_wait_div).text(msgText);
-						}
-
-						speech_input_wait_div.show();
-					}
-
-				};
-				/** @private
-				 *  @memberOf AndroidAudioInput.InputWaitIndicator.prototype */
-				var hide_wait_on_result = function(){
-					if ($('#'+speech_input_wait_div_id).length > 0){
-						// element inserted
-						$('#'+speech_input_wait_div_id).hide();
-					}
-				};
-
-				return {
-					/**
-					 * show / activate feedback for "start preparing"
-					 * @function
-					 * @memberOf AndroidAudioInput.InputWaitIndicator#
-					 */
-					preparing:     show_wait_on_result,
-					/**
-					 * hide / activate feedback for "preparing done"
-					 * @function
-					 * @memberOf AndroidAudioInput.InputWaitIndicator#
-					 */
-					ready: hide_wait_on_result
-				};
-
-			})(jQuery);
-			////////////////////////////////// END: application dependent WAIT feedback //////////////////
+			
+			//backwards compatibility (pre v0.5.0)
+			if(!mediaManager._preparing){
+				mediaManager._preparing = function(name){console.warn(name + ' is preparing - NOTE: this is a stub-function. Overwrite MediaManager._preparing for setting custom implementation.');};
+			}
+			if(!mediaManager._ready){
+				mediaManager._ready     = function(name){console.warn(name + ' is ready - NOTE: this is a stub-function. Overwrite MediaManager._ready for setting custom implementation.');};
+			}
 
 			/**
 			 * MIC-LEVELS: Name for the event that is emitted, when the input-mircophone's level change.
@@ -346,7 +260,7 @@ newMediaPlugin = {
 					if (repeat === true) {
 						if (asr_type === result_types.RECORDING_BEGIN){
 							// only call success-callback, if we started recording again.
-							_wait.ready();
+							mediaManager._ready(_pluginName);
 							call_callback_with_last_result();
 						} else if (asr_type === result_types.RECORDING_DONE){
 							// Do nothing right now at the recording done event
@@ -367,7 +281,7 @@ newMediaPlugin = {
 							// post current result
 							call_callback_with_last_result();
 						} else if (asr_type === result_types.INTERMEDIATE){
-							_wait.preparing();
+							mediaManager._preparing(_pluginName);
 							// save the last result and start recognition again
 							// (callback for intermediate results will be triggered on next RECORDING_BEGIN)
 							last_result = [asr_result, asr_score, asr_type, asr_alternatives, asr_unstable];
@@ -400,7 +314,7 @@ newMediaPlugin = {
 					} else {
 						// no repeat, there won't be another recording, so call callback right now with previous and current result
 
-						_wait.ready();
+						mediaManager._ready(_pluginName);
 
 						if (asr_type === result_types.RECORDING_DONE){
 						} else if (asr_type === result_types.FINAL){
@@ -454,7 +368,7 @@ newMediaPlugin = {
 
 					console.info("androidAudioInput ERROR \""+error_msg+"\" (code "+error_code+", type "+error_type+")...");
 					
-					_wait.ready();
+					mediaManager._ready(_pluginName);
 
 					// TEST: if there is still a pending last result, call successcallback first.
 					call_callback_with_last_result();
@@ -484,7 +398,7 @@ newMediaPlugin = {
 							var restartFunc = function(){//show loader so that the user knows it may take a while before (s)he can start talking again
 								
 								if (error_type !== result_types.FINAL){
-									_wait.preparing();
+									mediaManager._preparing(_pluginName);
 								}
 								
 								//restart:
@@ -591,7 +505,7 @@ newMediaPlugin = {
 						disable_improved_feedback_mode = false;
 					}
 					
-					_wait.preparing();
+					mediaManager._preparing(_pluginName);
 
 					window.plugins.androidSpeechPlugin.recognizeNoEOS(
 							languageManager.getLanguageConfig(_pluginName),
@@ -620,7 +534,7 @@ newMediaPlugin = {
 				recognize: function(successCallback,failureCallback){
 					repeat = false;
 
-					_wait.preparing();
+					mediaManager._preparing(_pluginName);
 
 					window.plugins.androidSpeechPlugin.recognize(
 							languageManager.getLanguageConfig(_pluginName),
@@ -637,7 +551,7 @@ newMediaPlugin = {
 					last_result = void(0);
 					repeat = false;
 
-					_wait.ready();
+					mediaManager._ready(_pluginName);
 					
 					window.plugins.androidSpeechPlugin.cancel(successCallBack, failureCallBack);
 				}

@@ -78,6 +78,8 @@ var mmirf_config = {
 	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
 		, 'jqm' : 			'vendor/libs/jquery.mobile-1.4.3'
 		, 'jqmSimpleModal':	'vendor/libs/jquery.simplemodal-1.4.4'
+		
+		, 'waitDialog':		'tools/stdlne-wait-dlg'
 
 	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
 	    , 'antlr3' : 'vendor/libs/antlr3-all'
@@ -104,7 +106,6 @@ var mmirf_config = {
     	// @chsc03 renderUtils required by presentationManager and depends on parserModule
 	    , 'renderUtils': 'mvc/parser/templateRenderUtils'
 	    , 'parserModule': 'mvc/parser/parserModule'
-	    	
 
 		, 'storageUtils': 'mvc/parser/storageUtils'
 	    
