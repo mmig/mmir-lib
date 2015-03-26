@@ -32,6 +32,35 @@ newMediaPlugin = {
 			
 			/**  @memberOf Html5AudioOutput# */
 			var _pluginName = 'html5AudioOutput';
+			
+			/**
+			 * Media error (codes):
+			 * 
+			 * the corresponding code is their <code>index</code>.
+			 * 
+			 * <p>
+			 * 
+			 * Code 0 is an internal error code for unknown/unspecific error causes.
+			 * <br>
+			 * Codes 1 - 4 correspond to the HTML5 MediaError interface
+			 * (which are the same as Cordova's Audio MediaError codes).
+			 * The description texts are taken from the HTML5 documentation.
+			 * 
+			 * @enum
+			 * @constant
+			 * @type Array<String>
+			 * @memberOf Html5AudioOutput#
+			 * 
+			 * @see <a href="https://html.spec.whatwg.org/multipage/embedded-content.html#mediaerror">https://html.spec.whatwg.org/multipage/embedded-content.html#mediaerror</a>
+			 * @see <a href="http://plugins.cordova.io/#/package/org.apache.cordova.media">http://plugins.cordova.io/#/package/org.apache.cordova.media</a>
+			 */
+			var MediaError = [
+			  	{name: 'MEDIA_ERR_UNKNOWN', 		code: 0, description: 'An unknown or unspecific (internal) error occurred.'},
+			  	{name: 'MEDIA_ERR_ABORTED', 		code: 1, description: 'The fetching process for the media resource was aborted by the user agent at the user\'s request.'},
+			  	{name: 'MEDIA_ERR_NETWORK', 		code: 2, description: 'A network error of some description caused the user agent to stop fetching the media resource, after the resource was established to be usable.'},
+			  	{name: 'MEDIA_ERR_DECODE', 			code: 3, description: 'An error of some description occurred while decoding the media resource, after the resource was established to be usable.'},
+			  	{name: 'MEDIA_ERR_NONE_SUPPORTED', 	code: 4, description: 'The media resource indicated by the src attribute or assigned media provider object was not suitable.'}
+			];
 
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
@@ -98,17 +127,59 @@ newMediaPlugin = {
 						 * @memberOf AudioHtml5Impl#
 						 */
 						var my_media = new Audio(url,null,failureCallback);
-
-						my_media.addEventListener('ended', function(){
-
-							//only proceed if we have a media-object (may have already been released)
-							if(enabled & mediaImpl){
-								mediaImpl.stop();
+						
+						/**
+						 * Wrapper for error callback:
+						 * normalize error events with attached MediaErrors to Cordova-error objects
+						 *  
+						 * @private
+						 * @memberOf AudioHtml5Impl#
+						 */
+						var errorWrapper = function(evt){
+							
+							var code, mErr;
+							//extract MediaError from event's (audio) target:
+							if(evt && evt.target && evt.target.error && (code = evt.target.error.code) && code > 0 && code < 5){
+								mErr = MediaError[code];
 							}
-							if (onEnd){
-								onEnd.apply(mediaImpl, arguments);
+							else {
+								mErro = MediaError[0];
 							}
-						}, false);
+							
+							var err = {
+									code: 			mErr.code,
+									message: 		mErr.name,
+									description: 	mErr.description + (code===0 && evt? ' ' + evt.toString() : '')
+							};
+							
+							if(failureCallback){
+								failureCallback.call(mediaImpl, err, evt);
+							}
+							else {
+								console.error(err.message + ' (code '+err.code + '): '+err.description, evt);
+							}
+						};
+						my_media.addEventListener('error', errorWrapper, false);
+						
+						
+						my_media.addEventListener('ended',
+							/**
+							 * @private
+							 * @memberOf AudioHtml5Impl#
+							 */
+							function onEnded(){
+
+								//only proceed if we have a media-object (may have already been released)
+								if(enabled & mediaImpl){
+									mediaImpl.stop();
+								}
+								if (onEnd){
+									onEnd.apply(mediaImpl, arguments);
+								}
+							},
+							false
+						);
+						
 						
 						/**
 						 * @private
@@ -306,4 +377,3 @@ newMediaPlugin = {
 			});
 		}
 };
-
