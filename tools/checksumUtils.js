@@ -156,6 +156,7 @@ define(['md5'],
 		 * 
 		 * @returns {String} the checksum information as a String (formatted as content of a checksum file)
 		 * 
+		 * @memberOf mmir.tools.ChecksumUtils#
 		 */
 		createContent: createDigestFileContent,
 		/**
@@ -170,6 +171,8 @@ define(['md5'],
 		 * 
 		 * @returns {PlainObject} an object with the extracted properties from the checksum-data:
 		 * 				{ size: INTEGER, hash: STRING }
+		 * 
+		 * @memberOf mmir.tools.ChecksumUtils#
 		 */
 		parseContent: parseDigestFileContent,
 		/**
@@ -187,7 +190,10 @@ define(['md5'],
 		 * 					properties:
 		 * 					{ size: INTEGER, hash: STRING }
 		 * 
-		 * @returns {Boolean} <code>true</code> if 
+		 * @returns {Boolean} 
+		 * 					<code>true</code> if the raw content matches the hash
+		 * 
+		 * @memberOf mmir.tools.ChecksumUtils#
 		 */
 		isSame: verifyIsSame,
 		/**
@@ -197,7 +203,9 @@ define(['md5'],
 		 * 
 		 * @function
 		 * @returns {String} the default file extension for checksum files 
-		 * 						(including the separating dot, eg. ".checksum.txt") 
+		 * 						(including the separating dot, eg. ".checksum.txt")
+		 * 
+		 * @memberOf mmir.tools.ChecksumUtils# 
 		 */
 		getFileExt: function(){
 			return digestFileExt;
@@ -206,6 +214,8 @@ define(['md5'],
 		 * The Char used for separating fields within checksum files.
 		 * 
 		 * @returns {String} the separator char (TAB)
+		 * 
+		 * @memberOf mmir.tools.ChecksumUtils#
 		 */
 		getConentSeparator: function(){
 			return digestContentSeparator;
