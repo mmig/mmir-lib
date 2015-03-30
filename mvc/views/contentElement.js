@@ -895,6 +895,7 @@ ContentElement.prototype.hasDynamicContent = function(){
  * @public
  * 
  * @requires StorageUtils
+ * @requires RenderUtils
  */
 ContentElement.prototype.stringify = function(){
 	

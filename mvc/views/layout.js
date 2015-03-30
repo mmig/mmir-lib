@@ -65,9 +65,9 @@ define (['commonUtils', 'viewConstants', 'yield', 'storageUtils' ],
  * 			May be empty: in this case the processed contents must be
  * 						  added manually (cf. parser.StorageUtils)
  * 
- * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+ * @requires if param <code>definition</code> is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
  * 			
- * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+ * @requires if param <code>definition</code> is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
  * 
  */
 function Layout(name, definition, remote, ignoreMissingBody){

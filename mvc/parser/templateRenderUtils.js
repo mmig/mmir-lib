@@ -604,8 +604,8 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		//TODO (?) move getPartial-method from PresentationManager (i.e. remove dependency here)?
 
 	    		
-	    		//FIXME there seems to be a dependency cycle: upon loading of templateRendererUtils.js, the presentationManager is not loaded yet!
-		    	//QUICK-FIX: retrieve renderUtils "on demand" here:
+	    		//NOTE previously, there was a dependency cycle: upon loading of templateRendererUtils.js, the presentationManager was not yet loaded.
+		    	//     This should not happen anymore, but just to be save, load the presentationManager, if it is not available yet
 		    	if(!presentationManager){
 		    		presentationManager = require('presentationManager');
 		    	}

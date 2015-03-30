@@ -1086,7 +1086,8 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 */
 		var doParseTemplate = function(controller, templateName, config, templateContent, status){
 
-			require(['parseUtils'], function(){
+			//NOTE need to request renderUtils here too, since it is needed during parsing!
+			require(['parseUtils', 'renderUtils'], function(){
 
 				var templateObj;
 				if(controller){
