@@ -39,7 +39,7 @@
   var Recorder = function(source, cfg){
     var config = cfg || {};
     var bufferLen = config.bufferLen || 4096;
-    this.context = source.context;
+//    this.context = source.context;
 //    this.createScriptProcessor = function(contextObj, bufferSize, numberOfInputChannels, numberOfOutputChannels){
 //    	if(contextObj.createJavaScriptNode){
 //    		return contextObj.createJavaScriptNode(bufferSize, numberOfInputChannels, numberOfOutputChannels);
@@ -52,19 +52,19 @@
 //    	}
 //    };
 //    this.node = this.createScriptProcessor(this.context, bufferLen, 2, 2);
-    if(!this.context.createScriptProcessor){
-    	this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
-    }
-    else {
-    	this.node = this.context.createScriptProcessor(bufferLen, 2, 2);
-    }
+//    if(!this.context.createScriptProcessor){
+//    	this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
+//    }
+//    else {
+//    	this.node = this.context.createScriptProcessor(bufferLen, 2, 2);
+//    }
     var worker = new Worker(config.workerPath || WORKER_PATH);
-    worker.postMessage({
-    	command: 'init',
-    	config: {
-    		sampleRate: this.context.sampleRate
-    	}
-    });
+//    worker.postMessage({
+//    	command: 'init',
+//    	config: {
+//    		sampleRate: this.context.sampleRate
+//    	}
+//    });
     this.processor = worker;///////////TODO MOD
     
     var recording = false,
@@ -72,7 +72,7 @@
     
     var dataListener;//TODO MOD
 
-    this.node.onaudioprocess = function(e){
+    var doRecordAudio = function(e){
       if (!recording) return;
       worker.postMessage({
         command: 'record',
@@ -81,6 +81,35 @@
           e.inputBuffer.getChannelData(1)
         ]
       });
+    }
+    
+    this._initSource = function(inputSource){
+
+        this.context = inputSource.context;
+        
+        //if we already had another input-source before, we need to clean up first:
+        if(this.node){
+        	this.node.disconnect();
+        }
+        
+    	if(!this.context.createScriptProcessor){
+        	this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
+        }
+        else {
+        	this.node = this.context.createScriptProcessor(bufferLen, 2, 2);
+        }
+
+    	this.node.onaudioprocess = doRecordAudio;
+    	
+    	worker.postMessage({
+        	command: 'init',
+        	config: {
+        		sampleRate: this.context.sampleRate
+        	}
+        });
+    	
+    	inputSource.connect(this.node);
+        this.node.connect(this.context.destination); 
     }
 
     this.configure = function(cfg){
@@ -164,8 +193,10 @@
     	
     }
 
-    source.connect(this.node);
-    this.node.connect(this.context.destination);    // if the script node is not connected to an output the "onaudioprocess" event is not triggered in chrome.
+//    source.connect(this.node);
+//    this.node.connect(this.context.destination);    // if the script node is not connected to an output the "onaudioprocess" event is not triggered in chrome.
+    
+    this._initSource(source);
   };
 
   Recorder.forceDownload = function(blob, filename){
