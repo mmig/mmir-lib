@@ -171,93 +171,86 @@ newMediaPlugin = {
 				console.log('webkitAudioInput: start analysing audio input...');
 				var buffer = 0;
 				var prevDb;
-				
+
 				_currentInputStream = inputstream;
 				var inputNode = _audioContext.createMediaStreamSource(_currentInputStream);
-				
-				  ///////////////////// VIZ ///////////////////
-//				  recorder = recorderInstance;
 
-				  _audioAnalyzer = _audioContext.createAnalyser();
-				  _audioAnalyzer.fftSize = 2048;
-//				  _audioAnalyzer.smoothingTimeConstant = 1;
-				  inputNode.connect(_audioAnalyzer);
-				  
-//				  audioRecorder = new Recorder( _currentInputStream );
-//				  recorder = new Recorder(_currentInputStream, {workerPath: recorderWorkerPath});
+				///////////////////// VIZ ///////////////////
+//				recorder = recorderInstance;
 
-//				  updateAnalysers();
-				  
-				  var updateAnalysis = function(){
-					  if(!_currentInputStream){
-						  return;
-					  }
-					  
-					  var size = _audioAnalyzer.fftSize;//.frequencyBinCount;//
-					  var data = new Uint8Array(size);//new Float32Array(size);//
-					  _audioAnalyzer.getByteTimeDomainData(data);//.getFloatFrequencyData(data);//.getByteFrequencyData(data);//.getFloatTimeDomainData(data);//
-					  
-					  var min = 32768;
-					  var max = -32768;
-					  var total = 0;
-					  for(var i=0; i < size; ++i){
-						  var datum = Math.abs(data[i]); 
-						  if (datum < min)
-							  min = datum;
-						  if (datum > max)
-							  max = datum;
-						  
-						  total += datum;
-					  }
-					  var avg = total / size;
-//					  console.info('audio ['+min+', '+max+'], avg '+avg);
-				  
-//					  _currentMicMax = normalize(max);
-//					  _currentMicMin = normalize(min);
-//					  _currentMicAvg = normalize(avg);
-//					  _currentMicTime = new Date().getTime();
-//					  
-//					  _currentMicValues.push({v: normalize(max), t: new Date().getTime()});
-					  
-//					  var rms = getRms(data, size);
-//					  var db = 20 * Math.log(rms);// / 0.0002);
-//					  
-//					  console.info('audio rms '+rms+', db '+db);
-					  
-					  /* RMS stands for Root Mean Square, basically the root square of the
-					   * average of the square of each value. */
-					  var rms = 0, val;
-					  for (var i = 0; i < data.length; i++) {
+				_audioAnalyzer = _audioContext.createAnalyser();
+				_audioAnalyzer.fftSize = 2048;
+//				_audioAnalyzer.smoothingTimeConstant = 1;
+				inputNode.connect(_audioAnalyzer);
+
+//				audioRecorder = new Recorder( _currentInputStream );
+//				recorder = new Recorder(_currentInputStream, {workerPath: recorderWorkerPath});
+
+//				updateAnalysers();
+
+				var updateAnalysis = function(){
+					if(!_currentInputStream){
+						return;
+					}
+
+					var size = _audioAnalyzer.fftSize;//.frequencyBinCount;//
+					var data = new Uint8Array(size);//new Float32Array(size);//
+					_audioAnalyzer.getByteTimeDomainData(data);//.getFloatFrequencyData(data);//.getByteFrequencyData(data);//.getFloatTimeDomainData(data);//
+
+					var min = 32768;
+					var max = -32768;
+					var total = 0;
+					for(var i=0; i < size; ++i){
+						var datum = Math.abs(data[i]); 
+						if (datum < min)
+							min = datum;
+						if (datum > max)
+							max = datum;
+
+						total += datum;
+					}
+					var avg = total / size;
+//					console.info('audio ['+min+', '+max+'], avg '+avg);
+
+//					var rms = getRms(data, size);
+//					var db = 20 * Math.log(rms);// / 0.0002);
+
+//					console.info('audio rms '+rms+', db '+db);
+
+					/* RMS is the Root Mean Square: basically the square root of the
+					 * sum of squared "deviations" from the average.
+					 */
+					var rms = 0, val;
+					for (var i = 0; i < data.length; i++) {
 						val = data[i] - avg;
-					    rms += val * val;
-					  }
-					  rms /= data.length;
-					  rms = Math.sqrt(rms);
-					  
-					  var db = rms;
-//					  console.info('audio rms '+rms);
-					  
-//					  _currentMicValues.push({v: db, t: new Date().getTime()});
-					  
-					  //actually fire the change-event on all registered listeners:
-					  if(hasChanged(db, prevDb)){
-//						  console.info('audio rms changed: '+prevDb+' -> '+db);
-						  prevDb = db;
-						  
-						  //adjust value
-						  db *= MIC_NORMALIZATION_FACTOR;
-						  
-						  mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
-					  }
-					  
-					  
-					  if(_isAnalysisActive && _currentInputStream){
-						  setTimeout(updateAnalysis, MIC_QUERY_INTERVALL);
-					  }
-				  };
-				  updateAnalysis();
-				  ///////////////////// VIZ ///////////////////
-				  
+						rms += val * val;
+					}
+					rms /= data.length;
+					rms = Math.sqrt(rms);
+
+					var db = rms;
+//					console.info('audio rms '+rms);
+
+
+					//now actually fire the change-event on all registered listeners:
+					if(hasChanged(db, prevDb)){
+//						console.info('audio rms changed: '+prevDb+' -> '+db);
+						prevDb = db;
+
+						//adjust value
+						db *= MIC_NORMALIZATION_FACTOR;
+
+						mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
+					}
+
+
+					if(_isAnalysisActive && _currentInputStream){
+						setTimeout(updateAnalysis, MIC_QUERY_INTERVALL);
+					}
+				};
+				updateAnalysis();
+				///////////////////// VIZ ///////////////////
+
 			}
 			
 			
@@ -288,13 +281,8 @@ newMediaPlugin = {
 					_currentInputStream = void(0);
 					stream.stop();
 					_isAnalysisActive = false;
-//					_currentMicMax = void(0);
-//					_currentMicMin = void(0);
-//					_currentMicAvg = void(0);
-//					_currentMicTime = void(0);
 					
-//					_currentMicValues.splice(0, _currentMicValues.length);
-					console.log('webkitAudioInput: stopped analysing audio input!');
+					console.debug('webkitAudioInput: stopped analysing audio input!');
 				}
 				else if(_isAnalysisActive === true){
 					console.warn('webkitAudioInput: stopped analysing audio input process, but no valid audio stream present!');
