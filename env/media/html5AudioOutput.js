@@ -61,6 +61,122 @@ newMediaPlugin = {
 			  	{name: 'MEDIA_ERR_DECODE', 			code: 3, description: 'An error of some description occurred while decoding the media resource, after the resource was established to be usable.'},
 			  	{name: 'MEDIA_ERR_NONE_SUPPORTED', 	code: 4, description: 'The media resource indicated by the src attribute or assigned media provider object was not suitable.'}
 			];
+			
+			/**
+			 * HELPER for creating error object that is returned in the failureCallbacks
+			 * 
+			 * @param {Number} code
+			 * 			The error code: if in [1,4], the corresponding HTML5 MediaError information will be returned
+			 * 			Otherwise an "error 0", i.e. internal/unknown error will be created
+			 * @param {Event|Error} errorEvent
+			 * 			the causing event- or error-object
+			 * 
+			 * @returns {Object} the error object, which has 3 properties: 
+			 * 			  code (Number): the error code
+			 * 			  message (String): the error name
+			 * 			  description (String): a descriptive text for the error
+			 * 
+			 * @memberOf Html5AudioOutput#
+			 */
+			function createError(code, errorEvent){
+				
+				var mErr;
+				if(code > 0 && code < 5){
+					mErr = MediaError[code];
+				}
+				else {
+					mErr = MediaError[0];
+				}
+				
+				return {
+						code: 			mErr.code,
+						message: 		mErr.name,
+						description: 	mErr.description + (code===0 && errorEvent? ' ' + errorEvent.toString() : '')
+				};
+			}
+			
+			/**
+			 * FACTORY for creating error-listeners (that trigger the failureCallback)
+			 * 
+			 * @param {Object} [ctx]
+			 * 			the context for the errorCallback.
+			 * 			IF omitted, the callback will be within the default (i.e. global) context.
+			 * @param {Function} [errorCallback]
+			 * 			the error callback.
+			 * 			Is invoked with 2 arguments:
+			 * 			errorCallback(error, event)
+			 * 			where error has 3 properties: 
+			 * 			  code (Number): the error code
+			 * 			  message (String): the error name
+			 * 			  description (String): a descriptive text for the error
+			 * 
+			 * 			IF omitted, the error will be printed to the console.
+			 * 
+			 * @return {Function} wrapper function that can be registered as event-listener (takes one argument: the event)
+			 * 
+			 * @memberOf Html5AudioOutput#
+			 */
+			function createErrorWrapper(ctx, errorCallback){
+				
+				return function(evt){
+					
+					var code;
+					//extract MediaError from event's (audio) target:
+					if(evt && evt.target && evt.target.error && (code = evt.target.error.code) && code > 0 && code < 5){
+//						code = code; //NO-OP: code value was already assigned in IF clause
+					}
+					else {
+						//unknown cause: create internal-error object
+						code = 0;
+					}
+					
+					var err = createError(code, evt);
+					
+					if(errorCallback){
+						errorCallback.call(ctx, err, evt);
+					}
+					else {
+						console.error(err.message + ' (code '+err.code + '): '+err.description, evt);
+					}
+				};
+			}
+			
+			/**
+			 * HELPER for creating data-URL from binary data (blob)
+			 * 
+			 * @param {Blob} blob
+			 * 			The audio data as blob
+			 * @param {Function} callback
+			 * 			callback that will be invoked with the data-URL:
+			 * 			<code>callback(dataUrl)</code>
+			 * 
+			 * @memberOf Html5AudioOutput#
+			 */
+			function createDataUrl(blob, callback){
+				
+				if(window.URL){
+					callback( window.URL.createObjectURL(blob) );
+				}
+				else if(window.webkitURL){
+					callback( window.webkitURL.createObjectURL(blob) );
+				}
+				else {
+					
+					//DEFAULT: use file-reader:
+					var fileReader = new FileReader();
+
+		            // onload needed since Google Chrome doesn't support addEventListener for FileReader
+		            fileReader.onload = function (evt) {
+		            	// Read out "file contents" as a Data URL
+		                var dataUrl = evt.target.result;
+		                callback(dataUrl);
+		            };
+		            
+		            //start loading the blob as Data URL:
+		            fileReader.readAsDataURL(blob);
+				}
+				
+			}
 
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
@@ -69,17 +185,26 @@ newMediaPlugin = {
 				 * @memberOf Html5AudioOutput.prototype
 				 * @see mmir.MediaManager#playWAV
 				 */
-				playWAV: function(blob, successCallback, failureCallback){
+				playWAV: function(blob, onEnd, failureCallback, successCallback){
+					
 					try {
-						blobURL = window.webkitURL.createObjectURL(blob);
-						var my_audio = new Audio(blobURL,null,failureCallback);
-						if(successCallback){
-							my_audio.addEventListener('ended', successCallack, false);
-						}
-						my_audio.play();
+						
+						var self = this;
+						createDataUrl(blob, function(dataUrl){
+							
+							self.playURL(dataUrl, onEnd, failureCallback, successCallback);
+							
+						});
+						
+						
 					} catch (e){
-						if(failureCallBack){
-							failureCallBack(e);
+						
+						var err = createError(0,e);
+						if(failureCallback){
+							failureCallback.call(null, err, e);
+						}
+						else {
+							console.error(err.message + ': ' + err.description, e);
 						}
 					}
 				},
@@ -88,19 +213,67 @@ newMediaPlugin = {
 				 * @memberOf Html5AudioOutput.prototype
 				 * @see mmir.MediaManager#playURL
 				 */
-				playURL: function(url, onEnd, failureCallBack, successCallback){
+				playURL: function(url, onEnd, failureCallback, successCallback){
+					
 					try {
+						
+						var audio = new Audio(url);
 
-						var my_media = new Audio(url,null,failureCallback);
-
-						if(successCallback){
-							my_media.addEventListener('ended', onEnd, false);
-							my_media.addEventListener('canplay', successCallback, false);
-						}
-						my_media.play();
-					} catch (e){
 						if(failureCallback){
-							failureCallback(e);
+							audio.addEventListener('error', createErrorWrapper(audio, failureCallback), false);
+						}
+						
+						if(onEnd){
+							audio.addEventListener('ended', onEnd, false);
+						}
+						
+						if(successCallback){
+							audio.addEventListener('canplay', successCallback, false);
+						}
+						
+						audio.play();
+						
+					} catch (e){
+						
+						var err = createError(0,e);
+						if(failureCallback){
+							failureCallback.call(null, err, e);
+						}
+						else {
+							console.error(err.message + ': ' + err.description, e);
+						}
+					}
+					
+				},
+				/**
+				 * @public
+				 * @memberOf Html5AudioOutput.prototype
+				 * @see mmir.MediaManager#getWAVAsAudio
+				 */
+				getWAVAsAudio: function(blob, callback, onEnd, failureCallback, onInit){
+					
+					try {
+						
+						var self = this;
+						var audioObj;
+						
+						createDataUrl(blob, function(dataUrl){
+							
+							audioObj = self.getURLAsAudio(dataUrl, onEnd, failureCallback, onInit);
+							
+							callback(audioObj);
+							
+						});
+						
+						
+					} catch (e){
+						
+						var err = createError(0, e);
+						if(failureCallback){
+							failureCallback.call(audioObj, err, e);
+						}
+						else {
+							console.error(err.message + ': ' + err.description, e);
 						}
 					}
 				},
@@ -109,7 +282,8 @@ newMediaPlugin = {
 				 * @memberOf Html5AudioOutput.prototype
 				 * @see mmir.MediaManager#getURLAsAudio
 				 */
-				getURLAsAudio: function(url, onEnd,  failureCallback, successCallback){
+				getURLAsAudio: function(url, onEnd, failureCallback, successCallback){
+					
 					try {
 
 						/**
@@ -126,61 +300,8 @@ newMediaPlugin = {
 						 * @private
 						 * @memberOf AudioHtml5Impl#
 						 */
-						var my_media = new Audio(url,null,failureCallback);
-						
-						/**
-						 * Wrapper for error callback:
-						 * normalize error events with attached MediaErrors to Cordova-error objects
-						 *  
-						 * @private
-						 * @memberOf AudioHtml5Impl#
-						 */
-						var errorWrapper = function(evt){
-							
-							var code, mErr;
-							//extract MediaError from event's (audio) target:
-							if(evt && evt.target && evt.target.error && (code = evt.target.error.code) && code > 0 && code < 5){
-								mErr = MediaError[code];
-							}
-							else {
-								mErro = MediaError[0];
-							}
-							
-							var err = {
-									code: 			mErr.code,
-									message: 		mErr.name,
-									description: 	mErr.description + (code===0 && evt? ' ' + evt.toString() : '')
-							};
-							
-							if(failureCallback){
-								failureCallback.call(mediaImpl, err, evt);
-							}
-							else {
-								console.error(err.message + ' (code '+err.code + '): '+err.description, evt);
-							}
-						};
-						my_media.addEventListener('error', errorWrapper, false);
-						
-						
-						my_media.addEventListener('ended',
-							/**
-							 * @private
-							 * @memberOf AudioHtml5Impl#
-							 */
-							function onEnded(){
+						var my_media = new Audio(url);
 
-								//only proceed if we have a media-object (may have already been released)
-								if(enabled & mediaImpl){
-									mediaImpl.stop();
-								}
-								if (onEnd){
-									onEnd.apply(mediaImpl, arguments);
-								}
-							},
-							false
-						);
-						
-						
 						/**
 						 * @private
 						 * @memberOf AudioHtml5Impl#
@@ -199,7 +320,7 @@ newMediaPlugin = {
 							}
 						};
 						my_media.addEventListener('canplay', canPlayCallback, false);
-
+						
 						/**
 						 * The Audio abstraction that is returned by {@link mmir.MediaManager#getURLAsAudio}.
 						 * 
@@ -365,12 +486,36 @@ newMediaPlugin = {
 									return enabled;
 								}
 						};
+						
+						my_media.addEventListener('error', createErrorWrapper(mediaImpl, failureCallback), false);
+						
+						my_media.addEventListener('ended',
+							/**
+							 * @private
+							 * @memberOf AudioHtml5Impl#
+							 */
+							function onEnded(){
+
+								//only proceed if we have a media-object (may have already been released)
+								if(enabled & mediaImpl){
+									mediaImpl.stop();
+								}
+								if (onEnd){
+									onEnd.apply(mediaImpl, arguments);
+								}
+							},
+							false
+						);
 
 						return mediaImpl;
 
 					} catch (e){
+						var err = createError(0,e);
 						if(failureCallback){
-							failureCallback(e);
+							failureCallback.call(mediaImpl, err, e);
+						}
+						else {
+							console.error(err.message + ': ' + err.description, e);
 						}
 					}
 				}
