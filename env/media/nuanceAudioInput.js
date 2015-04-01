@@ -26,7 +26,7 @@
 
 /**
  * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin
- * @version 0.6.0
+ * @version 0.7.0
  * @ignore
  */
 newMediaPlugin = {
@@ -442,9 +442,7 @@ newMediaPlugin = {
 
 					mediaManager._ready(_pluginName);
 
-					//FIXME currently, NuancePlugin returns failure on successful cancel-performance, so we call the function with switched failure, success arguments...
-					//			-> switch back, when NuancePlugin returns PluginResults correctly...
-					window.plugins.nuancePlugin.cancel(failureCallBack, successCallBack);
+					window.plugins.nuancePlugin.cancelRecognition(successCallBack, failureCallBack);
 				},
 				getMicLevels: function(successCallback,failureCallback){
 

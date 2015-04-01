@@ -26,7 +26,7 @@
 
 /**
  * part of Cordova plugin: de.dfki.iui.mmir.NuancePlugin
- * @version 0.5.0
+ * @version 0.7.0
  * @ignore
  */
 newMediaPlugin = {
@@ -102,9 +102,9 @@ newMediaPlugin = {
 					 * @see mmir.MediaManager#cancelSpeech
 					 */
 	    			cancelSpeech: function(successCallBack,failureCallBack){
-	    				//FIXME currently, NuancePlugin returns failure on successful cancel-performance, so we call the function with switched failure, success arguments...
-	    				//			-> switch back, when NuancePlugin returns PluginResults correctly... 
-	    				window.plugins.nuancePlugin.cancel(failureCallBack, successCallBack);
+	    				
+	    				window.plugins.nuancePlugin.cancelSpeech(successCallBack, failureCallBack);
+	    				
 	    			},
 					setTextToSpeechVolume: function(newValue){
 	    				//FIXME implement this? how? Nuance library gives no access to audio volume (we could set the Android volume level ...)
