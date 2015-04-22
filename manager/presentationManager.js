@@ -721,6 +721,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @async
 		 * @private
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @param {String} rawViewData
 		 * 					the text content of the view template (i.e. content of a eHTML file "as is")
@@ -735,24 +736,38 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 */
 		function loadPrecompiledView(rawViewData, targetpath, success, fail){
 
-			if(! isUpToDate(rawViewData, targetpath)){
-				if(fail) fail('Precompiled view file is outdated!');
-				else console.warn('Outdated pre-compiled view at: '+targetpath);
-			}
-
-			commonUtils.getLocalScript( //scriptUrl, success, fail)
-					targetpath, success, fail
-			);
+			//NOTE: stored template require the renderUtils:
+			require(['renderUtils'], function(){
+				
+				if(! isUpToDate(rawViewData, targetpath)){
+					if(fail) fail('Precompiled view file is outdated!');
+					else console.warn('Outdated pre-compiled view at: '+targetpath);
+					
+					//-> do not load the pre-compiled view, instead let fail-callback handle re-parsing for the view
+					return;/////////////////////// EARLY EXIT /////////////////////
+				}
+	
+				commonUtils.getLocalScript( //scriptUrl, success, fail)
+						targetpath, success, fail
+				);
+				
+			});
+			
 		}
 
-		//determine if pre-compiled views (*.js) should be used
-		//DEFAULT: use templates files (*.ehtml) and compile them (freshly) on-the-fly
+		/**
+		 * Flag for determining if pre-compiled views (*.js) should be used
+		 * 
+		 * Reads property {@link #CONFIG_PRECOMPILED_VIEWS_MODE}. If the property is not set,
+		 * <code>false</code> is used by default, i.e. no pre-compiled views are used.
+		 *
+		 * @protected
+		 * @default
+		 * @type Boolean
+		 * @default false: use templates files (*.ehtml) and compile them (freshly) on-the-fly
+		 * @memberOf mmir.MediaManager.init
+		 */
 		var isUsePreCompiledViews = configurationManager.getBoolean(CONFIG_PRECOMPILED_VIEWS_MODE, true, false);
-
-		//util for checking if pre-compiled views are up-to-date
-		// (i.e.: can we use the pre-compiled view, or do we need to use the template file and compile it on-the-fly)
-		//TODO should this also be configurable -> up-to-date check (e.g. use pre-compiled views without checking for changes)
-		checksumUtils = checksumUtils.init();
 
 		/**
 		 * Read the checksum file that was created when the pre-compiled view was created:
@@ -764,6 +779,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 *    
 		 * @sync the checksum file is loaded in synchronous mode
 		 * @private
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @param {String} viewContent
 		 * 						the content of the view template (i.e. loaded eHTML file)
@@ -803,17 +819,33 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @function
 		 * @private
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
 		 */
-		function loadLayouts() {
+		function loadLayouts(){
 			// Load application's layouts. 
 
-
+			/**
+			 * @type jQuery.Deffered
+			 * @private
+			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 */
 			var defer = $.Deferred();
-
+			
+			/**
+			 * @type String
+			 * @private
+			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 */
 			var ctrlNameList = controllerManager.getControllerNames();
-
+			
+			/**
+			 * HELPER object for tracking the loading-status of the layouts
+			 * 
+			 * @private
+			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 */
 			var loadStatus = {
 					loader: defer,
 					remainingCtrlCount: ctrlNameList.length + 1,//+1: for the default layout
@@ -855,13 +887,23 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 					}
 			};
 
+			/**
+			 * HELPER object for loading/creating the layouts
+			 * @private
+			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 */
 			var createLayoutConfig = {
 					constructor: Layout,
 					typeName: 'Layout',
 					collection: _layouts
 			};
 
-			//helper for loading a single layout-file
+			/**
+			 * helper for loading a single layout-file
+			 * 
+			 * @private
+			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 */
 			var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
 
 				var ctrlName;
@@ -918,6 +960,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all views
 		 * 
@@ -953,6 +996,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
 		 * 					NOTE: loading failures will generate a warning message (on the console)
@@ -991,6 +1035,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @private
 		 * @function
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @param {PlainObject} status
 		 * 		the object for managing the laoding status.
@@ -1016,6 +1061,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @private
 		 * @function
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @param {PlainObject} status
 		 * 		the object for managing the laoding status:
@@ -1050,6 +1096,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @private
 		 * @function
+		 * @memberOf mmir.MediaManager.init
 		 * 
 		 * @param {Controller} controller
 		 * 		the controller to which the template files belong.
@@ -1133,8 +1180,9 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
+		 * @memberOf mmir.MediaManager.init
 		 * 
-		 * @see doLoadTemplateFile
+		 * @see #doLoadTemplateFile
 		 * 
 		 * @param {PlainObject} createConfig
 		 * 			configuration object that determines which templates are loaded, and how
@@ -1147,10 +1195,26 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 */
 		var doProcessTemplateList = function(createConfig){
 
+			/**
+			 * @type jQuery.Deferred
+			 * @private
+			 * @memberOf mmir.MediaManager.init.doProcessTemplateList
+			 */
 			var defer = $.Deferred();
-
+			
+			/**
+			 * @type String
+			 * @private
+			 * @memberOf mmir.MediaManager.init.doProcessTemplateList
+			 */
 			var ctrlNameList = controllerManager.getControllerNames();
-
+			
+			/**
+			 * HELPER object for tracking the loading-status of the views
+			 * 
+			 * @private
+			 * @memberOf mmir.MediaManager.init.doProcessTemplateList
+			 */
 			var loadStatus = {
 					loader: defer,
 					remainingCtrlCount: ctrlNameList.length,
@@ -1234,6 +1298,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
+		 * @memberOf mmir.MediaManager.init
 		 */
 		var doLoadTemplateFile = function(controller, templateInfo, createConfig, loadStatus){
 			++loadStatus.currentLoadCount;
@@ -1286,21 +1351,48 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		
 		///////////// start intialization: ////////////////
 
+		/**
+		 * Deferred / promise for loading views.
+		 * 
+		 * @type jQuery.Deferred
+		 * @private
+		 * @memberOf mmir.MediaManager.init
+		 */
 		var defer = $.Deferred();
 
 		var isLayoutsLoaded = false;
 		var isViewsLoaded = false;
 		var isPartialsLoaded = false;
 		var isViewEngineLoaded = false;//MOD modularize view-engine jqm
+		
+		/**
+		 * Helper: called each time a loading-function finishes.
+		 * Checks if all other loading-functions have finished, and if so, resolves the init-promise.
+		 * 
+		 * @private
+		 * @memberOf mmir.MediaManager.init
+		 */
 		var checkResolved = function(){
 			if(isLayoutsLoaded && isViewsLoaded && isPartialsLoaded && isViewEngineLoaded){
 				defer.resolve();
 			}
 		};
+		/**
+		 * Helper: called if an error occured in one of the loading-functions:
+		 * rejects/fails the init-promise.
+		 * 
+		 * @private
+		 * @memberOf mmir.MediaManager.init
+		 */
 		var failPromise = function(msg){
 			defer.reject(msg);
 		};
 
+		//util for checking if pre-compiled views are up-to-date
+		// (i.e.: can we use the pre-compiled view, or do we need to use the template file and compile it on-the-fly)
+		//TODO should this also be configurable -> up-to-date check (e.g. use pre-compiled views without checking for changes)
+		checksumUtils = checksumUtils.init();
+		
 		loadLayouts().then(
 				function(){ isLayoutsLoaded = true; checkResolved(); },
 				failPromise
