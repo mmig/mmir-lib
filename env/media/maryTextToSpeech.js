@@ -147,11 +147,48 @@ newMediaPlugin = {
 			 * @memberOf MaryTextToSpeech#
 			 */
 			var sentenceArray = [];
+
+			var callOptions = void(0);
+			
 			/**  
 			 * In sentence mode: pause (in milli-seconds) between reading sentences.
 			 * @memberOf MaryTextToSpeech#
 			 */
 			var pauseDuration = 500;
+			
+			/**  
+			 * Placeholder for empty text / sentences:
+			 * no audio will be created for empty text/sentences, but using this placeholder-audio,
+			 * pause-durations etc will be applied (e.g. during sentence-mode).
+			 * 
+			 * @memberOf MaryTextToSpeech#
+			 */
+			var EMPTY_SENTENCE = {
+					type: 'empty',
+					disable: function(){},
+					release: function(){},
+					play: function(){
+						
+						//simulate async playing via setTimeout
+						setTimeout(function(){
+							
+							console.log("done playing EMPTY_SENTENCE");
+							console.log("LongTTS play next in "+pauseDuration+ " ms... ");
+							
+							//trigger playing the next entry (after the set pause-duration)
+							setTimeout(playNext, pauseDuration);
+							
+						}, 10);
+						
+					},
+					stop: function(){},
+					enable: function(){},
+					isEnabled: function(){return true;},//never disabled
+					isPaused: function(){return false;},//never paused
+					setVolume: function(){},
+					getDuration: function(){return 0;}//no duration
+			};
+			
 			/** 
 			 * HELPER for splitting a single String into "sentences", i.e. Array of Strings
 			 * @param {String} text
@@ -164,10 +201,11 @@ newMediaPlugin = {
 				return text.split("#");
 			};
 			/**  @memberOf MaryTextToSpeech# */
-			var generateTTSURL = function(text){
+			var generateTTSURL = function(text, options){
 				text = encodeURIComponent(text);
-				var lang = languageManager.getLanguageConfig(_pluginName);
-				var voice = languageManager.getLanguageConfig(_pluginName, 'voice');
+				var lang = options && options.language? options.language : languageManager.getLanguageConfig(_pluginName);
+				//NOTE voice-options may be empty string -> need to check against undefined
+				var voice = options && typeof options.voice !== 'undefined'? options.voice : languageManager.getLanguageConfig(_pluginName, 'voice');
 				
 				var voiceParamStr = voice? '&VOICE='+voice : '';
 				
@@ -178,14 +216,23 @@ newMediaPlugin = {
 			var playNext = function playNext(){
 				
 				playIndex++;
-				if (playIndex<(audioArray.length)){
-					ttsMedia=audioArray[playIndex];
-
-					console.log("LongTTS playing "+playIndex+ " '"+sentenceArray[playIndex]+ "'" + (!audioArray[playIndex].isEnabled()?' DISABLED':''));//FIXME debug
+				if (playIndex < audioArray.length){
 					
-					audioArray[playIndex].setVolume(volume);
-					audioArray[playIndex].play();
-					loadNext();
+					if(audioArray[playIndex]){
+						
+						ttsMedia=audioArray[playIndex];
+	
+						console.log("LongTTS playing "+playIndex+ " '"+sentenceArray[playIndex]+ "'" + (!audioArray[playIndex].isEnabled()?' DISABLED':''));//FIXME debug
+						
+						audioArray[playIndex].setVolume(volume);
+						audioArray[playIndex].play();
+						loadNext();
+					}
+					else {
+						// -> audio is not yet loaded...
+						//    request loading the next audio, and use playNext as onLoaded-callback:
+						loadNext(playNext);
+					}
 				}
 				else {
 					if (onEndCallBack){
@@ -200,11 +247,11 @@ newMediaPlugin = {
 			};
 			
 			/**  @memberOf MaryTextToSpeech# */
-			var ttsSingleSentence = function(text, onEnd, failureCallBack, onLoad){
+			var ttsSingleSentence = function(text, onEnd, failureCallBack, onLoad, options){
 				
 				try {
 					isReady = false;		   			
-					ttsMedia = mediaManager.getURLAsAudio(generateTTSURL(text), 
+					ttsMedia = mediaManager.getURLAsAudio(generateTTSURL(text, options), 
 								function(){
 //									isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
 									if(onEnd){
@@ -242,7 +289,7 @@ newMediaPlugin = {
 			};
 
 			/**  @memberOf MaryTextToSpeech# */
-			var ttsSentenceArray = function(sentences, onEnd, failureCallBack, onInit){
+			var ttsSentenceArray = function(sentences, onEnd, failureCallBack, onInit, options){
 				{
 					try {
 						firstSentence = true;
@@ -251,6 +298,7 @@ newMediaPlugin = {
 						var size = sentences.length;
 						var theText = null;
 						
+						callOptions = options;
 						sentenceArray= [];
 						for(var i=0; i < size; ++i){
 							if(sentences[i] && sentences[i].length > 0){
@@ -258,6 +306,12 @@ newMediaPlugin = {
 								if(theText.length > 0){
 									sentenceArray.push(theText);
 								}
+								else {
+									sentenceArray.push(EMPTY_SENTENCE);
+								}
+							}
+							else {
+								sentenceArray.push(EMPTY_SENTENCE);
 							}
 						}
 							
@@ -283,47 +337,63 @@ newMediaPlugin = {
 
 			/**  @memberOf MaryTextToSpeech# */
 			var loadNext = function loadNext(onInit){//TODO not onInit is currently only used for the very first sentence ...
+				
 				if (isLoading) return null;
+				
 				//FIXME need to handle case that loadingIndex is not within buffer-size ...
 				if (((loadIndex-playIndex)<= bufferSize) && (loadIndex<(audioArray.length-1))){
 					isLoading = true;
 					var currIndex = ++loadIndex;
-					console.log("LongTTS loading "+currIndex+ " "+sentenceArray[currIndex]);
-					audioArray[currIndex] = mediaManager.getURLAsAudio(generateTTSURL(sentenceArray[currIndex]), 
-							function(){
-								console.log("LongTTS done playing "+currIndex+ " "+sentenceArray[currIndex]);
-								audioArray[currIndex].release();
-								
-
-								console.log("LongTTS play next in "+pauseDuration+ " ms... ");
-								setTimeout(playNext, pauseDuration);
-								
-								//TODO only invoke this, if previously the test for (loadIndex-playIndex)<= bufferSize) failed ...
-//								loadNext();
-							},
-
-							function(){
-								//TODO currently, all pending sentences are aborted in case of an error
-								//     -> should we try the next sentence instead?
-								
-//								isReady = true;//DISABLE -> EXPERIMENTAL: command-queue feature.
-								if (currentFailureCallBack){
-									currentFailureCallBack();
-								};
-								
-								//EXPERIMENTAL: command-queue feature.
-								processNextInCommandQueue();
-							},
-							function(){
-								console.log("LongTTS done loading "+currIndex+ " "+sentenceArray[currIndex]+ (!this.isEnabled()?' DISABLED':''));
-								isLoading = false;
-								loadNext();
-								
-								if(onInit){
-									onInit();
+					var currSentence = sentenceArray[currIndex];
+					console.log("LongTTS loading "+currIndex+ " "+currSentence);
+					if(currSentence !== EMPTY_SENTENCE){
+						audioArray[currIndex] = mediaManager.getURLAsAudio(generateTTSURL(currSentence, callOptions), 
+								function(){
+									console.log("LongTTS done playing "+currIndex+ " "+sentenceArray[currIndex]);
+									audioArray[currIndex].release();
+									
+	
+									console.log("LongTTS play next in "+pauseDuration+ " ms... ");
+									setTimeout(playNext, pauseDuration);
+									
+									//TODO only invoke this, if previously the test for (loadIndex-playIndex)<= bufferSize) failed ...
+	//								loadNext();
+								},
+	
+								function(){
+									//TODO currently, all pending sentences are aborted in case of an error
+									//     -> should we try the next sentence instead?
+									
+	//								isReady = true;//DISABLE -> EXPERIMENTAL: command-queue feature.
+									if (currentFailureCallBack){
+										currentFailureCallBack();
+									};
+									
+									//EXPERIMENTAL: command-queue feature.
+									processNextInCommandQueue();
+								},
+								function(){
+									console.log("LongTTS done loading "+currIndex+ " "+sentenceArray[currIndex]+ (!this.isEnabled()?' DISABLED':''));
+									isLoading = false;
+									loadNext();
+									
+									if(onInit){
+										onInit();
+									}
 								}
-							}
-					);
+						);
+					}
+					else {
+						audioArray[currIndex] = EMPTY_SENTENCE;
+						
+						console.log("LongTTS done loading "+currIndex+ " EMPTY_SENTENCE");
+						isLoading = false;
+						loadNext();
+						
+						if(onInit){
+							onInit();
+						}
+					}
 					
 					if (currIndex==0){
 						playNext();
@@ -340,7 +410,7 @@ newMediaPlugin = {
 				 * @memberOf MaryTextToSpeech.prototype
 				 * @see mmir.MediaManager#textToSpeech
 				 */
-				textToSpeech: function(parameter, successCallback, failureCallback, onInit){
+				textToSpeech: function(parameter, successCallback, failureCallback, onInit, options){
 					var errMsg;
 					if (!isReady) {
 						
@@ -376,9 +446,9 @@ newMediaPlugin = {
 							
 							return;/////////////////////////////////// EARLY EXIT /////////////////////////////
 						}
-						ttsSingleSentence(parameter, successCallback, failureCallback, onInit);
+						ttsSingleSentence(parameter, successCallback, failureCallback, onInit, options);
 					} else if((typeof parameter !== 'undefined')&& commonUtils.isArray(parameter) ){
-						ttsSentenceArray(parameter, successCallback, failureCallback, onInit);
+						ttsSentenceArray(parameter, successCallback, failureCallback, onInit, options);
 					} else if ((typeof parameter == 'object')){
 						if (parameter.pauseDuration!== null && parameter.pauseDuration>=0){
 							pauseDuration = parameter.pauseDuration;
@@ -394,13 +464,13 @@ newMediaPlugin = {
 							if (parameter.forceSingleSentence){
 								ttsSingleSentence(commonUtils.concatArray(parameter.text),successCallback, failureCallback, onInit);
 							} else {
-								ttsSentenceArray(parameter.text, successCallback, failureCallback, onInit);
+								ttsSentenceArray(parameter.text, successCallback, failureCallback, onInit, options);
 							}
 						}
 						if ((typeof parameter.text)== 'string'){
 							if (parameter.split || parameter.splitter){
 								var splitter = parameter.splitter || defaultSplitter;
-								ttsSentenceArray(splitter(parameter.text), successCallback, failureCallback, onInit);
+								ttsSentenceArray(splitter(parameter.text), successCallback, failureCallback, onInit, options);
 							} else {
 								ttsSingleSentence(parameter.text, successCallback, failureCallback, onInit);
 							}
