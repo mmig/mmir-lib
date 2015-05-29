@@ -174,22 +174,36 @@ function initMmir() {
 	 * 			the configuration object to which values are merged
 	 * @param {String} name
 	 * 			the name of the property in <code>conf1</code> that should be merged into <code>conf2</code>
+	 * @param {Boolean} [isNotRoot] OPTIONAL
+	 * 			when cursively called, this should be TRUE, otherwise FALSE
+	 * 			(i.e. this should only be used in the function's internal invocation)
 	 * 
 	 * @return {Boolean} <code>true</code> if property <code>name</code> was merged into conf2.
 	 * 
 	 * @memberOf mmir.internal
 	 * @private
 	 */
-	function doMergeInto(conf1, conf2, name){
+	function doMergeInto(conf1, conf2, name, isNotRoot){
 		
 		var v = conf1[name];
 		
 		if(typeof conf2[name] === 'undefined' || typeof v !== typeof conf2[name] || typeof v !== 'object'){
 			
 			//if not set in conf2 OR types differ OR value is primitive:
-			//    overwrite value in conf2 by applying conf1 unmodified through requirejs.config()
-
-			return false; ////////////////////////// EARLY EXIT ////////////
+			if( ! isNotRoot){
+				//... if it is at the root-level of the config-value:
+				//  let requirejs.config() take care of it (-> will overwrite value in conf2 by applying conf1)
+				//  -> signal that it was not merged, and should not be removed
+				return false; ////////////////////////// EARLY EXIT ////////////
+			} else {
+				//... if not at root-level, we must move the property over to conf2, 
+				//    otherwise requirejs.config() would overwrite the entire property in conf2 with the one from conf1
+				//    -> move property (copy to conf2, remove from conf1)
+				//    -> signal that we merge the property
+				conf2[name] = v;
+				conf1[name] = void(0);
+				return true; ////////////////////////// EARLY EXIT ////////////
+			}
 		}
 		
 		//ASSERT v has type object AND conf2 has an object value too
@@ -198,7 +212,7 @@ function initMmir() {
 		for(var cname in conf1[name]){
 			if(conf1[name].hasOwnProperty(cname)){
 			    //merge cname into conf2
-				doMergeInto(conf1[name], conf2[name], cname);
+				doMergeInto(conf1[name], conf2[name], cname, true);
 			}
 		}
 
