@@ -105,6 +105,24 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	     */
 	    this.headerContents = "";
 
+	    /**
+	     * List for extracted & parsed SCRIPT, LINK and STYLE tags
+	     * 
+	     * @type Array<Layout.TagElement>
+	     * @public
+	     */
+	    this.headerElements = [];
+	    
+	    /**
+	     * The page / layout title
+	     * 
+	     * Will be extracted from <em>definition</em>'s TITLE-tag, if present.
+	     * 
+	     * @type String
+	     * @public
+	     */
+	    this.title = '';
+
 		/**
 	     * This variable holds the contents of the body part of the layout.
 	     * 
@@ -258,6 +276,8 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	//	    		pureHtml = pureHtml.substring(0,matchScriptTag.index) + pureHtml.substring(matchScriptTag.index + matchScriptTag[0].length);// pureHtml.replace(matchScriptTag[matchIndex], '');
 	
 		    	    removedScriptAndLinkHmtl.push({start: matchScriptTag.index, end: matchScriptTag.index + matchScriptTag[0].length});
+
+		    	    self.headerElements.push(new Layout.TagElement(matchScriptTag[2] || matchScriptTag[9], matchScriptTag[4], 'SCRIPT'));
 		    	}
 		    }
 		    
@@ -284,6 +304,8 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		        		self.headerContents += matchLinkTag[0];
 		    		}
 		    	    removedScriptAndLinkHmtl.push({start: matchLinkTag.index, end: matchLinkTag.index + matchLinkTag[0].length});
+
+		    	    self.headerElements.push(new Layout.TagElement(matchLinkTag[2] || matchLinkTag[9], matchLinkTag[4], 'LINK'));
 		    	}
 		    }
 		    
@@ -312,6 +334,8 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	//	    		pureHtml = pureHtml.substring(0,matchStyleTag.index) + pureHtml.substring(matchStyleTag.index + matchStyleTag[0].length);// pureHtml.replace(matchStyleTag[matchIndex], '');
 	
 		    	    removedScriptAndLinkHmtl.push({start: matchStyleTag.index, end: matchStyleTag.index + matchStyleTag[0].length});
+
+		    	    self.headerElements.push(new Layout.TagElement(matchStyleTag[2], matchStyleTag[4], 'STYLE'));
 		    	}
 		    }
 		    
@@ -372,36 +396,27 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		    //NOTE this assumes that matchBodyTag-RegExpr starts with: /(<body([\r\n]|.)*?>) ... 
 		    if(matchBodyTag && matchBodyTag[1] && matchBodyTag[1].length > '<body>'.length){
 		    	
-		//    	//NOTE: 1st case should really never occur.
-		//    	var bodyAttrEnd = matchBodyTag[1].endsWith('/>')? matchBodyTag[1].length-2 : matchBodyTag[1].length-1;
-		//    	var bodyAttr = '<div ' + matchBodyTag[1].substring('<body'.length, bodyAttrEnd) + '</div>';
-		//    	bodyAttr = jQuery(bodyAttr);
+//		    	//NOTE: 1st case should really never occur.
+//		    	var bodyAttrEnd = matchBodyTag[1].endsWith('/>')? matchBodyTag[1].length-2 : matchBodyTag[1].length-1;
+//		    	var bodyAttr = '<div ' + matchBodyTag[1].substring('<body'.length, bodyAttrEnd) + '</div>';
+//		    	bodyAttr = jQuery(bodyAttr);
 		    	
-		    	//extracts TAG attributes into an JSON-object
-		    	// e.g. <body onload="on_load();" class='biggestFont'>
-		    	// ->
-		    	// {onload: "on_load()", class: "biggestFont"}
-		    	var getTagAttr = function(str){
-		    		
-		    		var regExpr = /(\s+([^=]*?)\s*=\s*"([^"]*?)")|(\s+([^=]*?)\s*=\s*'([^']*)')/igm;
-		    		var result = {};
-		    		var match;
-		    	    
-		    	    while(match = regExpr.exec(str)){
-		    	    	
-		    	    	if(match[2]){
-		    				result[match[2]] = match[3].trim();
-		    			}
-		    			else if(match[5]){
-		    				result[match[5]] = match[6].trim();
-		    			}
-		    		}
-		    		return result;
-		    	};
-		    	
-		    	self.bodyAttributes = getTagAttr(matchBodyTag[1]);
+		    	self.bodyAttributes = Layout.getTagAttr(matchBodyTag[1]);
 		    }
+		    		
+		    //Extract title-tag
+	    	var regExpTitleTag = /(<title([\r\n]|.)*?>)(([\r\n]|.)*?)(<\/title>)/igm;
+		    // matchTitleTag[0]: complete match
+		    // matchTitleTag[1]: title start tag
+		    // matchTitleTag[2]: last CHAR within title start tag, before closing, e.g. "...lskdjf>" -> "f"
+		    // matchTitleTag[3]: title text content
+		    // matchTitleTag[4]: last CHAR within title text content, before closing, e.g. "...lsk</title>" -> "k"
+		    // matchTitleTag[5]: title end tag
+		    var matchTitleTag = regExpTitleTag.exec(pureHtml);
 		    
+		    if(matchTitleTag && matchTitleTag[3]){
+			    self.title = matchTitleTag[3];
+	    	}
 		    
 		    var regExpDialogsTag = /(<dialogs([\r\n]|.)*?>)(([\r\n]|.)*?)(<\/dialogs>)/igm;
 		    // matchDialogsTag[0]: complete match
@@ -431,6 +446,103 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	    
 	}//END: Layout()
 
+
+	/**
+	 * HELPER: extracts TAG attributes into an JSON-object
+	 * 
+	 * @memberOf Layout
+	 * @private
+	 * @static
+	 * 
+	 * @param {String} str
+	 * 			the start-TAG as String
+	 * @param {Object} [target] OPTIONAL
+	 * 			the target-object to which the extracted attributes will be attached
+	 * 			if omitted, a new, empty object will be created
+	 * 
+	 * @return {Object} the object with the extracted attributes as properties
+	 * 					(if <em>target</em> was provided, then this is the <em>target</em> object)
+	 * 
+	 * @example
+	 * e.g. <body onload="on_load();" class = 'biggestFont'>
+	 * -->
+	 * {"onload": "on_load()", "class": "biggestFont"}
+	 * 
+	 */
+	Layout.getTagAttr = function(str, target){
+		
+		//RegExp for:
+		// name = "..."
+		//or
+		// name = '...'
+		//
+		//NOTE: the RegExp does not extract "single properties", as e.g. <tag required>
+		//      ... instead, for extraction, they must be specified as follows: <tag required="...">
+		//NOTE: values MUST be enclosed in double-quotes or quotes, "quote-less" attribute values cannot be extracted!
+		//      ... e.g. NOT: <tag name=value>, instead: <tag name="value"> or <tag name='value'>
+		//NOTE: the RegExp also detects escaped double-quotes and quotes respectively
+		var regExpr = /\s+([^=]*?)\s*=\s*(("((\\"|[^"])*)")|('((\\'|[^'])*)'))/igm;
+		var result = target || {};
+		var match;
+	    
+	    while(match = regExpr.exec(str)){
+	    	
+	    	if(match[4]){
+				result[match[1]] = match[4];
+			}
+			else if(match[7]){
+				result[match[1]] = match[7];
+			}
+		}
+		return result;
+	};
+	
+	/**
+	 * HELPER class: extract raw TAG Strings into a property-object
+	 * 
+	 * @public
+	 * @constructor
+	 * @param {String} tag
+	 * 			the start TAG
+	 * @param {String} content
+	 * 			the TEXT content of the TAG (may be empty)
+	 * @param {String} tagType
+	 *  		the TAG type, e.g. "SCRIPT"
+	 * 
+	 * @returns {Layout.TagElement}
+	 * 
+	 * 		prop {String} tagName: the TAG type, e.g. "SCRIPT"
+	 * 		prop {String} textContent: the TEXT content of the TAG (may be an empty String)
+	 * 		prop EXTRACTED ATTRIBUTES: the extracted attributes form the start-TAG
+	 * 
+	 * 		func {String} attr(STRING name): returns the attribute-value for name (may be undefined)
+	 * 		func {String} html(): returns the TEXT content of the TAG (may be an empty String)
+	 * 
+	 * 		func {Boolean} isScript(): returns TRUE if tagType is SCRIPT
+	 * 		func {Boolean} isStyle():  returns TRUE if tagType is STYLE
+	 * 		func {Boolean} isLink():   returns TRUE if tagType is LINK
+	 */
+	Layout.TagElement = function TagElement(tag, content, tagType){
+		
+		this.tagName = tagType;
+		this.textContent = content || '';
+		
+		var tis = this;
+		tis.attr = function(name){
+			return this[name];
+		};
+		tis.html = function(){
+			return this.textContent;
+		};
+		tis.isScript = function(){return this.tagName === 'SCRIPT';};
+		tis.isStyle  = function(){return this.tagName === 'STYLE'; };
+		tis.isLink   = function(){return this.tagName === 'LINK';  };
+		
+		//extract attributes as properties from TAG string:
+		Layout.getTagAttr(tag, tis);
+		return tis;
+	};
+	
 	/**
 	 * This methods returns an associative array holding the contents of the different containers: header, body, footer and dialogs.
 	 * 
@@ -493,7 +605,9 @@ Layout.prototype.stringify = function(){
 	     'name', 
 	     'remoteaccess',
 	     'def',
+	     'headerElements',
 	     'headerContents',
+	     'title',
 	     'bodyContents',
 	     'dialogsContents',
 	     'markerAttributeName',
@@ -554,100 +668,6 @@ Layout.prototype.stringify = function(){
 	return sb.join('');
 };
 
-//	/**
-//	 * Create the header of the layout.
-//	 * 
-//	 * TODO check this implementation -> is it conform with code for handling eHTML templates?
-//	 * 
-//	 * @function
-//	 * @param {Object} jsonDef definition of the header
-//	 * @returns {String} The header
-//	 * @deprecated unused
-//	 * @public
-//	 */
-//	Layout.prototype.parseHead = function(jsonDef){
-//	    var head = "<meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
-//	    
-//	    if (jsonDef != null) {
-//	    
-//	    
-//	        var stylesheetPaths = jsonDef.query('/stylesheets/path');
-//        var jsPaths = jsonDef.query('/mmirf/path');
-//	        
-//	        $.each(stylesheetPaths, function(index, stPath){
-//	            head += "<link rel=\"stylesheet\" href=\"content/stylesheets/" + stPath + ".css\"/>";
-//	        });
-//	        
-//	        $.each(jsPaths, function(index, jsPath){
-//	            head += "<script  type=\"text/javascript\" charset=\"utf-8\"  src=\"" + jsPath + ".js\"></script>";
-//	        });
-//	    }
-//	    
-//	    head += "</head>";
-//	    
-//	    return head;
-//	};
-
-//	/**
-//	 * Create the body of the layout.
-//	 * 
-//	 * TODO check this implementation -> is it conform with code for handling eHTML templates?
-//	 * 
-//	 * @function
-//	 * @param {Object} jsonDef definition of the body
-//	 * @returns {String} The body
-//	 * @deprecated this function refers to the outdated/unsed JSON-format for defining layout/views
-//	 * @public
-//	 * 
-//	 * @requires jpath.js (JPath)
-//	 */
-//	Layout.prototype.parseBody = function(jsonDef){
-//		var body = "<body><div id=\"pageContainer\" data-role=\"page\" class=\"type-interior\">";
-//	    if (jsonDef != null) {
-//	        var header = new JPath(jsonDef.query('header'));
-//	        var content = new JPath(jsonDef.query('content'));
-//	        var footer = new JPath(jsonDef.query('footer'));
-//	        
-//	        if (header) {
-//	            var headerYield = header.query('yield');
-//	            body += " <div id=\"pageHeader\" data-role=\"header\" data-position=\"fixed\">";
-//	            if (headerYield) {
-//	                body += "\"yield\":\"" + headerYield + "\"";
-//	                this.yields['header'] = headerYield;
-//	            }
-//	            body += "</div>";
-//	        }
-//	        
-//	        if (content) {
-//	            var contentYield = content.query('yield');
-//	            body += " <div id=\"pageContent\">";
-//	            if (contentYield) {
-//	                body += "\"yield\":\"" + contentYield + "\"";
-//	                this.yields['content'] = contentYield;
-//	            }
-//	            body += "</div>";
-//	        }
-//	        
-//	        if (footer) {
-//	            var footerYield = footer.query('yield');
-//	            body += " <div id=\"pageFooter\" data-role=\"footer\" data-position=\"fixed\">";
-//	            if (footerYield) {
-//	                body += "\"yield\":\"" + footerYield + "\"";
-//	                this.yields['footer'] = footerYield;
-//	            }
-//	            body += "</div>";
-//	        }
-//	        //currently all body components (header, content, and footer could only contains "yield"
-//	    
-//	    }
-//	    
-//	    body += "</div></body>";
-//	    
-//	    if(logger.isv()) logger.v("body : " + body);//debug
-//	    
-//	    return body;
-//	};
-
-	return Layout;
+return Layout;
 	
 });
