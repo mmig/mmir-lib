@@ -123,20 +123,20 @@ newMediaPlugin = {
 				if(!buffer || size === 0){
 					return 0;
 				}
-				
+
 				var sum = 0, i = 0;
 				for(; i < size; ++i){
 					sum += buffer[i];
 				}
 				var avg = sum / size;
-				
+
 				var meansq = 0;
 				for(i=0; i < size; ++i){
 					meansq += Math.pow(buffer[i] - avg, 2); 
 				}
-				
+
 				var avgMeansq = meansq / size;
-				
+
 				return Math.sqrt(avgMeansq);
 			};
 			/**
@@ -180,7 +180,7 @@ newMediaPlugin = {
 
 				_audioAnalyzer = _audioContext.createAnalyser();
 				_audioAnalyzer.fftSize = 2048;
-//				_audioAnalyzer.smoothingTimeConstant = 1;
+//				_audioAnalyzer.smoothingTimeConstant = 0.9;//NOTE: value 1 will smooth everything *completely* -> do not use 1
 				inputNode.connect(_audioAnalyzer);
 
 //				audioRecorder = new Recorder( _currentInputStream );
@@ -217,9 +217,8 @@ newMediaPlugin = {
 
 //					console.info('audio rms '+rms+', db '+db);
 
-					/* RMS is the Root Mean Square: basically the square root of the
-					 * sum of squared "deviations" from the average.
-					 */
+					/* RMS stands for Root Mean Square, basically the root square of the
+					 * average of the square of each value. */
 					var rms = 0, val;
 					for (var i = 0; i < data.length; i++) {
 						val = data[i] - avg;
@@ -231,8 +230,7 @@ newMediaPlugin = {
 					var db = rms;
 //					console.info('audio rms '+rms);
 
-
-					//now actually fire the change-event on all registered listeners:
+					//actually fire the change-event on all registered listeners:
 					if(hasChanged(db, prevDb)){
 //						console.info('audio rms changed: '+prevDb+' -> '+db);
 						prevDb = db;
@@ -271,7 +269,7 @@ newMediaPlugin = {
 					_isAnalysisActive = false;
 				});
 			}
-			
+
 			/** HELPER stop mic-levels analysis
 			 * @memberOf WebkitAudioInput#
 			 */
@@ -281,15 +279,15 @@ newMediaPlugin = {
 					_currentInputStream = void(0);
 					stream.stop();
 					_isAnalysisActive = false;
-					
-					console.debug('webkitAudioInput: stopped analysing audio input!');
+
+					console.log('webkitAudioInput: stopped analysing audio input!');
 				}
 				else if(_isAnalysisActive === true){
 					console.warn('webkitAudioInput: stopped analysing audio input process, but no valid audio stream present!');
 					_isAnalysisActive = false;
 				}
 			}
-			
+
 			/** HELPER determine whether to start/stop audio-analysis based on
 			 * 		   listeners getting added/removed on the MediaManager
 			 * @memberOf WebkitAudioInput#
@@ -479,19 +477,19 @@ newMediaPlugin = {
             var helper_extract_results = function(eventResultsObject){
             	var res = [];
             	var size = eventResultsObject.length;
-            	
+
             	if(size < 1){
             		return res;
             	}
-            	
+
             	//ASSERT size >= 1
-            	
+
             	var result = eventResultsObject[0][EVENT_RESULT_FIELD];
             	// [0]: main result
             	res.push(result);
             	// [1]: main confidence score
             	res.push(eventResultsObject[0][EVENT_SCORE_FIELD]);
-            	
+
             	// [2]: result type
             	if(eventResultsObject.isFinal){
             		res.push(recording? RESULT_TYPES.INTERMEDIATE : RESULT_TYPES.FINAL);
@@ -499,7 +497,7 @@ newMediaPlugin = {
             	else {
             		res.push(RESULT_TYPES.INTERIM);
             	}
-            	
+
             	// [3]: array with alternative results
             	if(size > 1){
             		var altRes = [];
@@ -512,13 +510,13 @@ newMediaPlugin = {
             		res.push(altRes);
             	}
             	else {
-            		
+
             		//if no alternative results: add undefined-entry:
             		res.push(void(0));
             	}
-            	
+
             	// [4]: UNSTABLE part for main result
-            	
+
             	//NOTE "unstable" part of ASR result is not supported by webkitSpeechInput...
             	//HACK: detect unstable for non-final results:
             	//      * set to unstable if confidence is lower than UNSTABLE_LIMIT
@@ -526,17 +524,17 @@ newMediaPlugin = {
             	//        to detect an UNSTABLE part using the previous result
             	//        (if previous result contained more than the current stable one...)
             	if( ! eventResultsObject.isFinal){
-            		
+
             		//set to unstable, if result has a LOW score
             		if(res[1] <= UNSTABLE_LIMIT){
             			//add result as "unstable":
-	            		res.push(result);
-	            		//set main-result to empty
-	            		res[0] = "";
+            			res.push(result);
+            			//set main-result to empty
+            			res[0] = "";
             		}
             		//try to recover unstable part:
             		else if(res[1] > UNSTABLE_LIMIT && _prevResult && _prevResult.length > length){
-            			            			
+
             			//try to detect stable part: detect matching prefix with previous result
             			var prefixIndex = 0;
             			var size = result.length;
@@ -544,13 +542,13 @@ newMediaPlugin = {
             			while(size > prefixIndex && ch === _prevResult.charAt(prefixIndex).toLowerCase()){
             				ch = result.charAt(++prefixIndex).toLowerCase();
             			}
-            			
+
             			//-> use REST from matching prefix as UNSTABLE text
             			//NOTE: use simplification (i.e. simpler code) ignore matches <= 1, ie. prefixIndex > 0
             			if(prefixIndex > 0 && prefixIndex + 1 < _prevResult.length){
 
-    	            		//add REST to detected PREFIX as "unstable":
-    	            		res.push(_prevResult.substring(prefixIndex+1));
+            				//add REST to detected PREFIX as "unstable":
+            				res.push(_prevResult.substring(prefixIndex+1));
 
             				console.info('found unstable ASR part: "'+_prevResult.substring(prefixIndex+1)+'"');
             			}
@@ -559,21 +557,50 @@ newMediaPlugin = {
             				_prevResult = void(0);
             			}
             		}
-            		
-                	//remember current (main) result STRING, if it "adds information":
+
+            		//remember current (main) result STRING, if it "adds information":
             		if(!_prevResult || result.length >= _prevResult.length){
             			_prevResult = result;
             		}
-            		
+
             	}
             	else {
-                	//if FINAL, reset field for previous-result 
-                	_prevResult = void(0);
+            		//if FINAL, reset field for previous-result 
+            		_prevResult = void(0);
             	}
-            	
-            	
+
+
             	return res;
             };
+            
+            /**
+			 * Counter for error-in-a-row: 
+			 * each time an error is encountered, this counter is increased.
+			 * On starting/canceling, or on an internal success/result callback,
+			 * the counter is reset.
+			 * 
+			 * Thus, this counter keeps track how many times in a row
+			 * the (internal) error-callback was triggered.
+			 * 
+			 * NOTE: this is currently used, to try restarting <code>max_error_retry</code>
+			 * 		 times the ASR, even on "critical" errors (during repeat-mode). 
+			 * 
+			 * @see #max_error_retry
+			 * 
+			 * @memberOf AndroidAudioInput#
+			 */
+			var error_counter = 0;
+			
+			/**
+			 * Maximal number of errors-in-a-row for trying to restart
+			 * recognition in repeat-mode.
+			 * 
+			 * @see #error_counter
+			 * 
+			 * @memberOf AndroidAudioInput#
+			 * @default 5
+			 */
+			var max_error_retry = 5;
             
             /**
              * default helper for error-events:
@@ -603,11 +630,7 @@ newMediaPlugin = {
                     
                 ////////////////
                 // "serious" errors: cannot not automatically restart...
-                
-                // Speech input was aborted somehow, maybe by some user-agent-specific behavior such as UI that lets the user cancel speech input.
-            	case "aborted":
-                    // do not restart!
-                
+               
                 // Audio capture failed.
             	case "audio-capture":
             		// if analysing-audio for microphone levels (via getUserMedia)
@@ -625,7 +648,16 @@ newMediaPlugin = {
                 // Some network communication that was required to complete the recognition failed.
             	case "network":
                     // do not restart!
-                
+            		
+            		//for "serious errors": if errors-in-a-row-counter is under the limit, DO try to restart
+            		if(error_counter < max_error_retry){
+            			return true;
+            		}
+            	
+                // Speech input was aborted somehow, maybe by some user-agent-specific behavior such as UI that lets the user cancel speech input.
+            	case "aborted":
+                    // do not restart!
+                    
                 // The user agent is not allowing any speech input to occur for reasons of security, privacy or user preference.
             	case "not-allowed":
                     // user denied access -> do not automatically restart!
@@ -659,6 +691,9 @@ newMediaPlugin = {
             
             /** @memberOf WebkitAudioInput# */
             default_error_function = function(event){
+            	
+            	++error_counter;
+            	
 //                if (helper_error_handler.hasOwnProperty(event.error)){
 //                    helper_error_handler[event.error](event);
 //                } else {
@@ -816,6 +851,7 @@ newMediaPlugin = {
                     
                     aborted = false;
                     recording = true;
+                    error_counter = 0;
                     
                     _prevResult = void(0);
                     
@@ -849,6 +885,9 @@ newMediaPlugin = {
                     // - see https://dvcs.w3.org/hg/speech-api/raw-file/tip/speechapi.html#speechreco-event
                     recognition.onresult = function (event) {
                         var finalResult = '';
+                        
+                        
+                        error_counter = 0;
 
                         var evtResults = event.results[event.resultIndex];
                         if (loglevel >= 4){
@@ -1053,6 +1092,7 @@ newMediaPlugin = {
                     
                     aborted = false;
                     recording = true;
+                    error_counter = 0;
                     
                     _prevResult = void(0);
                     
@@ -1138,6 +1178,7 @@ newMediaPlugin = {
                 cancelRecognition: function(successCallback,failureCallback){
                     recording = false;
                     aborted = true;
+                    error_counter = 0;
                     
                     var self = this;
                     // callback used if an error occurred - includes abort
@@ -1175,9 +1216,6 @@ newMediaPlugin = {
                     loglevel = logvalue | 0;
                     return loglevel;
                 }
-//                , getRecognition: function(){
-//                    return recognition;
-//                }
 			});
 		    		
 		    		
