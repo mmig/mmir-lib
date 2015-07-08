@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.6.0rc4)
+version notes for MMIR framework code (v 3.6.0rc5)
 
  * using Cordova 3.x.x library
  * using jQuery 2.1.x library
@@ -24,7 +24,7 @@ version notes for MMIR framework code (v 3.6.0rc4)
  --------------
 
 ##################
- Version 3.6.0rc4
+ Version 3.6.0rc5
 ##################
 
 API Changes
@@ -78,11 +78,69 @@ API Changes
      * perform(ctx, fname, args)
      * getFunc(ctx, fname)
      * setDefaultCtx
-    		
+ * ADDITION AudioOutput (HTML5) env/media/html5AudioInput.js:
+   * the module now provides additional function getWAVAsAudio() analogous to getURLAsAudio()
+   * except (1): first parameter is a data-blob (instead of an URL)
+   * except (2): "additional" second parameter for callback: instead of the return-value, the audio-object is passed to the callback (because audio-object creation is potentially asynchronous)
+ * MODIFICATION AudioInput (HTML5/Webkit) env/media/webkitAudioInput.js:
+   * in repeat-mode (startRecord()): retry n-times to re-start the recognition for "serious" errors (before giving up an triggering the error-callback)
+ * ADDITION Recorder (extended) env/media/recorderExt.js:
+   * provides new semi-public function _initSource(inputSource)
+   * allows to set new input-source (e.g. in case original input-stream/-source was stopped)
+     NOTE: this can be useful in order to avoid creating multiple WebWorkers for recording...
+   * code example:
+   
+     navigator.getUserMedia({audio: true}, function(stream){
+     
+     	var input = new AudioContext().createMediaStreamSource(stream);
+     	var recorder = new Recorder(input);
+     	
+     	//start recording
+     	recorder.record();
+     	
+     	...
+     	
+     	//stop recording
+     	recorder.stop();
+     	recorder.clear();
+     	
+     	//close audio-stream
+     	stream.stop();
+     	
+     	...
+     	
+     	//restart recorder with another input-stream
+     	navigator.getUserMedia({audio: true}, function(stream2){
+     		
+     		var input2 = new AudioContext().createMediaStreamSource(stream2);
+     		
+     		//set new input-source on existing recorder:
+     		recorder._initSource(input2);
+     		
+     		//start recording
+     		recorder.record();
+     		
+     		...
+     	});
+     });
+     
+ * ADDITION / MODIFICATION for MARY textToSpeech module env/media/maryTextToSpeech.js:
+  * an (OPTIONAL) options-object allows to specify a different language and voice (than the current app's settings) when synthesizing text
+    * NOTE: if you specify a voice which does not exist for the language, an error will be trigger
+    * example:	//specify no callbacks: set onEnd, onError, onInit to NULL
+    			//specify different language and voice in 5th/last arguments
+    			mmir.MediaManager.textToSpeech(text, null, null, null, {
+						voice: 'bits3-hsmm',
+						language: 'de'
+					}
+				);
+  * allow empty text: in sentence-mode (i.e. invoking textToSpeech() with an array) empty Strings will be ignored but the sentence-pause will be applied (before, no pause was applied, if an empty string occurred)
   
+ * ADDITION the Layout object now provides the additional field headerElements:
+   * a list of structured data for the parsed SCRIPT, LINK, and STYLE tags in the layout-definition
+   * see also documentation for Layout.TagElement
 
-
-Added new modules for speech input on Android platform v0.4.0 (env/media/android*.js)
+New modules for speech input on Android platform via Cordova plugin v0.4.0 (env/media/android*.js)
  * added framework integration for Android Speech Plugin (Cordova Plugin)
    * NOTE: the Cordova Android Speech Plugin must be installed in the targeted Cordova project first, before the new modules can be used
  * added text-to-speech module (android)
@@ -92,10 +150,22 @@ Added new modules for speech input on Android platform v0.4.0 (env/media/android
 
 Media modules (env/media/)
  * webkitAudioInput: added normalization-factor for mic-levels (to make values more similar with results from other audio-input plugins)
- * nuanceAudioInput:
-  * updated to plugin v0.5.0
+ * maryTextToSpeech:
+  * added support for "empty sentences" (-> for reading a String-array: an empty String in the array) -> will insert a pause in place of the empty sentence
+  * added support for using options (language, voice) on funciton-call (instead of/overwriting the app-settings for this call)
+ 
+ * Nuance Speech Plugin (integration code in: env/media/nuanceAudioInput.js):
   * suppress start-prompt in sentence-wise input mode
   * added option for disabling delayed results (i.e. disabling "improved feedback mode")
+  
+ * removed files for Speech Plugins in MMIR lib:
+  * these files are now installed with the corresponding plugin
+  * removed files for NuanceSpeechPlugin (but will be installed, when plugin is installed):
+    * env/media/nuanceAudioInput.js
+    * env/media/nuanceTextToSpeech.js
+  * removed files for AndroidSpeechPlugin (but will be installed, when plugin is installed):
+    * env/media/androidAudioInput.js
+    * env/media/androidTextToSpeech.js   
 
 Logger (tools/logger):
  * added trace functionality (using stacktrace.js)
@@ -113,6 +183,14 @@ JSDoc
 BUGFIX
  * CommonUtils: fixed un-intentional global variable (script)
  * in some places (i.e. where this was still missing): explicitly handle / not handle cases where a var is typeof object, but NULL
+ * AudioOutput, HTML5 (env/media/html5AudioOutput.html):
+   * correctly register error-listener on Audio object & handle error-callback
+   * trigger error callbacks with unified error object (same as Cordova AudioOutput error-callbacks)
+ * PresentationManager:
+   * need to load/require renderUtils (mvc/parser/templateRenderUtils.js) for stored-views, too (i.e. not only when parsing template-views anew)
+   * when loading templates/views: if up-to-date check fails, do not load the pre-compiled view (but _only_ the re-parsed/-compiled view)
+ * Core: BUGFIX for merging additional configurations into the requirejs main-configuration (did omit some additional config-values before)
+ * maryTextToSpeech: fixed potential error when on playing the requested audio is not available yet
  
 REFACTOR
  * some structural (non-functional) changes
