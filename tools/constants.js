@@ -41,6 +41,8 @@ define(['env'],
  * @static
  * @class
  * 
+ * @requires org.apache.cordova.device: cordova plugin add org.apache.cordova.device
+ * 
  * @example var appBase = mmir.Constants.getBasePath();
  */
 function(
@@ -242,8 +244,43 @@ function(
 		}
 		else if (isBrowserEnvParam && isBrowserEnvParam.env){
 
-			switch(isBrowserEnvParam.env){
-				case 'cordova':
+			//if cordova env, try to detect the specific platform
+			//TODO move this to somewhere else? to envDetect.js ?
+			var env = isBrowserEnvParam.env;
+			if(env === 'cordova'){
+				
+				//use plugin org.apache.cordova.device for detecting specific env
+				if(typeof device !== 'undefined' && device.platform){
+					
+					var platform = device.platform;
+					if(/\bios\b/i.test(platform)){
+						env = 'ios';
+					} else if(/\bandroid\b/i.test(platform)){
+						env = 'android';
+					} else {//TODO handle other platforms
+						console.warn('Unknown platform "'+env+'", using default base path /');
+						env = 'default';
+					}
+					
+				} else {
+					
+					//fallback: use UserAgent for detecting env
+					var userAgent = navigator.userAgent;
+					if(/(iPad|iPhone|iPod)/ig.test(userAgent)){
+						env = 'ios';
+					} else if(/android/i.test(userAgent)){
+						env = 'android';
+					} else {//TODO handle other platforms
+						console.warn('Unknown platform "'+env+'", using default base path /');
+						env = 'default';
+					}
+					
+				}
+				
+			}
+			
+			switch(env){
+//				case 'cordova':
 				case 'android':
 					basePath = "file:///android_asset/www/";
 					break;
