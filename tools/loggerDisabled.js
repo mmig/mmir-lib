@@ -159,7 +159,7 @@ Logger.prototype =
 	 * @public
 	 * @function
 	 */
-    iVerbose: deny,
+    isVerbose: deny,
     /** 
 	 * @public
 	 * @function
