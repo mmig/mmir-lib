@@ -552,12 +552,12 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		}
 	    		
 	    		if(typeof text !== 'string'){
-	    			console.warn('RenderUtils.renderHelper: no STRING result for '+containingContentElement.getController().getName()+'::Helper >'+name+'<');
+	    			console.warn('RenderUtils.renderHelper: not a STRING result for '+containingContentElement.getController().getName()+'::Helper.'+name+'(), but '+(typeof text));
+	    			text = text === null || typeof text === 'undefined'? '' + text : text.toString();
 	    		}
-	    		else {
-	    			//TODO HTML escape for toString before pushing the result (?)
-	    			renderingBuffer.push(text.toString());
-	    		}
+	    		
+    			//TODO HTML escape for toString before pushing the result (?)
+    			renderingBuffer.push(text);
 	    		
 	    		return renderingBuffer;
 	    	}
