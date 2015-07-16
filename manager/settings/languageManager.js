@@ -746,7 +746,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                
 		                //if there is a separator specified: replace default separator '-' with this one
 		                if(value && typeof separator !== 'undefined'){
-		                	value.replace(/-/, separator);
+		                	value = value.replace(/-/, separator);
 		                }
 		                
 		                return value;
