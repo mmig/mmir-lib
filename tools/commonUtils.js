@@ -721,20 +721,23 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * directory, giving only those files which match the filter.
 		     * 
 		     * @function
-		     * @param {String}
-		     *            pathname Path of the directory which contents should
-		     *            be returned
-		     * @param {String}
-		     *            filter Filter of file-names: <b>*.js</b>, <b>*</b>
-		     *            or <b>*.ehtml</b>
+		     * @param {String} pathname
+		     *            Path of the directory which's contents should be
+		     *            returned
+		     * @param {String} filter
+		     *            Filter for file-names which may contain a wildcard, 
+		     *            e.g.: <b>*.js</b>, <b>*</b> or <b>*.ehtml</b>
 		     * @public
 		     * @returns {Array} Array of Strings which contains the contents of
-		     *          the directory
+		     *          the directory.
+		     *          Or <code>null</code>, if no matching contents could be
+		     *          found.
 		     *          
 	    	 * @memberOf mmir.CommonUtils.prototype
 		     */
 		    getDirectoryContentsWithFilter : function(pathname, filter) {
-				var retValue = new Array();
+		    	
+				var retValue = [];
 	
 				var tmpfilter = '^' + filter.replace('.', '\\.').replace('*', '.*').replace('\$', '\\$') + '$'; // e.g.,// '^.*\.js$'
 	
@@ -744,8 +747,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	
 				try {
 					var tmp = this.directoryStructure[pathname];
-					if (tmp == undefined) {
-						if(logger.isWarn()) logger.warn('CommonUtils', 'getDirectoryContentsWithFilter', '[' + pathname + ' / ' + filter + ']  not found.');
+					if (typeof tmp === 'undefined') {
+						if(logger.isInfo()) logger.info('CommonUtils', 'getDirectoryContentsWithFilter', '[' + pathname + ' | ' + filter + ']  not found.');
 						retValue = null;
 					} 
 					else {
@@ -756,7 +759,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 						}
 					}
 				} catch (e) {
-					logger.error('CommonUtils', 'getDirectoryContentsWithFilter', '[' + pathname + ' / ' + filter + '] ', e);
+					logger.error('CommonUtils', 'getDirectoryContentsWithFilter', '[' + pathname + ' | ' + filter + '] ', e);
 					retValue = null;
 				}
 				return retValue;
