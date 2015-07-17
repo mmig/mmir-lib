@@ -96,10 +96,44 @@ function initMmir() {
 		
 		_isApplied = true;
 		var conf;
+		var confConfig, p;
 		while(_configList.length > 0){
+			
 			conf = mergeModuleConfigs(_configList.shift(), mainConfig);
+			
+			//copy/remember all conf.config values that were not merged
+			if(conf.config){
+				for(p in conf.config){
+					if(conf.config.hasOwnProperty(p) && typeof conf.config[p] !== 'undefined'){
+						if(!confConfig){
+							confConfig = {};
+						}
+						confConfig[p] = conf.config[p];
+						//remove them from the conf, so that they do not overwrite anything in mainConfig.config:
+						conf.config[p] = void(0);
+					}
+				}
+			}
+			
 			require.config( conf );
 		}
+		
+		//if there were non-merged conf.config-values:
+		//   we cannot just apply these, since they would overwrite the mainConfig.config
+		//   -> so we copy all (possibly) merged values from the mainConfig.config over
+		//      and then apply all the conf.config-values at once here
+		if(confConfig){
+			
+			for(p in mainConfig.config){
+				if(mainConfig.config.hasOwnProperty(p) && typeof mainConfig.config[p] !== 'undefined'){
+					confConfig[p] = mainConfig.config[p];
+				}
+			}
+			
+			//now apply all conf.config-values (including mainConfig.config-values):
+			require.config( {config: confConfig} );
+		}
+		
 	}
 	
 	/**
