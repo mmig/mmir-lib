@@ -261,7 +261,7 @@ newMediaPlugin = {
 							
 							audioObj = self.getURLAsAudio(dataUrl, onEnd, failureCallback, onInit);
 							
-							callback(audioObj);
+							callback.call(audioObj, audioObj);
 							
 						});
 						
