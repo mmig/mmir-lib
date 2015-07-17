@@ -171,7 +171,7 @@ function printe(loggerName, logLevel, className, funcName, msg, error){
 		}
 	}
 	
-	print(loggerName, logLevel, createErr(createMsg(className, funcName, msg), error));
+	print(loggerName, logLevel, createErr(createMsg(className, funcName, msg), error), true);
 }
 
 /**
@@ -391,11 +391,13 @@ if(tmpTraceConfig !== false || (tmpTraceConfig !== null && typeof tmpTraceConfig
 		 * @function
 		 * @memberOf Logger.prototype
 		 */
-		print = function printFullStack(loggerName, logLevel, msg){
+		print = function printFullStack(loggerName, logLevel, msg, isErrInvoked){
 			if(typeof msg === 'undefined' || msg === null){
 				msg = '';
 			}
-			msg += '\n  ' + stacktrace(pnTraceOptions).slice(5).join('\n  ');
+			//if isErrInvoked is TRUE: this function was invoked via additional printe()-call
+			// => need to take 1 more step down the stack
+			msg += '\n  ' + stacktrace(pnTraceOptions).slice(isErrInvoked? 6 : 5).join('\n  ');
 			pnOriginal.call(this, loggerName, logLevel, msg);
 		};
 	}
@@ -415,11 +417,13 @@ if(tmpTraceConfig !== false || (tmpTraceConfig !== null && typeof tmpTraceConfig
 		 * @function
 		 * @memberOf Logger.prototype
 		 */
-		print = function printStack(loggerName, logLevel, msg){
+		print = function printStack(loggerName, logLevel, msg, isErrInvoked){
 			if(typeof msg === 'undefined' || msg === null){
 				msg = '';
 			}
-			msg += '\n  ' + stacktrace(pnTraceOptions)[5];
+			//if isErrInvoked is TRUE: this function was invoked via additional printe()-call
+			// => need to take 1 more step down the stack
+			msg += '\n  ' + stacktrace(pnTraceOptions)[isErrInvoked? 6 : 5];
 			pnOriginal.call(this, loggerName, logLevel, msg);
 		};
 	}
