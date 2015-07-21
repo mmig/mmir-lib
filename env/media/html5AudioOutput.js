@@ -245,23 +245,36 @@ newMediaPlugin = {
 					}
 					
 				},
+				
 				/**
 				 * @public
 				 * @memberOf Html5AudioOutput.prototype
 				 * @see mmir.MediaManager#getWAVAsAudio
 				 */
-				getWAVAsAudio: function(blob, callback, onEnd, failureCallback, onInit){
+				getWAVAsAudio: function(blob, callback, onEnd, failureCallback, onInit, emptyAudioObj){
+					
+					if(!emptyAudioObj){
+						emptyAudioObj = mediaManagerInstance.createEmptyAudio();
+					}
 					
 					try {
 						
 						var self = this;
-						var audioObj;
 						
 						createDataUrl(blob, function(dataUrl){
 							
-							audioObj = self.getURLAsAudio(dataUrl, onEnd, failureCallback, onInit);
+							var audioObj;
+
+							//do not start creating the blob, if the audio was already discarded:
+							if(emptyAudioObj.isEnabled()){
+								audioObj = self.getURLAsAudio(dataUrl, onEnd, failureCallback, onInit, emptyAudioObj);
+							} else {
+								audioObj = emptyAudioObj;
+							}
 							
-							callback.call(audioObj, audioObj);
+							if(callback){
+								callback.call(audioObj, audioObj);
+							}
 							
 						});
 						
@@ -270,19 +283,22 @@ newMediaPlugin = {
 						
 						var err = createError(0, e);
 						if(failureCallback){
-							failureCallback.call(audioObj, err, e);
+							failureCallback.call(emptyAudioObj, err, e);
 						}
 						else {
 							console.error(err.message + ': ' + err.description, e);
 						}
 					}
+					
+					return emptyAudioObj;
 				},
+				
 				/**
 				 * @public
 				 * @memberOf Html5AudioOutput.prototype
 				 * @see mmir.MediaManager#getURLAsAudio
 				 */
-				getURLAsAudio: function(url, onEnd, failureCallback, successCallback){
+				getURLAsAudio: function(url, onEnd, failureCallback, successCallback, audioObj){
 					
 					try {
 
@@ -290,7 +306,7 @@ newMediaPlugin = {
 						 * @private
 						 * @memberOf AudioHtml5Impl#
 						 */
-						var enabled = true;
+						var enabled = audioObj? audioObj._enabled : true;
 						/**
 						 * @private
 						 * @memberOf AudioHtml5Impl#
@@ -314,6 +330,7 @@ newMediaPlugin = {
 							//     (this is meant as "on-init" listener, but "canplay" 
 							//      may be triggered multiple times during the lifetime of the audio object).
 							this.removeEventListener('canplay', canPlayCallback);
+							canPlayCallback = null;
 
 							if (enabled && successCallback){
 								successCallback.apply(mediaImpl, arguments);
@@ -347,11 +364,24 @@ newMediaPlugin = {
 								 */
 								play: function(){
 									if (enabled){
-										// if (ready){
-										my_media.play();
-										// } else {
-										//	 my_media.addEventListener('canplay', my_media.play, false);
-										// }
+										
+										if (ready){
+											my_media.play();
+										} else {
+											
+											var autoPlay = function(){
+												
+												//start auto-play only once (i.e. remove after first invocation):
+												this.removeEventListener('canplay', autoPlay);
+												autoPlay = null;
+												
+												if(enabled){
+													my_media.play();
+												}
+											};
+											my_media.addEventListener('canplay', autoPlay , false);
+											
+										}
 
 									};
 								},
@@ -506,6 +536,27 @@ newMediaPlugin = {
 							},
 							false
 						);
+						
+						//if Audio was given: "merge" with newly created Audio
+						if(audioObj){
+							
+							jQuery.extend(audioObj, mediaImpl);
+							
+							//transfer (possibly) changed values to newly created Audio
+							if(audioObj._volume !== 1){
+								audioObj.setVolume( audioObj._volume );
+							}
+							if(audioObj._play){
+								audioObj.play();
+							}
+							
+							//remove internal properties / impl. that are not used anymore:
+							audioObj._volume  = void(0);
+							audioObj._play    = void(0);
+							audioObj._enabled = void(0);
+							
+							mediaImpl = audioObj;
+						}
 
 						return mediaImpl;
 
