@@ -712,12 +712,15 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		             * 
 		             * @public
 		             * @param {String} pluginId
-		             * @param {String|Array<String>} feature
+		             * @param {String|Array<String>} [feature] OPTIONAL
 		             * 				dot-separate path String or "path Array"
+		             * 				This parameter may be omitted, if no <code>separator</code> parameter
+		             * 				is used.
+		             * 				DEFAULT: "language" (the language feature)
 		             * @param {String} [separator] OPTIONAL
 		             * 				the speparator-string that should be used for separating
 		             * 				the country-part and the language-part of the code
-		             * @returns {Promise}
+		             * @returns {String} the language-setting/-code
 		             */
 		            getLanguageConfig : function(pluginId, feature, separator) {
 		                
