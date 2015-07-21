@@ -634,6 +634,58 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     					console.error("Audio Output: create audio from URL is not supported.");
     				}
     			},
+    			/**
+    			 * Get an empty audio object. This can be used as dummy or placeholder
+    			 * for a "real" audio object.
+    			 * 
+    			 * The audio object exports the following functions:
+    			 * 
+    			 * <pre>
+    			 * play()
+    			 * stop()
+    			 * release()
+    			 * enable()
+    			 * disable()
+    			 * setVolume(number)
+    			 * getDuration()
+    			 * isPaused()
+    			 * isEnabled()
+    			 * </pre>
+    			 * 
+    			 * Note:
+    			 * 
+    			 * <code>enable()</code> and <code>disable()</code> will set the internal
+    			 * enabled-state, which can be queried via <code>isEnabled()</code>.
+    			 * 
+    			 * <code>play()</code> and <code>stop()</code> will set the internal 
+    			 * playing-state, which can be queried via <code>isPaused()</code>
+    			 * (note however, that this empty audio does not actually play anything.
+    			 * 
+    			 * <code>setVolume()</code> sets the internal volume-value.
+    			 * 
+    			 * <code>getDuration()</code> will always return <code>0</code>.
+    			 * 
+    			 * 
+    			 * @returns {mmir.env.media.IAudio} the audio
+    			 * 
+    			 * @see {mmir.env.media.IAudio#_constructor}
+				 */
+				createEmptyAudio: function(){
+					return {
+						_enabled: true,
+						_play: false,
+						_volume: 1,
+						play: function(){ this._play = true; },
+						stop: function(){ this._play = true; },
+						enable: function(){ this._enabled = true; },
+						disable: function(){ this._enabled = false; },
+						release: function(){ this._enabled = false; },
+						setVolume: function(vol){ this._volume = vol; },
+						getDuration: function(){ return 0; },
+						isPaused: function(){ return !this._play; },
+						isEnabled: function(){ return this._enabled; }
+					};
+				},
 ///////////////////////////// text-to-speech API: /////////////////////////////
     			
     			/**
