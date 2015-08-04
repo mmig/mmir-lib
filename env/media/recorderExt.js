@@ -204,8 +204,10 @@
     var link = window.document.createElement('a');
     link.href = url;
     link.download = filename || 'output.wav';
-    var click = document.createEvent("Event");
-    click.initEvent("click", true, true);
+//  var click = document.createEvent("Event");click.initEvent("click", true, true);
+	//MOD NOTE: FireFox requires a MouseEvent (in Chrome a simple Event would do the trick)
+    var click = document.createEvent("MouseEvent");
+	click.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     link.dispatchEvent(click);
   }
 
