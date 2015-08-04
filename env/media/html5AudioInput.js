@@ -553,7 +553,7 @@ newMediaPlugin = {
 				 */
     			startRecord: function(successCallback, failureCallback, intermediateResults){
     				lastBlob = false;
-    				for (var k = 0; i < freeIds.length; i++){
+    				for (var k = 0; k < freeIds.length; k++){
     					webSocketSend("clear "+k);
     				}
 					totalText = '';
@@ -643,11 +643,11 @@ newMediaPlugin = {
 		};//END: htmlAudioConstructor()
 			
 		// the code starts here, loads the necessary scripts and then calls htmlAudioConstructor
-		commonUtils.loadScript(constants.getWorkerPath()+'recorderWorkerExt.js',function(){
+//		commonUtils.loadScript(constants.getWorkerPath()+'recorderWorkerExt.js',function(){
 			commonUtils.loadScript(constants.getMediaPluginPath()+'recorderExt.js', function(){
 				callBack(htmlAudioConstructor());
 			});
-		});
+//		});
 	}//END: initialize()
 		
 };
