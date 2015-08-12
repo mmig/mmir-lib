@@ -1134,13 +1134,11 @@ newMediaPlugin = {
                                 console.debug("[webkitAudioInput.Debug] " + "final");
                             }
 
-//                            finalResult = event.results[event.resultIndex][0][EVENT_RESULT_FIELD];
-                            
-                            var returnArgs = helper_extract_results(event.results[event.resultIndex]);
-                            
-                            // stop recording - finish after one sentence!
+                            //stop recording - finish after one sentence!
+                            //NOTE do this before calling helper_extract_results(), in order to make the result type FINAL
                             recording = false;
                             
+                            var returnArgs = helper_extract_results(event.results[event.resultIndex]);
                             
                             // TODO: dirty hack - somehow it does not throw end event after recognition if recognize is used
                             self.cancelRecognition();
