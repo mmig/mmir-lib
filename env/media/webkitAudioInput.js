@@ -277,7 +277,21 @@ newMediaPlugin = {
 				if(_currentInputStream){
 					var stream = _currentInputStream;
 					_currentInputStream = void(0);
-					stream.stop();
+					//DISABLED: MediaStream.stop() is deprecated -> instead: stop all tracks individually
+//					stream.stop();
+					try{
+						if(stream.active){
+							var list = stream.getTracks(), track;
+							for(var i=list.length-1; i >= 0; --i){
+								track = list[i];
+								if(track.readyState !== 'ended'){
+									track.stop();
+								}
+							}
+						}
+					} catch (err){
+						console.log('webkitAudioInput: a problem occured while stopping audio input analysis: '+err);
+					}
 					_isAnalysisActive = false;
 
 					console.log('webkitAudioInput: stopped analysing audio input!');
