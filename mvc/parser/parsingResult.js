@@ -686,7 +686,20 @@ ParsingResult.prototype.stringify = function(){
    	     'forIncrementEval'
    	];
 	
-
+	//default function properties:
+	// these functions from the prototype may have been overwritten
+	//  -> if one is overwritten, i.e. not the default implementation, then store that one too
+	var overwrittenFuncPropList = [
+ 	     'getEnd',
+   	     'getStart',
+   	     'getType',
+   	     'getValue',
+   	     'getTypeName',
+   	     'getCallDataStart',
+   	     'getCallDataEnd',
+   	     'getCallDataType'
+   	];
+	
 	//function for iterating over the property-list and generating JSON-like entries in the string-buffer
 	var  appendStringified = parser.appendStringified;
 
@@ -709,12 +722,22 @@ ParsingResult.prototype.stringify = function(){
 	appendStringified(this, typedPropList, sb, 'Type');
 	appendStringified(this, propList, sb);
 	//non-primitives with stringify() function:
-	appendStringified(this, strPropList, sb, null, function valueExtractor(name, value){
+	appendStringified(this, strPropList, sb, null, function stringifyableExtractor(name, value){
 		return value.stringify();
 	});
-	//function values
-	appendStringified(this, funcPropList, sb, null, function valueExtractor(name, value){
+	//function definitions
+	appendStringified(this, funcPropList, sb, null, function functionExtractor(name, value){
 		return value.toString();
+	});
+	//add "overwritten" function definitions
+	appendStringified(this, overwrittenFuncPropList, sb, null, function nonDefaultFunctionExtractor(name, value){
+		var instanceImpl = value.toString();
+		var defaultImpl = ParsingResult.prototype[name].toString();
+		if(instanceImpl !== defaultImpl){
+			return instanceImpl;
+		}
+		//DEFAULT: return void (will omit this from storage -> use default impl. of the prototype)
+		return;
 	});
 	
 	//if last element is a comma, remove it

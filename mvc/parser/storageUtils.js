@@ -168,6 +168,7 @@ parser.restoreObject = restoreObject;
  * 				function. If instead this argument is present, this function will be invoked for creating
  * 				the string representation of the property-value.
  * 				The function signature is <code>valueFunc(propertyName : String, propertyValue : Object) : String</code>.
+ * 				If the function returns <code>void</code>, then the corresponding property will not be added/stringified.
  * 
  * @returns {Array<String>} the modified <tt>stringBuffer</tt>
  * 
@@ -211,6 +212,10 @@ function appendStringified(obj, propertyNames, stringBuffer, propertyNamePostfix
 		}
 		else {
 			val = JSON.stringify(obj[prop]);
+		}
+		
+		if(typeof val === 'undefined'){
+			continue;
 		}
 		
 		stringBuffer.push( prop );
