@@ -369,7 +369,7 @@ newMediaPlugin = {
 									setTimeout(playNext, pauseDuration);
 									
 									//TODO only invoke this, if previously the test for (loadIndex-playIndex)<= bufferSize) failed ...
-	//								loadNext();
+									//loadNext();
 								},
 	
 								function onerror(){
@@ -524,7 +524,7 @@ newMediaPlugin = {
 						//disable playing for sentence-modus 
 						audioArray.forEach(function (audio){
 							if (audio) {
-								audio.disable();								
+								audio.disable();
 								audio.release();
 							}
 						});
