@@ -454,51 +454,85 @@ newMediaPlugin = {
 //						return;
 					}
 					isReady = false;
-					if ((typeof parameter) == 'string'){
-						if(parameter.length === 0){
-							isReady = true;
-							errMsg = "Aborted TTS: no text supplied (string has length 0)";
-							if(failureCallback){
-								failureCallback(errMsg);
-							}
-							else {
-								console.error(errMsg);
-							}
-
-							//EXPERIMENTAL: command-queue feature.
-							processNextInCommandQueue();
-							
-							return;/////////////////////////////////// EARLY EXIT /////////////////////////////
-						}
-						ttsSingleSentence(parameter, successCallback, failureCallback, onInit, options);
-					} else if((typeof parameter !== 'undefined')&& commonUtils.isArray(parameter) ){
-						ttsSentenceArray(parameter, successCallback, failureCallback, onInit, options);
-					} else if ((typeof parameter == 'object')){
-						if (parameter.pauseDuration!== null && parameter.pauseDuration>=0){
-							pauseDuration = parameter.pauseDuration;
-							console.log("PauseDuration: "+pauseDuration);
-						} else {
-							var configPause = configurationManager.get('pauseDurationBetweenSentences');
-							if (configPause) {
-								pauseDuration = configPause;
-							}
-							else pauseDuration = 1000;
-						}
-						if ((typeof parameter.text !== 'undefined')&& commonUtils.isArray(parameter.text) ){
+					
+					var text;
+					var isMultiple = false;
+					if (typeof parameter === 'object'){
+						
+						//TODO allow setting custom pause-duration, something like: (NOTE would need to reset pause in case of non-object arg too!)
+//						if (parameter.pauseDuration!== null && parameter.pauseDuration>=0){
+//							pauseDuration = parameter.pauseDuration;
+//							console.log("PauseDuration: "+pauseDuration);
+//						} else {
+//							var configPause = configurationManager.get('pauseDurationBetweenSentences');
+//							if (configPause) {
+//								pauseDuration = configPause;
+//							}
+//							else{
+//								pauseDuration = 500;
+//							}
+//						}
+						
+						if (parameter.text && commonUtils.isArray(parameter.text)){
 							if (parameter.forceSingleSentence){
-								ttsSingleSentence(commonUtils.concatArray(parameter.text),successCallback, failureCallback, onInit);
+								text = commonUtils.concatArray(parameter.text);
 							} else {
-								ttsSentenceArray(parameter.text, successCallback, failureCallback, onInit, options);
+								text = parameter.text;
 							}
-						}
-						if ((typeof parameter.text)== 'string'){
+						} 
+
+						//if text is string: apply splitting, if requested:
+						if (typeof parameter.text === 'string'){
 							if (parameter.split || parameter.splitter){
 								var splitter = parameter.splitter || defaultSplitter;
-								ttsSentenceArray(splitter(parameter.text), successCallback, failureCallback, onInit, options);
+								text = splitter(parameter.text);
 							} else {
-								ttsSingleSentence(parameter.text, successCallback, failureCallback, onInit);
+								text = parameter.text;
 							}
 						}
+						
+						if(!text){
+							text = parameter;
+						}
+						
+						if(!options){
+							options = parameter;
+						}
+						//TODO else: merge parameter into options
+						
+					} else {
+						text = parameter;
+					}
+						
+					if(text && commonUtils.isArray(text)){
+						isMultiple = true;
+					} else if (typeof text !== 'string'){
+						text = typeof text !== 'undefined' && text !== null? text.toString() : '' + text;
+					}
+					
+					if(text.length === 0){
+						isReady = true;
+						errMsg = "Aborted TTS: no text supplied (string has length 0)";
+						if(failureCallback){
+							failureCallback(errMsg);
+						}
+						else {
+							console.error(errMsg);
+						}
+
+						//EXPERIMENTAL: command-queue feature.
+						processNextInCommandQueue();
+						
+						return;/////////////////////////////////// EARLY EXIT /////////////////////////////
+					}
+					
+					if(!isMultiple){
+						
+						ttsSingleSentence(text, successCallback, failureCallback, onInit, options);
+						
+					} else {
+						
+						ttsSentenceArray(text, successCallback, failureCallback, onInit, options);
 					}
 				},
 				/**
