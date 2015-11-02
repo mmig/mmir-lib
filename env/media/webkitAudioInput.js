@@ -766,7 +766,7 @@ newMediaPlugin = {
                 	console.debug("[webkitAudioInput.Debug] Audio END");
                 }
 
-                _stopAudioAnalysis();
+//                _stopAudioAnalysis(); MOVED to onend: in some cases, onaudioend will not be triggered, but onend will always get triggered
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onspeechend = function(event){
@@ -801,6 +801,11 @@ newMediaPlugin = {
                 	console.debug("[webkitAudioInput.Debug] asr END");
                 	console.debug("[webkitAudioInput.Debug] active: " + active);
                 }
+                
+                //NOTE there may be no analysis open, but stopping here (and not e.g. in onaudioen) 
+                //     will ensure that we _always_ remove analysis, if it is present:
+                _stopAudioAnalysis();
+                
                 // TODO: check if it is alright if we stop restarting the asr when reset_counter is greater than 3
                 // --> this would mean, we can never start the asr again in this instance... bad choice
                 if ((aborted === false) && (recording === true)){
