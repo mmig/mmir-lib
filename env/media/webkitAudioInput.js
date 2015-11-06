@@ -171,8 +171,22 @@ newMediaPlugin = {
 				console.log('webkitAudioInput: start analysing audio input...');
 				var buffer = 0;
 				var prevDb;
+				
+				//we only need one analysis: if there is one active from a previous start
+				//  -> do stop it, before storing the new inputstream in _currentInputStream
+				if(_currentInputStream){
+					_stopAudioAnalysis();
+				}
 
 				_currentInputStream = inputstream;
+
+				if(_isAnalysisCanceled === true){
+					//ASR was stopped, before the audio-stream for the analysis became available:
+					// -> stop analysis now, since ASR is not active (and close the audio stream without doing anything)
+					_stopAudioAnalysis();
+					return;//////////////// EARLY EXIT //////////////////////
+				}
+				
 				var inputNode = _audioContext.createMediaStreamSource(_currentInputStream);
 
 				///////////////////// VIZ ///////////////////
@@ -256,6 +270,10 @@ newMediaPlugin = {
 			 * @memberOf WebkitAudioInput#
 			 */
 			var _isAnalysisActive = false;
+			/** internal flag: is/should mic-levels analysis be active?
+			 * @memberOf WebkitAudioInput#
+			 */
+			var _isAnalysisCanceled = false;
 			/** HELPER start-up mic-levels analysis (and fire events for registered listeners)
 			 * @memberOf WebkitAudioInput#
 			 */
@@ -263,6 +281,7 @@ newMediaPlugin = {
 				if(_isAnalysisActive === true){
 					return;
 				}
+				_isAnalysisCanceled = false;
 				_isAnalysisActive = true;
 				html5Navigator.__getUserMedia({audio: true}, _startUserMedia, function(e) {
 					console.error("webkitAudioInput: failed _startAudioAnalysis, error for getUserMedia ", e);
@@ -292,12 +311,14 @@ newMediaPlugin = {
 					} catch (err){
 						console.log('webkitAudioInput: a problem occured while stopping audio input analysis: '+err);
 					}
+					_isAnalysisCanceled = false;
 					_isAnalysisActive = false;
 
 					console.log('webkitAudioInput: stopped analysing audio input!');
 				}
 				else if(_isAnalysisActive === true){
 					console.warn('webkitAudioInput: stopped analysing audio input process, but no valid audio stream present!');
+					_isAnalysisCanceled = true;
 					_isAnalysisActive = false;
 				}
 			}
