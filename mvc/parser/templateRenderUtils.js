@@ -26,7 +26,8 @@
 
 
 
-define (['commonUtils', 'languageManager', 'controllerManager', 'presentationManager', 'parserModule', 'viewConstants'
+define (['commonUtils', 'languageManager', 'controllerManager', 'presentationManager', 'parserModule', 'viewConstants',
+         'logger', 'module'
    ], 
    
    /**
@@ -42,7 +43,8 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
     * 
     */   
    function (
-		   commonUtils, languageManager, controllerManager, presentationManager, parser, ViewConstants
+		   commonUtils, languageManager, controllerManager, presentationManager, parser, ViewConstants,
+		   Logger, module
 ) {
 	
 		/**
@@ -54,6 +56,16 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	     * @memberOf mmir.parser.RenderUtils#
 	     */
 	    var instance = null;
+	    
+	    /**
+	     * the logger for the RenderUtils
+	     * 
+	     * @type Logger
+	     * 
+	     * @private
+	     * @memberOf mmir.parser.RenderUtils#
+	     */
+	    var logger = Logger.create(module);
 	    		
 	  //internal "constants" for the RENDERING mode
 	    /**
@@ -422,7 +434,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		else if(type === parser.element.YIELD_CONTENT){
 		    		//ignore: this should not be rendered itself, but instead its content should be rendered 
 		    		//        in for the corresponding yield-declaration element.
-	    			console.warn('ParseUtil.renderElement: encountered YIELD_CONTENT for '+elem.name+' -> this sould be handled by renderYieldDeclaration!');
+	    			logger.warn('ParseUtil.renderElement: encountered YIELD_CONTENT for '+elem.name+' -> this sould be handled by renderYieldDeclaration!');
 	    		}
 	    		
 
@@ -451,7 +463,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    			return renderVarReference(elem, renderingMode, rawTemplateText, renderingBuffer, data);
 	    		}
 	    		else {
-	    			console.error('ParseUtil.renderElement: unknown element type -> '+type);
+	    			logger.error('ParseUtil.renderElement: unknown element type -> '+type);
 	    			return null;
 	    		}
 	    	}
@@ -510,7 +522,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		var name = elem.getValue(elem.name, elem.nameType, data);
 	    		var text = localizer.getText(name);
 	    		if(!text){
-	    			console.warn('RenderUtils.renderLocalize: could not find localization text for "'+elem.name+'"');
+	    			logger.warn('RenderUtils.renderLocalize: could not find localization text for "'+elem.name+'"');
 	    		}
 	    		else{
 	    			renderingBuffer.push(text);
@@ -552,7 +564,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		}
 	    		
 	    		if(typeof text !== 'string'){
-	    			console.warn('RenderUtils.renderHelper: not a STRING result for '+containingContentElement.getController().getName()+'::Helper.'+name+'(), but '+(typeof text));
+	    			logger.debug('RenderUtils.renderHelper: not a STRING result for '+containingContentElement.getController().getName()+'::Helper.'+name+'(), but '+(typeof text));
 	    			text = text === null || typeof text === 'undefined'? '' + text : text.toString();
 	    		}
 	    		
@@ -614,7 +626,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		
 	    		
 	    		if(!partial){
-	    			console.warn('RenderUtils.renderPartial: no partial for controller '+containingContentElement.getController().getName()+', with name >'+partialName+'<');
+	    			logger.warn('RenderUtils.renderPartial: no partial for controller '+containingContentElement.getController().getName()+', with name >'+partialName+'<');
 	    		}
 	    		else {
 	    			renderContentElement(partial.getContentElement(), renderingBuffer, data);
@@ -903,7 +915,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    			var name = elem.getValue(elem.name, elem.nameType, data);
 		    		var contentFor = getContentForYield(name, contentForArray);
 		    		if(!contentFor){
-		    			console.warn('ParseUtil.renderYield: could not find content-definition for yield '+name);
+		    			logger.warn('ParseUtil.renderYield: could not find content-definition for yield '+name);
 		    			return renderingBuffer;
 		    		}
 		    		
