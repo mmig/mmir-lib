@@ -1064,11 +1064,11 @@ newMediaPlugin = {
                     
                     //HACK: set an "internal" callback, that will be checked in the onend-listener (see above)
                     //		(NOTE: the onstop()-listener does not seem to get called ...)
-                    recognition._stopRecordCallback = function(){
+                    recognition._stopRecordCallback = function(evt){
                     	if(successCallback && !isSuccessTriggered){
 //                    		console.debug('stopRecord: calling success callback onstop (without last ASR result)');//FIXM debug
                     		isSuccessTriggered = true;
-                        	successCallback.call(self,'');
+                        	successCallback.call(self,'', -1, 'RECORDING_DONE');
                         }
                     };
                     
