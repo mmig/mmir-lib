@@ -128,10 +128,10 @@ var mmirf_config = {
 		, 'grammarConverter': 'semantic/grammarConverter'
 		, 'semanticInterpreter': 'semantic/semanticInterpreter'
 		, 'jscc':  'vendor/libs/jscc-amd'
-		, 'jison': 'vendor/libs/jisonAsync'
+		, 'jison': 'vendor/libs/jison'
 		, 'pegjs': 'vendor/libs/peg-0.8.0'
 		, 'jsccGen':  'env/grammar/jsccGenerator'
-		, 'jisonGen': 'env/grammar/jisonGenerator'
+		, 'jisonGen': 'env/grammar/jisonAsyncGenerator'
 		, 'pegjsGen': 'env/grammar/pegjsGenerator'
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
