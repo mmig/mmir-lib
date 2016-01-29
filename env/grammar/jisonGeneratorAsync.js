@@ -1,6 +1,6 @@
 
 
-define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
+define(['constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -32,12 +32,12 @@ define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  * @name JisonGenerator
  * @memberOf mmir.env.grammar
  * 
- * @requires Jison
+ * @requires jisonCompiler
  * @requires jQuery.Deferred
  * @requires jQuery.extend
  * @requires jQuery.makeArray
  */		
-function(jison, constants, configManager, GrammarConverter, $, Logger, module){
+function(constants, configManager, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
@@ -65,8 +65,8 @@ deferred.resolve();
  */
 var logger = Logger.create(module);
 
-//setup logger for compile errors (if not already set)
-if(! jison.printError){
+////setup logger for compile errors (if not already set)
+//if(! jison.printError){
 	/**
 	 * The default logging / error-print function for jison.
 	 * 
@@ -77,14 +77,14 @@ if(! jison.printError){
 	 * 
 	 * @see mmir.Logging
 	 */
-	jison.printError = function(){
+	var printError = function(){
 		var args = $.makeArray(arguments);
 		//prepend "location-information" to logger-call:
 		args.unshift('jison', 'compile');
 		//output log-message:
 		logger.error.apply(logger, args);
 	};
-}
+//}
 
 /**
  * The argument name when generating the grammar function:
@@ -97,6 +97,15 @@ if(! jison.printError){
  * @memberOf JisonGenerator#
  */
 var INPUT_FIELD_NAME = 'asr_recognized_text';
+
+/**
+ * Name for async WebWorker (file).
+ * 
+ * @constant
+ * @private
+ * @memberOf JisonGenerator#
+ */
+var WORKER_NAME = 'jisonCompiler.js';
 
 /**
  * The default options for the jison compiler.
@@ -136,6 +145,55 @@ var DEFAULT_OPTIONS = {
  */
 var pluginName = 'grammar.jison';
 
+var workerPath = constants.getWorkerPath() + WORKER_NAME;
+
+//TODO doc: ID for communication with web-worker
+var _compId = 0;
+
+//web-worker instance:
+var compiler = new Worker(workerPath);
+compiler.postMessage({
+	cmd: 'init',
+	config: DEFAULT_OPTIONS
+});
+
+//dictionary for currently active compilations:
+// [id] -> callback-function()
+compiler._active = {};
+
+//HELPER: register a callback (usage: see jisonGen.compileGrammar() below)
+compiler.addCallback = function(id, cb){
+	this._active[id] = cb;
+};
+
+//callback/handler for messages/event from web-worker:
+compiler.onmessage = function(evt){
+	
+	var id = evt.data.id;
+	if(id){
+		
+		if(this._active[id]){
+			
+			this._active[id](evt.data);
+			
+		} else {
+			console.warn('no callback registered for ID "'+id+'" -> ' + JSON.stringify(evt.data));
+		}
+		
+		//this was the final message for this ID -> remove callback-function from "active" dictionary:
+		if(evt.data.done){
+			this._active[id] = void(0);
+		}
+	}
+	else if(evt.data.config === 'success'){
+		console.info('successfully configured '+pluginName+' compiler');
+	}
+	else {
+		console.error('ERROR unknown message -> ' + JSON.stringify(evt.data));
+	}
+	
+};
+
 /**
  * Exported (public) functions for the jison grammar-engine.
  * @public
@@ -162,7 +220,7 @@ var jisonGen = {
 		return deferred;
 	},
 	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
-	isAsyncCompilation: function(){ return false; },
+	isAsyncCompilation: function(){ return true; },
 	/**
 	 * The function for compiling a JSON grammar:
 	 * 
@@ -184,9 +242,11 @@ var jisonGen = {
 		
 		//start conversion: create grammar in JS/CC syntax (from the JSON definition):
 		theConverterInstance.init();
-		if(jison.printError){
-			Jison.print = jison.printError;
-		}
+		
+//		if(jison.printError){
+//			Jison.print = jison.printError;
+//		}
+		
         theConverterInstance.convertJSONGrammar();
         var grammarDefinition = theConverterInstance.getJSCCGrammar();
         
@@ -197,139 +257,177 @@ var jisonGen = {
         
         var hasError = false;
         var grammarParser;
-        try{
-        	var cfg = bnf.parse(grammarDefinition);
-        	var parser = Jison.Generator(cfg, options);
-        	grammarParser = parser.generate();
-        } catch(error) {
-//        	"{
-//        	  "message": "Expected \"=\" or string but \"_\" found.",
-//        	  "expected": [
-//        	    {
-//        	      "type": "literal",
-//        	      "value": "=",
-//        	      "description": "\"=\""
-//        	    },
-//        	    {
-//        	      "type": "other",
-//        	      "description": "string"
-//        	    }
-//        	  ],
-//        	  "found": "_",
-//        	  "offset": 4104,
-//        	  "line": 40,
-//        	  "column": 6,
-//        	  "name": "SyntaxError"
-//        	}"
-        	hasError = true;
-        	var msg = ' while compiling grammar "' + instanceId+ '": ';
-        	if(error.name === 'SyntaxError'){
-        		msg= 'SyntaxError' + msg + error.message;
-        	}
-        	else {
-        		msg = 'Error' + msg + (error && error.stack? error.stack : error);
-        	}
-        	
-        	if(typeof error.lineNumber !== 'undefined'){
-        		msg += ' at line '+error.lineNumber;
-        	}
-
-        	if(typeof error.column !== 'undefined'){
-        		msg += ':'+error.column;
-        	}
-        	
-        	if(typeof error.index !== 'undefined'){
-        		msg += ' (offset '+error.index+')';
-        	}
-        	
-        	if(jison.printError){
-        		jison.printError(msg);
-        	}
-        	else {
-        		console.error(msg);
-        	}
-        	msg = '[INVALID GRAMMAR] ' + msg;
-        	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';//FIXME
-        }
+//        try{
+//        	
+//        	var cfg = bnf.parse(grammarDefinition);
+//        	var parser = Jison.Generator(cfg, options);
+//        	grammarParser = parser.generate();
+//        	
+//        } catch(error) {
+////        	"{
+////        	  "message": "Expected \"=\" or string but \"_\" found.",
+////        	  "expected": [
+////        	    {
+////        	      "type": "literal",
+////        	      "value": "=",
+////        	      "description": "\"=\""
+////        	    },
+////        	    {
+////        	      "type": "other",
+////        	      "description": "string"
+////        	    }
+////        	  ],
+////        	  "found": "_",
+////        	  "offset": 4104,
+////        	  "line": 40,
+////        	  "column": 6,
+////        	  "name": "SyntaxError"
+////        	}"
+//        	hasError = true;
+//        	var msg = ' while compiling grammar "' + instanceId+ '": ';
+//        	if(error.name === 'SyntaxError'){
+//        		msg= 'SyntaxError' + msg + error.message;
+//        	}
+//        	else {
+//        		msg = 'Error' + msg + (error && error.stack? error.stack : error);
+//        	}
+//        	
+//        	if(typeof error.lineNumber !== 'undefined'){
+//        		msg += ' at line '+error.lineNumber;
+//        	}
+//
+//        	if(typeof error.column !== 'undefined'){
+//        		msg += ':'+error.column;
+//        	}
+//        	
+//        	if(typeof error.index !== 'undefined'){
+//        		msg += ' (offset '+error.index+')';
+//        	}
+//        	
+//        	if(jison.printError){
+//        		jison.printError(msg);
+//        	}
+//        	else {
+//        		console.error(msg);
+//        	}
+//        	msg = '[INVALID GRAMMAR] ' + msg;
+//        	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';//FIXME
+//        }
         
-        //FIXME attach compiled parser to some other class/object
-        var moduleNameString = '"'+instanceId+'GrammarJs"';
-        var addGrammarParserExec = 
-//    	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
-    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
-        	+ 'var fileFormatVersion = '+fileFormatVersion+';\n  '
-        	+ 'var module = {};\n'
-        	+ grammarParser
-//        	+ ';\nvar grammarFunc = function(){ return parser.parse.apply(parser, arguments);};\n'
-        	+ ';\nvar grammarFunc = function(){\n'
-        	+ '  var result;  try {\n'
-        	+ '    result = parser.parse.apply(parser, arguments);\n'
-        	+ '  } catch (err){\n'
-        	+ '    console.error(err.stack?err.stack:err); result = {};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
-        	+ '  }\n'
-        	+ '  return result;\n'
-        	+ '};\n'
-        	+ 'semanticInterpreter.addGrammar("'
-        		+instanceId
-        		+'", grammarFunc, fileFormatVersion);\n\n'
-        	+ 'semanticInterpreter.setStopwords("'
-        		+instanceId+'",'
-
-        		//store stopwords with their Unicode representation (only for non-ASCII chars)
-        		+JSON.stringify(
-        				theConverterInstance.getEncodedStopwords()
-        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-        	+ ');\n'
-        	+ 'return grammarFunc;\n'
-//                	+ '});\n'
-//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
-        	+ '})();'//FIXME
-
-        	//for Chrome / FireFox debugging: provide an URL for eval'ed code
-        	+ '//@ sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n//# sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n'
-        ;
+        //callback-ID:
+        var compId = '' + _compId++;
         
-        theConverterInstance.setJSGrammar(addGrammarParserExec);
-
-//        doAddGrammar(instanceId, theConverterInstance);
-        
-        try{
+        //register callback for messages from web-worker:
+        compiler.addCallback(compId, function(evtData){
         	
-        	eval(addGrammarParserExec);
-        	
-        } catch (err) {
-
-        	//TODO russa: generate meaningful error message with details about error location
-        	//			  eg. use esprima (http://esprima.org) ...?
-        	//			... as optional dependency (see deferred initialization above?)
-        	
-        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
-        	
-        	if(jison.printError){
-        		jison.printError(evalMsg);
-        	}
-        	else {
-        		logger.error('jison', 'evalCompiled', evalMsg, err);
+        	if(evtData.error){
+        		
+        		//handle error message:
+        		
+        		if(printError){
+            		printError(msg);
+            	}
+            	else {
+            		console.error(msg);
+            	}
+        		
+        		//////////////////// EARLY EXIT /////////////////
+        		//NOTE this is not the final message from the compiler-thread...
+        		return;
         	}
         	
-        	if(! hasError){
-            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
-            	var parseDummyFunc = (function(msg, error){ 
-            		return function(){ console.error(msg); console.error(error); throw msg;};
-            	})(evalMsg, err);
-            	
-            	parseDummyFunc.hasErrors = true;
-            	
-            	//theConverterInstance = doGetGrammar(instanceId);
-            	theConverterInstance.setGrammarFunction(parseDummyFunc);
-        	}
         	
-        }
+        	var hasError = evtData.isError;
+        	var grammarParser = evtData.def;
         
-        //invoke callback if present:
-        if(callback){
-        	callback(theConverterInstance);
-        }
+	        //FIXME attach compiled parser to some other class/object
+	        var moduleNameString = '"'+instanceId+'GrammarJs"';
+	        var addGrammarParserExec = 
+	//    	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
+	    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
+	        	+ 'var fileFormatVersion = '+fileFormatVersion+';\n  '
+	        	+ 'var module = {};\n'
+	        	+ grammarParser
+	//        	+ ';\nvar grammarFunc = function(){ return parser.parse.apply(parser, arguments);};\n'
+	        	+ ';\nvar grammarFunc = function(){\n'
+	        	+ '  var result;  try {\n'
+	        	+ '    result = parser.parse.apply(parser, arguments);\n'
+	        	+ '  } catch (err){\n'
+	        	+ '    console.error(err.stack?err.stack:err); result = {};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
+	        	+ '  }\n'
+	        	+ '  return result;\n'
+	        	+ '};\n'
+	        	+ 'semanticInterpreter.addGrammar("'
+	        		+instanceId
+	        		+'", grammarFunc, fileFormatVersion);\n\n'
+	        	+ 'semanticInterpreter.setStopwords("'
+	        		+instanceId+'",'
+	
+	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
+	        		+JSON.stringify(
+	        				theConverterInstance.getEncodedStopwords()
+	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
+	        	+ ');\n'
+	        	+ 'return grammarFunc;\n'
+	//                	+ '});\n'
+	//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
+	        	+ '})();'//FIXME
+	
+	        	//for Chrome / FireFox debugging: provide an URL for eval'ed code
+	        	+ '//@ sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n//# sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n'
+	        ;
+	        
+	        theConverterInstance.setJSGrammar(addGrammarParserExec);
+	
+	//        doAddGrammar(instanceId, theConverterInstance);
+	        
+	        try{
+	        	
+	        	eval(addGrammarParserExec);
+	        	
+	        } catch (err) {
+	
+	        	//TODO russa: generate meaningful error message with details about error location
+	        	//			  eg. use esprima (http://esprima.org) ...?
+	        	//			... as optional dependency (see deferred initialization above?)
+	        	
+	        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
+	        	
+	        	if(jison.printError){
+	        		jison.printError(evalMsg);
+	        	}
+	        	else {
+	        		logger.error('jison', 'evalCompiled', evalMsg, err);
+	        	}
+	        	
+	        	if(! hasError){
+	            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
+	            	var parseDummyFunc = (function(msg, error){ 
+	            		return function(){ console.error(msg); console.error(error); throw msg;};
+	            	})(evalMsg, err);
+	            	
+	            	parseDummyFunc.hasErrors = true;
+	            	
+	            	//theConverterInstance = doGetGrammar(instanceId);
+	            	theConverterInstance.setGrammarFunction(parseDummyFunc);
+	        	}
+	        	
+	        }
+	        
+	        //invoke callback if present:
+	        if(callback){
+	        	callback(theConverterInstance);
+	        }
+	        
+        });
+        
+        //start compilation in web-worker:
+        compiler.postMessage({
+    		cmd: 'parse',
+    		id: compId,
+    		config: options,
+    		text: grammarDefinition
+    	});
         
         return theConverterInstance;
 	}
