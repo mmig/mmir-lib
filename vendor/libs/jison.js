@@ -14618,7 +14618,7 @@ test_match:function (match, indexed_rule) {
         }
         return false;
     },
-
+    
 // return next match in input
 next:function () {
         if (this.done) {
@@ -15023,12 +15023,47 @@ function prepareRules(rules, macros, actions, tokens, startConditions, caseless)
 
         m = rules[i][0];
         if (typeof m === 'string') {
-            for (k in macros) {
+        	//russa: original code:
+//            for (k in macros) {
+//                if (macros.hasOwnProperty(k)) {
+//                    m = m.split("{" + k + "}").join('(' + macros[k] + ')');
+//                }
+//            }
+//            m = new RegExp("^(?:" + m + ")", caseless ? 'i':'');
+        	var lastbreak = m.length,mi;//russa: try to break up very large reg-expr
+        	var islarge = lastbreak > 3000;//russa: try to break up very large reg-expr
+        	var mlist = islarge? [] : null;//russa: try to break up very large reg-expr
+        	for (k in macros) {
                 if (macros.hasOwnProperty(k)) {
-                    m = m.split("{" + k + "}").join('(' + macros[k] + ')');
+                	if(islarge){//russa: try to break up very large reg-expr
+                		var kindex = m.indexOf("|{" + k + "}|");
+                		if(kindex !== -1 && lastbreak - kindex > 2250){
+                			mlist.unshift(m.substring(kindex + 1, lastbreak));
+                			lastbreak = kindex;
+                		}
+                	} else {
+                		m = m.split("{" + k + "}").join('(' + macros[k] + ')');
+                	}
                 }
             }
-            m = new RegExp("^(?:" + m + ")", caseless ? 'i':'');
+            if(mlist){//russa: try to break up very large reg-expr
+            	if(lastbreak > 0){
+            		mlist.unshift(m.substring(0, lastbreak));
+            	}
+            	for (k in macros) {//
+                    if (macros.hasOwnProperty(k)) {
+		        		for(mi=mlist.length-1;mi>=0;--mi){
+		        			mlist[mi] = mlist[mi].split("{" + k + "}").join('(' + macros[k] + ')');
+		        		}
+                    }
+            	}
+            	for(mi=mlist.length-1;mi>=0;--mi){
+        			mlist[mi] = new RegExp("^(?:" + mlist[mi] + ")", caseless ? 'i':'');
+        		}
+            	m = mlist;
+        	} else {
+        		m = new RegExp("^(?:" + m + ")", caseless ? 'i':'');
+        	}
         }
         newRules.push(m);
         if (typeof rules[i][1] === 'function') {
@@ -15322,6 +15357,21 @@ RegExpLexer.prototype = {
         }
         return false;
     },
+    
+    _matchRules: function(rule){//russa: helper for dealing with broken-up (i.e. too large) reg-expr
+    	if(Array.isArray(rule)){
+    		var match = null;
+    		for(var i=0,size=rule.length; i < size; ++i){
+    			match = this._input.match(rule[i]);
+    			if(match){
+    				return match;
+    			}
+    		}
+    		return match;
+    	} else {
+    		return this._input.match(rule);
+    	}
+    },
 
     // return next match in input
     next: function () {
@@ -15342,7 +15392,7 @@ RegExpLexer.prototype = {
         }
         var rules = this._currentRules();
         for (var i = 0; i < rules.length; i++) {
-            tempMatch = this._input.match(this.rules[rules[i]]);
+            tempMatch = this._matchRules(this.rules[rules[i]]);//this._input.match(this.rules[rules[i]]); //russa: use helper for (possibly) dealing with broken-up reg-expr
             if (tempMatch && (!match || tempMatch[0].length > match[0].length)) {
                 match = tempMatch;
                 index = i;
@@ -15500,7 +15550,8 @@ function generateModuleBody (opt) {
         _currentRules: "produce the lexer rule set which is active for the currently active lexer condition state",
         topState: "return the currently active lexer condition state; when an index argument is provided it produces the N-th previous condition state, if available",
         pushState: "alias for begin(condition)",
-        stateStackSize: "return the number of states currently on the stack"
+        stateStackSize: "return the number of states currently on the stack",
+        _matchRule: "returns a match"//russa: helper for matching broken-up reg-expr (i.e. arrays of reg-expr)
     };
     var out = "({\n";
     var p = [];
@@ -15522,11 +15573,25 @@ function generateModuleBody (opt) {
     }
 
     out += ",\nperformAction: " + String(opt.performAction);
-    out += ",\nrules: [" + opt.rules + "]";
+    out += ",\nrules: [" + _writeRules(opt.rules) + "]";
     out += ",\nconditions: " + JSON.stringify(opt.conditions);
     out += "\n})";
 
     return out;
+}
+
+function _writeRules(rules) {//russa: helper for writing broken-up reg-expr (i.e. arrays of reg-expr)
+	var sb = [];
+	var temp;
+	for(var i=0,size=rules.length;i<size;++i){
+		if(Array.isArray(rules[i])){
+			temp = _writeRules(rules[i]);
+			sb.push('['+temp+']');
+		} else {
+			sb.push(''+rules[i]);
+		}
+	}
+	return sb.join(',');
 }
 
 function generateModule(opt) {
