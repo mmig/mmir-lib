@@ -367,6 +367,39 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		    },
 	
 		    /**
+			 * Get the file path/name for a compiled grammar (executable JavaScript grammars).
+			 * 
+			 * @function
+			 * @param {String} generatedGrammarsPath Path of the grammars which should be loaded, e.g. <b>gen/grammar/</b> 
+			 * @param {String} grammarId the ID (e.g. language code) for the grammar
+			 * @param {Boolean} [isFileNameOnly] OPTIONAL
+			 * 					if TRUE then only the file name will be returned, otherwise the full path is returned
+			 * 
+		     * @returns {String} file path / name for the compiled grammar
+		     *                   (returns an empty string, if there is no compile grammar for the specified grammar ID)
+		     * 
+			 * @public
+	    	 * @memberOf mmir.CommonUtils.prototype
+			 */
+		    getCompiledGrammarPath : function(generatedGrammarsPath, grammarId, isFileNameOnly) {
+		    	var files = instance.getDirectoryContentsWithFilter(generatedGrammarsPath, "*.js");
+		    	if(!files){
+		    		return '';
+		    	}
+		    	var f, index, id;
+		    	for(var i=0,size=files.length; i < size; ++i){
+		    		f = files[i];
+		    		index = f.lastIndexOf('_');
+					if (index !== -1) {
+						id = f.substring(0, index);
+						if(id === grammarId){
+							return isFileNameOnly? files[i] : generatedGrammarsPath + files[i];
+						}
+					}
+		    	}
+		    	return '';
+		    },
+		    /**
 			 * Load all compiled grammars (executable JavaScript grammars).
 			 * 
 			 * @function
