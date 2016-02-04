@@ -148,8 +148,10 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 					}
 				};
 				
+				//list of grammar IDs which should not be loaded, even if there is a compiled grammar available:
+				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', true, void(0));
 				
-				commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath()).then(function() {
+				commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
 					isSemanticsLoaded = true;
 					
 					mmir.SemanticInterpreter = semanticInterpreter;

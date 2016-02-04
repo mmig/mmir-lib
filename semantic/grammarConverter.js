@@ -83,6 +83,8 @@ function GrammarConverter(){
 	//alternative reg-exp for stop-words (a different method for detecting/removing stopwords must be used!)
 	this.stop_words_regexp_alt;
 	
+	//if execution of the grammar is asynchronously done (i.e. result is delivered using a callback)
+	this.is_async = false;
 };
 
 GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback, grammarUrl, doLoadSynchronously){
@@ -346,216 +348,82 @@ GrammarConverter.prototype.getStopWordsRegExpr_alt = function(){
 };
 
 /**
- * Get JS/CC grammar definition text.
+ * Get grammar definition text.
  * 
- * This is the "source code" input for the JS/CC compiler.
+ * This is the "source code" input for the grammar compiler
+ * (i.e. syntax for jison, PEG.js or JS/CC).
  * 
- * @returns {String} the JS/CC grammar definition
+ * The grammar definition text is generated from the JSON grammar.
+ * 
+ * @returns {String} the grammar definition in compiler-specific syntax
  */
-GrammarConverter.prototype.getJSCCGrammar = function(){
+GrammarConverter.prototype.getGrammarDef = function(){
 	return  this.jscc_grammar_definition;
 };
 
-GrammarConverter.prototype.setJSCCGrammar = function(rawGrammarSyntax){
+/**
+ * Sets the grammar definition text.
+ * 
+ * This function should only be used during compilation of the JSON grammar
+ * to the executable grammar.
+ * 
+ * NOTE: Setting this "manually" will have no effect on the executable grammar.
+ * 
+ * @see #getGrammarDef
+ * @protected
+ * 
+ * @param {String} rawGrammarSyntax
+ * 		the grammar definition in compiler-specific syntax
+ */
+GrammarConverter.prototype.setGrammarDef = function(rawGrammarSyntax){
 	this.jscc_grammar_definition = rawGrammarSyntax;
 };
 
 /**
  * Get the compiled JavaScript grammar source code.
  * 
- * This is the output of the JS/CC compiler (with additional
+ * This is the output of the grammar compiler (with additional
  * JavaScript "framing" in SemanticInterpreter.createGrammar).
  * 
- * This needs to be eval'ed before it can be executed (eval will add
+ * This needs to be eval'ed before it can be executed (eval() will add
  * the corresponding executable grammar to SemanticInterpreter).
  * 
  * @returns {String} the compiled, JavaScript grammar source code
  */
-GrammarConverter.prototype.getJSGrammar = function(){
+GrammarConverter.prototype.getGrammarSource = function(){
 	return  this.js_grammar_definition;
 };
 
-GrammarConverter.prototype.setJSGrammar = function(src_code){
+GrammarConverter.prototype.setGrammarSource = function(src_code){
 	 this.js_grammar_definition = src_code;
 };
-
-//GrammarConverter.prototype.parseTokens = function(){
-//	var self = this;
-//	var json_tokens =  this.json_grammar_definition.tokens;
-//	
-//	for(token_name in json_tokens){
-//		
-//		var words = json_tokens[token_name];
-//		
-//		self.token_variables += "  var " + self.variable_prefix
-//				+ token_name.toLowerCase() + " = {};\n";
-//		
-//		var grammar_token ="    '";
-//		
-//		for(var i=0, size = words.length; i < size ; ++i){
-//			if(i > 0){
-//				grammar_token += "|";
-//			}
-//			grammar_token += words[i];
-//		}
-//		
-//		grammar_token += "'    " + token_name + " [* " + self.variable_prefix
-//				+ token_name.toLowerCase() + "[%match] = %match; *];\n";
-//		
-//		self.grammar_tokens += grammar_token;
-//	}
-//};
-//
-//GrammarConverter.prototype.parseUtterances = function(){
-//	var self = this;
-//	var utt_index = 0;
-//	var json_utterances =  this.json_grammar_definition.utterances;
-//
-//	for(utterance_name in json_utterances){
-//		var utterance_def = json_utterances[utterance_name];
-//		if(utt_index > 0){
-//			self.grammar_phrases += "\n\t|";
-//		}
-//		utt_index++;
-//		self.doParseUtterance(utterance_name, utterance_def);
-//	}
-//};
-//
-//GrammarConverter.prototype.doParseUtterance = function(utterance_name, utterance_def){
-//	var grammar_utterance = utterance_name + ":";
-//	var self = this; 
-//	self.token_variables += "  var " + self.variable_prefix
-//			+ utterance_name.toLowerCase() + " = {};\n";
-//	//self.grammar_phrases += utterance_name + "  " +  self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
-//	self.grammar_phrases += utterance_name + "  " ;
-//	var phrases = utterance_def.phrases;
-//	var semantic  = self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
-//	
-//	for(var index=0,size=phrases.length; index < size; ++index){
-//		if(index > 0){
-//			grammar_utterance += "\n|";
-//		}
-//		var phrase = phrases[index];
-//		var semantic_interpretation = self.doCreateSemanticInterpretationForPhrase(
-//				utterance_name.toLowerCase(), utterance_def, phrase, semantic
-//		);
-//		grammar_utterance += phrase + semantic_interpretation;
-//	}
-//	self.grammar_utterances += grammar_utterance + ";\n\n";
-//};
-//
-//
-//GrammarConverter.prototype.doCreateSemanticInterpretationForUtterance = function(utterance_name, utterance_def){
-//	var semantic = utterance_def.semantic,
-//	variable_index, variable_name;
-//	
-//	if(logger.isDebug()) logger.debug('doCreateSemanticInterpretationForUtterance: '+semantic);//debug
-//	
-//	var semantic_as_string = JSON.stringify(semantic);
-//	if( semantic_as_string != null){
-//	this.variable_regexp.lastIndex = 0;
-//	var variables = this.variable_regexp.exec(semantic_as_string);
-//	while (variables != null) {
-//		var variable = variables[1],
-//		remapped_variable_name = "";
-//		
-//		if(logger.isDebug()) logger.debug("variables " + variable, semantic_as_string);//debug
-//		
-//		variable_index = /\[(\d+)\]/.exec(variable);
-//		variable_name = new RegExp('_\\$([a-zA-Z_][a-zA-Z0-9_\\-]*)').exec(variable)[1];
-////		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?(\["semantic"\]|\['semantic'\]|\.semantic)?/.exec(variable);
-////		variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
-////"_$NAME[INDEX]['FIELD']":  _$NAME                  [ INDEX ]        [" FIELD "]  | [' FIELD ']      |   .FIELD
-//		if (variable_index == null) {
-//			remapped_variable_name = variable;
-//		} else {
-//				remapped_variable_name = variable.replace(
-//						  '[' + variable_index[1] + ']'
-//						, "["
-//							+ utterance_name.toLowerCase() + "_temp['phrases']['"
-//							+ variable_name.toLowerCase() + "']["
-//							+ variable_index[1]
-//						+ "]]");
-//				//TODO replace try/catch with safe_acc function
-//				//     PROBLEM: currently, the format for variable-access is not well defined
-//				//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
-//				//                 we would need another safe_acc call 
-//				//				   ... i.e. need to parse expression for this, but since the format is not well defined
-//				//				   we cannot say, for what exactly we should parse...
-//				//                 NORMAL VAR EXPR: 		_$a_normal_token[0]
-//				//                 ACCESS TO SEMANTICS: 	_$other_utterance[0]['semantic']
-//				//                                      but this could also be expressed e.g. as _$other_utterance[0].semantic
-//				//                                      ...
-////				remapped_variable_name = variable.replace(
-////						  '[' + variable_index[1] + ']'
-////						, "[safe_acc("
-////							+ utterance_name.toLowerCase() + "_temp, 'phrases', '"
-////							+ variable_name.toLowerCase() + "', "
-////							+ variable_index[1] 
-////							+ ")]"
-////						);
-//		}
-//		semantic_as_string = semantic_as_string.replace(
-//				variables[0],
-//				" function(){try{return " + remapped_variable_name
-//					+ ";} catch(e){return void(0);}}() "
-////				"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
-//		);
-//		variables =  this.variable_regexp.exec(semantic_as_string);
-//	}
-//	}
-//	return semantic_as_string;
-//};
-//
-//GrammarConverter.prototype.doCreateSemanticInterpretationForPhrase = function(utterance_name, utterance_def, phrase, semantic_as_string){
-//	var splitted_phrase = phrase.split(/\s+/),
-//	length = splitted_phrase.length,
-//	duplicate_helper = {};
-//	
-//	var result = " [* %% = ";
-//	var i = 0;
-//	while (i < length){
-//		i++;
-//		result += "%"+i;
-//		if(i < length){
-//			result += " + ' ' + ";
-//		}
-//	}
-//	result += "; var "+utterance_name+"_temp = {}; "+utterance_name+"_temp['phrases'] = {};";
-//	for (i = 0; i < length; i += 1) {
-//		if (typeof(duplicate_helper[splitted_phrase[i]]) == "undefined") {
-//			duplicate_helper[splitted_phrase[i]] = 0;
-//			result += utterance_name+"_temp['phrases']['"+splitted_phrase[i].toLowerCase()+"'] = [];";
-//		} else {
-//			duplicate_helper[splitted_phrase[i]] += 1;
-//		}
-//		result += utterance_name + "_temp['phrases']['"
-//					+ splitted_phrase[i].toLowerCase() + "']["
-//					+ duplicate_helper[splitted_phrase[i]] + "] = %" + (i + 1)
-//					+ "; ";
-//	}
-//	result += "var " + this.variable_prefix + "phrase = %%; " + utterance_name
-//			+ "_temp['phrase']=" + this.variable_prefix + "phrase; "
-//			+ utterance_name + "_temp['semantic'] = " + semantic_as_string
-//			+ "; " + this.variable_prefix + utterance_name + "["
-//			+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "
-//			+ this.variable_prefix + "result = " + utterance_name + "_temp; *]";
-//	return result;
-//};
 
 /**
  * Set the executable grammar function.
  * 
- * The grammar function takes 1 String argument: the text that should be parsed.
- * The returned result depends on the JSON definition of the grammar.
+ * The grammar function takes a String argument: the text that should be parsed.
+ *                            a Function argument: the callback for the result.
+ *                            where the callback itself takes 1 argument for the result: <code>callback(result)</code>
+ *                            
+ * The returned result depends on the JSON definition of the grammar:
+ * <code>func(inputText, resultCallback)</code>
+ * 
  * 
  * @param {Function} func
- * 			the executable grammar function: <code>func(string) : object</code>
+ * 			the executable grammar function: <code>func(string, function(object)) : object</code>
+ * @param {Boolean} [isAsnc] OPTIONAL
+ * 					set to TRUE, if execution is asynchronously done.
+ * 					DEFAULT: FALSE 
  * 
  * @see #exectueGrammar
  */
-GrammarConverter.prototype.setGrammarFunction = function(func){
+GrammarConverter.prototype.setGrammarFunction = function(func, isAsync){
+	this.is_async = !!isAsync;
 	this.executeGrammar = func;
+};
+
+GrammarConverter.prototype.isAsyncExec = function(){
+	return this.is_async;
 };
 
 /**
@@ -567,6 +435,11 @@ GrammarConverter.prototype.setGrammarFunction = function(func){
  * 
  * @param {String} text
  * 			the text String that should be parse.
+ * @param {Function} [callback]
+ * 			if #isAsyncExec is TRUE, then executeGrammar will have no return value, but instead the result
+ * 			of the grammar execution is delivered by the <code>callback</code>:
+ * 			<pre>function callback(result){ ... }</pre>
+ * 			(see also description of <code>return</code> value below)
  * @returns {Object}
  * 			the result of the grammar execution:
  * 			<code>{phrase: STRING, phrases: OBJECT, semantic: OBJECT}</code>
@@ -579,8 +452,11 @@ GrammarConverter.prototype.setGrammarFunction = function(func){
  * 
  *          The returned property <code>semantic</code> depends on the JSON definition of the grammar.
  *          
+ *          NOTE: if #isAsyncExec is TRUE, then there will be no return value, but instead the callback
+ *                is invoked with the return value.
+ *          
  */
-GrammarConverter.prototype.executeGrammar = function(text){
+GrammarConverter.prototype.executeGrammar = function(text, callback){
 	console.warn('GrammarConverter.executeGrammar: this is only a stub. No grammar implementation set yet...');
 };
 

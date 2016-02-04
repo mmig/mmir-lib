@@ -72,7 +72,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
      * 
      * @memberOf SemanticInterpreter#
      */
-    var GRAMMAR_FILE_FORMAT_VERSION = 3;
+    var GRAMMAR_FILE_FORMAT_VERSION = 4;
     
     
     /**
@@ -127,6 +127,18 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var currentGrammarEningeId = null;
+
+	    /**
+	     * If true, the async versions of the grammar engines are loaded,
+	     * i.e. compilation of grammar parsers will be asynchronously done in a WebWorker
+	     * 
+	     * @type Boolean
+	     * @private
+	     * @default false
+	     * @memberOf SemanticInterpreter#
+	     */
+	    var _isAsyncCompileMode = false;
+	    
 	    /**
 	     * @type String
 	     * @constant
@@ -141,13 +153,25 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * @memberOf SemanticInterpreter#
 	     */
 	    var GRAMMAR_MODULE_ID_POSTFIX = 'Gen';
+	    /**
+	     * @type String
+	     * @constant
+	     * @private
+	     * @memberOf SemanticInterpreter#
+	     */
+	    var GRAMMAR_ASYNC_MODULE_MODIFIER = 'Async';
 	    
 	    /**
 	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
-	    var doSetGrammarEngine = function(id){
+	    var doSetGrammarEngine = function(id, asyncCompileMode){
+	    	
 	    	currentGrammarEningeId = id;
+	    	
+	    	if(typeof asyncCompileMode !== 'undefined'){
+	    		_isAsyncCompileMode = !!asyncCompileMode;
+	    	}
 	    };
 	    /**
 	     * @private
@@ -207,9 +231,17 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * 									In this case, if no GrammarConverter instance fo <tt>id</tt> is present, a new one will be created; 
 	     * 									The stopwords must already be set, or must additionally be set for the GrammarConverter instance
 	     * 									  (e.g. using {@link mmir.SemanticInterpreter.setStopwords})
-	     * @param {Number} [fileFormatNo] OPTIONAL
-		 * 					If the number given does not match {@link #GRAMMAR_FILE_FORMAT_VERSION}
+	     * @param {Number|PlainObject} [fileFormatNo] OPTIONAL
+		 * 					If Number and the number given does not match {@link #GRAMMAR_FILE_FORMAT_VERSION}
 		 * 					the file format is assumed to be out-dated and an Error will be thrown.
+		 * 					
+		 * 					If PlainObject, i.e. an options object, the following properties are evaluated
+		 * 					(all properties are opitional):
+		 * 					<code>fileFormat: NUMBER, default: undefined</code>
+		 * 						(desc. see above)
+		 * 					<code>execMode: 'sync' | 'async', default: 'sync'</code>
+		 * 						if 'async' then the grammar is executed asynchronously, i.e. getASRSemantic()
+		 * 						must be invoked with a callback function in order to retrieve the result
 		 * 
 	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION.
 	     * 
@@ -217,6 +249,15 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	     * @memberOf SemanticInterpreter#
 	     */
     	var doAddGrammar = function(id, grammarImpl, fileFormatNo){
+    		
+    		var execMode = 'sync';
+    		if(fileFormatNo && typeof fileFormatNo === 'object'){
+    			
+    			execMode = fileFormatNo.execMode;
+    			
+    			//lastly: overwrite fileFormatNo with the corresponding property:
+    			fileFormatNo = fileFormatNo.fileFormat;
+    		}
     		
     		//check if the added grammar has correct format
     		if(fileFormatNo && fileFormatNo != GRAMMAR_FILE_FORMAT_VERSION){
@@ -240,12 +281,9 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         		if(!gc){
         			gc = new GrammarConverter();
         		}
-        		gc.setGrammarFunction(grammarImpl);
+        		gc.setGrammarFunction(grammarImpl, execMode === 'async');
         		grammarImpl = gc;
         	}
-//        	else {
-//        		
-//        	}
         	
         	var isAlreadyPresent = checkHasGrammar(id);
         	grammarImplMap[id] = grammarImpl;
@@ -276,7 +314,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
          * @param {String} id
          * 		the ID (e.g. language code) for the grammar
          * @param {Boolean} [doNotResolve] OPTIONAL
-         * 		if <code>false</code> AND the request grammar is not loaded, yet
+         * 		if <code>false</code> AND the request grammar is not loaded yet,
          * 		then the grammar will NOT be loaded (if omitted or <code>true</code>
          * 		missing grammars will automatically be loaded and compiled)
          * @param {Function} [callback] OPTIONAL
@@ -384,13 +422,13 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         	function build_grammar(theConverterInstance){//<- argument is the GrammarConverter instance
         	    
         		var genId   = doGetGrammarEngine();//one of ['jscc' | 'pegjs' | 'jison'];
-        		var genName = genId + GRAMMAR_MODULE_ID_POSTFIX;
+        		var genName = genId + (_isAsyncCompileMode? GRAMMAR_ASYNC_MODULE_MODIFIER : '') + GRAMMAR_MODULE_ID_POSTFIX;
         		
-        		require([genName], function(gen){ 
+        		var onModuleLoaded = function onLoad(gen){ 
         			
         			//initialize the generator (initialization may be async -> need callback/Promise)
         			// (-> if already initialized, the then-callback will be invoked immediately)
-        			gen.init().then(function(){
+        			gen.init().then(function onInit(){
         				
         				//actually start compilation of the grammar definition:
         				// usually this involves 2 steps: 
@@ -398,14 +436,14 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         				//    (2) compiling this syntax using the corresponding Parser-Generator
         				// -> the resulting parser-function will then be registered on the SemanticInterpreter instance
         				//    (using its addGrammar() function) along with the stopword definition (using the setStopwords() function)
-        				gen.compileGrammar(theConverterInstance, generatedParserLanguageCode, GRAMMAR_FILE_FORMAT_VERSION, function(convertedInstance){
+        				gen.compileGrammar(theConverterInstance, generatedParserLanguageCode, GRAMMAR_FILE_FORMAT_VERSION, function onCompiled(convertedInstance){
 	        		        
         					//add the grammar-parser-text and grammar-definition-text to the newly registered Grammar-instance
         					// (-> registering is done within the compileGrammar() function!)
 	        		        var registeredGrammarInstance = doGetGrammar(generatedParserLanguageCode, true);
 	        		        if(registeredGrammarInstance){
-		        		        registeredGrammarInstance.setJSGrammar(convertedInstance.getJSGrammar());
-		        		        registeredGrammarInstance.setJSCCGrammar(convertedInstance.getJSCCGrammar());
+		        		        registeredGrammarInstance.setGrammarSource(convertedInstance.getGrammarSource());
+		        		        registeredGrammarInstance.setGrammarDef(convertedInstance.getGrammarDef());
 	        		        }
 	        		        else {
 	        		        	logger.error('A problem occured during generation of grammar for "'+generatedParserLanguageCode+'"');
@@ -418,7 +456,21 @@ define(['constants', 'grammarConverter', 'logger', 'module'
         				});
         			});
         			
-        		});//END: require([jsccGen])
+        		};//END: onModuleLoaded([jsccGen])
+        		
+        		require([genName], onModuleLoaded, function(err){
+        			
+        			//if async-module could not be loaded, try sync-module
+        			if(_isAsyncCompileMode){
+        				
+        				logger.warn('Cannot use asynchronous compilation for '+genId+
+        						': no async module available, using sync compilation instead...'
+        				);
+        				genName = genId + GRAMMAR_MODULE_ID_POSTFIX;
+        				
+        				require([genName], onModuleLoaded);
+        			}
+        		});
                 
             }//END function build_grammar
         	
@@ -457,28 +509,54 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 				langCode = void(0);
 			}
         	
-        	var execGrammar = function(grammarConverter, phrase, stopwordFunc, langCode){
+			var execGrammar = function(grammarConverter, phrase, stopwordFunc, langCode, callback){
+        		
 	            var strPreparedPhrase = grammarConverter.maskString( phrase.toLowerCase() );
 	            strPreparedPhrase = stopwordFunc(strPreparedPhrase, langCode, grammarConverter);
 	           
 	            if(logger.isDebug()) logger.debug('SemanticInterpreter.process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
 	            
-	    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
+	            if(callback){
+
+		    		grammarConverter.executeGrammar( strPreparedPhrase, function(result){
+		    			
+		    			//unmask previously mask non-ASCII chars in all Strings of the returned result:
+			    		result = grammarConverter.unmaskJSON(
+			    				result
+			    		);
+			            
+			            callback(result);//TODO return copy instead of original instance?
+			            
+		    		} );
+		            
+		    		
+		            
+	            } else {
+	            	
+		    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
+		            
+		    		//unmask previously mask non-ASCII chars in all Strings of the returned result:
+		    		result = grammarConverter.unmaskJSON(
+		    				result
+		    		);
+		            
+		            return result;//TODO return copy instead of original instance?
+	            }
 	            
-	    		//unmask previously mask non-ASCII chars in all Strings of the returned result:
-	    		result = grammarConverter.unmaskJSON(
-	    				result
-	    		);
-	            
-	            return result;//TODO return copy instead of original instance?
         	};
         	
 			var grammarReadyCallback;
 			if(callback){
+				
 				grammarReadyCallback = function(){
-					grammarConverter = doGetGrammar(langCode);
 					
-					callback( execGrammar(grammarConverter, phrase, stopwordFunc, langCode) );
+					var grammarConverter = doGetGrammar(langCode);
+					
+					if(grammarConverter.isAsyncExec()){
+						execGrammar(grammarConverter, phrase, stopwordFunc, langCode, callback);	
+					} else {
+						callback(execGrammar(grammarConverter, phrase, stopwordFunc, langCode));
+					}
 				};
 			}
 			
@@ -542,7 +620,7 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 			var grammarConverter = doGetGrammar(lang);
         	
         	if(!grammarConverter){
-    			throw 'NoGrammar_'+langCode;
+    			throw 'NoGrammar_'+lang;
     		}
         	
             var str = grammarConverter.maskString( thePhrase );
@@ -627,11 +705,11 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 			},
 			/** NOTE: the grammar must be compiled first, see getNewInstance(true)  @public */
 			getGrammarDefinitionText: function(id){
-				return doGetGrammar(id).getJSCCGrammar();//grammarDefinitionText;
+				return doGetGrammar(id).getGrammarDef();//grammarDefinitionText;
 			},
 			/** NOTE: the grammar must be compiled first, see getNewInstance(true)  @public*/
 			getGrammarParserText: function(id){
-				return doGetGrammar(id).getJSGrammar();//grammarParser;
+				return doGetGrammar(id).getGrammarSource();//grammarParser;
 			},
 			/**
 			 * 
@@ -743,8 +821,8 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	         * 			Possible values: "jscc", "jison", "pegjs"
 	         * @public
 	         */
-	        setGrammarEngine: function(engineId){
-	        	doSetGrammarEngine(engineId);
+	        setGrammarEngine: function(engineId, asyncCompileMode){
+	        	doSetGrammarEngine(engineId, asyncCompileMode);
 	        },
 	        
 	        /**

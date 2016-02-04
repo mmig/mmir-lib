@@ -1,5 +1,5 @@
 
-define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'],
+define(['jscc', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -40,7 +40,7 @@ define(['jscc', 'constants', 'grammarConverter', 'jquery', 'logger', 'module'],
  * @requires jQuery.ajax
  * @requires jQuery.makeArray
  */		
-function(jscc, constants, GrammarConverter, $, Logger, module){
+function(jscc, constants, configManager, GrammarConverter, $, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
@@ -142,6 +142,52 @@ var templatePath = constants.getGrammarPluginPath() + 'grammarTemplate_reduced.t
 var INPUT_FIELD_NAME = 'asr_recognized_text';
 
 /**
+ * The default options for the JS/CC compiler.
+ * 
+ * To overwrite the default options, configure the following property in <code>www/config/configuration.json</code>:<br>
+ * <pre>
+ * {
+ *   ...
+ *   "grammar": {
+ *   	...
+ *   	"jscc": {
+ *   		"execMode": "your configuration setting!"
+ *   	}
+ *   	...
+ *   },
+ *   ...
+ * }</pre>
+ * 
+ * Valid settings are:
+ * <code>execMode = 'sync' | 'async'</code>
+ * <code>genSourceUrl = true | STRING | FALSY'</code>
+ * 
+ * 
+ * genSourceUrl: if TRUTHY, the sourceUrl for eval'ed parser-module is set
+ *               (i.e. eval'ed code will appear at the URL in debugger, if browser supports sourceURL setting)
+ *               if true: the sourceUrl will be generated using the grammar's ID
+ *               if STRING: the string will be used as sourceUrl; if "<id>" is contained, it will be replaced by the grammar's ID
+ * 
+ * @constant
+ * @private
+ * @default targetType := jscc.MODE_GEN_JS, execMode := sync, genSourceUrl := FALSY
+ * @memberOf JsccGenerator#
+ */
+var DEFAULT_OPTIONS = {
+		targetType: jscc.MODE_GEN_JS,
+		execMode: 'sync',//'sync' | 'async' | default: sync
+		genSourceUrl: '',// true | STRING: the sourceURL for eval'ed parser-module | default: FALSY 
+};
+
+/**
+ * Name for this plugin/grammar-generator (e.g. used for looking up configuration values in configuration.json).
+ * @constant
+ * @private
+ * @memberOf JsccGenerator#
+ */
+var pluginName = 'grammar.jison';
+
+/**
  * Exported (public) functions for the JS/CC grammar-engine.
  * @public
  * @type GrammarGenerator
@@ -191,15 +237,115 @@ var jsccGen = {
 		
 		//start conversion: create grammar in JS/CC syntax (from the JSON definition):
 		theConverterInstance.init();
+		this._preparePrintError();
         theConverterInstance.convertJSONGrammar();
-        var grammarDefinition = theConverterInstance.getJSCCGrammar();
-        var grammarParserStr;
+        var grammarDefinition = theConverterInstance.getGrammarDef();
 
-        //set up the JS/CC compiler:
+        //load options from configuration:
+        var config = configManager.get(pluginName, true, {});
+        //combine with default default options:
+        var options = $.extend({id: instanceId}, DEFAULT_OPTIONS, config);
+        
+        var compileParserModule = function(grammarParserStr, hasError){
+        	
+	        var addGrammarParserExec = 
+	    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
+	        	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
+	        	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
+	    			//TODO active/use safe_acc (instead of try-catch construct in semantic-result extraction
+	//        			+ "var safe_acc = function(obj){\n  \tvar len = arguments.length;\n  \tif(len === 1){\n  \t    return null;\n  \t}\n  \tvar curr = obj, prop = arguments[1], i = 2;\n  \tfor(; i < len; ++i){\n  \tif(obj[prop] != null){\n  \t    obj = obj[prop];\n  \t}\n  \tprop = arguments[i];\n  \t}\n  \tvar res = obj[prop];\n  \treturn typeof res !== 'undefined'? res : null;\n  \t};"
+	    			+ grammarParserStr
+	        	+ '\n};\n'
+	        	
+	        	//add "self registering" for the grammar-function
+	        	//  i.e. register the grammar-function for the ID with the SemanticInterpreter
+	        	+ 'semanticInterpreter.addGrammar("'
+	        		+instanceId
+	        		+'", grammarFunc, options);\n\n'
+	        	+ 'semanticInterpreter.setStopwords("'
+	        		+instanceId+'",'
+	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
+	        		+JSON.stringify(
+	        				theConverterInstance.getEncodedStopwords()
+	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
+	        	+ ');\n'
+	        	+ 'return grammarFunc;\n'
+	        	+ '})();'
+	        ;
+
+	        if(options.genSourceUrl){
+            	
+            	var sourceUrlStr;
+            	if(options.genSourceUrl === true){
+            		sourceUrlStr = 'gen/grammar/_compiled_grammar_'+instanceId;
+            	} else {
+            		sourceUrlStr = options.genSourceUrl.toString().replace(/<id>/g,instanceId);
+            	}
+            	
+            	//for Chrome / FireFox debugging: provide an URL for eval'ed code
+            	addGrammarParserExec += '//@ sourceURL='+sourceUrlStr+'\n'
+            							+'//# sourceURL='+sourceUrlStr+'\n';
+                    
+            }
+	        
+	        theConverterInstance.setGrammarSource(addGrammarParserExec);
+	        
+	        try{
+	        
+	        	eval(addGrammarParserExec);
+	        	
+	        } catch (err) {
+	
+	        	//TODO russa: generate meaningful error message with details about error location
+	        	//			  eg. use esprima (http://esprima.org) ...?
+	        	//			... as optional dependency (see deferred initialization above?)
+	        	
+	        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
+	        	
+	        	if(jscc.get_printError()){
+	        		jscc.get_printError()(evalMsg);
+	        	}
+	        	else {
+	        		logger.error('JS/CC', 'evalCompiled', evalMsg, err);
+	        	}
+	        	
+	        	if(! hasError){
+	            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
+	            	var parseDummyFunc = (function(msg, error){ 
+	            		return function(){ console.error(msg); console.error(error); throw msg;};
+	            	})(evalMsg, err);
+	            	
+	            	parseDummyFunc.hasErrors = true;
+	            	
+	            	theConverterInstance.setGrammarFunction(parseDummyFunc);
+	        	}
+	        	
+	        }
+	        
+	        //invoke callback if present:
+	        if(callback){
+	        	callback(theConverterInstance);
+	        }
+		};
+		
+		var isPreventDefault = this._afterCompileParser(compileParserModule, callback);
+        var result = this._compileParser(grammarDefinition, options, isPreventDefault);
+        
+        if(!isPreventDefault){
+        	var hasError = result.hasError;
+        	compileParserModule(result.def, hasError);
+        }
+        
+        return theConverterInstance;
+	},
+	_compileParser: function(grammarDefinition, options, afterCompileParserResult){
+		
+		//set up the JS/CC compiler:
         var dfa_table = '';
         jscc.reset_all( jscc.EXEC_WEB );
         
         var isParsingFailed = false;
+        var grammarParserStr;
         try {
         	jscc.parse_grammar(grammarDefinition);
         } catch (err){
@@ -238,99 +384,97 @@ var jsccGen = {
         jscc.resetErrors();
         jscc.resetWarnings();
         
-//                console.debug("before replace " + theConverterInstance.PARSER_TEMPLATE);//debug
+//      console.debug("before replace " + theConverterInstance.PARSER_TEMPLATE);//debug
      
         if( ! isParsingFailed){
-	        grammarParserStr = this.template;
-	        grammarParserStr = grammarParserStr.replace(/##PREFIX##/gi, "");
-	        grammarParserStr = grammarParserStr.replace(/##HEADER##/gi, jscc.get_code_head());
-	        grammarParserStr = grammarParserStr.replace(/##TABLES##/gi, jscc.print_parse_tables(jscc.MODE_GEN_JS));
-	        grammarParserStr = grammarParserStr.replace(/##DFA##/gi, jscc.print_dfa_table(dfa_table));
-	        grammarParserStr = grammarParserStr.replace(/##TERMINAL_ACTIONS##/gi, jscc.print_term_actions());
-	        grammarParserStr = grammarParserStr.replace(/##LABELS##/gi, jscc.print_symbol_labels());
-	        grammarParserStr = grammarParserStr.replace(/##ACTIONS##/gi, jscc.print_actions());
-	        grammarParserStr = grammarParserStr.replace(/##FOOTER##/gi, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
-	        grammarParserStr = grammarParserStr.replace(/##ERROR##/gi, jscc.get_error_symbol_id());
-	        grammarParserStr = grammarParserStr.replace(/##EOF##/gi, jscc.get_eof_symbol_id());
-	        grammarParserStr = grammarParserStr.replace(/##WHITESPACE##/gi, jscc.get_whitespace_symbol_id());
+        	
+        	var genData = this._getGenerated(options.targetType, dfa_table);
+        	grammarParserStr = this._applyGenerated(genData, this.template);
         }
+		
+		return {def: grammarParserStr, hasError: isParsingFailed};
+	},
+	_preparePrintError: function(){
+		//TODO
+	},
+	/**
+	 * The default logging / error-print function for JS/CC.
+	 * 
+	 * @private
+	 * @name printError
+	 * 
+	 * @see mmir.Logging
+	 */
+	printError: function(){
+		var args = $.makeArray(arguments);
+		//prepend "location-information" to logger-call:
+		args.unshift('JS/CC', 'compile');
+		//output log-message:
+		logger.error.apply(logger, args);
+	},
+	/**
+	 * Optional hook for pre-processing the generated parser, after the parser is generated.
+	 * 
+	 * By default, this function returns VOID, in which case the parser-module is created by default.
+	 * 
+	 * If a function is returned instead, then it must invoke <code>compileParserModuleFunc</code>:
+	 * <code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
+	 * 
+	 * 
+	 * @param {Function} compileParserModuleFunc
+	 * 				the function that generates the parser-module:
+	 * 				<code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
+	 * 
+	 * @param {Function} compileCallbackFunc
+	 * 				the callback function which will be invoked by compileParserModuleFunc, after it has finished.
+	 * 				If compileParserModuleFunc() is prevented from exectution then the callback MUST be invoked manually
+	 * 				<code>compileCallbackFunc(theConverterInstance: GrammarConverter)</code>
+	 * 
+	 * @returns {TRUTHY|VOID}
+	 * 				FALSY for the default behavior.
+	 * 				IF a TRUTHY value is returned, then the default action after compiling the parser
+	 * 				is not executed:
+	 * 					i.e. compileParserModuleFunc is not automatically called and in consequence the callback is not invoked
+	 * 					
+	 * 				
+	 * 				NOTE: if not FALSY, then either compileParserModuleFunc() must be invoked, or the callback() must be invoked!
+	 */
+	_afterCompileParser: function(compileParserModuleFunc, compileCallbackFunc){
+		//default: return VOID
+		return;
+	},
+	/**
+	 * 
+	 */
+	_getGenerated: function(genMode, dfaTable){
+		return {
+			head: jscc.get_code_head(),
+			tables: jscc.print_parse_tables(genMode),//jscc.MODE_GEN_JS
+			dfa: jscc.print_dfa_table(dfaTable),//dfa_table
+			terminals: jscc.print_term_actions(),
+			labels: jscc.print_symbol_labels(),
+			actions: jscc.print_actions(),
+			error: jscc.get_error_symbol_id(),
+			eof: jscc.get_eof_symbol_id(),
+			whitespace: jscc.get_whitespace_symbol_id()
+		};
+	},
+	_applyGenerated: function(genData, template){
+    	
+        var grammarParserStr = template;
+        grammarParserStr = grammarParserStr.replace(/##PREFIX##/g, "");
+        grammarParserStr = grammarParserStr.replace(/##HEADER##/g, genData.head);
+        grammarParserStr = grammarParserStr.replace(/##TABLES##/g, genData.tables);
+        grammarParserStr = grammarParserStr.replace(/##DFA##/g, genData.dfa);
+        grammarParserStr = grammarParserStr.replace(/##TERMINAL_ACTIONS##/g, genData.terminals);
+        grammarParserStr = grammarParserStr.replace(/##LABELS##/g, genData.labels);
+        grammarParserStr = grammarParserStr.replace(/##ACTIONS##/g, genData.actions);
+        grammarParserStr = grammarParserStr.replace(/##FOOTER##/g, "\nvar _semanticAnnotationResult = { result: {}};\n__parse( "+INPUT_FIELD_NAME+", new Array(), new Array(), _semanticAnnotationResult);\nreturn _semanticAnnotationResult.result;");
+        grammarParserStr = grammarParserStr.replace(/##ERROR##/g, genData.error);
+        grammarParserStr = grammarParserStr.replace(/##EOF##/g, genData.eof);
+        grammarParserStr = grammarParserStr.replace(/##WHITESPACE##/g, genData.whitespace);
         
-        //FIXME attach compiled parser to some other class/object
-        var moduleNameString = '"'+instanceId+'GrammarJs"';
-        var addGrammarParserExec = 
-//        	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
-    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
-        	+ 'var fileFormatVersion = '+fileFormatVersion+';\n'
-        	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
-    			//TODO active/use safe_acc (instead of try-catch construct in semantic-result extraction
-//        			+ "var safe_acc = function(obj){\n  \tvar len = arguments.length;\n  \tif(len === 1){\n  \t    return null;\n  \t}\n  \tvar curr = obj, prop = arguments[1], i = 2;\n  \tfor(; i < len; ++i){\n  \tif(obj[prop] != null){\n  \t    obj = obj[prop];\n  \t}\n  \tprop = arguments[i];\n  \t}\n  \tvar res = obj[prop];\n  \treturn typeof res !== 'undefined'? res : null;\n  \t};"
-    			+ grammarParserStr
-        	+ '\n};\n'
-        	
-        	//add "self registering" for the grammar-function
-        	//  i.e. register the grammar-function for the ID with the SemanticInterpreter
-        	+ 'semanticInterpreter.addGrammar("'
-        		+instanceId
-        		+'", grammarFunc, fileFormatVersion);\n\n'
-        	+ 'semanticInterpreter.setStopwords("'
-        		+instanceId+'",'
-        		//store stopwords with their Unicode representation (only for non-ASCII chars)
-        		+JSON.stringify(
-        				theConverterInstance.getEncodedStopwords()
-        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-        	+ ');\n'
-        	+ 'return grammarFunc;\n'
-//                	+ '});\n'
-//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
-        	+ '})();'
-
-//        	//for Chrome / FireFox debugging: provide an URL for eval'ed code
-//        	+ '//@ sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n//# sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n'
-        ;
-        
-        theConverterInstance.setJSGrammar(addGrammarParserExec);
-
-//        doAddGrammar(instanceId, theConverterInstance);
-        
-        try{
-        
-        	eval(addGrammarParserExec);
-        	
-        } catch (err) {
-
-        	//TODO russa: generate meaningful error message with details about error location
-        	//			  eg. use esprima (http://esprima.org) ...?
-        	//			... as optional dependency (see deferred initialization above?)
-        	
-        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
-        	
-        	if(jscc.get_printError()){
-        		jscc.get_printError()(evalMsg);
-        	}
-        	else {
-        		logger.error('JS/CC', 'evalCompiled', evalMsg, err);
-        	}
-        	
-        	if(! hasError){
-            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
-            	var parseDummyFunc = (function(msg, error){ 
-            		return function(){ console.error(msg); console.error(error); throw msg;};
-            	})(evalMsg, err);
-            	
-            	parseDummyFunc.hasErrors = true;
-            	
-            	//theConverterInstance = doGetGrammar(instanceId);
-            	theConverterInstance.setGrammarFunction(parseDummyFunc);
-        	}
-        	
-        }
-//        
-        //invoke callback if present:
-        if(callback){
-        	callback(theConverterInstance);
-        }
-        
-        return theConverterInstance;
+        return grammarParserStr;
 	}
 };
 
