@@ -6,7 +6,7 @@ https://github.com/mmig/mmir-lib
 
 Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library 
 
-This is the mere source code of the bare library (i.e. without any tooling etc.)
+This is the source code of the bare library (i.e. without any _tooling_ etc.)
 
 Usually, the content of this repository (of the root directory)
 would be placed within the directory ```mmirf/``` of the web application:
@@ -20,6 +20,13 @@ would be placed within the directory ```mmirf/``` of the web application:
     ...
 
 For examples, see the [StarterKit][1] or the [minimal Cordova example][2].
+
+#### API Doc
+
+For documentation of the API see the generated [jsdoc2 MMIR docs][4].
+
+In addition, the [MMIR tooling][3] contains some scripts for generating the
+API documentation (see the `/doc` sub-directory after deploying the tooling files).
 
 --
 #### Including mmir-lib as subtree
@@ -55,7 +62,7 @@ _Note: these directions assume, that your web application is located in the
 
 (see contents of ```/vendor/libs/```)
 
- * jQuery 1.11.1
+ * jQuery 2.1.3
  * jQuery Mobile 1.4.3
  * RequireJS 2.1.9
  * SCION
@@ -84,10 +91,10 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 --
 ##### Version Information
 
- MMIR Version 3.1.0
+ MMIR Version 3.6.0
 
 
 [1]: https://github.com/mmig/mmir-starter-kit
 [2]: https://github.com/mmig/mmir-cordova
 [3]: https://github.com/mmig/mmir-tooling
-
+[4]: https://mmig.github.io/mmir/api/
