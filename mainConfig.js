@@ -130,7 +130,6 @@ var mmirf_config = {
 		, 'jscc':  'vendor/libs/jscc-amd'
 		, 'jison': 'vendor/libs/jison'
 		, 'pegjs': 'vendor/libs/peg-0.8.0'
-		, 'asyncLoader': 'env/grammar/asyncLoader'
 		, 'asyncGen': 'env/grammar/asyncGenerator'
 		, 'jsccGen': 'env/grammar/jsccGenerator'
 		, 'jsccAsyncGen': 'env/grammar/jsccAsyncGenerator'
