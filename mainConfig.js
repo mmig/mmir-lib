@@ -130,9 +130,13 @@ var mmirf_config = {
 		, 'jscc':  'vendor/libs/jscc-amd'
 		, 'jison': 'vendor/libs/jison'
 		, 'pegjs': 'vendor/libs/peg-0.8.0'
-		, 'jsccGen':  'env/grammar/jsccGenerator'
-		, 'jisonGen': 'env/grammar/jisonAsyncGenerator'
+		, 'asyncGen': 'env/grammar/asyncGenerator'
+		, 'jsccGen': 'env/grammar/jsccGenerator'
+		, 'jsccAsyncGen': 'env/grammar/jsccAsyncGenerator'
+		, 'jisonAsyncGen': 'env/grammar/jisonAsyncGenerator'
+		, 'jisonGen': 'env/grammar/jisonGenerator'
 		, 'pegjsGen': 'env/grammar/pegjsGenerator'
+		, 'pegjsAsyncGen': 'env/grammar/pegjsAsyncGenerator'
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)

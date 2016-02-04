@@ -38,8 +38,6 @@ define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  */		
 function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
 
-//////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
-
 /**
  * Deferred object that will be returned - for async-initialization:
  * the deferred object will be resolved, when this module has been initialized.
@@ -62,27 +60,6 @@ deferred.resolve();
  * @see mmir.Logging
  */
 var logger = Logger.create(module);
-
-//setup logger for compile errors, if not already set
-if(! pegjs.printError){
-	/**
-	 * The default logging / error-print function for PEGjs.
-	 * 
-	 * @private
-	 * @name printError
-	 * @function
-	 * @memberOf PegJsGenerator.pegjs#
-	 * 
-	 * @see mmir.Logging
-	 */
-	pegjs.printError = function(){
-		var args = $.makeArray(arguments);
-		//prepend "location-information" to logger-call:
-		args.unshift('PEGjs', 'compile');
-		//output log-message:
-		logger.error.apply(logger, args);
-	};
-}
 
 /**
  * The argument name when generating the grammar function:
@@ -117,16 +94,23 @@ var INPUT_FIELD_NAME = 'asr_recognized_text';
  *   ...
  * }</pre>
  * 
+ * non-specific compiler options:
+ * <code>execMode = 'sync' | 'async'</code>
+ * <code>genSourceUrl = true | STRING | FALSY'</code>
+ * 
  * 
  * @constant
  * @private
- * @default cache := false, optimize := 'speed', output := 'source' allowedStartRules := undefined
+ * @default cache := false, optimize := 'speed', output := 'source', allowedStartRules := undefined
  * @memberOf PegJsGenerator#
  */
 var DEFAULT_OPTIONS = {
 	cache:    false,
 	optimize: "speed",
-	output:   "source"
+	output:   "source",
+	allowedStartRules: void(0),
+	execMode: 'sync',//'sync' | 'async' | default: sync
+	genSourceUrl: '',// true | STRING: the sourceURL for eval'ed parser-module | default: FALSY 
 };
 
 /**
@@ -183,17 +167,117 @@ var pegjsGen = {
 		//attach functions for PEG.js conversion/generation to the converter-instance: 
 		$.extend(theConverterInstance, PegJsGrammarConverterExt);
 		
-		//start conversion: create grammar in JS/CC syntax (from the JSON definition):
-		theConverterInstance.init();	
+		//start conversion: create grammar in PEG.js syntax (from the JSON definition):
+		theConverterInstance.init();
+		this._preparePrintError();	
 		theConverterInstance.convertJSONGrammar();
-        var grammarDefinition = theConverterInstance.getJSCCGrammar();
+        var grammarDefinition = theConverterInstance.getGrammarDef();
         
         //load options from configuration:
         var config = configManager.get(pluginName, true, {});
         //combine with default default options:
-        var options = $.extend({}, DEFAULT_OPTIONS, config);
+        var options = $.extend({id: instanceId}, DEFAULT_OPTIONS, config);
         
-        var hasError = false;
+        var compileParserModule = function(grammarParser, hasError){
+        	
+	        var addGrammarParserExec = 
+	    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
+	        	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
+	        	+ 'var parser = '
+	        	+ grammarParser
+	//        	+ ';\nvar grammarFunc = parser.parse;\n'
+	        	+ ';\nvar grammarFunc = function(){\n'
+	        	+ '  var result;  try {\n'
+	        	+ '    result = parser.parse.apply(this, arguments);\n'
+	        	+ '  } catch (err){\n'
+	        	+ '    console.error(err.stack?err.stack:err); result = {};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
+	        	+ '  }\n'
+	        	+ '  return result;\n'
+	        	+ '};\n'
+	        	+ 'semanticInterpreter.addGrammar("'
+	        		+instanceId
+	        		+'", grammarFunc, options);\n\n'
+	        	+ 'semanticInterpreter.setStopwords("'
+	        		+instanceId+'",'
+	        		
+	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
+	        		+JSON.stringify(
+	        				theConverterInstance.getEncodedStopwords()
+	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
+	        	+ ');\n'
+	        	+ 'return grammarFunc;\n'
+	        	+ '})();';
+	        
+	        if(options.genSourceUrl){
+            	
+            	var sourceUrlStr;
+            	if(options.genSourceUrl === true){
+            		sourceUrlStr = 'gen/grammar/_compiled_grammar_'+instanceId;
+            	} else {
+            		sourceUrlStr = options.genSourceUrl.toString().replace(/<id>/g,instanceId);
+            	}
+            	
+            	//for Chrome / FireFox debugging: provide an URL for eval'ed code
+            	addGrammarParserExec += '//@ sourceURL='+sourceUrlStr+'\n'
+            							+'//# sourceURL='+sourceUrlStr+'\n';
+                    
+            }
+	        
+	        theConverterInstance.setGrammarSource(addGrammarParserExec);
+	        
+	        try{
+	        	
+	        	eval(addGrammarParserExec);
+	        	
+	        } catch (err) {
+	        	
+	        	//TODO russa: generate meaningful error message with details about error location
+	        	//			  eg. use esprima (http://esprima.org) ...?
+	        	//			... as optional dependency (see deferred initialization above?)
+	        	
+	        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
+	        	
+	        	if(pegjs.printError){
+	        		pegjs.printError(evalMsg);
+	        	}
+	        	else {
+	        		logger.error('PEGjs', 'evalCompiled', evalMsg, err);
+	        	}
+	        	
+	        	if(! hasError){
+	            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
+	            	var parseDummyFunc = (function(msg, error){ 
+	            		return function(){ console.error(msg); console.error(error); throw msg;};
+	            	})(evalMsg, err);
+	            	
+	            	parseDummyFunc.hasErrors = true;
+	            	
+	            	//theConverterInstance = doGetGrammar(instanceId);
+	            	theConverterInstance.setGrammarFunction(parseDummyFunc);
+	        	}
+	        	
+	        }
+	        
+	        //invoke callback if present:
+	        if(callback){
+	        	callback(theConverterInstance);
+	        }
+		};
+
+        var isPreventDefault = this._afterCompileParser(compileParserModule, callback);
+        var result = this._compileParser(grammarDefinition, options, isPreventDefault);
+        
+        if(!isPreventDefault){
+        	var hasError = result.hasError;
+        	compileParserModule(result.def, hasError);
+        }
+        	
+        return theConverterInstance;
+        return theConverterInstance;
+	},
+	_compileParser: function(grammarDefinition, options, afterCompileParserResult){
+		
+		var hasError = false;
         var grammarParser;
         try{
         	grammarParser = pegjs.buildParser(grammarDefinition, options);
@@ -218,7 +302,7 @@ var pegjsGen = {
 //        	  "name": "SyntaxError"
 //        	}"
         	hasError = true;
-        	var msg = ' while compiling grammar "' + instanceId+ '": ';
+        	var msg = ' while compiling grammar "' + options.id+ '": ';
         	if(error.name === 'SyntaxError'){
         		msg= 'SyntaxError' + msg + error.message;
         	}
@@ -245,89 +329,61 @@ var pegjsGen = {
         		console.error(msg);
         	}
         	msg = '[INVALID GRAMMAR] ' + msg;
-        	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';//FIXME
+        	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
         }
         
-        //FIXME attach compiled parser to some other class/object
-        var moduleNameString = '"'+instanceId+'GrammarJs"';
-        var addGrammarParserExec = 
-//    	  'define('+moduleNameString+',["semanticInterpreter"],function(semanticInterpreter){\n'
-    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
-        	+ 'var fileFormatVersion = '+fileFormatVersion+';\n'
-        	+ 'var parser = '
-        	+ grammarParser
-//        	+ ';\nvar grammarFunc = parser.parse;\n'
-        	+ ';\nvar grammarFunc = function(){\n'
-        	+ '  var result;  try {\n'
-        	+ '    result = parser.parse.apply(this, arguments);\n'
-        	+ '  } catch (err){\n'
-        	+ '    console.error(err.stack?err.stack:err); result = {};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
-        	+ '  }\n'
-        	+ '  return result;\n'
-        	+ '};\n'
-        	+ 'semanticInterpreter.addGrammar("'
-        		+instanceId
-        		+'", grammarFunc, fileFormatVersion);\n\n'
-        	+ 'semanticInterpreter.setStopwords("'
-        		+instanceId+'",'
-        		
-        		//store stopwords with their Unicode representation (only for non-ASCII chars)
-        		+JSON.stringify(
-        				theConverterInstance.getEncodedStopwords()
-        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-        	+ ');\n'
-        	+ 'return grammarFunc;\n'
-//                	+ '});\n'
-//                	+ 'require(['+moduleNameString+']);\n';//requirejs needs this, in order to trigger initialization of the grammar-module (since this is a self-loading module that may not be referenced in a dependency in a define() call...)
-        	+ '})();'//FIXME
-
-//        	//for Chrome / FireFox debugging: provide an URL for eval'ed code
-//        	+ '//@ sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n//# sourceURL=gen/grammar/'+instanceId+'_compiled_grammar\n'
-        ;
-        
-        theConverterInstance.setJSGrammar(addGrammarParserExec);
-
-//        doAddGrammar(instanceId, theConverterInstance);
-        
-        try{
-        	
-        	eval(addGrammarParserExec);
-        	
-        } catch (err) {
-        	
-        	//TODO russa: generate meaningful error message with details about error location
-        	//			  eg. use esprima (http://esprima.org) ...?
-        	//			... as optional dependency (see deferred initialization above?)
-        	
-        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
-        	
-        	if(pegjs.printError){
-        		pegjs.printError(evalMsg);
-        	}
-        	else {
-        		logger.error('PEGjs', 'evalCompiled', evalMsg, err);
-        	}
-        	
-        	if(! hasError){
-            	evalMsg = '[INVALID GRAMMAR JavaScript CODE] ' + evalMsg;
-            	var parseDummyFunc = (function(msg, error){ 
-            		return function(){ console.error(msg); console.error(error); throw msg;};
-            	})(evalMsg, err);
-            	
-            	parseDummyFunc.hasErrors = true;
-            	
-            	//theConverterInstance = doGetGrammar(instanceId);
-            	theConverterInstance.setGrammarFunction(parseDummyFunc);
-        	}
-        	
-        }
-        
-        //invoke callback if present:
-        if(callback){
-        	callback(theConverterInstance);
-        }
-        
-        return theConverterInstance;
+        return {def: grammarParser, hasError: hasError};
+	},
+	_preparePrintError: function(){
+		if(!pegjs.printError){
+			pegjs.printError = this.printError;
+		}
+	},
+	/**
+	 * The default logging / error-print function for PEGjs.
+	 * 
+	 * @private
+	 * @name printError
+	 * 
+	 * @see mmir.Logging
+	 */
+	printError: function(){
+		var args = $.makeArray(arguments);
+		//prepend "location-information" to logger-call:
+		args.unshift('PEGjs', 'compile');
+		//output log-message:
+		logger.error.apply(logger, args);
+	},
+	/**
+	 * Optional hook for pre-processing the generated parser, after the parser is generated.
+	 * 
+	 * By default, this function returns VOID, in which case the parser-module is created by default.
+	 * 
+	 * If a function is returned instead, then it must invoke <code>compileParserModuleFunc</code>:
+	 * <code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
+	 * 
+	 * 
+	 * @param {Function} compileParserModuleFunc
+	 * 				the function that generates the parser-module:
+	 * 				<code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
+	 * 
+	 * @param {Function} compileCallbackFunc
+	 * 				the callback function which will be invoked by compileParserModuleFunc, after it has finished.
+	 * 				If compileParserModuleFunc() is prevented from exectution then the callback MUST be invoked manually
+	 * 				<code>compileCallbackFunc(theConverterInstance: GrammarConverter)</code>
+	 * 
+	 * @returns {TRUTHY|VOID}
+	 * 				FALSY for the default behavior.
+	 * 				IF a TRUTHY value is returned, then the default action after compiling the parser
+	 * 				is not executed:
+	 * 					i.e. compileParserModuleFunc is not automatically called and in consequence the callback is not invoked
+	 * 					
+	 * 				
+	 * 				NOTE: if not FALSY, then either compileParserModuleFunc() must be invoked, or the callback() must be invoked!
+	 */
+	_afterCompileParser: function(compileParserModuleFunc, compileCallbackFunc){
+		//default: return VOID
+		return;
 	}
 };
 

@@ -25,16 +25,19 @@
  */
 
 /**
- * @module workers/jison-compiler
+ * @module workers/pegjs-compiler
  */
 
-importScripts('../vendor/libs/jison.js');
+importScripts('../vendor/libs/peg-0.8.0.js');
 
-//get global var that holds jison:
-var jison = Jison;
+//get global var that holds PEG.js:
+var pegjs = PEG;
 
 var defaultOptions = {
-	type: 'lalr'//'lr0' | 'slr' | 'lr' | 'll' | default: lalr
+	cache:    false,
+	optimize: "speed",
+	output:   "source",
+	allowedStartRules: void(0)
 };
 
 var _makeArray = function(obj) {
@@ -45,9 +48,9 @@ var _makeArray = function(obj) {
 	return list;
 };
 
-// setup jison compiler:
+// setup PEG.js compiler:
 
-jison.print = function(){
+pegjs.print = function(){
 	
 //	var args = $.makeArray(arguments);
 //	//prepend "location-information" to logger-call:
@@ -94,12 +97,8 @@ function parse(grammarDefinition, config, id){
     
 	var hasError = false;
     var grammarParser;
-	try{
-		
-    	var cfg = bnf.parse(grammarDefinition);
-    	var parser = jison.Generator(cfg, options);
-    	var grammarParser = parser.generate();
-    	
+    try{
+    	grammarParser = pegjs.buildParser(grammarDefinition, options);
     } catch(error) {
 //    	"{
 //    	  "message": "Expected \"=\" or string but \"_\" found.",
@@ -129,28 +128,29 @@ function parse(grammarDefinition, config, id){
     		msg = 'Error' + msg + (error && error.stack? error.stack : error);
     	}
     	
-    	if(typeof error.lineNumber !== 'undefined'){
-    		msg += ' at line '+error.lineNumber;
+    	if(typeof error.line !== 'undefined'){
+    		msg += ' at line '+error.line;
     	}
 
     	if(typeof error.column !== 'undefined'){
     		msg += ':'+error.column;
     	}
     	
-    	if(typeof error.index !== 'undefined'){
-    		msg += ' (offset '+error.index+')';
+    	if(typeof error.offset !== 'undefined'){
+    		msg += ' (offset '+error.offset+')';
     	}
     	
-//    	if(jison.printError){
-//    		jison.printError(msg);
+//    	if(pegjs.printError){
+//    		pegjs.printError(msg);
 //    	}
 //    	else {
 //    		console.error(msg);
 //    	}
+
     	self.postMessage({error: msg, id: id});
     	
     	msg = '[INVALID GRAMMAR] ' + msg;
-    	grammarParser = 'var parser = { parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
+    	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
     }
 	
 	self.postMessage({def: grammarParser, isError: hasError, id: id, done: true});

@@ -1,36 +1,36 @@
 
 
-define(['constants', 'jisonGen', 'asyncGen', 'jquery'],
+define(['constants', 'pegjsGen', 'asyncGen', 'jquery'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  * 
  * <p>
- * This generator uses Jison for compiling the JSON grammar.
+ * This generator uses PEG.js for compiling the JSON grammar.
  * 
  * <p>
- * Usage of this compile is the same as for synchronously working JisonGenerator.
+ * Usage of this compile is the same as for synchronously working PegJsGenerator.
  *  
- * @see JisonGenerator
+ * @see PegJsGenerator
  * 
  * @class
  * @constant
  * @public
- * @name JisonAsyncGenerator
+ * @name PegJsAsyncGenerator
  * @memberOf mmir.env.grammar
  * 
- * @requires JisonGenerator
+ * @requires PegJsGenerator
  * @requires jQuery.extend
  */		
-function(constants, jisonGen, asyncGen, $){
+function(constants, pegjsGen, asyncGen, $){
 
 /**
  * Name for async WebWorker (file).
  * 
  * @constant
  * @private
- * @memberOf JisonAsyncGenerator#
+ * @memberOf PegJsAsyncGenerator#
  */
-var WORKER_NAME = 'jisonCompiler.js';
+var WORKER_NAME = 'pegjsCompiler.js';
 
 //TODO doc: task ID for communication with web-worker
 var _taskId = 1;
@@ -38,16 +38,16 @@ var _taskId = 1;
 //web-worker instance:
 var asyncCompiler = asyncGen.createWorker(WORKER_NAME);
 
-var printError = jisonGen.printError;
+var printError = pegjsGen.printError;
 
 /**
- * Exported (public) functions for the jison grammar-engine.
+ * Exported (public) functions for the PEG.js grammar-engine.
  * @public
  * @type GrammarGenerator
- * @memberOf JisonAsyncGenerator#
+ * @memberOf PegJsAsyncGenerator#
  */
-var jisonAsyncGen = {
-	/** @scope JisonAsyncGenerator.prototype */
+var pegjsAsyncGen = {
+	/** @scope PegJsAsyncGenerator.prototype */
 	
 	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
 	isAsyncCompilation: function(){ return true; },
@@ -115,6 +115,6 @@ var jisonAsyncGen = {
 };
 
 //extend/overload sync-compiler with async-compiler:
-return $.extend({}, jisonGen, jisonAsyncGen);
+return $.extend({}, pegjsGen, pegjsAsyncGen);
 
 });

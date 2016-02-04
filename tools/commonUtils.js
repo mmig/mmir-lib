@@ -374,6 +374,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 			 * @param {Function} cbFunction The function that should be executed after the plugins are loaded. 
 			 * 					 If the execution of following functions is dependent on the presence of the grammars, 
 			 * 					 they should be triggered from inside the callback-function.
+			 * @param {Array<String>} [ignoreGrammarIds] OPTIONAL
+			 * 					grammar IDs that should be ignored, i.e. not loaded, even if there is a file available
 			 * 
 		     * @returns {Promise} a Deferred.promise (see loadImpl())
 		     * 
@@ -383,18 +385,24 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 			 * @public
 	    	 * @memberOf mmir.CommonUtils.prototype
 			 */
-		    loadCompiledGrammars : function(generatedGrammarsPath, cbFunction) {
+		    loadCompiledGrammars : function(generatedGrammarsPath, cbFunction, ignoreGrammarIds) {
 	
 				return instance.loadImpl(
 					generatedGrammarsPath,
 					false,
 					cbFunction,
 					function isGrammarAlreadyLoaded(grammarFileName) {
-						var i = grammarFileName.indexOf('_');
+						var i = grammarFileName.lastIndexOf('_');
 						if (i !== -1) {
-							return require('semanticInterpreter').hasGrammar(
-									grammarFileName.substring(0, i)
-							);
+							var id = grammarFileName.substring(0, i);
+							if(ignoreGrammarIds){
+								for(var p in ignoreGrammarIds){
+									if(ignoreGrammarIds.hasOwnProperty(p) && ignoreGrammarIds[p] == id){
+										return true;
+									}
+								}
+							}
+							return require('semanticInterpreter').hasGrammar(id);
 						} else {
 							return false;
 						}
@@ -404,6 +412,16 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 							if(logger.isInfo()) logger.info('CommonUtils', 'loadCompiledGrammars', 'loaded "'+ fileName + '": ' + msg);
 						}
 						else if (status === 'warning') {
+							
+							//filter "already loaded" warnings for ignored files:
+							if(ignoreGrammarIds && /already loaded/.test(msg)){
+								for(var p in ignoreGrammarIds){
+									if(ignoreGrammarIds.hasOwnProperty(p) && fileName.indexOf(ignoreGrammarIds[p]) === 0){
+										return;/////////////////////// EARLY EXIT ////////////////
+									}
+								}
+							}
+							
 							if(logger.isWarn()) logger.warn('CommonUtils', 'loadCompiledGrammars', 'loading "'+ fileName + '": ' + msg);
 						}
 						else if (status === 'error') {

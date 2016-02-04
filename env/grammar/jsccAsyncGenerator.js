@@ -1,36 +1,36 @@
 
 
-define(['constants', 'jisonGen', 'asyncGen', 'jquery'],
+define(['constants', 'jsccGen', 'asyncGen', 'jquery'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  * 
  * <p>
- * This generator uses Jison for compiling the JSON grammar.
+ * This generator uses JS/CC for compiling the JSON grammar.
  * 
  * <p>
- * Usage of this compile is the same as for synchronously working JisonGenerator.
+ * Usage of this compile is the same as for synchronously working JsccGenerator.
  *  
- * @see JisonGenerator
+ * @see JsccGenerator
  * 
  * @class
  * @constant
  * @public
- * @name JisonAsyncGenerator
+ * @name JsccAsyncGenerator
  * @memberOf mmir.env.grammar
  * 
- * @requires JisonGenerator
+ * @requires JsccGenerator
  * @requires jQuery.extend
  */		
-function(constants, jisonGen, asyncGen, $){
+function(constants, jsccGen, asyncGen, $){
 
 /**
  * Name for async WebWorker (file).
  * 
  * @constant
  * @private
- * @memberOf JisonAsyncGenerator#
+ * @memberOf JsccAsyncGenerator#
  */
-var WORKER_NAME = 'jisonCompiler.js';
+var WORKER_NAME = 'jsccCompiler.js';
 
 //TODO doc: task ID for communication with web-worker
 var _taskId = 1;
@@ -38,16 +38,18 @@ var _taskId = 1;
 //web-worker instance:
 var asyncCompiler = asyncGen.createWorker(WORKER_NAME);
 
-var printError = jisonGen.printError;
+var printError = jsccGen.printError;
+
+var _applyGenerated = jsccGen._applyGenerated;
 
 /**
- * Exported (public) functions for the jison grammar-engine.
+ * Exported (public) functions for the PEG.js grammar-engine.
  * @public
  * @type GrammarGenerator
- * @memberOf JisonAsyncGenerator#
+ * @memberOf JsccAsyncGenerator#
  */
-var jisonAsyncGen = {
-	/** @scope JisonAsyncGenerator.prototype */
+var jsccAsyncGen = {
+	/** @scope JsccAsyncGenerator.prototype */
 	
 	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
 	isAsyncCompilation: function(){ return true; },
@@ -105,7 +107,9 @@ var jisonAsyncGen = {
         	}
 
         	var hasError = evtData.isError;
-        	var grammarParser = evtData.def;
+        	var grammarParserData = evtData.def;
+        	
+        	var grammarParser = jsccGen._applyGenerated(grammarParserData, jsccGen.template);
         
         	compileParserModuleFunc(grammarParser, hasError);
         });
@@ -115,6 +119,6 @@ var jisonAsyncGen = {
 };
 
 //extend/overload sync-compiler with async-compiler:
-return $.extend({}, jisonGen, jisonAsyncGen);
+return $.extend({}, jsccGen, jsccAsyncGen);
 
 });
