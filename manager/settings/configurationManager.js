@@ -362,7 +362,7 @@ define(['constants', 'jquery' ],
             			
             			prop = path.shift();
             			
-            			if(typeof obj[prop] === 'undfined' || obj[prop] === null){
+            			if(typeof obj[prop] === 'undefined' || obj[prop] === null){
             				obj[prop] = {};
             			}
             			else if(typeof obj[prop] !== 'object'){
