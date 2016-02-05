@@ -47,6 +47,8 @@ define(['constants'],
  * 
  */		
 function(constants){
+	
+var COMPILER_WORKER_POSTFIX = 'Compiler.js';
 
 /**
  * Factory for creating WebWorkers that compile grammar-parser
@@ -74,7 +76,7 @@ return {
 	 * After adding a <em>callback</em>, messages to the WebWorker thread can be send with
 	 * the <code>postMessage({id: taskId, cmd: 'parse', ...})</code>
 	 * 
-	 * @param {String} webWorkerFile
+	 * @param {String} parserEngineId
 	 * 			the name of the file that holds the WebWorker implementation.
 	 * 			The file must be located in MMIR's {@link Constants#getWorkerPath}
 	 * 			directory.
@@ -85,11 +87,11 @@ return {
 	 * 
 	 * @memberOf AsyncCompiler#
 	 */
-	createWorker: function(webWorkerFile){
+	createWorker: function(parserEngineId){
 		
 
 		/**  @memberOf CompileWebWorker# */
-		var workerPath = constants.getWorkerPath() + webWorkerFile;
+		var workerPath = constants.getWorkerPath() + parserEngineId + COMPILER_WORKER_POSTFIX;
 
 		/** 
 		 * web-worker for compile jobs
@@ -109,6 +111,85 @@ return {
 		 * @memberOf CompileWebWorker#
 		 */
 		asyncCompiler._activeTaskIds = {};
+
+		/**
+		 * listener for init-message
+		 * 
+		 * DEFAULT: prints a message to the console
+		 * 
+		 * Init Message:
+		 *  * success:
+		 *    <code>{init:true}</code>
+		 *  * failed:
+		 *    <code>{init:false,error:"message"}</code>
+		 * 
+		 * @memberOf CompileWebWorker#
+		 */
+		asyncCompiler._oninit = function(evtData){
+			if(evtData.init){
+				console.log('initialized: '+JSON.stringify(evtData));
+			} else {
+				console.error('failed to initialize: '+JSON.stringify(evtData));
+			}
+		};
+		
+		/**
+		 * HELPER generate & setup oninit signal for sync + async modules.
+		 * 
+		 * Side Effects:
+		 * generates and sets #_oninit
+		 * 
+		 * @param {ParserGen} syncGen
+		 * 				the sync parser generator
+		 * @param {Deferred} asyncDef
+		 * 				the deferred that should be resolved when async generator is initialized
+		 * @param {requirejs} require
+		 * 				the require instance that is used for loading the MMIR framework
+		 * 
+		 * @returns {AsyncInitMesssage}
+		 * 				the message object that should be sent to the async generator's WebWorker
+		 * 
+		 * @memberOf CompileWebWorker#
+		 */
+		asyncCompiler.prepareOnInit = function(syncGen, asyncDef, require){
+
+			//setup async init-signaling:
+			var isSyncGenInit = false;
+			var isAsyncGenInit = false;
+			
+			//HELPER signal as "completely initialized" when sync & async modules are initialized:
+			var checkInit = function(){
+				if(isSyncGenInit && isAsyncGenInit){
+					asyncDef.resolve();
+				}
+			};
+
+			var initSyncGenDef = syncGen.init();//<- get init-signal for sync-generator
+			initSyncGenDef.always(function(){
+				isSyncGenInit = true;
+				checkInit();
+			});
+
+			this._oninit = function(initEvt){
+				if(initEvt.init === false){
+					console.error('Failed to initialize '+JSON.stringify(initEvt));
+				} else {
+					isAsyncGenInit = true;
+				}
+				checkInit();
+			};
+			return {cmd:'init', engineUrl: require.toUrl(syncGen.engineId)};
+
+		};
+
+		/**
+		 * Error handler for errors signaled by the webworker
+		 * 
+		 * @memberOf CompileWebWorker#
+		 */
+		asyncCompiler._onerror = function(errorMsg, error){
+			console.error(errorMsg, error);
+		};
 
 		/**
 		 * HELPER: register a callback (usage: see jisonGen.compileGrammar() below)
@@ -144,13 +225,15 @@ return {
 			}
 			else if(evt.data.error){
 				
-				console.error('Error in '+workerPath+': '+evt.data.error);
+				this._onerror('Error in '+workerPath+': '+evt.data.error, evt.data);
 			}
-//			else if(evt.data.config === 'success'){
-//				console.info('successfully configured thread '+workerPath+'.');
-//			}
+			else if(typeof evt.data.init === 'boolean'){
+				
+				asyncCompiler._oninit(evt.data);
+			}
 			else {
-				console.error('ERROR unknown message -> ' + JSON.stringify(evt.data));
+				
+				this._onerror('ERROR unknown message -> ' + JSON.stringify(evt.data), evt.data);
 			}
 			
 		};

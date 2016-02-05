@@ -130,7 +130,13 @@ var pluginName = 'grammar.jison';
  */
 var jisonGen = {
 	/** @scope JisonGenerator.prototype */
-		
+	
+	/**
+	 * The name/ID for the compile engine for the jison compiler
+	 * 
+	 * @memberOf JisonGenerator.prototype
+	 */
+	engineId: 'jison',
 	/**
 	 * @param {Function} [callback] OPTIONAL
 	 * 			the callback that is triggered, when the engine is initialized
@@ -139,7 +145,7 @@ var jisonGen = {
 	 * 			(NOTE: if you use the same function for the <code>callback</code> AND the promise,
 	 * 			       then the function will be invoked twice!)
 	 * 
-	 * @memberOf mmir.env.grammar.JisonGenerator.prototype
+	 * @memberOf JisonGenerator.prototype
 	 */
 	init: function(callback){
 		if(callback){
@@ -276,6 +282,9 @@ var jisonGen = {
         	
         return theConverterInstance;
 	},
+	/**
+	 * @protected 
+	 */
 	_compileParser: function(grammarDefinition, options, afterCompileParserResult){
 		
 		var hasError = false;
@@ -337,28 +346,41 @@ var jisonGen = {
         
         return {def: grammarParser, hasError: hasError};
 	},
+	/**
+	 * @protected 
+	 */
 	_preparePrintError: function(){
-		if(jison.printError){
-			Jison.print = jison.printError;
-		} else if(!Jison.print){
-			Jison.print = this.printError;
+		
+		//setup logger for compile errors (if not already set)
+		if(! jison.printError){
+			/**
+			 * The default logging / error-print function for jison.
+			 * 
+			 * @private
+			 * @name printError
+			 * @function
+			 * @memberOf JisonGenerator.jison#
+			 * 
+			 * @see mmir.Logging
+			 */
+			jison.printError = function(){
+				var args = $.makeArray(arguments);
+				//prepend "location-information" to logger-call:
+				args.unshift('jison', 'compile');
+				//output log-message:
+				logger.error.apply(logger, args);
+			};
 		}
 	},
 	/**
 	 * The default logging / error-print function for jison.
 	 * 
-	 * @private
-	 * @name printError
-	 * @function
+	 * @protected
 	 * 
 	 * @see mmir.Logging
 	 */
 	printError: function(){
-		var args = $.makeArray(arguments);
-		//prepend "location-information" to logger-call:
-		args.unshift('jison', 'compile');
-		//output log-message:
-		logger.error.apply(logger, args);
+		jison.printError.apply(jison, arguments);
 	},
 	/**
 	 * Optional hook for pre-processing the generated parser, after the parser is generated.
@@ -386,6 +408,8 @@ var jisonGen = {
 	 * 					
 	 * 				
 	 * 				NOTE: if not FALSY, then either compileParserModuleFunc() must be invoked, or the callback() must be invoked!
+	 * 
+	 * @protected
 	 */
 	_afterCompileParser: function(compileParserModuleFunc, compileCallbackFunc){
 		//default: return VOID

@@ -28,49 +28,50 @@
  * @module workers/jison-compiler
  */
 
-importScripts('../vendor/libs/jison.js');
+importScripts('asyncCompileUtil.js');
 
-//get global var that holds jison:
-var jison = Jison;
+var jison;
+function _init(url){
+	
+	var libUrl = '../../' + url +'.js';
+	importScripts(libUrl);//'../vendor/libs/jison.js');
+
+	//set global var that holds jison
+	jison = Jison;
+}
 
 var defaultOptions = {
 	type: 'lalr'//'lr0' | 'slr' | 'lr' | 'll' | default: lalr
 };
 
-var _makeArray = function(obj) {
-	var list = [];
-	for(var i in obj){
-		list.push(obj[i]);
-	}
-	return list;
-};
-
 // setup jison compiler:
 
-jison.print = function(){
+function _preparePrintImpl(id){
 	
-//	var args = $.makeArray(arguments);
-//	//prepend "location-information" to logger-call:
-//	args.unshift('jison', 'compile');
-//	
-//	//output log-message:
-//	logger.error.apply(logger, args);
+	if(jison.print && jison.print.name === 'mmirPrint'){
+		return;
+	}
 	
-	var args = _makeArray(arguments);
-	self.postMessage({error: args});
-};
-
-var _getOptions = function(opt){
-	return opt? opt : defaultOptions;
-};
-
+	jison.print = function mmirPrint(){
+		
+	//	var args = $.makeArray(arguments);
+	//	//prepend "location-information" to logger-call:
+	//	args.unshift('jison', 'compile');
+	//	
+	//	//output log-message:
+	//	logger.error.apply(logger, args);
+		
+		var args = _makeArray(arguments);
+		self.postMessage({error: args});
+	};
+}
 
 self.onmessage = function(e){
 	
   switch(e.data.cmd){
-//    case 'init':
-//      init(e.data.config);
-//      break;
+    case 'init':
+      init(e.data);
+      break;
     case 'parse':
       parse(e.data.text, e.data.config, e.data.id);
       break;
@@ -78,19 +79,15 @@ self.onmessage = function(e){
   
 };
 
-///**
-// * sets the config and echos back
-// * @param config
-// * @private
-// */
-//function init(config){
-//  if (config.type)	type = config.type;
-//  self.postMessage({config: 'success'});
-//}
-
 function parse(grammarDefinition, config, id){
 	
+	if(!verifyInit(jison, 'jison', id)){
+		return;
+	}
+	
 	var options = _getOptions(config);
+	
+	_preparePrintImpl(id);
     
 	var hasError = false;
     var grammarParser;

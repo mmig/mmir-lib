@@ -29,8 +29,11 @@
  */
 
 
+importScripts('asyncCompileUtil.js');
+
 /////////////// stub for define()/require() //////////////////////////////
 // NOTE only single-requires are supported here! (i.e. no lists of required modules)
+
 var _modules = {
 	_idgen: 1,
 	_customid: '',//<- set custom ID for next loaded module (will be reset after loading)
@@ -61,22 +64,20 @@ require = function(id, cb){
 
 /////////////// JS/CC compiler setup //////////////////////////////
 
-_modules._customid = 'jscc';
-importScripts('../vendor/libs/jscc-amd.js');
+var jscc;
+function _init(url){
+	
+	var libUrl = '../../' + url +'.js';
+	_modules._customid = 'jscc';
+	importScripts(libUrl);//'../vendor/libs/jscc-amd.js');
 
-//get global var that holds JS/CC:
-var jscc = require('jscc');
+	//set global var that holds JS/CC:
+	jscc = require('jscc');
+}
+
 
 var defaultOptions = {
 		//current there are no specific options for JS/CC
-};
-
-var _makeArray = function(obj) {
-	var list = [];
-	for(var i in obj){
-		list.push(obj[i]);
-	}
-	return list;
 };
 
 // setup JSCC compiler:
@@ -99,6 +100,7 @@ function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name
 }
 
 function _preparePrintImpl(id){
+	
 	/**
 	 * The default logging function for printing compilation errors.
 	 * @private
@@ -125,6 +127,8 @@ function _preparePrintImpl(id){
 	 * @memberOf JsccGenerator.jscc#
 	 */
 	jscc.set_printInfo(		_createCompileLogFunc(self, 'info', id));
+	
+	return true;
 }
 
 var _getGenerated = function(genMode, dfaTable){
@@ -141,17 +145,13 @@ var _getGenerated = function(genMode, dfaTable){
 	};
 };
 
-var _getOptions = function(opt){
-	return opt? opt : defaultOptions;
-};
-
 
 self.onmessage = function(e){
 	
   switch(e.data.cmd){
-//    case 'init':
-//      init(e.data.config);
-//      break;
+    case 'init':
+      init(e.data);
+      break;
     case 'parse':
       parse(e.data.text, e.data.config, e.data.id);
       break;
@@ -159,17 +159,12 @@ self.onmessage = function(e){
   
 };
 
-///**
-// * sets the config and echos back
-// * @param config
-// * @private
-// */
-//function init(config){
-//  if (config.type)	type = config.type;
-//  self.postMessage({config: 'success'});
-//}
 
 function parse(grammarDefinition, config, id){
+	
+	if(!verifyInit(jscc, 'jscc', id)){
+		return;
+	}
 	
 	var options = _getOptions(config);
 	

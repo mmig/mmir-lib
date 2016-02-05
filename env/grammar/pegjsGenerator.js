@@ -131,6 +131,12 @@ var pegjsGen = {
 	/** @scope PegJsGenerator.prototype */
 	
 	/**
+	 * The name/ID for the compile engine for the PEG.js compiler
+	 * 
+	 * @memberOf mmir.env.grammar.PegJsGenerator.prototype
+	 */
+	engineId: 'pegjs',
+	/**
 	 * @param {Function} [callback] OPTIONAL
 	 * 			the callback that is triggered, when the engine is initialized
 	 * @returns {Deferred}
@@ -275,6 +281,9 @@ var pegjsGen = {
         return theConverterInstance;
         return theConverterInstance;
 	},
+	/**
+	 * @protected 
+	 */
 	_compileParser: function(grammarDefinition, options, afterCompileParserResult){
 		
 		var hasError = false;
@@ -334,25 +343,40 @@ var pegjsGen = {
         
         return {def: grammarParser, hasError: hasError};
 	},
+	/**
+	 * @protected 
+	 */
 	_preparePrintError: function(){
-		if(!pegjs.printError){
-			pegjs.printError = this.printError;
+		//setup logger for compile errors, if not already set
+		if(! pegjs.printError){
+			/**
+			 * The default logging / error-print function for PEGjs.
+			 * 
+			 * @private
+			 * @name printError
+			 * @function
+			 * @memberOf PegJsGenerator.pegjs#
+			 * 
+			 * @see mmir.Logging
+			 */
+			pegjs.printError = function(){
+				var args = $.makeArray(arguments);
+				//prepend "location-information" to logger-call:
+				args.unshift('PEGjs', 'compile');
+				//output log-message:
+				logger.error.apply(logger, args);
+			};
 		}
 	},
 	/**
 	 * The default logging / error-print function for PEGjs.
 	 * 
-	 * @private
-	 * @name printError
+	 * @protected
 	 * 
 	 * @see mmir.Logging
 	 */
 	printError: function(){
-		var args = $.makeArray(arguments);
-		//prepend "location-information" to logger-call:
-		args.unshift('PEGjs', 'compile');
-		//output log-message:
-		logger.error.apply(logger, args);
+		pegjs.printError.apply(pegjs, arguments);
 	},
 	/**
 	 * Optional hook for pre-processing the generated parser, after the parser is generated.
@@ -380,6 +404,8 @@ var pegjsGen = {
 	 * 					
 	 * 				
 	 * 				NOTE: if not FALSY, then either compileParserModuleFunc() must be invoked, or the callback() must be invoked!
+	 * 
+	 * @protected
 	 */
 	_afterCompileParser: function(compileParserModuleFunc, compileCallbackFunc){
 		//default: return VOID

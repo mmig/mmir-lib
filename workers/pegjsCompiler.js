@@ -28,10 +28,17 @@
  * @module workers/pegjs-compiler
  */
 
-importScripts('../vendor/libs/peg-0.8.0.js');
+importScripts('asyncCompileUtil.js');
 
-//get global var that holds PEG.js:
-var pegjs = PEG;
+var pegjs;
+function _init(url){
+	
+	var libUrl = '../../' + url +'.js';
+	importScripts(libUrl);//'../vendor/libs/peg-0.8.0.js');
+
+	//set global var that holds jison
+	pegjs = PEG;
+}
 
 var defaultOptions = {
 	cache:    false,
@@ -40,40 +47,34 @@ var defaultOptions = {
 	allowedStartRules: void(0)
 };
 
-var _makeArray = function(obj) {
-	var list = [];
-	for(var i in obj){
-		list.push(obj[i]);
-	}
-	return list;
-};
-
 // setup PEG.js compiler:
 
-pegjs.print = function(){
+function _preparePrintImpl(id){
 	
-//	var args = $.makeArray(arguments);
-//	//prepend "location-information" to logger-call:
-//	args.unshift('jison', 'compile');
-//	
-//	//output log-message:
-//	logger.error.apply(logger, args);
+	if(pegjs.print && pegjs.print.name === 'mmirPrint'){
+		return;
+	}
 	
-	var args = _makeArray(arguments);
-	self.postMessage({error: args});
-};
-
-var _getOptions = function(opt){
-	return opt? opt : defaultOptions;
-};
-
+	pegjs.print = function mmirPrint(){
+		
+	//	var args = $.makeArray(arguments);
+	//	//prepend "location-information" to logger-call:
+	//	args.unshift('jison', 'compile');
+	//	
+	//	//output log-message:
+	//	logger.error.apply(logger, args);
+		
+		var args = _makeArray(arguments);
+		self.postMessage({error: args});
+	};
+}
 
 self.onmessage = function(e){
 	
   switch(e.data.cmd){
-//    case 'init':
-//      init(e.data.config);
-//      break;
+    case 'init':
+      init(e.data);
+      break;
     case 'parse':
       parse(e.data.text, e.data.config, e.data.id);
       break;
@@ -81,17 +82,13 @@ self.onmessage = function(e){
   
 };
 
-///**
-// * sets the config and echos back
-// * @param config
-// * @private
-// */
-//function init(config){
-//  if (config.type)	type = config.type;
-//  self.postMessage({config: 'success'});
-//}
-
 function parse(grammarDefinition, config, id){
+	
+	if(!verifyInit(pegjs, 'pegjs', id)){
+		return;
+	}
+	
+	_preparePrintImpl(id);
 	
 	var options = _getOptions(config);
     

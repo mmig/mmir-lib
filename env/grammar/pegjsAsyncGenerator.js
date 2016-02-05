@@ -24,21 +24,40 @@ define(['constants', 'pegjsGen', 'asyncGen', 'jquery'],
 function(constants, pegjsGen, asyncGen, $){
 
 /**
- * Name for async WebWorker (file).
+ * Counter for generating IDs for compile-jobs that
+ * are sent to the WebWorker
  * 
- * @constant
  * @private
  * @memberOf PegJsAsyncGenerator#
  */
-var WORKER_NAME = 'pegjsCompiler.js';
-
-//TODO doc: task ID for communication with web-worker
 var _taskId = 1;
 
-//web-worker instance:
-var asyncCompiler = asyncGen.createWorker(WORKER_NAME);
+/**
+ * WebWorker instance for compiling parser asynchronously
+ * 
+ * @private
+ * @memberOf PegJsAsyncGenerator#
+ */
+var asyncCompiler = asyncGen.createWorker(pegjsGen.engineId);
 
+/**
+ * printError function reference for compile-errors
+ * 
+ * @private
+ * @memberOf PegJsAsyncGenerator#
+ */
 var printError = pegjsGen.printError;
+
+
+////////////////////init async compiler/thread /////////////////////////
+
+asyncCompiler._onerror = printError;
+
+//setup async init-signaling:
+var initDef = $.Deferred();
+var initMsg = asyncCompiler.prepareOnInit(pegjsGen, initDef, require);
+asyncCompiler.postMessage(initMsg);
+
 
 /**
  * Exported (public) functions for the PEG.js grammar-engine.
@@ -48,9 +67,28 @@ var printError = pegjsGen.printError;
  */
 var pegjsAsyncGen = {
 	/** @scope PegJsAsyncGenerator.prototype */
-	
-	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
+		
+	/** 
+	 * @see PegJsAsyncGenerator#init
+	 * @memberOf PegJsAsyncGenerator.prototype
+	 */
+	init: function(callback){
+		//overwrite with own async "init signal"
+		if(callback){
+			initDef.always(callback);
+		}
+		return initDef;
+	},
+	/** @returns {Boolean} if this engine compilation works asynchronously.
+	 * 						The current implementation works asynchronously (returns TRUE)
+	 * 
+	 *  @memberOf PegJsAsyncGenerator.prototype
+	 */
 	isAsyncCompilation: function(){ return true; },
+	/**
+	 * @see PegJsAsyncGenerator#_compileParser
+	 * @protected 
+	 */
 	_compileParser: function(grammarDefinition, options, onAfterCompileParserResult){
 		
         //start compilation in web-worker:
@@ -62,23 +100,15 @@ var pegjsAsyncGen = {
     	});
         
 	},
-	_preparePrintError: function(){},//<- overwrite with NOOP
 	/**
-	 * Optional hook for pre-processing the generated parser, after the parser is generated.
-	 * 
-	 * By default, this function returns VOID, in which case the parser-module is created by default.
-	 * 
-	 * If a function is returned instead, then it must invoke <code>compileParserModuleFunc</code>:
-	 * <code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
-	 * 
-	 * 
-	 * @param {Function} compileParserModuleFunc
-	 * 				the function that generates the parser-module:
-	 * 				<code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
-	 * 
-	 * @returns {Function|VOID}
-	 * 				VOID for the default behavior, or a function that should
-	 * 				be executed after the parser was generated (NOTE this function must invoke compileParserModuleFunc) 
+	 * @see PegJsAsyncGenerator#_preparePrintError
+	 * @protected 
+	 */
+	_preparePrintError: function(){},//<- overwrite with NOOP
+
+	/**
+	 * @see PegJsAsyncGenerator#_afterCompileParser
+	 * @protected 
 	 */
 	_afterCompileParser: function(compileParserModuleFunc){
 		

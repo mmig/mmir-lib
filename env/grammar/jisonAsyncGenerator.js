@@ -24,21 +24,39 @@ define(['constants', 'jisonGen', 'asyncGen', 'jquery'],
 function(constants, jisonGen, asyncGen, $){
 
 /**
- * Name for async WebWorker (file).
+ * Counter for generating IDs for compile-jobs that
+ * are sent to the WebWorker
  * 
- * @constant
  * @private
  * @memberOf JisonAsyncGenerator#
  */
-var WORKER_NAME = 'jisonCompiler.js';
-
-//TODO doc: task ID for communication with web-worker
 var _taskId = 1;
 
-//web-worker instance:
-var asyncCompiler = asyncGen.createWorker(WORKER_NAME);
+/**
+ * WebWorker instance for compiling parser asynchronously
+ * 
+ * @private
+ * @memberOf JisonAsyncGenerator#
+ */
+var asyncCompiler = asyncGen.createWorker(jisonGen.engineId);
 
+/**
+ * printError function reference for compile-errors
+ * 
+ * @private
+ * @memberOf JisonAsyncGenerator#
+ */
 var printError = jisonGen.printError;
+
+
+////////////////////init async compiler/thread /////////////////////////
+
+asyncCompiler._onerror = printError;
+
+//setup async init-signaling:
+var initDef = $.Deferred();
+var initMsg = asyncCompiler.prepareOnInit(jisonGen, initDef, require);
+asyncCompiler.postMessage(initMsg);
 
 /**
  * Exported (public) functions for the jison grammar-engine.
@@ -48,9 +66,30 @@ var printError = jisonGen.printError;
  */
 var jisonAsyncGen = {
 	/** @scope JisonAsyncGenerator.prototype */
+		
+	/** 
+	 * @see JisonAsyncGenerator#init
+	 * @memberOf JisonAsyncGenerator.prototype
+	 */
+	init: function(callback){
+		//overwrite with own async "init signal"
+		if(callback){
+			initDef.always(callback);
+		}
+		return initDef;
+	},
 	
-	/** @returns {Boolean} if this engine compilation works asynchronously. The current implementation works synchronously (returns FALSE) */
+	/**
+	 * @returns {Boolean} if this engine compilation works asynchronously.
+	 * 						The current implementation works asynchronously (returns TRUE)
+	 * 
+	 * @memberOf JisonAsyncGenerator.prototype
+	 */
 	isAsyncCompilation: function(){ return true; },
+	/**
+	 * @see JisonGenerator#_compileParser
+	 * @protected 
+	 */
 	_compileParser: function(grammarDefinition, options, onAfterCompileParserResult){
 		
         //start compilation in web-worker:
@@ -62,23 +101,14 @@ var jisonAsyncGen = {
     	});
         
 	},
-	_preparePrintError: function(){},//<- overwrite with NOOP
+//	/**
+//	 * @see JisonGenerator#_preparePrintError
+//	 * @protected 
+//	 */
+//	_preparePrintError: function(){},//<- overwrite with NOOP
 	/**
-	 * Optional hook for pre-processing the generated parser, after the parser is generated.
-	 * 
-	 * By default, this function returns VOID, in which case the parser-module is created by default.
-	 * 
-	 * If a function is returned instead, then it must invoke <code>compileParserModuleFunc</code>:
-	 * <code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
-	 * 
-	 * 
-	 * @param {Function} compileParserModuleFunc
-	 * 				the function that generates the parser-module:
-	 * 				<code>compileParserModuleFunc(compiledParser : STRING, hasErrors : BOOLEAN)</code>
-	 * 
-	 * @returns {Function|VOID}
-	 * 				VOID for the default behavior, or a function that should
-	 * 				be executed after the parser was generated (NOTE this function must invoke compileParserModuleFunc) 
+	 * @see JisonGenerator#_afterCompileParser
+	 * @protected 
 	 */
 	_afterCompileParser: function(compileParserModuleFunc){
 		

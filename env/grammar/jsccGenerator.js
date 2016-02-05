@@ -87,38 +87,6 @@ function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name
 		log[level].apply(log, args);
 	};
 }
-//only set print-message function, if it is not already set 
-//  (i.e. if JS/CC still has its default print function set)
-if(jscc.is_printError_default()){
-	/**
-	 * The default logging function for printing compilation errors.
-	 * @private
-	 * @name set_printError
-	 * @function
-	 * @memberOf JsccGenerator.jscc#
-	 */
-	jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
-}
-if(jscc.is_printWarning_default()){
-	/**
-	 * The default logging function for printing compilation warnings.
-	 * @private
-	 * @name set_printWarning
-	 * @function
-	 * @memberOf JsccGenerator.jscc#
-	 */
-	jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
-}
-if(jscc.is_printInfo_default()){
-	/**
-	 * The default logging function for printing compilation information.
-	 * @private
-	 * @name set_printInfo
-	 * @function
-	 * @memberOf JsccGenerator.jscc#
-	 */
-	jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
-}
 
 /**
  * The URL to the JS/CC template file (generated code-text will be "embedded" in this template)
@@ -196,6 +164,12 @@ var pluginName = 'grammar.jison';
 var jsccGen = {
 	/** @scope JsccGenerator.prototype */
 	
+	/**
+	 * The name/ID for the compile engine for the JS/CC compiler
+	 * 
+	 * @memberOf mmir.env.grammar.JsccGenerator.prototype
+	 */
+	engineId: 'jscc',
 	/**
 	 * @param {Function} [callback] OPTIONAL
 	 * 			the callback that is triggered, when the engine is initialized
@@ -338,6 +312,9 @@ var jsccGen = {
         
         return theConverterInstance;
 	},
+	/**
+	 * @protected 
+	 */
 	_compileParser: function(grammarDefinition, options, afterCompileParserResult){
 		
 		//set up the JS/CC compiler:
@@ -394,23 +371,62 @@ var jsccGen = {
 		
 		return {def: grammarParserStr, hasError: isParsingFailed};
 	},
+	/**
+	 * @protected
+	 */
 	_preparePrintError: function(){
-		//TODO
+
+		//only set print-message function, if it is not already set 
+		//  (i.e. if JS/CC still has its default print function set)
+		if(jscc.is_printError_default()){
+			/**
+			 * The default logging function for printing compilation errors.
+			 * @private
+			 * @name set_printError
+			 * @function
+			 * @memberOf JsccGenerator.jscc#
+			 */
+			jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
+		}
+		if(jscc.is_printWarning_default()){
+			/**
+			 * The default logging function for printing compilation warnings.
+			 * @private
+			 * @name set_printWarning
+			 * @function
+			 * @memberOf JsccGenerator.jscc#
+			 */
+			jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
+		}
+		if(jscc.is_printInfo_default()){
+			/**
+			 * The default logging function for printing compilation information.
+			 * @private
+			 * @name set_printInfo
+			 * @function
+			 * @memberOf JsccGenerator.jscc#
+			 */
+			jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
+		}
 	},
 	/**
 	 * The default logging / error-print function for JS/CC.
 	 * 
-	 * @private
-	 * @name printError
+	 * @protected
 	 * 
 	 * @see mmir.Logging
 	 */
 	printError: function(){
-		var args = $.makeArray(arguments);
-		//prepend "location-information" to logger-call:
-		args.unshift('JS/CC', 'compile');
-		//output log-message:
-		logger.error.apply(logger, args);
+		var errorFunc = jscc.get_printError();
+		if(errorFunc){
+			errorFunc.apply(jscc, arguments);
+		} else {
+			var args = $.makeArray(arguments);
+			//prepend "location-information" to logger-call:
+			args.unshift('JS/CC', 'compile');
+			//output log-message:
+			logger.error.apply(logger, args);
+		}
 	},
 	/**
 	 * Optional hook for pre-processing the generated parser, after the parser is generated.
@@ -438,13 +454,15 @@ var jsccGen = {
 	 * 					
 	 * 				
 	 * 				NOTE: if not FALSY, then either compileParserModuleFunc() must be invoked, or the callback() must be invoked!
+	 * 
+	 * @protected
 	 */
 	_afterCompileParser: function(compileParserModuleFunc, compileCallbackFunc){
 		//default: return VOID
 		return;
 	},
 	/**
-	 * 
+	 * @protected
 	 */
 	_getGenerated: function(genMode, dfaTable){
 		return {
@@ -459,6 +477,9 @@ var jsccGen = {
 			whitespace: jscc.get_whitespace_symbol_id()
 		};
 	},
+	/**
+	 * @protected
+	 */
 	_applyGenerated: function(genData, template){
     	
         var grammarParserStr = template;
