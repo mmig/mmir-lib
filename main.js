@@ -148,18 +148,28 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 					}
 				};
 				
+				mmir.SemanticInterpreter = semanticInterpreter;
+				var grammarEngine = configurationManager.get('grammarCompiler', true);
+				if(grammarEngine){
+					semanticInterpreter.setGrammarEngine(grammarEngine);
+				}
+				var grammarCompileMode = configurationManager.get('grammarAsyncCompileMode', true);
+				if(typeof grammarCompileMode !== 'undefined'){
+					semanticInterpreter.setEngineCompileMode(grammarCompileMode);
+				}
+				
+				//TODO impl. automated sync/async loading&execution for compiled grammars
+//				var grammarExecMode = configurationManager.get('grammarExecMode', true);
+//				if(typeof grammarExecMode !== 'undefined'){
+//					semanticInterpreter.setGrammarExecMode(grammarExecMode);//TODO add async-loaded grammars to ignoreGrammarFiles-list (to prevent loading them in "sync-exec mode")
+//				}
+				
 				//list of grammar IDs which should not be loaded, even if there is a compiled grammar available:
 				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', true, void(0));
-				
+
 				commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
+					
 					isSemanticsLoaded = true;
-					
-					mmir.SemanticInterpreter = semanticInterpreter;
-					var grammarEngine = configurationManager.get('grammarCompiler');
-					if(grammarEngine){
-						semanticInterpreter.setGrammarEngine(grammarEngine);
-					}
-					
 					checkInitCompleted();
 				});
 

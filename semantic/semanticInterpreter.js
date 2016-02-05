@@ -819,12 +819,38 @@ define(['constants', 'grammarConverter', 'logger', 'module'
 	         * @param {String} egnineId
 	         * 			the ID for the engine.
 	         * 			Possible values: "jscc", "jison", "pegjs"
+	         * 
+	         * @param {Boolean} [asyncCompileMode] OPITIONAL
+	         * 			sets the compile mode (sychronous or asynchronous) when generating new parsers
+	         * 			with the grammar-engine.
+	         * 			DEFAULT: VOID (i.e. leave current set compile-mode setting unchanged)
+	         * 
 	         * @public
 	         */
 	        setGrammarEngine: function(engineId, asyncCompileMode){
 	        	doSetGrammarEngine(engineId, asyncCompileMode);
 	        },
 	        
+	        /**
+	         * Set compile-mode (sychronous or asynchronous) for the grammar engine, i.e. if the
+	         * compiler engine for the JSON grammar should run synchronously or asynchronously.
+	         * 
+	         * NOTE: if there is no asynchronous implementation available for the grammar engine,
+	         * 		 the sync-impl. is used by default.
+	         * 
+	         * NOTE: asynchronous compile mode requires WebWorkers
+	         * 
+	         * @param {Boolean} asyncCompileMode
+	         * 			sets the compile mode (sychronous or asynchronous) when generating new parsers
+	         * 			with the grammar-engine.
+	         * 
+	         * @public
+	         * @default false (i.e. synchronous compile mode)
+	         * @require WebWorker (if async mode)
+	         */
+	        setEngineCompileMode: function(asyncCompileMode){
+	        	_isAsyncCompileMode = !!asyncCompileMode;
+	        },
 	        /**
 	         * @returns {Number} the current version number that this SemanticInterpreter
 	         * 				instance supports, for the file format of compiled grammars.
