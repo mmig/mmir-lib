@@ -127,6 +127,7 @@ var mmirf_config = {
     	//grammar related
 		, 'grammarConverter': 'semantic/grammarConverter'
 		, 'semanticInterpreter': 'semantic/semanticInterpreter'
+		, 'asyncGrammar': 'semantic/asyncGrammar'
 		, 'jscc':  'vendor/libs/jscc-amd'
 		, 'jison': 'vendor/libs/jison'
 		, 'pegjs': 'vendor/libs/peg-0.8.0'

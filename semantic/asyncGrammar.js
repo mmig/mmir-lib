@@ -15,7 +15,7 @@ var _cmdIdCounter = 1;
 var _loadedGrammars = {};
 
 //web-worker instance:
-var _asyncGrammarLoader = new Worker(constants.getWorkerPath()+'asyncGrammar.js');
+var _asyncGrammarLoader = new Worker(constants.getWorkerPath()+'asyncGrammarWorker.js');
 
 //process messages from worker thread:
 _asyncGrammarLoader.onmessage = function(msg){
