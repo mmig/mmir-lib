@@ -134,8 +134,8 @@ var mmirf_config = {
 		, 'asyncGen': 'env/grammar/asyncGenerator'
 		, 'jsccGen': 'env/grammar/jsccGenerator'
 		, 'jsccAsyncGen': 'env/grammar/jsccAsyncGenerator'
-		, 'jisonAsyncGen': 'env/grammar/jisonAsyncGenerator'
 		, 'jisonGen': 'env/grammar/jisonGenerator'
+		, 'jisonAsyncGen': 'env/grammar/jisonAsyncGenerator'
 		, 'pegjsGen': 'env/grammar/pegjsGenerator'
 		, 'pegjsAsyncGen': 'env/grammar/pegjsAsyncGenerator'
 
