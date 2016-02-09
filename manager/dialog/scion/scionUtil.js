@@ -1,24 +1,61 @@
 
-//TODO doc
-	
+/**
+ * Module for Extended SCION impl.
+ * 
+ * @class mmir.env.statemachine.engine.extended
+ */	
 define(['dictionary', 'stringExtension'], function(Dictionary) {
 
-	return function(_scion) {
+	/**
+	 * @param {Engine} _scion
+	 * 			the SCION engine instance
+	 * 
+	 * @return {ExtendedEngine}
+	 * 			the extended SCION engine instance
+	 * 
+	 * @memberOf mmir.env.statemachine.engine.extended
+	 */
+	var extend = function (_scion) {
 
 		/*
 		 * if (testbed._util) return testbed._util;
 		 */
 
-		var _states = [], _transitions = new Dictionary();
+		/** @memberOf mmir.env.statemachine.engine.extended.private  */
+		var _states = [];
+		/** @memberOf mmir.env.statemachine.engine.extended.private  */
+		var _transitions = new Dictionary();
+		/** @memberOf mmir.env.statemachine.engine.extended.private  */
 		var _events = new Dictionary();
 		
 
 		(function() {
 			
-			var events = [], transitions = {}, 
-				states = _scion.model.states, n, 
-				stateObj, transitionObjects, m, ev, 
-				targets, targetObject, t;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var events = [];
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var transitions = {};
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var states = _scion.model.states;
+			
+			
+			//temporary variables:
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var n; 
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var stateObj;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var transitionObjects;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var m;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var ev;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var targets;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var targetObject;
+			/** @memberOf mmir.env.statemachine.engine.extended.private  */
+			var t;
 
 			// crawl all states, events and transitions
 			for (n = 0; n < states.length; n++) {
@@ -71,8 +108,11 @@ define(['dictionary', 'stringExtension'], function(Dictionary) {
 
 		})();
 
+		/** @class ExtendedEngineImpl  */
 		return {
-
+			/** @scope ExtendedEngineImpl  */
+			
+			/** @memberOf ExtendedEngineImpl  */
 			_scion : _scion,
 
 			_states : _states,
@@ -82,43 +122,43 @@ define(['dictionary', 'stringExtension'], function(Dictionary) {
 			_transitions : _transitions,
 
 			start : function() {
-				_scion.start();
+				this._scion.start();
 			},
 
 			ignoreScript : function() {
-				_scion.opts.retrace = true;
+				this._scion.opts.retrace = true;
 			},
 
 			evalScript : function() {
-				_scion.opts.retrace = false;
+				this._scion.opts.retrace = false;
 			},
 
 			gen : function(event, data) {
-				_scion.gen(event, data);
+				this._scion.gen(event, data);
 			},
 
 			getStates : function() {
-				return _scion.getConfiguration();
+				return this._scion.getConfiguration();
 			},
 
 			getActiveStates : function() {
-				return _scion.getFullConfiguration();
+				return this._scion.getFullConfiguration();
 			},
 
 			getEvents : function() {
-				var i, events = [], states = _scion.getConfiguration();
+				var i, events = [], states = this._scion.getConfiguration();
 				for (i = 0; i < states.length; i++) {
-					events = events.concat(_events.get(states[i]));
+					events = events.concat(this._events.get(states[i]));
 				}
 				return events;
 			},
 
 			getActiveEvents : function() {
 				
-				var i, events = [], states = _scion.getFullConfiguration();
+				var i, events = [], states = this._scion.getFullConfiguration();
 				
 				for (i = 0; i < states.length; i++) {
-					events = events.concat(_events.get(states[i]));
+					events = events.concat(this._events.get(states[i]));
 				}
 				
 				return events;
@@ -126,11 +166,11 @@ define(['dictionary', 'stringExtension'], function(Dictionary) {
 
 			getTransitions : function() {
 				
-				var i, t, e, transitions = {}, states = _scion.getConfiguration();
+				var i, t, e, transitions = {}, states = this._scion.getConfiguration();
 
 				for (i = 0; i < states.length; i++) {
 					
-					t = _transitions.get(states[i]);
+					t = this._transitions.get(states[i]);
 					
 					for (e in t) {
 						transitions[e] = t[e];
@@ -142,11 +182,11 @@ define(['dictionary', 'stringExtension'], function(Dictionary) {
 
 			getActiveTransitions : function() {
 				
-				var i, t, e, transitions = {}, states = _scion.getFullConfiguration();
+				var i, t, e, transitions = {}, states = this._scion.getFullConfiguration();
 
 				for (i = 0; i < states.length; i++) {
 					
-					t = _transitions.get(states[i]);
+					t = this._transitions.get(states[i]);
 					
 					for (e in t) {
 						transitions[e] = t[e];
@@ -158,6 +198,8 @@ define(['dictionary', 'stringExtension'], function(Dictionary) {
 
 		};//END: return {...
 		
-	};//END: return function(_scion) {...
+	};//END: extend = function(_scion) {...
+	
+	return extend;
 		
 });//END: define(...

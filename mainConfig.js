@@ -177,9 +177,13 @@ var mmirf_config = {
 	
 };//END: require.config({...
 
-require.config(mmirf_config);
 
-require(['core'], function(core){
+var reqInstance = requirejs.config(mmirf_config);
+
+reqInstance(['core'], function(core){
+	
+	//attach the local-require instance:
+	core.require = reqInstance;
 	
 	//get the "entry-point", i.e. module-name/-id that will be loaded (default: "main") 
 	var startModule = core.startModule;
@@ -234,7 +238,7 @@ require(['core'], function(core){
 	
 	
 	//finally: trigger framework loading
-	require(['logger',startModule]);
+	core.require(['logger',startModule]);
 });
 
 }());//END: (function(){...
