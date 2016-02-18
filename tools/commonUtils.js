@@ -1158,38 +1158,24 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		    
 			init: function(success, errorFunc){
 				
-				return this.loadDirectoryStructure.apply(this, arguments);
+				var initPromise;
 				
-//				var _defer = $.Deferred();
-//				var self = this;
-//				
-//				if(success){
-//					_defer.done(success);
-//				}
-//				if(errorFunc){
-//					_defer.fail(errorFunc);
-//				}
-//				
-//				window.plugins.directoryListing.getDirectoryStructure(
-//					directoriesToParse,
-//					function(dirStruct){
-//						
-//						self.directoryStructure = dirStruct;
-//						
-//						if (!success){
-//							logger.info("[getDirectoryStructure] finished: " + JSON.stringify(dirStruct));//debug
-//						}
-//						_defer.resolve(instance);
-//					}, 
-//					function(e){
-//						if (!errorFunc){
-//							logger.error("ERROR [getDirectoryStructure]: " + e);
-//						}
-//						_defer.fail(e);
-//					}
-//				);
-//				
-//				return _defer.promise();
+				//use the Deferred from load-dir-struct, since this is the only async initialization atm:
+				initPromise = this.loadDirectoryStructure.apply(this, arguments);
+				
+				//replace init so that we do not ivoke load-dir-struct multiple times
+				this.__initDeferred = initPromise;
+				this.init = function initCompleted(onsuccess, onerror){
+					if(onsuccess){
+						this.__initDeferred.done(success);
+					}
+					if(onerror){
+						this.__initDeferred.fail(errorFunc);
+					}
+					return this.__initDeferred;
+				};
+				
+				return initPromise;
 			}
 		    
 		    /**
