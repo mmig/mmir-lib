@@ -115,43 +115,53 @@ return {
 			return false;//////////////////// EARLY EXIT////////////////////////
 		}
 		
+		//if grammar is already loaded & available:
 		if(_loadedGrammars[langCode] === true){
 			semanticInterpreter.getASRSemantic(phrase, langCode, listener);
 			return true;//////////////////// EARLY EXIT ////////////////////////
 		}
 		
-		var compiledGrammarPath = utils.getCompiledGrammarPath(constants.getGeneratedGrammarsPath(), langCode);
-		if(!compiledGrammarPath){
-			console.error('No compiled grammar available for ID: "'+langCode+'"');
-			return false;//////////////////// EARLY EXIT////////////////////////
-		}
-		
-		var grammarInit = {
-			id: langCode,
-			initDef: $.Deferred(),
-			isGrammar: false,
-			isStopwords: false,
-			checkInit: function(){
-				if(this.isStopwords && this.isGrammar){
-					_loadedGrammars[this.id] = true;
-					this.initDef.resolve();
-					this.initDef = null;
+		utils.init().then(function onSuccess(){
+			
+				var compiledGrammarPath = utils.getCompiledGrammarPath(constants.getGeneratedGrammarsPath(), langCode);
+				if(!compiledGrammarPath){
+					console.error('No compiled grammar available for ID: "'+langCode+'"');
+					return;//////////////////// EARLY EXIT////////////////////////
 				}
-			}
-		};
+				
+				var grammarInit = {
+					id: langCode,
+					initDef: $.Deferred(),
+					isGrammar: false,
+					isStopwords: false,
+					checkInit: function(){
+						if(this.isStopwords && this.isGrammar){
+							_loadedGrammars[this.id] = true;
+							this.initDef.resolve();
+							this.initDef = null;
+						}
+					}
+				};
+	
+				//register invocation of init-phrase as soon as (async-loaded) grammar becomes available
+				grammarInit.initDef.always(function(){
+					
+					if(typeof phrase !== 'undefined'){
+						semanticInterpreter.getASRSemantic(phrase, langCode, listener);
+					} else {//TODO use grammar's example_phrase for init instead?
+						listener({});
+					}
+					
+				});
+				_loadedGrammars[langCode] = grammarInit;
 
-		//register invocation of init-phrase as soon as (async-loaded) grammar becomes available
-		grammarInit.initDef.always(function(){
-			
-			if(typeof phrase !== 'undefined'){
-				semanticInterpreter.getASRSemantic(phrase, langCode, listener);
-			} else {//TODO use grammar's example_phrase for init instead?
-				listener({});
-			}
-			
+				_asyncGrammarLoader.postMessage({cmd: 'load', id: langCode, url: compiledGrammarPath});
+			},
+			function onError(){
+				
+				//FIXME impl. real error handling
+				console.error('cannot determine URL for compiled grammar with ID "'+langCode+'": commonUtils is not initialized.');
 		});
-		_loadedGrammars[langCode] = grammarInit;
-		_asyncGrammarLoader.postMessage({cmd: 'load', id: langCode, url: compiledGrammarPath});
 		
 		return true;
 	}
