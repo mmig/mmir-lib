@@ -1,5 +1,5 @@
 ﻿/*
- * 	Copyright (C) 2012-2013 DFKI GmbH
+ * 	Copyright (C) 2012-2016 DFKI GmbH
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
@@ -67,7 +67,7 @@ require = function(id, cb){
 var jscc;
 function _init(url){
 	
-	var libUrl = '../../' + url +'.js';
+	var libUrl = getPath(url) + '.js';
 	_modules._customid = 'jscc';
 	importScripts(libUrl);//'../vendor/libs/jscc-amd.js');
 

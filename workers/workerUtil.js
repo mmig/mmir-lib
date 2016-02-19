@@ -24,51 +24,48 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-//load basic utilities for web-worker:
-importScripts('workerUtil.js');
-
-var _makeArray = function(obj) {
-	var list = [];
-	for(var i in obj){
-		list.push(obj[i]);
-	}
-	return list;
-};
-
-var defaultOptions = {};
-var _getOptions = function(opt){
-	return opt? opt : defaultOptions;
-};
-
-function verifyInit(engine, engineId, taskId){
+if(typeof console === 'undefined'){
 	
-	if(!engine){
-		self.postMessage({error: 'ReferenceError: parser-compiler "'+engineId+'" is not initialized yet!', level: 'error', id: taskId});
-		return false;
+	//-> if WebWorker implementation does not provide a console
+	
+	var consoleStubFunc = function(msg){};
+	
+	var consoleFunc;
+	if(typeof postError !== 'undefined'){
+		consoleFunc = function(msg){
+			postError(msg);
+		};	
+	} else {
+		consoleFunc = consoleStubFunc;
 	}
 	
-	return true;
+	console = {
+		log: consoleStubFunc,
+		debug: consoleStubFunc,
+		info: consoleStubFunc,
+		//only transfer WARN and ERROR messages:
+		warn: consoleFunc,
+		error: consoleFunc
+	};
 }
 
 /**
- * initialized the compiler and sends init-complete message when finished
+ * HELPER for resolving script paths that will be loaded via importScripts()
  * 
- * @param {PlainObject} config
- * 			configuration with property <code>config.engineUrl</code> (String)
- * @private
+ * This helper resolves URL for scripts that are NOT located in the same directory/path as the worker itself
+ * (do not use this helper for script URLs that are located in the same path as the worker!)
+ * 
+ * @param scriptUrl
+ * @returns the resolved script path
  */
-function init(config){
+function getPath(scriptUrl){
 	
-  if (config.engineUrl){
-	  
-	  _init(config.engineUrl);
-	  self.postMessage({init: true});
-	  
-  } else {
-
-	  self.postMessage({
-		  init: false,
-		  error: 'Could not load library for parser-compiler: missing property engineUrl in configuration: '+JSON.stringify(config)
-	  });
-  }
+	//if starts with protocol "*://" -> absolute path
+	if(/^[^/]+:\/\//.test(scriptUrl)){
+		return scriptUrl;
+	}
+	
+	//if it is a relative path, we must "navigate back" from the worker's path
+	return '../../'+scriptUrl;
 }
+

@@ -1,5 +1,5 @@
 /*
- * 	Copyright (C) 2012-2013 DFKI GmbH
+ * 	Copyright (C) 2012-2016 DFKI GmbH
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
@@ -24,6 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+importScripts('workerUtil.js');
 
 var semanticInterpreterImpl = {
 	
@@ -96,7 +97,8 @@ function postError(msg){
 }
 
 function load(compiledGrammarUrl, id){
-	importScripts('../../'+compiledGrammarUrl);
+	var libPath = getPath(compiledGrammarUrl);
+	importScripts( libPath );
 }
 
 /**
