@@ -234,6 +234,18 @@ function(
 	var helperSuffix = "Helper";
 	
 	/**
+	 * Object that holds information about the execution
+	 * environment / platform.
+	 * 
+	 * (set on initialization)
+	 * 
+	 * @private
+	 * @type env
+	 * @memberOf Constants#
+	 */
+	var envInfo = void(0);
+	
+	/**
 	 * @private
 	 * @memberOf Constants#
 	 */
@@ -242,61 +254,45 @@ function(
 		if(typeof isBrowserEnvParam === 'string'){
 			basePath = isBrowserEnvParam;
 		}
-		else if (isBrowserEnvParam && isBrowserEnvParam.env){
+		else if (isBrowserEnvParam && isBrowserEnvParam.isCordovaEnv){
 
-			//if cordova env, try to detect the specific platform
-			//TODO move this to somewhere else? to envDetect.js ?
-			var env = isBrowserEnvParam.env;
+			//if cordova env, try to use the specific platform
+			var env = isBrowserEnvParam.envSetting;
 			if(env === 'cordova'){
 				
-				//use plugin org.apache.cordova.device for detecting specific env
-				if(typeof device !== 'undefined' && device.platform){
-					
-					var platform = device.platform;
-					if(/\bios\b/i.test(platform)){
-						env = 'ios';
-					} else if(/\bandroid\b/i.test(platform)){
-						env = 'android';
-					} else {//TODO handle other platforms
-						console.warn('Unknown platform "'+env+'", using default base path /');
-						env = 'default';
-					}
-					
-				} else {
-					
-					//fallback: use UserAgent for detecting env
-					var userAgent = navigator.userAgent;
-					if(/(iPad|iPhone|iPod)/ig.test(userAgent)){
-						env = 'ios';
-					} else if(/android/i.test(userAgent)){
-						env = 'android';
-					} else {//TODO handle other platforms
-						console.warn('Unknown platform "'+env+'", using default base path /');
-						env = 'default';
-					}
-					
+				env = isBrowserEnvParam.platform;
+				
+				if(env === 'default'){
+					console.warn('Unknown cordova platform "'+env+'", using default base path /');
 				}
 				
 			}
 			
 			switch(env){
-//				case 'cordova':
 				case 'android':
 					basePath = "file:///android_asset/www/";
 					break;
+//				case 'cordova':
 				case 'ios':
 				case 'default':
+				default:
 					basePath = "";
 			}
 			
 		}
-		else if (isBrowserEnvParam){
+		else if (isBrowserEnvParam && isBrowserEnvParam.isBrowserEnv){
 			basePath = "";
 		}
-		else {
-			//TODO this is only for ANDROID -- need to set appropriate path path according to ENV setting...
+		else if (isBrowserEnvParam === false || typeof isBrowserEnvParam === 'undefined'){
+			//BACKWARD COMPATIBILITY: false and omitted argument are interpreted as Android env
+			//TODO remove this?
 			basePath = "file:///android_asset/www/";
 		}
+		else {
+			//default:
+			basePath = "";
+		}
+		
 	}
 	
 	/**
@@ -306,9 +302,10 @@ function(
 	 * @memberOf mmir.Constants.prototype
 	 * @private
 	 */
-    function constructor(forBrowserParameter){
-		isBrowserEnv = forBrowserParameter? forBrowserParameter : isBrowserEnv;
-		setBasePath(forBrowserParameter);
+    function constructor(env){
+    	envInfo = env;
+		isBrowserEnv = envInfo.isBrowserEnv;
+		setBasePath(env);
 		
 		/** @lends Constants.prototype */
 		return {
@@ -547,6 +544,27 @@ function(
 				return isBrowserEnv;
 			},
 			
+
+			/**
+	         * @function
+	         * @returns {String}
+	         * @values "browser" | "cordova" | (or: VALUE set in document's query-parameter "?env=VALUE"
+	         * @public
+	         */
+			getEnv: function(){
+				return envInfo.envSetting? envInfo.envSetting : 'browser';
+			},
+			
+			/**
+	         * @function
+	         * @returns {String}
+	         * @values "android" | "ios" | "browser" | "default"
+	         * @public
+	         */
+			getEnvPlatform: function(){
+				return envInfo.platform;
+			},
+			
 			/**
 			 * @deprecated instead, use Constants-object directly: mmir.Constants
 			 */
@@ -557,14 +575,7 @@ function(
 		
 	}//END: constructor()
 	
-    
-//    //TODO implement mechanism for setting env-variable (e.g. read from params...)
-	var isBrowserEnvironment = env.isBrowserEnv;// module.config().forBrowser;
-	
-	instance = new constructor(isBrowserEnvironment);
-	
-	//TODO find better way for initializing env-dependent settings (see also comment above)
-	setBasePath({env: env.envSetting});
+	instance = new constructor(env);
 	
 	return instance;
 

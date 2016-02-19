@@ -42,11 +42,47 @@ define(['paramsParseFunc'], function(paramsParseFunc) {
 		isBrowserEnv = true;
 		isCordovaEnv = false;
 	}
+	
+	var env;
+	if(isBrowserEnv){
+		env = 'browser';
+	} else {
+	
+		//if available, use plugin cordova-plugin-device for detecting specific env
+		if(typeof device !== 'undefined' && device.platform){
+			
+			var platform = device.platform;
+			if(/\bios\b/i.test(platform)){
+				env = 'ios';
+			} else if(/\bandroid\b/i.test(platform)){
+				env = 'android';
+			} else {//TODO handle other platforms
+				console.warn('Unknown platform "'+platform+'"');
+				env = 'default';
+			}
+			
+		} else {
+			
+			//fallback: use UserAgent for detecting env
+			var userAgent = navigator.userAgent;
+			if(/(iPad|iPhone|iPod)/ig.test(userAgent)){
+				env = 'ios';
+			} else if(/android/i.test(userAgent)){
+				env = 'android';
+			} else {//TODO handle other platforms
+				console.warn('Unknown platform for userAgent "'+userAgent+'"');
+				env = 'default';
+			}
+			
+		}
+		
+	}
 
 	return {
 		  isBrowserEnv: isBrowserEnv,
 		  isCordovaEnv: isCordovaEnv,
-		  envSetting: envSetting
+		  envSetting: envSetting,
+		  platform: env
 //		, params : params
 	};
 });
