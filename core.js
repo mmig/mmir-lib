@@ -18,12 +18,22 @@
  * 
  */
 function initMmir() {
+	
+	/**
+	 * the name of the global variable which will hold the core-module
+	 * @memberOf mmir.internal
+	 * @private
+	 */	
+	var CORE_NAME = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
     
-	if(window.mmir){
-		if(typeof define === 'function'){
-			define(function(){ return window.mmir; });
+	if(window[CORE_NAME]){
+		
+		//if window[CORE_NAME] is the core-module: register it and return
+		//(note: if it is not the core-module, its properties will be merged/copied to the core-module -> see below)
+		if(typeof window[CORE_NAME].startModule === 'string' && typeof define === 'function'){
+			define(function(){ return window[CORE_NAME]; });
+			return window[CORE_NAME];
 		}
-		return window.mmir;
 	}
 	
     
@@ -421,6 +431,23 @@ function initMmir() {
 			applyConfig: applyConfigs,
 			
 			/**
+			 * The name of the (this) the core module:
+			 * this is also the global variable by which the core module (this) can be accessed.
+			 * 
+			 * 
+			 * NOTE: changing this name here will have no affect on the name of the global variable
+			 * 
+			 * 
+			 * @memberOf mmir
+			 * @name mmirName
+			 * @type String
+			 * @default {String} "mmir"
+			 * @readonly
+			 * @public
+			 */
+			mmirName: CORE_NAME,
+			
+			/**
 			 * The name / ID of the RequireJS module that will
 			 * be loaded, after the configuration in
 			 * <code>mainConfig.js</code> was applied.
@@ -543,8 +570,18 @@ function initMmir() {
 		define(function(){ return mmir; });
 	}
 	
-	//export as global namespace:
-	window.mmir = mmir;
+	//if window[CORE_NAME] already exists:
+	//  copy all its properties to the new core-mmir object
+	if(window[CORE_NAME]){
+		for(var p in window[CORE_NAME]){
+			if(window[CORE_NAME].hasOwnProperty(p) && typeof mmir[p] === 'undefined'){
+				mmir[p] = window[CORE_NAME][p];
+			}
+		}
+	}
+	
+	//export core-module into global namespace:
+	window[CORE_NAME] = mmir;
 	
 	return mmir;
 }());
