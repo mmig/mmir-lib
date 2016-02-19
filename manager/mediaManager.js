@@ -90,7 +90,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * 
 	 * @memberOf MediaManager#
 	 */
-    var pluginsToLoad = {
+    var _defaultPlugins = {
     		'browser': ['waitReadyIndicator.js',
     		            'html5AudioOutput.js',
     		            'html5AudioInput.js',
@@ -1203,20 +1203,55 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @private
 	 * @memberOf mmir.MediaManager#
      */
-    function getPluginsToLoad(isCordovaEnvironment){
-    	var env = null;
-    	var pluginArray = [];
-    	if (isCordovaEnvironment) {
-    		env = 'cordova';
-    	} else {
-    		env = 'browser';
-    	}
+    function getPluginsToLoad(configurationName){//if configurationName is omitted, then it is automatically detected
     	
+    	var env = configurationName;
+    	var pluginArray = [];
+
     	var dataFromConfig = configurationManager.get('mediaManager.plugins', true);
+    	
+    	if(!env){
+    		
+    		var envSetting = constants.getEnv();
+    		if(envSetting === 'cordova'){
+    			
+    			//try to find config for specific cordova-env
+    			envSetting = constants.getEnvPlatform();
+    			if(envSetting !== 'default'){
+    				
+    				//if there is a config present for the specific envSetting, then use it:
+    				if((dataFromConfig && dataFromConfig[envSetting]) || _defaultPlugins[envSetting]){
+    	    			//if there is a config present for the envSetting, then use it:
+    					env = envSetting;
+    				}
+    				
+    			}
+    			
+    		} else if(dataFromConfig && dataFromConfig[envSetting]){
+    			//if there is a non-default config present for the envSetting, then use it
+    			//  if there is a deault config, then the env will also be a default one 
+    			//  -> this will be detected by default-detection-mechanism below
+				env = envSetting;
+			}
+    		
+    		//if there is no env value yet, use default criteria browser vs. cordova env:
+    		if(!env){
+    			
+	    		var isCordovaEnvironment = ! constants.isBrowserEnv();
+	        	if (isCordovaEnvironment) {
+	        		env = 'cordova';
+	        	} else {
+	        		env = 'browser';
+	        	}
+    		}
+    		
+    		//ASSERT env is non-empty String
+    	}
+        
     	if (dataFromConfig && dataFromConfig[env]){
     		pluginArray = pluginArray.concat(dataFromConfig[env]);
     	} else{
-    		pluginArray = pluginArray.concat(pluginsToLoad[env]);
+    		pluginArray = pluginArray.concat(_defaultPlugins[env]);
     	}
     	
     	return pluginArray;
@@ -1325,9 +1360,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
                 	}
                 }
                 
-                var isCordovaEnvironment = ! constants.isBrowserEnv();//FIXME implement mechanism for configuring this!!
-                
-            	var pluginConfig = getPluginsToLoad(isCordovaEnvironment);
+            	var pluginConfig = getPluginsToLoad();
                 loadAllPlugins(pluginConfig,deferredSuccess, deferredFailure);
 
             }
