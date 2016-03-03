@@ -1,4 +1,4 @@
-define(
+define(['jsonUtils'],
 	/**
      * Set to "backwards compatibility mode" (for pre version 2.0) for CommonUtils.
      * 
@@ -32,6 +32,8 @@ define(
      * </li>
      * </ul>
      * 
+     * Also, the functions of {@link mmir.extensions.JsonUtils} will be made available.
+     * 
      * @requires document (DOM element)
      * 
      * @param {mmir.CommonUtils} compatibilitySelf
@@ -51,7 +53,7 @@ define(
 	 * 
 	 * @public
 	 */
-	function(
+	function(jsonUtils
 ) {
 	
 	/**
@@ -88,6 +90,12 @@ define(
     	
     	/** @scope mmir.CommonUtils.setToCompatibilityModeExtension.prototype *///for jsdoc2
     	
+    	//add functions from jsonUtils
+    	for(var p in jsonUtils){
+    		if(jsonUtils.hasOwnProperty(p)){
+    			compatibilitySelf[p] = jsonUtils[p];
+    		}
+    	}
     	
 		/**
 		 * Array of strings for the conversion of month represented by integers

@@ -147,6 +147,7 @@ var mmirf_config = {
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
 		, 'loadCss' : 'tools/loadCss'
 
+		, 'jsonUtils' : 'tools/extensions/JsonUtils'
 	    , 'commonUtilsCompatibility' : 'tools/extensions/CommonUtilsCompatibility'
 	    , 'languageManagerCompatibility' : 'tools/extensions/LanguageManagerCompatibility'
 	    
