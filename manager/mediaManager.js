@@ -69,17 +69,17 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      * <pre>
 	 *     "mediaManager": {
 	 *     	"plugins": {
-	 *     		"browser": ["html5AudioOutput.js",
-	 *     		            "html5AudioInput.js",
-	 *     		            "maryTextToSpeech.js",
-	 *     		            {"mod": "webkitAudioInput.js",    "ctx": "chrome"}
+	 *     		"browser": ["html5AudioOutput",
+	 *     		            "html5AudioInput",
+	 *     		            {"mod": "webAudioTextToSpeech", "config": "webttsMaryImpl"},
+	 *     		            {"mod": "webkitAudioInput",     "ctx": "chrome"}
 	 *     		],
-	 *     		"cordova": ["cordovaAudioOutput.js",
-	 *     		            "nuanceAudioInput.js",
-	 *     		            "nuanceTextToSpeech.js",
-	 *     		            {"mod": "androidAudioInput.js",   "ctx": "native"},
-	 *     		            {"mod": "androidTextToSpeech.js", "ctx": "native"},
-	 *     		            {"mod": "maryTextToSpeech.js",    "ctx": "web"}
+	 *     		"cordova": ["cordovaAudioOutput",
+	 *     		            "nuanceAudioInput",
+	 *     		            "nuanceTextToSpeech",
+	 *     		            {"mod": "androidAudioInput",    "ctx": "native"},
+	 *     		            {"mod": "androidTextToSpeech",  "ctx": "native"},
+	 *     		            {"mod": "webAudioTextToSpeech", "ctx": "web", "config": "webttsMaryImpl"}
 	 *     		]
 	 *     	}
 	 *     }
@@ -91,33 +91,63 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @memberOf MediaManager#
 	 */
     var _defaultPlugins = {
-    		'browser': ['waitReadyIndicator.js',
-    		            'html5AudioOutput.js',
-    		            'html5AudioInput.js',
-    		            'maryTextToSpeech.js'
-    		],
-    		'cordova': ['waitReadyIndicator.js',
-    		            'cordovaAudioOutput.js',
-    		            'androidAudioInput.js',
-    		            'maryTextToSpeech.js'
-    		]
+		'browser': ['waitReadyIndicator',
+		            'html5AudioOutput',
+		            'webkitAudioInput',
+		            'maryTextToSpeech',
+		],
+		'cordova': ['waitReadyIndicator',
+		            'cordovaAudioOutput',
+		            'androidAudioInput',
+		            'maryTextToSpeech',
+		]
     };
+    
+    /**
+     * Mapping for modules to default module configurations.
+     * 
+     * This mainly used for backwards compatibility, to map deprecated modules to their
+     * new/corresponding configuration.
+     * 
+     * Maps a module name/file to the corresponding (new) module configuration.
+     * 
+     * NOTE: The module's name/file are in lower case.
+     * 
+     * @private
+     * @type PlainObject
+     * 
+	 * @memberOf MediaManager#
+     */
+    var _pluginsConfig = {};
     
     /**
      * Load an media-module implementation from plugin file.
      * 
-     * @param {String} filePath
+     * @param {String} fileName
+     * 			the file-name of the media-module that will be loaded.
+     * 			The file needs to be located in {@link mmir.Constants#getMediaPluginPath}.
+     * 			If fileName does not end with suffix ".js", it will be added, before
+     * 			loading the file.
      * @param {Function} successCallback
      * @param {Function} failureCallback
      * @param {String} [execId]
+     * 			the context-ID into which the implementation of the media-module will be loaded.
+     * 			If omitted or FALSY, the default context will be used.
+     * @param {any} [config]
+     * 			a configuration value that will be passed to the media-module upon its initialization
      * 
      * @private
 	 * @function
 	 * 
 	 * @memberOf MediaManager#
 	 */
-    var loadPlugin = function loadPlugin(filePath, successCallback, failureCallback, execId){
+    var loadPlugin = function loadPlugin(filePath, successCallback, failureCallback, execId, config){
     	try {
+    		
+    		if(!/\.js$/.test(filePath)){
+    			
+    			filePath += '.js';
+    		}
     		
     		commonUtils.loadScript(constants.getMediaPluginPath() + filePath, function(){
     			
@@ -190,12 +220,11 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	    				
 						if (successCallback) successCallback();
 						
-	    			}, instance, execId);
+	    			}, instance, execId, config);
 	    			
 	    			//"delete" global var for media plugin after loading
 	    			// TODO remove when/if other loading mechanism is established
-//	    			newMediaPlugin = void(0);
-	    			delete newMediaPlugin;
+	    			newMediaPlugin = void(0);
 	    			
 	    		}
 	    		else {
@@ -463,9 +492,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 */
     			waitReadyImpl: {},
     		
-    			//TODO add API documentation
-    		
-    			//... these are the standard audioInput procedures, that should be implemented by a loaded file
+    			//... these are the standard audioInput procedures, that should be implemented by a loaded module/file:
     		
 ///////////////////////////// audio input API: /////////////////////////////
 	    		/**
@@ -486,7 +513,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	    		 * 				<code>callback(error)</code> 
 	    		 */
     			recognize: function(successCallBack, failureCallBack){
-    				if(failureCallBack){
+    				
+    				var funcName = 'recognize';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Input: Speech Recognition is not supported.");
     				}
     				else {
@@ -523,7 +555,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	    		 * @see #stopRecord
 	    		 */
     			startRecord: function(successCallBack,failureCallBack, isWithIntermediateResults){
-    				if(failureCallBack){
+    				
+    				var funcName = 'startRecord';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     				else {
@@ -552,7 +589,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	    		 * @see #startRecord
 	    		 */
     			stopRecord: function(successCallBack,failureCallBack){
-    				if(failureCallBack){
+    				
+    				var funcName = 'stopRecord';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     				else {
@@ -566,7 +608,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     	   		 * Has no effect, if no recognition is active.
     	   		 */
     			cancelRecognition: function(successCallBack,failureCallBack){
-    	   			if(failureCallBack){
+    				
+    				var funcName = 'cancelRecognition';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Output: canceling Recognize Speech is not supported.");
     				}
     				else {
@@ -579,7 +626,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * Play PCM audio data.
     			 */
     	   		playWAV: function(blob, onPlayedCallback, failureCallBack){
-    	   			if(failureCallBack){
+    	   			
+    	   			var funcName = 'playWAV';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Output: play WAV audio is not supported.");
     				}
     				else {
@@ -590,7 +642,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * Play audio file from the specified URL.
     			 */
     			playURL: function(url, onPlayedCallback, failureCallBack){
-    	   			if(failureCallBack){
+    				
+    				var funcName = 'playURL';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Output: play audio from URL is not supported.");
     				}
     				else {
@@ -627,7 +684,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * @see {mmir.env.media.IAudio#_constructor}
     			 */
     			getURLAsAudio: function(url, onPlayedCallback, failureCallBack, onLoadedCallBack){
-    	   			if(failureCallBack){
+    				
+    				var funcName = 'getURLAsAudio';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Output: create audio from URL is not supported.");
     				}
     				else {
@@ -706,7 +768,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * 		}</pre>
     			 */
     			textToSpeech: function(parameter, onPlayedCallback, failureCallBack){
-    	   			if(failureCallBack){
+    				
+    				var funcName = 'textToSpeech';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Output: Text To Speech is not supported.");
     				}
     				else {
@@ -717,7 +784,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * Cancel current synthesis.
     			 */
     			cancelSpeech: function(successCallBack,failureCallBack){
-    	   			if(failureCallBack){
+    				
+    				var funcName = 'cancelSpeech';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
     					failureCallBack("Audio Output: canceling Text To Speech is not supported.");
     				}
     				else {
@@ -733,7 +805,14 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			 * 				TODO specify format / range
     			 */
     			setTextToSpeechVolume: function(newValue){
-    				console.error("Audio Output: set volume for Text To Speech is not supported.");
+    				
+    				var funcName = 'setTextToSpeechVolume';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else {
+    					console.error("Audio Output: set volume for Text To Speech is not supported.");
+    				}
 				}
     			
 
@@ -1270,18 +1349,34 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     		return;
     	}
     	
-    	var ctxId;
+    	var ctxId, config;
     	var newPluginName = pluginArray.pop();
-    	if(newPluginName.ctx && newPluginName.mod){
-    		ctxId = newPluginName.ctx;
+    	if(newPluginName.mod){
+    		
+    		if(newPluginName.ctx){
+        		ctxId = newPluginName.ctx;
+    		}
+    		if(newPluginName.config){
+        		config = newPluginName.config;
+    		}
     		newPluginName = newPluginName.mod;
     	}
     	
-    	loadPlugin(newPluginName, function (){
-    		console.log(newPluginName+' loaded!');
-    		loadAllPlugins(pluginArray,successCallback, failureCallback);},
+    	//check if there is a "replacement" / default configuration for the requested module
+    	var legacyModule = newPluginName? _pluginsConfig[newPluginName.toLowerCase()] : null;
+    	if(legacyModule){
+    		ctxId  = ctxId  || legacyModule.ctxId;
+    		config = config || legacyModule.config;
+    		newPluginName = legacyModule.mod;
+    	}
+    	
+    	loadPlugin(newPluginName, function onloaded(){
+	    		console.log(newPluginName+' loaded!');
+	    		loadAllPlugins(pluginArray,successCallback, failureCallback);
+    		},
     		failureCallback,
-    		ctxId
+    		ctxId,
+    		config
     	);
     }
     	
