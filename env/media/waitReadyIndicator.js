@@ -27,7 +27,7 @@
 
 newMediaPlugin = {
 		/**  @memberOf WaitReadyIndicatorImpl# */
-		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled
+		initialize: function(callBack){//, mediaManager, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
 			
 			
 			require(['waitDialog'], function(dlg){
