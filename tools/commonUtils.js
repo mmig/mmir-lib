@@ -594,7 +594,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 							_defer.resolve();
 						};
 					
-						/// ATTENTION: $.getScript --> mobileDS.CommonUtils.getInstance().getLocalScript
+						/// ATTENTION: $.getScript --> mmir.CommonUtils.getLocalScript
 						/// under Android 4.0 getScript is not wokring properly
 						instance.getLocalScript(librariesPath+fileName, 
 							function(){
@@ -823,8 +823,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * This function can be savely run in arbirtray contexts, e.g.
 		     * 
 		     * <pre>
-		     *  var checkArray = mmir.CommonUtils.getInstance().isArray;
-		     * if( checkArray(someObject) ){
+		     *  var checkArray = mmir.CommonUtils.isArray;
+		     *  if( checkArray(someObject) ){
 		     *   ...
 		     * </pre>
 		     * 
