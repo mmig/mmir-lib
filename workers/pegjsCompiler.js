@@ -34,7 +34,7 @@ var pegjs;
 function _init(url){
 	
 	var libUrl = getPath(url) +'.js';
-	importScripts(libUrl);//'../vendor/libs/peg-0.8.0.js');
+	importScripts(libUrl);//'../vendor/libs/peg-x.x.x.js');
 
 	//set global var that holds jison
 	pegjs = PEG;
