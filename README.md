@@ -55,12 +55,12 @@ _Note: these directions assume, that your web application is located in the
 
 (see contents of ```/vendor/libs/```)
 
- * jQuery 1.11.1
+ * jQuery 2.1.3
  * jQuery Mobile 1.4.3
  * RequireJS 2.1.9
  * SCION
  * JS/CC 0.30
- * PEG.js
+ * PEG.js 0.9.0
  * Jison
  * ANTLR 3
  * CryptoJS MD5 3.1.2
@@ -72,8 +72,8 @@ See also the [tools project][3] for scripts, resources etc. for compiling and ge
 directories into JavaScript files).
 
 NOTE: Integration with / loading of Cordova is now designed to work with the _build process_
-      of **Cordova 3** (see [MMIR skeleton project][2] for integration / tooling of the MMIR framework
-      in combination with Cordova 3).
+      of **Cordova 5** or later (see [MMIR skeleton project][2] for integration / tooling of the MMIR framework
+      in combination with Cordova 5).
 
 --
 #### License
@@ -84,7 +84,7 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 --
 ##### Version Information
 
- MMIR Version 3.1.0
+ MMIR Version 3.7.0
 
 
 [1]: https://github.com/mmig/mmir-starter-kit

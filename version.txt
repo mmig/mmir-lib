@@ -1,12 +1,12 @@
 ﻿
-version notes for MMIR framework code (v 3.6.0rc5)
+version notes for MMIR framework code (v 3.7.0)
 
- * using Cordova 3.x.x library
+ * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
  * using jQuery Mobile 1.4.x library
  
  
- NOTE: for versions older than 3.x, the change-information refers to the MMIG StarterKit code.
+ NOTE: for versions older than MMIR 3.x, the change-information refers to the MMIG StarterKit code.
        Since version 3.x the code is restructured:
        
        * mmir-lib: the framework code itself (would usually be located at /www/mmirf/)
@@ -24,7 +24,129 @@ version notes for MMIR framework code (v 3.6.0rc5)
  --------------
 
 ##################
- Version 3.6.0rc5
+ Version 3.7.0
+##################
+
+API Changes:
+
+ * REFACTORING in semantic/GrammarConverter.js
+   * renamed GrammarConverter.getJSCCGrammar() 		-> GrammarConverter.getGrammarDef()
+   * renamed GrammarConverter.setJSCCGrammar(str) 	-> GrammarConverter.setGrammarDef(str)
+   * renamed GrammarConverter.getJSGrammar() 		-> GrammarConverter.getGrammarSource()
+   * renamed GrammarConverter.setJSGrammar(str) 	-> GrammarConverter.setGrammarSource(str)
+ * REFACTORING in tools/commonUtils: (re-)moved functions from commonUtils to (optional module) jsonUtils:
+   * load jsonUtils with mmir.require('jsonUtils')
+   * extended CommonUtilsCompatibility with functions from jsonUtils
+   * moved funcitons from commonUtils -> jsonUtils:
+     * toJSONStringValue()
+     * convertJSONStringValueToHTML()
+     * convertJSONStringToHTML()
+ * ADDITION MediaManager: additional utility function createEmptyAudio()
+ * MODFICATION env/html5AudioOutput: getWAVAsAudio() now immediately returns an audio object (not just only via callback)
+ 
+MODFIFICATIONS:
+
+ * IMPROVEMENT for media/env/recorderExt.js: Recorder.forceDownload() audio: added support for FireFox
+ * mvc/parser/templateRenderUtils.js: use Logger instead of console-output
+ * MODFICATION using new QueuePlugin (for Android environments with Android version < 4.4):
+               the API did not change, but most notably, the queue-plugin is now available at window.cordova.plugins.queuePlugin instead of window.plugins.queuePlugin
+ * ADDITION added implementation for asynchronous compilation & execution of grammars
+ * ADDITION added configuration value "ignoreGrammarFiles" for application's www/config/configuration.json:
+            list of language codes / IDs to ignore, i.e. not to load, the (compiled) grammar files for (during start-up)
+            Example:
+              "ignoreGrammarFiles": ["de", "ja"],
+            will not load/compile grammars for languages de and ja
+ * ADDITION in tools/envDetect.js (env module): added property 'platform' with detected platform (currently only for cordova env: 'android' | 'ios' | 'default')
+ * ADDITION in tools/constants.js
+   * added function getEnv(): returns the env-parameter (e.g. 'cordova' or 'browser' or custom value from document's query-param "?env=VALUE")
+   * added function getEnvPlatform(): returns detected platform (currently only for cordova env: 'android' | 'ios' | 'default')
+ * MODIFICATION manager/mediaManager.js and the app's /www/config/configuration.json: allow platform specific media-plugin configurations
+    if the configuration.json contains a specific plugin-config-entry then this media-configuration will be used,
+    for example, for settings in configuration.json:
+       "mediaManager": {
+	    	"plugins": {
+	    		"browser": ["html5AudioOutput.js",
+	    		            "webkitAudioInput.js",
+	    		            "maryTextToSpeech.js"
+	    		],
+	    		"cordova": ["cordovaAudioOutput.js",
+	    		            "sphinxAudioInput.js",
+	    		            "sphinxTextToSpeech.js"
+	    		],
+	    		"android": ["cordovaAudioOutput.js",
+	    		            "androidAudioInput.js",
+	    		            "androidTextToSpeech.js"
+	    		],
+				"ios": ["cordovaAudioOutput.js",
+				            "nuanceAudioInput.js",
+				            "nuanceTextToSpeech.js"
+				]
+	    	}
+	    }
+	    
+	 then on an Android device, by default the "android" entry will be used, and on an iOS device, the "ios" entry
+	 (and for all other cordova platforms, the "cordova" entry will be used)
+ * MODIFICATION manager/mediaManager.js and the app's /www/config/configuration.json: allow (optional) config parameter in media-plugin configurations
+    in the configuration.json's media plugin configuration, the plugin's settings/config-parameters can now be made directly
+    for example, instead of :
+    
+       "maryTextToSpeech": {
+            "baseSeverUrl": "https://some.url"
+       },
+       "mediaManager": {
+	    	"plugins": {
+	    		"browser": ["html5AudioOutput.js",
+	    		            "webkitAudioInput.js",
+	    		            "maryTextToSpeech.js"
+	    		],...
+	    	}
+	    }
+	 
+	 you can use an abbreviated configuration by including the "maryTextToSpeech" configuration directly:
+	   
+       "mediaManager": {
+	    	"plugins": {
+	    		"browser": ["html5AudioOutput.js",
+	    		            "webkitAudioInput.js",
+	    		            {"mod": "maryTextToSpeech.js", "config": {
+	    		                "baseSeverUrl": "https://some.url"
+	    		            }}
+	    		],...
+	    	}
+	    }
+	    
+	 In addition, the file-extensions for the media modules are now optional and can be omitted in configuration.json:
+	 for example, instead of "webkitAudioInput.js" you can use "webkitAudioInput"
+	 
+ * core.js:
+   * MODIFICATION the core-module now allows presence of global mmir variable: if one is present upon initialization of the core, then all (non-inherited) properties will be preserved by copying them to the core's global mmir variable (NOTE: excluding properties that would overwrite somehting on the core's mmir object)
+   * ADDITION of property "mmirName" on core-module (value: "mmir", can be overwritten by defining a global String variable MMIR_CORE_NAME before core-module's core.js is loaded, e.g. see example index.html in starter-kit)
+ 
+   
+
+BUGFIX
+ * tools/loggerDisabled.js: corrected function name: iVerbose -> isVerbose
+ * tools/logger.js: print correct call-location (from call-stack) for error()-logging
+ * mvc/parser/templateRenderUtils.js: do not omit non-String results from helper-invocations: instead print warning and "convert" to String
+ * manager/settings/languageManager.js: in getLanguageConfig() actually apply modification in case a separator was provided
+ * manager/settings/configurationManager.js: fixed set(): generating new property-objects (i.e. missing components in "settings-path") works now
+ * manager/mediaManager.js: if modules are loaded into a specific context, and it set to the default-context, then the default-implementation of speech-input/-output functions will now invoke the corresponding functions of the default context
+ * env/media/html5AudioOutput: fix for getWAVAsAudio() by invoking callback in context of created AudioObject
+ * env/media/webkitAudioInput:
+   * fixed result-type to use FINAL in recognize() invocation
+   * replaced deprecated MediaStream.stop() call, instead: stop all media tracks individually
+   * improve stopping the audio-analysis (for determining mic-levels): avoid continuing audio-analysis (and keeping microphone open), even in case ASR did stop "un-commonly"
+   * cancel audio-analysis (for firing mic-level changes) in case recognition was canceled before audio-stream for analysis became available
+   * use new function-signature (with event-type "RECORDING_DONE") when triggering "manual" stop
+ * core.js: fix for merging requirejs config-settings -> fixed BUG in case additional, previously non-existing config-values are applied: this caused ANY existing config-value to be overwritten
+ * mvc/parser: store non-default functions for template-elements (e.g. for ELSE: need to store non-default getEnd()-function in owning IF-element)
+ * semantic/asyncGrammar.js: explicitly deal with dependency on commonUtils.init()
+ * workers/ (web-workers):
+   * BUGFIX deal with case that WebWorker implementation of the environment does not provide console object
+   * BUGFIX deal with absolute URLs in importScripts()
+
+##################
+ Version 3.6.0
 ##################
 
 API Changes
