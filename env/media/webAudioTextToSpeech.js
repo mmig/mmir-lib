@@ -1,5 +1,5 @@
 /*
- * 	Copyright (C) 2012-2013 DFKI GmbH
+ * 	Copyright (C) 2012-2016 DFKI GmbH
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
@@ -26,39 +26,82 @@
 
 
 newMediaPlugin = {
-		/**  @memberOf MaryTextToSpeech# */
-		initialize: function(callBack, mediaManager){
+		
+		/**  @memberOf WebAudioTextToSpeech# */
+		initialize: function(callBack, mediaManager, ctxId, moduleConfig){
 			
-			/**  @memberOf MaryTextToSpeech# */
-			var _pluginName = 'maryTextToSpeech';
+			/**  @memberOf WebAudioTextToSpeech# */
+			var _basePluginName = 'webAudioTextToSpeech';
+			
+			/**
+			 * Default implementation for WebAudioTTS: MARY TTS
+			 * @memberOf WebAudioTextToSpeech#
+			 */
+			var _defaultImplFile = 'maryttsImpl.js';
+			
+			/** 
+			 * When specifying the implementation file for an Audio Module Context
+			 * 
+			 * i.e.
+			 * 	{"mod": "webAudioTextToSpeech.js", "ctx": CONTEXT} 
+			 * 
+			 * then plugin configuration will be check, if there is an entry for the ctx, 
+			 * i.e. an implementation file name for entry ctx:
+			 *  "webAudioTextToSpeech": { CONTEXT: IMPLEMENTATION_FILE_ENTRY },
+			 * 
+			 * Otherwise the plugin configuration's default entry will be used
+			 *  "webAudioTextToSpeech": { CONTEXT: _defaultCtxName },
+			 * 
+			 * If no default entry exists, then {@link #_defaultImplFile} will be used as
+			 * implementation.
+			 * 
+			 * @defaultValue "default"
+			 * @memberOf WebAudioTextToSpeech#
+			 */
+			var _defaultCtxName = 'default';
 			
 			/** 
 			 * @type mmir.LanguageManager
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var languageManager = require('languageManager');
 			/** 
+			 * @type mmir.Constants
+			 * @memberOf WebAudioTextToSpeech#
+			 */
+			var constants = require('constants');
+			/** 
 			 * @type mmir.ConfigurationManager
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var configurationManager = require('configurationManager');
 			/** 
 			 * @type mmir.CommonUtils
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var commonUtils = require('commonUtils');
 			
-			/**
-			 * separator char for language- / country-code (specific to TTS service)
-			 *   
-			 * @memberOf MaryTextToSpeech#
+
+			/**  
+			 * Will be set/"overwritten" by specific implementation.
+			 * 
+			 * @protected
+			 * @memberOf WebAudioTextToSpeech#
 			 */
-			var _langSeparator = void(0);
+			var _pluginName;
+
+			/**  
+			 * Will be set/"overwritten" by specific implementation.
+			 * 
+			 * @protected
+			 * @memberOf WebAudioTextToSpeech#
+			 */
+			var createAudio;
 			
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var volume = 1.0;
 			
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var _setVolume = function(val){
 				volume = val;
 				
@@ -75,11 +118,11 @@ newMediaPlugin = {
 			 * -> if TTS invoked, but currently not ready: add to queue
 			 * -> after processing current TTS: process next on queue
 			 *  
-			 * @memberOf MaryTextToSpeech# 
+			 * @memberOf WebAudioTextToSpeech# 
 			 */
 			var commandQueue = [];
 			/** EXPERIMENTAL: command-queue
-			 * @memberOf MaryTextToSpeech# */
+			 * @memberOf WebAudioTextToSpeech# */
 			var addToCommandQueue = function(args){
 				
 				//copy argument list:
@@ -92,7 +135,7 @@ newMediaPlugin = {
 				commandQueue.push(list);
 			};
 			/** EXPERIMENTAL: command-queue
-			 * @memberOf MaryTextToSpeech# */
+			 * @memberOf WebAudioTextToSpeech# */
 			var processNextInCommandQueue = function(){
 				
 				isReady = false;
@@ -107,7 +150,7 @@ newMediaPlugin = {
 				
 			};
 			/** EXPERIMENTAL: command-queue
-			 * @memberOf MaryTextToSpeech# */
+			 * @memberOf WebAudioTextToSpeech# */
 			var clearCommandQueue = function(args){
 				commandQueue.splice(0, commandQueue.length);
 			};
@@ -115,43 +158,43 @@ newMediaPlugin = {
 			
 			/**
 			 * @function
-			 * @memberOf MaryTextToSpeech# */
+			 * @memberOf WebAudioTextToSpeech# */
 			var onEndCallBack= null;
 			/**
 			 * @function
-			 * @memberOf MaryTextToSpeech# */
+			 * @memberOf WebAudioTextToSpeech# */
 			var currentFailureCallBack = null;
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var isReady= true;
 			/** internal field for single-sentence audio-object.
 			 * Used in {@link #ttsSingleSentence}
 			 * @type AudioImpl
-			 * @memberOf MaryTextToSpeech# */
+			 * @memberOf WebAudioTextToSpeech# */
 			var ttsMedia = null;
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var playIndex = 0;
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var firstSentence = true;
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var loadIndex = 0;
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var isLoading = false;
 			/** 
 			 * number of audio-objects that should be pre-fetched/buffered
 			 * when in sentence-mode.
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var bufferSize = 3;
 			/** internal field for list of "sentence audio-object".
 			 * Used in {@link #ttsSentenceArray}
 			 * @type Array<AudioImpl>
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var audioArray = [];
 			/** internal field for list of (text) sentences to be played.
 			 * Used in {@link #ttsSentenceArray}
 			 * @type Array<String>
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var sentenceArray = [];
 
@@ -159,7 +202,7 @@ newMediaPlugin = {
 			
 			/**  
 			 * In sentence mode: pause (in milli-seconds) between reading sentences.
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var pauseDuration = 500;
 			
@@ -168,7 +211,7 @@ newMediaPlugin = {
 			 * no audio will be created for empty text/sentences, but using this placeholder-audio,
 			 * pause-durations etc will be applied (e.g. during sentence-mode).
 			 * 
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var EMPTY_SENTENCE = mediaManager.createEmptyAudio();
 			EMPTY_SENTENCE.type = 'empty';
@@ -178,10 +221,9 @@ newMediaPlugin = {
 				setTimeout(function(){
 					
 					console.log("done playing EMPTY_SENTENCE");
-					console.log("LongTTS play next in "+pauseDuration+ " ms... ");
 					
-					//trigger playing the next entry (after the set pause-duration)
-					setTimeout(playNext, pauseDuration);
+					//trigger playing the next entry:
+					playNextAfterPause();
 					
 				}, 10);
 				
@@ -192,37 +234,44 @@ newMediaPlugin = {
 			 * @param {String} text
 			 * 			the input String
 			 * @returns {Array<String>} a list of strings
-			 * @memberOf MaryTextToSpeech#
+			 * @memberOf WebAudioTextToSpeech#
 			 */
 			var defaultSplitter = function(text){
 				text = text.replace(/\.\s|\?\s|\!\s/g,"#");
 				return text.split("#");
 			};
-			/**  @memberOf MaryTextToSpeech# */
-			var generateTTSURL = function(text, options){
-				
-				text = encodeURIComponent(text);
-				
-				var lang = getLangParam(options);
-				
-				var voice = getVoiceParam(options);
-				var voiceParamStr = voice? '&VOICE='+voice : '';
-				
-				return configurationManager.get([_pluginName, "serverBasePath"])+'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
+			
+			/**  @memberOf WebAudioTextToSpeech# */
+			var getLangParam = function(options, langSeparator){
+				return options && options.language? options.language : languageManager.getLanguageConfig(_pluginName, 'language', langSeparator);
 			};
 			
-			/**  @memberOf MaryTextToSpeech# */
-			var getLangParam = function(options){
-				return options && options.language? options.language : languageManager.getLanguageConfig(_pluginName, 'language', _langSeparator);
-			};
-			
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var getVoiceParam = function(options){
 				//NOTE voice-options may be empty string -> need to check against undefined
 				return options && typeof options.voice !== 'undefined'? options.voice : languageManager.getLanguageConfig(_pluginName, 'voice');
 			};
+			
+			/**  @memberOf WebAudioTextToSpeech# */
+			var playNextAfterPause = function(){
+				
+				if(playIndex < audioArray.length - 1){
 
-			/**  @memberOf MaryTextToSpeech# */
+					var pause = callOptions && typeof callOptions.pauseDuration === 'number'? callOptions.pauseDuration : pauseDuration;
+					
+					console.log("LongTTS play next in "+pause+ " ms... ");
+					
+					setTimeout(playNext, pause);
+					
+				} else {
+					
+					console.log("LongTTS played last audio, finishing up now... ");
+					playNext();
+				}
+				
+			};
+
+			/**  @memberOf WebAudioTextToSpeech# */
 			var playNext = function playNext(){
 				
 				playIndex++;
@@ -256,7 +305,7 @@ newMediaPlugin = {
 				}
 			};
 			
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var ttsSingleSentence = function(text, onEnd, failureCallBack, onLoad, options){
 				
 				try {
@@ -298,7 +347,7 @@ newMediaPlugin = {
 				
 			};
 
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var ttsSentenceArray = function(sentences, onEnd, failureCallBack, onInit, options){
 				{
 					try {
@@ -345,7 +394,7 @@ newMediaPlugin = {
 				}
 			};
 
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var loadNext = function loadNext(onInit){//TODO not onInit is currently only used for the very first sentence ...
 				
 				if (isLoading) return null;
@@ -361,12 +410,11 @@ newMediaPlugin = {
 						audioArray[currIndex] = createAudio(currSentence, callOptions,
 								
 								function onend(){
-									console.log("LongTTS done playing "+currIndex+ " "+sentenceArray[currIndex]);
+							
+									console.log("LongTTS done playing "+currIndex+ " '"+sentenceArray[currIndex]+"'");
 									audioArray[currIndex].release();
 									
-	
-									console.log("LongTTS play next in "+pauseDuration+ " ms... ");
-									setTimeout(playNext, pauseDuration);
+									playNextAfterPause();
 									
 									//TODO only invoke this, if previously the test for (loadIndex-playIndex)<= bufferSize) failed ...
 									//loadNext();
@@ -417,21 +465,33 @@ newMediaPlugin = {
 				}
 			};
 			
-			/**  @memberOf MaryTextToSpeech# */
-			var createAudio = function(sentence, options, onend, onerror, oninit){
+			
+			/**  @memberOf WebAudioTextToSpeech# */
+			var initImpl = function(impl){
 				
-				return mediaManager.getURLAsAudio(
-						generateTTSURL(sentence, callOptions),
-						onend, onerror, oninit
-				);
+				var pluginName = impl.getPluginName();
+				var createAudioFunc = impl.getCreateAudioFunc();
+				
+				_pluginName = pluginName;
+				createAudio = createAudioFunc;
+				
+				//optional: set default implementations, if imp. "requests" it by specifying a setter function
+				if(impl.setLangParamFunc){
+					//set default impl
+					impl.setLangParamFunc(getLangParam);
+				}
+				if(impl.setVoiceParamFunc){
+					//set default impl
+					impl.setVoiceParamFunc(getVoiceParam);
+				}
 				
 			};
 			
-			/**  @memberOf MaryTextToSpeech# */
+			/**  @memberOf WebAudioTextToSpeech# */
 			var _instance = {
 				/**
 				 * @public
-				 * @memberOf MaryTextToSpeech.prototype
+				 * @memberOf WebAudioTextToSpeech.prototype
 				 * @see mmir.MediaManager#textToSpeech
 				 */
 				textToSpeech: function(parameter, successCallback, failureCallback, onInit, options){
@@ -537,7 +597,7 @@ newMediaPlugin = {
 				},
 				/**
 				 * @public
-				 * @memberOf MaryTextToSpeech.prototype
+				 * @memberOf WebAudioTextToSpeech.prototype
 				 * @see mmir.MediaManager#cancelSpeech
 				 */
 				cancelSpeech: function(successCallBack, failureCallBack){
@@ -583,7 +643,7 @@ newMediaPlugin = {
 				},
 				/**
 				 * @public
-				 * @memberOf MaryTextToSpeech.prototype
+				 * @memberOf WebAudioTextToSpeech.prototype
 				 * @see mmir.MediaManager#setTextToSpeechVolume
 				 */
 				setTextToSpeechVolume: function(newValue){
@@ -591,7 +651,42 @@ newMediaPlugin = {
 				}
 			};//END: _instance = { ...
 			
-			//invoke the passed-in initializer-callback and export the public functions:
-			callBack(_instance);
+			//load specific implementation of WebAudio TTS:
+			
+			var implFile, configPath = [_basePluginName, ctxId];
+			
+			if(moduleConfig){
+				
+				//if there config setting -> use as implementation-filename:
+				implFile = moduleConfig;
+				
+			} else if(ctxId){
+				//if plugin was loaded into a specific context, check, if there is a configuration value for this context)
+				implFile = configurationManager.get(configPath, true);
+			}
+			
+			if(!implFile){
+				//use default configuration path
+				configPath[1] = _defaultCtxName;
+				implFile = configurationManager.get(configPath, true);
+			}
+			
+			if(!implFile){
+				
+				//if no configuration: use default impl.
+				implFile = _defaultImplFile;
+				
+			} else if(!/\.js$/.test(implFile)){
+				implFile += '.js';
+			}
+			
+			commonUtils.loadScript(constants.getMediaPluginPath()+implFile, function(){
+				
+				//initialize implementation:
+				initImpl(newWebAudioTtsImpl);
+				
+				//invoke the passed-in initializer-callback and export the public functions:
+				callBack(_instance);
+			});
 		}
 };

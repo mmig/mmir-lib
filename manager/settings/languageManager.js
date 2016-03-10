@@ -753,6 +753,39 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                }
 		                
 		                return value;
+		            },
+		            
+		            /**
+		             * HELPER for dealing with specific language / country code quirks of speech services:
+		             * Get the language code for a specific ASR or TTS service, that is if the service requires some
+		             * specific codes/transformations, then the transformed code is retruned by this function
+		             * (otherwise the unchanged langCode is returned).
+		             * 
+		             * @public
+		             * @param {String} providerName
+		             * 					corrections for: "nuance" | "mary"
+		             * @param {String} langCode
+		             * 					the original language / country code
+		             * @returns {String} the (possibly "fixed") language-setting/-code
+		             */
+		            fixLang : function(providerName, langCode) {
+		            	
+		            	if(providerName === 'nuance'){
+		            		
+		            		//QUIRK nuanceasr short-language code for the UK is UK instead of GB:
+		            		//  replace en-GB with en-UK if necessary (preserving separator char)
+		            		langCode = langCode.replace(/en(.)GB/i, 'en$1UK');
+		            		
+		            	} else if(providerName === 'mary'){
+		            		
+		            		//QUIRK marytts does not accept language+country code for German:
+		        			//  must only be language code
+		        			if(/de.DE/i.test(langCode)){
+		        				langCode = 'de';
+		        			}
+		            	}
+		            	
+		            	return langCode;
 		            }
 		            
 		            /**

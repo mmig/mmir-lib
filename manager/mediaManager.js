@@ -94,12 +94,12 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 		'browser': ['waitReadyIndicator',
 		            'html5AudioOutput',
 		            'webkitAudioInput',
-		            'maryTextToSpeech',
+		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		],
 		'cordova': ['waitReadyIndicator',
 		            'cordovaAudioOutput',
 		            'androidAudioInput',
-		            'maryTextToSpeech',
+		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		]
     };
     
@@ -118,7 +118,10 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      * 
 	 * @memberOf MediaManager#
      */
-    var _pluginsConfig = {};
+    var _pluginsConfig = {
+    	'marytexttospeech.js': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
+    	'html5audioinput.js':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'}
+    };
     
     /**
      * Load an media-module implementation from plugin file.

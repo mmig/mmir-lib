@@ -40,27 +40,10 @@
     var config = cfg || {};
     var bufferLen = config.bufferLen || 4096;
 //    this.context = source.context;
-//    this.createScriptProcessor = function(contextObj, bufferSize, numberOfInputChannels, numberOfOutputChannels){
-//    	if(contextObj.createJavaScriptNode){
-//    		return contextObj.createJavaScriptNode(bufferSize, numberOfInputChannels, numberOfOutputChannels);
-//    	}
-//    	else if(contextObj.createScriptProcessor){
-//    		return contextObj.createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);
-//    	}
-//    	else {
-//    		throw Error('Could not create script-processor for AudioContext: context provides no function for generating processor!');
-//    	}
-//    };
 //    this.node = this.createScriptProcessor(this.context, bufferLen, 2, 2);
-//    if(!this.context.createScriptProcessor){
-//    	this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
-//    }
-//    else {
-//    	this.node = this.context.createScriptProcessor(bufferLen, 2, 2);
-//    }
     var worker = new Worker(config.workerPath || WORKER_PATH);
 //    worker.postMessage({
-//    	command: 'init',
+//    	cmd: 'init',
 //    	config: {
 //    		sampleRate: this.context.sampleRate
 //    	}
@@ -75,7 +58,7 @@
     var doRecordAudio = function(e){
       if (!recording) return;
       worker.postMessage({
-        command: 'record',
+        cmd: 'record',
         buffer: [
           e.inputBuffer.getChannelData(0),
           e.inputBuffer.getChannelData(1)
@@ -92,17 +75,14 @@
         	this.node.disconnect();
         }
         
-    	if(!this.context.createScriptProcessor){
-        	this.node = this.context.createJavaScriptNode(bufferLen, 2, 2);
-        }
-        else {
-        	this.node = this.context.createScriptProcessor(bufferLen, 2, 2);
-        }
+        //backwards compatibility: use older createJavaScriptNode(), if new API function is not available 
+        var funcName = !this.context.createScriptProcessor? 'JavaScriptNode' : 'ScriptProcessor';
+        this.node = this.context['create'+funcName](bufferLen, 2, 2);
 
     	this.node.onaudioprocess = doRecordAudio;
     	
     	worker.postMessage({
-        	command: 'init',
+        	cmd: 'init',
         	config: {
         		sampleRate: this.context.sampleRate
         	}
@@ -120,7 +100,10 @@
       }
     }
 
-    this.record = function(){
+    this.record = function(source){
+      if(source){
+        this.init(source);
+      }
       recording = true;
     }
 
@@ -129,18 +112,18 @@
     }
 
     this.clear = function(){
-      worker.postMessage({ command: 'clear' });
+      worker.postMessage({ cmd: 'clear' });
     }
 
     this.getBuffers = function(cb, isListener) {//TODO MOD additional parameter
     	//TODO MOD start
       if(isListener === true){
     	  dataListener = cb;
-          worker.postMessage({ command: 'getBuffers', id: 'listener' });
+          worker.postMessage({ cmd: 'getBuffers', id: 'listener' });
       }
       else {//TODO MOD end
     	  currCallback = cb || config.callback;
-          worker.postMessage({ command: 'getBuffers' })
+          worker.postMessage({ cmd: 'getBuffers' })
       }
     }
 
@@ -149,7 +132,7 @@
     	type = type || config.type || 'audio/wav';
     	if (!currCallback) throw new Error('Callback not set');
     	worker.postMessage({
-    		command: 'exportWAV',
+    		cmd: 'exportWAV',
     		type: type
     	});
     }
@@ -159,13 +142,50 @@
     	type = type || config.type || 'audio/wav';
     	if (!currCallback) throw new Error('Callback not set');
     	worker.postMessage({
-    		command: 'exportMonoWAV',
+    		cmd: 'exportMonoWAV',
     		type: type
     	});
     }
+
+	///////////TODO MOD start
+    this.doEncode = function(){
+    	worker.postMessage({ cmd: 'encode' });
+    };
+    
+    this.doFinish = function(){
+    	worker.postMessage({ cmd: 'encClose'});
+    };
+    
+    this.init = function(source){
+    	this.destroyed = false;
+        this._initSource(source);
+    };
+    
+    this.release = function(){
+    	
+    	this.stop();
+    	this.clear();
+    	
+    	if(this.node){
+        	this.node.disconnect();
+        	this.node = null;
+        }
+    	
+    	this.destroyed = true;
+    };
+	///////////TODO MOD end
     
     var selfRef = this;///////////TODO MOD
     worker.onmessage = function(e){
+    	
+    	///////////TODO MOD start
+    	if(e.data && e.data.cmd === 'encFinished'){
+    	  	if(selfRef.onencodefinished){
+        		selfRef.onencodefinished(e);
+        	}
+    		return;
+    	}
+    	///////////TODO MOD end
 
     	var blob = e.data;
     	///////////TODO MOD start
@@ -204,10 +224,10 @@
     var link = window.document.createElement('a');
     link.href = url;
     link.download = filename || 'output.wav';
-//  var click = document.createEvent("Event");click.initEvent("click", true, true);
-	//MOD NOTE: FireFox requires a MouseEvent (in Chrome a simple Event would do the trick)
+	//TODO MOD start: FireFox requires a MouseEvent (in Chrome a simple Event would do the trick)
     var click = document.createEvent("MouseEvent");
 	click.initMouseEvent("click", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+	//TODO MOD end
     link.dispatchEvent(click);
   }
 
