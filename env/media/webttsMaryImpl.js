@@ -31,7 +31,7 @@
  *           NOTE if you have configured a different server URL, then that one needs to be enabled via CSP
  * 
  */
-newWebAudioTtsImpl = (function(){
+newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 			
 		/**  @memberOf MaryWebAudioTTSImpl# */
 		var _pluginName = 'maryTextToSpeech';

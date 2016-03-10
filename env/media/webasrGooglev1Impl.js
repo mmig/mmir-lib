@@ -33,53 +33,53 @@
  * @requires CSP for accessing the proxy/mediator server via ws: or wss:, e.g. "connect-src ws://server-address" or "default-src connect-src ws://server-address"
  * 
  */
-newWebAudioAsrImpl = (function() {
+newWebAudioAsrImpl = (function Googlev1WebAudioInputImpl() {
 
-	/**  @memberOf Html5AudioInput# */
+	/**  @memberOf Googlev1WebAudioInputImpl# */
 	var MODE = 'google1';
 
-	/**  @memberOf Html5AudioInput# */
-	var _pluginName = 'html5AudioInput';
+	/**  @memberOf Googlev1WebAudioInputImpl# */
+	var _pluginName = 'Googlev1WebAudioInputImpl';
 
 	/** 
 	 * @type mmir.LanguageManager
-	 * @memberOf Html5AudioInput#
+	 * @memberOf Googlev1WebAudioInputImpl#
 	 */
 	var languageManager = require('languageManager');
 	/** 
 	 * @type mmir.ConfigurationManager
-	 * @memberOf Html5AudioInput#
+	 * @memberOf Googlev1WebAudioInputImpl#
 	 */
 	var configurationManager = require('configurationManager');
 
 	/** 
 	 * @type mmir.ConfigurationManager
-	 * @memberOf Html5AudioInput#
+	 * @memberOf Googlev1WebAudioInputImpl#
 	 */
 	var mediaManager = require('mediaManager');
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var freeIds = [true];
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var hasActiveId = false;
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var inputId = 0;
 	
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var lastBlob = false;
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var isUseIntermediateResults = false;
 	
 	/** 
 	 * for gathering partial ASR results when using startRecord:
-	 * @memberOf Html5AudioInput#
+	 * @memberOf Googlev1WebAudioInputImpl#
 	 */
 	var recordAsrResultCache = [];
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var recordAsrResultSorter = function(a,b){return a.id - b.id;};
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var asrResultCacheToString = function(cache){
 		var size = cache.length;
 		var sb = new Array(size);//use "StringBuffer" for concatenating partial results
@@ -88,7 +88,7 @@ newWebAudioAsrImpl = (function() {
 		}
 		return sb.join('');
 	};
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	function findLowestFreeId(){
 		for (var i=0;i<freeIds.length;i++){
 			if (freeIds[i]){
@@ -99,7 +99,7 @@ newWebAudioAsrImpl = (function() {
 		freeIds.push(false);
 		return freeIds.length-1;
 	}
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var recordAsrResultAggregator = function printResult(res,id){
 		recordAsrResultCache.push({
 			text: res,
@@ -113,13 +113,13 @@ newWebAudioAsrImpl = (function() {
 
 	/** 
 	 * @type WebSocket
-	 * @memberOf Html5AudioInput#
+	 * @memberOf Googlev1WebAudioInputImpl#
 	 */
 	var webSocket = null;
 	
 	var textProcessor, currentFailureCallback, closeMicFunc;
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var doSend = function(msg, successCallback, failureCallback){
 		
 		if(successCallback){
@@ -154,7 +154,7 @@ newWebAudioAsrImpl = (function() {
 	/** initializes the connection to the googleMediator-server, 
 	 * where the audio will be sent in order to be recognized.
 	 * 
-	 * @memberOf Html5AudioInput#
+	 * @memberOf Googlev1WebAudioInputImpl#
 	 */
 	var doInitSend = function(oninit){ 
 		
@@ -163,7 +163,7 @@ newWebAudioAsrImpl = (function() {
 		}
 		webSocket = new WebSocket(configurationManager.getString( [_pluginName, "webSocketAddress"] ));
 
-		/**  @memberOf Html5AudioInput.webSocket# */
+		/**  @memberOf Googlev1WebAudioInputImpl.webSocket# */
 		webSocket.onopen = function () {
 			if(oninit){
 				console.log("invoking on-init callback for websocket");
@@ -177,7 +177,7 @@ newWebAudioAsrImpl = (function() {
 				delete this.onInitStack;
 			}
 		};
-		/**  @memberOf Html5AudioInput.webSocket# */
+		/**  @memberOf Googlev1WebAudioInputImpl.webSocket# */
 		webSocket.onmessage = function(e) {
 			if (e.data.substring(0,5) == 'ERROR'){
 				console.error('Serverside Error '+e.data.substring(6));  	
@@ -216,7 +216,7 @@ newWebAudioAsrImpl = (function() {
 			}
 			lastBlob = false;
 		};
-		/**  @memberOf Html5AudioInput.webSocket# */
+		/**  @memberOf Googlev1WebAudioInputImpl.webSocket# */
 		webSocket.onerror = function(e) {
 
 			closeMicFunc();
@@ -229,22 +229,22 @@ newWebAudioAsrImpl = (function() {
 				console.error('Websocket Error: '+e  + (e.code? ' CODE: '+e.code : '')+(e.reason? ' REASON: '+e.reason : ''));
 			}
 		};
-		/**  @memberOf Html5AudioInput.webSocket# */
+		/**  @memberOf Googlev1WebAudioInputImpl.webSocket# */
 		webSocket.onclose = function(e) {
 			console.info('Websocket closed!'+(e.code? ' CODE: '+e.code : '')+(e.reason? ' REASON: '+e.reason : ''));
 		};
 	};
 	
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var buffer = 0;
 	
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var onSendPart = function(evt){
 
 		var recorder = evt.recorder;
 
 		recorder && recorder.exportWAV(
-				/** @memberOf Html5AudioInput.recorder# */
+				/** @memberOf Googlev1WebAudioInputImpl.recorder# */
 				function onSendPartial(blob, id){
 					if(mediaManager._log.isDebug()) mediaManager._log.log("wav exported");
 //					if(blob.size>2000000) {
@@ -273,14 +273,14 @@ newWebAudioAsrImpl = (function() {
 		return false;
 	};
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var onSilence = function(evt){
 
 		var recorder = evt.recorder;
 
 		// send record to server!
 		recorder && recorder.exportWAV(
-				/** @memberOf Html5AudioInput.recorder# */
+				/** @memberOf Googlev1WebAudioInputImpl.recorder# */
 				function onSilenceDetected(blob, id){
 					if(mediaManager._log.isDebug()) mediaManager._log.log("wav exported");
 					if(blob.size>2000000) {
@@ -317,28 +317,28 @@ newWebAudioAsrImpl = (function() {
 		return false;
 	};
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var onClear = function(evt){
 
 		evt.recorder && evt.recorder.clear();
 		return false;
 	};
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var clearRec = function(){
 		for (var k = 0; k < freeIds.length; k++){
 			doSend("clear "+k);
 		}
 	};
 
-	/** @memberOf Html5AudioInput# */
+	/** @memberOf Googlev1WebAudioInputImpl# */
 	var doStopPropagation = function(){
 		return false;
 	};
 
-	/**  @memberOf Html5AudioInput# */
+	/**  @memberOf Googlev1WebAudioInputImpl# */
 	return {
-		/** @memberOf Html5AudioInput.AudioProcessor# */
+		/** @memberOf Googlev1WebAudioInputImpl.AudioProcessor# */
 		_init: doInitSend,
 		initRec: clearRec,
 		sendData: doSend,
