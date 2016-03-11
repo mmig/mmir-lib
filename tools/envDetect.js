@@ -6,11 +6,17 @@
  *  currently supported settings are
  *  <ul>
  *  	<li>browser</li>
+ *  	<li>cordova</li>
  *  	<li>android</li>
+ *  	<li>ios</li>
  *  </ul>
  *  
  *  @exports {Object} a singleton object with information about the runtime setting:
- *  		<pre>{ isBrowserEnv: [true|false] }</pre>
+ *  		<pre>{
+ *  			isBrowserEnv: [true|false],
+ *  			isCordovaEnv: [true|false],
+ *  			platform: ["browser" | "android" | "ios" | "default"],
+ *  		}</pre>
  */
 define(['paramsParseFunc'], function(paramsParseFunc) {
 	
@@ -19,9 +25,20 @@ define(['paramsParseFunc'], function(paramsParseFunc) {
 	var isBrowserEnv;
 	var isCordovaEnv;
 	var envSetting = '';
+	var envParamSetting = '';
 	
+	if(typeof cordova !== 'undefined'){
+		envSetting = cordova.platformId? cordova.platformId : envSetting;
+		isCordovaEnv = true;
+	}
+
 	if(params.has('env')){
-		envSetting = params['env'];
+		
+		envParamSetting = params['env'];
+		envSetting = !envSetting? envParamSetting : envSetting;
+	}
+	
+	if(envSetting){
 		
 		if(envSetting === 'browser'){
 			isBrowserEnv = true;
@@ -32,7 +49,7 @@ define(['paramsParseFunc'], function(paramsParseFunc) {
 		
 		if(envSetting === 'cordova' || envSetting === 'android' || envSetting === 'ios'){
 			isCordovaEnv = true;
-			isBrowserEnv = false;
+//			isBrowserEnv = false;
 		}
 		else {
 			isCordovaEnv = false;
