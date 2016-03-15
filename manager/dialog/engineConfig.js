@@ -65,7 +65,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
 	};
 
 	/**
-	 * Factory for default implementation for state-engine, returns
+	 * Factory for base / default implementation for state-engine, returns
 	 * <pre>
 	 * {
 	 * 		name: STRING        // engine name / description
@@ -87,11 +87,11 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
 	 * 
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
-    var _defaultFactory = function(_instance, envFactory){ /** @class StateEngineDefaultImpl */ return {
+    var _baseFactory = function(_instance, envFactory){ /** @class StateEngineDefaultImpl */ return {
     		/** @scope  StateEngineDefaultImpl */
 
     		/** @memberOf  StateEngineDefaultImpl */
-    		name : envFactory.name? envFactory.name : 'default_engine',
+    		name : envFactory.name? envFactory.name : 'base_engine',
 
     		doc : null,
 
@@ -202,7 +202,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
     };
     
     /**
-	 * Factory for Android-based implementation of raise function.
+	 * Factory for CordovaPlugin-based implementation of raise function.
 	 * 
 	 * Provide creator-functions:
 	 * <code>createWorker(_engineInstance, genFunc) : WebWorker</code>
@@ -213,7 +213,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
 	 *  
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
-    var _androidFactory = {
+    var _queuePluginFactory = {
 		/** @scope  StateEngineQueuePluginImpl */
 
 		/** @memberOf  StateEngineQueuePluginImpl */
@@ -339,15 +339,17 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
     	var hasWebWorkers = typeof window.Worker !== 'undefined';
     	
     	//TODO make this configurable? through ConfigurationManager?
-    	if(hasWebWorkers && constants.isBrowserEnv()){
+    	if(hasWebWorkers){// && constants.isBrowserEnv()){
     		return _browserFactory; //_browser;
     	}
     	else {
     		var isCordovaEnv = !constants.isBrowserEnv();
-        	if(isCordovaEnv){
-        		return _androidFactory;//_cordova;
+    		//if queue-plugin is available:
+        	if(isCordovaEnv && cordova.plugins && cordova.plugins.queuePlugin){
+        		return _queuePluginFactory;//_cordova;
         	}
         	else {
+        		//otherwise use fallback:
         		return _stubFactory;//_stub;
         	}	
     	}
@@ -407,7 +409,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
      */
 	return function create(url, _mode) {
 		
-		var baseFactory = _defaultFactory;
+		var baseFactory = _baseFactory;
 		var scionEnvConfig = getScionEnvFactory();
 
 		var _instance = {url: url,_log: nolog};
