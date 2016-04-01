@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 version notes for MMIR framework code (v 3.7.0)
 
  * using Cordova 5.x.x - 6.x.x library
