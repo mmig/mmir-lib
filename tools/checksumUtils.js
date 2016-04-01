@@ -139,7 +139,7 @@ define(['md5'],
 		 */
 		init: function(cryptoImpl){
 			if(!cryptoImpl){
-				cryptoImpl = CryptoJS;
+				cryptoImpl = CryptoJS? CryptoJS : cryptoInstance;
 			}
 			cryptoInstance = cryptoImpl;
 			return this;
