@@ -788,6 +788,12 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 */
 		function isUpToDate(viewContent, preCompiledViewPath){
+			
+			//there is no pre-compiled view -> need to compile ehtml
+			if(!preCompiledViewPath){
+				return false;///////////////////// EARLY EXIT ////////////////////////
+			}
+			
 			//replace file extension with the checksum-file's one: '.js' -> '.checksum.txt'
 			var  viewVerificationInfoPath = 
 					preCompiledViewPath.substring(0, preCompiledViewPath.length - 3) 
