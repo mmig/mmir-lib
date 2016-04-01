@@ -138,7 +138,7 @@ define(['md5'],
 		 * @memberOf mmir.tools.ChecksumUtils#
 		 */
 		init: function(cryptoImpl){
-			if(!cryptoImpl){
+			if(!cryptoImpl && CryptoJS){
 				cryptoImpl = CryptoJS;
 			}
 			cryptoInstance = cryptoImpl;
