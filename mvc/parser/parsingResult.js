@@ -191,6 +191,9 @@ define(['parserModule'],
  * @memberOf mmir.parser
  */		
 function(parser){
+	
+var _antrl3;
+
 //set to @ignore in order to avoid doc-duplication in jsdoc3
 /**
  * @ignore
@@ -747,6 +750,26 @@ ParsingResult.prototype.stringify = function(){
 	
 	sb.push(' })');
 	return sb.join('');
+};
+
+/**
+ * HELPER for making the namespace of the core-parser (i.e. ANTLR3) available
+ * 
+ * This is necessary in environments where the namespace is not automatically
+ *  exported into the global namespace, e.g. when runnin in nodejs.
+ * 
+ * @static
+ * @private
+ * @param {String} parserNamerspace
+ * 			the namespace object of the ANTLR parser (should be the object org which is exported by antlr3 module/shim) 
+ */
+ParsingResult._nsParserInit = function(parserNamerspace){
+	
+	_antrl3 = parserNamerspace;
+	
+	if(typeof org === 'undefined'){
+		org = parserNamerspace;
+	}
 };
 
 parser.ParsingResult = ParsingResult;
