@@ -1,5 +1,5 @@
-﻿﻿
-version notes for MMIR framework code (v 3.7.0)
+﻿
+version notes for MMIR framework code (v 3.8.0)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
@@ -23,6 +23,46 @@ version notes for MMIR framework code (v 3.7.0)
  Change Log
  --------------
 
+##################
+ Version 3.7.1
+##################
+
+MODFIFICATIONS:
+
+ * REFACTORING in env/media:
+   * extracted common-code for web-audio based modules into modules webAudioTextToSpeech.js and webAudioInput.js
+   * moved language-code modifications (as required by specific TTS and/or ASR modules) into LanguageManager instead of requiring specific configuration files
+   * specific impl. for web-audio TTS and ASR modules can be configured in config/configuration.json via the "config" property,
+     for example (note the "config" property for the webAudioTextToSpeech.js entry):
+     
+   		"mediaManager": {
+	    	"plugins": {
+	    		"browser": ["html5AudioOutput.js",
+	    		            {"mod": "webAudioInput", "config": "webasrGooglev1Impl"},
+	    		            {"mod": "webAudioTextToSpeech.js", "config": "webttsNuanceImpl"}
+	    		],
+	    		"cordova": ["cordovaAudioOutput.js",
+	    		            "androidAudioInput.js",
+	    		            "androidTextToSpeech.js"
+	    		]
+	    	}
+	    }
+	  
+	  NOTE that a backwards compatible conversion is provided for existing standard modules (e.g. for maryTextToSpeech.js):
+	       old configurations will continue to work for these without changing the configuration.json
+
+
+BUGFIX
+ * mainConfig.js: refactored shims for view-parsing by making use of imported dependencies explicit (via init-argument name)
+ * manager/dialog/engineConfig.js:
+   * fix error for ios platform
+   * always try to use WebWorker based command-queue for Dialog-/InputEngine, and only try to use (cordova) QueuePlugin if it actually available
+ * manager/presentationManager.js:
+   * avoid ReferenceErrors in case there is no URL for the precompiled view during up-to-date check
+ * tools/checksumUtils.js:
+   * avoid setting empty crypto-instance in case global CryptoJS is not available
+ * mvc/parser/parsingResult.js: added private helper for setting the core-parser namespace (needed when running in nodejs)
+ 
 ##################
  Version 3.7.0
 ##################
