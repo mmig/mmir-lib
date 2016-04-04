@@ -156,20 +156,20 @@ var mmirf_config = {
 	shim : {
 		
 		/** @memberOf mmir.require.config.shim */
-	    'antlr3':         {exports : 'org'}
+	    'antlr3':			{deps: ['parsingResult'], exports : 'org'}
 		
 		, 'md5':            {exports : 'CryptoJS'}
 		
 		, 'pegjs':       	{exports: 'PEG'}
 		
-		, 'ES3Lexer':       {deps: ['antlr3'], exports: 'ES3Lexer'}
-		, 'ES3Parser':      {deps: ['antlr3'], exports: 'ES3Parser'}
-    	, 'scriptLexer':    {deps: ['antlr3'], exports: 'MmirScriptLexer'}
-    	, 'scriptParser':   {deps: ['antlr3'], exports: 'MmirScriptParser'}
-    	, 'contentLexer':   {deps: ['antlr3'], exports: 'MmirScriptContentLexer'}
-    	, 'contentParser':  {deps: ['antlr3'], exports: 'MmirScriptContentParser'}
-    	, 'templateLexer':  {deps: ['antlr3'], exports: 'MmirTemplateLexer'}
-    	, 'templateParser': {deps: ['antlr3'], exports: 'MmirTemplateParser'}
+		, 'ES3Lexer':       {deps: ['antlr3'], init: function(org){ return ES3Lexer;} }
+		, 'ES3Parser':      {deps: ['antlr3'], init: function(org){ return ES3Parser;} }
+    	, 'scriptLexer':    {deps: ['antlr3'], init: function(org){ return MmirScriptLexer;} }
+    	, 'scriptParser':   {deps: ['antlr3'], init: function(org){ return MmirScriptParser;} }
+    	, 'contentLexer':   {deps: ['antlr3'], init: function(org){ return MmirScriptContentLexer;} }
+    	, 'contentParser':  {deps: ['antlr3'], init: function(org){ return MmirScriptContentParser;} }
+    	, 'templateLexer':  {deps: ['antlr3'], init: function(org){ return MmirTemplateLexer;} }
+    	, 'templateParser': {deps: ['antlr3'], init: function(org){ return MmirTemplateParser;} }
     	
     	//dependencies for jqmViewEngine (may not be loaded if jqmViewEngine is not loaded)
     	, 'jqm': ['jquery']
