@@ -229,7 +229,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
 				var execQueue = window.cordova.plugins.queuePlugin;
 
 				function successCallBackHandler(args){
-					if (args.length=2){
+					if (args.length===2){
 //	  					console.debug('QueuePlugin: success '+ JSON.stringify(args[0]) + ', '+JSON.stringify(args[1]));//DEBUG
 						callBackList[args[0]](args[1]);
 					}
