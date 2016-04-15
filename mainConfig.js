@@ -40,7 +40,7 @@ var mmirf_config = {
  	    , 'main': 'main'
  	    
 	    // lib
- 	    , 'jquery': 'vendor/libs/jquery-2.1.3'
+ 	    , 'jquery': 'vendor/libs/jquery-2.2.3'
  	    , 'scion': 'vendor/libs/scion-amd'
 	    
 	    // globals and AMDs
