@@ -195,7 +195,7 @@ function Dictionary() {
 				var lKey = lookupKey(key);
 
 				// remove from map:
-				delete map[lKey];
+				map[lKey] = void(0);
 
 				// remove from key-list
 				for (var i = 0, size = keyList.length; i < size; ++i) {
@@ -258,7 +258,7 @@ function Dictionary() {
 			// delete map[keyList[i]];
 			// }
 			// keyList.splice(0, size);
-			delete map;
+			map = void(0);
 			map = {};
 			keyList.splice(0, keyList.length);
 		}
