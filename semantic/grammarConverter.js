@@ -513,7 +513,7 @@ GrammarConverter.prototype.maskString = function (str, prefix, postfix) {
 		result.push('\n');
 	};
 	
-	function mask(theChar) {
+	mask = function (theChar) {
 		
 		result.push(ESC_START);
 		

@@ -912,7 +912,6 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 */
 			var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
 
-				var ctrlName;
 				var layoutInfo;
 				if(theDefaultLayoutName){
 
