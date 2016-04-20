@@ -1488,7 +1488,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * are added to the visibility of audioInput, and will from now on be applicable by calling
          * mmir.MediaManager.<function name>().
          * 
-         * @deprecated do not use.
+         * NOTE should only be used by plugin implementations for loading (dependent/sub-) plugins.
+         * 
          * @function
          * @protected
          * @memberOf mmir.MediaManager.prototype
@@ -1499,7 +1500,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			this.init();
     		}
     		
-    		loadPlugin(filePath,sucessCallback, failureCallback, execId);
+    		loadPlugin(filePath,successCallback, failureCallback, execId);
 			
     	}
     };
