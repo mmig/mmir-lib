@@ -680,13 +680,26 @@ newMediaPlugin = {
 				implFile += '.js';
 			}
 			
-			commonUtils.loadScript(constants.getMediaPluginPath()+implFile, function(){
+			var implPath = constants.getMediaPluginPath() + implFile;
+			
+			commonUtils.getLocalScript(implPath, function success(){
+			
+				var theNewWebAudioTtsImpl = newWebAudioTtsImpl;
+				newWebAudioTtsImpl = void(0);
 				
 				//initialize implementation:
-				initImpl(newWebAudioTtsImpl);
+				initImpl(theNewWebAudioTtsImpl);
 				
 				//invoke the passed-in initializer-callback and export the public functions:
 				callBack(_instance);
+				
+			}, function error(err){
+				
+				console.error('failed to media plugin file '+implPath+': '+err);
+				
+				//invoke the passed-in initializer-callback without exporting any functions:
+				callBack({});
+				
 			});
 		}
 };
