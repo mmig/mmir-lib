@@ -260,32 +260,13 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		    regexHTMLComment : /<!--([\r\n]|.)*?-->/igm,
 	
 		    /**
-		     * Similar to the jQuery.getScript() function - appending a url of a
-		     * javascript-source to the header of the main document.<br>
-		     * This function also calls a callback if the script was loaded.
+		     * Same as <code>getLocalScript</code>
 		     * 
-		     * @function
-		     * @param {String}
-		     *            url source of javascript-file
-		     * @param {Function}
-		     *            callback callback function
-		     * @public
-		     * @async
-		     * @deprecated instead use  #getLocalScript()
+		     * @see #getLocalScript
 	    	 * @memberOf mmir.CommonUtils.prototype
 		     */
-		    loadScript : function(url, callback) {
-				var script = document.createElement("script");
-				script.type = "text/javascript";
-				script.src = url;
-	
-				if (typeof callback === 'function') {
-					/** @ignore */
-					script.onload = function() {
-					callback();
-					};
-				}
-				document.getElementsByTagName("head")[0].appendChild(script);
+		    loadScript : function(url, successCallback, errorCallback) {
+				return this.getLocalScript.apply(this, arguments);
 		    },
 	
 		    /**
@@ -726,7 +707,10 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 				script.onload = function() {
 					if(success){
 						success.apply(this, arguments);
-					} 
+					}
+					else {
+						logger.debug('CommonUtils', 'getLocalScript', 'Successfully loaded script from ' + this.src)
+					}
 				};
 				script.onerror = function(e) {
 					if(fail){
