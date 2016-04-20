@@ -29,328 +29,6 @@ newMediaPlugin = {
 		/**  @memberOf WebkitAudioInput# */
 		initialize: function(callBack, mediaManager, logvalue){
 			
-			
-			////////////////// START MIC-LEVELS: analyzer for microphone-levels-changed & listener mechanism ////////////
-			/**  
-			 * @type navigator
-			 * @memberOf WebkitAudioInput#
-			 */
-			var html5Navigator = navigator;
-			/**
-			 * @type AudioContext
-			 * @memberOf WebkitAudioInput#
-			 */
-			var _audioContext;
-			/**  @memberOf WebkitAudioInput# */
-			var nonFunctional = false;
-			try {
-		        // unify the different kinds of HTML5 implementations
-				//window.AudioContext = window.AudioContext || window.webkitAudioContext;
-				html5Navigator.__getUserMedia = html5Navigator.getUserMedia || html5Navigator.webkitGetUserMedia || html5Navigator.mozGetUserMedia;
-				//window.URL = window.URL || window.webkitURL;
-//		    	_audioContext = new webkitAudioContext;
-
-				if(typeof AudioContext !== 'undefined'){
-					_audioContext = new AudioContext;
-				}
-				else {//if(typeof webkitAudioContext !== 'undefined'){
-					_audioContext = new webkitAudioContext;
-				}
-			} 
-			catch (e) {
-				console.error('No web audio support in this browser! Error: '+(e.stack? e.stack : e));
-				nonFunctional = true;
-			}
-			/**
-			 * Switch for generally disabling "microphone-level changed" calculations
-			 * (otherwise calculation becomes active/inactive depending on whether or 
-			 *  not a listener is registered to event {@link #MIC_CHANGED_EVT_NAME})
-			 *  
-			 * <p>
-			 * TODO make this configurable?...
-			 *  
-			 * @memberOf WebkitAudioInput#
-			 */
-			var isMicLevelsEnabled = true;
-			/** MIC-LEVELS: the maximal value to occurs in the input data
-			 * <p>
-			 * FIXME verify / check if this is really the maximal possible value...
-			 * @contant
-			 * @memberOf WebkitAudioInput#
-			 */
-			var MIC_MAX_VAL = 2;//
-			/** MIC-LEVELS: the maximal value for level changes (used for normalizing change-values)
-			 * @constant
-			 * @memberOf WebkitAudioInput# */
-			var MIC_MAX_NORM_VAL = -90;// -90 dB ... ???
-			
-			/** MIC-LEVELS: normalization factor for values: adjust value, so that is 
-			 *              more similar to the results from the other input-modules
-			 * @constant
-			 * @memberOf WebkitAudioInput# */
-			var MIC_NORMALIZATION_FACTOR = 3.5;//adjust value, so that is more similar to the results from the other input-modules
-			/** MIC-LEVELS: time interval / pauses between calculating level changes
-			 * @constant
-			 * @memberOf WebkitAudioInput# */
-			var MIC_QUERY_INTERVALL = 128;
-			/** MIC-LEVELS: threshold for calculating level changes
-			 * @constant
-			 * @memberOf WebkitAudioInput# */
-			var LEVEL_CHANGED_THRESHOLD = 1.5;
-			/**
-			 * MIC-LEVELS: Name for the event that is emitted, when the input-mircophone's level change.
-			 * 
-			 * @private
-			 * @constant
-			 * @memberOf WebkitAudioInput#
-			 */
-			var MIC_CHANGED_EVT_NAME = 'miclevelchanged';
-			
-			/**
-			 * HELPER normalize the levels-changed value to MIC_MAX_NORM_VAL
-			 * @deprecated currently un-used
-			 * @memberOf WebkitAudioInput#
-			 */
-			var normalize = function (v){
-				return MIC_MAX_NORM_VAL * v / MIC_MAX_VAL;
-			};
-			/**
-			 * HELPER calculate the RMS value for list of audio values
-			 * @deprecated currently un-used
-			 * @memberOf WebkitAudioInput#
-			 */
-			var getRms = function (buffer, size){
-				if(!buffer || size === 0){
-					return 0;
-				}
-
-				var sum = 0, i = 0;
-				for(; i < size; ++i){
-					sum += buffer[i];
-				}
-				var avg = sum / size;
-
-				var meansq = 0;
-				for(i=0; i < size; ++i){
-					meansq += Math.pow(buffer[i] - avg, 2); 
-				}
-
-				var avgMeansq = meansq / size;
-
-				return Math.sqrt(avgMeansq);
-			};
-			/**
-			 * HELPER determine if a value has change in comparison with a previous value
-			 * 		  (taking the LEVEL_CHANGED_THRESHOLD into account)
-			 * @memberOf WebkitAudioInput#
-			 */
-			var hasChanged = function(value, previousValue){
-				var res = typeof previousValue === 'undefined' || Math.abs(value - previousValue) > LEVEL_CHANGED_THRESHOLD;
-				return res;
-			};
-			/**
-			 * @type LocalMediaStream
-			 * @memberOf WebkitAudioInput#
-			 * @see https://developer.mozilla.org/en-US/docs/Web/API/MediaStream_API#LocalMediaStream
-			 */
-			var _currentInputStream;
-			/**
-			 * @type AnalyserNode
-			 * @memberOf WebkitAudioInput#
-			 * @see https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode
-			 */
-			var _audioAnalyzer;
-			
-			/**
-			 * HELPER callback for getUserMedia: creates the microphone-levels-changed "analyzer"
-			 *        and fires mic-levels-changed events for registered listeners
-			 * @param {LocalMediaStream} inputstream
-			 * @memberOf WebkitAudioInput#
-			 */
-			function _startUserMedia(inputstream){
-				console.log('webkitAudioInput: start analysing audio input...');
-				var buffer = 0;
-				var prevDb;
-				
-				//we only need one analysis: if there is one active from a previous start
-				//  -> do stop it, before storing the new inputstream in _currentInputStream
-				if(_currentInputStream){
-					_stopAudioAnalysis();
-				}
-
-				_currentInputStream = inputstream;
-
-				if(_isAnalysisCanceled === true){
-					//ASR was stopped, before the audio-stream for the analysis became available:
-					// -> stop analysis now, since ASR is not active (and close the audio stream without doing anything)
-					_stopAudioAnalysis();
-					return;//////////////// EARLY EXIT //////////////////////
-				}
-				
-				var inputNode = _audioContext.createMediaStreamSource(_currentInputStream);
-
-				///////////////////// VIZ ///////////////////
-//				recorder = recorderInstance;
-
-				_audioAnalyzer = _audioContext.createAnalyser();
-				_audioAnalyzer.fftSize = 2048;
-//				_audioAnalyzer.smoothingTimeConstant = 0.9;//NOTE: value 1 will smooth everything *completely* -> do not use 1
-				inputNode.connect(_audioAnalyzer);
-
-//				audioRecorder = new Recorder( _currentInputStream );
-//				recorder = new Recorder(_currentInputStream, {workerPath: recorderWorkerPath});
-
-//				updateAnalysers();
-
-				var updateAnalysis = function(){
-					if(!_currentInputStream){
-						return;
-					}
-
-					var size = _audioAnalyzer.fftSize;//.frequencyBinCount;//
-					var data = new Uint8Array(size);//new Float32Array(size);//
-					_audioAnalyzer.getByteTimeDomainData(data);//.getFloatFrequencyData(data);//.getByteFrequencyData(data);//.getFloatTimeDomainData(data);//
-
-					var min = 32768;
-					var max = -32768;
-					var total = 0;
-					for(var i=0; i < size; ++i){
-						var datum = Math.abs(data[i]); 
-						if (datum < min)
-							min = datum;
-						if (datum > max)
-							max = datum;
-
-						total += datum;
-					}
-					var avg = total / size;
-//					console.info('audio ['+min+', '+max+'], avg '+avg);
-
-//					var rms = getRms(data, size);
-//					var db = 20 * Math.log(rms);// / 0.0002);
-
-//					console.info('audio rms '+rms+', db '+db);
-
-					/* RMS stands for Root Mean Square, basically the root square of the
-					 * average of the square of each value. */
-					var rms = 0, val;
-					for (var i = 0; i < data.length; i++) {
-						val = data[i] - avg;
-						rms += val * val;
-					}
-					rms /= data.length;
-					rms = Math.sqrt(rms);
-
-					var db = rms;
-//					console.info('audio rms '+rms);
-
-					//actually fire the change-event on all registered listeners:
-					if(hasChanged(db, prevDb)){
-//						console.info('audio rms changed: '+prevDb+' -> '+db);
-						prevDb = db;
-
-						//adjust value
-						db *= MIC_NORMALIZATION_FACTOR;
-
-						mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
-					}
-
-
-					if(_isAnalysisActive && _currentInputStream){
-						setTimeout(updateAnalysis, MIC_QUERY_INTERVALL);
-					}
-				};
-				updateAnalysis();
-				///////////////////// VIZ ///////////////////
-
-			}
-			
-			
-			/** internal flag: is/should mic-levels analysis be active?
-			 * @memberOf WebkitAudioInput#
-			 */
-			var _isAnalysisActive = false;
-			/** internal flag: is/should mic-levels analysis be active?
-			 * @memberOf WebkitAudioInput#
-			 */
-			var _isAnalysisCanceled = false;
-			/** HELPER start-up mic-levels analysis (and fire events for registered listeners)
-			 * @memberOf WebkitAudioInput#
-			 */
-			function _startAudioAnalysis(){
-				if(_isAnalysisActive === true){
-					return;
-				}
-				_isAnalysisCanceled = false;
-				_isAnalysisActive = true;
-				html5Navigator.__getUserMedia({audio: true}, _startUserMedia, function(e) {
-					console.error("webkitAudioInput: failed _startAudioAnalysis, error for getUserMedia ", e);
-					_isAnalysisActive = false;
-				});
-			}
-
-			/** HELPER stop mic-levels analysis
-			 * @memberOf WebkitAudioInput#
-			 */
-			function _stopAudioAnalysis(){
-				if(_currentInputStream){
-					var stream = _currentInputStream;
-					_currentInputStream = void(0);
-					//DISABLED: MediaStream.stop() is deprecated -> instead: stop all tracks individually
-//					stream.stop();
-					try{
-						if(stream.active){
-							var list = stream.getTracks(), track;
-							for(var i=list.length-1; i >= 0; --i){
-								track = list[i];
-								if(track.readyState !== 'ended'){
-									track.stop();
-								}
-							}
-						}
-					} catch (err){
-						console.log('webkitAudioInput: a problem occured while stopping audio input analysis: '+err);
-					}
-					_isAnalysisCanceled = false;
-					_isAnalysisActive = false;
-
-					console.log('webkitAudioInput: stopped analysing audio input!');
-				}
-				else if(_isAnalysisActive === true){
-					console.warn('webkitAudioInput: stopped analysing audio input process, but no valid audio stream present!');
-					_isAnalysisCanceled = true;
-					_isAnalysisActive = false;
-				}
-			}
-
-			/** HELPER determine whether to start/stop audio-analysis based on
-			 * 		   listeners getting added/removed on the MediaManager
-			 * @memberOf WebkitAudioInput#
-			 */
-			function _updateMicLevelAnalysis(actionType, handler){
-
-				//start analysis now, if necessary
-				if(		actionType 			=== 'added' && 
-						recording 			=== true && 
-						_isAnalysisActive 	=== false && 
-						isMicLevelsEnabled 	=== true
-				){
-					_startAudioAnalysis();
-				}
-				//stop analysis, if there is no listener anymore 
-				else if(actionType 			=== 'removed' && 
-						_isAnalysisActive 	=== true && 
-						mediaManager.hasListeners(MIC_CHANGED_EVT_NAME) === false
-				){
-					_stopAudioAnalysis();
-				}
-			}
-			//observe changes on listener-list for mic-levels-changed-event
-			mediaManager._addListenerObserver(MIC_CHANGED_EVT_NAME, _updateMicLevelAnalysis);
-			
-
-			////////////////// START MIC-LEVELS: analyzer for microphone-levels-changed & listener mechanism ////////////
-			
 			/** @memberOf WebkitAudioInput# */
 			var _pluginName = 'webkitAudioInput';
 			/**
@@ -368,7 +46,7 @@ newMediaPlugin = {
 				
 				//FIXME this error message is a quick an dirty hack -- there should be a more general way for defining the error message...
 				var msg = 'Unfortunately, your internet browser'
-							+'\ndoes not support speech input.'
+							+'\ndoes not support Web Speech Recognition.'
 							+'\n\nPlease use Google Chrome,'
 							+'\nif you want to use speech input.'
 							+'\n\nhttp://www.google.com/chrome';
@@ -447,6 +125,9 @@ newMediaPlugin = {
 				"RECORDING_BEGIN": 		"RECORDING_BEGIN",
 				"RECORDING_DONE": 		"RECORDING_DONE"
 			};
+			
+			/** @memberOf WebkitAudioInput# */
+			var micLevelsImplFile = 'webMicLevels';
 			
 			/** @type webkitSpeechRecognition
 			 * @memberOf WebkitAudioInput# */
@@ -632,7 +313,7 @@ newMediaPlugin = {
 			 * 
 			 * @see #error_counter
 			 * 
-			 * @memberOf AndroidAudioInput#
+			 * @memberOf WebkitAudioInput#
 			 * @default 5
 			 */
 			var max_error_retry = 5;
@@ -673,8 +354,8 @@ newMediaPlugin = {
             		//    due to the fact, that it does not allow multiple/parallel access
             		//    to the microphone resource...
             		// -> try once again, but with disabled analysing-audio feature:
-            		if(isMicLevelsEnabled === true){
-            			isMicLevelsEnabled = false;
+            		if(mediaManager.micLevelsAnalysis.enabled()){
+            			mediaManager.micLevelsAnalysis.enabled(false);
             			return true;
             		}
             		
@@ -764,8 +445,8 @@ newMediaPlugin = {
                 	console.debug("[webkitAudioInput.Debug] active: " + active);
                 }
                 
-                if(isMicLevelsEnabled === true){
-                	_startAudioAnalysis();
+                if(mediaManager.micLevelsAnalysis.enabled()){
+                	mediaManager.micLevelsAnalysis.start();
                 }
             };
             /** @memberOf WebkitAudioInput.recognition# */
@@ -787,7 +468,7 @@ newMediaPlugin = {
                 	console.debug("[webkitAudioInput.Debug] Audio END");
                 }
 
-//                _stopAudioAnalysis(); MOVED to onend: in some cases, onaudioend will not be triggered, but onend will always get triggered
+//                mediaManager.micLevelsAnalysis.stop();// MOVED to onend: in some cases, onaudioend will not be triggered, but onend will always get triggered
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onspeechend = function(event){
@@ -825,7 +506,7 @@ newMediaPlugin = {
                 
                 //NOTE there may be no analysis open, but stopping here (and not e.g. in onaudioen) 
                 //     will ensure that we _always_ remove analysis, if it is present:
-                _stopAudioAnalysis();
+                mediaManager.micLevelsAnalysis.stop();
                 
                 // TODO: check if it is alright if we stop restarting the asr when reset_counter is greater than 3
                 // --> this would mean, we can never start the asr again in this instance... bad choice
@@ -860,8 +541,9 @@ newMediaPlugin = {
              */
             recognition.maxAlternatives = 1;
             
-            //invoke the passed-in initializer-callback and export the public functions:
-			callBack ({
+            /** @type webkitSpeechAudioInput
+			 * @memberOf WebkitAudioInput# */
+            var pluginExports = {
 				/**
 				 * @public
 				 * @memberOf WebkitAudioInput.prototype
@@ -890,7 +572,7 @@ newMediaPlugin = {
                     }
                     
                     aborted = false;
-                    recording = true;
+                    recording = mediaManager.micLevelsAnalysis.active(true);
                     error_counter = 0;
                     
                     _prevResult = void(0);
@@ -1003,7 +685,7 @@ newMediaPlugin = {
 				 */
 				stopRecord: function(successCallback,failureCallback){
                 // TODO: at end of recording return whole recognized stuff in successcallback
-                    recording = false;
+                    recording = mediaManager.micLevelsAnalysis.active(false);
                     
                     var isSuccessTriggered = false;
                     
@@ -1109,8 +791,6 @@ newMediaPlugin = {
 				 */
 				recognize: function(successCallback,failureCallback){
 					
-                    console.warn("DO NOT USE AT THE MOMENT\nUnexpected behavior: if recognition is stopped (via 'stopRecord()'), the 'end' is not thrown. The recognizer is still active, but not usable.");
-                
                     var errMsg;
                     if (active == true){
                     	
@@ -1131,7 +811,7 @@ newMediaPlugin = {
                     }
                     
                     aborted = false;
-                    recording = true;
+                    recording = mediaManager.micLevelsAnalysis.active(true);
                     error_counter = 0;
                     
                     _prevResult = void(0);
@@ -1176,7 +856,7 @@ newMediaPlugin = {
 
                             //stop recording - finish after one sentence!
                             //NOTE do this before calling helper_extract_results(), in order to make the result type FINAL
-                            recording = false;
+                            recording = mediaManager.micLevelsAnalysis.active(false);
                             
                             var returnArgs = helper_extract_results(event.results[event.resultIndex]);
                             
@@ -1214,7 +894,7 @@ newMediaPlugin = {
 				 * @see mmir.MediaManager#cancelRecognition
 				 */
                 cancelRecognition: function(successCallback,failureCallback){
-                    recording = false;
+                    recording = mediaManager.micLevelsAnalysis.active(false);
                     aborted = true;
                     error_counter = 0;
                     
@@ -1254,9 +934,60 @@ newMediaPlugin = {
                     loglevel = logvalue | 0;
                     return loglevel;
                 }
-			});
-		    		
-		    		
-		}
+			};
+			
+			
+			if(!mediaManager.micLevelsAnalysis){
+				
+				//load mic-levels-analysis before invoking initializer-callback
+				
+				mediaManager.micLevelsAnalysis = true;//<- indicate that micLevelsAnalysis will be loaded (in case other plugins want to load it)
+				
+				//load mic-levels-analysis implementation into mediaManager's default context (i.e. omit 4th argument),
+				// since mic-levels-analysis should be used as singleton
+				mediaManager.loadFile(micLevelsImplFile, function success(){
+					
+					console.debug('initialized microphone-levels analysis for '+_pluginName);
+					
+					//invoke the passed-in initializer-callback and export the public functions:
+					callBack(pluginExports);
+					
+				}, function error(err){
+
+					console.error('ERROR: using stub implementation  for microphone-levels analysis, because loading the implementation file '+implPath+' failed: '+err);
+					
+					mediaManager.micLevelsAnalysis = {
+						/** @memberOf WebkitAudioInput.MicLevelsAnalysisStub */
+						_active: false,
+						start: function(){
+							console.info('STUB::micLevelsAnalysis.start()');
+						},
+						stop: function(){
+							console.info('STUB::micLevelsAnalysis.start()');
+						},
+						enable: function(enable){
+							console.info('STUB::micLevelsAnalysis.enable('+(typeof enable === 'undefined'? '': enable)+') -> false');
+							return false;
+						},
+						active: function(active){
+							this._active = typeof active === 'undefined'? this._active: active;
+							console.info('STUB::micLevelsAnalysis.active('+(typeof active === 'undefined'? '': active)+') -> ' + this._active);
+							return active;
+						}
+					};
+					
+					//invoke the passed-in initializer-callback and export the public functions:
+					callBack(pluginExports);
+					
+				});
+			}
+			else {
+				//micLevelsAnalysis already loaded 
+				
+				// -> immediately invoke initializer-callback and export the public functions:
+				callBack(pluginExports);
+			}
+			
+		}//END: initialize()
 		
 };
