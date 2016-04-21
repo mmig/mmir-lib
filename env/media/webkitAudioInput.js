@@ -445,9 +445,7 @@ newMediaPlugin = {
                 	console.debug("[webkitAudioInput.Debug] active: " + active);
                 }
                 
-                if(mediaManager.micLevelsAnalysis.enabled()){
-                	mediaManager.micLevelsAnalysis.start();
-                }
+                mediaManager.micLevelsAnalysis.start();
             };
             /** @memberOf WebkitAudioInput.recognition# */
             recognition.onspeechstart = function(event){
@@ -963,7 +961,7 @@ newMediaPlugin = {
 							console.info('STUB::micLevelsAnalysis.start()');
 						},
 						stop: function(){
-							console.info('STUB::micLevelsAnalysis.start()');
+							console.info('STUB::micLevelsAnalysis.stop()');
 						},
 						enable: function(enable){
 							console.info('STUB::micLevelsAnalysis.enable('+(typeof enable === 'undefined'? '': enable)+') -> false');

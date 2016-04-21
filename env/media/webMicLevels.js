@@ -8,10 +8,78 @@
  * In addition, if the mic-levels-audio plugin starts its own audio-stream, an <code>webaudioinputstarted</code>
  * event is trigger, when the plugin starts.
  * 
+ * @example
+ * 
+ * ////////////////////////////////  within media plugin: load analyzer //////////////////////////////////
+ * //within audio-input plugin that uses Web Audio: load mic-levels-analyzer plugin
+ * 
+ * //first: check, if the analyzer plugin is already loaded (should be loaded only once)
+ * if(!mediaManager.micLevelsAnalysis){
+ * 	
+ * 	//set marker so that other plugins may know that the analyzer will be loaded:
+ * 	mediaManager.micLevelsAnalysis = true;
+ * 	
+ * 	//load the analyzer
+ * 	mediaManager.loadFile(micLevelsImplFile, function success(){
+ * 
+ * 		//... finish the audio-plugin initialization, e.g. invoke initializer-callback
+ * 
+ * 	}, function error(err){
+ * 
+ *	  	// ... in case the analyzer could not be loaded:
+ *		// do some error handling ...
+ *	  	
+ *		//... and supply a stub-implementation for the analyzer module:
+ *	  	mediaManager.micLevelsAnalysis = {
+ *	  		_active: false,
+ *	  		start: function(){
+ *	  			console.info('STUB::micLevelsAnalysis.start()');
+ *	  		},
+ *	  		stop: function(){
+ *	  			console.info('STUB::micLevelsAnalysis.stop()');
+ *	  		},
+ *	  		enable: function(enable){
+ *	  			console.info('STUB::micLevelsAnalysis.enable('+(typeof enable === 'undefined'? '': enable)+') -> false');
+ *	  			return false;//<- the stub can never be enabled
+ *	  		},
+ *	  		active: function(active){
+ *	  			this._active = typeof active === 'undefined'? this._active: active;
+ *	  			console.info('STUB::micLevelsAnalysis.active('+(typeof active === 'undefined'? '': active)+') -> ' + this._active);
+ *	  			return active;//<- must always return the input-argument's value
+ *	  		}
+ *	  	};
+ *	  	
+ *	  	//... finish the audio-plugin initialization without the mic-levels-analyzer, e.g. invoke initializer-callback
+ *	  	
+ *	  });
+ * } else {
+ * 	
+ * 	//if analyzer is already loaded/loading: just finish the audio-plugin initialization,
+ * 	//										 e.g. invoke initializer-callback
+ * 
+ * }
+ * 
+ * 
+ * ////////////////////////////////  use of mic-levels-analysis events //////////////////////////////////
+ * //in application code: listen for mic-level-changes
+ * 
+ * mmir.MediaManager.on('miclevelchange', function(micValue){
+ * 
+ * });
+ * 
+ * @class
+ * @public
+ * @name  MicLevelsAnalysis
+ * @memberOf mmir.env.media
+ * 
+ * @see {@link mmir.env.media.WebkitAudioInput} for an example on integrating the mic-levels-analysis plugin into an audio-input plugin
+ * 
+ * @requires HTML5 AudioContext
+ * @requires HTML5 getUserMedia (audio)
  */
 
 newMediaPlugin = {
-	/**  @memberOf MicLevelsAnalysisModule# */
+	/**  @memberOf MicLevelsAnalysis.module# */
 	initialize: function(callBack, mediaManager){//, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
 
 		/**  
@@ -99,6 +167,7 @@ newMediaPlugin = {
 		 * 
 		 * @private
 		 * @constant
+		 * @default "miclevelchanged"
 		 * @memberOf MicLevelsAnalysis#
 		 */
 		var MIC_CHANGED_EVT_NAME = 'miclevelchanged';
@@ -108,6 +177,7 @@ newMediaPlugin = {
 		 * 
 		 * @private
 		 * @constant
+		 * @default "webaudioinputstarted"
 		 * @memberOf MicLevelsAnalysis#
 		 */
 		var STREAM_STARTED_EVT_NAME = 'webaudioinputstarted';
@@ -422,7 +492,10 @@ newMediaPlugin = {
 			 * @memberOf MicLevelsAnalysis.prototype
 			 */
 			start: function(audioInputData){
-				_startAudioAnalysis(audioInputData);
+				
+				if(isMicLevelsEnabled){//same as: this.enabled()
+					_startAudioAnalysis(audioInputData);
+				}
 			},
 			/**
 			 * Stops the audio analysis for "microphone levels changed" events.
@@ -455,7 +528,7 @@ newMediaPlugin = {
 				
 				if(typeof enable !== 'undefined'){
 					
-					if(!enable && isMicLevelsEnabled != enable){
+					if(!enable && (isMicLevelsEnabled != enable || _isAnalysisActive)){
 						this.stop();
 					}
 					
@@ -468,6 +541,12 @@ newMediaPlugin = {
 			 * 
 			 * This function should be called with <code>true</code> when ASR starts and
 			 * with <code>false</code> when ASR stops.
+			 * 
+			 * 
+			 * NOTE setting the <code>active</code> state allows the analyzer to start
+			 * processing when a listener for <code>miclevelchanged</code> is added while
+			 * ASR/recording is already active (otherwise the processing would not start
+			 * immediately, but when the ASR/recording is started the next time).
 			 * 
 			 * 
 			 * @param {Boolean} [active]
