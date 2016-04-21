@@ -1,5 +1,5 @@
 /*
- * 	Copyright (C) 2012-2013 DFKI GmbH
+ * 	Copyright (C) 2012-2016 DFKI GmbH
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
@@ -24,6 +24,58 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * Default / standard implementation for wait-/ready-indication:
+ * 
+ * media-modules may signal that they are <code>preparing</code> a resource, and then that
+ * they are <code>ready</code> via the {@link mmir.MediaManager#_preparing} and 
+ * {@link mmir.MediaManager#_ready}.
+ * 
+ * This implementation provides a simple mechanism for showing these states to the user:
+ * upon <em>preparing</em> an overlay with a "please wait" message is shown, and upon
+ * <em>ready</em> the overlay is hidden again.
+ * 
+ * See {@link #setWaitCaption} for details on setting a custom text message.
+ * 
+ * In order to load this implementation, add the entry <code>"waitReadyIndicator"</code>
+ * to the <code>mediaManager.plugins</code> list in the MMIR configuration file
+ * at <code>config/configuration.json</code>:
+ * <pre>
+ * ...
+ *   "mediaManager": {
+ *    "plugins": {
+ *      "browser": ["waitReadyIndicator",
+ *                  "html5AudioOutput",
+ *                  ...
+ *      ],
+ *      "cordova": ["waitReadyIndicator",
+ *                  "androidAudioInput",
+ *                  ...
+ *      ]
+ *      ...
+ *    }
+ *  },
+ *  ...
+ * </pre>
+ * 
+ * @example
+ * 
+ * //starting to prepare a resource:
+ * mmir.MediaManager._preparing();
+ * 
+ * // do something ...
+ * 
+ * //... when the resouce has been prepared
+ * // and is ready to be used:
+ * mmir.MediaManager._ready();
+ * 
+ * @class
+ * @public
+ * @name  WaitReadyIndicatorImpl
+ * @memberOf mmir.env.media
+ * 
+ * @requires stlne-wait-dlg (waitDialog module and CSS)
+ */
 
 newMediaPlugin = {
 		/**  @memberOf WaitReadyIndicatorImpl# */
