@@ -88,7 +88,7 @@ define(['jquery', 'loadCss'],
 function(jquery, loadCss){
 
 	//load CSS for jQuery Mobile:
-	loadCss('mmirf/vendor/styles/jquery.mobile-1.4.3.min.css');
+	loadCss('mmirf/vendor/styles/jquery.mobile-1.4.5.min.css');
 	
 	/**
 	 * Deferred object that will be returned; for async-initialization:

@@ -76,7 +76,7 @@ var mmirf_config = {
 	    , 'jqmViewEngine': 'env/view/jqmViewEngine'
 	    
 	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
-		, 'jqm' : 			'vendor/libs/jquery.mobile-1.4.3'
+		, 'jqm' : 			'vendor/libs/jquery.mobile-1.4.5'
 		, 'jqmSimpleModal':	'vendor/libs/jquery.simplemodal-1.4.4'
 		
 		, 'waitDialog':		'tools/stdlne-wait-dlg'
