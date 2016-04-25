@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.8.0)
+version notes for MMIR framework code (v 3.7.2)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
@@ -23,6 +23,31 @@ version notes for MMIR framework code (v 3.8.0)
  Change Log
  --------------
 
+##################
+ Version 3.7.2
+##################
+
+MODFIFICATIONS:
+
+ * updated jQuery to version 2.2.3
+ * updated jQueryMobile to version 1.4.5
+ * IMPROVED JavaScript "strict" conformance: avoid re-defining variables
+   * semantic/grammarConverter.js, manager/presentationManager.js
+ * REFACTOR tools/dictionary.js: replaced delete statements with undefined-values (avoid changing underlying class structure)
+ * REFACTOR tools/commonUtils.js: loadScript is now "synonymous" with getLocalScript (i.e. removed "similar" implementation and invoke getLocalScript instead)
+ * REFACTOR media/env/webkitAudioInput.js:
+     * extracted microphone-levels analysis for web audio input into separate module / plugin
+     * microphone-levels analysis can be loaded as plugin via MediaManager.loadFile('webMicLevels', ....
+       * the this plugin should be loaded as "singleton": before loading, check if property MediaManager.micLevelsAnalysis already exists
+     * the exported functions are then available at MediaManager.micLevelsAnalysis.<exported function> 
+
+
+BUGFIX
+ * manager/dialog/engineConfig.js: use equality check instead of assignment statement in if condition
+ * manager/mediaManager.js: for ReferenceError in loadFile(): fixed typo for argument name
+ * env/media/webAudioTextToSpeech.js: added handling in case loading the specific TTS implementation fails
+ 
+ 
 ##################
  Version 3.7.1
 ##################
