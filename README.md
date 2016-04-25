@@ -55,8 +55,8 @@ _Note: these directions assume, that your web application is located in the
 
 (see contents of ```/vendor/libs/```)
 
- * jQuery 2.1.3
- * jQuery Mobile 1.4.3
+ * jQuery 2.2.3
+ * jQuery Mobile 1.4.5
  * RequireJS 2.1.9
  * SCION
  * JS/CC 0.30
