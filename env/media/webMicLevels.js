@@ -72,7 +72,7 @@
  * @name  MicLevelsAnalysis
  * @memberOf mmir.env.media
  * 
- * @see {@link mmir.env.media.WebkitAudioInput} for an example on integrating the mic-levels-analysis plugin into an audio-input plugin
+ * @see {@link mmir.env.media.WebspeechAudioInput} for an example on integrating the mic-levels-analysis plugin into an audio-input plugin
  * 
  * @requires HTML5 AudioContext
  * @requires HTML5 getUserMedia (audio)
