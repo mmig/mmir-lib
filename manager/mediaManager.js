@@ -120,7 +120,8 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
      */
     var _pluginsConfig = {
     	'marytexttospeech.js': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
-    	'html5audioinput.js':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'}
+    	'html5audioinput.js':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'},
+    	'webkitaudioinput.js':  {mod: 'webspeechAudioInput'}
     };
     
     /**
