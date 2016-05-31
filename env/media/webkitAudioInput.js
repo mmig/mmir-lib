@@ -44,9 +44,7 @@ newMediaPlugin = {
             //detect feature avaibility:
 			if(typeof webkitSpeechRecognition !== 'undefined'){
 				SpeechRecognitionImpl = webkitSpeechRecognition;
-			} else if(typeof mozSpeechRecognition === 'undefined'){
-				SpeechRecognitionImpl = mozSpeechRecognition;
-			} else if(typeof SpeechRecognition === 'undefined'){
+			} else if(typeof SpeechRecognition !== 'undefined'){
 				SpeechRecognitionImpl = SpeechRecognition;
 			}
 			
