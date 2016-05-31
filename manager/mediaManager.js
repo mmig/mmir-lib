@@ -72,7 +72,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 *     		"browser": ["html5AudioOutput",
 	 *     		            "html5AudioInput",
 	 *     		            {"mod": "webAudioTextToSpeech", "config": "webttsMaryImpl"},
-	 *     		            {"mod": "webkitAudioInput",     "ctx": "chrome"}
+	 *     		            {"mod": "webspeechAudioInput",     "ctx": "chrome"}
 	 *     		],
 	 *     		"cordova": ["cordovaAudioOutput",
 	 *     		            "nuanceAudioInput",
@@ -93,7 +93,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     var _defaultPlugins = {
 		'browser': ['waitReadyIndicator',
 		            'html5AudioOutput',
-		            'webkitAudioInput',
+		            'webspeechAudioInput',
 		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		],
 		'cordova': ['waitReadyIndicator',
