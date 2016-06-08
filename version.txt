@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.7.2)
+version notes for MMIR framework code (v 3.7.3)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
@@ -23,6 +23,47 @@ version notes for MMIR framework code (v 3.7.2)
  Change Log
  --------------
 
+##################
+ Version 3.7.3
+##################
+
+MODFIFICATIONS:
+
+ * ADDITION: added a Controller-argument to initialization constructor for controller (and helper) implementations.
+   For example, for the controller implementation in file application.js, this argument is passed to the constructor function:
+   ...
+      var Application = function ApplicationConstructor(ctrl){
+        this.ctrlRef = ctrl;
+        ...
+      };
+   ...
+   NOTE that during the initialization (i.e. in the controller/helper implementation's constructor) there should 
+        be made no calls to the Controller/Helper object, since it is not fully initialized during that time.
+      
+ * ADDITION added optional context configuration for controller (and helper) implementations and for model implementations:
+   set these contexts/namespaces in config/configuration.json:
+   ...
+     "controllerContext": "some.namespace",
+     "modelContext": "some.other.namespace",
+   ...
+   this would mean that, for example, the implementation for the controller application.js should be done in namespace
+   some.namespace, i.e. in application.js:
+   ...
+     some.namespace.Application = function ApplicationConstructor(){
+   ...
+   NOTE that these contexts/namespaces are created during intialization, before the controllers/helpers/models are
+        initialized. If you are using these contexts/namespaces in your own code, you should take care not to
+        "override" them.
+     
+ * env/media/webkitAudioInput.js
+  * REFACTOR renamed file to webspeechAduioInput.js (and module name to "webspeechAudioInput")
+  * added auto-configuration to mediaManager for backwards compatibility (i.e. "webkitAudioInput" configuration will be automatically mapped to the new module name "webspeechAudioInput") 
+
+BUGFIX
+ * env/media/webkitAudioInput.js: avoid ReferenceErrors when checking for SpeechRecognition implementation in browsers other than Chrome
+ 
+ 
+ 
 ##################
  Version 3.7.2
 ##################
