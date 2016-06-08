@@ -26,7 +26,7 @@
 
 
 
-define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
+define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module' ],
 	/**
 	 * 
 	 * A class for managing the models of the application (MVC-Component). <br>
@@ -46,10 +46,18 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * 
 	 */
 	function( 
-    		Dictionary,  constants, commonUtils, $
+    		Dictionary,  constants, commonUtils, Logger, $, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ModelManager.prototype */
+	
+	/**
+	 * @private
+	 * @type Logger
+	 * @memberOf mmir.ModelManager#
+	 * @see mmir.Logging#create
+	 */
+	var logger = Logger.create(module);
 
 	// private members
     /**
@@ -126,18 +134,29 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 	 * models in the path specified by *modelPath*.
 	 * 
 	 * @function
-	 * @param {Function}
-	 *            myCallbackFunction The callback function from the constructor
+	 * @param {Function} [initCallbackFunction] OPTIONAL
+	 *            The callback function from the constructor
 	 *            which shall be called after the initialization of the
 	 *            {@link mmir.ModelManager}.
+	 *            
+	 * @param {Object} [ctx] OPTIONAL
+	 * 				the context for the model implementations (DEFAULT: the global context, i.e. window)
+	 * @returns {Promise} 
+	 * 					a Deferred.promise that gets fulfilled when models are loaded.
 	 * @private
 	 * @memberOf mmir.ModelManager#
 	 */
-	function _init(myCallbackFunction) {
+	function _init(initCallbackFunction, ctx) {
 		
 		/** @scope mmir.ModelManager.prototype */
-
-//		delete _instance.init;
+		
+		//shift arguments if necessary:
+		//shift arguments if necessary:
+		if(!ctx && typeof initCallbackFunction !== 'function'){
+			ctx = initCallbackFunction;
+			callback = void(0);
+		}
+		
 		/**
 		 * <code>init</code> as alias for #getInstance
 		 * @private
@@ -157,6 +176,8 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 		 * 								Note, if {String} components/namespaces are separated by a <tt>.</tt> (dot)
 		 * 								If {Array<String>} the entries correspond to the namespace components (without dots),
 		 * 								  where the last entry corresponds to the class/singleton name
+		 * @param {Object} [ctx] OPTIONAL
+		 * 				the (base) context for the model implementations (DEFAULT: the global context GLOBAL_NAMESPACE)
 		 * @returns {Object} the "raw" model object (may be a constructor or the main-singleton-namespace).
 		 * 					 Or <tt>null</tt> if there is no Model with the name.
 		 * @private
@@ -168,7 +189,10 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 		 * 
 		 * @memberOf mmir.ModelManager#
 		 */
-        function getModelByName(fullModelName){
+        function getModelByName(fullModelName, ctx){
+        	
+        	ctx = ctx || GLOBAL_NAMESPACE;
+        	
         	var components;
         	if(commonUtils.isArray(fullModelName)){
         		components = fullModelName;
@@ -177,23 +201,39 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
         		components = fullModelName.split('.');
         	}
         	
-        	var currentNameSpace = GLOBAL_NAMESPACE;
+        	//try to resolve fully-qualified name (without triggering an error)
+        	var currentNameSpace = ctx;
         	for(var i=0, size = components.length; i < size; ++i){
-        		currentNameSpace = currentNameSpace[components[i]]; 
+        		currentNameSpace = currentNameSpace[components[i]];
     			if(typeof currentNameSpace !== 'undefined' ){
             		if(i === size-1){
             			return currentNameSpace;
             		}
     			}
     			else {
-    				console.error('ModelManager.getModelByName: could not find model "'
-    						+(components.join('.'))
-    						+'": invalid namespace/class: '
-    						+components[i]
-    				);
     				break;
     			}
         	}
+        	
+        	if(size > 0 && ctx[components[size-1]]){
+        		//try simple model name
+        		return ctx[components[size-1]];
+        	}
+        	
+        	var isReTry = ctx !== GLOBAL_NAMESPACE;
+        	
+        	var logFunc = isReTry? 'info' : 'error';
+        	logger[logFunc]('ModelManager.getModelByName: could not find model'
+        			+(isReTry? ' in model context with path "<modelContext>.' : ' "')
+					+(components.join('.'))
+					+'": '
+					+(isReTry? 'there is no' : 'invalid')
+					+' namespace/class: "'
+					+components[i]
+					+'"' 
+					+(isReTry? ', trying to find model in global namespace ...' : '')
+			);
+        	
         	return null;
         }
         
@@ -236,8 +276,8 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
         }
 
 		var _defer = $.Deferred();
-		if(myCallbackFunction){
-			_defer.always(myCallbackFunction);
+		if(initCallbackFunction){
+			_defer.always(initCallbackFunction);
 		}
 
 		commonUtils.loadImpl(
@@ -248,7 +288,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 
 				function () {
 					
-					console.log('[loadModels] done');
+					logger.debug('[loadModels] done');
 
 					_defer.resolve(_instance);
 				},
@@ -261,29 +301,32 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 					
 					if (status === 'info') {
 						
-						console.info('[loadModel] "' + fileName);
+						logger.info('[loadModel] "' + fileName);
 						
 						var modelName = fileName.charAt(0).toUpperCase() + fileName.slice(1).replace(/\.[^.]+$/g, "");
 						var fullName = getFullModelName(modelName);
-						var modelImpl = getModelByName(fullName);
+						var modelImpl = getModelByName(fullName, ctx);
+						if(!modelImpl){
+							modelImpl = getModelByName(fullName);
+						}
 						var modelInstance;
 						if (modelImpl) {
 							modelInstance = doGetModelInstance(modelImpl);
 						} else {
-							console.error('ModelManager.load: Could not find implementation for Model "' + modelName + '" (' + fullName + ') for file ' + fileName);
+							logger.error('ModelManager.load: Could not find implementation for Model "' + modelName + '" (' + fullName + ') for file ' + fileName);
 							modelInstance = modelName;
 						}
 						models.put(fullName, modelInstance);
 						
 					}
 					else if (status === 'warning') {
-						console.warn('[loadModel] "' + fileName + '": ' + msg);
+						logger.warn('[loadModel] "' + fileName + '": ' + msg);
 					}
 					else if (status === 'error') {
-						console.error('[loadModel] "' + fileName + '": ' + msg);
+						logger.error('[loadModel] "' + fileName + '": ' + msg);
 					}
 					else {
-						console.error('[loadModel] ' + status + ' (UNKNOWN STATUS) -> "' + fileName + '": ' + msg);
+						logger.error('[loadModel] ' + status + ' (UNKNOWN STATUS) -> "' + fileName + '": ' + msg);
 					}
 				}
 
@@ -295,7 +338,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 //					if (modelImpl) {
 //						modelInstance = doGetModelInstance(modelImpl);
 //					} else {
-//						console.error('ModelManager.load: Could not find implementation for Model "' + modelName + '" (' + fullName + ') for file ' + jsfile);
+//						logger.error('ModelManager.load: Could not find implementation for Model "' + modelName + '" (' + fullName + ') for file ' + jsfile);
 //						modelInstance = modelName;
 //					}
 //					models.put(fullName, modelInstance);
@@ -347,7 +390,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 
 				retModel = models.get(fullModelName);
 				if (!retModel) {
-					console.error('Could not find Model "' + modelName + '" at ' + fullModelName);
+					logger.error('Could not find Model "' + modelName + '" at ' + fullModelName);
 					return null;
 				}
 				return retModel;
@@ -385,6 +428,8 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'jquery' ],
 			 * @function
 			 * @param {Function} [callbackFunction] 
 			 * 					The function which should be called after loading all controllers
+			 * @param {Object} [ctx] OPTIONAL
+			 * 				the context for the model implementations (DEFAULT: the global context, i.e. window)
 			 * @returns {Promise} 
 			 * 					a Deferred.promise that gets fulfilled when models are loaded.
 			 * @example

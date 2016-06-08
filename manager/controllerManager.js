@@ -70,17 +70,27 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * @function
 	 * @param {Function} [callback] OPTIONAL
 	 * 				an optional callback that will be triggered after the controllers where loaded
+	 * @param {Object} [ctx] OPTIONAL
+	 * 				the context for the controller & helper implementations (DEFAULT: the global context, i.e. window)
 	 * @returns {Promise}
 	 * 				a Deferred.promise that will get fulfilled when controllers are loaded
 	 * @private
 	 * 
 	 * @memberOf mmir.ControllerManager#
 	 */
-	function _init(callback) {
+	function _init(callback, ctx) {
 
-//		delete _instance.create;
 		//replace create-method with instance-getter:
 		_instance.create = _instance.getInstance;
+		
+		//shift arguments if necessary:
+		if(!ctx && typeof callback !== 'function'){
+			ctx = callback;
+			callback = void(0);
+		}
+		
+		//set ctx to global/window, if not already set:
+		ctx = ctx || window;
 		
 		//create return value
 		var deferred = $.Deferred();
@@ -343,12 +353,12 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 
 						var ctrlInfo = getControllerResources(fileName, constants.getControllerPath());
 
-						var controller = new Controller(ctrlInfo.name, ctrlInfo);
+						var controller = new Controller(ctrlInfo.name, ctrlInfo, ctx);
 
 						if(ctrlInfo.helper){
 							var helperPath = ctrlInfo.helper.path;
 							var helperName = ctrlInfo.helper.name;
-							controller.loadHelper(helperName,helperPath);
+							controller.loadHelper(helperName,helperPath, ctx);
 						}
 
 						controllers.put(controller.getName(), controller);
@@ -493,6 +503,8 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			 * 
 			 * @param {Function} [callback] OPTIONAL
 			 * 				an optional callback that will be triggered after the controllers where loaded
+			 * @param {Object} [ctx] OPTIONAL
+			 * 				the context for the controller & helper implementations (DEFAULT: the global context, i.e. window)
 			 * @returns {Promise}
 			 * 				a Deferred.promise that will get fulfilled when controllers are loaded
 			 * @example

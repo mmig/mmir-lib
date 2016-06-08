@@ -32,7 +32,8 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * Also holds information about views and partials associated with the controller.
 	 * 
 	 * @param {String} name Name of the Controller
-	 * @param {Object} jsonDef Information about the controllers views and partials
+	 * @param {Object} jsonDef Information about the controllers, views, and partials
+	 * @param {Object} [ctx] OPTIONAL the context for the controller implementation (DEFAULT: global context, i.e. window)
 	 * 
 	 * @name Controller
 	 * @class
@@ -61,22 +62,11 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * 
 	 * @constructs Controller
 	 * @param {String} name Name of the Controller
-	 * @param {Object} jsonDef Information about the controllers views and partials
+	 * @param {Object} jsonDef Information about the controllers, views, and partials
+	 * @param {Object} ctx the context for the controller implementation, i.e. where the constructor exists: ctx.<controller name>()
 	 */
-	function Controller(name, jsonDef){
+	function Controller(name, jsonDef, ctx){
 //	    console.log("controller name " + name);
-	    /**
-	     * The definition of the controller object, containing all properties and functions of the controller.<br>
-	     * A method of the controller can be called via:
-
-		this.script.methodController(parameter);
-
-	     * 
-	     * @type Object
-	     * @public
-	     */
-		// this can only be invoked, if a function with the name "name" exists
-	    this.script = new window[name]();
 
 	    /**
 	     * The json definition of the views and partials associated with the controller. Also contains paths to controller and its views/partials. 
@@ -84,7 +74,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	     * @type Object
 	     * @public
 	     */
-	    this.def = jsonDef;//new JPath(jsonDef);
+	    this.def = jsonDef;
 
 	    /**
 	     * The name of the controller. 
@@ -94,7 +84,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	     */
 	    this.name = name;
 	    
-	    var viewDefs = this.def.views;//.query('views');
+	    var viewDefs = this.def.views;
 
 	    /**
 	     * An array holding the names of all views associated with the controller.  
@@ -102,11 +92,11 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	     * @type Array<String>
 	     * @public
 	     */
-	    this.views = new Array();
+	    this.views = [];
 	    this.parseViews(viewDefs);
 
 	    // parsing the partials and saving the names in an array
-	    var partialDefs = this.def.partials;//.query('partials');
+	    var partialDefs = this.def.partials;
 	    
 
 	    /**
@@ -115,7 +105,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	     * @type Array<String>
 	     * @public
 	     */
-	    this.partials = new Array();
+	    this.partials = [];
 	    this.parsePartials(partialDefs);
 
 
@@ -132,6 +122,21 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	     * @type Object
 	     */
 	    this.layout = this.def.layout;
+
+	    /**
+	     * The definition of the controller object, i.e. its (application specific) implementation,
+	     * containing all properties and functions of the controller.<br>
+	     * 
+	     * A method of the controller implementation can be called via:
+		 * <pre>
+		 * 	this.script.method(parameter);
+		 * </pre>
+	     * 
+	     * @type Object
+	     * @protected
+	     */
+		// this can only be invoked, if a function with the name "name" exists in the object/context ctx
+	    this.script = new ctx[name](this);
 	}
 
 
@@ -140,13 +145,15 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * 
 	 * @function
 	 * @param {String} name Name of the Helper to be loaded
-	 * @param {String} helperPath Path to the helper file to load  
-	 * @public
+	 * @param {String} helperPath Path to the helper file to load
+	 * @param {Object} ctx the context for the helper implementation, i.e. where the constructor exists: ctx.<helper name>()
+	 * @protected
 	 */
-	Controller.prototype.loadHelper = function(name, helperPath){
+	Controller.prototype.loadHelper = function(name, helperPath, ctx){
+		
 		var self = this;
 		
-		//TODO move check of helper existance to Controller.foundControllersCallBack ?
+		//TODO move check of helper existence to Controller.foundControllersCallBack ?
 
 		//determine if there is a helper for the controller:
 		var path = helperPath;
@@ -186,7 +193,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 			
 				if(logger.isVerbose()) logger.v("[HELPER] load "+ helperPath);//debug
 				
-				self.helper =   new Helper(self, name);//new window["GoogleMapHelper"]();
+				self.helper = new Helper(self, name, ctx);
 			},
 			function(exception) {
 				// print out an error message

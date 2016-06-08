@@ -61,6 +61,30 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 	mmir.ConfigurationManager = configurationManager;
 	mmir.NotificationManager = notificationManager.init();
 	
+	//helper: create a "namespace" from a package-definition (dot-separated string) from configuration
+	//        or return the global namespace, if there is not config-value
+	var getContextFor = function(ctxConfigName){
+		var ctxName = configurationManager.get(ctxConfigName, true);
+		if(ctxName){
+			var namespaces = ctxName.split('.');
+			var ctx = window, name;
+			for(var i=0, size= namespaces.length; i < size; ++i){
+				name = namespaces[i];
+				if(!ctx[name]){
+					ctx[name] = {};
+				}
+				ctx = ctx[name];
+			}
+			return ctx;
+		}
+		return ctx;
+	}
+	
+	//the context where the controller implementation can be found (default: global context, i.e. window)
+	var ctrlImplCtx = getContextFor('controllerContext');
+	//the context where the model implementations can be found (default: global context, i.e. window)
+	var modelImplCtx = getContextFor('modelContext');
+	
 	var mainInit = function(){
 
 		console.log('dom ready');
@@ -102,7 +126,7 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				//NOTE: this also gathers information on which 
 				//      views, layouts etc. are available
 				//      -> the presentationManager depends on this information
-				return controllerManager.init();
+				return controllerManager.init(ctrlImplCtx);
 			})
 			
 			//TEST parallelized loading of independent modules:
@@ -186,7 +210,7 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				
 				//TODO models may access views etc. during their initialization
 				//	   --> there should be a way to configure startup, so that models may only be loaded, after everything else was loaded
-				modelManager.init().then(function(){
+				modelManager.init(modelImplCtx).then(function(){
 					isModelsLoaded = true;
 					mmir.ModelManager = modelManager;
 					checkInitCompleted();
