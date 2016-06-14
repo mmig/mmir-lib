@@ -129,14 +129,20 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	     * 
 	     * A method of the controller implementation can be called via:
 		 * <pre>
-		 * 	this.script.method(parameter);
+		 * 	this.instance.method(parameter);
 		 * </pre>
 	     * 
 	     * @type Object
 	     * @protected
 	     */
 		// this can only be invoked, if a function with the name "name" exists in the object/context ctx
-	    this.script = new ctx[name](this);
+	    this.impl = new ctx[name](this);
+	    
+	    /**
+	     * @deprecated use {@link #impl} instead
+	     * @protected
+	     */
+	    this.script = this.impl;
 	}
 
 
@@ -218,10 +224,10 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 		if(logger.isVerbose()) logger.v("should perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		
 	    if(arguments.length > 2){
-	    	return this.script[actionName](data, arguments[2]);
+	    	return this.impl[actionName](data, arguments[2]);
 		}
 		else {
-			return this.script[actionName](data);
+			return this.impl[actionName](data);
 		}
 	};
 
@@ -239,14 +245,14 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 	 * @public
 	 */
 	Controller.prototype.performIfPresent = function(actionName, data){
-		if(typeof this.script[actionName] === 'function'){
+		if(typeof this.impl[actionName] === 'function'){
 		    
 			if(logger.isVerbose()) logger.v("performing '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		    
 		    return this.perform.apply(this, arguments);
 		    
-		} else if(typeof this.script[actionName] !== 'undefined'){
-			if(logger.isVerbose()) logger.info("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": no function ("+typeof this.script[actionName]+")");//debug
+		} else if(typeof this.impl[actionName] !== 'undefined'){
+			if(logger.isVerbose()) logger.info("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": no function ("+typeof this.impl[actionName]+")");//debug
 		} else {
 			if(logger.isVerbose()) logger.debug("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": not implemented (undefined)");//debug
 		}

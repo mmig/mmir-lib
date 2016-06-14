@@ -237,7 +237,7 @@ define(['jsonUtils'],
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %>
+		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").impl['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -398,7 +398,7 @@ define(['jsonUtils'],
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %>
+		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").impl['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
 		 */
@@ -422,7 +422,7 @@ define(['jsonUtils'],
 		 * 
 		 * @deprecated old template syntax format
 		 * 
-		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").script['current_poi_meta_data'])} %>
+		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").impl['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
 		 */

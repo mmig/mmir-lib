@@ -77,14 +77,20 @@ define(
 	     * 
 	     * A method of the helper can be called via:
 		 * <pre>
-		 * 	this.script.method(parameter);
+		 * 	this.impl.method(parameter);
 		 * </pre>
 	     * 
 	     * @type Object
 	     * @public
 	     */
 		// this can only be invoked, if a function with the name "name" exists in the object/context ctx
-		this.script = new ctx[name](this);
+		this.impl = new ctx[name](this);
+		
+		/**
+	     * @deprecated use {@link #impl} instead
+	     * @protected
+	     */
+	    this.script = this.impl;
 	}
 
 
@@ -102,10 +108,10 @@ define(
 //		if(logger.isv()) logger.v("should perform '" + actionName + "' of '" + this.name + "'" + ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
 		
 		if(arguments.length > 2){
-		    return this.script[actionName](this.controller, data, arguments[2]);
+		    return this.impl[actionName](this.controller, data, arguments[2]);
 		}
 		else {
-		    return this.script[actionName](this.controller, data);
+		    return this.impl[actionName](this.controller, data);
 		}
 	};
 
