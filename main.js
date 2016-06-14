@@ -376,5 +376,6 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 	}
 	//END: $(function() {...
 
+	return mmir;
 	
 });//END: define(...
