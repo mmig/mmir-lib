@@ -26,7 +26,7 @@
 
 newMediaPlugin = {
 		/**  @memberOf CordovaAudioOutput# */
-		initialize: function(callBack){//, mediaManager){//DISABLED this argument is currently un-used -> disabled
+		initialize: function(callBack, mediaManager){
 			
 			/**  @memberOf CordovaAudioOutput# */
 			var _pluginName = 'codovaAudioOutput';
@@ -89,6 +89,13 @@ newMediaPlugin = {
 						}
 					}
 				},
+				/**
+				 * @public
+				 * @type Function
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#play
+				 */
+				play: mediaManager.play,
 				/**
 				 * @public
 				 * @memberOf CordovaAudioOutput.prototype
@@ -322,7 +329,20 @@ newMediaPlugin = {
 							failureCallback(e);
 						}
 					}
-				}//END: getURLAsAudio
+				},//END: getURLAsAudio
+				/**
+				 * @public
+				 * @type Function
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#getAudio
+				 */
+				getAudio: function(url, onPlayedCallback, failureCallBack, onLoadedCallBack){
+					if(typeof url !== 'string'){
+						mediaManager._log.error(_pluginName+'.getAudio(): getWAVAsAudio is not supported by this module.');
+					} else {
+						return this.getURLAsAudio.apply(this, arguments);
+					}
+				}
 				
 			});//END: callBack({...
 		}

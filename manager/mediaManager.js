@@ -659,6 +659,20 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				}
     			},
     			/**
+    			 * Play audio file from the specified URL or WAV data.
+    			 * 
+    			 * Convenience function for {@link #playWAV} and {@link #playURL}:
+    			 * if first argument is a String, then <code>playURL</code> will be invoked,
+    			 * otherwise <code>playWAV</code>
+    			 */
+    			play: function(urlOrData, onPlayedCallback, failureCallBack){
+    				if(typeof urlOrData === 'string'){
+    					return this.playURL.apply(this, arguments);
+    				} else {
+    					return this.playWAV.apply(this, arguments);
+    				}
+    			},
+    			/**
     			 * Get an audio object for the audio file specified by URL.
     			 * 
     			 * The audio object exports the following functions:
@@ -698,6 +712,22 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     				}
     				else {
     					console.error("Audio Output: create audio from URL is not supported.");
+    				}
+    			},
+    			/**
+    			 * Get an audio object for the audio file specified by URL URL or by WAV data.
+    			 * 
+    			 * NOTE that getWAVAsAudio may not be supported by all modules!
+    			 * 
+    			 * Convenience function for {@link #getURLAsAudio} and {@link #getWAVAsAudio}:
+    			 * if first argument is a String, then <code>getURLAsAudio</code> will be invoked,
+    			 * otherwise <code>getWAVAsAudio</code> (if the module supports this function).
+    			 */
+    			getAudio: function(urlOrData, onPlayedCallback, failureCallBack, onLoadedCallBack){
+    				if(typeof urlOrData === 'string'){
+    					return this.getURLAsAudio.apply(this, arguments);
+    				} else {
+    					return this.getWAVAsAudio.apply(this, arguments);
     				}
     			},
     			/**

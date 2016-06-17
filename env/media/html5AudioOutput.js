@@ -245,6 +245,13 @@ newMediaPlugin = {
 					}
 					
 				},
+				/**
+				 * @public
+				 * @type Function
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#play
+				 */
+				play: mediaManagerInstance.play,
 				
 				/**
 				 * @public
@@ -569,7 +576,14 @@ newMediaPlugin = {
 							console.error(err.message + ': ' + err.description, e);
 						}
 					}
-				}
+				},//END getURLAsAudio
+
+				/**
+				 * @public
+				 * @memberOf CordovaAudioOutput.prototype
+				 * @see mmir.MediaManager#getAudio
+				 */
+				getAudio: mediaManagerInstance.getAudio,
 			});
 		}
 };
