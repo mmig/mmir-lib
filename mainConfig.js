@@ -1,6 +1,7 @@
 (function () {//execute in anonymous namespace/closure:
 
-/** @memberOf mmir.require */
+
+/** @memberOf mmir.mainConfig */
 var mmirf_config = {
 	
 	/** @memberOf mmir.require.config */		
@@ -70,7 +71,7 @@ var mmirf_config = {
 	    // ########### PRESENTATION LAYER (TODO: make changeable) ##############
 	    // #####################################################################
 	    
-	    , 'presentationManager':  'manager/presentationManager'
+	    , 'presentationManager': 'manager/presentationManager'
 	    
 	    //default view-engine (this ID is used in core.viewEngine)
 	    , 'jqmViewEngine': 'env/view/jqmViewEngine'
@@ -178,10 +179,13 @@ var mmirf_config = {
 	
 };//END: require.config({...
 
-
+/** apply mmir-configuration and retrieve (local) requirejs instance
+ * @type requirejs 
+ * @memberOf mmir.mainConfig */
 var reqInstance = requirejs.config(mmirf_config);
 
-reqInstance(['core'], function(core){
+//start mmir initialization by (re-)loading the core-module, pre-configuring mmir, and then load the main-module:
+reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core){
 	
 	//attach the local-require instance:
 	core.require = reqInstance;
@@ -197,7 +201,7 @@ reqInstance(['core'], function(core){
 		logConfig.paths.logger += 'Disabled';
 	}
 	//if the "functional" logger is set, configure it:
-	else{
+	else {
 		
 		//retrieve/set the default log-level:
 		if(typeof core.logLevel !== 'undefined'){
