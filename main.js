@@ -55,14 +55,30 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
      , presentationManager, inputManager, dialogManager, module
      , semanticInterpreter, mediaManager, notificationManager
 ){
-	//export framework functions/objects
+	/**
+	 * @private 
+	 * @memberOf mmir */
+	var isInit = false;
+	
+	//export framework functions/objects:
+	
+	/** @memberOf mmir */
 	mmir.Constants = constants;
+	/** @memberOf mmir */
 	mmir.CommonUtils = commonUtils;
+	/** @memberOf mmir */
 	mmir.ConfigurationManager = configurationManager;
+	/** @memberOf mmir */
 	mmir.NotificationManager = notificationManager.init();
 	
-	//helper: create a "namespace" from a package-definition (dot-separated string) from configuration
-	//        or return the global namespace, if there is not config-value
+	/**
+	 * HELPER create a "namespace" from a package-definition (dot-separated string) from configuration
+	 *        or return the global namespace, if there is not config-value
+	 * @param {String|Array<String>} configuration name
+	 * 
+	 * @private
+	 * @memberOf main
+	 */
 	var getContextFor = function(ctxConfigName){
 		var ctxName = configurationManager.get(ctxConfigName, true);
 		if(ctxName){
@@ -81,13 +97,21 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 	}
 	
 	//the context where the controller implementation can be found (default: global context, i.e. window)
+	/** @memberOf main */
 	var ctrlImplCtx = getContextFor('controllerContext');
 	//the context where the model implementations can be found (default: global context, i.e. window)
+	/** @memberOf main */
 	var modelImplCtx = getContextFor('modelContext');
 	
+	/** 
+	 * Main Initialization:
+	 * initializes mmir and exports its functions/modules to (gobal) mmir namespace
+	 * 
+	 * @memberOf main
+	 */
 	var mainInit = function(){
 
-		console.log('dom ready');
+//		console.log('dom ready');
     	
 		//initialize the common-utils:
 		commonUtils.init()//<- load directory structure
@@ -97,6 +121,10 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 
 				mmir.LanguageManager = languageManager.init();
 				
+				/** 
+				 * @type Deferred
+				 * @memberOf main
+				 */
 				var defer = $.Deferred();
 		        
 				//if in Cordova env:
@@ -132,13 +160,21 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 			//TEST parallelized loading of independent modules:
 			.then(function(){
 				
+
+				/** @memberOf main */
 				var isMediaManagerLoaded 	= false;
+				/** @memberOf main */
 				var isModelsLoaded 			= false;
+				/** @memberOf main */
 				var isVisualsLoaded 		= false;
+				/** @memberOf main */
 				var isInputManagerLoaded 	= false;
+				/** @memberOf main */
 				var isDialogManagerLoaded 	= false;
+				/** @memberOf main */
 				var isSemanticsLoaded        = false;
-				
+
+				/** @memberOf main */
 				var checkInitCompleted = function(){
 					
 					if(			isMediaManagerLoaded
@@ -148,20 +184,25 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 							&&	isDialogManagerLoaded
 							&&	isSemanticsLoaded
 					){
-						//get additional configuration for requirejs
-						//from configuration.json:
-						// -> if property "config" is set, apply it as requirejs-config
-						//    before signaling READY
-						// EXAMPLE:
-						// the following entry (in config/configuration.json) would add
-						// the dependency information for www/appjs/test.js as module "testConf"
-						// 
-						//	, "config": {
-						//    	"paths": {
-						//    		"testConf": "../appjs/test"
-						//    	}
-						//    }
-						//
+
+						/**
+						 * Additional configuration for requirejs
+						 * from configuration.json:
+						 *  -> if property "config" is set, apply it as requirejs-config
+						 *     before signaling READY
+						 *  EXAMPLE:
+						 *  the following entry (in config/configuration.json) would add
+						 *  the dependency information for www/appjs/test.js as module "testConf"
+						 *  
+						 * 	, "config": {
+						 *     	"paths": {
+						 *     		"testConf": "../appjs/test"
+						 *     	}
+						 *     }
+						 * 
+						 * @type PlainObject 
+						 * @memberOf main
+						 */
 						var requireConfig = configurationManager.get('config');
 						if(requireConfig){
 							require.config(requireConfig);
@@ -173,10 +214,18 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				};
 				
 				mmir.SemanticInterpreter = semanticInterpreter;
+				/** ID for the grammar engine/compiler to be used, if/when JSON grammar are (re-) compiled
+				 * @see mmir.SemanticInterpreter#setGrammarEngine
+				 * @type String 
+				 * @memberOf main */
 				var grammarEngine = configurationManager.get('grammarCompiler', true);
 				if(grammarEngine){
 					semanticInterpreter.setGrammarEngine(grammarEngine);
 				}
+				/** set synchronous/asynchronous compile-mode for grammar compilation
+				 * @see mmir.SemanticInterpreter#setEngineCompileMode
+				 * @type Boolean
+				 * @memberOf main */
 				var grammarCompileMode = configurationManager.get('grammarAsyncCompileMode', true);
 				if(typeof grammarCompileMode !== 'undefined'){
 					semanticInterpreter.setEngineCompileMode(grammarCompileMode);
@@ -188,7 +237,10 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 //					semanticInterpreter.setGrammarExecMode(grammarExecMode);//TODO add async-loaded grammars to ignoreGrammarFiles-list (to prevent loading them in "sync-exec mode")
 //				}
 				
-				//list of grammar IDs which should not be loaded, even if there is a compiled grammar available:
+				/** list of grammar IDs which should not be loaded, even if there is a compiled grammar available:
+				 * @type String
+				 * @memberOf main
+				 */
 				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', true, void(0));
 
 				commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
@@ -222,8 +274,13 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 					//   (i.e. in presentationManager's rendering function and not here)
 					//
 					//initialize with default layout contents:
+					
+					/** @type String
+					 * @memberOf main */
 					var headerContents = $( presentationManager.getLayout(null, true).getHeaderContents() );
+					
 					//NOTE: need to handle scripts separately, since some browsers may refuse to "simply append" script TAGs...
+					/** @memberOf main */
 					var scriptList = [];
 					var stylesheetList = headerContents.filter(function(index){
 						var tis = $(this);
@@ -233,6 +290,7 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 						}
 						return true;
 					});
+					
 					$("head").append( stylesheetList );
 					commonUtils.loadImpl(scriptList, true)//load serially, since scripts may depend on each other; TODO should processing wait, until these scripts have been finished! (i.e. add callbacks etc.?)
 							
@@ -266,105 +324,6 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 			
 
 	};//END: mainInit(){...
-	
-	//TEST for reference/testing: strictly serial initialization of the modules/managers:
-//	var mainSerialInit = function(){
-//
-//		console.log('dom ready');
-//    	
-//		//load plugins
-//		commonUtils.init()//<- load directory structure
-//			
-//			//load compiled grammars (if present)
-//			.then(function() {
-//
-//				mmir.SemanticInterpreter = semanticInterpreter;
-//				return commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath());//TODO remove dependency on constants-obj here (move into commonUtils? and/or make param optional?)
-//			})
-//			
-//			//load plugins (if in CORDOVA environment)
-//			.then(function() {
-//
-//				mmir.LanguageManager = languageManager.init();
-//				
-//				var defer = $.Deferred();
-//		        
-//				//if in Cordova env:
-//				// * load cordova library
-//				// * then load the (Cordova) plugins
-//				// -> after this: continue (i.e. resolve promise)
-//				var isCordova = env.isCordovaEnv;
-//				if(isCordova){
-//					require(['cordova'], function(){
-//						commonUtils.loadAllCordovaPlugins()
-//							.then(defer.resolve());
-//					});
-//		        }
-//		        else {
-//		        	// otherwise (e.g. BROWSER env):
-//		        	// just continue by resolving the promise immediately
-//		        	defer.resolve();
-//		        }
-//
-//	        	return defer.promise();
-//			})
-//			// start the MediaManager
-//			.then(function() {
-//				
-//				mmir.MediaManager = mediaManager;
-//				return mediaManager.init();
-//			})
-//			// start the ControllerManager
-//			.then(function() {
-//
-//				notificationManager.initBeep();//initialize BEEP notification (after MediaManager was initialized)
-//				
-//				mmir.ControllerManager = controllerManager;
-//				return controllerManager.init();
-//			})
-//	
-//			// start the ModelManager
-//			.then(function() {
-//				
-//				//TODO models may access views etc. during their initialization
-//				//	   --> there should be a way to configure startup, so that models may only be loaded, after everything else was loaded
-//				return modelManager.init();
-//			})
-//	
-//			// start the PresentationManager
-//			.then(function() {
-//				
-//				return presentationManager.init();
-//			})
-//	
-//			// start the InputManager
-//			.then(function() {
-//				
-//				//FIXME this should be done on rendering (and (possibly) removing obsolete the CSS header contents)
-//				$("head").append(presentationManager.getLayout("Application").getHeaderContents());
-//				
-//				mmir.InputManager = inputManager;
-//				return mmir.InputManager.init();
-//			})
-//	
-//			// start the DialogManager
-//			.then(function() {
-//				mmir.DialogManager = dialogManager;
-//				return mmir.DialogManager.init();
-//			})
-//	
-//			// start the app
-//			.then(function(_engine) {
-//				
-//				//"give signal" that the framework is now initialized / ready
-//				mmir.setInitialized();
-//	
-//			});
-//			
-//
-//	};//END: mainSerialInit(){...
-//	
-//	mainInit = mainSerialInit;
 	
 	if(env.isCordovaEnv){
 		
