@@ -18,7 +18,7 @@ var mmirf_config = {
 	        //EXAMPLE: set module-specific log-level to 'info'
 //		    , logLevel: 'info'
 	    }
-	    
+		/** @memberOf mmir.require.config.moduleConfig */
 	    , 'dialogManager': {
 	        scxmlDoc: 'config/statedef/dialogDescriptionSCXML.xml'
 	        // simple | mode 
@@ -77,13 +77,13 @@ var mmirf_config = {
 	    , 'jqmViewEngine': 'env/view/jqmViewEngine'
 	    
 	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
-		, 'jqm' : 			'vendor/libs/jquery.mobile-1.4.5'
-		, 'jqmSimpleModal':	'vendor/libs/jquery.simplemodal-1.4.4'
+		, 'jqm': 'vendor/libs/jquery.mobile-1.4.5'
+		, 'jqmSimpleModal': 'vendor/libs/jquery.simplemodal-1.4.4'
 		
-		, 'waitDialog':		'tools/stdlne-wait-dlg'
+		, 'waitDialog': 'tools/stdlne-wait-dlg'
 
 	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
-	    , 'antlr3' : 'vendor/libs/antlr3-all'
+	    , 'antlr3': 'vendor/libs/antlr3-all'
 	    
 	    , 'configurationManager': 'manager/settings/configurationManager'
 	    	
@@ -124,11 +124,15 @@ var mmirf_config = {
 	    // @chsc03 templateProcessor depends on parsingResult
 	    , 'templateProcessor': 'mvc/parser/templateProcessor'
 	    , 'parsingResult': 'mvc/parser/parsingResult'
-	    	
-    	//grammar related
+
+	    // #####################################################################
+	    // ########                SEMANTIC PROCESSING              ############
+	    // ######## (grammar generation/compilation, execution etc) ############
+	    // #####################################################################
 		, 'grammarConverter': 'semantic/grammarConverter'
 		, 'semanticInterpreter': 'semantic/semanticInterpreter'
 		, 'asyncGrammar': 'semantic/asyncGrammar'
+		, 'stemmer': 'semantic/stemmer'
 		, 'jscc':  'vendor/libs/jscc-amd'
 		, 'jison': 'vendor/libs/jison'
 		, 'pegjs': 'vendor/libs/peg-0.9.0'
@@ -142,15 +146,28 @@ var mmirf_config = {
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)
-		, 'md5' : 'vendor/libs/md5'
-		, 'checksumUtils' : 'tools/checksumUtils'
+		, 'md5': 'vendor/libs/md5'
+		, 'checksumUtils': 'tools/checksumUtils'
 
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
-		, 'loadCss' : 'tools/loadCss'
+		, 'loadCss': 'tools/loadCss'
 
-		, 'jsonUtils' : 'tools/extensions/JsonUtils'
-	    , 'commonUtilsCompatibility' : 'tools/extensions/CommonUtilsCompatibility'
-	    , 'languageManagerCompatibility' : 'tools/extensions/LanguageManagerCompatibility'
+		, 'jsonUtils': 'tools/extensions/JsonUtils'
+	    , 'commonUtilsCompatibility': 'tools/extensions/CommonUtilsCompatibility'
+	    , 'languageManagerCompatibility': 'tools/extensions/LanguageManagerCompatibility'
+	    	
+	    	
+	    //optional or "dynamically" loaded modules 
+
+	    // #####################################################################
+	    // #####         OPTIONAL / DYNAMICALLY LOADED MODULES          ########
+	    // ##### (depending on configuration in core.js or global vars) ########
+	    // #####################################################################
+	    
+	    // (console) logging related modules (either 'loggerEnabled' or 'loggerDisabled' will be mapped to 'logger', depending on configuration
+    	, 'loggerEnabled': 'tools/logger'
+    	, 'loggerDisabled': 'tools/loggerDisabled'
+	    , 'stacktrace': 'vendor/libs/stacktrace-v0.6.4'
 	    
 	},//END: paths : {...
 
@@ -159,6 +176,7 @@ var mmirf_config = {
 		/** @memberOf mmir.require.config.shim */
 	    'antlr3':			{deps: ['parsingResult'], exports : 'org'}
 		
+		/** @memberOf mmir.require.config.shim */
 		, 'md5':            {exports : 'CryptoJS'}
 		
 		, 'pegjs':       	{exports: 'PEG'}
@@ -179,6 +197,14 @@ var mmirf_config = {
 	
 };//END: require.config({...
 
+
+//var base = mmirf_config.baseUrl, path;
+//mmirf_config.baseUrl = '';
+//if(base) for(var mod in mmirf_config.paths){
+//	path = mmirf_config.paths[mod];
+//	mmirf_config.paths[mod] = base +'/'+ path;
+//}
+
 /** apply mmir-configuration and retrieve (local) requirejs instance
  * @type requirejs 
  * @memberOf mmir.mainConfig */
@@ -194,18 +220,22 @@ reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core)
 	var startModule = core.startModule;
 	
 	//setup the logger implementation:
-	// one of ['logger' | 'loggerDisabled']
-	var logConfig = {paths:{'logger': 'tools/logger'}};
-	if(core.debug === false){
-		//this will load a "disabled" logger implementation with no-op functions etc.
-		logConfig.paths.logger += 'Disabled';
-	}
-	//if the "functional" logger is set, configure it:
-	else {
+	// map 'logger' to one of  ['loggerEnabled' | 'loggerDisabled']
+	var isEnableLogger = core.debug !== false;//NOTE: only explicitly setting debug to boolean false will disable logging
+	var implName = isEnableLogger? 'loggerEnabled' : 'loggerDisabled';
+	var implPath = mmirf_config.paths[implName];
+	var logConfig = {paths:{'logger': implPath}};
+	
+	//if the "functional" logger is set, configure it
+	// (NOTE: for "disabled" logger, the implementation is provided with no-op functions etc.)
+	if(isEnableLogger) {
+
+		logConfig.config = {'logger': {}};
+		var logSettings = logConfig.config['logger'];
 		
 		//retrieve/set the default log-level:
 		if(typeof core.logLevel !== 'undefined'){
-			logConfig.config = {'logger': {logLevel: core.logLevel}};
+			logSettings.logLevel = core.logLevel;
 		}
 		
 		//set up the stacktrace for log messages (or not)
@@ -214,23 +244,15 @@ reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core)
 			isEnableTrace = core.logTrace;
 		}
 		
-		//normalize config object
-		if(!logConfig.config){
-			logConfig.config = {};
-		}
-		if(!logConfig.config['logger']){
-			logConfig.config['logger'] = {};
-		}
-		
 		if(isEnableTrace === true || (isEnableTrace && isEnableTrace.trace === true)){
 			//add module ID for stacktrace library
-			logConfig.paths['stacktrace'] = 'vendor/libs/stacktrace-v0.6.4';
-			logConfig.config['logger'].trace = isEnableTrace;
+			logSettings.trace = isEnableTrace;
 		}
 		else {
-			//define dummy module for stacktrace library (will not be used!)
+			//define dummy module for stacktrace library 
+			// (will not be used anyway, but this avoids loading the actual stacktrace impl. from file)
 			define('stacktrace', function(){ return function(){}; });
-			logConfig.config['logger'].trace = false;
+			logSettings.trace = false;
 		}
 
 	}
