@@ -7,7 +7,7 @@ var mmirf_config = {
 	/** @memberOf mmir.require.config */		
 	baseUrl: './mmirf'
 		
-	//TODO this should be defined/"defineable" somewhere else (outside the framework-scope) 
+	//configurations for the modules:
 	, config: {
 		
 		/** @memberOf mmir.require.config.moduleConfig */
@@ -34,6 +34,7 @@ var mmirf_config = {
 	    
 	}
 
+	//definition for the module IDs and their (file) paths
 	, paths : {
 		/** @memberOf mmir.require.config.paths */
 	    // core
@@ -68,7 +69,7 @@ var mmirf_config = {
 	    , 'modelManager': 'manager/modelManager'
 	    
 	    // #####################################################################
-	    // ########### PRESENTATION LAYER (TODO: make changeable) ##############
+	    // ####################### PRESENTATION LAYER ##########################
 	    // #####################################################################
 	    
 	    , 'presentationManager': 'manager/presentationManager'
@@ -210,7 +211,7 @@ var mmirf_config = {
  * @memberOf mmir.mainConfig */
 var reqInstance = requirejs.config(mmirf_config);
 
-//start mmir initialization by (re-)loading the core-module, pre-configuring mmir, and then load the main-module:
+//start mmir initialization by (re-)loading the core-module, pre-configuring mmir, and then load the framework's start-module:
 reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core){
 	
 	//attach the local-require instance:
