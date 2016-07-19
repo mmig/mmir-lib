@@ -57,6 +57,9 @@ define([  'core', 'jquery'
 	 * 
      * @requires jQuery.Deferred
      * @requires jQuery.extend
+     *  
+     * @requires mmir.require
+     * @requires mmir._define
      * 
 	 */
 	function(
@@ -356,11 +359,11 @@ define([  'core', 'jquery'
 					delete _engine.gen;
 					
 					//register the DialogeEngine with requirejs as module "dialogEngine":
-					define("dialogEngine", function(){
+					mmir._define("dialogEngine", function(){
 						return _engine;
 					});
 					//immediately load the module-definition:
-					require(['dialogEngine'], function(){
+					mmir.require(['dialogEngine'], function(){
 						//signal end of initialization process:
 						theDeferredObj.resolve(_instance, _engine);	
 					});

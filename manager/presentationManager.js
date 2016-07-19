@@ -566,7 +566,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             reRenderView : function() {
                 if (_currentView) {
                     if (_currentView.ctrlName && _currentView.viewName) {
-                        require('dialogManager').render(_currentView.ctrlName, _currentView.viewName, _currentView.data);
+                        core.require('dialogManager').render(_currentView.ctrlName, _currentView.viewName, _currentView.data);
                     }
                 }
             },
@@ -587,7 +587,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             renderPreviousView : function() {
                 if (_previousView) {
                     if (_previousView.ctrlName && _previousView.viewName) {
-                    	require('dialogManager').render(_previousView.ctrlName, _previousView.viewName, _previousView.data);
+                    	core.require('dialogManager').render(_previousView.ctrlName, _previousView.viewName, _previousView.data);
                     }
                 }
             },        
@@ -737,7 +737,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		function loadPrecompiledView(rawViewData, targetpath, success, fail){
 
 			//NOTE: stored template require the renderUtils:
-			require(['renderUtils'], function(){
+			core.require(['renderUtils'], function(){
 				
 				if(! isUpToDate(rawViewData, targetpath)){
 					if(fail) fail('Precompiled view file is outdated!');
@@ -1139,7 +1139,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		var doParseTemplate = function(controller, templateName, config, templateContent, status){
 
 			//NOTE need to request renderUtils here too, since it is needed during parsing!
-			require(['parseUtils', 'renderUtils'], function(){
+			core.require(['parseUtils', 'renderUtils'], function(){
 
 				var templateObj;
 				if(controller){
@@ -1412,7 +1412,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		);
 		
 		//MOD modularize view-engine jqm: load viewEngine (default is based on jQuery Mobile)
-		require([core.viewEngine], function(viewEngineInit){
+		core.require([core.viewEngine], function(viewEngineInit){
 			viewEngineInit.then(
 				function(viewEngine){
 					_instance.setRenderEngine(viewEngine);

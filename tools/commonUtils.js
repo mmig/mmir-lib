@@ -25,7 +25,7 @@
  */
 
 
-define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', 'module'],
+define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', 'module', 'require'],
 	/**
 	 * A Utility class to support various functions.<br>
 	 * 
@@ -39,6 +39,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	 * @requires StringExtensions
 	 * @requires Constants (optionally: jQuery)
 	 * @requires mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
+	 * @requires require
 	 * 
      * @requires jQuery.isArray	 in #isArrayHelper
      * @requires jQuery.Deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
@@ -52,7 +53,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	 * 
 	 */
 	function(
-		constants, stringExt, $, paramsParseFunc, Logger, module
+		constants, stringExt, $, paramsParseFunc, Logger, module, require
 ) {
 	/** @scope mmir.CommonUtils.prototype *///for jsdoc2
 	
@@ -1068,6 +1069,12 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * @param {Function} [success]
 		     * 				a callback function that is invoked, after compatibility mode
 		     * 				was set (alternatively the returned promise can be used).
+		     * @param {Function} [requireFunction]
+		     * 				the require-function that is configured for loading the compatibility module/file.
+		     * 				Normally, this would be the function <code>mmir.require</code>.
+		     * 				If omitted, the default (local dependency) <code>require</code> function will be used.
+		     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
+		     * 				      you want to specify this argument
 		     * @returns {jQuery.Promise}
 		     * 				a Deffered.promise that is resolved, after compatibility mode
 		     * 				was set
@@ -1077,14 +1084,15 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * @see mmir.CommonUtils.setToCompatibilityModeExtension
 		     * 
 		     */
-		    , setToCompatibilityMode : function(success) {
+		    , setToCompatibilityMode : function(success, requireFunction) {
 		    	
 		    	var defer = $.Deferred();
 		    	if(success){
 		    		defer.always(success);
 		    	}
-		    	
-		    	require(['commonUtilsCompatibility'],function(setCompatibility){
+
+		    	requireFunction = requireFunction || require;
+		    	requireFunction(['commonUtilsCompatibility'],function(setCompatibility){
 		    		
 		    		setCompatibility(instance);
 		    		

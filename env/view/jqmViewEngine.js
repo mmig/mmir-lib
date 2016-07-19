@@ -1,6 +1,6 @@
 
 
-define(['jquery', 'loadCss'],
+define(['jquery', 'loadCss', 'require'],
 /**
  * View engine that uses jQuery Mobile for loading the views as new jQM pages.
  * 
@@ -85,7 +85,7 @@ define(['jquery', 'loadCss'],
  *  @see mmir.PresentationManager#callRenderEngine
  *  @see mmir.viewEngine
  */
-function(jquery, loadCss){
+function(jquery, loadCss, require){
 
 	//load CSS for jQuery Mobile:
 	loadCss('mmirf/vendor/styles/jquery.mobile-1.4.5.min.css');

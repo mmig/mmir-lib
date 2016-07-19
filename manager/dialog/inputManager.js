@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
+define(['core', 'jquery', 'commonUtils', 'logger', 'engineConfig', 'module'],
 	/**
 	 * The InputManager handles input events.
 	 * 
@@ -50,10 +50,13 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 	 * 
      *  @requires jQuery.Deferred
      *  @requires jQuery.extend
+     *  
+     *  @requires mmir.require
+     *  @requires mmir._define
 	 * 
 	 */
 	function(
-		mmir, $, commonUtils,module, engineConfig, Logger
+		mmir, $, commonUtils, Logger, engineConfig, module
 ){
 
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -133,11 +136,11 @@ define(['core', 'jquery', 'commonUtils', 'module', 'engineConfig', 'logger' ],
 					delete _engine.gen;
 
 					//register the InputEngine with requirejs as module "inputEngine":
-					define("inputEngine", function(){
+					mmir._define("inputEngine", function(){
 						return _engine;
 					});
 					//immediately load the module-definition:
-					require(['inputEngine'], function(){
+					mmir.require(['inputEngine'], function(){
 						//signal end of initialization process:
 						theDeferredObj.resolve(_instance, _engine);	
 					});

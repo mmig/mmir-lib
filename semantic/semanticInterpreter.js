@@ -24,16 +24,18 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['constants', 'grammarConverter', 'logger', 'module'
+define(['constants', 'grammarConverter', 'logger', 'module', 'require'
         ], 
 	/**
 	 * @name SemanticInterpreter
 	 * @memberOf mmir
 	 * @static
 	 * @class
+	 * 
+	 * @requires require
 	 */
 	function (
-		constants, GrammarConverter, Logger, module
+		constants, GrammarConverter, Logger, module, require
 ){
 	
 	/**

@@ -31,7 +31,7 @@
 //
 // should the dependency on LanguageManager be made OPTIONAL?
 //
-define(['constants', 'jquery' ],
+define(['constants', 'jquery'],
 	/**
 	 * A class for managing the configuration. <br>
 	 * It's purpose is to load the configuration and settings automatically.
@@ -45,6 +45,8 @@ define(['constants', 'jquery' ],
 	 * 
 	 * @requires jQuery.ajax
 	 * @requires jQuery.isArray
+	 * 
+	 * @requires mmir.require for getting/setting language code (e.g. see {@link mmir.ConfigurationManager.getLanguage}
 	 * 
 	 */
 	function (
@@ -84,6 +86,41 @@ define(['constants', 'jquery' ],
     	 */
     	var configData = null;
     	
+    	/**
+         * Reference to the {@link mmir.LanguageManager} instance.
+         * 
+         * Will be initialized lazily
+         * 
+         * @type LanguageManager
+         * @private
+         * 
+         * @see #getLanguage
+         * @see #setLanguage
+         * 
+    	 * @memberOf LanguageManager#
+         */
+        var languageManager = null;
+        /**
+         * HELPER returns (and sets if necessary) {@link #languageManager}
+         * 
+         * @returns {mmir.LanguageManager} the LanguageManager instance
+         * @private
+         * 
+    	 * @memberOf LanguageManager#
+         */
+        var getLanguageManager = function(){
+        	if(!languageManager){
+            	var req;
+            	if(typeof mmir === 'undefined'){
+            		//fallback if global mmir is undefined, try to use global require-function
+            		req = require;
+            	} else {
+            		req = mmir.require;
+            	}
+        		languageManager = req('languageManager');
+        	}
+        	return languageManager;
+        };
     	
     	/**
     	 * Helper that loads configuration file synchronously.
@@ -231,7 +268,7 @@ define(['constants', 'jquery' ],
 			 * @memberOf ConfigurationManager.prototype
 			 */
             getLanguage: function(){
-                return require('languageManager').getInstance().getLanguage();
+                return getLanguageManager().getLanguage();
             },
 			/**
 			 * Sets the currently used language.
@@ -249,7 +286,7 @@ define(['constants', 'jquery' ],
 			 * @public
 			 */
             setLanguage: function(lang){
-            	require('languageManager').getInstance().setLanguage(lang);
+            	getLanguageManager().setLanguage(lang);
             },
 			/**
 			 * Returns the value of a property.
