@@ -831,22 +831,31 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		
 	    		var varName = rawTemplateText.substring(elem.getStart(),elem.getEnd());
 	    		
-	    		//TODO should there be a check included -> for var-existance?
-	    		//     --> currently: on assignment, if var does not exists, it will be created
-	    		//     --> change (?), so that there is a check first, and if var does not exists an ReferenceError is thrown (?)
-	    		renderingBuffer.push(DATA_NAME);
-	    		renderingBuffer.push('["');
+	    		//handle "import"/"export" of call/args-data
+	    		if(varName === PARAM_DATA_NAME || varName === PARAM_ARGS_NAME){
 	    		
-	    		if(renderingMode === RENDER_MODE_JS_SOURCE_FORCE_VAR_PREFIX){
-	    			//ensure that the replacement variable-name starts with an @:
-	    			if( ! varName.startsWith('@')){
-	    				varName = '@' + varName;
-	    			}
+		    		//TODO should there be a check included -> for var-existance?
+		    		//     --> currently: on assignment, if var does not exists, it will be created
+		    		//     --> change (?), so that there is a check first, and if var does not exists an ReferenceError is thrown (?)
+		    		renderingBuffer.push(DATA_NAME);
+		    		renderingBuffer.push('["');
+		    		
+		    		if(renderingMode === RENDER_MODE_JS_SOURCE_FORCE_VAR_PREFIX){
+		    			//ensure that the replacement variable-name starts with an @:
+		    			if( ! varName.startsWith('@')){
+		    				varName = '@' + varName;
+		    			}
+		    		}
+		    		
+		    		//extract var-name from original source-code (NOTE this var must start with @)
+		    		renderingBuffer.push(varName);
+		    		renderingBuffer.push('"]');
+	    		
+
+	    		} else {
+	    			//render variable (without leading @ symbol)
+	    			renderingBuffer.push(varName.startsWith('@')? varName.substring(1) : varName);
 	    		}
-	    		
-	    		//extract var-name from original source-code (NOTE this var must start with @)
-	    		renderingBuffer.push(varName);
-	    		renderingBuffer.push('"]');
 	    		
 	    		return renderingBuffer;
 	    	}

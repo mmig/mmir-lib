@@ -156,6 +156,20 @@ function ContentElement(group, view, parser, renderer){
 		this.parentOffset = 0;
 	}
 	
+	//if this is a sub-ContentElement (i.e. not directly attached to a view, but to another ContentElement):
+	// add a reference to its parent ContentElement
+	if(typeof group.parent !== 'undefined'){
+		/**
+		 * the parent ContentElement, if this is a sub-ContentElement to another ContentElement
+		 * 
+		 * NOTE: this field will only be present, if the ContentElement is initialized from parsing a template
+		 *       (i.e. not present when restored for persisted JS view)
+		 * @private
+		 * @type ContentElement
+		 */
+		this._parent = group.parent;
+	}
+	
 	/**
 	 * The ParsingResult that represents this ContentElement
 	 * 
@@ -261,6 +275,21 @@ function ContentElement(group, view, parser, renderer){
 	
 //	this.yields           = parsingResult.yields; @see mmir.parser.element.YIELD_DECLARATION
 //	this.contentFors    = parsingResult.contentFors; @see mmir.parser.element.YIELD_CONTENT
+	
+
+	/**
+	 * a list of VarReferences that are relevant/active for sub-content elements
+	 * (e.g. content of FOR elements)
+	 * 
+	 * 
+	 * NOTE: this field is only filled, if the ContentElement is created for parsing a template
+	 *       (i.e. not present when restored from a persisted JS view object).
+	 * 
+	 * @private
+	 * @type mmir.parser.ParsingResult
+	 * @memberOf ContentElement#
+	 */
+	this._contentVars             = [];
 	
 	//create ALL array and sort localizations etc. ...
 	/**
@@ -389,6 +418,99 @@ function ContentElement(group, view, parser, renderer){
 	};
 	
 	/**
+	 * HELPER: get a list of VarReference ParsingResults from this ContentElement and all its parent ContentElements
+	 *         (i.e. all VarReferences that this ContentElement may "need to know about" in order to execute JavaScript code, e.g. template ScriptStatements like @())
+	 * 
+	 * @returns {Array<VarReference>} list of VarReference ParsingResults from this ContentElement and all its parent ContentElements
+	 * 
+	 * @private
+	 * @function
+	 * @memberOf ContentElement#
+	 */
+	var getAllVars = function(contentElement){
+		
+		var vars = contentElement.vars;
+		var list = vars.slice(0, vars.length);
+		var parent = contentElement._parent;
+		while(parent){
+			list = list.concat(parent.vars, parent._contentVars);
+			parent = parent._parent;
+		}
+		unifyVarList(list, null);
+		return list;
+	};
+	
+	/**
+	 * HELPER: get a list of VarReference ParsingResults from this ContentElement and all its parent ContentElements
+	 *         (i.e. all VarReferences that this ContentElement may "need to know about" in order to execute JavaScript code, e.g. template ScriptStatements like @())
+	 * 
+	 * @param {Array<VarReference>} varList
+	 * @param {String} [rawText]
+	 * 				NOTE: if the list contains var-references from parsed JS-text, then the actual var-name must be extracted from the rawText
+	 * 					  (if necessary, the extracted var-name will be attached to the VarReference)
+	 * 				can be omitted, if no VarReference entries in varList originate for parsing JS-content (i.e. renderer.parseJS())
+	 * @returns {Array<VarReference>} list of VarReference ParsingResults from this ContentElement and all its parent ContentElements
+	 * 
+	 * @private
+	 * @function
+	 * @memberOf ContentElement#
+	 */
+	var unifyVarList = function(varList, rawText){
+		
+		var dict = {}, e, val, start;
+		for(var i=varList.length-1; i >= 0; --i){
+			e = varList[i];
+			val = e.getValue(e.name, e.nameType);
+			
+			//for VarReference from parsed JS code: need to extract the actual var-name:
+			if(typeof val === 'undefined' && rawText){
+				start = e.start;
+				if(rawText.charAt(e.start) === '@'){//omit template-var char
+					++start;
+				}
+				val = rawText.substring(start, e.end);
+				e.name = e.name || val;
+				e.nameType = e.nameType || 'Identifier';
+			} else {
+				val.startsWith('@')? val.substring(1) : val;//normalize var-name if necessary
+			}
+			
+			if(dict[val]){
+				//remove duplicate entry from list;
+				varList.slice(i,1);
+			} else {
+				dict[val] = true;
+			}
+		}
+	}
+	
+	/**
+	 * HELPER: check whether a var-reference is already present
+	 * 
+	 * @param {Array<VarReference>} varList
+	 * @param {String} varName
+	 * 					 the name for the variable (if it starts with "@", it will be removed before checking)
+	 * @returns {Boolean} <code>true</code> if <code>varName</code> corresponds to one of the VarReference entries in <code>varList</code>
+	 * 
+	 * @private
+	 * @function
+	 * @memberOf ContentElement#
+	 */
+	var isVarInList = function(varList, varName){
+
+		varName = varName.startsWith('@')? varName.substring(1) : varName;
+		var e, val;
+		for(var i=varList.length-1; i >= 0; --i){
+			e = varList[i];
+			val = e.getValue(e.name, e.nameType);
+			if(val === varName){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
 	 * HELPER: this creates a function for embedded JavaScript code:
 	 *  		using a function pre-compiles codes - this avoids (re-) parsing the code  
 	 *   		(by the execution environment) each time that the template is rendered.
@@ -403,7 +525,7 @@ function ContentElement(group, view, parser, renderer){
 	 * @function
 	 * @memberOf ContentElement#
 	 */
-	var createJSEvalFunction = function(strFuncBody, strFuncName){
+	var createJSEvalFunction = function(strFuncBody, strFuncName, templateVars){
 		
 		//COMMENT: using new Function(..) may yield less performance than eval('function...'), 
 		//         since the function-body using the Function(..)-method is re-evaluated on each invocation
@@ -413,64 +535,47 @@ function ContentElement(group, view, parser, renderer){
 //		var func = new Function(parser_context.element.DATA_NAME, strFuncBody);
 //		func.name = strFuncName;
 		
-		
-//		//TEST use import/export VARs instead of data-object access:
-//		//
-//		//IMPORT
-//		// * make properties of DATA available as local variables
-//		// * synchronize the DATA properties to local variables (with property getters/setters)
-//		//EXPORT
-//		// * on exit: commit values of local variables to their corresponding DATA-fields (and remove previously set "sync"-code)
-//		//
-//		var dataFieldName = parser_context.element.DATA_NAME;
-//		
-//		//TODO do static "import" without eval(): only import VARs that were declared by @var() before!
-//		//     ... also (OPTIMIZATION): during JS-parsing, gather/detect VARIABLE occurrences -> only import VAR if it gets "mentioned" in the func-body! (need to detect arguments vs. variables for this!)		
-//		var iteratorName = '__$$ITER$$__';//<- iterator name (for iterating over DATA fields)
-//		var varIteratorStartSrc = 'for(var '+iteratorName+' in '+dataFieldName+'){\
-//	          if('+dataFieldName+'.hasOwnProperty('+iteratorName+')){';//<- TODO? add check, if field-name starts with @?
-//		var varIteratorEndSrc = '}}';
-//		
-//		var importDataSrc = varIteratorStartSrc
-//					//create local variable, initialized with the DATA's value 
-//					+ 'eval("var "+'+iteratorName+'.substring(1)+" = '+dataFieldName+'[\'"+'+iteratorName+'+"\'];");'
-//					//"synchronize" the DATA object to to the created local variable 
-//					+ 'Object.defineProperty('+dataFieldName+', '+iteratorName+',{\
-//		                    configurable : true,\
-//		                    enumerable : true,\
-//		    				set: eval("var dummy1 = function set(value){\\n "+'+iteratorName+'.substring(1)+" = value;\\n };dummy1"),\
-//		    				get: eval("var dummy2 = function get(){\\n return "+'+iteratorName+'.substring(1)+";\\n };dummy2")\
-//		    			});'
-//					+ varIteratorEndSrc;
-//		
-//		//TODO do not define "export" with the function itself, since there may be problems due to return statements etc.
-//		//     ... instead: do the "export" after the function was invoked, i.e. obj.evalScript() etc. in renderer
-//		var exportDataSrc = varIteratorStartSrc
-//					//DISABLED: use defineProperty() instead (see below) ... this would use the "proxy"/"sync" mechanism..
-////					+ 'eval("'+dataFieldName+'[\'"+'+iteratorName+'+"\'] = "+'+iteratorName+'.substring(1)+";");'
-//		
-//					//reset to DATA property to normal behavior 
-//					// i.e. remove proxy-behavior by removing the getter/setter
-//					// and setting to current value
-//					+ 'Object.defineProperty('+dataFieldName+', '+iteratorName+',{\
-//							value : '+dataFieldName+'['+iteratorName+'],\
-//                    		writable : true,\
-//		                    configurable : true,\
-//		                    enumerable : true\
-//		    			});'
-//					+ varIteratorEndSrc;
-//		
-//		var func = eval( 'var dummy=function '+strFuncName+'('+parser_context.element.DATA_NAME+'){'
-//				+ importDataSrc + strFuncBody +';'+exportDataSrc+'};dummy' );//<- FIXME WARING: export does not work correctly, if there is a return-statement in the outermost scope of the strFuncBody!
-		
+		//create import/export data-argument
+		// for making fields in data-argument accessible without context-information within the function
+		// (e.g. instead of "data.theField" -> "theField") 
+		var size=templateVars.length;
+		var importVarValues, exportVarValues;
+		if(size > 0){
+			importVarValues = [];
+			exportVarValues = [];
+			var v, vname, nvname;
+			for(var i=0; i < size; ++i){
+				v = templateVars[i];
+				vname = v.getValue(v.name, v.nameType);
+				if(vname.startsWith('@')){
+					nvname = vname.substring(1);
+				} else {
+					nvname = vname;
+					vname = '@' + nvname;
+				}
+				importVarValues.push('\nvar ', nvname, ' = ', parser_context.element.DATA_NAME, '["', vname, '"];');
+				exportVarValues.push('\n', parser_context.element.DATA_NAME, '["', vname, '"] = ', nvname, ';');
+			}
+
+			var resultVarName = parser_context.element.DATA_NAME+'RESULT__';
+			importVarValues = importVarValues.join('') +'\nvar '+resultVarName+' = (function(){\n';
+			exportVarValues = '\n})();' + exportVarValues.join('') + '\n return ' + resultVarName + ';';
+			
+		} else {
+			importVarValues = '';
+			exportVarValues = '';
+		}
 		
 //		//NOTE: need a dummy variable to catch and return the create function-definition in the eval-statement
 //		//      (the awkward 'var dummy=...;dummy'-construction avoids leaking the dummy-var into the 
 //		//       global name-space, where the last ';dummy' represent the the return-statement for eval(..) )
-		var func = eval( 'var dummy=function '+strFuncName+'('+parser_context.element.DATA_NAME+'){'+strFuncBody+'};dummy' );
+		var func = eval( 'var dummy=function '+strFuncName+'('+parser_context.element.DATA_NAME+'){'//TODO use strict mode?: +'\n"use strict";\n'
+				+importVarValues+strFuncBody+exportVarValues+'};dummy' );
 		
 		return func;
 	};
+	
+	var allVars = getAllVars(this);
 	
 	//init iter-variables
 	var i=0,size=0;
@@ -495,7 +600,7 @@ function ContentElement(group, view, parser, renderer){
 			preparedJSCode = renderer.renderJS(parsedJS.rawTemplateText, parsedJS.varReferences, true);
 			
 			try{
-				renderPartialsElement.argsEval = createJSEvalFunction('return ('+preparedJSCode+');', 'argsEval');
+				renderPartialsElement.argsEval = createJSEvalFunction('return ('+preparedJSCode+');', 'argsEval', allVars);
 			} catch (err){
 				var error = new ScriptEvalError(err, preparedJSCode,  this, renderPartialsElement);
 				//attach a dummy function that prints the error each time it is invoked:
@@ -523,7 +628,7 @@ function ContentElement(group, view, parser, renderer){
 			preparedJSCode = renderer.renderJS(parsedJS.rawTemplateText, parsedJS.varReferences, true);
 			
 			try{
-				helperElement.argsEval = createJSEvalFunction('return ('+preparedJSCode+');', 'argsEval');
+				helperElement.argsEval = createJSEvalFunction('return ('+preparedJSCode+');', 'argsEval', allVars);
 			} catch (err){
 				var error = new ScriptEvalError(err, preparedJSCode,  this, helperElement);
 				//attach a dummy function that prints the error each time it is invoked:
@@ -547,7 +652,7 @@ function ContentElement(group, view, parser, renderer){
 		preparedJSCode = renderer.renderJS(parsedJS.rawTemplateText, parsedJS.varReferences);
 		
 		try{
-			ifElement.ifEval = createJSEvalFunction('return ('+preparedJSCode+');', 'ifEval');
+			ifElement.ifEval = createJSEvalFunction('return ('+preparedJSCode+');', 'ifEval', allVars);
 		} catch (err){
 			var error = new ScriptEvalError(err, preparedJSCode,  this, ifElement);
 			//attach a dummy function that prints the error each time it is invoked:
@@ -571,6 +676,15 @@ function ContentElement(group, view, parser, renderer){
 			
 			forElement.forPropName = this.definition.substring(forPropNameRef.getStart(), forPropNameRef.getEnd());
 			forElement.forListName = this.definition.substring(forListNameRef.getStart(), forListNameRef.getEnd());
+
+			//special case FOR-statement: "implicitly declare" property-name variable, if it is not declared yet (i.e. make available for JS code within for-loop)
+			var normalizedPropName = forElement.forPropName.startsWith('@')? forElement.forPropName.substring(1) : forElement.forPropName;
+			if(!isVarInList(allVars, normalizedPropName) && !isVarInList(this._contentVars, normalizedPropName)){
+				//add name to ParsingResult, so that there is no need to extract it from raw-template anymore:
+				forPropNameRef.name = normalizedPropName;
+				forPropNameRef.nameType = 'Identifier';
+				this._contentVars.push(forElement.forControlVarPos[0]);
+			}
 			
 			//prepend variable-names with template-var-prefix if necessary:
 			if( ! forElement.forPropName.startsWith('@')){
@@ -587,8 +701,8 @@ function ContentElement(group, view, parser, renderer){
 				//the forIteration-function creates a list of all property names for the variable 
 				// given in the FORITER statement
 				
+				//TODO implement this using iteration-functionality of JavaScript (-> yield)
 				forIterInit = function (data) {
-					//TODO implement this using iteration-functionality of JavaScript (-> yield)
 					var list = new Array(); 
 					for(var theProp in data[this.forListName]){
 						list.push(theProp);
@@ -620,6 +734,9 @@ function ContentElement(group, view, parser, renderer){
 			// (-> for locating the init-/condition-/increase-statements in case of an error)
 			var currentOffset = '@for('.length;//<- "@for("
 			
+			//list for template-vars: these may increased by "implicit" for-init-variables (see comment below)
+			var allForVars = allVars.slice(0, allVars.length);
+			
 			//TODO use original parser/results instead of additional parsing pass
 			if(forElement.forInitExpr){
 				parsedJS = parser.parseJS(
@@ -628,15 +745,26 @@ function ContentElement(group, view, parser, renderer){
 						, forElement.getStart() + this.getOffset() + currentOffset
 				);
 				preparedJSCode = renderer.renderJS(parsedJS.rawTemplateText, parsedJS.varReferences, true);
-				
+
 				currentOffset += forElement.forInitExpr.length;
+				
+				//special case FOR-statement: if there occur template-vars in init-expression, then "implicitly declare" these (i.e. make available for JS code within for-loop)
+				var forInitVars = parsedJS.varReferences;
+				unifyVarList(parsedJS.varReferences, parsedJS.rawTemplateText);
+				if(forInitVars.length > 0){
+					allForVars = allForVars.concat(forInitVars);
+					unifyVarList(allForVars);
+					this._contentVars = this._contentVars.concat(allForVars);
+					unifyVarList(this._contentVars);
+				}
+				
 			}
 			else {
 				// -> empty init-statement
 				preparedJSCode = '';
 			}
 			try{
-				forElement.forInitEval = createJSEvalFunction(preparedJSCode+';', 'forInitEval');
+				forElement.forInitEval = createJSEvalFunction(preparedJSCode+';', 'forInitEval', allForVars);
 			} catch (err){
 				var error = new ScriptEvalError(err, preparedJSCode,  this, forElement);
 				//attach a dummy function that prints the error each time it is invoked:
@@ -663,7 +791,7 @@ function ContentElement(group, view, parser, renderer){
 				preparedJSCode = 'true';
 			}
 			try {
-				forElement.forConditionEval = createJSEvalFunction('return ('+preparedJSCode+');', 'forConditionEval');
+				forElement.forConditionEval = createJSEvalFunction('return ('+preparedJSCode+');', 'forConditionEval', allForVars);
 			} catch (err){
 				var error = new ScriptEvalError(err, preparedJSCode,  this, forElement);
 				//attach a dummy function that prints the error each time it is invoked:
@@ -690,7 +818,7 @@ function ContentElement(group, view, parser, renderer){
 			}
 			
 			try{
-				forElement.forIncrementEval = createJSEvalFunction(preparedJSCode+';', 'forIncrementEval');
+				forElement.forIncrementEval = createJSEvalFunction(preparedJSCode+';', 'forIncrementEval', allForVars);
 			} catch (err){
 				var error = new ScriptEvalError(err, preparedJSCode,  this, forElement);
 				//attach a dummy function that prints the error each time it is invoked:
@@ -701,7 +829,7 @@ function ContentElement(group, view, parser, renderer){
 		}
 	}
 	
-	//recursively parse content-fields:
+	//(recursively) parse content-fields:
 	for(i=0, size = all.length; i < size; ++i){
 		subContentElement = all[i];
 		
@@ -735,7 +863,7 @@ function ContentElement(group, view, parser, renderer){
 			}
 			
 			try{
-				subContentElement.scriptEval = createJSEvalFunction(preparedJSCode, 'scriptEval');
+				subContentElement.scriptEval = createJSEvalFunction(preparedJSCode, 'scriptEval', allVars);
 			} catch (err){
 				var error = new ScriptEvalError(err, preparedJSCode,  this, subContentElement);
 				//attach a dummy function that prints the error each time it is invoked:
@@ -747,12 +875,15 @@ function ContentElement(group, view, parser, renderer){
 			this.internalHasDynamicContent = true;
 		}
 		
+		//recursively parse template-content by creating sub-ContentElements:
+		
 		if(typeof subContentElement.content === 'string'){
 			
 			subContentElement.content = new ContentElement({
 					name: SUB_ELEMENT_NAME, 
 					content: subContentElement.content,
-					offset: this.getOffset() + subContentElement.contentOffset
+					offset: this.getOffset() + subContentElement.contentOffset,
+					parent: this
 				}, view, parser, renderer
 			);
 			
@@ -765,7 +896,8 @@ function ContentElement(group, view, parser, renderer){
 			subContentElement.elseContent.content = new ContentElement({
 					name: SUB_ELEMENT_NAME,
 					content: subContentElement.elseContent.content,
-					offset: this.getOffset() + subContentElement.elseContent.contentOffset
+					offset: this.getOffset() + subContentElement.elseContent.contentOffset,
+					parent: this
 				}, view, parser, renderer
 			);
 
