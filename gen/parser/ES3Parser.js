@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 ES3.g3 2014-11-10 18:43:02
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 ES3.g3 2016-07-04 21:14:35
 
 var ES3Parser = function(input, state) {
     if (!state) {
@@ -1439,8 +1439,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var THIS20_tree=null;
         var Identifier21_tree=null;
         var RPAREN26_tree=null;
-        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
+        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         try {
             // ES3.g3:1186:2: ( THIS | Identifier | amp= IdentifierNameAmpersatStart | literal | arrayLiteral | objectLiteral | lpar= LPAREN expression RPAREN -> ^( PAREXPR[$lpar, \"PAREXPR\"] expression ) )
@@ -1648,9 +1648,9 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var lb_tree=null;
         var COMMA28_tree=null;
         var RBRACK30_tree=null;
+        var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_RBRACK=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RBRACK");
         var stream_LBRACK=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACK");
-        var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_arrayItem=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule arrayItem");
         try {
             // ES3.g3:1196:2: (lb= LBRACK ( arrayItem ( COMMA arrayItem )* )? RBRACK -> ^( ARRAY[$lb, \"ARRAY\"] ( arrayItem )* ) )
@@ -1845,12 +1845,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             // AST REWRITE
             // elements: expr
             // token labels: 
-            // rule labels: retval, expr
+            // rule labels: expr, retval
             // token list labels: 
             // rule list labels: 
             retval.tree = root_0;
-            var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
             var stream_expr=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token expr",expr!=null?expr.tree:null);
+            var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
 
             root_0 = this.adaptor.nil();
             // 1202:2: -> ^( ITEM ( $expr)? )
@@ -1923,8 +1923,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var lb_tree=null;
         var COMMA32_tree=null;
         var RBRACE34_tree=null;
-        var stream_RBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RBRACE");
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
+        var stream_RBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RBRACE");
         var stream_LBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACE");
         var stream_nameValuePair=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule nameValuePair");
         try {
@@ -2092,7 +2092,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: assignmentExpression, propertyName
+            // elements: propertyName, assignmentExpression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -2454,9 +2454,9 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var LPAREN46_tree=null;
         var COMMA48_tree=null;
         var RPAREN50_tree=null;
-        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
+        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_assignmentExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule assignmentExpression");
         try {
             // ES3.g3:1242:2: ( LPAREN ( assignmentExpression ( COMMA assignmentExpression )* )? RPAREN -> ^( ARGS ( assignmentExpression )* ) )
@@ -2607,12 +2607,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var DOT56_tree=null;
         var Identifier57_tree=null;
         var stream_RBRACK=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RBRACK");
+        var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
         var stream_LBRACK=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACK");
         var stream_DOT=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token DOT");
-        var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
-        var stream_memberExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule memberExpression");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_arguments=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule arguments");
+        var stream_memberExpression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule memberExpression");
         try {
             // ES3.g3:1247:2: ( ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )* )
             // ES3.g3:1248:2: ( memberExpression -> memberExpression ) ( arguments -> ^( CALL $leftHandSideExpression arguments ) | LBRACK expression RBRACK -> ^( BYINDEX $leftHandSideExpression expression ) | DOT Identifier -> ^( BYFIELD $leftHandSideExpression Identifier ) )*
@@ -6224,10 +6224,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
         var VAR160_tree=null;
         var COMMA162_tree=null;
-        var stream_VAR=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token VAR");
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
-        var stream_variableDeclaration=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule variableDeclaration");
+        var stream_VAR=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token VAR");
         var stream_semic=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule semic");
+        var stream_variableDeclaration=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule variableDeclaration");
         try {
             // ES3.g3:1570:2: ( VAR variableDeclaration ( COMMA variableDeclaration )* semic -> ^( VAR ( variableDeclaration )+ ) )
             // ES3.g3:1570:4: VAR variableDeclaration ( COMMA variableDeclaration )* semic
@@ -6647,10 +6647,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var LPAREN175_tree=null;
         var RPAREN177_tree=null;
         var ELSE179_tree=null;
-        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
-        var stream_IF=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token IF");
         var stream_ELSE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token ELSE");
+        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
+        var stream_IF=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token IF");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
         try {
@@ -6903,13 +6903,13 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var WHILE186_tree=null;
         var LPAREN187_tree=null;
         var RPAREN189_tree=null;
+        var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
+        var stream_WHILE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token WHILE");
         var stream_DO=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token DO");
         var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
-        var stream_WHILE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token WHILE");
-        var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
-        var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
-        var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_semic=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule semic");
+        var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
+        var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
         try {
             // ES3.g3:1625:2: ( DO statement WHILE LPAREN expression RPAREN semic -> ^( DO statement expression ) )
             // ES3.g3:1625:4: DO statement WHILE LPAREN expression RPAREN semic
@@ -6946,7 +6946,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: DO, expression, statement
+            // elements: statement, expression, DO
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -7308,10 +7308,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var COMMA208_tree=null;
         var SEMIC210_tree=null;
         var SEMIC211_tree=null;
-        var stream_VAR=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token VAR");
-        var stream_IN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token IN");
-        var stream_SEMIC=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token SEMIC");
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
+        var stream_IN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token IN");
+        var stream_VAR=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token VAR");
+        var stream_SEMIC=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token SEMIC");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
         var stream_variableDeclarationNoIn=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule variableDeclarationNoIn");
         try {
@@ -7359,7 +7359,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: variableDeclarationNoIn, expression, VAR
+                    // elements: variableDeclarationNoIn, VAR, expression
                     // token labels: 
                     // rule labels: retval
                     // token list labels: 
@@ -7494,14 +7494,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: ex2, variableDeclarationNoIn, VAR, ex1
+                    // elements: ex2, VAR, variableDeclarationNoIn, ex1
                     // token labels: 
-                    // rule labels: retval, ex2, ex1
+                    // rule labels: ex2, retval, ex1
                     // token list labels: 
                     // rule list labels: 
                     retval.tree = root_0;
-                    var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
                     var stream_ex2=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex2",ex2!=null?ex2.tree:null);
+                    var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
                     var stream_ex1=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = this.adaptor.nil();
@@ -7676,14 +7676,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: ex2, ex1
+                    // elements: ex1, ex2
                     // token labels: 
-                    // rule labels: retval, ex2, ex1
+                    // rule labels: ex2, retval, ex1
                     // token list labels: 
                     // rule list labels: 
                     retval.tree = root_0;
-                    var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
                     var stream_ex2=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex2",ex2!=null?ex2.tree:null);
+                    var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
                     var stream_ex1=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = this.adaptor.nil();
@@ -7781,15 +7781,15 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
                     // AST REWRITE
-                    // elements: ex2, ex3, ex1
+                    // elements: ex1, ex3, ex2
                     // token labels: 
-                    // rule labels: retval, ex3, ex2, ex1
+                    // rule labels: ex3, ex2, retval, ex1
                     // token list labels: 
                     // rule list labels: 
                     retval.tree = root_0;
-                    var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
                     var stream_ex3=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex3",ex3!=null?ex3.tree:null);
                     var stream_ex2=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex2",ex2!=null?ex2.tree:null);
+                    var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
                     var stream_ex1=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
                     root_0 = this.adaptor.nil();
@@ -7961,12 +7961,12 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
             // AST REWRITE
             // elements: ex1, ex2
             // token labels: 
-            // rule labels: retval, ex2, ex1
+            // rule labels: ex2, retval, ex1
             // token list labels: 
             // rule list labels: 
             retval.tree = root_0;
-            var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
             var stream_ex2=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex2",ex2!=null?ex2.tree:null);
+            var stream_retval=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token retval",retval!=null?retval.tree:null);
             var stream_ex1=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"token ex1",ex1!=null?ex1.tree:null);
 
             root_0 = this.adaptor.nil();
@@ -8402,14 +8402,14 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var RPAREN234_tree=null;
         var LBRACE235_tree=null;
         var RBRACE238_tree=null;
-        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_RBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RBRACE");
-        var stream_SWITCH=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token SWITCH");
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
+        var stream_SWITCH=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token SWITCH");
+        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_LBRACE=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LBRACE");
         var stream_expression=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule expression");
-        var stream_caseClause=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule caseClause");
         var stream_defaultClause=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule defaultClause");
+        var stream_caseClause=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule caseClause");
 
         //	int 
         	  var defaultClauseCount = 0;
@@ -8488,7 +8488,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: defaultClause, caseClause, SWITCH, expression
+            // elements: SWITCH, defaultClause, caseClause, expression
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -8754,8 +8754,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
         var Identifier246_tree=null;
         var COLON247_tree=null;
-        var stream_COLON=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COLON");
         var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
+        var stream_COLON=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COLON");
         var stream_statement=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule statement");
         try {
             // ES3.g3:1806:2: ( Identifier COLON statement -> ^( LABELLED Identifier statement ) )
@@ -9182,8 +9182,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
         var name_tree=null;
         var FUNCTION264_tree=null;
-        var stream_FUNCTION=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token FUNCTION");
         var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
+        var stream_FUNCTION=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token FUNCTION");
         var stream_functionBody=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule functionBody");
         var stream_formalParameterList=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule formalParameterList");
         try {
@@ -9210,7 +9210,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: FUNCTION, functionBody, name, formalParameterList
+            // elements: formalParameterList, functionBody, FUNCTION, name
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -9285,8 +9285,8 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
         var name_tree=null;
         var FUNCTION267_tree=null;
-        var stream_FUNCTION=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token FUNCTION");
         var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
+        var stream_FUNCTION=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token FUNCTION");
         var stream_functionBody=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule functionBody");
         var stream_formalParameterList=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule formalParameterList");
         try {
@@ -9329,7 +9329,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: name, formalParameterList, FUNCTION, functionBody
+            // elements: name, functionBody, FUNCTION, formalParameterList
             // token labels: name
             // rule labels: retval
             // token list labels: 
@@ -9413,10 +9413,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var COMMA272_tree=null;
         var Identifier273_tree=null;
         var RPAREN274_tree=null;
-        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
         var stream_Identifier=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token Identifier");
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
+        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
 
         try {
             // ES3.g3:1870:2: ( LPAREN ( Identifier ( COMMA Identifier )* )? RPAREN -> ^( ARGS ( Identifier )* ) )
@@ -10148,10 +10148,10 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
         var COMMA295_tree=null;
         var COMMA297_tree=null;
         var RPAREN299_tree=null;
-        var stream_RENDER=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RENDER");
-        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_COMMA=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token COMMA");
+        var stream_RENDER=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RENDER");
         var stream_LPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token LPAREN");
+        var stream_RPAREN=new org.antlr.runtime.tree.RewriteRuleTokenStream(this.adaptor,"token RPAREN");
         var stream_callParam=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callParam");
         var stream_callData=new org.antlr.runtime.tree.RewriteRuleSubtreeStream(this.adaptor,"rule callData");
         try {
@@ -10209,7 +10209,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: callParam, callParam, callData, RENDER
+            // elements: callData, RENDER, callParam, callParam
             // token labels: 
             // rule labels: retval
             // token list labels: 
@@ -10344,7 +10344,7 @@ org.antlr.lang.augmentObject(ES3Parser.prototype, {
 
 
             // AST REWRITE
-            // elements: callData, callParam, callParam
+            // elements: callParam, callParam, callData
             // token labels: 
             // rule labels: retval
             // token list labels: 

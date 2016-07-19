@@ -1,4 +1,4 @@
-// $ANTLR 3.3 Nov 30, 2010 12:50:56 MmirScript.g 2014-08-05 21:54:58
+// $ANTLR 3.3 Nov 30, 2010 12:50:56 MmirScript.g 2016-07-04 21:14:34
 
 var MmirScriptLexer = function(input, state) {
 // alternate constructor @todo
@@ -64,16 +64,16 @@ org.antlr.lang.augmentObject(MmirScriptLexer, {
     DoEnterHelper: 21,
     DoEnterRender: 22,
     END_SCRIPT: 23,
-    HEX_DIGIT: 24,
-    UNICODE_ESC: 25,
-    OCTAL_ESC: 26,
-    ESC_SEQ: 27,
-    DoExit: 28,
-    DoExitStatement: 29,
-    DoEnter: 30,
-    STRING: 31,
-    SSTRING: 32,
-    WS: 33
+    DoExit: 24,
+    DoExitStatement: 25,
+    DoEnter: 26,
+    STRING: 27,
+    SSTRING: 28,
+    WS: 29,
+    ESC_SEQ: 30,
+    HEX_DIGIT: 31,
+    UNICODE_ESC: 32,
+    OCTAL_ESC: 33
 });
 
 (function(){
@@ -101,16 +101,16 @@ org.antlr.lang.extend(MmirScriptLexer, org.antlr.runtime.Lexer, {
     DoEnterHelper : 21,
     DoEnterRender : 22,
     END_SCRIPT : 23,
-    HEX_DIGIT : 24,
-    UNICODE_ESC : 25,
-    OCTAL_ESC : 26,
-    ESC_SEQ : 27,
-    DoExit : 28,
-    DoExitStatement : 29,
-    DoEnter : 30,
-    STRING : 31,
-    SSTRING : 32,
-    WS : 33,
+    DoExit : 24,
+    DoExitStatement : 25,
+    DoEnter : 26,
+    STRING : 27,
+    SSTRING : 28,
+    WS : 29,
+    ESC_SEQ : 30,
+    HEX_DIGIT : 31,
+    UNICODE_ESC : 32,
+    OCTAL_ESC : 33,
     getGrammarFileName: function() { return "MmirScript.g"; }
 });
 org.antlr.lang.augmentObject(MmirScriptLexer.prototype, {
@@ -1098,7 +1098,7 @@ org.antlr.lang.augmentObject(MmirScriptLexer, {
     "\u0002\u0001\u0003\u0001\u0004\u0001\u0005\u0001\u0006\u0001\u0008\u0001"+
     "\u0009\u0001\u000a",
     DFA15_specialS:
-        "\u0001\u0001\u000c\uffff\u0001\u0000\u0001\u0002\u000a\uffff}>",
+        "\u0001\u0002\u000c\uffff\u0001\u0001\u0001\u0000\u000a\uffff}>",
     DFA15_transitionS: [
             "\u0009\u000f\u0001\u000a\u0001\u0006\u0002\u000f\u0001\u0005"+
             "\u0012\u000f\u0001\u0009\u0001\u000f\u0001\u000d\u0004\u000f"+
@@ -1178,6 +1178,16 @@ org.antlr.lang.extend(MmirScriptLexer.DFA15, org.antlr.runtime.DFA, {
         var retval = (function(s, input) {
             switch ( s ) {
                         case 0 : 
+                            var LA15_14 = input.LA(1);
+
+                            s = -1;
+                            if ( ((LA15_14>='\u0000' && LA15_14<='\uFFFF')) ) {s = 24;}
+
+                            else s = 15;
+
+                            if ( s>=0 ) return s;
+                            break;
+                        case 1 : 
                             var LA15_13 = input.LA(1);
 
                             s = -1;
@@ -1187,7 +1197,7 @@ org.antlr.lang.extend(MmirScriptLexer.DFA15, org.antlr.runtime.DFA, {
 
                             if ( s>=0 ) return s;
                             break;
-                        case 1 : 
+                        case 2 : 
                             var LA15_0 = input.LA(1);
 
                             s = -1;
@@ -1220,16 +1230,6 @@ org.antlr.lang.extend(MmirScriptLexer.DFA15, org.antlr.runtime.DFA, {
                             else if ( (LA15_0=='\'') ) {s = 14;}
 
                             else if ( ((LA15_0>='\u0000' && LA15_0<='\b')||(LA15_0>='\u000B' && LA15_0<='\f')||(LA15_0>='\u000E' && LA15_0<='\u001F')||LA15_0=='!'||(LA15_0>='#' && LA15_0<='&')||(LA15_0>='*' && LA15_0<='.')||(LA15_0>='0' && LA15_0<='?')||(LA15_0>='A' && LA15_0<='z')||LA15_0=='|'||(LA15_0>='~' && LA15_0<='\u2027')||(LA15_0>='\u202A' && LA15_0<='\uFFFF')) ) {s = 15;}
-
-                            if ( s>=0 ) return s;
-                            break;
-                        case 2 : 
-                            var LA15_14 = input.LA(1);
-
-                            s = -1;
-                            if ( ((LA15_14>='\u0000' && LA15_14<='\uFFFF')) ) {s = 24;}
-
-                            else s = 15;
 
                             if ( s>=0 ) return s;
                             break;
