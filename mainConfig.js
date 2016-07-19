@@ -1,4 +1,4 @@
-(function () {//execute in anonymous namespace/closure:
+(function (requirejs, define) {//execute in anonymous namespace/closure:
 
 
 /** @memberOf mmir.mainConfig */
@@ -210,12 +210,14 @@ var mmirf_config = {
  * @type requirejs 
  * @memberOf mmir.mainConfig */
 var reqInstance = requirejs.config(mmirf_config);
+var defInstance = define;
 
 //start mmir initialization by (re-)loading the core-module, pre-configuring mmir, and then load the framework's start-module:
 reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core){
 	
 	//attach the local-require instance:
 	core.require = reqInstance;
+	core._define = defInstance;
 	
 	//get the "entry-point", i.e. module-name/-id that will be loaded (default: "main") 
 	var startModule = core.startModule;
@@ -269,4 +271,4 @@ reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core)
 	core.require(['logger',startModule]);
 });
 
-}());//END: (function(){...
+}(requirejs, define));//END: (function(){...

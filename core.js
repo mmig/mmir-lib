@@ -563,7 +563,34 @@ function initMmir() {
 			 * @see mmir.debug
 			 * @see mmir.logLevel
 			 */
-			logTrace: true	//{trace: true, depth: 'full'}
+			logTrace: true,	//{trace: true, depth: 'full'},
+			
+			/**
+			 * Attached require-function that is used by the framework to load dependencies.
+			 * 			 
+			 * @memberOf mmir
+			 * @name require
+			 * @type Function
+			 * @default requirejs
+			 * @public
+			 * 
+			 * @see https://requirejs.org/
+			 */
+			require: null,//is intialized in mainConfig.js
+			/**
+			 * Attached define-function for "declaring" modules that is used by the framework.
+			 * 
+			 * See requirejs documentation on details about the <code>define</code> function.
+			 * 			 
+			 * @memberOf mmir
+			 * @name require
+			 * @type Function
+			 * @default define
+			 * @protected
+			 * 
+			 * @see https://requirejs.org/
+			 */
+			_define: null//is intialized in mainConfig.js
 	};
 	
 	if(typeof define === 'function'){
