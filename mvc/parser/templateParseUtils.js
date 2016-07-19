@@ -696,6 +696,8 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 		var varRefs = parser.getVarReferences();
 		if(varRefs){
 			result.varReferences = varRefs;
+		} else {
+			result.varReferences = [];
 		}
 		
 		//TODO handle potentially global var-declaration (i.e. assignments without preceding var, where the variable is undefined yet)
