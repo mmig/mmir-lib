@@ -93,7 +93,8 @@ content returns[String theContent]
 	;
 
 other	: COMMENT  {if(this.isDebug) this.printInfo('CONTENT_comment',$COMMENT.text);/*debug*/}
-	| STRING   {if(this.isDebug) this.printInfo('CONTENT_String' ,$STRING.text);/*debug*/}
+		// "evalute" strings in order to ignore content that is contained in strings (e.g. escape sequences within a script-block that occur in a string)
+		| STRING   {if(this.isDebug) this.printInfo('CONTENT_String' ,$STRING.text);/*debug*/}
 		| SSTRING  {if(this.isDebug) this.printInfo('CONTENT_string' ,$SSTRING.text);/*debug*/}
 	;
 	
