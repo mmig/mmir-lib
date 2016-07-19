@@ -628,6 +628,29 @@ define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
 //				parsingObj.forIterationExpr = getFirstChild(tree.getChild(0).getChild(0), 'Identifier', parser).toString();
 //				parsingObj.forObjectExpr    = getFirstChild(tree.getChild(0).getChild(1), 'Identifier', parser).toString();
 				parsingObj.forControlVarPos = parser.getVarReferences();
+				//if one/both variables were not AmpersatVariables, we need to extract them manually:
+				if(parsingObj.forControlVarPos.length < 2){
+					
+					//first try if the missing variable is the property-name variable (for iterating):
+					var propVar = getFirstChild(tree.getChild(0).getChild(0), 'Identifier', parser);
+					if(propVar){
+						//put propVar parsing result at first position:
+						propVar = new ParsingResult(propVar.token);
+						propVar.end += 1;//adjust end position: token.end is exactly the end, while we need the position after the last char
+						parsingObj.forControlVarPos.unshift(propVar);
+					}
+					
+					//if still not both present, try to extract the object-variable (container/list for iterating):
+					if(parsingObj.forControlVarPos.length < 2){
+						var objVar =  getFirstChild(tree.getChild(0).getChild(1), 'Identifier', parser);
+						if(objVar){
+							//put objVar parsing result at second position:
+							objVar = new ParsingResult(objVar.token);
+							objVar.end += 1;//adjust end position: token.end is exactly the end, while we need the position after the last char
+							parsingObj.forControlVarPos.push(objVar);
+						}
+					}
+				}
 				parsingObj.forControlPos  = extractBoundries(tree.getChild(0));
 			}
 			else {
