@@ -43,6 +43,8 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
    * @memberof mmir
    * @private
    * 
+   * @requires require.config
+   * 
    * @requires jQuery.Deferred
    * 
    * @requires jQuery#selector	(for initial CSS/script injections; TODO change mechanism)
