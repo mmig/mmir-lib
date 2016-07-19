@@ -59,6 +59,45 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
     	, MmirScriptLexer, MmirScriptParser, org
 ){
 
+	/**
+	 * add extend-function for MmirTemplateLexer objects:
+	 *  attaches the main processing functionality for parsing the template files
+	 *  
+	 *  (NOTE the extend-function is called in the constructor, see MmirTemplate.g and MmirTemplateLexer.js) 
+	 * 
+	 * @type Function
+	 * @memberOf MmirTemplateLexer.prototype
+	 */
+	MmirTemplateLexer.__mmirExtend = templateProcessor;
+	
+	/**
+	 * @memberOf ES3Parser.prototype
+	 */
+	ES3Parser.prototype.getVarReferences = function(){
+		
+		var size = this.ampersatIdentifiers.length;
+		
+		if(size === 0){
+			return null;
+		}
+		
+		var varRefs = new Array(size);
+		for(var i=0; i < size; ++i){
+			var ref = this.ampersatIdentifiers[i];
+			
+			var refObj = new ParsingResult(ref);
+//			refObj.start = ref.start;
+			
+			//correct end-position (token's stop-index is exactly the last char-index, whereas ParsingResult's end-position is token.stopIndex + 1)
+			refObj.end = refObj.getEnd() + 1;
+			
+			refObj.type = parser.element.VAR_REFERENCE;
+			
+			varRefs[i] = refObj;
+		}
+		return varRefs;
+	};
+	
 	////////////////////////////////////helper for debugging / printing error details ////////////////////////
 
 	/**
@@ -546,128 +585,128 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	
 	//////////////////////////////////// END: helper for debugging, error details etc. ////////////////////////
 
-		/**
-	     * Object containing the instance of the class ParserUtils 
-	     * 
-	     * @type ParserUtils
-	     * @private
-	     * 
-	     * @memberOf ParserUtils#
-	     */
-	    var instance = null;
+	/**
+     * Object containing the instance of the class ParserUtils 
+     * 
+     * @type ParserUtils
+     * @private
+     * 
+     * @memberOf ParserUtils#
+     */
+    var instance = null;
 
-	    /**
-		 * @private
-	     * @memberOf ParserUtils#
-	     */
-	    var isDebug = true;//TODO read/set from configuration
-	    
-	    MmirTemplateLexer.prototype.emitErrorMessage = function(msg) {
-	    	parser.parserPrintError('[ERROR] TemplateLexer: ', msg, this);
-		};
+    /**
+	 * @private
+     * @memberOf ParserUtils#
+     */
+    var isDebug = true;//TODO read/set from configuration
+    
+    MmirTemplateLexer.prototype.emitErrorMessage = function(msg) {
+    	parser.parserPrintError('[ERROR] TemplateLexer: ', msg, this);
+	};
 //		MmirTemplateParser.prototype.emitErrorMessage = function(msg) {
 //			parser.parserPrintError('[ERROR] TemplateParser: ',msg);
 //		};
-		
-		ES3Lexer.prototype.emitErrorMessage = function(msg) {
-			parser.parserPrintError('[ERROR] JavaScriptLexer_ES3: ', msg, this);
-		};
-		ES3Parser.prototype.emitErrorMessage = function(msg) {
-			parser.parserPrintError('[ERROR] JavaScriptParser_ES3: ', msg, this.getTokenStream().getTokenSource());
-		};
-		
-		MmirScriptLexer.prototype.emitErrorMessage = function(msg) {
-			var mode = this.isStatementMode()? 'Statement' : 'Block';
-			parser.parserPrintError('[ERROR] Script'+mode+'Lexer: ',msg, this);
-		};
-		MmirScriptParser.prototype.emitErrorMessage = function(msg) {
-			parser.parserPrintError('[ERROR] ScriptParser: ',msg, this.getTokenStream().getTokenSource());
-		};
-		
-		MmirScriptContentLexer.prototype.emitErrorMessage = function(msg) {
-			parser.parserPrintError('[ERROR] ContentLexer: ',msg, this);
-		};
-		MmirScriptContentParser.prototype.emitErrorMessage = function(msg) {
-			parser.parserPrintError('[ERROR] ContentParser: ',msg, this.getTokenStream().getTokenSource());
-		};
-		
-		/**
-		 * @private
-	     * @memberOf ParserUtils#
-		 */
-		function internalParse(text) {
+	
+	ES3Lexer.prototype.emitErrorMessage = function(msg) {
+		parser.parserPrintError('[ERROR] JavaScriptLexer_ES3: ', msg, this);
+	};
+	ES3Parser.prototype.emitErrorMessage = function(msg) {
+		parser.parserPrintError('[ERROR] JavaScriptParser_ES3: ', msg, this.getTokenStream().getTokenSource());
+	};
+	
+	MmirScriptLexer.prototype.emitErrorMessage = function(msg) {
+		var mode = this.isStatementMode()? 'Statement' : 'Block';
+		parser.parserPrintError('[ERROR] Script'+mode+'Lexer: ',msg, this);
+	};
+	MmirScriptParser.prototype.emitErrorMessage = function(msg) {
+		parser.parserPrintError('[ERROR] ScriptParser: ',msg, this.getTokenStream().getTokenSource());
+	};
+	
+	MmirScriptContentLexer.prototype.emitErrorMessage = function(msg) {
+		parser.parserPrintError('[ERROR] ContentLexer: ',msg, this);
+	};
+	MmirScriptContentParser.prototype.emitErrorMessage = function(msg) {
+		parser.parserPrintError('[ERROR] ContentParser: ',msg, this.getTokenStream().getTokenSource());
+	};
+	
+	/**
+	 * @private
+     * @memberOf ParserUtils#
+	 */
+	function internalParse(text) {
 
-		    var input = new org.antlr.runtime.ANTLRStringStream(text);//FIXME change, how dependency 'antlr3' is exported?
-		  	var lexer = new MmirTemplateLexer(input);
-		  	
-		  	lexer.isDebug = isDebug;
-		  	
-		  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);//FIXME change, how dependency 'antlr3' is exported?
+	    var input = new org.antlr.runtime.ANTLRStringStream(text);//FIXME change, how dependency 'antlr3' is exported?
+	  	var lexer = new MmirTemplateLexer(input);
+	  	
+	  	lexer.isDebug = isDebug;
+	  	
+	  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);//FIXME change, how dependency 'antlr3' is exported?
 
-			var result 				= {};
-			result.rawTemplateText 	= tokens.toString();
-			result.scripts 			= lexer.includeScripts;
-			result.styles 			= lexer.includeStyles;
-			result.localizations 	= lexer.locales;
-			result.ifs	 			= lexer.ifs;
-			result.fors 			= lexer.fors;
-			result.yields 			= lexer.yields;
-			result.contentFors 		= lexer.yieldContents;
-			result.helpers	 		= lexer.helpers;
-			result.partials 		= lexer.renderPartials;
-			result.escapes	 		= lexer.escape;
-			result.scriptStatements	= lexer.scriptStatements;
-			result.scriptBlocks		= lexer.scriptBlocks;
-			result.vars				= lexer.vars;
-			result.comments			= lexer.comments;
-			//end: parsing results
-			
-			
-			lexer = null;
-			
-			return result;
-		}
+		var result 				= {};
+		result.rawTemplateText 	= tokens.toString();
+		result.scripts 			= lexer.includeScripts;
+		result.styles 			= lexer.includeStyles;
+		result.localizations 	= lexer.locales;
+		result.ifs	 			= lexer.ifs;
+		result.fors 			= lexer.fors;
+		result.yields 			= lexer.yields;
+		result.contentFors 		= lexer.yieldContents;
+		result.helpers	 		= lexer.helpers;
+		result.partials 		= lexer.renderPartials;
+		result.escapes	 		= lexer.escape;
+		result.scriptStatements	= lexer.scriptStatements;
+		result.scriptBlocks		= lexer.scriptBlocks;
+		result.vars				= lexer.vars;
+		result.comments			= lexer.comments;
+		//end: parsing results
 		
-		/**
-		 * @private
-	     * @memberOf ParserUtils#
-		 */
-		function internalParseJS(text, entryRuleName, offset) {
-		  	
-		  	var input = new org.antlr.runtime.ANTLRStringStream(text);
-		  	var lexer = new ES3Lexer(input);
-		  	lexer.isDebug = isDebug;
-		  	lexer.offset = offset;
-		  	
-		  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);
-			var parser = new ES3Parser(tokens);
-			parser.offset = offset;
-			
-			if(!entryRuleName){
+		
+		lexer = null;
+		
+		return result;
+	}
+	
+	/**
+	 * @private
+     * @memberOf ParserUtils#
+	 */
+	function internalParseJS(text, entryRuleName, offset) {
+	  	
+	  	var input = new org.antlr.runtime.ANTLRStringStream(text);
+	  	var lexer = new ES3Lexer(input);
+	  	lexer.isDebug = isDebug;
+	  	lexer.offset = offset;
+	  	
+	  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);
+		var parser = new ES3Parser(tokens);
+		parser.offset = offset;
+		
+		if(!entryRuleName){
 //			var parseResult = 
-				parser.program();//<- parse with main rule 'program' in ES3Parser
-			}
-			else {
-//				var parseResult = 
-					parser[entryRuleName]();//<- parse with main rule 'program' in ES3Parser
-			}
-			var result 				= new Object();
-			result.rawTemplateText 	= tokens.toString();
-			
-			var varRefs = parser.getVarReferences();
-			if(varRefs){
-				result.varReferences = varRefs;
-			}
-			
-			//TODO handle potentially global var-declaration (i.e. assignments without preceding var, where the variable is undefined yet)
-			
-			//end: parsing results
-			
-			lexer = null;
-			parser = null;
-			
-			return result;
+			parser.program();//<- parse with main rule 'program' in ES3Parser
 		}
+		else {
+//				var parseResult = 
+				parser[entryRuleName]();//<- parse with main rule 'program' in ES3Parser
+		}
+		var result 				= new Object();
+		result.rawTemplateText 	= tokens.toString();
+		
+		var varRefs = parser.getVarReferences();
+		if(varRefs){
+			result.varReferences = varRefs;
+		}
+		
+		//TODO handle potentially global var-declaration (i.e. assignments without preceding var, where the variable is undefined yet)
+		
+		//end: parsing results
+		
+		lexer = null;
+		parser = null;
+		
+		return result;
+	}
 		
 //		var getVarReferences = function(parser){
 //			
@@ -791,5 +830,4 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	    return instance;
 		
 	});//END define(..., function(){
-
 

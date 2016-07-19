@@ -33,10 +33,7 @@ options{
 
 @lexer::members {
 
-	//FIXME
-	//mmir.parser.extendMmirTemplateProcessor(this);
-	var extendMmirTemplateProcessor = require('templateProcessor');
-	extendMmirTemplateProcessor(this);
+	MmirTemplateLexer.__mmirExtend(this);
 	
 }
 
@@ -278,7 +275,7 @@ STRING
 SSTRING
     :  '\'' ( options {greedy=false;}: (ESC_SEQ | ~('\\'|'\'') ))* '\''
     ;
-*/
+
 
 fragment
 HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F') ;
@@ -301,6 +298,7 @@ fragment
 UNICODE_ESC
     :   '\\' 'u' HEX_DIGIT HEX_DIGIT HEX_DIGIT HEX_DIGIT
     ;
+*/
 
 /** When the template parser sees end-of-comment it just says 'I'm done', which
  *  consumes the tokens and forces this template parser (feeding
