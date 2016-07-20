@@ -680,13 +680,14 @@ ParsingResult.prototype.stringify = function(){
 	
 	//function properties:
 	var funcPropList = [
-   	     'scriptEval',
-   	     'argsEval',
-   	     'ifEval',
-   	     'forInitEval',
-   	     'forIterator',
-   	     'forConditionEval',
-   	     'forIncrementEval'
+	//DISABLED these are now generated/initialized in the owning ContentElment's initEvalFunctions() function (NOTE that this may include the forInitEval too, which then will overwrite this function, that may be exported due to this list)
+//   	     'scriptEval',
+//   	     'argsEval',
+//   	     'ifEval',
+//   	     'forConditionEval',
+//   	     'forIncrementEval',
+   	     'forInitEval',//TODO include this in ContentElement.initEvalFunctions
+   	     'forIterator'//TODO include this in ContentElement.initEvalFunctions
    	];
 	
 	//default function properties:

@@ -344,6 +344,9 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		//create "buffer" if necessary:
 	    		var renderResult = getRenderingBuffer(renderingBuffer);
 	    		
+	    		//initialize the contentElement with the current rendering-data object:
+	    		contentElement.setRenderData(data);
+	    		
 	    		var pos = 1;
 	    		//iterate over elements, and render them into the "buffer":
 	    		for(var i=0, size = contentElement.allContentElements.length; i < size; ++i){
@@ -436,7 +439,6 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 		    		//        in for the corresponding yield-declaration element.
 	    			logger.warn('ParseUtil.renderElement: encountered YIELD_CONTENT for '+elem.name+' -> this sould be handled by renderYieldDeclaration!');
 	    		}
-	    		
 
 	    		else if(type === parser.element.IF){
 	    			return renderIf(elem, renderingMode, rawTemplateText, renderingBuffer, data, containingContentElement);
