@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.7.3)
+version notes for MMIR framework code (v 3.7.4)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
@@ -22,6 +22,40 @@ version notes for MMIR framework code (v 3.7.3)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.7.4
+##################
+
+MODFIFICATIONS:
+
+ * ADDITION main.js: exports now the mmir object in its module definition, i.e. you can use: require('main') for retrieving mmir core
+ * REFACTOR controller.js, helper.js: renamed (internal) field 'script' -> 'impl', and marked 'script' field as deprecated
+ * ADDITION mediaManager: added short-cut functions play() (for playWAV() and playURL()) and getAudio() (for getWAVAsAudio() and getURLAsAudio())
+ * REFACTOR mainConfig.js: all module IDs and their (file) paths are now contained (statically) in mainConfig.js::mmir_config.paths (now, the only mmir framework related module IDs that are added dynamically, as aliases to existing module IDs/paths)
+
+ * REFACTOR MmirTemplateLexer: removed dependency of require() (using attached field to lexer class instead)
+ * REFACTOR template parsing: moved paser/lexer class extensions from templateProcessor to templateParseUtils
+  * attach templateProcessor's augment-function to template lexer class
+ * REFACTOR templateProcessor:
+  * in class extension: replaced (hidden/private) closure variable with this-reference
+  * export augment/extend-function instead of object for augmenting/extending
+
+ * ADDITION attached requirejs' define to core-object as <core module instance>._define (i.e. mmir._define)
+ * REFACTOR added require() as explicit dependency
+ * REFACTOR use require/define functions attached to the core-object instead of global-object
+ 
+ * ADDITION contentElement: allow usage of template-variables without prefixing them @ within javascript code
+   * implement "import" / "export" for data argument that makes the template variables accessible
+   * "auto declare" variables in for(in)-expressions as template variables if necessary
+   * when parsing ContentElements from template text, add/use reference to parent ContentElement (if they are not directly contained in a view, but in another ContentElement)within js code
+   
+ * REFACTOR [parsingResult, templateRenderUtils, contentElement] changed creation of script-eval functions:
+   instead of creating each function on its own and import & exporting data-vars, now all script-eval functions are gathered and are created within a closure together with the data-vars
+
+
+BUGFIX:
+  * FIX MmirTemplateLexer: removed lexing for string-types (which is only relevant within content/scripts lexers)
 
 ##################
  Version 3.7.3
