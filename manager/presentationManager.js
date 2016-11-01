@@ -27,9 +27,9 @@
 
 
 define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'//DISABLED: now loaded on-demand (see init()) -> 'renderUtils'
-         , 'layout', 'view', 'partial', 'dictionary', 'checksumUtils', 'languageManager'
-         , 'jquery', 'core'//, 'module'
-         , 'stringExtension', 'parserModule'
+         , 'layout', 'view', 'partial', 'dictionary', 'checksumUtils', 'languageManager', 'logger'
+         , 'jquery', 'core', 'module'
+         , 'stringExtension', 'parserModule'//<- loaded, but not directly used
     ],
     
     /**
@@ -48,8 +48,8 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      *  
      */
     function ( controllerManager, constants, commonUtils, configurationManager//, renderUtils
-    		, Layout, View, Partial, Dictionary, checksumUtils, languageManager
-            , $, core//, module
+    		, Layout, View, Partial, Dictionary, checksumUtils, languageManager, Logger
+            , $, core, module
 ) {
 	
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -91,6 +91,24 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	 var DEFAULT_LAYOUT_NAME = 'Default';
 	 
 	 /**
+	  * Name of the configuration property that specifies a custom name for the default layout.
+	  * 
+	  * <p>
+	  * NOTE: if FALSY (other than <code>undefined</code>) no default layout will be loaded.
+	  *       Rendering views may fail, if they rely on a {@link Layout}!
+	  * 
+	  * @type String
+	  * @private
+	  * @constant
+	  * @memberOf mmir.PresentationManager#
+	  * 
+	  * @example var defaultLayout = mmir.Constants.get(CONFIG_DEFAULT_LAYOUT_NAME);
+	  * 
+	  */
+	 var CONFIG_DEFAULT_LAYOUT_NAME = 'defaultLayoutName';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...
+	 
+	 
+	 /**
 	  * Name of the configuration property that specifies whether or not to use 
 	  * pre-compiled views, i.e. whether to use generated JavaScript files
 	  * instead of parsing & compiling the "raw" templates (eHTML files).
@@ -114,6 +132,15 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	 var CONFIG_PRECOMPILED_VIEWS_MODE = 'usePrecompiledViews';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...
 	 
 	 // private members
+	 /**
+	  * The logger for the PresentationManager.
+	  * 
+	  * @private
+	  * @type Logger
+	  * @memberOf mmir.PresentationManager#
+	  */
+	var logger = Logger.create(module);//initialize with requirejs-module information
+		
 	 /**
 	  * Array of layouts of the application
 	  * 
@@ -279,19 +306,19 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
     		  *            [data] optional data for the view.
     		  */
     		 render: function(ctrlName, viewName, view, ctrl, data){
-    			 console.error('PresentationManager.render: no rendering engine set!');
+    			 logger.error('PresentationManager.render: no rendering engine set!');
     		 },
     		 showDialog: function(ctrlName, dialogId, data) {
-    			 console.error('PresentationManager.showDialog: no rendering engine set!');
+    			 logger.error('PresentationManager.showDialog: no rendering engine set!');
     		 },
     		 hideCurrentDialog: function(){
-    			 console.error('PresentationManager.hideCurrentDialog: no rendering engine set!');
+    			 logger.error('PresentationManager.hideCurrentDialog: no rendering engine set!');
     		 },
     		 showWaitDialog: function(text, data) {
-    			 console.error('PresentationManager.showWaitDialog: no rendering engine set!');
+    			 logger.error('PresentationManager.showWaitDialog: no rendering engine set!');
     		 },
     		 hideWaitDialog: function() {
-    			 console.error('PresentationManager.hideWaitDialog: no rendering engine set!');
+    			 logger.error('PresentationManager.hideWaitDialog: no rendering engine set!');
     		 }
      };
 	 /**
@@ -345,7 +372,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                         layout = _instance.getLayout(DEFAULT_LAYOUT_NAME, false);
                     }
                     else {
-                        console.error('[PresentationManager.getLayout]: could not find layout "' + layoutName +'"')
+                        logger.error('[PresentationManager.getLayout]: could not find layout "' + layoutName +'"')
                         return false;
                     }
                 }
@@ -381,7 +408,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 view = _views.get(viewName);
 
                 if (!view) {
-                    console.error('[PresentationManager.getView]: could not find view "' + viewName + '"');
+                    logger.error('[PresentationManager.getView]: could not find view "' + viewName + '"');
                     return false;
                 }
                 return view;
@@ -418,14 +445,14 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                     partialKey = createPartialKey(controllerName, partialName);
                 }
                 else {
-                    console.error('[PresentationManager.getPartial]: requested partial "' + partialName + '" for unknown controller: "' + (controllerName ? (controllerName.getName? controllerName.getName(): controllerName) : 'undefined')
+                    logger.error('[PresentationManager.getPartial]: requested partial "' + partialName + '" for unknown controller: "' + (controllerName ? (controllerName.getName? controllerName.getName(): controllerName) : 'undefined')
                             + '"');
                     return false;
                 }
 
                 partial = _partials.get(partialKey);
                 if (!partial) {
-                    console.error('[PresentationManager.getPartial]: could not find partial "' + partialName + '" for controller "' + (controllerName ? (controllerName.getName? controllerName.getName(): controllerName) : 'undefined') + '"!');
+                    logger.error('[PresentationManager.getPartial]: could not find partial "' + partialName + '" for controller "' + (controllerName ? (controllerName.getName? controllerName.getName(): controllerName) : 'undefined') + '"!');
                     return false;
                 }
                 return partial;
@@ -530,7 +557,13 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 var ctrl = controllerManager.getController(ctrlName);
 
                 if (ctrl != null) {
+                	
                     var view = this.getView(ctrlName, viewName);
+
+                    if(!view){
+                    	logger.error('PresentationManager.renderView: could not find view "'+viewName+'" for controller "'+ctrlName+'"');
+                    	return;
+                    }
                     
                     _renderEngine.render.call(this, ctrlName, viewName, view, ctrl, data);
 
@@ -547,7 +580,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 					_currentView.data=data;
                 }
                 else {
-                	console.warn('PresentationManager.renderView: could not retrieve controller "'+ctrlName+'"');
+                	logger.error('PresentationManager.renderView: could not retrieve controller "'+ctrlName+'"');
                 }
             },
 
@@ -710,6 +743,12 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		/** @scope mmir.MediaManager.prototype */
 
 		delete _instance.init;//FIXME should init be deleted?
+		
+		// determine if default-layout has a custom name (or is disabled, in it was set to null)
+		var defLayoutName = configurationManager.get(CONFIG_DEFAULT_LAYOUT_NAME, true, void(0));
+		if(typeof defLayoutName !== 'undefined'){
+			DEFAULT_LAYOUT_NAME = defLayoutName;
+		}
 
 		/**
 		 * Checks if a pre-compiled view is up-to-date:
@@ -741,7 +780,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 				
 				if(! isUpToDate(rawViewData, targetpath)){
 					if(fail) fail('Precompiled view file is outdated!');
-					else console.warn('Outdated pre-compiled view at: '+targetpath);
+					else logger.warn('Outdated pre-compiled view at: '+targetpath);
 					
 					//-> do not load the pre-compiled view, instead let fail-callback handle re-parsing for the view
 					return;/////////////////////// EARLY EXIT /////////////////////
@@ -813,7 +852,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			}).fail(function(jqxhr, status, err){
 				// print out an error message
 				var errMsg = err && err.stack? err.stack : err;
-				console.error("[" + status + "] Could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
+				logger.error("[" + status + "] Could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
 			});
 
 			return isCompiledViewUpToDate;
@@ -947,7 +986,11 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			};//END: doLoadLayout(){...
 
 			//load the default layout:
-			doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
+			if(DEFAULT_LAYOUT_NAME){
+				doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
+			} else {
+				logger.info('The name for the default Layout was set to "'+DEFAULT_LAYOUT_NAME+'", no default Layout will be loaded!')
+			}
 
 			//load layouts for controllers (there may be none defined)
 			$.each(ctrlNameList, doLoadLayout);
@@ -1322,7 +1365,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
 						}, function(err){
 
-							console.warn('Could not load precompiled '+createConfig.typeName+' from '
+							logger.warn('Could not load precompiled '+createConfig.typeName+' from '
 									+templateInfo.genPath+'", because: '+err
 									+', compiling template instead: '
 									+templateInfo.path
@@ -1344,7 +1387,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
 				// print out an error message
 				var errMsg = err && err.stack? err.stack : err;
-				console.error("[" + status + "] Could not load '" + templateInfo.path + "': "+errMsg); //failure
+				logger.error("[" + status + "] Could not load '" + templateInfo.path + "': "+errMsg); //failure
 
 				updateLoadStatus(loadStatus, true);
 			});
