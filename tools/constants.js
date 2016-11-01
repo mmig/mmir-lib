@@ -26,7 +26,7 @@
 
 
 //define(['module'], function(module){//TODO remove module-dependency? -> would need different mechanism for querying env-configuration...
-define(['env'], 
+define(['env', 'module'], 
 /**
  * A Utility class that provides various <i>constants</i>.<br>
  * 
@@ -46,8 +46,13 @@ define(['env'],
  * @example var appBase = mmir.Constants.getBasePath();
  */
 function(
-		env
+		env, module
 ){
+	
+	var _modConf = module.config();
+	if(_modConf.basePath){
+		env.basePath = _modConf.basePath;
+	}
 	
 	/**
 	 * Object containing the instance of the class constants 
@@ -252,9 +257,14 @@ function(
 	function setBasePath(isBrowserEnvParam){
 		// if not on browser: basepath must be different
 		if(typeof isBrowserEnvParam === 'string'){
+			
 			basePath = isBrowserEnvParam;
 		}
-		else if (isBrowserEnvParam && isBrowserEnvParam.isCordovaEnv){
+		else if (isBrowserEnvParam && isBrowserEnvParam.basePath){
+			
+			basePath = isBrowserEnvParam.basePath;
+			
+		} else if (isBrowserEnvParam && isBrowserEnvParam.isCordovaEnv){
 
 			//if cordova env, try to use the specific platform
 			var env = isBrowserEnvParam.envSetting;
@@ -281,6 +291,7 @@ function(
 			
 		}
 		else if (isBrowserEnvParam && isBrowserEnvParam.isBrowserEnv){
+			
 			basePath = "";
 		}
 		else if (isBrowserEnvParam === false || typeof isBrowserEnvParam === 'undefined'){
@@ -388,7 +399,7 @@ function(
 			 * @returns {String} worker path
 			 */
 			getWorkerPath: function(){
-				return workerPath;
+				return basePath+workerPath;
 			},
 			/**
 			 * Returns a string with the path to the helpers.
