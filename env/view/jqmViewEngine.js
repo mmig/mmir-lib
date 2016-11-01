@@ -1,6 +1,6 @@
 
 
-define(['jquery', 'loadCss', 'require'],
+define(['constants', 'jquery', 'loadCss', 'require'],
 /**
  * View engine that uses jQuery Mobile for loading the views as new jQM pages.
  * 
@@ -85,10 +85,11 @@ define(['jquery', 'loadCss', 'require'],
  *  @see mmir.PresentationManager#callRenderEngine
  *  @see mmir.viewEngine
  */
-function(jquery, loadCss, require){
+function(consts, jquery, loadCss, require){
 
+	var basePath = consts.getBasePath()
 	//load CSS for jQuery Mobile:
-	loadCss('mmirf/vendor/styles/jquery.mobile-1.4.5.min.css');
+	loadCss(basePath+'mmirf/vendor/styles/jquery.mobile-1.4.5.min.css');
 	
 	/**
 	 * Deferred object that will be returned; for async-initialization:
