@@ -287,23 +287,26 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	    	var layoutsFileList = commonUtils.getDirectoryContentsWithFilter(layoutsPath, "(?!"+partialsPrefix+")*.ehtml");
 	    	
 	    	var layoutInfo = null, layoutGenPath;
-	    	for(i=0, size = layoutsFileList.length; i < size; ++i){
-	    		
-	    		if( layoutsFileList[i].startsWith(controllerName, true) ){
-	    			
-	    			var layoutName = removeFileExt(layoutsFileList[i]);
-	    	    	layoutInfo = {
-			    		fileName: layoutName,
-			    		name: firstToUpperCase(layoutName),
-			        	path: layoutsPath+"/"+layoutsFileList[i],
-	    	    	};
-	    	    	
-	    	    	layoutGenPath = constants.getCompiledLayoutPath();
-	    	    	addGenPath(layoutGenPath.substring(0, layoutGenPath.length-1), layoutInfo);
-		        	
-		        	break;
-	    		}
-	        }
+	    	if(layoutsFileList != null){
+		    	for(i=0, size = layoutsFileList.length; i < size; ++i){
+		    		
+		    		if( layoutsFileList[i].startsWith(controllerName, true) ){
+		    			
+		    			var layoutName = removeFileExt(layoutsFileList[i]);
+		    	    	layoutInfo = {
+				    		fileName: layoutName,
+				    		name: firstToUpperCase(layoutName),
+				        	path: layoutsPath+"/"+layoutsFileList[i],
+		    	    	};
+		    	    	
+		    	    	layoutGenPath = constants.getCompiledLayoutPath();
+		    	    	addGenPath(layoutGenPath.substring(0, layoutGenPath.length-1), layoutInfo);
+			        	
+		    	    	//there can be max. 1 layout per controller
+			        	break;
+		    		}
+		        }
+	    	}
 	    	
 	    	var ctrlInfo = {
 	    		fileName: rawControllerName,
