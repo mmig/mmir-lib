@@ -272,37 +272,54 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				
 				presentationManager.init().then(function(){
 					
+					var doCompletePresInit = function(){
+
+						isVisualsLoaded = true;//<- set to "LOADED" after all scripts have been loaded / TODO impl. better mechanism for including application-scripts...
+			
+						mmir.PresentationManager = presentationManager;
+						checkInitCompleted();
+					};
+					
 					//FIXME impl. mechanism where this is done for each view/layout rendering 
 					//   (i.e. in presentationManager's rendering function and not here)
 					//
 					//initialize with default layout contents:
 					
-					/** @type String
-					 * @memberOf main */
-					var headerContents = $( presentationManager.getLayout(null, true).getHeaderContents() );
-					
-					//NOTE: need to handle scripts separately, since some browsers may refuse to "simply append" script TAGs...
-					/** @memberOf main */
-					var scriptList = [];
-					var stylesheetList = headerContents.filter(function(index){
-						var tis = $(this);
-						if( tis.is('script') ){
-							scriptList.push(tis.attr('src'));
-							return false;
-						}
-						return true;
-					});
-					
-					$("head").append( stylesheetList );
-					commonUtils.loadImpl(scriptList, true)//load serially, since scripts may depend on each other; TODO should processing wait, until these scripts have been finished! (i.e. add callbacks etc.?)
-							
-						.then(function(){//<- need to wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
+					// determine if default-layout is disabled
+					// i.e. configuration is either undefined (-> using default name) 
+					// or TRUTHY (-> custom name for default layout)
+					// -> if FALSY-other-than-undefined: default layout is disabled
+					var defLayoutName = configurationManager.get("defaultLayoutName", true, void(0));//TODO impl. & use PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME instead of "defaultLayoutName"
+					if(typeof defLayoutName === 'undefined' || defLayoutName){
 
-								isVisualsLoaded = true;//<- set to "LOADED" after all scripts have been loaded / TODO impl. better mechanism for including application-scripts...
-					
-								mmir.PresentationManager = presentationManager;
-								checkInitCompleted();
-					});
+						/** @type String
+						 * @memberOf main */
+						var defaultLayout = presentationManager.getLayout(null, true);
+						
+						/** @type String
+						 * @memberOf main */
+						var headerContents = $( defaultLayout.getHeaderContents() );
+						
+						//NOTE: need to handle scripts separately, since some browsers may refuse to "simply append" script TAGs...
+						/** @memberOf main */
+						var scriptList = [];
+						var stylesheetList = headerContents.filter(function(index){
+							var tis = $(this);
+							if( tis.is('script') ){
+								scriptList.push(tis.attr('src'));
+								return false;
+							}
+							return true;
+						});
+						
+						$("head").append( stylesheetList );
+						commonUtils.loadImpl(scriptList, true)//load serially, since scripts may depend on each other; TODO should processing wait, until these scripts have been finished! (i.e. add callbacks etc.?)
+							.then(doCompletePresInit);//<- need to wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
+						
+					} else {
+						//no default layout present: just continue
+						doCompletePresInit();
+					}
 				});
 				//TODO handle reject/fail of the presentationManager's init-Promise!
 				
