@@ -899,14 +899,16 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 					//additional property for keeping track on how many layouts were load overall
 					// NOTE: this additional counter is necessary, since currentLoadCount
 					//       keeps only track of how many controller's were checked. But since
-					//       a controller may not have a layout-defintion of its own, we have
-					//       to use another counter to keep track of actually loaded layouts.
+					//       a controller may not have a layout-definition of its own, we have
+					//       to use another counter to keep track of the actually loaded layouts.
 					loadedLayoutsCount: 0,
 
 					//need a custom function for checking the load status: if no layout was loaded, 
 					//                                                     the Derred will be rejected
 					onCompletionImpl: function(status){
-						if(status.loadedLayoutsCount < 1){
+						
+						//if there is a default-layout specified, but no layout was loaded -> fail
+						if(status.loadedLayoutsCount < 1 && DEFAULT_LAYOUT_NAME){
 
 							//there must be at least on layout-file for the default-controller:
 							status.loader.reject( 'Could not load any layout! At least one layout must be present at '
@@ -989,7 +991,9 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			if(DEFAULT_LAYOUT_NAME){
 				doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
 			} else {
-				logger.info('The name for the default Layout was set to "'+DEFAULT_LAYOUT_NAME+'", no default Layout will be loaded!')
+				logger.info('The name for the default Layout was set to "'+DEFAULT_LAYOUT_NAME+'", no default Layout will be loaded!');
+				--loadStatus.remainingCtrlCount;
+				checkCompletion(loadStatus);
 			}
 
 			//load layouts for controllers (there may be none defined)
