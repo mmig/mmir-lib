@@ -583,14 +583,28 @@ function initMmir() {
 			 * See requirejs documentation on details about the <code>define</code> function.
 			 * 			 
 			 * @memberOf mmir
-			 * @name require
+			 * @name _define
 			 * @type Function
 			 * @default define
 			 * @protected
 			 * 
 			 * @see https://requirejs.org/
 			 */
-			_define: null//is intialized in mainConfig.js
+			_define: null,//is intialized in mainConfig.js
+			
+			/**
+			 * The (relative) path pointing to the mmir-lib, in case the library is located
+			 * somewhere other than <code>mmirf/</code> (relative to the main HTML page).
+			 * 
+			 * Normally, it should not be necessary to change this.
+			 * 			 
+			 * @memberOf mmir
+			 * @name _mmirLibPath
+			 * @type String
+			 * @default undefined (will use the default configuration for the path)
+			 * @protected
+			 */
+			_mmirLibPath: void(0)
 	};
 	
 	if(typeof define === 'function'){

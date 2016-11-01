@@ -206,6 +206,16 @@ var mmirf_config = {
 //	mmirf_config.paths[mod] = base +'/'+ path;
 //}
 
+//allow to change baseUrl for mmir-lib
+var coreName = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
+var mmirCore = window[coreName];
+if(typeof mmirCore !== 'undefined'){
+	if(mmirCore && mmirCore._mmirLibPath){
+		mmirf_config.baseUrl = mmirCore._mmirLibPath;
+	}
+}
+
+
 /** apply mmir-configuration and retrieve (local) requirejs instance
  * @type requirejs 
  * @memberOf mmir.mainConfig */
