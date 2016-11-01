@@ -740,7 +740,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 	
 	function init () {
 
-		/** @scope mmir.MediaManager.prototype */
+		/** @scope mmir.PresentationManager.prototype */
 
 		delete _instance.init;//FIXME should init be deleted?
 		
@@ -760,7 +760,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @async
 		 * @private
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @param {String} rawViewData
 		 * 					the text content of the view template (i.e. content of a eHTML file "as is")
@@ -804,7 +804,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @default
 		 * @type Boolean
 		 * @default false: use templates files (*.ehtml) and compile them (freshly) on-the-fly
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 */
 		var isUsePreCompiledViews = configurationManager.getBoolean(CONFIG_PRECOMPILED_VIEWS_MODE, true, false);
 
@@ -818,7 +818,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 *    
 		 * @sync the checksum file is loaded in synchronous mode
 		 * @private
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @param {String} viewContent
 		 * 						the content of the view template (i.e. loaded eHTML file)
@@ -864,7 +864,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @function
 		 * @private
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
 		 */
@@ -874,14 +874,14 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			/**
 			 * @type jQuery.Deffered
 			 * @private
-			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
 			var defer = $.Deferred();
 			
 			/**
 			 * @type String
 			 * @private
-			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
 			var ctrlNameList = controllerManager.getControllerNames();
 			
@@ -889,7 +889,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * HELPER object for tracking the loading-status of the layouts
 			 * 
 			 * @private
-			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
 			var loadStatus = {
 					loader: defer,
@@ -937,7 +937,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			/**
 			 * HELPER object for loading/creating the layouts
 			 * @private
-			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
 			var createLayoutConfig = {
 					constructor: Layout,
@@ -949,7 +949,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * helper for loading a single layout-file
 			 * 
 			 * @private
-			 * @memberOf mmir.MediaManager.init.loadLayouts
+			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
 			var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
 
@@ -1012,7 +1012,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all views
 		 * 
@@ -1048,7 +1048,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
 		 * 					NOTE: loading failures will generate a warning message (on the console)
@@ -1087,7 +1087,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @private
 		 * @function
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @param {PlainObject} status
 		 * 		the object for managing the laoding status.
@@ -1113,7 +1113,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @private
 		 * @function
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @param {PlainObject} status
 		 * 		the object for managing the laoding status:
@@ -1148,7 +1148,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @private
 		 * @function
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @param {Controller} controller
 		 * 		the controller to which the template files belong.
@@ -1232,7 +1232,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 * 
 		 * @see #doLoadTemplateFile
 		 * 
@@ -1250,14 +1250,14 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			/**
 			 * @type jQuery.Deferred
 			 * @private
-			 * @memberOf mmir.MediaManager.init.doProcessTemplateList
+			 * @memberOf mmir.PresentationManager.init.doProcessTemplateList
 			 */
 			var defer = $.Deferred();
 			
 			/**
 			 * @type String
 			 * @private
-			 * @memberOf mmir.MediaManager.init.doProcessTemplateList
+			 * @memberOf mmir.PresentationManager.init.doProcessTemplateList
 			 */
 			var ctrlNameList = controllerManager.getControllerNames();
 			
@@ -1265,7 +1265,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * HELPER object for tracking the loading-status of the views
 			 * 
 			 * @private
-			 * @memberOf mmir.MediaManager.init.doProcessTemplateList
+			 * @memberOf mmir.PresentationManager.init.doProcessTemplateList
 			 */
 			var loadStatus = {
 					loader: defer,
@@ -1350,7 +1350,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @function
 		 * @private
 		 * @async
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 */
 		var doLoadTemplateFile = function(controller, templateInfo, createConfig, loadStatus){
 			++loadStatus.currentLoadCount;
@@ -1408,7 +1408,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 
 		 * @type jQuery.Deferred
 		 * @private
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 */
 		var defer = $.Deferred();
 
@@ -1422,7 +1422,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * Checks if all other loading-functions have finished, and if so, resolves the init-promise.
 		 * 
 		 * @private
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 */
 		var checkResolved = function(){
 			if(isLayoutsLoaded && isViewsLoaded && isPartialsLoaded && isViewEngineLoaded){
@@ -1434,7 +1434,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * rejects/fails the init-promise.
 		 * 
 		 * @private
-		 * @memberOf mmir.MediaManager.init
+		 * @memberOf mmir.PresentationManager.init
 		 */
 		var failPromise = function(msg){
 			defer.reject(msg);
