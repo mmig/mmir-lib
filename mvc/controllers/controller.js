@@ -170,7 +170,7 @@ define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
 			fileName = fileName.substring( lastPathSeparatorIndex + 1 );
 		}
 		//get contents of the helper directory:
-		var dirContents = commonUtils.getDirectoryContents(path);
+		var dirContents = commonUtils.listDir(path);
 		if(!dirContents){
 			logger.warn('Could not determine contents for directory "'+path+'"');
 			return; ////////////////////// EARLY EXIT //////////////////////////////

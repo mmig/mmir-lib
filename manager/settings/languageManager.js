@@ -157,7 +157,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		        var retValue = false;
 
 		        if (lang != null) {
-		            langFiles = commonUtils.getDirectoryContents(constants.getLanguagePath() + lang);
+		            langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
 		            if (langFiles != null) {
 		                if (langFiles.indexOf(constants.getGrammarFileName()) > -1) {
 		                    retValue = true;
@@ -406,7 +406,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		        		
 
 				        // get all the languages/dictionaries by name
-				        languages = commonUtils.getDirectoryContents(constants.getLanguagePath());
+				        languages = commonUtils.listDir(constants.getLanguagePath());
 
 				        if (logger.isDebug()) logger.debug("[LanguageManager] Found dictionaries for: " + JSON.stringify(languages));// debug
 
@@ -472,7 +472,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                var retValue = false;
 
 		                if (lang != null) {
-		                    langFiles = commonUtils.getDirectoryContents(constants.getLanguagePath() + lang);
+		                    langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
 		                    if (langFiles != null) {
 		                        if (langFiles.indexOf(constants.getDictionaryFileName()) > -1) {
 		                            retValue = true;
@@ -500,7 +500,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                var retValue = false;
 
 		                if (lang != null) {
-		                    langFiles = commonUtils.getDirectoryContents(constants.getLanguagePath() + lang);
+		                    langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
 		                    if (langFiles != null) {
 		                        if (langFiles.indexOf(constants.getSpeechConfigFileName()) > -1) {
 		                            retValue = true;
