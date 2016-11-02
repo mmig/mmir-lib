@@ -165,10 +165,11 @@ return {
 			};
 
 			var initSyncGenDef = syncGen.init();//<- get init-signal for sync-generator
-			initSyncGenDef.always(function(){
+			var onComplete = function(){
 				isSyncGenInit = true;
 				checkInit();
-			});
+			};
+			initSyncGenDef.then(onComplete, onComplete);
 
 			this._oninit = function(initEvt){
 				if(initEvt.init === false){

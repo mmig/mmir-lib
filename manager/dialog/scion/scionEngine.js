@@ -93,11 +93,12 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
                 				model
                 		);
                 	};
-                	if(err.always) err.always(function(){url = this.url; printError();});
+                	var printErrorFunc = function(){url = this.url; printError();};
+                	if(err.then) err.then(printErrorFunc, printErrorFunc);
                 	else printError();
                 	
 //                    alert('SCXML is not valid!');
-                	_defer.fail(err);
+                	_defer.reject(err);
                     return;
                 }
 

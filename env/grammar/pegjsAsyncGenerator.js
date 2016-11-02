@@ -75,7 +75,7 @@ var pegjsAsyncGen = {
 	init: function(callback){
 		//overwrite with own async "init signal"
 		if(callback){
-			initDef.always(callback);
+			initDef.then(callback, callback);
 		}
 		return initDef;
 	},

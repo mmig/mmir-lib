@@ -95,7 +95,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		//create return value
 		var deferred = $.Deferred();
 		if(callback){
-			deferred.always(callback);
+			deferred.then(callback, callback);
 		}
 		
 		

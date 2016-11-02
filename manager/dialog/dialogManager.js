@@ -348,7 +348,7 @@ define([  'core', 'jquery'
 
 			return $.Deferred(function(theDeferredObj) {
 				
-				engine.load().done(function(_engine) {
+				engine.load().then(function(_engine) {
 					
 					_instance.raise = function raise(){
 						_engine.raise.apply(_engine, arguments);

@@ -277,7 +277,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module'
 
 		var _defer = $.Deferred();
 		if(initCallbackFunction){
-			_defer.always(initCallbackFunction);
+			_defer.then(initCallbackFunction, initCallbackFunction);
 		}
 
 		commonUtils.loadImpl(

@@ -1469,15 +1469,9 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
     			defer.reject();
     		};
         	
-    		
-        	if(successCallback){
-        		defer.done(successCallback);
+        	if(successCallback || failureCallback){
+        		defer.then(successCallback, failureCallback);
         	}
-        	
-        	if(deferredFailure){
-        		defer.fail(failureCallback);
-        	}
-        	
         	
             if (instance === null) {
             	jQuery.extend(true,this,constructor());
@@ -1490,7 +1484,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
                 }
                 
             	var pluginConfig = getPluginsToLoad();
-                loadAllPlugins(pluginConfig,deferredSuccess, deferredFailure);
+                loadAllPlugins(pluginConfig, deferredSuccess, deferredFailure);
 
             }
             else if(listenerList){

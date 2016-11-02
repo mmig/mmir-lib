@@ -504,7 +504,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		    	var _defer = $.Deferred();
 				
 				if(completedCallback){
-					_defer.always(completedCallback);
+					_defer.then(completedCallback, completedCallback);
 				}
 				
 				var isPath = true;//TODO use this for creating absolute paths (-> in case librariesPath is an Array)!
@@ -793,7 +793,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		            var tmp = this.directoryStructure[pathname];
 		            if (typeof tmp === 'undefined') {
 		            	
-		                logger.info('CommonUtils', 'listDir', 'path "' + pathname + '" not found.');
+		                logger.debug('CommonUtils', 'listDir', 'path "' + pathname + '" not found.');
 		                
 		                return null;////////////////// EARLY EXIT ///////////////////////////////
 		            } 
@@ -1100,11 +1100,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 				var _defer = $.Deferred();
 				var self = this;
 				
-				if(success){
-					_defer.done(success);
-				}
-				if(errorFunc){
-					_defer.fail(errorFunc);
+				if(success || errorFunc){
+					_defer.then(success, errorFunc);
 				}
 
 				var directoryFileUrl = constants.getDirectoriesFileUrl();
@@ -1135,7 +1132,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 							logger.error('CommonUtils', 'loadDirectoryStructure', msg);
 						}
 						
-						_defer.fail(msg);
+						_defer.reject(msg);
 					}
 				});
 				
@@ -1152,11 +1149,8 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 				//replace init so that we do not ivoke load-dir-struct multiple times
 				this.__initDeferred = initPromise;
 				this.init = function initCompleted(onsuccess, onerror){
-					if(onsuccess){
-						this.__initDeferred.done(success);
-					}
-					if(onerror){
-						this.__initDeferred.fail(errorFunc);
+					if(onsuccess || onerror){
+						this.__initDeferred.then(success, onerror);
 					}
 					return this.__initDeferred;
 				};
@@ -1201,7 +1195,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		    	
 		    	var defer = $.Deferred();
 		    	if(success){
-		    		defer.always(success);
+		    		defer.then(success, success);
 		    	}
 
 		    	requireFunction = requireFunction || require;

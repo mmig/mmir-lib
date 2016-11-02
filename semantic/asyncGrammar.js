@@ -144,7 +144,7 @@ return {
 				};
 	
 				//register invocation of init-phrase as soon as (async-loaded) grammar becomes available
-				grammarInit.initDef.always(function(){
+				var onComplete = function(){
 					
 					if(typeof phrase !== 'undefined'){
 						semanticInterpreter.getASRSemantic(phrase, langCode, listener);
@@ -152,7 +152,8 @@ return {
 						listener({});
 					}
 					
-				});
+				};
+				grammarInit.initDef.then(onComplete, onComplete);
 				_loadedGrammars[langCode] = grammarInit;
 
 				_asyncGrammarLoader.postMessage({cmd: 'load', id: langCode, url: compiledGrammarPath});

@@ -149,7 +149,7 @@ var jisonGen = {
 	 */
 	init: function(callback){
 		if(callback){
-			deferred.always(callback);
+			deferred.then(callback, callback);
 		}
 		return deferred;
 	},

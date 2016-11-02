@@ -843,16 +843,17 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			$.ajax({
 				async: false,//<-- use "SYNC" modus here (NOTE: we win nothing with async here, because the following step (loading/not loading the pre-compiled view) strictly depends on the result of this)
 				dataType: "text",
-				url: viewVerificationInfoPath,
-				success: function(data){
+				url: viewVerificationInfoPath
+			}).then(function onSuccess(data){
 
-					//compare raw String to checksum-data from file
-					isCompiledViewUpToDate = checksumUtils.isSame(viewContent, data);
-				}
-			}).fail(function(jqxhr, status, err){
+				//compare raw String to checksum-data from file
+				isCompiledViewUpToDate = checksumUtils.isSame(viewContent, data);
+				
+			}, function onError(jqxhr, status, err){
+				
 				// print out an error message
 				var errMsg = err && err.stack? err.stack : err;
-				logger.error("[" + status + "] Could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
+				logger.error("[" + status + "] On checking up-to-date, could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
 			});
 
 			return isCompiledViewUpToDate;
@@ -1358,40 +1359,39 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			$.ajax({
 				async: true,
 				dataType: "text",
-				url: templateInfo.path,
-				success: function(data){
+				url: templateInfo.path
+			}).then(function onSuccess(data){
 
-					if(isUsePreCompiledViews){
+				if(isUsePreCompiledViews){
 
-						loadPrecompiledView(data, templateInfo.genPath, function(){
+					loadPrecompiledView(data, templateInfo.genPath, function(){
 
-							updateLoadStatus(loadStatus);
+						updateLoadStatus(loadStatus);
 
-						}, function(err){
+					}, function(err){
 
-							logger.warn('Could not load precompiled '+createConfig.typeName+' from '
-									+templateInfo.genPath+'", because: '+err
-									+', compiling template instead: '
-									+templateInfo.path
-							);
+						logger.warn('Could not load precompiled '+createConfig.typeName+' from '
+								+templateInfo.genPath+'", because: '+err
+								+', compiling template instead: '
+								+templateInfo.path
+						);
 
-							doParseTemplate(controller, templateInfo.name, createConfig , data, loadStatus);
+						doParseTemplate(controller, templateInfo.name, createConfig , data, loadStatus);
 
-						});
+					});
 
-					}
-					else {
-
-						doParseTemplate(controller, templateInfo.name, createConfig, data, loadStatus);
-
-					}
 				}
+				else {
 
-			}).fail(function(jqxhr, status, err){
+					doParseTemplate(controller, templateInfo.name, createConfig, data, loadStatus);
+
+				}
+				
+			}, function onError(jqxhr, status, err){
 
 				// print out an error message
 				var errMsg = err && err.stack? err.stack : err;
-				logger.error("[" + status + "] Could not load '" + templateInfo.path + "': "+errMsg); //failure
+				logger.error("[" + status + "] Could not load eHTML file '" + templateInfo.path + "': "+errMsg); //failure
 
 				updateLoadStatus(loadStatus, true);
 			});

@@ -823,7 +823,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		            	
 		            	var defer = $.Deferred();
 				    	if(success){
-				    		defer.always(success);
+				    		defer.then(success, success);
 				    	}
 				    	requireFunction = requireFunction || require;
 				    	requireFunction(['languageManagerCompatibility'],function(setCompatibility){
