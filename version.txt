@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.7.4)
+version notes for MMIR framework code (v 3.7.5)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
@@ -22,6 +22,54 @@ version notes for MMIR framework code (v 3.7.4)
  --------------
  Change Log
  --------------
+ 
+##################
+ Version 3.7.5
+##################
+
+MODFIFICATIONS:
+ * ADDITION core.js: added property mmir._mmirLibPath which allows to set the (relative) path to the mmir-lib (if it is different than the default path mmirf/); DEFAULT VALUE: undefined
+ * ADDITION tools/constants.js: allow manual configuration via requirejs' config() of basePath:
+     usually the basePath is automatically detected depending on platform/environment, but in case the mmir-lib
+     but in case the mmir-lib and the framework files (controllers, views etc) are located somewhere different
+     than the default location, the this configuration can be used:
+     
+     Example
+     [before the framework initializes: set base-path to resources (controllers, models etc.) to assets/]
+     
+     mmir.config({config: {'constants': {
+       basePath: 'assets/'
+     }}});
+ * ADDITION presentationManager.js: added configuration value defaultLayoutName for setting a custom default-layout (or disabling the default-layout, in case a FALSY-value other than undefined is set)
+     
+     Example (in config/configuration.json): disabling default value
+     {
+     ... 
+	   "defaultLayoutName": null,
+	 ...
+	 }
+	 
+	      
+     Example (in config/configuration.json): use views/layouts/custom.ehtml as default layout
+     {
+     ... 
+	   "defaultLayoutName": "custom",
+	 ...
+	 }
+ * MODIFICATION tools/commonUtils.js: getDirectoryContents() is now an alias for getDirectoryContentsWithFilter(), both with optional second parameter
+ * REFACTOR tools/commonUtils.js: renamed functions (and made old name depricated):
+   * getDirectoryContents() -> listDir
+   * getDirectoryContentsWithFilter() -> listDir
+ * REFACTOR normalized use of Promises/jQuery.Deferred: always use Promise/A+ standard then() function (instead of jQuery alternatives like done(), fail(), always() etc)
+
+ 
+BUGFIX:
+ * BUGFIX env/media/jqmViewEngine.js: use basePath for loading CSS stylesheet
+ * BUGFIX tools/constants.js: prepend basePath to worker's sub-path
+ * BUGFIX presentationManager.js: abort, if on rendering a view cannot be found
+ * BUGFIX controllerManager.js: handle case that no (default) layout is present without provoking an exception
+ * BUGFIX tools/commonUtils.js: in getDirectoryContentsWithFilter() and getDirectoryContents() do wildcard matching without RegExpr, in order to avoid potential problems with special regex-characters in filenames
+ * BUGFIX fixed wrong use of jQuery.Deferred.fail(), when reject() should be used 
 
 ##################
  Version 3.7.4
