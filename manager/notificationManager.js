@@ -493,12 +493,12 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     							soundMap.remove(name);
     						};
     						
-    						if(audioObj){
+    						if(audioObj && audioObj.fireError){
     							audioObj.fireError(e);
     						}
     						else {
     							if(onErrorCallback){
-    								onErrorCallback();
+    								onErrorCallback(e);
     							}
     							else {
     								console.error('Notification: Error playing the sound from "'+audioUrl+'": '+e);
