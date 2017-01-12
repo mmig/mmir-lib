@@ -311,34 +311,38 @@ newMediaPlugin = {
 				try {
 					isReady = false;		   			
 					ttsMedia = createAudio(text, options,
-								function(){
-//									isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
-									if(onEnd){
-										onEnd();
-									};
-									//EXPERIMENTAL: command-queue feature.
-									processNextInCommandQueue();
-								},
-								function(){
-//									isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
-									if (failureCallBack){
-										failureCallBack();
-									};
-
-									//EXPERIMENTAL: command-queue feature.
-									processNextInCommandQueue();
-								},
-								function(){
-									if(onLoad){
-										onLoad();
-									};
-								});
+							function(){
+//								isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
+								if(onEnd){
+									onEnd();
+								}
+								//EXPERIMENTAL: command-queue feature.
+								processNextInCommandQueue();
+							},
+							function(err){
+//								isReady = true;//DISABLED -> EXPERIMENTAL: command-queue feature.
+								if (failureCallBack){
+									failureCallBack(err);
+								} else {
+									console.error(err);
+								}
+		
+								//EXPERIMENTAL: command-queue feature.
+								processNextInCommandQueue();
+							},
+							function(){
+								if(onLoad){
+									onLoad();
+								}
+							});
 					ttsMedia.play();
 				} catch (e){
 //					isReady=true;//DISABLED -> EXPERIMENTAL: command-queue feature.
-		    		console.log('error!'+e);
+//		    		console.log('error!'+e);
 					if (failureCallBack){
 						failureCallBack();
+					} else {
+						console.error(err);
 					}
 
 					//EXPERIMENTAL: command-queue feature.
@@ -634,7 +638,8 @@ newMediaPlugin = {
 						}
 						
 						isReady = true;
-						successCallBack();
+						if(successCallBack)
+							successCallBack();
 					}catch (e){
 						isReady = true;
 						if (failureCallBack)
