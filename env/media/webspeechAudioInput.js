@@ -796,7 +796,7 @@ newMediaPlugin = {
 				 * @memberOf WebspeechAudioInput.prototype
 				 * @see mmir.MediaManager#recognize
 				 */
-				recognize: function(successCallback,failureCallback){
+				recognize: function(successCallback, failureCallback, intermediateResults){
 					
                     var errMsg;
                     if (active == true){
@@ -825,6 +825,9 @@ newMediaPlugin = {
                     
                     // flush any old results
                     final_recognition_result = "";
+
+                    // set intermediate_results - for access by stopRecord
+                    intermediate_results = intermediateResults;
                     
                     // recognition.lang = "en-US";
                     var langStr = languageManager.getLanguageConfig(_pluginName);
