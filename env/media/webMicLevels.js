@@ -157,7 +157,7 @@ newMediaPlugin = {
 		/** MIC-LEVELS: time interval / pauses between calculating level changes
 		 * @constant
 		 * @memberOf MicLevelsAnalysis# */
-		var MIC_QUERY_INTERVALL = 64;
+		var MIC_QUERY_INTERVALL = 48;
 		/** MIC-LEVELS: threshold for calculating level changes
 		 * @constant
 		 * @memberOf MicLevelsAnalysis# */
@@ -385,7 +385,7 @@ newMediaPlugin = {
 	
 					//console.info('audio rms changed ('+db+'): '+prevRms+' -> '+rms);
 	
-					mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
+					mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db, rms]);
 				}
 	
 	
