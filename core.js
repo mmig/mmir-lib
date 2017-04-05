@@ -64,7 +64,7 @@ function initMmir() {
 	 * @memberOf mmir.internal
 	 * @private
 	 */
-	function deqExex (func) {
+	function deqExec (func) {
 		if(!func){
 			func = dequeue();
 		}
@@ -322,7 +322,7 @@ function initMmir() {
 				
 				//execute all callbacks in queue
 				while(!isEmpty()){
-					deqExex();
+					deqExec();
 				}
 			},
 			
@@ -343,7 +343,7 @@ function initMmir() {
 		
 				//SPECIAL MODE: if already active, execute the callback 
 				//				(if queue is not empty yet: queue function call in order to preserve the execution ordering)
-				if(_isReady && ! isEmpty()){
+				if(_isReady && isEmpty()){
 					deqExec(func);
 				}
 				else {
