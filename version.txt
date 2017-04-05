@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 3.7.5)
+version notes for MMIR framework code (v 3.7.6)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
@@ -22,6 +22,21 @@ version notes for MMIR framework code (v 3.7.5)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.7.6
+##################
+
+MODFIFICATIONS:
+ * MODIFICATION env/media/webspeechAudioInput.js: enabled (optional) intermediate-results argument for recognize()
+ * MODIFICATION env/media/webAudioTextToSpeech: improved error handling
+ * IMPROVE env/media/webMicLevels: improve calculation for RMS and dB
+ * FIX env/media/webspeechAudioInput: replace internal "loglevel + console.log" mechanism with logger
+
+BUGFIX:
+ * BUGFIX core: for queuing/dequeuing ready() callbacks
+ * BUGFIX manager/notificationManager: check availability of fireError before usage (if there was an error during initialization, this function might not be available)
+ * BUGFIX env/media/webAudioTextToSpeech.cancelSpeech(): only call success-callback, if one is present
  
 ##################
  Version 3.7.5
