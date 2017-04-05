@@ -27,7 +27,7 @@
 newMediaPlugin = {
 
 		/**  @memberOf WebspeechAudioInput# */
-		initialize: function(callBack, mediaManager, logvalue){
+		initialize: function(callBack, mediaManager, ctxId, moduleConfig){
 			
 			/** @memberOf WebspeechAudioInput# */
 			var _pluginName = 'webspeechAudioInput';
@@ -36,6 +36,16 @@ newMediaPlugin = {
 			 * @memberOf WebspeechAudioInput#
 			 */
 			var languageManager = require('languageManager');
+			/**
+			 * @type mmir.ConfigurationManager
+			 * @memberOf WebspeechAudioInput#
+			 */
+			var config = require('configurationManager');
+			/**
+			 * @type mmir.Logger
+			 * @memberOf WebspeechAudioInput#
+			 */
+			var logger = require('logger').create(_pluginName);
 
 			/** @type SpeechRecognition
 			 * @memberOf WebspeechAudioInput# */
@@ -51,7 +61,7 @@ newMediaPlugin = {
 			if(!SpeechRecognitionImpl){
 				//... browser does NOT support this speech-input-module: create warning message and dummy functions for the MediaManager
 				
-				console.warn('Could not load '+_pluginName+' plugin: API SpeechRecognition is not available!');
+				logger.error('Could not load '+_pluginName+' plugin: API SpeechRecognition is not available!');
 				
 				//FIXME this error message is a quick an dirty hack -- there should be a more general way for defining the error message...
 				var msg = 'Unfortunately, your internet browser'
@@ -99,8 +109,8 @@ newMediaPlugin = {
 					 */
 	    			, cancelRecognition: function(successCallBack,failureCallBack){
 	    				alert(msg);
-	    				if(failureCallback)
-	    					failureCallback();
+	    				if(failureCallBack)
+	    					failureCallBack();
 	    			}
 				});
 				return;////////////////////// EARLY EXIT ///////////////////////////
@@ -170,14 +180,10 @@ newMediaPlugin = {
             var intermediate_results = false;
             
 
-			/** @memberOf WebspeechAudioInput# */
-            // loglevel - shows:
-            // 0 - errors
-            // 1 - warning, errors
-            // 2 - info, warning, errors
-            // 3 - logs, info, warning, errors
-            // 4 - debugs, logs, info, warning, errors
-            var loglevel = 4;//FIXME logvalue | 0;
+            var loglevel = config.get([_pluginName, 'log'], true);
+						if(typeof loglevel !== 'undefined'){
+							logger.setLevel(loglevel);
+						}
 
 			/** 
 			 * field for storing the previous (main) recontion result
@@ -275,7 +281,7 @@ newMediaPlugin = {
             				//add REST to detected PREFIX as "unstable":
             				res.push(_prevResult.substring(prefixIndex+1));
 
-            				console.info('found unstable ASR part: "'+_prevResult.substring(prefixIndex+1)+'"');
+            				if(logger.isi()) logger.info('found unstable ASR part: "'+_prevResult.substring(prefixIndex+1)+'"');
             			}
             			else {
             				// -> we have relatively stable result, that has no unstable postfix -> reset _prevResult;
@@ -347,8 +353,8 @@ newMediaPlugin = {
             	
             	switch(type){
             	case "no-speech":
-                    if (loglevel >= 1){
-                        console.info("[webspeechAudioInput.Warn] event " + type);
+                    if (logger.isi()){
+                        logger.info("event " + type);
                     }
                     // no errorcallback, just restart (if in RECORD mode)...
                     return true;
@@ -399,8 +405,8 @@ newMediaPlugin = {
             	case "language-not-supported":
                     // do not automatically restart!, change the language
                     aborted = true;
-                    if (loglevel >= 1){
-                        console.warn("[webspeechAudioInput.Warn] event " + type);
+                    if (logger.isw()){
+                        logger.warn("event " + type);
                     }
                     currentFailureCallback && currentFailureCallback(event.error);
                     return true;
@@ -427,7 +433,7 @@ newMediaPlugin = {
                     if (currentFailureCallback){
                         currentFailureCallback(event.error);
                     } else {
-                        console.error("[webspeechAudioInput.Error] event " + event.error);
+                        logger.error("event " + event.error);
                     }
                 }
             };
@@ -449,50 +455,50 @@ newMediaPlugin = {
                 // so: reset counter
                 // TODO: check if this is really correct
 //                restart_counter=0;
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] Audio START");
-                	console.debug("[webspeechAudioInput.Debug] active: " + active);
+                if (logger.isd()){
+                	logger.debug("Audio START");
+                	logger.debug("active: " + active);
                 }
                 
                 mediaManager.micLevelsAnalysis.start();
             };
             /** @memberOf WebspeechAudioInput.recognition# */
             recognition.onspeechstart = function(event){
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] Speech START");
+                if (logger.isd()){
+                	logger.debug("Speech START");
                 }
             };
             /** @memberOf WebspeechAudioInput.recognition# */
             recognition.onsoundstart  = function(event){
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] Sound  START");
+                if (logger.isd()){
+                	logger.debug("Sound  START");
                 }
             };
             /** @memberOf WebspeechAudioInput.recognition# */
             recognition.onaudioend = function(event){
                 active = false;
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] Audio END");
+                if (logger.isd()){
+                	logger.debug("Audio END");
                 }
 
 //                mediaManager.micLevelsAnalysis.stop();// MOVED to onend: in some cases, onaudioend will not be triggered, but onend will always get triggered
             };
             /** @memberOf WebspeechAudioInput.recognition# */
             recognition.onspeechend = function(event){
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] Speech END");
+                if (logger.isd()){
+                	logger.debug("Speech END");
                 }
             };
             /** @memberOf WebspeechAudioInput.recognition# */
             recognition.onsoundend  = function(event){
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] Sound  END");
+                if (logger.isd()){
+                	logger.debug("Sound  END");
                 }
             };
             /** @memberOf WebspeechAudioInput.recognition# */
             recognition.onstart  = function(event){
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] asr START");
+                if (logger.isd()){
+                	logger.debug("Recognition START");
                 }
             };
             /**
@@ -506,9 +512,8 @@ newMediaPlugin = {
              */
             recognition.onend  = function(event){
                 active = false;
-                if (loglevel >= 4){
-                	console.debug("[webspeechAudioInput.Debug] asr END");
-                	console.debug("[webspeechAudioInput.Debug] active: " + active);
+                if (logger.isd()){
+                	logger.debug("Recognition END (active: "+active+")");
                 }
                 
                 //NOTE there may be no analysis open, but stopping here (and not e.g. in onaudioen) 
@@ -568,12 +573,10 @@ newMediaPlugin = {
                         	
                         	failureCallback(errMsg);
                         	
-                        	if (loglevel >= 1){
-                                console.warn(errMsg);
-                            }
+                        	logger.warn(errMsg);
                         }
                         else {
-                        	console.warn(errMsg);
+                        	logger.warn(errMsg);
                         }
                         return;
                     }
@@ -588,7 +591,7 @@ newMediaPlugin = {
                     final_recognition_result = "";
                     
                     // set intermediate_results - for access by stopRecord
-                    intermediate_results = intermediateResults;
+                    intermediate_results = !!intermediateResults;
                     
                     // set recognition language
                     var langStr = languageManager.getLanguageConfig(_pluginName);
@@ -602,7 +605,7 @@ newMediaPlugin = {
                     recognition.continuous = true;
                     
                     // get results continuously
-                    recognition.interimResults = (loglevel >= 4) ? true : false;
+                    recognition.interimResults = !!intermediateResults;//(loglevel >= 4) ? true : false;//FIXME make settable/argument
 
 					currentFailureCallback = failureCallback;
 					currentSuccessCallback = successCallback;
@@ -619,16 +622,16 @@ newMediaPlugin = {
                         error_counter = 0;
 
                         var evtResults = event.results[event.resultIndex];
-                        if (loglevel >= 4){
-//                            console.debug("[webspeechAudioInput.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD] + " ("+event.results[event.resultIndex][0].confidence+")");
+                        if (logger.isd()){
+//                            logger.debug("interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD] + " ("+event.results[event.resultIndex][0].confidence+")");
                             
-                            console.debug("[webspeechAudioInput.Debug]  interim: " + JSON.stringify(event.results));
+                            logger.debug("interim: " + JSON.stringify(event.results));
                         }
 
                         // if event.results[event.resultIndex].isFinal is true, then there is a pause.
                         if (evtResults.isFinal) {
-                            if (loglevel >= 4){
-                                console.debug("[webspeechAudioInput.Debug]  final");
+                            if (logger.isd()){
+                                logger.debug("final result");
                             }
 
                             finalResult = evtResults[0][EVENT_RESULT_FIELD];
@@ -676,12 +679,10 @@ newMediaPlugin = {
                         	
                         	failureCallback(errMsg,exc);
 
-                            if (loglevel >= 1){
-                                console.error(errMsg, exc);
+                            logger.error(errMsg, exc);
                             }
-                        }
                         else {
-                        	console.error(errMsg, exc);
+                        	logger.error(errMsg, exc);
                         }
                     }
 				},
@@ -704,15 +705,15 @@ newMediaPlugin = {
                         recognition.onresult = function (event) {
                             var finalResult = '';
 
-                            if (loglevel >= 4){
-                                console.debug("[webspeechAudioInput.Debug] interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
+                            if (logger.isd()){
+                                logger.debug("interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
                             }
                             
                             var evtResults = event.results[event.resultIndex];
                             // if event.results[event.resultIndex].isFinal is true, then there is a pause.
                             if (evtResults.isFinal) {
-                                if (loglevel >= 4){
-                                    console.debug("[webspeechAudioInput.Debug] final");
+                                if (logger.isd()){
+                                    logger.debug("final result");
                                 }
 
                                 finalResult = evtResults[0][EVENT_RESULT_FIELD];
@@ -730,7 +731,7 @@ newMediaPlugin = {
                                     
                                     if(successCallback){
                                     	if(isSuccessTriggered){
-                                    		console.warn('stopRecord: success callback was already triggered!');//FIXME debug
+                                    		logger.info('stopRecord: success callback was already triggered!');
                                     	}
                                     	isSuccessTriggered = true;
                                     	successCallback.call(self, final_recognition_result);
@@ -755,7 +756,7 @@ newMediaPlugin = {
                     //		(NOTE: the onstop()-listener does not seem to get called ...)
                     recognition._stopRecordCallback = function(evt){
                     	if(successCallback && !isSuccessTriggered){
-//                    		console.debug('stopRecord: calling success callback onstop (without last ASR result)');//FIXM debug
+//                    		logger.debug('stopRecord: calling success callback onstop (without last ASR result)');//FIXM debug
                     		isSuccessTriggered = true;
                         	successCallback.call(self,'', -1, 'RECORDING_DONE');
                         }
@@ -773,12 +774,10 @@ newMediaPlugin = {
                         	
                         	failureCallback(errMsg);
                         	
-                        	if (loglevel >= 1){
-                                console.error(errMsg, exc);
+                        	logger.error(errMsg, exc);
                             }
-                        }
                         else {
-                        	console.error(errMsg, exc);
+                        	logger.error(errMsg, exc);
                         }
                     }
 				},
@@ -807,12 +806,10 @@ newMediaPlugin = {
                         	
                         	failureCallback(errMsg);
                         	
-                        	if (loglevel >= 1){
-                                console.warn(errMsg);
-                            }
+                        	logger.warn(errMsg);
                         }
                         else {
-                        	console.warn(errMsg);
+                        	logger.warn(errMsg);
                         }
                         return;
                     }
@@ -826,9 +823,6 @@ newMediaPlugin = {
                     // flush any old results
                     final_recognition_result = "";
 
-                    // set intermediate_results - for access by stopRecord
-                    intermediate_results = intermediateResults;
-                    
                     // recognition.lang = "en-US";
                     var langStr = languageManager.getLanguageConfig(_pluginName);
                     if(!langStr){
@@ -842,7 +836,7 @@ newMediaPlugin = {
                     
                     // not needed for recognize
                     // // set intermediate_results - for access by stopRecord
-                    recognition.interimResults = (loglevel >= 4) ? true : false;
+                    recognition.interimResults = !!intermediateResults;//(loglevel >= 4) ? true : false;//FIXME make settable/argument
 
 					currentFailureCallback = failureCallback;
 					currentSuccessCallback = successCallback;
@@ -854,14 +848,14 @@ newMediaPlugin = {
                     recognition.onresult = function (event) {
 //                        var finalResult = '';
 
-                        if (loglevel >= 4){
-                            console.debug("[webspeechAudioInput.Debug] " + "interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
+                        if (logger.isd()){
+                            logger.debug("interim: " + event.results[event.resultIndex][0][EVENT_RESULT_FIELD]);
                         }
 
                         // if event.results[event.resultIndex].isFinal is true, then there is a pause.
                         if (event.results[event.resultIndex].isFinal) {
-                            if (loglevel >= 4){
-                                console.debug("[webspeechAudioInput.Debug] " + "final");
+                            if (logger.isd()){
+                                logger.debug("final result");
                             }
 
                             //stop recording - finish after one sentence!
@@ -889,12 +883,10 @@ newMediaPlugin = {
                         	
                         	failureCallback(errMsg, exc);
 
-                            if (loglevel >= 1){
-                                console.error(errMsg, exc);
+                          logger.error(errMsg, exc);
                             }
-                        }
                         else {
-                        	console.error(errMsg, exc);
+                        	logger.error(errMsg, exc);
                         }
                     }
 				},
@@ -929,20 +921,21 @@ newMediaPlugin = {
                 /**
                  * for debugging - NOTE use with caution, be removed in the future
 				 * @private
+				 * @see see Logger#getLevel
 				 * @memberOf WebspeechAudioInput.prototype
 				 */
                 getLoglevel: function(){
-                    return loglevel;
+                    return logger.getLevel();
                 },
                 /**
                  * for debugging - NOTE use with caution, be removed in the future
-                 * @default 0: set loglevel to 0
+                 * @default 'warning' (see {@link Logger#setLevel})
 				 * @private
 				 * @memberOf WebspeechAudioInput.prototype
 				 */
                 setLoglevel: function(logvalue){
-                    loglevel = logvalue | 0;
-                    return loglevel;
+                    logger.setLevel(logvalue);
+                    return logger.getLevel();
                 }
 			};
 			
@@ -957,31 +950,31 @@ newMediaPlugin = {
 				// since mic-levels-analysis should be used as singleton
 				mediaManager.loadFile(micLevelsImplFile, function success(){
 					
-					console.debug('initialized microphone-levels analysis for '+_pluginName);
+					logger.debug('initialized microphone-levels analysis for '+_pluginName);
 					
 					//invoke the passed-in initializer-callback and export the public functions:
 					callBack(pluginExports);
 					
 				}, function error(err){
 
-					console.error('ERROR: using stub implementation  for microphone-levels analysis, because loading the implementation file '+implPath+' failed: '+err);
+					logger.error('ERROR: using stub implementation  for microphone-levels analysis, because loading the implementation file '+implPath+' failed: '+err);
 					
 					mediaManager.micLevelsAnalysis = {
 						/** @memberOf WebspeechAudioInput.MicLevelsAnalysisStub */
 						_active: false,
 						start: function(){
-							console.info('STUB::micLevelsAnalysis.start()');
+							logger.info('STUB::micLevelsAnalysis.start()');
 						},
 						stop: function(){
-							console.info('STUB::micLevelsAnalysis.stop()');
+							logger.info('STUB::micLevelsAnalysis.stop()');
 						},
 						enable: function(enable){
-							console.info('STUB::micLevelsAnalysis.enable('+(typeof enable === 'undefined'? '': enable)+') -> false');
+							logger.info('STUB::micLevelsAnalysis.enable('+(typeof enable === 'undefined'? '': enable)+') -> false');
 							return false;
 						},
 						active: function(active){
 							this._active = typeof active === 'undefined'? this._active: active;
-							console.info('STUB::micLevelsAnalysis.active('+(typeof active === 'undefined'? '': active)+') -> ' + this._active);
+							logger.info('STUB::micLevelsAnalysis.active('+(typeof active === 'undefined'? '': active)+') -> ' + this._active);
 							return active;
 						}
 					};
