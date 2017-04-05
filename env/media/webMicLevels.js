@@ -157,11 +157,11 @@ newMediaPlugin = {
 		/** MIC-LEVELS: time interval / pauses between calculating level changes
 		 * @constant
 		 * @memberOf MicLevelsAnalysis# */
-		var MIC_QUERY_INTERVALL = 128;
+		var MIC_QUERY_INTERVALL = 64;
 		/** MIC-LEVELS: threshold for calculating level changes
 		 * @constant
 		 * @memberOf MicLevelsAnalysis# */
-		var LEVEL_CHANGED_THRESHOLD = 1.5;
+		var LEVEL_CHANGED_THRESHOLD = 1.05;
 		/**
 		 * MIC-LEVELS: Name for the event that is emitted, when the input-mircophone's level change.
 		 * 
@@ -216,6 +216,14 @@ newMediaPlugin = {
 			return Math.sqrt(avgMeansq);
 		};
 		/**
+		 * HELPER calculate the dezible value for PCM value
+		 * @deprecated currently un-used
+		 * @memberOf MicLevelsAnalysis#
+		 */
+		var getDb = function (pcmData, upperLimit){
+			return 20 * Math.log10(Math.abs(pcmData)/upperLimit);
+		};
+		/**
 		 * HELPER determine if a value has change in comparison with a previous value
 		 * 		  (taking the LEVEL_CHANGED_THRESHOLD into account)
 		 * @memberOf MicLevelsAnalysis#
@@ -239,6 +247,11 @@ newMediaPlugin = {
 		
 		var _ownsInputStream = true;
 		
+		//FIXME test
+		// window.RAW_DATA = [];
+		// window.DB_DATA = [];
+		// window.RMS_DATA = [];
+
 		/**
 		 * HELPER callback for getUserMedia: creates the microphone-levels-changed "analyzer"
 		 *        and fires mic-levels-changed events for registered listeners
@@ -248,7 +261,8 @@ newMediaPlugin = {
 		function _startUserMedia(inputstream, foreignAudioData){
 			console.log('MicLevelsAnalysis: start analysing audio input...');
 			var buffer = 0;
-			var prevDb;
+			// var prevDb;
+			var prevRms;
 			
 			//we only need one analysis: if there is one active from a previous start
 			//  -> do stop it, before storing the new inputstream in _currentInputStream
@@ -293,7 +307,9 @@ newMediaPlugin = {
 	
 			_audioAnalyzer = _audioContext.createAnalyser();
 			_audioAnalyzer.fftSize = 2048;
-	//		_audioAnalyzer.smoothingTimeConstant = 0.9;//NOTE: value 1 will smooth everything *completely* -> do not use 1
+			_audioAnalyzer.minDecibels = -90;
+			_audioAnalyzer.maxDecibels = 0;
+			_audioAnalyzer.smoothingTimeConstant = 0.8;//NOTE: value 1 will smooth everything *completely* -> do not use 1
 			inputNode.connect(_audioAnalyzer);
 	
 	//		audioRecorder = new Recorder( _currentInputStream );
@@ -310,11 +326,25 @@ newMediaPlugin = {
 				var data = new Uint8Array(size);//new Float32Array(size);//
 				_audioAnalyzer.getByteTimeDomainData(data);//.getFloatFrequencyData(data);//.getByteFrequencyData(data);//.getFloatTimeDomainData(data);//
 	
-				var min = 32768;
-				var max = -32768;
+				// var view = new DataView(data.buffer);
+
+				var MAX = 255;//32768;
+				var MIN = 0;//-32768;
+
+				var min = MAX;//32768;
+				var max = MIN;//-32768;
 				var total = 0;
 				for(var i=0; i < size; ++i){
 					var datum = Math.abs(data[i]); 
+
+					//FIXM TEST
+					// console.log('data '+(20 * Math.log10(data[i]/MAX)));//+view.getInt16(i));
+					// console.log('data '+view.getInt16(i));
+					// console.log('data '+data[i]);
+					// window.RAW_DATA.push(data[i]);
+					// window.DB_DATA.push(20 * Math.log10(data[i]/MAX));
+					// window.RMS_DATA.push('');
+
 					if (datum < min)
 						min = datum;
 					if (datum > max)
@@ -340,16 +370,20 @@ newMediaPlugin = {
 				rms /= data.length;
 				rms = Math.sqrt(rms);
 	
-				var db = rms;
+				// window.RMS_DATA[window.RMS_DATA.length-1] = rms;//FIXME TEST
+				// var db = 20 * Math.log10(Math.abs(max)/MAX);
+				// var db = rms;
 	//			console.info('audio rms '+rms);
-	
+				// console.info('audio rms changed: '+prevDb+' -> '+db);
 				//actually fire the change-event on all registered listeners:
-				if(hasChanged(db, prevDb)){
-	//				console.info('audio rms changed: '+prevDb+' -> '+db);
-					prevDb = db;
+				if(hasChanged(rms, prevRms)){
+					prevRms = rms;
 	
-					//adjust value
-					db *= MIC_NORMALIZATION_FACTOR;
+					// //adjust value
+					// db *= MIC_NORMALIZATION_FACTOR;
+					db = 20 * Math.log10(Math.abs(max)/MAX);
+	
+					//console.info('audio rms changed ('+db+'): '+prevRms+' -> '+rms);
 	
 					mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db]);
 				}
