@@ -35,17 +35,17 @@ define(function loadJqmCss() {
 			
 			if(attrs.href){
 				href = attrs.href;
-				delete attrs.href;
+				attrs.href = void(0);
 			}
 			
 			if(attrs.rel){
 				rel = attrs.rel;
-				delete attrs.rel;
+				attrs.rel = void(0);
 			}
 			
 			if(attrs.onload){
 				callback = attrs.onload;
-				delete attrs.onload;
+				attrs.onload = void(0);
 			}
 			
 		}
@@ -62,11 +62,14 @@ define(function loadJqmCss() {
 		link.href = href;
 		
 		if(attrs) for(var prop in attrs){
-			if(attrs.hasOwnProperty(prop)){
-//				if(/^on/.test(prop)){
-//					TODO russa: should we apply special treatment for event handlers?
-//				}
-				link[prop] = attrs[prop];
+			if(typeof attrs[prop] !== 'undefined' && attrs.hasOwnProperty(prop)){
+				if(prop === 'class'){
+					link.classList.add(attrs[prop]);
+				} else if(/^data-/.test(prop)){
+					link.dataset[prop.substring(5)] = attrs[prop];
+				} else {
+					link[prop] = attrs[prop];
+				}
 			}
 		}
 	
