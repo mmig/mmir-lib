@@ -243,6 +243,8 @@ define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/
 		     *            
 		     * @returns {Promise} a deferred promise (see loadImpl())
 		     * 
+		     * @requires window
+		     * 
 		     * @async
 		     * @public
 	    	 * @memberOf mmir.CommonUtils.prototype
