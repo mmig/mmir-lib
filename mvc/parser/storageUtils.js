@@ -95,21 +95,8 @@ function restoreObject(storedObject, isTriggerPublish, fileFormatNo){
 		classExtender = {extend: extend};
 	}
 	
-//	//NOTE: classConstructor contains a list of Strings:
-//	//       * the constructor-function is either in global namespace
-//	//         e.g. "View" -> then the list contains exactly one entry ["View"]
-//	//
-//	//       * if the constructor-function is in a sub-namespace (e.g. "sub-module")
-//	//         then the list contains the "path" to the constructorf-function
-//	//         starting with the module that is in the global namespace
-//	//         e.g. "mobileDS.parser.ParsingResult" -> ["mobileDS, "parser", "ParsingResult"]
-//	//
-//	var constructor = window[storedObject.classConstructor[0]];//FIXME need to convert this to require
-//	for(var i=1, size = storedObject.classConstructor.length; i < size; ++i){
-//		constructor = constructor[storedObject.classConstructor[i]];
-//	}
 	
-	//requirejs version (for this to work, all Classe (i.e. JS-files) need to already have been loaded & required!)
+	//NOTE: for require-ing to work, all Classes (i.e. JS-files) need to already have been loaded & required (i.e. "async-required" once before)
 	var constructor = require(storedObject.classConstructor);
 	
 	var obj = classExtender.extend( new constructor(), storedObject);
