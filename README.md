@@ -4,7 +4,7 @@ mmir-lib
 https://github.com/mmig/mmir-lib
 
 
-Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library 
+Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library
 
 This is the mere source code of the bare library (i.e. without any tooling etc.)
 
@@ -25,7 +25,7 @@ For examples, see the [StarterKit][1] or the [minimal Cordova example][2].
 #### Including mmir-lib as subtree
 
 This repository can be included as GIT _subtree_ so that updates can be easily fetched.
-E.g. for including the repository as subtree in the directory ```www/mmirf``` the 
+E.g. for including the repository as subtree in the directory ```www/mmirf``` the
 following command can be used:
 
     git subtree add --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
@@ -42,7 +42,7 @@ In order to update `mmir-lib` in your project, you should follow these steps
 _Note: these directions assume, that your web application is located in the
        sub-directory `/www` of your project directory._  
 
- 1. replace the contents of `/www/mmirf` with the new contents of this repository 
+ 1. replace the contents of `/www/mmirf` with the new contents of this repository
     (e.g. the using `git subtree pull` command)
  1. update the _tooling_ in `/build` from the [mmir-tooling][3] repository, by
    1. replacing `/build` with the new contents of the _mmir-tooling_ repository
@@ -84,10 +84,9 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 --
 ##### Version Information
 
- MMIR Version 3.7.6
+ MMIR Version 3.7.7
 
 
 [1]: https://github.com/mmig/mmir-starter-kit
 [2]: https://github.com/mmig/mmir-cordova
 [3]: https://github.com/mmig/mmir-tooling
-

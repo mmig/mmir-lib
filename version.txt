@@ -1,27 +1,35 @@
 ﻿
-version notes for MMIR framework code (v 3.7.6)
+version notes for MMIR framework code (v 3.7.7)
 
  * using Cordova 5.x.x - 6.x.x library
  * using jQuery 2.1.x library
  * using jQuery Mobile 1.4.x library
- 
- 
+
+
  NOTE: for versions older than MMIR 3.x, the change-information refers to the MMIG StarterKit code.
        Since version 3.x the code is restructured:
-       
+
        * mmir-lib: the framework code itself (would usually be located at /www/mmirf/)
        * mmir-tooling: the tools for building resources (would usually be located at /build/)
-       
-       * mmir-starter-kit: the code for the StarterKit includes mmir-lib and mmir-tooling as well 
+
+       * mmir-starter-kit: the code for the StarterKit includes mmir-lib and mmir-tooling as well
                            as a small example application (i.e. basically this is the same as the
                            StarterKit from pre 3.x versions)
                            NOTE: the mmir-lib and mmir-tooling code that is used within this example
                                  project may lack behind the most current version of their base
                                  repositories of mmir-lib and mmir-tooling.
-       
+
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.7.7
+##################
+
+MODFIFICATIONS:
+ * MODIFICATION env/media/webMicLevels: emit RMS value in addition to dB value
+ * ADDITION vendor/lib: added modified version of scion library (non-minified)
 
 ##################
  Version 3.7.6
@@ -37,7 +45,7 @@ BUGFIX:
  * BUGFIX core: for queuing/dequeuing ready() callbacks
  * BUGFIX manager/notificationManager: check availability of fireError before usage (if there was an error during initialization, this function might not be available)
  * BUGFIX env/media/webAudioTextToSpeech.cancelSpeech(): only call success-callback, if one is present
- 
+
 ##################
  Version 3.7.5
 ##################
@@ -48,26 +56,26 @@ MODFIFICATIONS:
      usually the basePath is automatically detected depending on platform/environment, but in case the mmir-lib
      but in case the mmir-lib and the framework files (controllers, views etc) are located somewhere different
      than the default location, the this configuration can be used:
-     
+
      Example
      [before the framework initializes: set base-path to resources (controllers, models etc.) to assets/]
-     
+
      mmir.config({config: {'constants': {
        basePath: 'assets/'
      }}});
  * ADDITION presentationManager.js: added configuration value defaultLayoutName for setting a custom default-layout (or disabling the default-layout, in case a FALSY-value other than undefined is set)
-     
+
      Example (in config/configuration.json): disabling default value
      {
-     ... 
+     ...
 	   "defaultLayoutName": null,
 	 ...
 	 }
-	 
-	      
+
+
      Example (in config/configuration.json): use views/layouts/custom.ehtml as default layout
      {
-     ... 
+     ...
 	   "defaultLayoutName": "custom",
 	 ...
 	 }
@@ -77,14 +85,14 @@ MODFIFICATIONS:
    * getDirectoryContentsWithFilter() -> listDir
  * REFACTOR normalized use of Promises/jQuery.Deferred: always use Promise/A+ standard then() function (instead of jQuery alternatives like done(), fail(), always() etc)
 
- 
+
 BUGFIX:
  * BUGFIX env/media/jqmViewEngine.js: use basePath for loading CSS stylesheet
  * BUGFIX tools/constants.js: prepend basePath to worker's sub-path
  * BUGFIX presentationManager.js: abort, if on rendering a view cannot be found
  * BUGFIX controllerManager.js: handle case that no (default) layout is present without provoking an exception
  * BUGFIX tools/commonUtils.js: in getDirectoryContentsWithFilter() and getDirectoryContents() do wildcard matching without RegExpr, in order to avoid potential problems with special regex-characters in filenames
- * BUGFIX fixed wrong use of jQuery.Deferred.fail(), when reject() should be used 
+ * BUGFIX fixed wrong use of jQuery.Deferred.fail(), when reject() should be used
 
 ##################
  Version 3.7.4
@@ -107,12 +115,12 @@ MODFIFICATIONS:
  * ADDITION attached requirejs' define to core-object as <core module instance>._define (i.e. mmir._define)
  * REFACTOR added require() as explicit dependency
  * REFACTOR use require/define functions attached to the core-object instead of global-object
- 
+
  * ADDITION contentElement: allow usage of template-variables without prefixing them @ within javascript code
    * implement "import" / "export" for data argument that makes the template variables accessible
    * "auto declare" variables in for(in)-expressions as template variables if necessary
    * when parsing ContentElements from template text, add/use reference to parent ContentElement (if they are not directly contained in a view, but in another ContentElement)within js code
-   
+
  * REFACTOR [parsingResult, templateRenderUtils, contentElement] changed creation of script-eval functions:
    instead of creating each function on its own and import & exporting data-vars, now all script-eval functions are gathered and are created within a closure together with the data-vars
 
@@ -134,9 +142,9 @@ MODFIFICATIONS:
         ...
       };
    ...
-   NOTE that during the initialization (i.e. in the controller/helper implementation's constructor) there should 
+   NOTE that during the initialization (i.e. in the controller/helper implementation's constructor) there should
         be made no calls to the Controller/Helper object, since it is not fully initialized during that time.
-      
+
  * ADDITION added optional context configuration for controller (and helper) implementations and for model implementations:
    set these contexts/namespaces in config/configuration.json:
    ...
@@ -151,16 +159,16 @@ MODFIFICATIONS:
    NOTE that these contexts/namespaces are created during intialization, before the controllers/helpers/models are
         initialized. If you are using these contexts/namespaces in your own code, you should take care not to
         "override" them.
-     
+
  * env/media/webkitAudioInput.js
   * REFACTOR renamed file to webspeechAduioInput.js (and module name to "webspeechAudioInput")
-  * added auto-configuration to mediaManager for backwards compatibility (i.e. "webkitAudioInput" configuration will be automatically mapped to the new module name "webspeechAudioInput") 
+  * added auto-configuration to mediaManager for backwards compatibility (i.e. "webkitAudioInput" configuration will be automatically mapped to the new module name "webspeechAudioInput")
 
 BUGFIX
  * env/media/webkitAudioInput.js: avoid ReferenceErrors when checking for SpeechRecognition implementation in browsers other than Chrome
- 
- 
- 
+
+
+
 ##################
  Version 3.7.2
 ##################
@@ -177,15 +185,15 @@ MODFIFICATIONS:
      * extracted microphone-levels analysis for web audio input into separate module / plugin
      * microphone-levels analysis can be loaded as plugin via MediaManager.loadFile('webMicLevels', ....
        * the this plugin should be loaded as "singleton": before loading, check if property MediaManager.micLevelsAnalysis already exists
-     * the exported functions are then available at MediaManager.micLevelsAnalysis.<exported function> 
+     * the exported functions are then available at MediaManager.micLevelsAnalysis.<exported function>
 
 
 BUGFIX
  * manager/dialog/engineConfig.js: use equality check instead of assignment statement in if condition
  * manager/mediaManager.js: for ReferenceError in loadFile(): fixed typo for argument name
  * env/media/webAudioTextToSpeech.js: added handling in case loading the specific TTS implementation fails
- 
- 
+
+
 ##################
  Version 3.7.1
 ##################
@@ -197,7 +205,7 @@ MODFIFICATIONS:
    * moved language-code modifications (as required by specific TTS and/or ASR modules) into LanguageManager instead of requiring specific configuration files
    * specific impl. for web-audio TTS and ASR modules can be configured in config/configuration.json via the "config" property,
      for example (note the "config" property for the webAudioTextToSpeech.js entry):
-     
+
    		"mediaManager": {
 	    	"plugins": {
 	    		"browser": ["html5AudioOutput.js",
@@ -210,7 +218,7 @@ MODFIFICATIONS:
 	    		]
 	    	}
 	    }
-	  
+
 	  NOTE that a backwards compatible conversion is provided for existing standard modules (e.g. for maryTextToSpeech.js):
 	       old configurations will continue to work for these without changing the configuration.json
 
@@ -225,7 +233,7 @@ BUGFIX
  * tools/checksumUtils.js:
    * avoid setting empty crypto-instance in case global CryptoJS is not available
  * mvc/parser/parsingResult.js: added private helper for setting the core-parser namespace (needed when running in nodejs)
- 
+
 ##################
  Version 3.7.0
 ##################
@@ -246,7 +254,7 @@ API Changes:
      * convertJSONStringToHTML()
  * ADDITION MediaManager: additional utility function createEmptyAudio()
  * MODFICATION env/html5AudioOutput: getWAVAsAudio() now immediately returns an audio object (not just only via callback)
- 
+
 MODFIFICATIONS:
 
  * IMPROVEMENT for media/env/recorderExt.js: Recorder.forceDownload() audio: added support for FireFox
@@ -286,13 +294,13 @@ MODFIFICATIONS:
 				]
 	    	}
 	    }
-	    
+
 	 then on an Android device, by default the "android" entry will be used, and on an iOS device, the "ios" entry
 	 (and for all other cordova platforms, the "cordova" entry will be used)
  * MODIFICATION manager/mediaManager.js and the app's /www/config/configuration.json: allow (optional) config parameter in media-plugin configurations
     in the configuration.json's media plugin configuration, the plugin's settings/config-parameters can now be made directly
     for example, instead of :
-    
+
        "maryTextToSpeech": {
             "baseSeverUrl": "https://some.url"
        },
@@ -304,9 +312,9 @@ MODFIFICATIONS:
 	    		],...
 	    	}
 	    }
-	 
+
 	 you can use an abbreviated configuration by including the "maryTextToSpeech" configuration directly:
-	   
+
        "mediaManager": {
 	    	"plugins": {
 	    		"browser": ["html5AudioOutput.js",
@@ -317,15 +325,15 @@ MODFIFICATIONS:
 	    		],...
 	    	}
 	    }
-	    
+
 	 In addition, the file-extensions for the media modules are now optional and can be omitted in configuration.json:
 	 for example, instead of "webkitAudioInput.js" you can use "webkitAudioInput"
-	 
+
  * core.js:
    * MODIFICATION the core-module now allows presence of global mmir variable: if one is present upon initialization of the core, then all (non-inherited) properties will be preserved by copying them to the core's global mmir variable (NOTE: excluding properties that would overwrite somehting on the core's mmir object)
    * ADDITION of property "mmirName" on core-module (value: "mmir", can be overwritten by defining a global String variable MMIR_CORE_NAME before core-module's core.js is loaded, e.g. see example index.html in starter-kit)
- 
-   
+
+
 
 BUGFIX
  * tools/loggerDisabled.js: corrected function name: iVerbose -> isVerbose
@@ -362,7 +370,7 @@ API Changes
    		"silenceDetectorPath": "mmirf/workers/silenceDetection.js", //old value: "mmirf/env/media/silenceDetection.js"
    		...
    	}...
- 
+
  * MODIFICATION: externalized preparing/wait functionality from media audio-input plugins (prevously in internal/private _wait implementation)
    * added property to MediaManger: waitReadyImpl
      * if set, then its preparing/ready functions are exported to MediaManager's _preparing/_ready functions, i.e. set object with:
@@ -383,9 +391,9 @@ API Changes
      or using alternative SCXML definition (overwriting the default setting)
      mmir.config({config: { 'dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
  * ADDITION: MediaManager now allows to load multiple modules for same functionality (e.g. two modules for text-to-speech) by using "execution contexts":
-   example: in configuration.json specify the context for a media module using {"mod": "moduleFile.js", "ctx": "thecontext"}, 
+   example: in configuration.json specify the context for a media module using {"mod": "moduleFile.js", "ctx": "thecontext"},
             e.g. the following configuration will load a 2nd speech-input module into context "html"
-            
+
    "mediaManager": {
     	"plugins": {
     		"browser": ["html5AudioOutput.js",
@@ -394,7 +402,7 @@ API Changes
     		            {"mod": "html5AudioInput.js","ctx": "html" }
     		],
     		...
-    		
+
     		the 'default module' for speech-input is available - same as before - without the "context prefix" (i.e. the following will use module functions from "webkitAudioInput.js")
     		    mmir.MediaManager.recognize(...
     		and the 2nd module for speech-input can then be used via its context (this will use module functions from "html5AudioInput.js"):
@@ -414,41 +422,41 @@ API Changes
    * allows to set new input-source (e.g. in case original input-stream/-source was stopped)
      NOTE: this can be useful in order to avoid creating multiple WebWorkers for recording...
    * code example:
-   
+
      navigator.getUserMedia({audio: true}, function(stream){
-     
+
      	var input = new AudioContext().createMediaStreamSource(stream);
      	var recorder = new Recorder(input);
-     	
+
      	//start recording
      	recorder.record();
-     	
+
      	...
-     	
+
      	//stop recording
      	recorder.stop();
      	recorder.clear();
-     	
+
      	//close audio-stream
      	stream.stop();
-     	
+
      	...
-     	
+
      	//restart recorder with another input-stream
      	navigator.getUserMedia({audio: true}, function(stream2){
-     		
+
      		var input2 = new AudioContext().createMediaStreamSource(stream2);
-     		
+
      		//set new input-source on existing recorder:
      		recorder._initSource(input2);
-     		
+
      		//start recording
      		recorder.record();
-     		
+
      		...
      	});
      });
-     
+
  * ADDITION / MODIFICATION for MARY textToSpeech module env/media/maryTextToSpeech.js:
   * an (OPTIONAL) options-object allows to specify a different language and voice (than the current app's settings) when synthesizing text
     * NOTE: if you specify a voice which does not exist for the language, an error will be trigger
@@ -460,7 +468,7 @@ API Changes
 					}
 				);
   * allow empty text: in sentence-mode (i.e. invoking textToSpeech() with an array) empty Strings will be ignored but the sentence-pause will be applied (before, no pause was applied, if an empty string occurred)
-  
+
  * ADDITION the Layout object now provides the additional field headerElements:
    * a list of structured data for the parsed SCRIPT, LINK, and STYLE tags in the layout-definition
    * see also documentation for Layout.TagElement
@@ -478,11 +486,11 @@ Media modules (env/media/)
  * maryTextToSpeech:
   * added support for "empty sentences" (-> for reading a String-array: an empty String in the array) -> will insert a pause in place of the empty sentence
   * added support for using options (language, voice) on funciton-call (instead of/overwriting the app-settings for this call)
- 
+
  * Nuance Speech Plugin (integration code in: env/media/nuanceAudioInput.js):
   * suppress start-prompt in sentence-wise input mode
   * added option for disabling delayed results (i.e. disabling "improved feedback mode")
-  
+
  * removed files for Speech Plugins in MMIR lib:
   * these files are now installed with the corresponding plugin
   * removed files for NuanceSpeechPlugin (but will be installed, when plugin is installed):
@@ -490,12 +498,12 @@ Media modules (env/media/)
     * env/media/nuanceTextToSpeech.js
   * removed files for AndroidSpeechPlugin (but will be installed, when plugin is installed):
     * env/media/androidAudioInput.js
-    * env/media/androidTextToSpeech.js   
+    * env/media/androidTextToSpeech.js
 
 Logger (tools/logger):
  * added trace functionality (using stacktrace.js)
  * configurable via core.js (see #logTrace)
- 
+
 NotificationManager:
  * added implementations for alert() and confirm() for non-Cordova environments
 
@@ -504,7 +512,7 @@ JSDoc
  * FIX for some incorrect JSDoc comments
  * added several comments for enabling Eclipse to detect file structure (e.g. for JavaScript Outline View)
  * made comments compatible with JSDoc3 ( >= 3.4.0dev, NOTE: some additional plugins are required for correct (symbolic) link generation)
- 
+
 BUGFIX
  * CommonUtils: fixed un-intentional global variable (script)
  * in some places (i.e. where this was still missing): explicitly handle / not handle cases where a var is typeof object, but NULL
@@ -516,7 +524,7 @@ BUGFIX
    * when loading templates/views: if up-to-date check fails, do not load the pre-compiled view (but _only_ the re-parsed/-compiled view)
  * Core: BUGFIX for merging additional configurations into the requirejs main-configuration (did omit some additional config-values before)
  * maryTextToSpeech: fixed potential error when on playing the requested audio is not available yet
- 
+
 REFACTOR
  * some structural (non-functional) changes
   * mainly in parserModule, parsingResult, strorageUtils, templateProcessor, renderUtils, paramsParseFunc
@@ -558,7 +566,7 @@ Template rendering (mvc/parser/templateRenderUtils.js)
 
 BUGFIXES
  * FIXED BUG (and removed HACK for workaround) in PresentationManager.init: removed duplicate declaration of checksumUtils variable
- 
+
 
 ##################
  Version 3.4.0
@@ -573,7 +581,7 @@ Logging:
    * uses module's ID as logger-name
    * uses module-specific log-level for the module, if defined in requirejs' config (see mainConfig.js for examples)
  * FIX removed ("partially" global) variable IS_DEBUG_ENABLED (using logging factory instead)
- * TODO add "trace mode" for logger (i.e. log from where the logger functions were called) 
+ * TODO add "trace mode" for logger (i.e. log from where the logger functions were called)
  * TODO replace console.log() etc with logger calls
 
 PresentationManager:
@@ -584,7 +592,7 @@ MediaManager:
   * added helper for firing / triggering events: _fireEvent(..)
   * added support for "observering listeners", i.e. observing registration / removal of event-listeners
    * see _addListenerObserver() and _removeListenerObserver()
-   * notification by callback function with arguments: (eventName, ["added" | "removed"], eventHadlerFunction) 
+   * notification by callback function with arguments: (eventName, ["added" | "removed"], eventHadlerFunction)
  * add aliases for addListener(..) and removeListener(..): on(..) / off(..)
 
 loadCss (tools):
@@ -639,12 +647,12 @@ the jQuery Mobile based view-engine can now be replaced with some other mechanis
 	* extended error information
 
  * MODIFICATION PresentationManager
-    * processing of hook-invocation on Controllers (on_page_load, before_page_load, etc) is handled more gracefully (no error if some parameters are missing) 
+    * processing of hook-invocation on Controllers (on_page_load, before_page_load, etc) is handled more gracefully (no error if some parameters are missing)
 
 ##################
  Version 3.1.1
 ##################
- 
+
 API CHANGES (additions):
 
 * added (optional) hooks for controllers: "before_page_prepare" and "before_page_prepare_<ctrl name>" which get called before view-templates are prepared for showing (i.e. before dynamic content in views is rendered)
@@ -677,13 +685,13 @@ API CHANGES:
 
 * changed grammar-generation via JS/CC to lazy-loading
  * only load JC/CC if a JSON grammar needs to be compiled (normally, grammars are already pre-compiled)
- 
+
 * added mechanism for allowing use of different grammar-compilers / -engines
   * moved code specific for grammar-compilation from SemanticInterpreter to env/grammar/*
   * added several grammar-generators for grammar-compilers, including the existing JS/CC-generator (moved the specific code from GrammarConverter to the generator):
     available generators: JS/CC (default), Jison, PEG.js
   * added config property "grammarCompiler" for setting a specific grammar-compiler (DEFAULT: "jscc"; see SemanticInterpreter.setGrammarEngine() for possible values)
- 
+
 * GrammarConverter
  * added JS/CC grammar template as extra file which will be load through AJAX call (instead of unsing a "hard-coded" stringified version in JavaScript code)
   * removed grammarParserTemplate.js (which contains the now un-used strigified JS/CC template)
@@ -715,57 +723,57 @@ API CHANGES:
  * added versioning for file format of generated grammar files:
    if file is loaded and its file format is out-of-date, an exception will be thrown
    NOTE: you should re-generated grammars (use ANT clean & build task)
-   
+
  * added versioning for file format of compiled view / template files:
    if file is loaded and its file format is out-of-date, an exception will be thrown
    NOTE: you should re-compile views (use ANT default task in mmir-parse.xml)
- 
+
  * added mechanism for enabling RequireJS config settings through config/configuration.json:
    if property "config" is set, this will be applied to require.config(..), AFTER the framework
    has been initialized and BEFORE the mmir.ready() signal is given
    (see documentation of RequireJS for usage of require.config())
    NOTE: the requirejs' base-path is currently set to the mmirf/ sub-directory! path references have to start with "../"
          in order to navigate to the root directory (where index.html is located).
-         
+
  * added mechanism for configuring MediaManager, ie. which media-plugin implementations should be loaded via
    config/configuration.json
    (see the MMIR StarterKit demo for an example)
-   
+
  * FIX for MARY-TTS plugin: if TTS is active, incoming requests for TTS are now queued and processed, after the current TTS has finished (before, they were ignored)
 
 ##################
  Version 3.0beta4
 ##################
- 
+
  * removed un-documented/private field semanticAnnotationResult from GrammarConverter: now using local variable for handling result of grammar execution
    NOTE: you should re-generate the application's grammar files at
          /gen/grammar/
          (either delete the directory, or use the ANT clean-task; then rebuild
           grammars with the ANT build task)
- 
+
  * changed name of default layout: application -> default
    NOTE: you have to rename your application's
          /views/layout/application.ehtml
          to ->
          /views/layout/default.ehtml
- 
+
  * added option "usePrecompiledViews" in config/configuration.json for enabling/disabling use of pre-compiled views:
    if this option is present and enabled ("true"), pre-compiled views will be used if
    (1) the pre-compiled view (*.js) exists for the view (*.ehtml) in gen/views/...
    (2) the view (*.ehtml) has not changed, since it has been compiled (verified by using the checksum files)
- 
+
  * Removed "hard-coded" requirejs dependencies for template/view parser from PresentationManager (and view classes):
    using "lazy loading" for parsers now (e.g. in case pre-compiled views are used, parsers will not be loaded)
- 
+
  * FIX for stopword removal in SemanticInterpreter: respect word boundaries, ie. do not remove matches that occur within words (e.g. for stopword "in" ignore match within "going")
- 
+
 ##################
  Version 3.0beta3
 ##################
- 
+
  * changed to Cordova 3.x
  * new project structure for Cordova 3.x
- 
+
  * added function for overwriting default requirejs-config of framework via mmir.config(..)
    USAGE NOTE must be invoked, after core.js is loaded AND before requirejs is loaded (in index.html)
 
@@ -776,10 +784,10 @@ API CHANGES:
  * moved JavaScript files used in build process & testing into separate folder /build/lib/mmir-build/ (and into /test/scripts/ respectively)
   * updated build.properties, build.xml and parse.xml accordingly
   * updated test.settings, test.xml ect. accordingly
-  
+
  * moved jsonlint library to build directory (only used during build-process and grammar-testing)
   * for testSemanticInterpreter.html: copied jsonlint source-code directly into the HTML page
-     
+
 ##################
  Version 3.0beta / alpha
 ##################
@@ -789,7 +797,7 @@ API CHANGES:
    e.g. use mmir.DialogEngine (instead of old-style: mobileDS.DialogEngine)
 
  * renamed directory mmirf/res/ -> mmirf/vendor/
- 
+
  * renamed resources:
   * renamed files /lanugages/<lang>/speaker.json -> /languages/<lang>/speech.json
   * renamed file extension /lanugages/<lang>/dictionary.dic -> /languages/<lang>/dictionary.json
@@ -808,7 +816,7 @@ API CHANGES:
  * constants
    * changed speaker.json -> speech.json
    * renamed getter function: getSpeakerFileName -> getSpeechConfigFileName
- 
+
  * build.xml
    * all checksum files are now located where the generated counterparts are
    * unified checksum file names to the file-extension used by the JavaScript checksumUtils code
@@ -818,19 +826,19 @@ API CHANGES:
    * added support for nested / structured configuration
    * changed media-plugin settings into structured settings (for htm5AudioInput and maryTextToSpeech)
    * TODO document possible configuration values!!!
-   
+
  * commonUtils:
    * renamed: commonUtils.loadAllPhonegapPlugins -> loadAllCordovaPlugins
 
  * notificationManager:
    * renamed: Notification -> NotificationManager
-   
+
  * backwards compatibility issues
   * mobileDS.constants is now mmir.Constants
     (NOTE: case change for first letter!)
   * create() is now replaced with init()!
 	         in: Constants, ControllerManager, CommonUtils, MediaManager, ModelManager
-	         
+
   * deprecated / removed:
     * BROWSER-part of plugins/directoryListing (-> now in CommonUtils!)
     * html5Navigator (removed; now use navigator directly...)
@@ -849,12 +857,12 @@ API CHANGES:
        -> or add "backwards compatability" by creating global variable: var mobileDS = mmir;
   * renamed Notification -> NotificationManager (moved file into mmirf/manager/)
   * manager modules that had a .create() function: functions renamed to .init() [which return now Promise objects]
-  
+
 ##################
  Version 2.4.1
 ##################
  (changes are contained within 3.0 notes)
- 
+
 ##################
  Version 2.4
 ##################
@@ -905,7 +913,7 @@ API CHANGES:
  * Notification
    * BUGFIX for callback triggering (avoid null-pointer exceptions)
    * DISABLED releasing resources on pause (in order to be able to play notification sounds as long as app is only paused and not exited yet)
-     * added & implemented optional parameter isKeepOnPause for creating notifications sounds (only relevant for ANDROID): if set, sounds are not released when APP pauses   
+     * added & implemented optional parameter isKeepOnPause for creating notifications sounds (only relevant for ANDROID): if set, sounds are not released when APP pauses
    * added initSound() function (for avoiding double-triggering sound upon first playing, e.g. BEEP feedback after starting/resuming APP)
    * REFACTORED private method for getting audio-object from internal cache
  * removed language-specific functionality from ConfigurationManager (set to @deprecated: instead the LanguageManager should be used directly)
@@ -913,15 +921,15 @@ API CHANGES:
  * buil-properties/-settings:
    * removed properties in build-setting files and ANT script that were required for previous solution (i.e. usage of external SCXML-JS)
    * added/extended comments and added example for referencing nodejs in standard MacOS-environment
-   
-   
+
+
 ##################
  Version 2.3
 ##################
  * notification: added stopSound() function
  * Templating (ehtml): added stringify() function for template representation objects
  * Controllers/PresentationManager: added optional callback before_page_load()
- * env/media: 
+ * env/media:
    * added new Audio Input Module webkitAudioInput.js
    * some BUGFIXes for audio output modules (html5 and cordova)
    * updated recorder.js/recorderWorker.js
@@ -943,12 +951,12 @@ API CHANGES:
    - using json-lint
    - added check / detail message for build.xml
    - added check / detail message for testSemanticInterpreter.html
-   
- 
+
+
 ##################
  Version 2.2
 ##################
- 
+
  * added transitions (animations) for views: now jQuery Mobile page transitions can be used in render(..., {transition: 'jqm transition name', reverse: [true|false]})
    - default transition now set in PresentationManager (to: 'none'), instead of in main.js::afterLoadingControllers()
    - added example dialogDescriptionSCXML.xml that uses transitions
@@ -969,11 +977,11 @@ API CHANGES:
   - InitForAntDefaultScriptEnv.js -> InitAntDefaultEnv.js
 * updated HTML test page for grammar generation/testing (for new multi-language support of grammars)
 * some updates in user-guide.pdf
-  
+
 ##################
  Version 2.1
 ##################
- 
+
  * ModelManger:
 	- API change: now use create(callback) before first usage (instead of getInstance(callback))
 	- API change: removed getModels() [RETURNS: Array<Object>]; replaced with getModelNames() [RETURNS: Array<String>]
@@ -991,7 +999,7 @@ API CHANGES:
   - build (compile all necessary files, i.e. compile grammars, update directories.json file etc.)
   - doc (generate HTML documentation for framework code; WINDOWS only)
   - targets for compiling all available grammar.json files
- 
+
 ##################
  Version 2.0
 ##################
@@ -1004,7 +1012,7 @@ TODO (changes that may effect application specific code)
  * renamed parsed_directories.json: directories.json
  * moved application specific JS-files into assets/www/appStarterKit/
 	- suggested file structure: application specific code should be placed into assets/www/app[ application name ]/...
-	
+
  * changed behavior for file-/class-/view-names:
 	* names will now ALWAYS be treated case-sensitive & corresponding to the file-name, with the exception
 	* controllers: the controller-class must have the same name as the controller's file
@@ -1016,7 +1024,7 @@ TODO (changes that may effect application specific code)
 	* partials: partial file-names always start with the character "~"; however, when refering to partials (e.g. @render('Application','languageMenu')) the "~" SHOULD be omitted
 	* see also comments for PresentationManager
 	* NOTE: do not forget to update directories.json (default target in build.xml) after adding, removing, or renaming files
- 
+
  * restructured 3rd party JS files, libraries etc.:
 	- resources (JS-files, CSS-files, images, sounds etc) required by the framework itself are now located in mmirf/vendor/ (previously: mmirf/res/), that is, in the corresponding sub-directories thereof
 	- application specific JS-files are now located in assets/www/libs/
@@ -1026,7 +1034,7 @@ TODO (changes that may effect application specific code)
   - initializeDialog: startEngine
   - raiseEvent: raise
   * changed API: now InputEngine must be created ( mobileDS.InputEngine.create( callback ) ), before it can be used (or its instance be accessed)
-  
+
  * DialogEngine: renamed functions
   - show_dialog: showDialog
   - close_current_dialog: hideCurrentDialog
@@ -1038,7 +1046,7 @@ TODO (changes that may effect application specific code)
   - raiseEvent: raise
   - initializeDialog: startEngine
   * changed API: now DialogEngine must be created ( mobileDS.DialogEngine.create( callback ) ), before it can be used (or its instance be accessed)
- 
+
  * renamed functions in SemanticInterpreter:
 	- get_asr_semantic: getASRSemantic
 	- get_asr_semantic_alt: getASRSemantic_alt
@@ -1050,7 +1058,7 @@ TODO (changes that may effect application specific code)
    -> instead use: var asr_recognized_text = mobileDS.SemanticInterpreter.getInstance().getASRSemantic(asr_semantic_annotation);
 
  * "renamed" stem_word: mobileDS.SnowballSimple.stem
- 
+
  * renamed in CommonUtils
   - html_comment_regex: regexHTMLComment
   - html_resize_font_to_fit_surrounding_box: resizeFitToSourroundingBox
@@ -1078,7 +1086,7 @@ TODO (changes that may effect application specific code)
   - get_duration_as_string
 
   -> NOTE: these can be made re-available by calling setToCompatibilityMode() on the CommonUtils object
-  
+
  * in LanguageManager removed deprecated function:
 	- translateHTML
 	- changeLanguage (this was/is an application specific function; a "copy" is available in controller/application.js)
@@ -1096,16 +1104,16 @@ TODO (changes that may effect application specific code)
 	- initializeControllers: create
   * API change:
 	- removed getControllers() (RETURNS: Array<Controller>); replaced by getControllerNames() (RETURNS: Array<String>)
-	
+
  * in View renamed:
   (NOTE these changes are unlikely to effect application specific code)
 	- performAction: perform
 	- performActionIfPresent: performIfPresent
- 
+
  * in Helper renamed:
   (NOTE these changes are unlikely to effect application specific code)
 	- performAction: perform
-	
+
  * mobileDS.constants:
 	- changed for interface:
 		* needs to initialized using mobileDS.constants.create(env-mode) (NOTE: backwards compatible, i.e. mobileDS.constants.getInstance(new-mode) can be used too)
@@ -1116,7 +1124,7 @@ TODO (changes that may effect application specific code)
 		- getDictionaryFilename: getDictionaryFileName
 		- getSpeakerFilename: getSpeakerFileName
 		- getGrammarFilename: getGrammarFileName
- 
+
  * PresentationManager
   - removed un-used functions/properties: getVisualComponent, visualComponents
   - renamed
@@ -1128,9 +1136,9 @@ TODO (changes that may effect application specific code)
 	- addView(view): addView(controllerName, view)
 	- getView(viewName): getView(controllerName, viewName)
 	- getPartial(partialName, controller): getPartial(controllerName, partialName)
-	
 
- * renamed functions in GrammarConverter: 
+
+ * renamed functions in GrammarConverter:
   (NOTE these changes are unlikely to effect application specific code)
 	- load_grammar: loadGrammar
 	- convert_json_grammar: convertJSONGrammar
@@ -1151,12 +1159,12 @@ TODO (changes that may effect application specific code)
 	- set_compile_grammar: setGrammarFunction
 	- compiled_grammar: executeGrammar
 	- (field) asr_semantic_annotation: semanticAnnotationResult
-	
+
 ----------------------
 Change Information (changes that mostly concern internal framework code)
 ----------------------
 
-* index.html: 
+* index.html:
   NOTE: new SCRIPT tag order requirement: "javascripts/gen/grammar.js" must be loaded AFTER "javascripts/semantic/semantic_interpreter.js"
 
 * JSON Grammar files:
@@ -1181,17 +1189,16 @@ Change Information (changes that mostly concern internal framework code)
  - input_manager_state_chart.js: InputDescription.js
  - dialogDescription.xml: dialogDescriptionSCXML.xml
  - DialogEngine.js: dialogEngine.js
- 
+
 ##################
  Version 1.0
 ##################
- 
+
  * added support for Partial views
  * extended support for template expressions:
   - control structures: @if [@else], @for(;;), @for( in )
   - partial view expression: @render
   - comments: @* *@
   - "code execution" expressions: @(), @{ }@
- * added message queue for SCION: now raising events from within SCION event-processing code is supported (i.e. from within BIG STEP in SCION) 
- * added JSDoc generation for framework documentation 
-   
+ * added message queue for SCION: now raising events from within SCION event-processing code is supported (i.e. from within BIG STEP in SCION)
+ * added JSDoc generation for framework documentation
