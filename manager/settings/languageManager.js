@@ -25,7 +25,7 @@
  */
 
 
-define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter', 'logger', 'module'],
+define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter', 'util/deferred', 'util/loadFile', 'logger', 'module'],
 		
 	/**
 	 * A class for managing the language of the application. <br>
@@ -49,7 +49,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
      * 
 	 */
 	function( 
-			constants, configurationManager, commonUtils, semanticInterpreter, Logger, module
+			constants, configurationManager, commonUtils, semanticInterpreter, deferred, loadFile, Logger, module
 ){
 			//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 			/** @scope mmir.LanguageManager.prototype */
@@ -259,7 +259,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		            currentLanguage = lang;
 		        }
 		        var path = constants.getLanguagePath() + lang + "/" + constants.getSpeechConfigFileName();
-		        $.ajax({
+		        loadFile({
 		            async : false,
 		            dataType : "json",
 		            url : path,
@@ -297,7 +297,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		            currentLanguage = lang;
 		        }
 		        var path = constants.getLanguagePath() + lang + "/" + constants.getDictionaryFileName();
-		        $.ajax({
+		        loadFile({
 		            async : false,
 		            dataType : "json",
 		            url : path,
@@ -358,6 +358,9 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		        	 * 				a language code for setting the current language and
 		        	 * 				selecting the corresponding language resources
 		        	 * 
+		        	 * @returns {Promise}
+		        	 * 				a deferred promise that gets resolved when the language manager is initialized
+		        	 * 
 		        	 * @memberOf LanguageManager.prototype
 		        	 */
 		        	init: function(lang){
@@ -410,13 +413,16 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 
 				        if (logger.isDebug()) logger.debug("[LanguageManager] Found dictionaries for: " + JSON.stringify(languages));// debug
 
+				        var defer = deferred();
+				        
 				        loadDictionary(lang);   
 				        loadSpeechConfig(lang);
 				        requestGrammar(lang, true);//2nd argument TRUE: if no grammar is available for lang, try to find/set any available grammar
 				        
 				        _isInitialized = true;
+				        defer.resolve(this);
 				        
-				        return this;
+				        return defer;
 		        	},
 		        	/**
 		        	 * Initializes the LanguageManager instance if necessary, and sets the Language to lang.
@@ -814,14 +820,14 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
 				     * 				      you want to specify this argument
 				     * @returns {Promise}
-				     * 				a Deffered.promise that is resolved, after compatibility mode
+				     * 				a Deffered promise that is resolved, after compatibility mode
 				     * 				was set
 				     * 
 				     * @see mmir.LanguageManager.setToCompatibilityModeExtension
 		             */
 		            , setToCompatibilityMode : function(success, requireFunction) {
 		            	
-		            	var defer = $.Deferred();
+		            	var defer = deferred();
 				    	if(success){
 				    		defer.then(success, success);
 				    	}
@@ -833,7 +839,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				    		defer.resolve();
 				    	});
 				    	
-				    	return defer.promise();
+				    	return defer;
 		                
 		            }//END: setToCompatibilityMode()
 		            
@@ -845,7 +851,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		    		    
 		    //FIXME as of now, the LanguageManager needs to be initialized,
 		    //		either by calling getInstance() or init()
-		    //		-> should this be done explicitly (async-loading for dictionary and grammar? with returned Deferred.promise?)
+		    //		-> should this be done explicitly (async-loading for dictionary and grammar? with returned Deferred?)
 		    instance = new constructor();
 		    		    
 		    return instance;

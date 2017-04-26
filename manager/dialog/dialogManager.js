@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define([  'core', 'jquery'
+define([  'core', 'util/extend', 'util/deferred'
         , 'commonUtils', 'module', 'engineConfig', 'controllerManager', 'presentationManager', 'logger'
         , 'modelManager' 
 	], 
@@ -53,17 +53,13 @@ define([  'core', 'jquery'
 	 * @requires mmir.ControllerManager
 	 * @requires mmir.PresentationManager
 	 * @requires mmir.ModelManager
-	 * 
-	 * 
-     * @requires jQuery.Deferred
-     * @requires jQuery.extend
-     *  
+	 *   
      * @requires mmir.require
      * @requires mmir._define
      * 
 	 */
 	function(
-			mmir, $, 
+			mmir, extend, deferred, 
 			commonUtils, module, engineConfig, controllerManager, presentationManager, Logger
 ) {
 
@@ -272,16 +268,30 @@ define([  'core', 'jquery'
 		 * @param {Object}
 		 *            data Optional data that can be submitted to the
 		 *            generation of the view
+		 * @returns {void|Promise}
+		 * 			if void/undefined is returned, the view is rendered synchronously, i.e.
+		 * 			the view is rendered, when this method returns.
+		 * 			If a Promise is returned, the view is rendered asynchronously
+		 * 			(rendering is finished, when the promise is resolved)
+		 * 
 		 * @public
 		 */
 		render : function(ctrlName, viewName, data) {
 			
-			presentationManager.renderView(ctrlName, viewName, data);
+			var defer = presentationManager.renderView(ctrlName, viewName, data);
 
 			if (typeof onPageRenderedFunc === 'function') {
 				var ctrl = controllerManager.getController(ctrlName);
-				onPageRenderedFunc.call(ctrl, ctrlName, viewName, data);
+				if(defer){
+					defer.then(function(){
+						onPageRenderedFunc.call(ctrl, ctrlName, viewName, data);
+					});
+				} else {
+					onPageRenderedFunc.call(ctrl, ctrlName, viewName, data);
+				}
 			}
+			
+			return defer;
 		},
 		/**
 		 * Get the current on-page-rendered hook function (if it was
@@ -328,7 +338,7 @@ define([  'core', 'jquery'
 		
 	};//END: _instance = {...
 
-	return $.extend(true, _instance, {
+	return extend({}, _instance, {
 
 		init : function() {
 			
@@ -346,30 +356,30 @@ define([  'core', 'jquery'
 
 //			var _self = this;
 
-			return $.Deferred(function(theDeferredObj) {
+			var theDeferredObj = deferred();
 				
-				engine.load().then(function(_engine) {
-					
-					_instance.raise = function raise(){
-						_engine.raise.apply(_engine, arguments);
-					};
-					
+			engine.load().then(function(_engine) {
+				
+				_instance.raise = function raise(){
+					_engine.raise.apply(_engine, arguments);
+				};
+				
 //					mmir.DialogEngine = _engine;
 //					mmir.DialogEngine.gen('init', _self);
-					delete _engine.gen;
-					
-					//register the DialogeEngine with requirejs as module "dialogEngine":
-					mmir._define("dialogEngine", function(){
-						return _engine;
-					});
-					//immediately load the module-definition:
-					mmir.require(['dialogEngine'], function(){
-						//signal end of initialization process:
-						theDeferredObj.resolve(_instance, _engine);	
-					});
-				});
+				delete _engine.gen;
 				
-			}).promise();
+				//register the DialogeEngine with requirejs as module "dialogEngine":
+				mmir._define("dialogEngine", function(){
+					return _engine;
+				});
+				//immediately load the module-definition:
+				mmir.require(['dialogEngine'], function(){
+					//signal end of initialization process:
+					theDeferredObj.resolve({manager: _instance, engine: _engine});	
+				});
+			});
+				
+			return theDeferredObj;
 			
 		}//END: init()
 

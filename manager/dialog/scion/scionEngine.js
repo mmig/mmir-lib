@@ -1,11 +1,7 @@
 ﻿
-/**
- *  @requires jQuery.Deferred
- */
-
 //TODO doc
 
-define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
+define(['scion', 'scionUtil', 'util/deferred'], function( scion, scionUtil, deferred ) {
 
     /**
      * An array containing all states active.
@@ -53,7 +49,7 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
              * @type Deferred
         	 * @memberOf mmir.env.statemachine.engine#
         	 */
-            var _defer = $.Deferred();
+            var _defer = deferred();
             
             if (typeof _url === 'undefined') {
             	instanceContext._log.error('URL is missing!');
@@ -168,13 +164,13 @@ define(['scion', 'scionUtil', 'jquery'], function( scion, scionUtil, $ ) {
                 	if(!self.evalScript) self.scion.ignoreScript();
                 	self.onload( _scion, _defer );
                 } else {
-                	deferred.resolve(instanceContext);
+                	_defer.resolve(instanceContext);
                 }
                 
             });//END: scion.urlToModel(...
 
             
-            return _defer.promise();
+            return _defer;
             
         };//END: load = function(){...
 

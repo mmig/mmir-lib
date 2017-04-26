@@ -28,7 +28,7 @@
 
 
 
-define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
+define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' ],
 
 	/**
 	 * A class for managing the controllers of the application. <br>
@@ -42,10 +42,9 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * @name mmir.ControllerManager
 	 * @static
 	 * 
-	 * @requires jQuery.Deferred
 	 */
 	function( 
-		Dictionary, Controller, constants, commonUtils, $
+		Dictionary, Controller, constants, commonUtils, deferred
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ControllerManager.prototype */
@@ -73,7 +72,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 	 * @param {Object} [ctx] OPTIONAL
 	 * 				the context for the controller & helper implementations (DEFAULT: the global context, i.e. window)
 	 * @returns {Promise}
-	 * 				a Deferred.promise that will get fulfilled when controllers are loaded
+	 * 				a Deferred promise that will get fulfilled when controllers are loaded
 	 * @private
 	 * 
 	 * @memberOf mmir.ControllerManager#
@@ -93,9 +92,9 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 		ctx = ctx || window;
 		
 		//create return value
-		var deferred = $.Deferred();
+		var defer = deferred();
 		if(callback){
-			deferred.then(callback, callback);
+			defer.then(callback, callback);
 		}
 		
 		
@@ -346,7 +345,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 					
 					console.info( '[loadControllers] done' );
 					
-					deferred.resolve(_instance);
+					defer.resolve(_instance);
 				},
 
 				function isAlreadyLoaded (name) {
@@ -383,7 +382,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 
 		);		
 
-		return deferred.promise(_instance);
+		return defer;
 
 	};
 
@@ -513,7 +512,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'jquery' ],
 			 * @param {Object} [ctx] OPTIONAL
 			 * 				the context for the controller & helper implementations (DEFAULT: the global context, i.e. window)
 			 * @returns {Promise}
-			 * 				a Deferred.promise that will get fulfilled when controllers are loaded
+			 * 				a deferred promise that will get fulfilled when controllers are loaded
 			 * @example
 			 *  //recommended style:
 			 *  require(['controllerManager', ...], function(controllerManager, ...) {

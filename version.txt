@@ -1,7 +1,9 @@
 ﻿
-version notes for MMIR framework code (v 3.7.7)
+version notes for MMIR framework code (v 3.8.0)
 
  * using Cordova 5.x.x - 6.x.x library
+
+optional
  * using jQuery 2.1.x library
  * using jQuery Mobile 1.4.x library
 
@@ -22,6 +24,20 @@ version notes for MMIR framework code (v 3.7.7)
  --------------
  Change Log
  --------------
+
+##################
+ Version 3.8.0
+##################
+
+MODFIFICATIONS:
+
+  * REFACTOR removed dependency on jQuery
+    * added util-implementations that either use jQuery (if present) or use an alternative implementation, see tools/util_purejs/ and tools/util_jquery
+    * replaced jQuery dependencies with specific function-dependencies (of utility functions), e.g. util/deferred, util/extend etc
+    * detect jQuery presence and use its implementation when present (see mainConfig and core)
+
+  * IMPROVE tools/loadCss: enable setting 'class' and 'data-' attributes, if provided in options
+
 
 ##################
  Version 3.7.7

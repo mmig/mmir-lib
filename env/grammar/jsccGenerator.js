@@ -1,5 +1,5 @@
 
-define(['jscc', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
+define(['jscc', 'constants', 'configurationManager', 'grammarConverter', 'util/deferred', 'util/extend', 'util/toArray', 'util/loadFile', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -35,12 +35,8 @@ define(['jscc', 'constants', 'configurationManager', 'grammarConverter', 'jquery
  * @memberOf mmir.env.grammar
  * 
  * @requires JS/CC
- * @requires jQuery.Deferred
- * @requires jQuery.extend
- * @requires jQuery.ajax
- * @requires jQuery.makeArray
  */		
-function(jscc, constants, configManager, GrammarConverter, $, Logger, module){
+function(jscc, constants, configManager, GrammarConverter, deferred, extend, toArray, loadFile, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
@@ -54,7 +50,7 @@ function(jscc, constants, configManager, GrammarConverter, $, Logger, module){
  * 
  * @see #_loadTemplate
  */
-var deferred = $.Deferred();
+var deferred = deferred();
 
 /**
  * The Logger for the JS/CC generator.
@@ -78,9 +74,9 @@ var logger = Logger.create(module);
  * 
  * @see mmir.Logging
  */
-function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name*/, libMakeArray/*helper-lib: provides function makeArray(obj); e.g. jquery*/){
+function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name*/, toArray/*helper-lib: provides function makeArray(obj); e.g. jquery*/){
 	return function(){
-		var args = libMakeArray.makeArray(arguments);
+		var args = toArray(arguments);
 		//prepend "location-information" to logger-call:
 		args.unshift('JS/CC', 'compile');
 		//output log-message:
@@ -205,7 +201,7 @@ var jsccGen = {
 	compileGrammar: function(theConverterInstance, instanceId, fileFormatVersion, callback){
         
 		//attach functions for JS/CC conversion/generation to the converter-instance: 
-		$.extend(theConverterInstance, JsccGrammarConverterExt);
+		extend(theConverterInstance, JsccGrammarConverterExt);
 		//attach the JS/CC template to the converter instance
 		theConverterInstance.TEMPLATE = this.template;
 		
@@ -218,7 +214,7 @@ var jsccGen = {
         //load options from configuration:
         var config = configManager.get(pluginName, true, {});
         //combine with default default options:
-        var options = $.extend({id: instanceId}, DEFAULT_OPTIONS, config);
+        var options = extend({id: instanceId}, DEFAULT_OPTIONS, config);
         
         var compileParserModule = function(grammarParserStr, hasError){
         	
@@ -386,7 +382,7 @@ var jsccGen = {
 			 * @function
 			 * @memberOf JsccGenerator.jscc#
 			 */
-			jscc.set_printError(	_createCompileLogFunc(logger, 'error', $));
+			jscc.set_printError(	_createCompileLogFunc(logger, 'error', toArray));
 		}
 		if(jscc.is_printWarning_default()){
 			/**
@@ -396,7 +392,7 @@ var jsccGen = {
 			 * @function
 			 * @memberOf JsccGenerator.jscc#
 			 */
-			jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', $));
+			jscc.set_printWarning(	_createCompileLogFunc(logger, 'warn', toArray));
 		}
 		if(jscc.is_printInfo_default()){
 			/**
@@ -406,7 +402,7 @@ var jsccGen = {
 			 * @function
 			 * @memberOf JsccGenerator.jscc#
 			 */
-			jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', $));
+			jscc.set_printInfo(		_createCompileLogFunc(logger, 'info', toArray));
 		}
 	},
 	/**
@@ -421,7 +417,7 @@ var jsccGen = {
 		if(errorFunc){
 			errorFunc.apply(jscc, arguments);
 		} else {
-			var args = $.makeArray(arguments);
+			var args = toArray(arguments);
 			//prepend "location-information" to logger-call:
 			args.unshift('JS/CC', 'compile');
 			//output log-message:
@@ -518,7 +514,7 @@ var jsccGen = {
  * @memberOf JsccGenerator#
  */
 function _loadTemplate(url, jsccGenerator, promise){
-	$.ajax({
+	loadFile({//$.ajax({
 		url: url,
 		dataType: 'text',
 		async: true,

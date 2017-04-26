@@ -26,7 +26,7 @@
 
 
 
-define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionary', 'logger', 'module'],
+define(['util/deferred', 'util/extend', 'constants', 'commonUtils', 'configurationManager', 'dictionary', 'logger', 'module'],
 	/**
 	 * The MediaManager gives access to audio in- and output functionality.
 	 * 
@@ -42,13 +42,10 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	 * @memberOf mmir
 	 * @static
 	 * 
-	 * @requires jQuery.extend
-	 * @requires jQuery.Deferred
-	 * 
 	 * TODO remove / change dependency on forBrowser: constants.isBrowserEnv()!!!
 	 */
 	function(
-		jQuery, constants, commonUtils, configurationManager, Dictionary, Logger, module
+		deferred, extend, constants, commonUtils, configurationManager, Dictionary, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.MediaManager.prototype */
@@ -218,7 +215,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 	    					
 	    				}//END if(execId)
 	    				else {
-	    					jQuery.extend(true,instance,exportedFunctions);
+	    					extend(instance,exportedFunctions);
 	    					newMediaPlugin = null;
 	    				}
 	    				
@@ -270,7 +267,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
 //                	
 //                	if (typeof newMediaPlugin !== 'undefined' && newMediaPlugin){
 //    	    			newMediaPlugin.initialize(function(exportedFunctions){
-//    	    					jQuery.extend(true,instance,exportedFunctions);
+//    	    					extend(instance,exportedFunctions);
 //    	    					newMediaPlugin = null;
 //    							if (successCallback) successCallback();
 //    	    			}, instance);
@@ -1452,7 +1449,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          * 					}
          * 				 </pre>
          * @return {Object}
-         * 				an Deferred object that gets resolved, after the {@link mmir.MediaManager}
+         * 				a Deferred object that gets resolved, after the {@link mmir.MediaManager}
          * 				has been initialized.
          * @public
          * 
@@ -1461,7 +1458,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
          */
         init: function(successCallback, failureCallback, listenerList){
         	
-        	var defer = jQuery.Deferred();
+        	var defer = deferred();
         	var deferredSuccess = function(){
     			defer.resolve();
     		};
@@ -1474,7 +1471,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
         	}
         	
             if (instance === null) {
-            	jQuery.extend(true,this,constructor());
+            	extend(this,constructor());
                 instance = this;
                 
                 if(listenerList){
@@ -1493,7 +1490,7 @@ define(['jquery', 'constants', 'commonUtils', 'configurationManager', 'dictionar
             	}
             }
             
-            return defer.promise(this);
+            return defer;
         },
         /**
          * Same as {@link #init}.

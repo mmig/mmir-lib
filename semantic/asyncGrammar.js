@@ -6,7 +6,7 @@
  *      calls on getASRSemantic(text, callback) are re-directed to the WebWorker
  * 
  */
-define(['constants', 'commonUtils', 'semanticInterpreter', 'jquery'], function(constants, utils, semanticInterpreter, $){
+define(['constants', 'commonUtils', 'semanticInterpreter', 'util/deferred'], function(constants, utils, semanticInterpreter, deferred){
 
 //
 var _pendingCmds = {};
@@ -121,6 +121,12 @@ return {
 			return true;//////////////////// EARLY EXIT ////////////////////////
 		}
 		
+		//if grammar is loading, but not available yet: register listener as complete-callback
+		if(_loadedGrammars[langCode] && _loadedGrammars[langCode].initDef && _loadedGrammars[langCode].initDef.then){
+			_loadedGrammars[langCode].initDef.then(listener, listener);
+			return true;//////////////////// EARLY EXIT ////////////////////////
+		}
+		
 		utils.init().then(function onSuccess(){
 			
 				var compiledGrammarPath = utils.getCompiledGrammarPath(constants.getGeneratedGrammarsPath(), langCode);
@@ -131,7 +137,7 @@ return {
 				
 				var grammarInit = {
 					id: langCode,
-					initDef: $.Deferred(),
+					initDef: deferred(),
 					isGrammar: false,
 					isStopwords: false,
 					checkInit: function(){

@@ -72,6 +72,7 @@ define(['constants', 'jquery', 'loadCss', 'require'],
  *  
  *  @requires jQuery.parseHTML
  *  @requires jQuery.appendTo
+ *  @requires jQuery.append
  *  @requires jQuery#selector
  *  
  *  @requires jQueryMobile.defaultPageTransition
@@ -101,10 +102,14 @@ function(consts, jquery, loadCss, require){
 	 */
 	var promise = jquery.Deferred();
 	
-	require(['jquery', 'renderUtils', 'languageManager', 'controllerManager',
+	require(['jquery', 'commonUtils', 'renderUtils', 'languageManager', 'controllerManager', 'util/forEach',
 	         'jqm','jqmSimpleModal'],
-	    function(jq, renderUtils, languageManager, controllerManager
+	    function(jq, commonUtils, renderUtils, languageManager, controllerManager, forEach
 	){
+
+		// set jQuery Mobile's default transition to "none":
+		// TODO make this configurable (through mmir.ConfigurationManager)?
+		jq.mobile.defaultPageTransition = 'none';
 
 		/**
 		 * List of elements (jQuery objects) that should be remove from DOM
@@ -139,6 +144,18 @@ function(consts, jquery, loadCss, require){
 		 * Property name for passing the respected objects from
 		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
 		 * 
+		 * Internal ID for field name that holds the deferred promise signaling that the view is rendered.
+		 * 
+		 * @type String
+		 * @private
+		 * @constant
+		 * @memberOf JqmViewEngine#
+		 */
+		var FIELD_NAME_RESOLVE 		 = '__renderResolve';
+		/**
+		 * Property name for passing the respective objects from
+		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
+		 * 
 		 * Internal ID for field name that holds the {@link View}.
 		 * 
 		 * @type String
@@ -148,7 +165,7 @@ function(consts, jquery, loadCss, require){
 		 */
 		var FIELD_NAME_VIEW 		 = '__view';
 		/**
-		 * Property name for passing the respected objects from
+		 * Property name for passing the respective objects from
 		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
 		 * 
 		 * Internal ID for field name that holds the rendering data object.
@@ -163,7 +180,7 @@ function(consts, jquery, loadCss, require){
 		 */
 		var FIELD_NAME_DATA 		 = '__renderData';
 		/**
-		 * Property name for passing the respected objects from
+		 * Property name for passing the respective objects from
 		 * {@link #doRenderView} to {@link #doRemoveElementsAfterViewLoad}:
 		 * 
 		 * Internal ID for field name that holds the {@link Controller}.
@@ -174,8 +191,18 @@ function(consts, jquery, loadCss, require){
 		 * @memberOf JqmViewEngine#
 		 */
 		var FIELD_NAME_CONTROLLER 	 = '__ctrl';
+		
+		/**
+		 * Reference to the layout that was rendered last.
+		 * 
+		 * This is updated in doRenderView() before the view is actually rendered.
+		 * 
+		 * @type Layout
+		 * @private
+		 * @memberOf JqmViewEngine#
+		 */
+		var lastLayout = null;
 
-		//
 		/**
 		 * Function for removing "old" content from DOM (-> remove old, un-used page content).
 		 * 
@@ -187,6 +214,7 @@ function(consts, jquery, loadCss, require){
 		 * 	<li>calls <code>on_page_load</code> on the view's controller</li>
 		 * 	<li>calls <code>on_page_load&lt;VIEW NAME&gt;</code> on the view's controller (if it exists)</li>
 		 * 	<li>removes the DOM content of the previous view from the document</li>
+		 * 	<li>resolves the promise that was returned by doRenderView()/render()</li>
 		 * <ul>
 		 * 
 		 * @param {Event} event
@@ -200,6 +228,7 @@ function(consts, jquery, loadCss, require){
 		 * 					FIELD_NAME_CONTROLLER: Controller,  //the Controller of the View which is rendered (if NULL, an error will be printed to the console!)
 		 * 					FIELD_NAME_VIEW:       View,        //View which is rendered
 		 * 					FIELD_NAME_DATA:       Object,      //the data object with which render() was invoked
+		 * 					FIELD_NAME_RESOLVE:    Promise,     //promise for signaling that view is rendered
 		 * 				}</pre>
 		 *  
 		 * @function
@@ -224,6 +253,7 @@ function(consts, jquery, loadCss, require){
 			var ctrl = data.options[FIELD_NAME_CONTROLLER];
 			var view = data.options[FIELD_NAME_VIEW];
 			var renderData = data.options[FIELD_NAME_DATA];
+			var defer = data.options[FIELD_NAME_RESOLVE];
 
 			//FIX handle missing ctrl/view parameter gracefully 
 			//     this may occur when doRemoveElementsAfterViewLoad is 
@@ -239,7 +269,7 @@ function(consts, jquery, loadCss, require){
 				console.error('PresentationManager[jqmViewEngine].__doRemoveElementsAfterViewLoad: missing controller (and view)!',data.options);
 				return;
 			}
-
+			
 			//trigger "after page loading" hooks on controller:
 			// the hook for all views of the controller MUST be present/implemented:
 			ctrl.perform('on_page_load', renderData, viewName);
@@ -247,12 +277,112 @@ function(consts, jquery, loadCss, require){
 			if(view){
 				ctrl.performIfPresent('on_page_load_'+viewName, renderData);
 			}
-
+			
+			defer.resolve();
 		};
+		
+		/**
+		 * HELPER generate a marker for inserted LINK and STYLE elements
+		 * 			(so that they can easily removed)
+		 * 
+		 * @function
+		 * @private
+		 * @memberOf JqmViewEngine#
+		 */
+		var getLayoutMarkerAttr = function(layout){
+			return 'rendered_layout_' + layout.getName();
+		};
+		
+		/**
+		 * HELPER remove layout resources (before loading a new layout).
+		 * 
+		 * @param {Layout} layout
+		 * 				the layout which's resources should be removed
+		 * 
+		 * @function
+		 * @private
+		 * @memberOf JqmViewEngine#
+		 */
+		var doRemoveLayoutResources = function(layout){
+			jquery('head .' + getLayoutMarkerAttr(layout)).remove();
+		};
+		
+		/**
+		 * Prepares the layout, before loading a view:
+		 * loads referenced SCRIPTs, LINKs, and STYLEs.
+		 * 
+		 * This function should not be called, if the layout is already loaded,
+		 * i.e. SCRIPTs etc. are meant to be load-once (not load-on-every-page-rendering)
+		 * 
+		 * @param {Layout} layout
+		 * 				the layout which's resources should be prepared
+		 * @returns {Promise}
+		 * 				a deferred promise that gets resolved when the resources have been prepared
+		 * 
+		 * @function
+		 * @private
+		 * @memberOf JqmViewEngine#
+		 */
+		var doPrepareLayout = function(layout){
 
-		// set jQuery Mobile's default transition to "none":
-		// TODO make this configurable (through mmir.ConfigurationManager)?
-		jq.mobile.defaultPageTransition = 'none';
+			//initialize with layout contents:
+				
+			/** @type Array<TagElement> */
+			var headerContents = layout.headerElements;
+			
+			var scriptList = [];
+			var layoutMarker = getLayoutMarkerAttr(layout);
+			var isLinkLoading = false;
+			var head, htmlStyle;
+			forEach(headerContents, function(elem){
+				if( elem.isScript()){
+					
+					scriptList.push(elem.src);
+					
+				} else if(elem.isLink()){
+					
+					isLinkLoading = true;
+					loadCss({'href': elem.href, 'class': layoutMarker});
+					
+				} else if(elem.isStyle()){
+					
+					if(!head){
+						head = $('head');
+					}
+					htmlStyle = jquery.parseHTML(['<style class="', layoutMarker, '">', elem.html(), '</style>' ].join(''));
+					head.append(htmlStyle);
+					
+				} else {
+					
+					console.warn('jqmViewEngine.doPrepareLayout: unknown header element type: '+ elem.tagName, elem);
+				}
+			});
+			
+			if(scriptList.length === 0){
+				var defer = jquery.Deferred();
+				if(isLinkLoading){
+					//if css file is loading, resolve with a small delay, so that (most/some of) the CSS is loaded by then
+					setTimeout(function(){defer.resolve();}, 10);
+				} else {
+					defer.resolve();	
+				}
+				return defer;/////////////////////////// EARLY EXIT ///////////////////////////////
+			} else {
+				//wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
+				if(!head){
+					head = $('head');
+				}
+				return commonUtils.loadImpl(
+					scriptList,
+					true,//<- load serially, since scripts may depend on each other
+					null,//<- use returned promise instead of callback
+					function checkIsAlreadyLoadedFunc(fileName){
+						//if script is already loaded, do not load again:
+						return head.find('script[src="'+fileName+'"]').length > 0;
+					}
+				);/////////////////////////// EARLY EXIT ///////////////////////////////
+			}
+		};
 
 		/**
 		 * Actually renders the View.<br>
@@ -288,6 +418,9 @@ function(consts, jquery, loadCss, require){
 		 *            							DEFAULT: "none".
 		 *            <code>reverse</code>: whether the animation should in "forward" (FALSE) direction, or "backwards" (TRUE)
 		 *            						DEFAULT: FALSE
+		 *            
+		 * @returns {Promise}
+		 * 			a Promise that gets resolved when rendering is finished 
 		 *
 		 * @function
 		 * @private
@@ -314,96 +447,106 @@ function(consts, jquery, loadCss, require){
 
 			var layoutBody = layout.getBodyContents();
 			var layoutDialogs = layout.getDialogsContents();
-			//TODO var layoutHeader = layout.getHeaderContents();
+			
+			var renderResolve = jquery.Deferred();
+			var presentMgr = this;
+			var renderFunc = function(){
 
-			layoutBody = renderUtils.renderViewContent(layoutBody, layout.getYields(), view.contentFors, data );
-			layoutDialogs = renderUtils.renderViewDialogs(layoutDialogs, layout.getYields(), view.contentFors, data );
-
-			//TODO handle additional template syntax e.g. for BLOCK, STATEMENT (previously: partials)
-			var dialogs = jq("#applications_dialogs");//<- TODO make this ID a CONST & export/collect all CONSTs in one place 
-			dialogs.empty();
-
-			dialogs.append(layoutDialogs);
-
-//			// Translate the Keywords or better: localize it... 
-//			NOTE: this is now done during rendering of body-content                  	layoutBody = mmir.LanguageManager.translateHTML(layoutBody);
-			//TODO do localization rendering for layout (i.e. none-body- or dialogs-content)
-
-			var pg = new RegExp(CONTENT_ID, "ig");
-			var oldId = "#" + CONTENT_ID + this.pageIndex;
-
-			// get old content from page
-			var oldContent = jq(oldId);
-			if(oldContent.length < 1 && oldId == '#'+CONTENT_ID+'0'){
-				//the ID of the first page (pageIndex 0) may have no number postfix
-				// -> try without number:
-				oldContent = jq('#' + CONTENT_ID);
+				layoutBody = renderUtils.renderViewContent(layoutBody, layout.getYields(), view.contentFors, data );
+				layoutDialogs = renderUtils.renderViewDialogs(layoutDialogs, layout.getYields(), view.contentFors, data );
+	
+				//TODO handle additional template syntax e.g. for BLOCK, STATEMENT (previously: partials)
+				var dialogs = jq("#applications_dialogs");//<- TODO make this ID a CONST & export/collect all CONSTs in one place 
+				dialogs.empty();
+	
+				dialogs.append(layoutDialogs);
+	
+	//			// Translate the Keywords or better: localize it... 
+	//			NOTE: this is now done during rendering of body-content                  	layoutBody = mmir.LanguageManager.translateHTML(layoutBody);
+				//TODO do localization rendering for layout (i.e. none-body- or dialogs-content)
+	
+				var pg = new RegExp(CONTENT_ID, "ig");
+				var oldId = "#" + CONTENT_ID + presentMgr.pageIndex;
+	
+				// get old content from page
+				var oldContent = jq(oldId);
+				if(oldContent.length < 1 && oldId == '#'+CONTENT_ID+'0'){
+					//the ID of the first page (pageIndex 0) may have no number postfix
+					// -> try without number:
+					oldContent = jq('#' + CONTENT_ID);
+				}
+	
+				//mark old content for removal
+				afterViewLoadRemoveList.push(oldContent);
+	
+				++ presentMgr.pageIndex;
+				var newId = CONTENT_ID + presentMgr.pageIndex;
+	
+				//TODO detect ID-attribute of content-TAG when layout is initialized instead of here
+				layoutBody = layoutBody.replace(pg, newId);
+	
+				if(typeof jq.parseHTML !== 'undefined'){
+					layoutBody = jq.parseHTML(layoutBody);
+				}
+				var newPage = jq(layoutBody);
+	
+	
+				//trigger "before page loading" hooks on controller, if present/implemented: 
+				isContinue = ctrl.performIfPresent('before_page_load', data, viewName);//<- this is triggered for every view in the corresponding controller
+				if(isContinue === false){
+					return;/////////////////////// EARLY EXIT ////////////////////////
+				}
+	
+				isContinue = ctrl.performIfPresent('before_page_load_'+viewName, data);
+				if(isContinue === false){
+					return;/////////////////////// EARLY EXIT ////////////////////////
+				}
+	
+				//'load' new content into the page (using jQuery mobile)
+				newPage.appendTo(jq.mobile.pageContainer);
+	
+				//pass controller- and view-instance to "after page change" handler (jQuery Mobile specific!)
+				var changeOptions = {};
+				changeOptions[FIELD_NAME_RESOLVE] = renderResolve;
+				changeOptions[FIELD_NAME_VIEW] = view;
+				changeOptions[FIELD_NAME_DATA] = data;
+				changeOptions[FIELD_NAME_CONTROLLER] = ctrl;
+	
+	
+				//set transition options, if present (jQuery Mobile specific!):
+				if(data && typeof data.transition !== 'undefined'){
+	
+					changeOptions.transition= data.transition;
+				}
+				if(data && typeof data.reverse !== 'undefined'){
+	
+					changeOptions.reverse = data.reverse;
+				}
+	
+	
+				//change visible page from old to new one (using jQuery mobile)
+	
+				//jQuery Mobile 1.4 API:
+				var pageContainer = jq(':mobile-pagecontainer');
+				//add handler that removes old page, after the new one was loaded:
+				pageContainer.pagecontainer({change: doRemoveElementsAfterViewLoad});
+				//actually change the (visible) page to the new one:
+				pageContainer.pagecontainer('change', '#' + newId, changeOptions);
+			
+			};
+			
+			if(layout !== lastLayout){
+				//if lastLayout is not null: unload its SCRIPTs, LINKs, and STYLEs?
+				if(lastLayout){
+					doRemoveLayoutResources(lastLayout);
+				}
+				lastLayout = layout;
+				doPrepareLayout(layout).then(renderFunc);
+			} else {
+				renderFunc();
 			}
-
-			//mark old content for removal
-			afterViewLoadRemoveList.push(oldContent);
-
-			++ this.pageIndex;
-			var newId = CONTENT_ID + this.pageIndex;
-
-			//TODO detect ID-attribute of content-TAG when layout is initialized instead of here
-			layoutBody = layoutBody.replace(pg, newId);
-
-			if(typeof jq.parseHTML !== 'undefined'){
-				layoutBody = jq.parseHTML(layoutBody);
-			}
-			var newPage = jq(layoutBody);
-
-
-			//trigger "before page loading" hooks on controller, if present/implemented: 
-			isContinue = ctrl.performIfPresent('before_page_load', data, viewName);//<- this is triggered for every view in the corresponding controller
-			if(isContinue === false){
-				return;/////////////////////// EARLY EXIT ////////////////////////
-			}
-
-			isContinue = ctrl.performIfPresent('before_page_load_'+viewName, data);
-			if(isContinue === false){
-				return;/////////////////////// EARLY EXIT ////////////////////////
-			}
-
-			//'load' new content into the page (using jQuery mobile)
-			newPage.appendTo(jq.mobile.pageContainer);
-
-			//pass controller- and view-instance to "after page change" handler (jQuery Mobile specific!)
-			var changeOptions = {};
-			changeOptions[FIELD_NAME_VIEW] = view;
-			changeOptions[FIELD_NAME_DATA] = data;
-			changeOptions[FIELD_NAME_CONTROLLER] = ctrl;
-
-
-			//set transition options, if present (jQuery Mobile specific!):
-			if(data && typeof data.transition !== 'undefined'){
-
-				changeOptions.transition= data.transition;
-			}
-			if(data && typeof data.reverse !== 'undefined'){
-
-				changeOptions.reverse = data.reverse;
-			}
-
-
-			//change visible page from old to new one (using jQuery mobile)
-
-			//jQuery Mobile 1.4 API:
-			var pageContainer = jq(':mobile-pagecontainer');
-			//add handler that removes old page, after the new one was loaded:
-			pageContainer.pagecontainer({change: doRemoveElementsAfterViewLoad});
-			//actually change the (visible) page to the new one:
-			pageContainer.pagecontainer('change', '#' + newId, changeOptions);
-
-
-			//FIX moved into doRemoveElementsAfterViewLoad()-handler (if transition-animation is used, these must be called from handler!)
-//			//trigger "after page loading" hooks on controller:
-//			// the hook for all views of the controller MUST be present/implemented:
-//			ctrl.perform('on_page_load', data);
-//			//... the hook for single/specific view MAY be present/implemented:
-//			ctrl.performIfPresent('on_page_load_'+viewName, data);
-
+			
+			return renderResolve;
 		};
 		
 		//the exported functions (i.e. the rendering-engine interface):

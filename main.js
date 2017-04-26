@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configurationManager', 'languageManager'
+define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', 'configurationManager', 'languageManager'
      , 'controllerManager', 'modelManager'
      , 'presentationManager', 'inputManager', 'dialogManager', 'module'
      , 'semanticInterpreter', 'mediaManager', 'notificationManager'
@@ -44,15 +44,14 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
    * @private
    * 
    * @requires require.config
-   * 
-   * @requires jQuery.Deferred
-   * 
+   * @requires util/deferred
+   *  
    * @requires jQuery#selector	(for initial CSS/script injections; TODO change mechanism)
    * @requires jQuery.is			(for initial script injections; TODO change mechanism)
    * @requires jQuery.append		(for initial CSS injections; TODO change mechanism)
    * 
    */
-  function(mmir, env, envInit, $, constants, commonUtils, configurationManager, languageManager
+  function(mmir, env, envInit, deferred, constants, commonUtils, configurationManager, languageManager
 	 , controllerManager, modelManager
      , presentationManager, inputManager, dialogManager, module
      , semanticInterpreter, mediaManager, notificationManager
@@ -121,13 +120,15 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 			//load plugins (if in CORDOVA environment)
 			.then(function() {
 
-				mmir.LanguageManager = languageManager.init();
+				languageManager.init().then(function(langMng){
+					mmir.LanguageManager = langMng;
+				});
 				
 				/** 
 				 * @type Deferred
 				 * @memberOf main
 				 */
-				var defer = $.Deferred();
+				var defer = deferred();
 		        
 				//if in Cordova env:
 				// * load cordova library
@@ -146,13 +147,12 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 		        	defer.resolve();
 		        }
 
-	        	return defer.promise();
+	        	return defer;
 			})
 			// start the ControllerManager
 			.then(function() {
 				
-				mmir.ControllerManager = controllerManager;
-				
+				mmir.ControllerManager = controllerManager;				
 				//NOTE: this also gathers information on which 
 				//      views, layouts etc. are available
 				//      -> the presentationManager depends on this information
@@ -161,7 +161,6 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 			
 			//TEST parallelized loading of independent modules:
 			.then(function(){
-				
 
 				/** @memberOf main */
 				var isMediaManagerLoaded 	= false;
@@ -271,69 +270,25 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 				});
 				
 				presentationManager.init().then(function(){
-					
-					var doCompletePresInit = function(){
 
-						isVisualsLoaded = true;//<- set to "LOADED" after all scripts have been loaded / TODO impl. better mechanism for including application-scripts...
-			
-						mmir.PresentationManager = presentationManager;
-						checkInitCompleted();
-					};
-					
-					//FIXME impl. mechanism where this is done for each view/layout rendering 
-					//   (i.e. in presentationManager's rendering function and not here)
-					//
-					//initialize with default layout contents:
-					
-					// determine if default-layout is disabled
-					// i.e. configuration is either undefined (-> using default name) 
-					// or TRUTHY (-> custom name for default layout)
-					// -> if FALSY-other-than-undefined: default layout is disabled
-					var defLayoutName = configurationManager.get("defaultLayoutName", true, void(0));//TODO impl. & use PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME instead of "defaultLayoutName"
-					if(typeof defLayoutName === 'undefined' || defLayoutName){
-
-						/** @type String
-						 * @memberOf main */
-						var defaultLayout = presentationManager.getLayout(null, true);
-						
-						/** @type String
-						 * @memberOf main */
-						var headerContents = $( defaultLayout.getHeaderContents() );
-						
-						//NOTE: need to handle scripts separately, since some browsers may refuse to "simply append" script TAGs...
-						/** @memberOf main */
-						var scriptList = [];
-						var stylesheetList = headerContents.filter(function(index){
-							var tis = $(this);
-							if( tis.is('script') ){
-								scriptList.push(tis.attr('src'));
-								return false;
-							}
-							return true;
-						});
-						
-						$("head").append( stylesheetList );
-						commonUtils.loadImpl(scriptList, true)//load serially, since scripts may depend on each other; TODO should processing wait, until these scripts have been finished! (i.e. add callbacks etc.?)
-							.then(doCompletePresInit);//<- need to wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
-						
-					} else {
-						//no default layout present: just continue
-						doCompletePresInit();
-					}
-				});
+					isVisualsLoaded = true;//<- set to "LOADED" after all scripts have been loaded / TODO impl. better mechanism for including application-scripts...
+		
+					mmir.PresentationManager = presentationManager;
+					checkInitCompleted();
+				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });
 				//TODO handle reject/fail of the presentationManager's init-Promise!
 				
-				dialogManager.init().then(function(_dlgMng, _dialogEngine){
+				dialogManager.init().then(function(res){//_dlgMng, _dialogEngine){
 					isDialogManagerLoaded = true;
-					mmir.DialogManager = dialogManager;
-					mmir.DialogEngine = _dialogEngine;
+					mmir.DialogManager = res.manager;//dialogManager;
+					mmir.DialogEngine = res.engine;//_dialogEngine;
 					checkInitCompleted();
 				});
 				
-				inputManager.init().then(function(_inputMng, _inputEngine){
+				inputManager.init().then(function(res){//_inputMng, _inputEngine){
 					isInputManagerLoaded = true;
-					mmir.InputManager = inputManager;
-					mmir.InputEngine  = _inputEngine; 
+					mmir.InputManager = res.manager;//inputManager;
+					mmir.InputEngine  = res.engine;//_inputEngine; 
 					checkInitCompleted();
 				});
 				
@@ -344,15 +299,7 @@ define(['core', 'env', 'envInit', 'jquery', 'constants', 'commonUtils', 'configu
 
 	};//END: mainInit(){...
 	
-	if(env.isCordovaEnv){
-		
-		document.addEventListener("deviceready", mainInit, false);
-	}
-	else {
-		
-		$(mainInit);
-	}
-	//END: $(function() {...
+	mainInit();
 
 	return mmir;
 	

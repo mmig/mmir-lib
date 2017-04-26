@@ -28,7 +28,7 @@
 
 define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'//DISABLED: now loaded on-demand (see init()) -> 'renderUtils'
          , 'layout', 'view', 'partial', 'dictionary', 'checksumUtils', 'languageManager', 'logger'
-         , 'jquery', 'core', 'module'
+         , 'util/deferredWithState', 'util/loadFile', 'util/forEach', 'core', 'module'
          , 'stringExtension', 'parserModule'//<- loaded, but not directly used
     ],
     
@@ -49,7 +49,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      */
     function ( controllerManager, constants, commonUtils, configurationManager//, renderUtils
     		, Layout, View, Partial, Dictionary, checksumUtils, languageManager, Logger
-            , $, core, module
+            , deferred, loadFile, forEach, core, module
 ) {
 	
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -304,6 +304,11 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
     		  *            ctrl Controller object of the view to render
     		  * @param {Object}
     		  *            [data] optional data for the view.
+    		  * @returns {void|Promise}
+    		  * 			if void/undefined is returned, the view is rendered synchronously, i.e.
+			  * 			the view is rendered, when this method returns.
+			  * 			If a Promise is returned, the view is rendered asynchronously
+			  * 			(rendering is finished, when the promise is resolved) 
     		  */
     		 render: function(ctrlName, viewName, view, ctrl, data){
     			 logger.error('PresentationManager.render: no rendering engine set!');
@@ -539,22 +544,19 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 *            viewName Name of the view to render
 			 * @param {Object}
 			 *            [data] optional data for the view.
-			 *            Currently same jQuery Mobile specific properties are supported: <br>
-			 *            When these are present, they will be used for animating the 
-			 *            page transition upon rendering.
-			 *            
-			 *            <pre>{transition: STRING, reverse: BOOLEAN}</pre>
-			 *            where<br>
-			 *            <code>transition</code>: the name for the transition (see jQuery Mobile Doc for possible values)
-			 *            							DEFAULT: "none".
-			 *            <code>reverse</code>: whether the animation should in "forward" (FALSE) direction, or "backwards" (TRUE)
-			 *            						DEFAULT: FALSE
+			 * @returns {void|Promise}
+			 * 			if void/undefined is returned, the view is rendered synchronously, i.e.
+			 * 			the view is rendered, when this method returns.
+			 * 			If a Promise is returned, the view is rendered asynchronously
+			 * 			(rendering is finished, when the promise is resolved) 
+			 * 
 			 * @public
 			 * @memberOf mmir.PresentationManager.prototype
 			 */
             renderView : function(ctrlName, viewName, data) {
             	
                 var ctrl = controllerManager.getController(ctrlName);
+                var renderResult;
 
                 if (ctrl != null) {
                 	
@@ -565,7 +567,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                     	return;
                     }
                     
-                    _renderEngine.render.call(this, ctrlName, viewName, view, ctrl, data);
+                    renderResult = _renderEngine.render.call(this, ctrlName, viewName, view, ctrl, data);
 
                     //TODO russa: _previousView is deprecated (should use a history instead, i.e. application level)
                     // Only overwrite previous state if and only if the view is not re-rendered!
@@ -582,6 +584,8 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
                 else {
                 	logger.error('PresentationManager.renderView: could not retrieve controller "'+ctrlName+'"');
                 }
+                
+                return renderResult;
             },
 
             /**
@@ -599,7 +603,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             reRenderView : function() {
                 if (_currentView) {
                     if (_currentView.ctrlName && _currentView.viewName) {
-                        core.require('dialogManager').render(_currentView.ctrlName, _currentView.viewName, _currentView.data);
+                        return core.require('dialogManager').render(_currentView.ctrlName, _currentView.viewName, _currentView.data);
                     }
                 }
             },
@@ -620,7 +624,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
             renderPreviousView : function() {
                 if (_previousView) {
                     if (_previousView.ctrlName && _previousView.viewName) {
-                    	core.require('dialogManager').render(_previousView.ctrlName, _previousView.viewName, _previousView.data);
+                    	return core.require('dialogManager').render(_previousView.ctrlName, _previousView.viewName, _previousView.data);
                     }
                 }
             },        
@@ -639,7 +643,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
              * <em>hideCurrentDialog</em>, <em>showWaitDialog</em>, and <em>hideWaitDialog</em>:
              * 
              * <ul>
-             * 	<li><b>theRenderEngine.<code>render(ctrlName : String, viewName : String, view : View, ctrl : Controller, data : Object) : void</code></b></li>
+             * 	<li><b>theRenderEngine.<code>render(ctrlName : String, viewName : String, view : View, ctrl : Controller, data : Object) : void|Promise</code></b></li>
              * 	<li>theRenderEngine.<code>showDialog(ctrlName : String, dialogId : String, data : Object) : Dialog</code></li>
              * 	<li>theRenderEngine.<code>hideCurrentDialog(): void</code></li>
              * 	<li>theRenderEngine.<code>showWaitDialog(text : String, data : Object): void</code></li>
@@ -840,20 +844,22 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 
 			var isCompiledViewUpToDate = false;
 
-			$.ajax({
+			loadFile({
 				async: false,//<-- use "SYNC" modus here (NOTE: we win nothing with async here, because the following step (loading/not loading the pre-compiled view) strictly depends on the result of this)
 				dataType: "text",
-				url: viewVerificationInfoPath
-			}).then(function onSuccess(data){
-
-				//compare raw String to checksum-data from file
-				isCompiledViewUpToDate = checksumUtils.isSame(viewContent, data);
+				url: viewVerificationInfoPath,
+				success: function onSuccess(data){
+	
+					//compare raw String to checksum-data from file
+					isCompiledViewUpToDate = checksumUtils.isSame(viewContent, data);
+					
+				},
+				error: function onError(jqxhr, status, err){
 				
-			}, function onError(jqxhr, status, err){
-				
-				// print out an error message
-				var errMsg = err && err.stack? err.stack : err;
-				logger.error("[" + status + "] On checking up-to-date, could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
+					// print out an error message
+					var errMsg = err && err.stack? err.stack : err;
+					logger.error("[" + status + "] On checking up-to-date, could not load '" + viewVerificationInfoPath + "': "+errMsg); //failure
+				}
 			});
 
 			return isCompiledViewUpToDate;
@@ -867,7 +873,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @private
 		 * @memberOf mmir.PresentationManager.init
 		 * 
-		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
+		 * @returns {Promise} a deferred promise that gets resolved upon loading all layouts; fails/is rejected, if not at least 1 layout was loaded
 		 */
 		function loadLayouts(){
 			// Load application's layouts. 
@@ -877,7 +883,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * @private
 			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
-			var defer = $.Deferred();
+			var defer = deferred();
 			
 			/**
 			 * @type String
@@ -952,16 +958,16 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * @private
 			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
-			var doLoadLayout = function(index, ctrlName, theDefaultLayoutName){
+			var doLoadLayout = function(ctrlName, index, theDefaultLayoutName){
 
 				var layoutInfo;
-				if(theDefaultLayoutName){
+				if(typeof theDefaultLayoutName === 'string'){
 
 					ctrlName = theDefaultLayoutName;
 
 					//create info-object for default-layout
 					var layoutFileName = theDefaultLayoutName[0].toLowerCase() 
-					+ theDefaultLayoutName.substring(1, theDefaultLayoutName.length);
+											+ theDefaultLayoutName.substring(1, theDefaultLayoutName.length);
 					layoutInfo = {
 						name: theDefaultLayoutName,
 						fileName: layoutFileName,
@@ -998,10 +1004,10 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			}
 
 			//load layouts for controllers (there may be none defined)
-			$.each(ctrlNameList, doLoadLayout);
+			forEach(ctrlNameList, doLoadLayout);
 
 			checkCompletion(loadStatus);
-			return defer.promise();
+			return defer;
 
 		}//END: loadLayouts()
 
@@ -1015,7 +1021,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @async
 		 * @memberOf mmir.PresentationManager.init
 		 * 
-		 * @returns {Promise} a Deferred.promise that gets resolved upon loading all views
+		 * @returns {Promise} a deferred promise that gets resolved upon loading all views
 		 * 
 		 * @see doProcessTemplateList
 		 */
@@ -1051,7 +1057,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @async
 		 * @memberOf mmir.PresentationManager.init
 		 * 
-		 * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
+		 * @returns {Promise} a deferred promise, that resolves after all partials have been loaded
 		 * 					NOTE: loading failures will generate a warning message (on the console)
 		 * 						  but will not cause the Promise to fail.
 		 */
@@ -1242,7 +1248,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * 			the loaded data is processed.
 		 * 
 		 * 
-		 * @returns {Promise} a Deferred.promise, that resolves after all partials have been loaded
+		 * @returns {Promise} a deferred promise, that resolves after all partials have been loaded
 		 * 					NOTE: loading failures will generate a warning message (on the console)
 		 * 						  but will not cause the Promise to fail.
 		 */
@@ -1253,7 +1259,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			 * @private
 			 * @memberOf mmir.PresentationManager.init.doProcessTemplateList
 			 */
-			var defer = $.Deferred();
+			var defer = deferred();
 			
 			/**
 			 * @type String
@@ -1274,11 +1280,11 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 					currentLoadCount: 0
 			};
 
-			$.each(ctrlNameList, function(ctrlIndex, controllerName){
+			forEach(ctrlNameList, function(controllerName, ctrlIndex){
 
 				var controller = controllerManager.getController(controllerName); 
 
-				$.each(controller[createConfig.accessorName](), function(index, templateInfo){
+				forEach(controller[createConfig.accessorName](), function(templateInfo, index){
 
 					doLoadTemplateFile(controller, templateInfo, createConfig, loadStatus);
 
@@ -1290,7 +1296,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			});//END: each(ctrlName)
 
 			checkCompletion(loadStatus);
-			return defer.promise();
+			return defer;
 
 		};//END: doProcessTemplateList()
 
@@ -1356,44 +1362,46 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		var doLoadTemplateFile = function(controller, templateInfo, createConfig, loadStatus){
 			++loadStatus.currentLoadCount;
 
-			$.ajax({
+			loadFile({
 				async: true,
 				dataType: "text",
-				url: templateInfo.path
-			}).then(function onSuccess(data){
+				url: templateInfo.path,
+				success: function onSuccess(data){
 
-				if(isUsePreCompiledViews){
-
-					loadPrecompiledView(data, templateInfo.genPath, function(){
-
-						updateLoadStatus(loadStatus);
-
-					}, function(err){
-
-						logger.warn('Could not load precompiled '+createConfig.typeName+' from '
-								+templateInfo.genPath+'", because: '+err
-								+', compiling template instead: '
-								+templateInfo.path
-						);
-
-						doParseTemplate(controller, templateInfo.name, createConfig , data, loadStatus);
-
-					});
-
+					if(isUsePreCompiledViews){
+	
+						loadPrecompiledView(data, templateInfo.genPath, function(){
+	
+							updateLoadStatus(loadStatus);
+	
+						}, function(err){
+	
+							logger.warn('Could not load precompiled '+createConfig.typeName+' from '
+									+templateInfo.genPath+'", because: '+err
+									+', compiling template instead: '
+									+templateInfo.path
+							);
+	
+							doParseTemplate(controller, templateInfo.name, createConfig , data, loadStatus);
+	
+						});
+	
+					}
+					else {
+	
+						doParseTemplate(controller, templateInfo.name, createConfig, data, loadStatus);
+	
+					}
+					
+				},
+				error: function onError(jqxhr, status, err){
+	
+					// print out an error message
+					var errMsg = err && err.stack? err.stack : err;
+					logger.error("[" + status + "] Could not load eHTML file '" + templateInfo.path + "': "+errMsg); //failure
+	
+					updateLoadStatus(loadStatus, true);
 				}
-				else {
-
-					doParseTemplate(controller, templateInfo.name, createConfig, data, loadStatus);
-
-				}
-				
-			}, function onError(jqxhr, status, err){
-
-				// print out an error message
-				var errMsg = err && err.stack? err.stack : err;
-				logger.error("[" + status + "] Could not load eHTML file '" + templateInfo.path + "': "+errMsg); //failure
-
-				updateLoadStatus(loadStatus, true);
 			});
 
 			checkCompletion(loadStatus);
@@ -1410,7 +1418,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		 * @private
 		 * @memberOf mmir.PresentationManager.init
 		 */
-		var defer = $.Deferred();
+		var defer = deferred();
 
 		var isLayoutsLoaded = false;
 		var isViewsLoaded = false;
@@ -1469,7 +1477,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			);
 		});
 
-		return defer.promise(_instance);
+		return defer;
 
 	};//END: init()
 	

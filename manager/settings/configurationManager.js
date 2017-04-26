@@ -1,37 +1,11 @@
-﻿/*
- * 	Copyright (C) 2012-2013 DFKI GmbH
- * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
- * 	German Research Center for Artificial Intelligence
- * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
- * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
- * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
- * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-	
-
+﻿
 //TODO additional dependency on LanguageManager for 
 //		* getLanguage() -> languageManager.getLanguage()
 //		* setLanguage(lang) -> languageManager.setLanguage(lang)
 //
 // should the dependency on LanguageManager be made OPTIONAL?
 //
-define(['constants', 'jquery'],
+define(['constants', 'util/loadFile', 'util/isArray'],
 	/**
 	 * A class for managing the configuration. <br>
 	 * It's purpose is to load the configuration and settings automatically.
@@ -50,7 +24,7 @@ define(['constants', 'jquery'],
 	 * 
 	 */
 	function (
-		constants, $
+		constants, loadFile, isArray
 ){
 	
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -129,9 +103,9 @@ define(['constants', 'jquery'],
 		 * @memberOf ConfigurationManager#
     	 */
     	//FIXME change implementation to async-loading?
-    	//		-> would need to add init()-function, with callback and/or return Deferred.promise
+    	//		-> would need to add init()-function, with callback and/or return Deferred
     	function _loadConfigFile(){
-	        $.ajax({
+	        loadFile({
 	    		async: false,
 	    		dataType: "json",
 	    		url: constants.getConfigurationFileUrl(),
@@ -174,7 +148,7 @@ define(['constants', 'jquery'],
         function _getAsPath(propertyName){
         	
         	var path = propertyName;
-        	if( ! $.isArray(path)){
+        	if( ! isArray(path)){
         		path = propertyName.split('.');
         	}
         	else {
@@ -227,7 +201,7 @@ define(['constants', 'jquery'],
         			entry = pathList[i];
     				
         			//flatten sub-paths into the new array:
-    				if( $.isArray(entry) ){
+    				if( isArray(entry) ){
     					
     	        		for(var j=0, len=entry.length; j < len; ++j){
     	        			newPath[index++] = entry[j];

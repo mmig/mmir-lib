@@ -1,6 +1,6 @@
 
 
-define(['constants', 'jsccGen', 'asyncGen', 'jquery'],
+define(['constants', 'jsccGen', 'asyncGen', 'util/deferred', 'util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -19,10 +19,8 @@ define(['constants', 'jsccGen', 'asyncGen', 'jquery'],
  * @memberOf mmir.env.grammar
  * 
  * @requires JsccGenerator
- * @requires jQuery.extend
- * @requires jQuery.deferred
  */		
-function(constants, jsccGen, asyncGen, $){
+function(constants, jsccGen, asyncGen, deferred, extend){
 
 /**
  * Counter for generating IDs for compile-jobs that
@@ -65,7 +63,7 @@ var _applyGenerated = jsccGen._applyGenerated;
 asyncCompiler._onerror = printError;
 
 //setup async init-signaling:
-var initDef = $.Deferred();
+var initDef = deferred();
 var initMsg = asyncCompiler.prepareOnInit(jsccGen, initDef, require);
 asyncCompiler.postMessage(initMsg);
 
@@ -157,6 +155,6 @@ var jsccAsyncGen = {
 };
 
 //extend/overload sync-compiler with async-compiler:
-return $.extend({}, jsccGen, jsccAsyncGen);
+return extend({}, jsccGen, jsccAsyncGen);
 
 });

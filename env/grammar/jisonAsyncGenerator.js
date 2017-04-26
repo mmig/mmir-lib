@@ -1,6 +1,6 @@
 
 
-define(['constants', 'jisonGen', 'asyncGen', 'jquery'],
+define(['constants', 'jisonGen', 'asyncGen', 'util/deferred', 'util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -19,9 +19,8 @@ define(['constants', 'jisonGen', 'asyncGen', 'jquery'],
  * @memberOf mmir.env.grammar
  * 
  * @requires JisonGenerator
- * @requires jQuery.extend
  */		
-function(constants, jisonGen, asyncGen, $){
+function(constants, jisonGen, asyncGen, deferred, extend){
 
 /**
  * Counter for generating IDs for compile-jobs that
@@ -54,7 +53,7 @@ var printError = jisonGen.printError;
 asyncCompiler._onerror = printError;
 
 //setup async init-signaling:
-var initDef = $.Deferred();
+var initDef = deferred();
 var initMsg = asyncCompiler.prepareOnInit(jisonGen, initDef, require);
 asyncCompiler.postMessage(initMsg);
 
@@ -145,6 +144,6 @@ var jisonAsyncGen = {
 };
 
 //extend/overload sync-compiler with async-compiler:
-return $.extend({}, jisonGen, jisonAsyncGen);
+return extend({}, jisonGen, jisonAsyncGen);
 
 });

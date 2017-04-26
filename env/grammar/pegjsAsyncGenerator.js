@@ -1,6 +1,6 @@
 
 
-define(['constants', 'pegjsGen', 'asyncGen', 'jquery'],
+define(['constants', 'pegjsGen', 'asyncGen', 'util/deferred', 'util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -19,9 +19,8 @@ define(['constants', 'pegjsGen', 'asyncGen', 'jquery'],
  * @memberOf mmir.env.grammar
  * 
  * @requires PegJsGenerator
- * @requires jQuery.extend
  */		
-function(constants, pegjsGen, asyncGen, $){
+function(constants, pegjsGen, asyncGen, deferred, extend){
 
 /**
  * Counter for generating IDs for compile-jobs that
@@ -54,7 +53,7 @@ var printError = pegjsGen.printError;
 asyncCompiler._onerror = printError;
 
 //setup async init-signaling:
-var initDef = $.Deferred();
+var initDef = deferred();
 var initMsg = asyncCompiler.prepareOnInit(pegjsGen, initDef, require);
 asyncCompiler.postMessage(initMsg);
 
@@ -145,6 +144,6 @@ var pegjsAsyncGen = {
 };
 
 //extend/overload sync-compiler with async-compiler:
-return $.extend({}, pegjsGen, pegjsAsyncGen);
+return extend({}, pegjsGen, pegjsAsyncGen);
 
 });

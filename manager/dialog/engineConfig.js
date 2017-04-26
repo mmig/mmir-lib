@@ -1,28 +1,3 @@
-/*
- * 	Copyright (C) 2012-2013 DFKI GmbH
- * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
- * 	German Research Center for Artificial Intelligence
- * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
- * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
- * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
- * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 
 /**
  * Factory for creating the state-machine's <em>raise()</em> function.
@@ -41,10 +16,9 @@
  * 
  * @class mmir.env.statemachine.engine.exec
  * 
- * @requires jQuery.extend
  * @requires cordova.plugins.queuePlugin: needed for Android < 4.4 -> Cordova plugin for non-WebWorker-based execution-queue
  */
-define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEngine, $) {
+define(['constants', 'scionEngine', 'util/extend'], function(constants, createScionEngine, extend) {
 
 	/**
 	 * HELPER logging for state-changes
@@ -117,7 +91,7 @@ define(['constants', 'scionEngine', 'jquery'], function(constants, createScionEn
     			//
     			//TODO russa: check if we really need a deep copy here (maybe we should make a copy TO scion and replace _instance with the ext. scion obj. ...?)
     			scion['_scion'].constructor = function dummy(){};
-    			$.extend(true, _instance, scion);
+    			extend(_instance, scion);//<- FIXME should this be a deep-copy? e.g. jQuery.exted(true, ...)
 
     			_instance.worker = envFactory.createWorker(_instance, _instance.gen);//_instance._genFuncFactory(_instance, _instance.gen);
 

@@ -1,14 +1,12 @@
 
 
 
-define(['jquery', 'parserModule'],
+define(['util/extend', 'parserModule'],
 /**
  * Extends the parser-module with helper functions for
  * storing/restoring compiled templates (eHTML -> layout, view, partial etc)
  *
  * Dependencies:
- * 
- *  @requires jQuery.extend 
  *  
  *  alternatively: set <code>mmir.parser.CLASS_EXTENDER</code> with an object that 
  *  exposes a function <tt>extend(obj1,obj1)</tt>, i.e.
@@ -20,7 +18,7 @@ define(['jquery', 'parserModule'],
  * @memberOf mmir.parser
  * 
  */		
-function($, parser){
+function(extend, parser){
 
 /**
  * @public
@@ -89,12 +87,12 @@ function restoreObject(storedObject, isTriggerPublish, fileFormatNo){
 		
 	}
 	
-	var classExtender;
+	var classExtender = {};
 	if(parser.CLASS_EXTENDER && typeof parser.CLASS_EXTENDER.extend === 'function'){
 		classExtender = parser.CLASS_EXTENDER;
 	}
 	else {
-		classExtender = $;
+		classExtender = {extend: extend};
 	}
 	
 //	//NOTE: classConstructor contains a list of Strings:

@@ -1,13 +1,13 @@
-define(['jsonUtils'],
+define(['jsonUtils', 'resizeToFit'],
 	/**
      * Set to "backwards compatibility mode" (for pre version 2.0) for CommonUtils.
-     * 
+     *
      * This function re-adds deprecated and removed functions and
      * properties to the CommonUtils instance.
-     * 
+     *
      * NOTE that once set to compatibility mode, it cannot be reset to
      * non-compatibility mode.
-     *          
+     *
      * <p>
      * In addition, the following functions of CommonUtils are made accessible
      * on the <code>mmir.CommonUtils</code> instance with these additional names
@@ -31,48 +31,48 @@ define(['jsonUtils'],
      *          <b><u>get_params_as_dict(String: str) : Object</u></b>
      * </li>
      * </ul>
-     * 
+     *
      * Also, the functions of {@link mmir.extensions.JsonUtils} will be made available.
-     * 
+     *
      * @requires document (DOM element)
-     * 
+     *
      * @param {mmir.CommonUtils} compatibilitySelf
      * 			the instance of mmir.CommonUtils to which the compatibility functions etc.
      * 			will be attached
-     * 
+     *
 	 * @class
 	 * @name mmir.CommonUtils.setToCompatibilityModeExtension
 	 * @static
-	 * 
+	 *
 	 * @example
 	 * require(['commonUtilsCompatibility'], function(setCompatibility){
 	 * 		setCompatibility(mmir.CommonUtils);
 	 * });
-	 * 
+	 *
      * @requires document (DOM element)
-	 * 
+	 *
 	 * @public
 	 */
-	function(jsonUtils
+	function(jsonUtils, resizeToFit
 ) {
-	
+
 	/**
      * Set to "backwards compatibility mode" (for pre version 2.0).
-     * 
+     *
      * This function re-adds deprecated and removed functions and
      * properties to the CommonUtils instance.
-     * 
+     *
      * NOTE that once set to compatibility mode, it cannot be reset to
      * non-compatibility mode.
-     * 
+     *
      * @requires document (DOM element)
-     * 
+     *
      * @param {mmir.CommonUtils} compatibilitySelf
      * 			the instance of mmir.CommonUtils to which the compatibility functions etc.
      * 			will be attached
-     *  
+     *
      * @constructs mmir.CommonUtils.setToCompatibilityModeExtension
-     * 
+     *
      * @borrows mmir.CommonUtils#regexHTMLComment as
      *          html_comment_regex
      * @borrows mmir.CommonUtils#resizeFitToSourroundingBox as
@@ -85,26 +85,31 @@ define(['jsonUtils'],
      *          this.convert_json_to_HTML_string
      * @borrows mmir.CommonUtils#parseParamsToDictionary as
      *          this.get_params_as_dict
+     * @borrows mmir.ExtendedCommonUtils#resizeFitToSourroundingBox as
+     *          this.resizeFitToSourroundingBox
      */
     return setToCompatibilityMode = function(compatibilitySelf) {
-    	
+
     	/** @scope mmir.CommonUtils.setToCompatibilityModeExtension.prototype *///for jsdoc2
-    	
+
     	//add functions from jsonUtils
     	for(var p in jsonUtils){
     		if(jsonUtils.hasOwnProperty(p)){
     			compatibilitySelf[p] = jsonUtils[p];
     		}
     	}
-    	
+
+			//add function from resizeToFit:
+			compatibilitySelf.resizeFitToSourroundingBox = resizeToFit;
+
 		/**
 		 * Array of strings for the conversion of month represented by integers
 		 * to strings Default Language for months is english, 'en'
-		 * 
+		 *
 		 * @type Object
 		 * @private
 		 */
-    	compatibilitySelf.months = { 
+    	compatibilitySelf.months = {
 			'01': 'January',
 			'02': 'February',
 			'03': 'March',
@@ -139,8 +144,8 @@ define(['jsonUtils'],
 //		/**
 //		 * The instance that holds the extensions for compatibility
 //		 * mode, which really is the CommonUtils instance.
-//		 * 
-//		 * @type 
+//		 *
+//		 * @type
 //		 * @private
 //		 */
 //		var compatibilitySelf = this;
@@ -149,7 +154,7 @@ define(['jsonUtils'],
 		 * HTML-Dom-Element for logging directly on the main HTML-Page
 		 * as of now there is no element with the id "log" in the
 		 * index.html
-		 * 
+		 *
 		 * @type Element
 		 * @private
 		 * @deprecated unused
@@ -159,7 +164,7 @@ define(['jsonUtils'],
 		/**
 		 * Regular Expression to identify a styleSheet-tag for the
 		 * transformation of ehtml to html
-		 * 
+		 *
 		 * @type String|RegExp
 		 * @private
 		 * @deprecated unused
@@ -169,7 +174,7 @@ define(['jsonUtils'],
 		/**
 		 * Regular Expression to identify a javascript for the
 		 * transformation of ehtml to html
-		 * 
+		 *
 		 * @type String|RegExp
 		 * @private
 		 * @deprecated unused
@@ -179,9 +184,9 @@ define(['jsonUtils'],
 		/**
 		 * Regular Expression to identify content for a view-element:<br>
 		 * either _header_, _footer_, _dialogs_ or _content_
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @type String|RegExp
 		 * @private
 		 */
@@ -190,9 +195,9 @@ define(['jsonUtils'],
 		/**
 		 * Regular Expression to identify if a partial should be
 		 * rendered inside a view (ehtml-String)
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @type String|RegExp
 		 * @private
 		 */
@@ -201,9 +206,9 @@ define(['jsonUtils'],
 		/**
 		 * Regular Expression for matching a translation-tag for the
 		 * localization of view content (ehtml-String)
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @type String|RegExp
 		 * @private
 		 */
@@ -226,7 +231,7 @@ define(['jsonUtils'],
 		 * This regular expression is an extension for the parsing of
 		 * the parameters of the partial (for customization) to get the
 		 * name of the corresponding controller of the partial.<br>
-		 * 
+		 *
 		 * Regular Expression to identify if a partial is to be inserted
 		 * in a view. <br>
 		 * Partials are in principle customizable views, which can be
@@ -234,9 +239,9 @@ define(['jsonUtils'],
 		 * parameters to customize the partial.<br>
 		 * A partial is first processed and then integrated into the
 		 * view.
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").impl['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
@@ -254,15 +259,15 @@ define(['jsonUtils'],
 		 * <b>data-instruction</b>, which is evaluated, but not
 		 * displayed + <b>variable</b> or <b>javascript-code</b>,
 		 * which are evaluated and displayed in the view
-		 * 
+		 *
 		 * Partials are principally customizable views, which can be
 		 * used independently from a controller and furthermore accept
 		 * parameters to customize the partial.<br>
 		 * A partial is first processed and then integrated into the
 		 * view.
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example   {::address = address + " " + {:curr_poi_data}.query('addressBean/housenumber')}
 		 * @type String|RegExp
 		 * @public
@@ -276,16 +281,16 @@ define(['jsonUtils'],
 		 * customization of the partial in the form of
 		 * <b>{:curr_poi_data}</b>.<br>
 		 * Form of <b>simple object</b>: <b>{:SIMPLE_OBJECT}</b><br>
-		 * 
+		 *
 		 * Partials are principally customizable views, which can be
 		 * used independently from a controller and furthermore accept
 		 * parameters to customize the partial.<br>
 		 * A partial is first processed and then integrated into the
 		 * view.
-		 * 
-		 * 
+		 *
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example {:curr_poi_data}
 		 * @type String|RegExp
 		 * @public
@@ -299,16 +304,16 @@ define(['jsonUtils'],
 		 * customization of the partial in the form of
 		 * <b>{::curr_poi_data={:curr_poi_data_jpath}}</b>.<br>
 		 * Form of <b>data object</b>: <b>{::DATA_OBJECT}</b><br>
-		 * 
+		 *
 		 * Partials are principally customizable views, which can be
 		 * used independently from a controller and furthermore accept
 		 * parameters to customize the partial.<br>
 		 * A partial is first processed and then integrated into the
 		 * view.
-		 * 
-		 * 
+		 *
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example {::address = address + "&lt;br/&gt;"}
 		 * @type String|RegExp
 		 * @public
@@ -319,10 +324,10 @@ define(['jsonUtils'],
 		/**
 		 * Regular expression for detecting an assignment expression in
 		 * templates, e.g. <code>{::theVariable=... }</code>.
-		 * 
-		 * 
+		 *
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example {::address = address + "&lt;br/&gt;"}
 		 *          or
 		 *          <code>{::address = {:anotherVariable} + "&lt;br/&gt;"}</code>
@@ -352,9 +357,9 @@ define(['jsonUtils'],
 		 * If the string is escaped and must be unescaped a second
 		 * parameter can be given to ensure that the string will be
 		 * unescaped before the insertion in the view.
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example  <%= value_of(languageMenu::header, true) %>
 		 * @type String|RegExp
 		 * @public
@@ -368,7 +373,7 @@ define(['jsonUtils'],
 		 * <br>
 		 * This regular expression is an extension to parse the
 		 * parameters of the <b>value_of</b>-function.<br>
-		 * 
+		 *
 		 * Regular Expression to identify content in a view that will be
 		 * inserted.<br>
 		 * The content is generated by a helper function of the
@@ -377,9 +382,9 @@ define(['jsonUtils'],
 		 * If the string is escaped and must be unescaped a second
 		 * parameter can be given to ensure that the string will be
 		 * unescaped before the insertion in the view.
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example  <%= value_of(languageMenu::header, true) %>
 		 * @type String|RegExp
 		 * @public
@@ -395,9 +400,9 @@ define(['jsonUtils'],
 		 * parameters to customize the partial.<br>
 		 * A partial is first processed and then integrated into the
 		 * view.
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").impl['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
@@ -411,7 +416,7 @@ define(['jsonUtils'],
 		 * <br>
 		 * This regular expression is an extension for the parsing of
 		 * the parameters of the partial (for customization).<br>
-		 * 
+		 *
 		 * Regular Expression to identify if a partial is to be inserted
 		 * in a view. <br>
 		 * Partials are in principle customizable views, which can be
@@ -419,9 +424,9 @@ define(['jsonUtils'],
 		 * parameters to customize the partial.<br>
 		 * A partial is first processed and then integrated into the
 		 * view.
-		 * 
+		 *
 		 * @deprecated old template syntax format
-		 * 
+		 *
 		 * @example   <% render googlemap/poi_details {:curr_poi_data_jpath => new JPath(mmir.ControllerManager.getInstance().getController("googlemap").impl['current_poi_meta_data'])} %>
 		 * @type String|RegExp
 		 * @public
@@ -432,7 +437,7 @@ define(['jsonUtils'],
 		/**
 		 * Appends a log-message to the main document (index.html) and
 		 * prints it in the console
-		 * 
+		 *
 		 * @function
 		 * @param {String}
 		 *            clazz A prefix for the output of the log message
@@ -455,11 +460,11 @@ define(['jsonUtils'],
 		 * Function which transforms a ehtml string (while parsing
 		 * views) into html by replacing stylesheet-, javascript- and
 		 * content_for-tags with corresponding contents.
-		 * 
-		 * 
+		 *
+		 *
 		 * @deprecated used for parsing/rendering old template syntax
 		 *             format
-		 * 
+		 *
 		 * @function
 		 * @param {String}
 		 *            eHtmlTag A string that should be transformed from
@@ -479,7 +484,7 @@ define(['jsonUtils'],
 			}else if (eHtmlTag.match(contentForRegExp)) {
 				var group = eHtmlTag.match(contentForRegExp);
 				return group;
-			} 
+			}
 			else {
 				return eHtmlTag;
 			}
@@ -491,7 +496,7 @@ define(['jsonUtils'],
 		/**
 		 * Similar to the jQuery.getScript() function - appending a url
 		 * of a javascript-source to the header of the main document.
-		 * 
+		 *
 		 * @function
 		 * @param {String}
 		 *            scriptSrc source of javascript-file
@@ -523,7 +528,7 @@ define(['jsonUtils'],
 
 		/**
 		 * Gets the Regular Expression for translation tags.
-		 * 
+		 *
 		 * @function
 		 * @public
 		 * @returns {String} The regular expression for matching a
@@ -536,10 +541,10 @@ define(['jsonUtils'],
 
 		/**
 		 * Reformat the String representation of a date.
-		 * 
+		 *
 		 * @example converts <code>2012-07-23 16:37:33.0</code> into
 		 *          &rarr; <code>23. July 2012</code>
-		 * 
+		 *
 		 * @function
 		 * @param {String}
 		 *            the date String in format
@@ -577,17 +582,17 @@ define(['jsonUtils'],
 				//get default name for month
 				monthName = self.months[month];
 			}
-			return day +". "+monthName+" "+year; 
+			return day +". "+monthName+" "+year;
 		};
 		compatibilitySelf.get_date_as_string = get_date_as_string;
 
 		/**
 		 * Convert a duration (in seconds) into a String representation.
-		 * 
-		 * @example 
+		 *
+		 * @example
 		 * 	2:09:19 h
 		 *  12:05 min
-		 * 
+		 *
 		 * @function
 		 * @param {Integer}
 		 *            the duration in seconds
@@ -631,5 +636,5 @@ define(['jsonUtils'],
 		compatibilitySelf.get_params_as_dict = compatibilitySelf.parseParamsToDictionary;
 
     };// END: setToCompatibilityModeExtension
-    
+
 });

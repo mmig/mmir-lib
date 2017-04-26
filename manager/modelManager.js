@@ -26,7 +26,7 @@
 
 
 
-define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module' ],
+define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', 'module' ],
 	/**
 	 * 
 	 * A class for managing the models of the application (MVC-Component). <br>
@@ -46,7 +46,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module'
 	 * 
 	 */
 	function( 
-    		Dictionary,  constants, commonUtils, Logger, $, module
+    		Dictionary,  constants, commonUtils, Logger, deferred, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ModelManager.prototype */
@@ -142,7 +142,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module'
 	 * @param {Object} [ctx] OPTIONAL
 	 * 				the context for the model implementations (DEFAULT: the global context, i.e. window)
 	 * @returns {Promise} 
-	 * 					a Deferred.promise that gets fulfilled when models are loaded.
+	 * 					a deferred promise that gets fulfilled when models are loaded.
 	 * @private
 	 * @memberOf mmir.ModelManager#
 	 */
@@ -275,7 +275,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module'
         	
         }
 
-		var _defer = $.Deferred();
+		var _defer = deferred();
 		if(initCallbackFunction){
 			_defer.then(initCallbackFunction, initCallbackFunction);
 		}
@@ -346,7 +346,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module'
 		);
 
 
-		return _defer.promise(_instance);
+		return _defer;
 	};
 
 	/**
@@ -431,7 +431,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'jquery', 'module'
 			 * @param {Object} [ctx] OPTIONAL
 			 * 				the context for the model implementations (DEFAULT: the global context, i.e. window)
 			 * @returns {Promise} 
-			 * 					a Deferred.promise that gets fulfilled when models are loaded.
+			 * 					a deferred promise that gets fulfilled when models are loaded.
 			 * @example
 			 * 	function afterLoadingModels(modelManagerInstance){
 			 * 		var userModel = modelManagerInstance.getModel('User');

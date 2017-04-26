@@ -469,6 +469,26 @@ function initMmir() {
 			 * @public
 			 */
 			startModule: 'main',
+			
+			/**
+			 * The jQuery instance that will be used by the MMIR library.
+			 * 
+			 * Will be automatically set, if jQuery is loaded before the MMIR library initializes
+			 * (or can be manually set, before the MMIR library initializes).
+			 * 
+			 * If jQuery is present, the MMIR library will utilize its implementation for some
+			 * utility functions (otherwise alternative, internal utiltiy implemenations will be used).
+			 * 
+			 * NOTE: changing this field after the MMIR library has initialized will have no effect.
+			 * 
+			 * 
+			 * @memberOf mmir
+			 * @name jquery
+			 * @type jQuery
+			 * @default undefined (will be set automatically, if jQuery was loaded)
+			 * @public
+			 */
+			jquery: void(0),
 
 			/**
 			 * Name / ID / load-path (requirejs) for the module

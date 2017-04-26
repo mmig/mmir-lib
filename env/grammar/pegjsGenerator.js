@@ -1,5 +1,5 @@
 
-define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
+define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'util/deferred', 'util/extend', 'util/toArray', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -32,11 +32,8 @@ define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  * @memberOf mmir.env.grammar
  * 
  * @requires PEG.js
- * @requires jQuery.Deferred
- * @requires jQuery.extend
- * @requires jQuery.makeArray
  */		
-function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
+function(pegjs, constants, configManager, GrammarConverter, deferred, extend, toArray, Logger, module){
 
 /**
  * Deferred object that will be returned - for async-initialization:
@@ -46,7 +43,7 @@ function(pegjs, constants, configManager, GrammarConverter, $, Logger, module){
  * @type Deferred
  * @memberOf PegJsGenerator#
  */
-var deferred = $.Deferred();
+var deferred = deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
 
@@ -108,7 +105,7 @@ var DEFAULT_OPTIONS = {
 	cache:    false,
 	optimize: "speed",
 	output:   "source",
-	allowedStartRules: void(0),
+//	allowedStartRules: void(0), FIXME DISABLED: pegjs actually evaluates this value, if it present (even if it is undefined/FALSY)
 	execMode: 'sync',//'sync' | 'async' | default: sync
 	genSourceUrl: '',// true | STRING: the sourceURL for eval'ed parser-module | default: FALSY 
 };
@@ -171,7 +168,7 @@ var pegjsGen = {
 	compileGrammar: function(theConverterInstance, instanceId, fileFormatVersion, callback){
         
 		//attach functions for PEG.js conversion/generation to the converter-instance: 
-		$.extend(theConverterInstance, PegJsGrammarConverterExt);
+		extend(theConverterInstance, PegJsGrammarConverterExt);
 		
 		//start conversion: create grammar in PEG.js syntax (from the JSON definition):
 		theConverterInstance.init();
@@ -182,7 +179,7 @@ var pegjsGen = {
         //load options from configuration:
         var config = configManager.get(pluginName, true, {});
         //combine with default default options:
-        var options = $.extend({id: instanceId}, DEFAULT_OPTIONS, config);
+        var options = extend({id: instanceId}, DEFAULT_OPTIONS, config);
         
         var compileParserModule = function(grammarParser, hasError){
         	
@@ -360,7 +357,7 @@ var pegjsGen = {
 			 * @see mmir.Logging
 			 */
 			pegjs.printError = function(){
-				var args = $.makeArray(arguments);
+				var args = toArray(arguments);
 				//prepend "location-information" to logger-call:
 				args.unshift('PEGjs', 'compile');
 				//output log-message:
@@ -376,7 +373,11 @@ var pegjsGen = {
 	 * @see mmir.Logging
 	 */
 	printError: function(){
-		pegjs.printError.apply(pegjs, arguments);
+		if(pegjs.printError){
+			pegjs.printError.apply(pegjs, arguments);
+		} else {
+			console.error(arguments);
+		}
 	},
 	/**
 	 * Optional hook for pre-processing the generated parser, after the parser is generated.

@@ -42,9 +42,9 @@ function _init(url){
 
 var defaultOptions = {
 	cache:    false,
+//	allowedStartRules: void(0), FIXME DISABLED: pegjs actually evaluates this value, if it present (even if it is undefined/FALSY)
 	optimize: "speed",
-	output:   "source",
-	allowedStartRules: void(0)
+	output:   "source"
 };
 
 // setup PEG.js compiler:

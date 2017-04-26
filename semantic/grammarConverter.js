@@ -32,10 +32,10 @@
 * @class
 * @name GrammarConverter
 * 
-* @requires mmir.CommonUtils.isArray
-* @requires jQuery.ajax
+* @requires util/loadFile
+* @requires util/isArray
 */
-define(['commonUtils', 'jquery'], function(commonUtils, $){
+define(['util/isArray', 'util/loadFile'], function(isArray, loadFile){
 
 
 
@@ -131,7 +131,7 @@ GrammarConverter.prototype.loadResource = function(successCallback, errorCallbac
 		isLoadAsync = true;
 	}
 	
-	$.ajax({
+	loadFile({
 		async: isLoadAsync,
 		dataType: 'json',
 		url:theUrl,
@@ -684,17 +684,9 @@ GrammarConverter.prototype.unmaskJSON = function (json, isMaskValues, isMaskName
  * 
  * @returns {Object} the recoded JSON object
  * 
- * @requires {@link mmir.CommonUtils#isArray} or {@link Array#isArray}
+ * @requires util/isArray
  */
-GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the initializer (i.e. see returned function below)
-	
-	var isArray;
-	if(typeof commonUtils !== 'undefined'){
-		isArray = commonUtils.isArray;//FIXME this requires ArrayExtension.js !!!
-	} 
-	else { 
-		isArray = Array.isArray;
-	}
+GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is only the initializer (i.e. see returned function below)
 	
 	//recursive processing for an object
 	//returns: the processed object
@@ -753,7 +745,7 @@ GrammarConverter.prototype.recodeJSON = (function () {//<- NOTE this is only the
 		return processJSON.call(this, json, recodeFunc, isMaskValues, isMaskNames);
 	};
 	
-})();
+})(isArray);//<- dependency util/isArray
 
 /**
  * 

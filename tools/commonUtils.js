@@ -25,7 +25,7 @@
  */
 
 
-define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', 'module', 'require'],
+define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/isArray', 'paramsParseFunc', 'logger', 'module', 'require'],
 	/**
 	 * A Utility class to support various functions.<br>
 	 * 
@@ -41,19 +41,16 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	 * @requires mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
 	 * @requires require
 	 * 
-     * @requires jQuery.isArray	 in #isArrayHelper
-     * @requires jQuery.Deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
-     * @requires jQuery.ajax		 in #loadDirectoryStructure
-     * 
-     * 
-     * @requires jQuery	 in #resizeFitToSourroundingBox
+     * @requires util/isArray
+     * @requires util/deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
+     * @requires util/loadFile	 in #loadDirectoryStructure
      * 
      * 
      * @example var isList = mmir.CommonUtils.isArray(list);
 	 * 
 	 */
 	function(
-		constants, stringExt, $, paramsParseFunc, Logger, module, require
+		constants, stringExt, deferred, loadFile, _isArray, paramsParseFunc, Logger, module, require
 ) {
 	/** @scope mmir.CommonUtils.prototype *///for jsdoc2
 	
@@ -84,60 +81,17 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
     this.directoryStructure;
 
     /**
-     * This helper initializes a function for detecting if an Object is an
-     * Array.
-     * 
-     * The helper tries to find functions of JavaScript libraries for this; if
-     * none can be found, a custom implementation is used.
-     * 
-     * The returned function is used by {@link mmir.CommonUtils#isArray}
-     * 
-     * NOTE: The current implementation checks jQuery.isArray for presences
-     * 
-     * @function
-     * @private
-     * @returns {Function} a function that takes one parameter (Object) and
-     *          returns true if this parameter is an Array (false otherwise)
-     *          
-     * @memberOf mmir.CommonUtils#
-     */
-    var isArrayHelper = function(obj) {
-
-		// this is the initializer: the following will overwrite the
-		// isArray-function
-		// with the appropriate version (use jQuery method, if present,
-		// otherwise use alternative)
-	
-		// if present, use jQuery method:
-		if (typeof $ !== 'undefined' && typeof $.isArray === 'function') {
-		    isArrayHelper = $.isArray;
-		}
-		else {
-		    // use the toString method with well-defined return-value from
-		    // Object:
-		    var staticToString = Object.prototype.toString;
-	
-		    isArrayHelper = function(obj) {
-		    	return staticToString.call(obj) === '[object Array]';
-		    };
-		}
-    };
-    // initialize the isArray-function
-    isArrayHelper();
-
-    /**
      * Constructor-Method of Class {@link mmir.CommonUtils}
      * 
-     * @param {jQuery}
-     *            [$] the jQuery instance/object (OPTIONAL); some few function
-     *            need jQuery to work correctly (see requires annotations)
+     * @param {Constants} constants
+     *            the constants-provider (e.g. URL for base directory etc)
      * 
      * @constructs mmir.CommonUtils
      * @memberOf mmir.CommonUtils#
      * @function
      * @private
      */
-    function constructor($, constants) {
+    function constructor(constants) {
 		// private members.
     	
 		/**
@@ -287,7 +241,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     *            functions is dependent on the present of plugins, they
 		     *            should be triggered from inside the callback-function
 		     *            
-		     * @returns {Promise} a Deferred.promise (see loadImpl())
+		     * @returns {Promise} a deferred promise (see loadImpl())
 		     * 
 		     * @async
 		     * @public
@@ -390,7 +344,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 			 * @param {Array<String>} [ignoreGrammarIds] OPTIONAL
 			 * 					grammar IDs that should be ignored, i.e. not loaded, even if there is a file available
 			 * 
-		     * @returns {Promise} a Deferred.promise (see loadImpl())
+		     * @returns {Promise} a deferred promise (see loadImpl())
 		     * 
 		     * @requires mmir.SemanticInterpreter (must be loaded as dependency "semanticInterpreter" at least once before this function is loaded)
 		     * 
@@ -480,7 +434,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 			 * 				If the function returns <tt>true</tt>, the library will not be loaded, and loading continues
 			 * 				with the next library-file.
 			 * 
-			 * 				NOTE: if <tt>isSerial</tt> is <tt>flase</tt>, libraries with lower indices in the list may
+			 * 				NOTE: if <tt>isSerial</tt> is <tt>false</tt>, libraries with lower indices in the list may
 			 * 				      still be loading, when later entries are checked with this callback. In consequence,
 			 * 				      the "is already loaded"-check may not be accurate, in case parallel loading is
 			 * 				      used and the library-list contains "duplicate" entries.
@@ -493,7 +447,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 			 * 				      <tt>fileName</tt> is the file-name for the library that this status message concerns, and
 			 * 				      <tt>message</tt> is a message text with details concerning the status
 			 * 
-			 * @returns {Promise} a Deferred.promise that will be fullfilled when loadImpl() has finished.
+			 * @returns {Promise} a deferred promise that will be fulfilled when loadImpl() has finished.
 			 * 
 			 * @async
 			 * @public
@@ -501,7 +455,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 			 */
 		    loadImpl: function (librariesPath, isSerial, completedCallback, checkIsAlreadyLoadedFunc, statusCallback){
 	
-		    	var _defer = $.Deferred();
+		    	var _defer = deferred();
 				
 				if(completedCallback){
 					_defer.then(completedCallback, completedCallback);
@@ -529,50 +483,46 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 						
 					var fileName = fileList[index];
 					
+					//handler that is invoked after file has been processed (loaded or omitted):
+					var handleScriptDone = function(){
+						//"notify" that this file has been DONE:
+						++progress;
+						
+						//check: are all entries of the list done?
+						if (progress < size){
+							
+							if( isSerial ){
+								//synchronous load: load next entry recursively, when previous, i.e. this, one has finished:
+								doLoadImplFile(fileList, index+1);
+							}
+							//all entries already have been processed -> stop now.
+							return;
+						}
+						
+						//ASSERT: all entries of the file-list are DONE -> triggere completedCallback
+						
+//						if (typeof completedCallback == 'function'){
+//							completedCallback();
+//						} else {
+//							if(statusCallback){
+//								statusCallback('warning', fileName, 'provided callback for COMPLETION is not a function: '+completedCallback);
+//							}
+//							else {
+//								logger.warn('[loadImpl] callback for COMPLETION is not a function: '+completedCallback);
+//							}
+//						}
+						_defer.resolve();
+					};
+					
 					if ( checkIsAlreadyLoadedFunc && checkIsAlreadyLoadedFunc(fileName) ){
 						
 						if(statusCallback){
 							statusCallback('warning', fileName, 'already loaded ' + librariesPath+fileName);
 						}
 						
-						++progress;
-						//synchronous load: load next recursively
-						if(isSerial){
-							doLoadImplFile(fileList, index+1);
-						}
+						handleScriptDone();
 						
 					} else {
-						
-						//handler that is invoked after file has been loaded:
-						var handleScriptDone = function(){
-							//"notify" that this file has been DONE:
-							++progress;
-							
-							//check: are all entries of the list done?
-							if (progress < size){
-								
-								if( isSerial ){
-									//synchronous load: load next entry recursively, when previous, i.e. this, one has finished:
-									doLoadImplFile(fileList, index+1);
-								}
-								//all entries already have been processed -> stop now.
-								return;
-							}
-							
-							//ASSERT: all entries of the file-list are DONE -> triggere completedCallback
-							
-	//						if (typeof completedCallback == 'function'){
-	//							completedCallback();
-	//						} else {
-	//							if(statusCallback){
-	//								statusCallback('warning', fileName, 'provided callback for COMPLETION is not a function: '+completedCallback);
-	//							}
-	//							else {
-	//								logger.warn('[loadImpl] callback for COMPLETION is not a function: '+completedCallback);
-	//							}
-	//						}
-							_defer.resolve();
-						};
 					
 						/// ATTENTION: $.getScript --> mmir.CommonUtils.getLocalScript
 						/// under Android 4.0 getScript is not wokring properly
@@ -620,7 +570,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 					doLoadImplFile(theFileList);
 				}
 	
-				return _defer.promise();
+				return _defer;
 			},
 	
 		    /**
@@ -937,54 +887,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	    	 * @memberOf mmir.CommonUtils.prototype
 		     */
 		    isArray : function(object) {
-				return isArrayHelper(object);
-		    },
-	
-		    /**
-		     * This function iterates over all elements of a specific class and
-		     * changes the font-size of the contained text to the maximal
-		     * possible size - while still being small enough to fit in the
-		     * element.
-		     * 
-		     * @function
-		     * @param {String}
-		     *            class_name Name of the class which inner text should
-		     *            be fitted to the size of the element
-		     * 
-		     * @requires jQuery
-		     * @public
-	    	 * @memberOf mmir.CommonUtils.prototype
-		     */
-		    resizeFitToSourroundingBox : function(class_name) {
-				// resize the font in box_fit-class, so that it won't overlap its div-box
-				$(function() {
-	
-					var smallest_font = 1000;
-					$(class_name).each(function(i, box) {
-						var width = $( box ).width(),
-        					html = '<span style="white-space:nowrap">',
-        					line = $( box ).wrapInner( html ).children()[ 0 ],
-        					n = parseInt($( box ).css("font-size"), 10);
-        				
-        				$( box ).css( 'font-size', n );
-
-        				while ( $( line ).width() > width ) {
-        					$( box ).css( 'font-size', --n );
-        				}
-
-        				$( box ).text( $( line ).text() );
-        				
-        				n = parseInt($( box ).css("font-size"), 10);
-        				
-						if (n < smallest_font) {
-							smallest_font = n;
-						}
-					});
-	
-					$(class_name).each(function(i, box) {
-						$(box).css('font-size', smallest_font);
-					});
-				});
+				return _isArray(object);
 		    },
 	
 		    /**
@@ -1097,7 +1000,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 	    	 * @memberOf mmir.CommonUtils.prototype
 			 */
 		    loadDirectoryStructure: function (success, errorFunc) {
-				var _defer = $.Deferred();
+				var _defer = deferred();
 				var self = this;
 				
 				if(success || errorFunc){
@@ -1107,7 +1010,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 				var directoryFileUrl = constants.getDirectoriesFileUrl();
 				
 				//load configuration file asynchronously: 
-				$.ajax({
+				loadFile({
 					async: true,
 					dataType: "json",
 					url: directoryFileUrl,
@@ -1136,7 +1039,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 					}
 				});
 				
-				return _defer.promise();
+				return _defer;
 		    },
 		    
 			init: function(success, errorFunc){
@@ -1183,7 +1086,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
 		     * 				      you want to specify this argument
 		     * @returns {jQuery.Promise}
-		     * 				a Deffered.promise that is resolved, after compatibility mode
+		     * 				a deferred promise that is resolved, after compatibility mode
 		     * 				was set
 		     * 
 	    	 * @memberOf mmir.CommonUtils.prototype
@@ -1193,7 +1096,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		     */
 		    , setToCompatibilityMode : function(success, requireFunction) {
 		    	
-		    	var defer = $.Deferred();
+		    	var defer = deferred();
 		    	if(success){
 		    		defer.then(success, success);
 		    	}
@@ -1206,7 +1109,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
 		    		defer.resolve();
 		    	});
 		    	
-		    	return defer.promise();
+		    	return defer;
 		    }
 			
 		};// END: return {...
@@ -1214,7 +1117,7 @@ define(['constants', 'stringExtension', 'jquery', 'paramsParseFunc', 'logger', '
     }// END: constructor()
 
     
-	instance = new constructor($, constants);
+	instance = new constructor(constants);
 	
 	return instance;
     

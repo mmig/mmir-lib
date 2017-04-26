@@ -1,6 +1,6 @@
 
 
-define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquery', 'logger', 'module'],
+define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'util/deferred', 'util/extend', 'util/toArray', 'logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -33,11 +33,8 @@ define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'jquer
  * @memberOf mmir.env.grammar
  * 
  * @requires Jison
- * @requires jQuery.Deferred
- * @requires jQuery.extend
- * @requires jQuery.makeArray
  */		
-function(jison, constants, configManager, GrammarConverter, $, Logger, module){
+function(jison, constants, configManager, GrammarConverter, deferred, extend, toArray, Logger, module){
 
 /**
  * Deferred object that will be returned - for async-initialization:
@@ -47,7 +44,7 @@ function(jison, constants, configManager, GrammarConverter, $, Logger, module){
  * @type Deferred
  * @memberOf JisonGenerator#
  */
-var deferred = $.Deferred();
+var deferred = deferred();
 //no async initialization necessary for PEG.js generator -> resolve immediately
 deferred.resolve();
 
@@ -172,7 +169,7 @@ var jisonGen = {
 	compileGrammar: function(theConverterInstance, instanceId, fileFormatVersion, callback){
         
 		//attach functions for PEG.js conversion/generation to the converter-instance: 
-		$.extend(theConverterInstance, JisonGrammarConverterExt);
+		extend(theConverterInstance, JisonGrammarConverterExt);
 		
 		//start conversion: create grammar in jison syntax (from the JSON definition):
 		theConverterInstance.init();
@@ -183,7 +180,7 @@ var jisonGen = {
         //load options from configuration:
         var config = configManager.get(pluginName, true, {});
         //combine with default default options:
-        var options = $.extend({id: instanceId}, DEFAULT_OPTIONS, config);
+        var options = extend({id: instanceId}, DEFAULT_OPTIONS, config);
         
         //HELPER function for generating the parser-module (after parser was generated)
         var compileParserModule = function(grammarParser, hasError){
@@ -364,7 +361,7 @@ var jisonGen = {
 			 * @see mmir.Logging
 			 */
 			jison.printError = function(){
-				var args = $.makeArray(arguments);
+				var args = toArray(arguments);
 				//prepend "location-information" to logger-call:
 				args.unshift('jison', 'compile');
 				//output log-message:

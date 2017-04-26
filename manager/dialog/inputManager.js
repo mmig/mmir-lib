@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'jquery', 'commonUtils', 'logger', 'engineConfig', 'module'],
+define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engineConfig', 'module'],
 	/**
 	 * The InputManager handles input events.
 	 * 
@@ -46,17 +46,13 @@ define(['core', 'jquery', 'commonUtils', 'logger', 'engineConfig', 'module'],
 	 * @name mmir.InputManager
 	 * @static
 	 * @class
-	 * 
-	 * 
-     *  @requires jQuery.Deferred
-     *  @requires jQuery.extend
      *  
      *  @requires mmir.require
      *  @requires mmir._define
 	 * 
 	 */
 	function(
-		mmir, $, commonUtils, Logger, engineConfig, module
+		mmir, extend, deferred, commonUtils, Logger, engineConfig, module
 ){
 
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -100,7 +96,7 @@ define(['core', 'jquery', 'commonUtils', 'logger', 'engineConfig', 'module'],
 
 	};
 
-	return $.extend(true, _instance, {
+	return extend({}, _instance, {
 
 		/**
 		 * @function
@@ -124,30 +120,30 @@ define(['core', 'jquery', 'commonUtils', 'logger', 'engineConfig', 'module'],
 
 //			var _self = this;
 
-			return $.Deferred(function(theDeferredObj) {
+			var theDeferredObj = deferred();
 				
-				engine.load().then(function(_engine) {
-					
-					_instance.raise = function raise(){
-						_engine.raise.apply(_engine, arguments);
-					};
-					
+			engine.load().then(function(_engine) {
+				
+				_instance.raise = function raise(){
+					_engine.raise.apply(_engine, arguments);
+				};
+				
 //					mmir.InputEngine = _engine;
-					delete _engine.gen;
+				delete _engine.gen;
 
-					//register the InputEngine with requirejs as module "inputEngine":
-					mmir._define("inputEngine", function(){
-						return _engine;
-					});
-					//immediately load the module-definition:
-					mmir.require(['inputEngine'], function(){
-						//signal end of initialization process:
-						theDeferredObj.resolve(_instance, _engine);	
-					});
-					
+				//register the InputEngine with requirejs as module "inputEngine":
+				mmir._define("inputEngine", function(){
+					return _engine;
+				});
+				//immediately load the module-definition:
+				mmir.require(['inputEngine'], function(){
+					//signal end of initialization process:
+					theDeferredObj.resolve({manager: _instance, engine: _engine});	
 				});
 				
-			}).promise();
+			});
+			
+			return theDeferredObj;
 		}
 	});
 
