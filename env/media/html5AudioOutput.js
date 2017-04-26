@@ -33,6 +33,12 @@ newMediaPlugin = {
 			/**  @memberOf Html5AudioOutput# */
 			var _pluginName = 'html5AudioOutput';
 			
+			/** 
+			 * @type Function
+			 * @memberOf Html5AudioOutput#
+			 */
+			var extend = require('util/extend');
+			
 			/**
 			 * Media error (codes):
 			 * 
@@ -547,7 +553,7 @@ newMediaPlugin = {
 						//if Audio was given: "merge" with newly created Audio
 						if(audioObj){
 							
-							jQuery.extend(audioObj, mediaImpl);
+							extend(audioObj, mediaImpl);
 							
 							//transfer (possibly) changed values to newly created Audio
 							if(audioObj._volume !== 1){
