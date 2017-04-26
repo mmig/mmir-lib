@@ -42,8 +42,6 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', '
 	 * @memberOf mmir
 	 * @static
 	 * 
-	 * @requires jQuery.Deferred
-	 * 
 	 */
 	function( 
     		Dictionary,  constants, commonUtils, Logger, deferred, module

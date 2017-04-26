@@ -17,9 +17,6 @@ define(['constants', 'util/loadFile', 'util/isArray'],
 	 * @static
 	 * @class
 	 * 
-	 * @requires jQuery.ajax
-	 * @requires jQuery.isArray
-	 * 
 	 * @requires mmir.require for getting/setting language code (e.g. see {@link mmir.ConfigurationManager.getLanguage}
 	 * 
 	 */

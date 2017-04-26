@@ -1070,10 +1070,12 @@ define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/
 		     * NOTE that once set to compatibility mode, it cannot be reset to
 		     * non-compatibility mode.
 		     * 
-		     * @deprecated use only for backward compatibility
+             * NOTE: Requires jQuery to be present.
+             * 
+		     * @deprecated use only for backwards compatibility
 		     * 
 		     * @async
-		     * @requires jQuery.Deferred
+		     * @requires jQuery
 		     * @requires mmir.CommonUtils.setToCompatibilityModeExtension
 		     * 
 		     * @param {Function} [success]
@@ -1085,7 +1087,7 @@ define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/
 		     * 				If omitted, the default (local dependency) <code>require</code> function will be used.
 		     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
 		     * 				      you want to specify this argument
-		     * @returns {jQuery.Promise}
+		     * @returns {Promise}
 		     * 				a deferred promise that is resolved, after compatibility mode
 		     * 				was set
 		     * 

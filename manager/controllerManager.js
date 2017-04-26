@@ -493,7 +493,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 * This function must be called before using the {@link mmir.ControllerManager}. The Initialization process is asynchronous, 
 			 * because javascript-files must be loaded (the controllers).
 			 * To ensure that the ControllerManager is initialized, a callback can be used, or the returned
-			 * <em>Promise</em> (e.g. see documentation of jQuery.Deferred) for code, that relies
+			 * <em>Promise</em> (i.e. a "then-able" object) for code, that relies
 			 * on the presence of the loaded controllers.<br>   
 			 * 
 			 * 

@@ -69,7 +69,7 @@ function initMmir() {
 			func = dequeue();
 		}
 
-		//run function in context of the document (whith jQuery as argument)
+		//run function in context of the document (with library reference as argument)
 		func.call(mmir);
 	};
 	

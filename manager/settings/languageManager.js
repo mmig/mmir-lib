@@ -43,10 +43,6 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 	 * @requires mmir.CommonUtils
 	 * @requires mmir.SemanticInterpreter
 	 * 
-	 * 
-     * @requires jQuery.Deferred
-     * @requires jQuery.ajax
-     * 
 	 */
 	function( 
 			constants, configurationManager, commonUtils, semanticInterpreter, deferred, loadFile, Logger, module
@@ -267,7 +263,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		                
 		            	if(logger.isVerbose()) logger.v("[LanguageManager] Success. " + data);
 		                
-		            	currentSpeechConfig = data;// jQuery.parseJSON(data);
+		            	currentSpeechConfig = data;
 		                
 		                if(logger.isVerbose()) logger.v("[LanguageManager] " + JSON.stringify(dictionary));
 		            },
@@ -803,11 +799,13 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 		             * NOTE that once set to compatibility mode, it cannot be reset to
 		             * non-compatibility mode.
 		             * 
-		             * @deprecated use only for backward compatability
+		             * NOTE: Requires jQuery to be present.
+		             * 
+		             * @deprecated use only for backwards compatibility
 		             * 
 		             * @public
 		             * @async
-				     * @requires jQuery.Deferred
+				     * @requires jQuery
 				     * @requires mmir.LanguageManager.setToCompatibilityModeExtension
 				     * 
 				     * @param {Function} [success]

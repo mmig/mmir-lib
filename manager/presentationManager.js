@@ -35,16 +35,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
     /**
      * @class
      * @name mmir.PresentationManager
-     * @static 
-     *  
-     * Libraries:
-     *  - jQuery (>= v1.6.2); ajax, each
-     *  
-     *  @requires document (DOM object)
-     *  
-     *  @requires jQuery.Deferred
-     *  @requires jQuery.ajax
-     *  @requires jQuery.each
+     * @static
      *  
      */
     function ( controllerManager, constants, commonUtils, configurationManager//, renderUtils
@@ -879,7 +870,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 			// Load application's layouts. 
 
 			/**
-			 * @type jQuery.Deffered
+			 * @type Promise
 			 * @private
 			 * @memberOf mmir.PresentationManager.init.loadLayouts
 			 */
@@ -1255,7 +1246,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		var doProcessTemplateList = function(createConfig){
 
 			/**
-			 * @type jQuery.Deferred
+			 * @type Promise
 			 * @private
 			 * @memberOf mmir.PresentationManager.init.doProcessTemplateList
 			 */
@@ -1414,7 +1405,7 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
 		/**
 		 * Deferred / promise for loading views.
 		 * 
-		 * @type jQuery.Deferred
+		 * @type Promise
 		 * @private
 		 * @memberOf mmir.PresentationManager.init
 		 */

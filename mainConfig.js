@@ -42,7 +42,6 @@ var mmirf_config = {
  	    , 'main': 'main'
 
 	    // lib
-// 	    , 'jquery': 'vendor/libs/jquery-2.2.3'
  	    , 'scion': 'vendor/libs/scion-amd-mod.min'
 
 	    // globals and AMDs
@@ -77,7 +76,9 @@ var mmirf_config = {
 	    //default view-engine (this ID is used in core.viewEngine)
 	    , 'jqmViewEngine': 'env/view/jqmViewEngine'
 
+	    //TODO extract/make optional:
 	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
+//	 	, 'jquery': 'vendor/libs/jquery-2.2.3'
 		, 'jqm': 'vendor/libs/jquery.mobile-1.4.5'
 		, 'jqmSimpleModal': 'vendor/libs/jquery.simplemodal-1.4.4'
 

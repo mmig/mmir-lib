@@ -33,11 +33,6 @@ define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', '
    * Initializes the MMIR framework:
    * triggers {@link mmir.ready} when initialization has finished.
    * 
-   * If run with env-setting <code>cordova</code> the initialization starts
-   * when the <code>deviceready</code> event is fired.
-   * Otherwise initialization starts when the <code>domready</code> event was fired
-   * (using jQuery's ready function). 
-   * 
    * @class
    * @name main
    * @memberof mmir
@@ -45,10 +40,6 @@ define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', '
    * 
    * @requires require.config
    * @requires util/deferred
-   *  
-   * @requires jQuery#selector	(for initial CSS/script injections; TODO change mechanism)
-   * @requires jQuery.is			(for initial script injections; TODO change mechanism)
-   * @requires jQuery.append		(for initial CSS injections; TODO change mechanism)
    * 
    */
   function(mmir, env, envInit, deferred, constants, commonUtils, configurationManager, languageManager
@@ -271,10 +262,11 @@ define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', '
 				
 				presentationManager.init().then(function(){
 
-					isVisualsLoaded = true;//<- set to "LOADED" after all scripts have been loaded / TODO impl. better mechanism for including application-scripts...
+					isVisualsLoaded = true;
 		
 					mmir.PresentationManager = presentationManager;
 					checkInitCompleted();
+					
 				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });
 				//TODO handle reject/fail of the presentationManager's init-Promise!
 				

@@ -1,4 +1,3 @@
-
 /**
  * Simplified jQuery-like AJAX interface for loading text/JSON files.
  *

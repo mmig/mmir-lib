@@ -1,3 +1,8 @@
+/**
+ * jQuery-based forEach-iteration
+ * 
+ * @requires jQuery
+ */
 define(['jquery'], function(jQuery){
 	return function(arr, callback){
 		jQuery.each(arr, function(index, value){
