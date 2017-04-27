@@ -142,9 +142,9 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
 		    		doVibrate = function vibrate(n){ navigator.notification.vibrate(n); };
 	    		}
 	    		else {
-	    			console.warn('mmir.NotificationManager.INIT: could not detect navigator.notification.vibrate, using NOOP dummy instead.');
+	    			console.warn('NotificationManager.INIT: could not detect navigator.notification.vibrate, using NOOP dummy instead.');
 	    			/** @ignore */
-	        		doVibrate = function dummyVibrate(n){ console.error('mmir.NotificationManager.vibrate('+n+') triggered in CORDOVA environment, but no VIBRATE functionality available.'); };// DEBUG
+	        		doVibrate = function dummyVibrate(n){ console.error('NotificationManager.vibrate('+n+') triggered in CORDOVA environment, but no VIBRATE functionality available.'); };// DEBUG
 	    		}
 	    		
 	    	}
@@ -421,7 +421,7 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     			}
     			
     			if(!soundEntry){
-    				var errMsg = 'mmir.NotificationManager: no sound "'+name+'" initialized!';
+    				var errMsg = 'NotificationManager: no sound "'+name+'" initialized!';
     				if(onErrorCallback){
     					onErrorCallback(errMsg);
     				}
