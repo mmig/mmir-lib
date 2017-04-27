@@ -177,6 +177,12 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * NOTE: this does not actually render the layout for "viewing"
 	    	 *       (see renderContent(..))!
 	    	 * 
+	    	 * @param {ParsingResult} result the parsing result for the layout string
+	    	 * @param {Array<ContentElement>} contentForArray (usually this would be NULL for pre-rendering layouts)
+	    	 * @param {Number} renderingMode the rendering mode for layouts
+	    	 * @returns {String} the (pre-) rendered layout
+	    	 * 
+	    	 * 
 	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 * @name renderLayoutImpl
@@ -281,6 +287,14 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * 
 	    	 * Renders the contents into a layout definition (i.e. "render for viewing").
 	    	 * 
+        	 * @param {String} htmlContentString the "raw" content string that was parsed
+    		 * @param {Array<YieldDeclaration>} yieldDeclarationsArray a list of yield-declarations for the parsed htmlContentString
+    		 * @param {Array<ContentElement>} contentForObjectsArray a list of content-for objects for the parsed htmlContentString. This list must supply a corresponding object for each entry in the <tt>yieldDeclarationsArray</tt>.
+    		 * @param {Number} renderingMode the render mode
+    		 * @param {Object} data the rendering data
+    		 * @returns {String} the evaluated and rendered view-content
+    		 * 
+	    	 * 
 	    	 * @private
 	    	 * @function
 	    	 * @memberOf mmir.parser.RenderUtils#
@@ -329,23 +343,33 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    	 * Renders a ContentElement object into the renderingBuffer.
 	    	 * 
 	    	 * 
-	    	 * @param contentElement {ContentElement} the ContentElement object that should be rendered
-	    	 * @param renderingBuffer {Array} of Strings (if <code>null</code> a new buffer will be created)
-	    	 * @param data {Object} the data/arguments/variables object; 
-	    	 * 						the event data with which the rendering was invoked is accessible via <DATA_NAME>[<PARAM_DATA_NAME>] 
-	    	 * @returns {Array} of Strings the renderingBuffer where the contents of this object are added at the end of the Array
+	    	 * @param {ContentElement} contentElement 
+	    	 * 						the ContentElement object that should be rendered
+	    	 * @param {Array} renderingBuffer 
+	    	 * 						of Strings (if <code>null</code> a new buffer will be created)
+	    	 * @param {Object} data 
+	    	 * 						the data/arguments/variables object; 
+	    	 * 						the event data with which the rendering was invoked is accessible via <DATA_NAME>[<PARAM_DATA_NAME>]
+	    	 * 
+    		 * @param {Array<ContentElement>} [contentForObjectsArray] OPTIONAL
+    		 * 						for rendering layouts, i.e. when YieldDeclarations are contained in the contentElement.allContentElements fields:
+    		 * 						a list of content-for objects for the parsed htmlContentString. This list must supply a corresponding object for each entry in the <tt>yieldDeclarationsArray</tt>. 
+	    	 * @returns {Array} 
+	    	 * 						a list of Strings the renderingBuffer where the contents of this object are added at the end of the Array
 	    	 * 
 	    	 * @private
 	    	 * @memberOf mmir.parser.RenderUtils#
 	    	 * @name renderContentElementImpl
 	    	 */
-	    	function renderContentElement(contentElement, renderingBuffer, data){
+	    	function renderContentElement(contentElement, renderingBuffer, data, contentForObjectsArray){
 	    		
 	    		//create "buffer" if necessary:
 	    		var renderResult = getRenderingBuffer(renderingBuffer);
 	    		
 	    		//initialize the contentElement with the current rendering-data object:
 	    		contentElement.setRenderData(data);
+	    		
+	    		contentForObjectsArray = contentForObjectsArray || null;
 	    		
 	    		var pos = 1;
 	    		//iterate over elements, and render them into the "buffer":
@@ -358,16 +382,23 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    			//  of the current "dynamic" element: 
 	    			renderResult.push(contentElement.definition.substring(pos-1, childContentElement.getStart()));
 	    			
-	    			//render the current "dynamic" element:
-	    			renderElement(
-	    					childContentElement, 
-	    					null,//<- contentForArray: not used (only for LAYOUTS)
-	    					RENDER_MODE_VIEW_CONTENT,//<- renderingMode: render as normal view (i.e. generate all replacements)
-	    					contentElement.getRawText(),
-	    					renderResult,
-	    					data,
-	    					contentElement
-	    			);
+	    			if(!contentForObjectsArray && childContentElement.isYield()){
+	    				
+	    				logger.e('encountered YieldDeclaration, but now ContentFor list was supplied');
+	    				
+	    			} else {
+	    			
+		    			//render the current "dynamic" element:
+		    			renderElement(
+		    					childContentElement, 
+		    					contentForObjectsArray,//<- contentForArray: must be specified, if not used (only for LAYOUTS)
+		    					RENDER_MODE_VIEW_CONTENT,//<- renderingMode: render as normal view (i.e. generate all replacements)
+		    					contentElement.getRawText(),
+		    					renderResult,
+		    					data,
+		    					contentElement
+		    			);
+	    			}
 	    			
 	    			//set position-marker for "static" content after entry position
 	    			// of current "dynamic" element:
@@ -926,7 +957,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    			var name = elem.getValue(elem.name, elem.nameType, data);
 		    		var contentFor = getContentForYield(name, contentForArray);
 		    		if(!contentFor){
-		    			logger.warn('ParseUtil.renderYield: could not find content-definition for yield '+name);
+		    			logger.info('ParseUtil.renderYield: could not find content-definition for yield '+name);
 		    			return renderingBuffer;
 		    		}
 		    		
@@ -997,11 +1028,16 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * <p>During rendering, the view's template-expressions are evaluated, and the results rendered into
 	    		 * the returned String.
 	    		 * 
-	        	 * @param {String} htmlContentString the original view-content of the layout-template text, see {@link Layout#getBodyContents}
-	    		 * @param YieldDeclaration[]} yieldDeclarationsArray a list of yield-declarations of the layout
-	    		 * @param {ContentElement[]} contentForObjectsArray a list of content-for objects of the view. This list must supply a corresponding objecet for each entry in the <tt>yieldDeclarationsArray</tt>.
-	    		 * @param {Object} [data] a JSON object which's fields will be available during rendering/evaluation of the template expressions
-	    		 * @returns {String} the evalutated and rendered view-content
+	        	 * @param {String|ContentElement} htmlContentString
+	        	 * 				the original view-content of the layout-template text, see {@link Layout#getBodyContents}
+	        	 * 				or a ContentElement with its YieldDeclarations in its allContentElements field (by default yields are not contained in ContentElement.allContentElements)
+	    		 * @param {Array<YieldDeclaration>} yieldDeclarationsArray
+	    		 * 				a list of yield-declarations of the layout
+	    		 * @param {Array<ContentElement>} contentForObjectsArray
+	    		 * 				a list of content-for objects of the view. This list must supply a corresponding objecet for each entry in the <tt>yieldDeclarationsArray</tt>.
+	    		 * @param {Object} [data] OPTIONAL
+	    		 * 				a JSON object which's fields will be available during rendering/evaluation of the template expressions
+	    		 * @returns {String} the evaluated and rendered view-content
 	    		 * 
 	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
@@ -1010,7 +1046,19 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 
 	    			var dataArgs = createInternalData(data);
 	    			
-	    			return renderContent(htmlContentString, yieldDeclarationsArray, contentForObjectsArray, RENDER_MODE_VIEW_CONTENT, dataArgs);
+	    			if(typeof htmlContentString === 'string'){
+	    			
+	    				return renderContent(htmlContentString, yieldDeclarationsArray, contentForObjectsArray, RENDER_MODE_VIEW_CONTENT, dataArgs);
+	    				
+	    			} else {
+	    				
+		    			return renderContentElement(
+		    					htmlContentString,
+		    					null,//<- yields should be in htmlContentString.allContentElements
+		    					dataArgs,
+		    					contentForObjectsArray
+		    			).join('');
+	    			}
 	    		},
 	    		
 	    		/**
@@ -1019,19 +1067,19 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * <p>During rendering, the view's template-expressions are evaluated, and the results rendered into
 	    		 * the returned String.
 	    		 * 
-	        	 * @param {String} htmlContentString the original view-template text
+		    	 * @param {ContentElement} contentElement the ContentElement object that should be rendered
 	    		 * @param {Object} [data] a JSON object which's fields will be available during rendering/evaluation of the template expressions
-	    		 * @param {String[]} [renderingBuffer] if provided, the partial rendering results will be appended to this Array
-	    		 * @returns {String} the evalutated and rendered ContentElement; if <tt>renderingBuffer</tt> was provided and not empty, the result will be prepended with the concatenated contents of the Array's Strings
+	    		 * @param {Array<String>} [renderingBuffer] if provided, the partial rendering results will be appended to this Array
+	    		 * @returns {String} the evaluated and rendered ContentElement; if <tt>renderingBuffer</tt> was provided and not empty, the result will be prepended with the concatenated contents of the Array's Strings
 	    		 * 
 	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
 	    		 */
-	    		renderContentElement: function(htmlContentString, data, renderingBuffer/*optional*/){
+	    		renderContentElement: function(contentElement, data, renderingBuffer/*optional*/){
 	    			 
 	    			var dataArgs = createInternalData(data);
 	    			
-	    			return renderContentElement(htmlContentString, renderingBuffer, dataArgs);
+	    			return renderContentElement(contentElement, renderingBuffer, dataArgs);
 	    		},
 	    		
 	    		/**
@@ -1044,7 +1092,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		 * @param YieldDeclaration[]} yieldDeclarationsArray a list of yield-declarations of the layout
 	    		 * @param {ContentElement[]} contentForObjectsArray a list of content-for objects of the view. This list must supply a corresponding objecet for each entry in the <tt>yieldDeclarationsArray</tt>.
 	    		 * @param {Object} [data] a JSON object which's fields will be available during rendering/evaluation of the template expressions
-	    		 * @returns {String} the evalutated and rendered dialog-content
+	    		 * @returns {String} the evaluated and rendered dialog-content
 	    		 * 
 	    		 * @public
 	    		 * @memberOf mmir.parser.RenderUtils.prototype
