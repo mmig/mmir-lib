@@ -273,7 +273,8 @@ function ContentElement(group, view, parser, renderer){
 	 */
 	this.comments         = parsingResult.comments;
 	
-//	this.yields           = parsingResult.yields; @see mmir.parser.element.YIELD_DECLARATION
+	//NOTE by default this field is not added to the allContentElements list (i.e. will not be stored/stringified)
+	this.yields         = parsingResult.yields;// @see mmir.parser.element.YIELD_DECLARATION
 //	this.contentFors    = parsingResult.contentFors; @see mmir.parser.element.YIELD_CONTENT
 	
 
@@ -1256,8 +1257,8 @@ ContentElement.prototype.stringify = function(){
 //		if(this['view']){
 //			sb.push( ' this.initView(); ' );
 //		}
-		if(this['this.initEvalFunctions']){//MOD glob vars
-			sb.push('this.initEvalFunctions(); ');
+		if(this['initEvalFunctions']){//MOD glob vars
+			sb.push(' this.initEvalFunctions(); ');
 		}
 		sb.push( ' }' );
 		
