@@ -131,6 +131,8 @@ define(['md5'],
 		 * Must be called before using checksum-generation:
 		 * sets/initializes the object/function for checksum generation.
 		 * 
+		 * After first call, following calls to this function will have no effect.
+		 * 
 		 * @param {CryptoJS} [cryptoImpl] OPTIONAL
 		 * 				if omitted, the (global!) variable <code>CryptoJS</code> is used by default.
 		 * 				This argument should be the CryptoJS object containing the MD5 function/algorithm, i.e. CryptoJS.MD5() must be a function!
