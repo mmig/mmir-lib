@@ -105,8 +105,11 @@ var mmirf_config = {
 	    , 'partial': 'mmirf/mvc/views/partial'
 	    , 'contentElement': 'mmirf/mvc/views/contentElement'
 	    , 'yield': 'mmirf/mvc/views/yield'
+	    	
+	    // view loader: loads compiled views or raw views & compiles them:
+	    , 'viewLoader': 'mmirf/env/view/viewLoader'
 
-    	// @chsc03 renderUtils required by presentationManager and depends on parserModule
+    	// @chsc03 renderUtils required by viewInitializer and depends on parserModule
 	    , 'renderUtils': 'mmirf/mvc/parser/templateRenderUtils'
 	    , 'parserModule': 'mmirf/mvc/parser/parserModule'
 
