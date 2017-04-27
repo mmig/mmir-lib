@@ -106,9 +106,24 @@ function(consts, jquery, loadCss, require){
 	         'jqm','jqmSimpleModal'],
 	    function(jq, commonUtils, renderUtils, languageManager, controllerManager, forEach
 	){
+		
+		/**
+		 * delay in case a Layout that is rendered includes a CSS file:
+		 * signal "on_page_load" after this delay so that (hopefully) the CSS has been loaded
+		 * 
+		 * NOTE: the onload listener for LINK-tags does not work in all browsers, so it cannot be used for checking if CSS has been loaded
+		 * 
+		 * TODO make configurable (through configurationManager)?
+		 * 
+		 * @private
+		 * @constant
+		 * @type Number
+		 * @memberOf JqmViewEngine#
+		 */
+		var CSS_LOAD_DELAY = typeof window.CSS_LOAD_DELAY === 'number'? window.CSS_LOAD_DELAY : 10;//ms
 
 		// set jQuery Mobile's default transition to "none":
-		// TODO make this configurable (through mmir.ConfigurationManager)?
+		// TODO make this configurable (through configurationManager)?
 		jq.mobile.defaultPageTransition = 'none';
 
 		/**
@@ -362,17 +377,29 @@ function(consts, jquery, loadCss, require){
 				var defer = jquery.Deferred();
 				if(isLinkLoading){
 					//if css file is loading, resolve with a small delay, so that (most/some of) the CSS is loaded by then
-					setTimeout(function(){defer.resolve();}, 10);
+					setTimeout(function(){defer.resolve();}, CSS_LOAD_DELAY);
 				} else {
 					defer.resolve();	
 				}
 				return defer;/////////////////////////// EARLY EXIT ///////////////////////////////
 			} else {
-				//wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
+				
 				if(!head){
 					head = $('head');
 				}
-				return commonUtils.loadImpl(
+
+
+				var defer = jquery.Deferred();
+				var resolved = 0;//<- counter for resolved async-executions
+				var setResolved = function(){++resolved; checkResolve();}
+				var checkResolve = function(){
+					if(resolved === 2){//<- expected async-executions: 2
+						defer.resolve();
+					}
+				}
+				
+				//wait until all referenced scripts form LAYOUT have been loaded (may be used/required when views get rendered)
+				commonUtils.loadImpl(
 					scriptList,
 					true,//<- load serially, since scripts may depend on each other
 					null,//<- use returned promise instead of callback
@@ -380,7 +407,16 @@ function(consts, jquery, loadCss, require){
 						//if script is already loaded, do not load again:
 						return head.find('script[src="'+fileName+'"]').length > 0;
 					}
-				);/////////////////////////// EARLY EXIT ///////////////////////////////
+				).then(setResolved);
+				
+				if(isLinkLoading){
+					//if css file is loading, resolve with a small delay, so that (most/some of) the CSS is loaded by then
+					setTimeout(setResolved, CSS_LOAD_DELAY);
+				} else {
+					setResolved();
+				}
+				
+				return defer;/////////////////////////// EARLY EXIT ///////////////////////////////
 			}
 		};
 
@@ -442,28 +478,21 @@ function(consts, jquery, loadCss, require){
 			if(isContinue === false){
 				return;/////////////////////// EARLY EXIT ////////////////////////
 			}
-
+			
 			var layout = this.getLayout(ctrlName, true);
-
-			var layoutBody = layout.getBodyContents();
-			var layoutDialogs = layout.getDialogsContents();
 			
 			var renderResolve = jquery.Deferred();
 			var presentMgr = this;
 			var renderFunc = function(){
 
-				layoutBody = renderUtils.renderViewContent(layoutBody, layout.getYields(), view.contentFors, data );
-				layoutDialogs = renderUtils.renderViewDialogs(layoutDialogs, layout.getYields(), view.contentFors, data );
+				var layoutBody = renderUtils.renderViewContent(layout.bodyContentElement, null, view.contentFors, data);
+				var layoutDialogs = renderUtils.renderViewDialogs(layout.getDialogsContents(), layout.getYields(), view.contentFors, data);
 	
 				//TODO handle additional template syntax e.g. for BLOCK, STATEMENT (previously: partials)
 				var dialogs = jq("#applications_dialogs");//<- TODO make this ID a CONST & export/collect all CONSTs in one place 
 				dialogs.empty();
 	
 				dialogs.append(layoutDialogs);
-	
-	//			// Translate the Keywords or better: localize it... 
-	//			NOTE: this is now done during rendering of body-content                  	layoutBody = mmir.LanguageManager.translateHTML(layoutBody);
-				//TODO do localization rendering for layout (i.e. none-body- or dialogs-content)
 	
 				var pg = new RegExp(CONTENT_ID, "ig");
 				var oldId = "#" + CONTENT_ID + presentMgr.pageIndex;
@@ -672,7 +701,7 @@ function(consts, jquery, loadCss, require){
 			showWaitDialog : function(text, theme) {
 
 				var loadingText = typeof text === 'undefined'? languageManager.getText('loadingText') : text;
-				var themeSwatch = typeof theme === 'undefined'? 'b' : text;//TODO define a default & make configurable (-> mmir.ConfigurationManager) 
+				var themeSwatch = typeof theme === 'undefined'? 'b' : text;//TODO define a default & make configurable (-> configurationManager) 
 				
 				if (loadingText !== null && loadingText.length > 0) {
 //					console.log('[DEBUG] setting loading text to: "'+loadingText+'"');
