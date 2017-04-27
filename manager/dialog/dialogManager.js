@@ -109,7 +109,7 @@ define([  'core', 'util/extend', 'util/deferred'
 		raise : function(eventName, eventData) {
 			//NOTE the functional implementation will be set during initialization (see below #init())
 			throw new Error('DialogEngine not initialized yet: '
-					+'call mmir.DialogManager.init(callback) and wait for the callback.'
+					+'call DialogManager.init(callback) and wait for the callback.'
 			);
 		},
 
