@@ -26,10 +26,9 @@
 
 
 
-define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'//DISABLED: now loaded on-demand (see init()) -> 'renderUtils'
-         , 'layout', 'view', 'partial', 'dictionary', 'checksumUtils', 'languageManager', 'logger'
-         , 'viewLoader'
-         , 'util/deferredWithState', 'util/loadFile', 'util/forEach', 'core', 'module'
+define([ 'controllerManager', 'commonUtils', 'viewLoader'
+         , 'dictionary', 'logger'
+         , 'util/deferredWithState', 'core', 'module'
          , 'stringExtension'
     ],
     
@@ -37,12 +36,13 @@ define([ 'controllerManager', 'constants', 'commonUtils', 'configurationManager'
      * @class
      * @name mmir.PresentationManager
      * @static
+     * 
+     * @requires dialogManager if reRenderView() or renderPreviousView() are used
      *  
      */
-    function ( controllerManager, constants, commonUtils, configurationManager//, renderUtils
-    		, Layout, View, Partial, Dictionary, checksumUtils, languageManager, Logger
-    		, viewLoader
-            , deferred, loadFile, forEach, core, module
+    function ( controllerManager, commonUtils, viewLoader
+    		, Dictionary, Logger
+            , deferred, core, module
 ) {
 	
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
