@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', 'configurationManager', 'languageManager'
+define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurationManager', 'languageManager'
      , 'controllerManager', 'modelManager'
      , 'presentationManager', 'inputManager', 'dialogManager', 'module'
      , 'semanticInterpreter', 'mediaManager', 'notificationManager'
@@ -42,7 +42,7 @@ define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', '
    * @requires util/deferred
    * 
    */
-  function(mmir, env, envInit, deferred, constants, commonUtils, configurationManager, languageManager
+  function(mmir, env, deferred, constants, commonUtils, configurationManager, languageManager
 	 , controllerManager, modelManager
      , presentationManager, inputManager, dialogManager, module
      , semanticInterpreter, mediaManager, notificationManager
@@ -127,10 +127,8 @@ define(['core', 'env', 'envInit', 'util/deferred', 'constants', 'commonUtils', '
 				// -> after this: continue (i.e. resolve promise)
 				var isCordova = env.isCordovaEnv;
 				if(isCordova){
-//					require(['cordova'], function(){
-						commonUtils.loadAllCordovaPlugins()
-							.then(defer.resolve());
-//					});
+					commonUtils.loadAllCordovaPlugins()
+						.then(defer.resolve());
 		        }
 		        else {
 		        	// otherwise (e.g. BROWSER env):

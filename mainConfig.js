@@ -51,7 +51,6 @@ var mmirf_config = {
 	    , 'dictionary': 'mmirf/tools/dictionary'
 	    , 'paramsParseFunc': 'mmirf/tools/paramsParseFunc'
 		, 'env': 'mmirf/tools/envDetect'
-		, 'envInit': 'mmirf/tools/envInit'
 
 	    // dialog/input manager
 	    , 'inputManager': 'mmirf/manager/dialog/inputManager'
