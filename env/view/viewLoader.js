@@ -3,10 +3,12 @@ define([
     , 'util/deferred', 'util/loadFile', 'util/forEach'
 	, 'configurationManager', 'checksumUtils', 'controllerManager', 'constants', 'core', 'commonUtils'
 	, 'parserModule'//<- loaded, but not directly used
+	//,'renderUtils' DISABLED: loaded on-demand (see loadViews())
 ],function(
 	Layout, View, Partial,
 	deferred, loadFile, forEach,
 	configurationManager, checksumUtils, controllerManager, constants, core, commonUtils
+	//renderUtils
 ){
 
   /**
@@ -43,7 +45,7 @@ define([
    *          
    * @memberOf ViewLoader
    */
-	function viewLoader (
+	function loadViews (
 			_instance, _layouts, _views, _partials, createViewKey, createPartialKey
 	) {
 
@@ -793,7 +795,7 @@ define([
 
 		return defer;
 
-	};//END: viewLoader(){
+	};//END: loadViews(){
 	
-	return viewLoader;
+	return loadViews;
 });
