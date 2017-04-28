@@ -1,13 +1,15 @@
 define([
     'layout', 'view', 'partial'
-    , 'util/deferred', 'util/loadFile', 'util/forEach'
+    , 'util/deferredWithState', 'util/loadFile', 'util/forEach'
 	, 'configurationManager', 'checksumUtils', 'controllerManager', 'constants', 'core', 'commonUtils'
+	, 'logger', 'module'
 	, 'parserModule'//<- loaded, but not directly used
 	//,'renderUtils' DISABLED: loaded on-demand (see loadViews())
 ],function(
 	Layout, View, Partial,
 	deferred, loadFile, forEach,
-	configurationManager, checksumUtils, controllerManager, constants, core, commonUtils
+	configurationManager, checksumUtils, controllerManager, constants, core, commonUtils,
+	Logger, module
 	//renderUtils
 ){
 
@@ -71,8 +73,38 @@ define([
 			_instance, _layouts, _views, _partials, createViewKey, createPartialKey
 	) {
 
+		/**
+		 * The name of the configuration field that holds
+		 * the name for the default layout.
+		 * 
+		 * @private
+		 * @type String
+		 * @constant
+		 * @memberOf ViewLoader.init
+		 */
 		var CONFIG_DEFAULT_LAYOUT_NAME = _instance.CONFIG_DEFAULT_LAYOUT_NAME;
+
+		/**
+		 * Name for the default layout, that will be loaded.
+		 * 
+		 * If NULL, no default layout will be loaded
+		 * (see below configurationManager.get(CONFIG_DEFAULT_LAYOUT_NAME...))
+		 * 
+		 * @private
+		 * @type String
+		 * @memberOf ViewLoader.init
+		 */
 		var defaultLayoutName = _instance.DEFAULT_LAYOUT_NAME;
+
+
+		/**
+		 * The logger for the PresentationManager.
+		 * 
+		 * @private
+		 * @type Logger
+		 * @memberOf ViewLoader.init
+		 */
+		var logger = Logger.create(module);//initialize with requirejs-module information
 
 		/**
 		 * Name of the configuration property that specifies whether or not to use
