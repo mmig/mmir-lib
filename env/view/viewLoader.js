@@ -11,75 +11,97 @@ define([
 	//renderUtils
 ){
 
-  /**
-   * Loads views (layouts and partials):
-   * either compiled views (i.e. JS files), or raw views (i.e. eHTML files).
-   *
-   * The loader checks, if compiled views are up-to-date (using the corresponding
-   * checksum file).
-   * If a compiled view is not up-to-date (or its checksum file is missing), then
-   * the raw view will be loaded and compiled.
-   *
-   * If raw views are loaded, the parsing-module will loaded for compiling the
-   * views (i.e. if only compiled views are loaded, the dependency for the template
-   *  parser and renderer is not required).
-   *
-   * @param  {PresentationManager} _instance
-   *          the instance of the PresentationManager
-   * @param  {Dictionary<Layout>} _layouts
-   *          the layout collection of the PresentationManager for adding loaded layouts
-   * @param  {Dictionary<View>} _views
-   *          the view collection of the PresentationManager for adding loaded views
-   * @param  {Dictionary<Partial>} _partials
-   *          the partials collection of the PresentationManager for adding loaded partials
-   * @param  {Function} createViewKey
-   *          the PresentationManager's helper function for creating keys to be used when
-   *          adding views to <code>_views</code>:<br>
-   *          <code>createViewKey(ctrl: {Controller|String}, view: {View|String}) : {String}</code>
-   * @param  {Function} createPartialKey
-   *          the PresentationManager's helper function for creating keys to be used when
-   *          adding partials to <code>_partials</code>:<br>
-   *          <code>createPartialKey(partial: {Partial|String}, view: {View|String}) : {String}</code>
-   * @return {Promise}
-   *          a deferred promise that gets resolved when the views (layouts, and partials) are loaded
-   *          
-   * @memberOf ViewLoader
-   */
+	/**
+	 * Loads views (layouts and partials):
+	 * either compiled views (i.e. JS files), or raw views (i.e. eHTML files).
+	 *
+	 * The loader checks, if compiled views are up-to-date (using the corresponding
+	 * checksum file).
+	 * If a compiled view is not up-to-date (or its checksum file is missing), then
+	 * the raw view will be loaded and compiled.
+	 *
+	 * If raw views are loaded, the parsing-module will loaded for compiling the
+	 * views (i.e. if only compiled views are loaded, the dependency for the template
+	 * parser and renderer is not required).
+	 * 
+	 * 
+	 * <br>
+	 * <strong>Configuration (configuration.json)</strong>
+	 * <br>
+	 * 
+	 * The configuration value <code>"usePrecompiledViews"</code> (Boolean) allows
+	 * the determine, if views should always be compiled from the eHTML files (even
+	 * if up-to-date compiled views are present).
+	 * 
+	 * For example, configuration <code>"usePrecompiledViews": true</code> will use
+	 * compiled views, while <code>"usePrecompiledViews": false</code> will always
+	 * compile the eHTML files.
+	 * 
+	 * 
+	 * If the configuration value for {@link mmir.PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME} is
+	 * set to <code>NULL</code> no default layout will be loaded.
+	 * 
+	 * If {@link mmir.PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME} is a non-empty string, then
+	 * the corresponding layout will be used as default layout, instead of
+	 * {@link mmir.PresentationManager.DEFAULT_LAYOUT_NAME}.
+	 * 
+	 *
+	 * @param  {PresentationManager} _instance
+	 *          the instance of the PresentationManager
+	 * @param  {Dictionary<Layout>} _layouts
+	 *          the layout collection of the PresentationManager for adding loaded layouts
+	 * @param  {Dictionary<View>} _views
+	 *          the view collection of the PresentationManager for adding loaded views
+	 * @param  {Dictionary<Partial>} _partials
+	 *          the partials collection of the PresentationManager for adding loaded partials
+	 * @param  {Function} createViewKey
+	 *          the PresentationManager's helper function for creating keys to be used when
+	 *          adding views to <code>_views</code>:<br>
+	 *          <code>createViewKey(ctrl: {Controller|String}, view: {View|String}) : {String}</code>
+	 * @param  {Function} createPartialKey
+	 *          the PresentationManager's helper function for creating keys to be used when
+	 *          adding partials to <code>_partials</code>:<br>
+	 *          <code>createPartialKey(partial: {Partial|String}, view: {View|String}) : {String}</code>
+	 * @return {Promise}
+	 *          a deferred promise that gets resolved when the views (layouts, and partials) are loaded
+	 *          
+	 * @memberOf ViewLoader
+	 */
 	function loadViews (
 			_instance, _layouts, _views, _partials, createViewKey, createPartialKey
 	) {
 
 		var CONFIG_DEFAULT_LAYOUT_NAME = _instance.CONFIG_DEFAULT_LAYOUT_NAME;
-		var DEFAULT_LAYOUT_NAME = _instance.DEFAULT_LAYOUT_NAME;
-		
-		 /**
-		  * Name of the configuration property that specifies whether or not to use
-		  * pre-compiled views, i.e. whether to use generated JavaScript files
-		  * instead of parsing & compiling the "raw" templates (eHTML files).
-		  *
-		  * <p>
-		  * NOTE: the configuration value, that can be retrieved by querying this configuration-property
-		  * 	  has is either a Boolean, or a String representation of a Boolean value:
-		  * 		<code>[true|false|"true"|"false"]</code>
-		  * <br>
-		  * NOTE2: There may be no value set at all in the configuration for this property.
-		  * 	   In this case you should assume that it was set to <code>false</code>.
-		  *
-		  * @type String
-		  * @private
-		  * @constant
-		  * @memberOf ViewLoader.init
-		  *
-		  * @example var isUsePrecompiledViews = mmir.Constants.get(CONFIG_PRECOMPILED_VIEWS_MODE);
-		  *
-		  */
-		 var CONFIG_PRECOMPILED_VIEWS_MODE = 'usePrecompiledViews';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...
+		var defaultLayoutName = _instance.DEFAULT_LAYOUT_NAME;
+
+		/**
+		 * Name of the configuration property that specifies whether or not to use
+		 * pre-compiled views, i.e. whether to use generated JavaScript files
+		 * instead of parsing & compiling the "raw" templates (eHTML files).
+		 *
+		 * <p>
+		 * NOTE: the configuration value, that can be retrieved by querying this configuration-property
+		 * 	  has is either a Boolean, or a String representation of a Boolean value:
+		 * 		<code>[true|false|"true"|"false"]</code>
+		 * <br>
+		 * NOTE2: There may be no value set at all in the configuration for this property.
+		 * 	   In this case you should assume that it was set to <code>false</code>.
+		 *
+		 * @type String
+		 * @private
+		 * @constant
+		 * @memberOf ViewLoader.init
+		 *
+		 * @example var isUsePrecompiledViews = mmir.Constants.getBoolean("usePrecompiledViews");
+		 *
+		 */
+		var CONFIG_PRECOMPILED_VIEWS_MODE = 'usePrecompiledViews';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...
 
 
 		// determine if default-layout has a custom name (or is disabled, in it was set to null)
 		var defLayoutName = configurationManager.get(CONFIG_DEFAULT_LAYOUT_NAME, true, void(0));
 		if(typeof defLayoutName !== 'undefined'){
-			DEFAULT_LAYOUT_NAME = defLayoutName;
+			defaultLayoutName = defLayoutName;
 		}
 
 		/**
@@ -243,12 +265,12 @@ define([
 					onCompletionImpl: function(status){
 
 						//if there is a default-layout specified, but no layout was loaded -> fail
-						if(status.loadedLayoutsCount < 1 && DEFAULT_LAYOUT_NAME){
+						if(status.loadedLayoutsCount < 1 && defaultLayoutName){
 
 							//there must be at least on layout-file for the default-controller:
 							status.loader.reject( 'Could not load any layout! At least one layout must be present at '
 									+ constants.getLayoutPath()
-									+ DEFAULT_LAYOUT_NAME[0].toLowerCase() + DEFAULT_LAYOUT_NAME.substring(1)
+									+ defaultLayoutName[0].toLowerCase() + defaultLayoutName.substring(1)
 									+ '.ehtml'
 							);
 						}
@@ -323,10 +345,10 @@ define([
 			};//END: doLoadLayout(){...
 
 			//load the default layout:
-			if(DEFAULT_LAYOUT_NAME){
-				doLoadLayout(null, null, DEFAULT_LAYOUT_NAME);
+			if(defaultLayoutName){
+				doLoadLayout(null, null, defaultLayoutName);
 			} else {
-				logger.info('The name for the default Layout was set to "'+DEFAULT_LAYOUT_NAME+'", no default Layout will be loaded!');
+				logger.info('The name for the default Layout was set to "'+defaultLayoutName+'", no default Layout will be loaded!');
 				--loadStatus.remainingCtrlCount;
 				checkCompletion(loadStatus);
 			}
