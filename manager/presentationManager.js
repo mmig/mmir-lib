@@ -140,31 +140,6 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
 	 var _partials = new Dictionary();
 
 	 /**
-	  * An object containing data for the currently displayed view.<br>
-	  * It contains: name of the corresponding controller, name of the view
-	  * and optionally data for the view
-	  * 
-	  * @type View
-	  * @private
-	  * @memberOf mmir.PresentationManager#
-	  */
-	 var _currentView = {};
-
-	 /**
-	  * An object containing data for the previously displayed view - the one
-	  * displayed before the current view.<br>
-	  * It contains: name of the corresponding controller, name of the view
-	  * and optionally data for the view
-	  * 
-	  * @type View
-	  * @private
-	  * @memberOf mmir.PresentationManager#
-	  * 
-	  * @deprecated do not use
-	  */
-	 var _previousView = {};
-
-	 /**
 	  * The currently displayed dialog object, if a dialog is displayed. Used
 	  * mainly to close the dialog.
 	  * 
@@ -458,7 +433,7 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
              * @param {Object} [data] OPTIONAL
              *            a data / options object
              *            
-             * @returns {Object} the instance of the opened dialog (void or falsy dialog was not opened)
+             * @returns {Object} the instance of the opened dialog (void or falsy if dialog was not opened)
              * 
              * @public
 			 * @memberOf mmir.PresentationManager.prototype
@@ -540,17 +515,6 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
                     
                     renderResult = _renderEngine.render.call(this, ctrlName, viewName, view, ctrl, data);
 
-                    //TODO russa: _previousView is deprecated (should use a history instead, i.e. application level)
-                    // Only overwrite previous state if and only if the view is not re-rendered!
-					if (ctrlName != _currentView.ctrlName || viewName != _currentView.viewName || data != _currentView.data){
-						_previousView.ctrlName=_currentView.ctrlName;
-						_previousView.viewName=_currentView.viewName;
-						_previousView.data=_currentView.data;
-					}
-					
-					_currentView.ctrlName=ctrlName; 
-					_currentView.viewName=viewName; 
-					_currentView.data=data;
                 }
                 else {
                 	logger.error('PresentationManager.renderView: could not retrieve controller "'+ctrlName+'"');
@@ -558,47 +522,6 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
                 
                 return renderResult;
             },
-
-            /**
-             * Renders the current view again, using the
-             * {@link #renderView} method.
-             * 
-             * @deprecated you should use {@link #renderView} with appropriate parameters instead.
-             * 
-             * @requires mmir.DialogManager
-             * 
-             * @function
-             * @public
-			 * @memberOf mmir.PresentationManager.prototype
-             */
-            reRenderView : function() {
-                if (_currentView) {
-                    if (_currentView.ctrlName && _currentView.viewName) {
-                        return core.require('dialogManager').render(_currentView.ctrlName, _currentView.viewName, _currentView.data);
-                    }
-                }
-            },
-
-            /**
-             * Renders the previous view again, using the
-             * {@link mmir.DialogManager#render} method.
-             * 
-             * 
-             * @deprecated you should use {@link #renderView} with appropriate parameters instead.
-             * 
-             * @requires mmir.DialogManager
-             * 
-             * @function
-             * @public
-			 * @memberOf mmir.PresentationManager.prototype
-             */
-            renderPreviousView : function() {
-                if (_previousView) {
-                    if (_previousView.ctrlName && _previousView.viewName) {
-                    	return core.require('dialogManager').render(_previousView.ctrlName, _previousView.viewName, _previousView.data);
-                    }
-                }
-            },        
 	
             /**
              * @function
