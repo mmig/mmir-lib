@@ -159,6 +159,7 @@ var mmirf_config = {
 		, 'jsonUtils': 'mmirf/tools/extensions/JsonUtils'
 	    , 'commonUtilsCompatibility': 'mmirf/tools/extensions/CommonUtilsCompatibility'
 	    , 'languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerCompatibility'
+	    , 'core3Compatibility' : 'mmirf/tools/extensions/Core3Compatibility'
 
 
 	    //optional or "dynamically" loaded modules

@@ -349,7 +349,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 				},
 
 				function isAlreadyLoaded (name) {
-					return false; //(_instance && _instance.getController(name));
+					return false;
 				},
 
 				function callbackStatus(status, fileName, msg) {
@@ -397,20 +397,6 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 	var _instance = {
 			/** @scope mmir.ControllerManager.prototype *///for jsdoc2
 
-			/**
-			 * Get instance of ControllerManager.
-			 * 
-			 * @deprecated use directly: instead of <code>mmir.ControllerManager.getInstance()</code> use <code>mmir.ControllerManager</code>
-			 * 
-			 * NOTE: The ControllerManager must be initialized, before it can be used! (see {@link ControllerManager#init})
-			 * 
-			 * @memberOf mmir.ControllerManager.prototype
-			 */
-			getInstance : function () {
-
-				return this;
-			},	
-
 			// public members           
 
 			/**
@@ -420,8 +406,9 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 * @param {String} ctrlName Name of the controller which should be returned
 			 * @returns {Object} controller if found, null else
 			 * @public
+			 * @memberOf mmir.ControllerManager.prototype
 			 */
-			getController: function(ctrlName){
+			get: function(ctrlName){
 				var ctrl = controllers.get(ctrlName);
 				if(!ctrl){
 					return null;
@@ -437,7 +424,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 * @returns {Array<String>} Names of all loaded controllers
 			 * @public
 			 */
-			getControllerNames: function(){
+			getNames: function(){
 
 				return controllers.getKeys();
 			},
@@ -454,7 +441,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 * @public
 			 */
 			perform: function(ctrlName, actionName, data){
-				var ctrl = this.getController(ctrlName);
+				var ctrl = this.get(ctrlName);
 				if (ctrl != null) {
 					return ctrl.perform(actionName, data);
 				}
@@ -476,7 +463,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 */
 			performHelper: function(ctrlName, actionName, data) {
 
-				var ctrl = this.getController(ctrlName);
+				var ctrl = this.get(ctrlName);
 				if (ctrl != null) {
 					if(arguments.length > 3){
 						return ctrl.performHelper(actionName, data, arguments[3]);
@@ -523,7 +510,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 *  
 			 *  //old style:
 			 * 	function afterLoadingControllers(controllerManagerInstance){
-			 * 		var appCtrl = controllerManagerInstance.getController('Application');
+			 * 		var appCtrl = controllerManagerInstance.get('Application');
 			 * 		//do something...
 			 * 	} 
 			 * 	mmir.ControllerManager.init(afterLoadingControllers);

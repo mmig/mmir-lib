@@ -673,7 +673,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
              * 
 	         * @public
              */
-            getASRSemantic: function(phrase, langCode, callback){
+            interpret: function(phrase, langCode, callback){
             	
             	return process_asr_semantic(phrase, removeStopwordsFunc, langCode, callback);
             	
@@ -874,18 +874,6 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
     }
     
     instance = new constructor();
-    
-    /**
-	 * @deprecated instead: use <code>mmir.SemanticInterpreter</code> directly
-	 * 
-	 * @function
-	 * @name getInstance
-	 * @public
-     * @memberOf SemanticInterpreter.prototype
-	 */
-	instance.getInstance = function(){
-		return instance;
-	};
     
     return instance;
     

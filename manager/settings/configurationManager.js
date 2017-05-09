@@ -482,17 +482,5 @@ define(['constants', 'util/loadFile', 'util/isArray'],
 		    	
 	instance = new constructor();
 	
-	/**
-	 * @deprecated instead: use mmir.ConfigurationManager directly
-	 * 
-	 * @function
-	 * @name getInstance
-	 * @public
-	 * @memberOf ConfigurationManager#
-	 */
-	instance.getInstance = function(){
-		return instance;
-	};
-	
 	return instance;
 });

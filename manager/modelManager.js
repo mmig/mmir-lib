@@ -152,7 +152,7 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', '
 		//shift arguments if necessary:
 		if(!ctx && typeof initCallbackFunction !== 'function'){
 			ctx = initCallbackFunction;
-			callback = void(0);
+			initCallbackFunction = void(0);
 		}
 		
 		/**
@@ -357,18 +357,6 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', '
 	var _instance = {
 			/** @scope mmir.ModelManager.prototype */
 
-			/**
-			 * @deprecated use ModelManager object directly, e.g. instead of: mmir.ModelManager.getInstance().getModel()
-			 * 				use: mmir.ModelManager.getModel()
-			 * 
-			 * NOTE: ModelManager must be initialized before it can be used.
-			 * 
-			 * @memberOf mmir.ModelManager.prototype
-			 */
-			getInstance : function () {
-				return this;
-			},
-
 			// public members
 			/**
 			 * This function gets the model by name.
@@ -378,8 +366,9 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', '
 			 *            modelName Name of the model which should be returned
 			 * @returns {Object} The model if found, null else
 			 * @public
+			 * @memberOf mmir.ModelManager.prototype
 			 */
-			getModel : function(modelName) {
+			get: function(modelName) {
 				var retModel = null;
 
 				// TODO implement mechanism for multiple/configurable model namespaces
@@ -396,14 +385,14 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', '
 
 
 			/**
-			 * This function returns all loaded models.
+			 * This function returns all loaded model names.
 			 * 
 			 * @function
-			 * @returns {Array} All loaded models
+			 * @returns {Array<string>} All loaded model names
 			 * @public
 			 */
-			getModels : function() {
-				return models;
+			getNames: function() {
+				return models.getKeys();
 			},
 
 			/**

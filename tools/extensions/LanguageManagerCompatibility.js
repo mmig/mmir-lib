@@ -1,6 +1,7 @@
 define(['commonUtils', 'presentationManager', 'dialogManager'],
 	/**
      * Set to "backwards compatibility mode" (for pre version 2.0) for LanguageManager.
+     * NOTE: needs {@link mmir.Core.setToCompatibilityModeExtension} to be set first!
      * 
 	 * This function re-adds deprecated and removed functions and
      * properties to the CommonUtils instance.
@@ -39,7 +40,8 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
 	 * @static
 	 * 
 	 * @example
-	 * require(['languageManagerCompatibility'], function(setCompatibility){
+	 * require(['core3Compatibility', 'languageManagerCompatibility'], function(setCoreCompatibility, setCompatibility){
+	 * 		setCoreCompatibility(mmir);
 	 * 		setCompatibility(mmir.LanguageManager);
 	 * });
 	 * 

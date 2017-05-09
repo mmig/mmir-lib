@@ -186,12 +186,24 @@ define(['util/deferred', 'util/extend', 'constants', 'commonUtils', 'configurati
 //					    								console.log('executing '+context+'.'+name+', in context '+mediaManagerInstance,mediaManagerInstance);//DEBUG
 				    								return originalFunc.apply(mediaManagerInstance, arguments);
 				    							};
+				    							
+				    							//add alias 'tts' for 'textToSpeech'
+				    							if(name === 'textToSpeech'){
+				    								mediaManagerInstance.ctx[context]['tts'] = mediaManagerInstance.ctx[context]['textToSpeech'];
+				    							}
+				    							
 		    								})(instance, func, p, execId);
 		    								
 		    							}
 		    							else {
+		    								
 		    								//for non-functions: just attach to the new "sub-context"
 			    							instance.ctx[execId][p] = func;
+			    							
+			    							//add alias 'tts' for 'textToSpeech'
+			    							if(p === 'textToSpeech'){
+			    								mediaManagerInstance.ctx[execId]['tts'] = func;
+			    							}
 		    							}
 		    							
 	    							} else {
@@ -216,6 +228,10 @@ define(['util/deferred', 'util/extend', 'constants', 'commonUtils', 'configurati
 	    				}//END if(execId)
 	    				else {
 	    					extend(instance,exportedFunctions);
+	    					//add alias 'tts' for 'textToSpeech'
+							if(typeof exportedFunctions['textToSpeech'] === 'function'){
+								instance['tts'] = exportedFunctions['textToSpeech'];
+							}
 	    					newMediaPlugin = null;
 	    				}
 	    				
@@ -797,6 +813,23 @@ define(['util/deferred', 'util/extend', 'constants', 'commonUtils', 'configurati
     			 * 			, split: OPTIONAL boolean, if true and the text is a single string, it will be split using a splitter function
     			 * 			, splitter: OPTIONAL function, replaces the default splitter-function. It takes a simple string as input and gives a string Array as output
     			 * 		}</pre>
+    			 */
+    			tts: function(parameter, onPlayedCallback, failureCallBack){
+    				
+    				var funcName = 'textToSpeech';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallBack){
+    					failureCallBack("Audio Output: Text To Speech is not supported.");
+    				}
+    				else {
+    					console.error("Audio Output: Text To Speech is not supported.");
+    				}
+    			},
+    			
+    			/**
+    			 * @deprecated use {@link #tts} instead
     			 */
     			textToSpeech: function(parameter, onPlayedCallback, failureCallBack){
     				
@@ -1491,18 +1524,6 @@ define(['util/deferred', 'util/extend', 'constants', 'commonUtils', 'configurati
             }
             
             return defer;
-        },
-        /**
-         * Same as {@link #init}.
-         * 
-         * @deprecated access MediaManger directly via <code>mmir.MediaManager.someFunction</code> - <em>&tl;internal: for initialization use <code>init()</code> instead&gt;</em>
-         * 
-         * @function
-         * @public
-         * @memberOf mmir.MediaManager.prototype
-         */
-        getInstance: function(){
-            return this.init(null, null);
         },
         /**
          * loads a file. If the file implements a function initialize(f)

@@ -55,13 +55,13 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 	//export framework functions/objects:
 	
 	/** @memberOf mmir */
-	mmir.Constants = constants;
+	mmir.const = constants;
 	/** @memberOf mmir */
-	mmir.CommonUtils = commonUtils;
+	mmir.util = commonUtils;
 	/** @memberOf mmir */
-	mmir.ConfigurationManager = configurationManager;
+	mmir.conf = configurationManager;
 	/** @memberOf mmir */
-	mmir.NotificationManager = notificationManager.init();
+	mmir.notify = notificationManager.init();
 	
 	/**
 	 * HELPER create a "namespace" from a package-definition (dot-separated string) from configuration
@@ -112,7 +112,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 			.then(function() {
 
 				languageManager.init().then(function(langMng){
-					mmir.LanguageManager = langMng;
+					mmir.lang = langMng;
 				});
 				
 				/** 
@@ -141,7 +141,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 			// start the ControllerManager
 			.then(function() {
 				
-				mmir.ControllerManager = controllerManager;				
+				mmir.ctrl = controllerManager;				
 				//NOTE: this also gathers information on which 
 				//      views, layouts etc. are available
 				//      -> the presentationManager depends on this information
@@ -162,7 +162,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 				/** @memberOf main */
 				var isDialogManagerLoaded 	= false;
 				/** @memberOf main */
-				var isSemanticsLoaded        = false;
+				var isSemanticsLoaded       = false;
 
 				/** @memberOf main */
 				var checkInitCompleted = function(){
@@ -203,7 +203,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 					}
 				};
 				
-				mmir.SemanticInterpreter = semanticInterpreter;
+				mmir.semantic = semanticInterpreter;
 				/** ID for the grammar engine/compiler to be used, if/when JSON grammar are (re-) compiled
 				 * @see mmir.SemanticInterpreter#setGrammarEngine
 				 * @type String 
@@ -246,7 +246,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 					//initialize BEEP notification (after MediaManager was initialized)
 					notificationManager.initBeep();
 					
-					mmir.MediaManager = mediaManager;
+					mmir.media = mediaManager;
 					checkInitCompleted();
 				});
 				
@@ -254,7 +254,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 				//	   --> there should be a way to configure startup, so that models may only be loaded, after everything else was loaded
 				modelManager.init(modelImplCtx).then(function(){
 					isModelsLoaded = true;
-					mmir.ModelManager = modelManager;
+					mmir.model = modelManager;
 					checkInitCompleted();
 				});
 				
@@ -262,7 +262,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 
 					isVisualsLoaded = true;
 		
-					mmir.PresentationManager = presentationManager;
+					mmir.present = presentationManager;
 					checkInitCompleted();
 					
 				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });
@@ -270,19 +270,17 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 				
 				dialogManager.init().then(function(res){//_dlgMng, _dialogEngine){
 					isDialogManagerLoaded = true;
-					mmir.DialogManager = res.manager;//dialogManager;
-					mmir.DialogEngine = res.engine;//_dialogEngine;
+					mmir.dialog = res.manager;
+					mmir.dialogEngine = res.engine;
 					checkInitCompleted();
 				});
 				
 				inputManager.init().then(function(res){//_inputMng, _inputEngine){
 					isInputManagerLoaded = true;
-					mmir.InputManager = res.manager;//inputManager;
-					mmir.InputEngine  = res.engine;//_inputEngine; 
+					mmir.input = res.manager;
+					mmir.inputEngine  = res.engine;
 					checkInitCompleted();
 				});
-				
-				
 				
 			});
 			

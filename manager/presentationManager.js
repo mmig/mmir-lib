@@ -287,16 +287,12 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
 	 var _instance = {
 			/** @scope mmir.PresentationManager.prototype  */
 			 
+           // public members
 			/**
-			 * @deprecated instead: use mmir.PresentationManager directly
-			 * 
+			 * @param {Layout} layout
+			 * 			the layout to add
 			 * @memberOf mmir.PresentationManager.prototype
 			 */
-			getInstance: function () {
-				return this;
-			},
-
-           // public members
             addLayout : function(layout) {
                 _layouts.put(layout.getName(), layout);
             },
@@ -499,9 +495,9 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
 			 * @public
 			 * @memberOf mmir.PresentationManager.prototype
 			 */
-            renderView : function(ctrlName, viewName, data) {
+            render : function(ctrlName, viewName, data) {
             	
-                var ctrl = controllerManager.getController(ctrlName);
+                var ctrl = controllerManager.get(ctrlName);
                 var renderResult;
 
                 if (ctrl != null) {

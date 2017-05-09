@@ -65,15 +65,6 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 
 		/** @scope mmir.InputManager.prototype */
 		
-		/** 
-		 * @deprecated instead: use mmir.InputManager object directly.
-		 * 
-		 * @memberOf mmir.InputManager.prototype
-		 */
-		getInstance : function() {
-			return this;
-		},
-		
 		/**
 		 * This function raises an event. 
 		 * 
@@ -86,6 +77,7 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 		 * 				   event/state engine (i.e. {@link mmir.InputEngine}
 		 * 				   is not initialized yet
 		 * @public
+		 * @memberOf mmir.InputManager.prototype
 		 */
 		raise : function(eventName, eventData) {
 			//NOTE the functional implementation will be set during initialization (see below #init())

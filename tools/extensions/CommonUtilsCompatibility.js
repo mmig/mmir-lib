@@ -1,13 +1,14 @@
 define(['jsonUtils', 'resizeToFit'],
 	/**
      * Set to "backwards compatibility mode" (for pre version 2.0) for CommonUtils.
+     * NOTE: needs {@link mmir.Core.setToCompatibilityModeExtension} to be set first!
      *
      * This function re-adds deprecated and removed functions and
      * properties to the CommonUtils instance.
      *
      * NOTE that once set to compatibility mode, it cannot be reset to
      * non-compatibility mode.
-     *
+     * 
      * <p>
      * In addition, the following functions of CommonUtils are made accessible
      * on the <code>mmir.CommonUtils</code> instance with these additional names
@@ -45,7 +46,8 @@ define(['jsonUtils', 'resizeToFit'],
 	 * @static
 	 *
 	 * @example
-	 * require(['commonUtilsCompatibility'], function(setCompatibility){
+	 * require(['core3Compatibility', 'commonUtilsCompatibility'], function(setCoreCompatibility, setCompatibility){
+	 * 		setCoreCompatibility(mmir);
 	 * 		setCompatibility(mmir.CommonUtils);
 	 * });
 	 *

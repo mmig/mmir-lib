@@ -643,7 +643,7 @@ function(consts, jquery, loadCss, require){
 
 				this.hideCurrentDialog();
 
-				var ctrl = controllerManager.getController(ctrlName);
+				var ctrl = controllerManager.get(ctrlName);
 				
 				if (ctrl != null) {
 

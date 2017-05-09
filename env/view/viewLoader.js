@@ -272,7 +272,7 @@ define([
 			 * @private
 			 * @memberOf ViewLoader.init.loadLayouts
 			 */
-			var ctrlNameList = controllerManager.getControllerNames();
+			var ctrlNameList = controllerManager.getNames();
 
 			/**
 			 * HELPER object for tracking the loading-status of the layouts
@@ -360,7 +360,7 @@ define([
 
 				}
 				else {
-					var ctrl = controllerManager.getController( ctrlName );
+					var ctrl = controllerManager.get( ctrlName );
 					ctrlName = ctrl.getName();
 					layoutInfo = ctrl.getLayout();
 				}
@@ -648,7 +648,7 @@ define([
 			 * @private
 			 * @memberOf ViewLoader.init.doProcessTemplateList
 			 */
-			var ctrlNameList = controllerManager.getControllerNames();
+			var ctrlNameList = controllerManager.getNames();
 
 			/**
 			 * HELPER object for tracking the loading-status of the views
@@ -664,7 +664,7 @@ define([
 
 			forEach(ctrlNameList, function(controllerName, ctrlIndex){
 
-				var controller = controllerManager.getController(controllerName);
+				var controller = controllerManager.get(controllerName);
 
 				forEach(controller[createConfig.accessorName](), function(templateInfo, index){
 

@@ -917,17 +917,6 @@ define(['module', 'constants', 'mediaManager', 'dictionary'],
     }
     
     instance = new constructor();
-    	    
-	/**
-	 * @deprecated instead: use mmir.NotificationManager directly
-	 * 
-	 * @function
-	 * @name getInstance
-	 * @memberOf mmir.NotificationManager#
-	 */
-	instance.getInstance = function(){
-		return instance;
-	};
     		
     return instance;
     

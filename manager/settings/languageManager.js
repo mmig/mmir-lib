@@ -420,31 +420,6 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				        
 				        return defer;
 		        	},
-		        	/**
-		        	 * Initializes the LanguageManager instance if necessary, and sets the Language to lang.
-		        	 * 
-				     * If no language is supplied as parameter, then the property *language*
-				     * from {@link mmir.Configuration} is used or the first language found
-				     * in the language directory.
-				     * 
-				     * @deprecated instead use LanguageManager directly (NOTE: before starting to use LanguageManager, init() has to be invoked once)
-				     * 
-				     * @param {String} [lang] OPTIONAL
-				     *            The language which should be used throughout the
-				     *            application.
-		        	 */
-		        	getInstance: function(lang){
-		        		
-		        		if(_isInitialized === false){
-		        			_isInitialized = true;
-		        			this.init(lang);
-		        		}
-		        		else if(lang) {
-		        			setLanguage(lang);
-		        		}
-		        		
-		        		return this;
-		        	},
 		        	
 		            /**
 		             * Returns the dictionary of the currently used language.

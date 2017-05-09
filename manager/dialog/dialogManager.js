@@ -84,15 +84,6 @@ define([  'core', 'util/extend', 'util/deferred'
 
 		/** @scope mmir.DialogManager.prototype */
 		
-		/** 
-		 * @deprecated instead: use mmir.DialogManager object directly.
-		 * 
-		 * @memberOf mmir.DialogManager.prototype
-		 */
-		getInstance : function() {
-			return this;
-		},
-		
 		/**
 		 * This function raises an event. 
 		 * 
@@ -105,6 +96,7 @@ define([  'core', 'util/extend', 'util/deferred'
 		 * 				   event/state engine (i.e. {@link mmir.DialogEngine}
 		 * 				   is not initialized yet
 		 * @public
+		 * @memberOf mmir.DialogManager.prototype
 		 */
 		raise : function(eventName, eventData) {
 			//NOTE the functional implementation will be set during initialization (see below #init())
@@ -281,7 +273,7 @@ define([  'core', 'util/extend', 'util/deferred'
 			var defer = presentationManager.renderView(ctrlName, viewName, data);
 
 			if (typeof onPageRenderedFunc === 'function') {
-				var ctrl = controllerManager.getController(ctrlName);
+				var ctrl = controllerManager.get(ctrlName);
 				if(defer){
 					defer.then(function(){
 						onPageRenderedFunc.call(ctrl, ctrlName, viewName, data);
