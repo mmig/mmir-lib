@@ -46,14 +46,6 @@ define(['util/isArray', 'util/loadFile'], function(isArray, loadFile){
  */
 function GrammarConverter(){
 	
-//	this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
-//	this.grammar_tokens = "/~ --- Token definitions --- ~/\n\n/~ Characters to be ignored ~/\n!   ' |\\t' ;\n\n/~ Non-associative tokens ~/\n";
-//	this.grammar_utterances = "";
-//	this.grammar_phrases = "phrases:";
-//	this.token_variables = "[*\n  var " + this.variable_prefix
-//			+ "result = '';\n";
-//	this.tokens_array = new Array();
-	
 	this.variable_prefix = "_$";
 	this.variable_regexp = /"(_\$[^\"]*)"/igm;// /"_$([^\"]*)/igm;
 	
@@ -74,15 +66,6 @@ function GrammarConverter(){
 	//default setting for masking property-name Strings in JSON values (see maskJSON() / unmaskJSON)
 	// WARNING: this is actually EXPERIMENTAL; it should be set to false, since JS/CC may not be able to handle masked ID names...
 	this.maskNames = false;
-	//default setting for loading JSON files:
-	// if set to true, old-style umlauts encodings (e.g. __oe__) will converted after loading the file
-	// Enable this, if you need to use old-style encoded grammars ... still, the better option would
-	//  be to convert the old-style grammar (i.e. use un-encoded umlauts in the JSON grammar file).
-	this.convertOldFormat = false;
-	
-
-//	//alternative reg-exp for stop-words (a different method for detecting/removing stopwords must be used!)
-//	this.stop_words_regexp_alt;
 	
 	//if execution of the grammar is asynchronously done (i.e. result is delivered using a callback)
 	this.is_async = false;
@@ -92,15 +75,6 @@ GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback
 	var self = this;
 	var success = function(data, status, xhr){
 		
-		//DISABLED: old-style masking for umlauts:
-//		data = self.recodeJSON(data, self.encodeUmlauts);
-		
-		//if auto-upgrading is enabled:
-		//   decode old-style umlaut masking before continuing
-		if(self.convertOldFormat){
-			data = self.recodeJSON(data, self.decodeUmlauts);
-		}
-		
 		self.json_grammar_definition = data;
 		
 		if (typeof successCallback == "function") {
@@ -108,9 +82,11 @@ GrammarConverter.prototype.loadGrammar = function(successCallback, errorCallback
 		}
 	};
 	var error = function(xhr, status, data){
-		alert("failed to load the grammar! error: "+ JSON.stringify(data));
+		
 		if (typeof errorCallback == "function") {
 			errorCallback.call(this, self);
+		} else {
+			console.error("failed to load the grammar! error: "+ JSON.stringify(data));
 		}
 	};
 	this.loadResource(success, error, grammarUrl, doLoadSynchronously);
@@ -150,7 +126,6 @@ GrammarConverter.prototype.setStopWords = function(stopWordArray){
 	this.json_grammar_definition.stop_word = this.maskJSON(stopWordArray);
 	
 	this.parseStopWords();
-//	this.parseStopWords_alt();
 	
 	//use unmask-function in order to ensure masking/unmasking is reversible
 	//  (or in case it is not: the error will be held in property stop_word)
@@ -272,40 +247,7 @@ GrammarConverter.prototype.parseStopWords = function(){
 			this.stop_words_regexp_enc = new RegExp(enc_stop_words,"igm");	
 	}
 
-	//DISABLED: only create these if necessary (i.e. if getStopWordsRegExpr_alt() is called)
-//	//initialize the alternative version / regular expression for stopwords:
-//	this.parseStopWords_alt();
 };
-
-////initialize alternative version / regular expression for stopwords:
-//GrammarConverter.prototype.parseStopWords_alt = function(){
-//	
-//	var json_stop_words = this.json_grammar_definition.stop_word;
-//	var size = json_stop_words.length;
-//	var stop_words = "";
-//	
-//	if(size > 0){
-//		stop_words += "(";
-//
-//		for(var index=0; index < size ; ++index){
-//			var stop_word = json_stop_words[index];
-//			if (index > 0) {
-//				stop_words += "|";
-//			}
-//			//create match pattern for: (1) stopword enclosed in spaces, (2) the stopword at 'line end' preceded by a space, (3) the stopword at 'line start' followed by a space
-//			stop_words += " " + stop_word + " | " + stop_word + "$|^" + stop_word
-//					+ " ";
-//		}
-//		
-//		stop_words += ")";
-//	}
-//	else {
-//		//for empty stopword definition: match empty string
-//		//  (basically: remove nothing)
-//		stop_words += '^$';
-//	}
-//	this.stop_words_regexp_alt = new RegExp(stop_words,"igm");
-//};
 
 GrammarConverter.prototype.getStopWordsRegExpr = function(){
 	if(!this.stop_words_regexp){
@@ -339,14 +281,6 @@ GrammarConverter.prototype.getStopWordsEncRegExpr = function(){
 	}
 	return this.stop_words_regexp_enc;
 };
-
-////alternative version / regular expression for stopwords:
-//GrammarConverter.prototype.getStopWordsRegExpr_alt = function(){
-//	if(!this.stop_words_regexp_alt){
-//		this.parseStopWords_alt();
-//	}
-//	return this.stop_words_regexp_alt;
-//};
 
 /**
  * Get grammar definition text.
@@ -726,18 +660,10 @@ GrammarConverter.prototype.removeStopwords_alt = function(thePhrase){
 	return thePhrase;
 };
 
-//GrammarConverter.prototype.doProcessStopwords = function(thePhrase, func){
-//    var str = this.maskString( thePhrase );
-//    
-////	var str = this.encodeUmlauts(thePhrase, true);
-//	str = func(str);
-//	return this.unmaskString( str );//this.decodeUmlauts(str, true);
-//};
-
 /**
  * Execute the grammar.
  * 
- * NOTE: do not use directly, but {@link mmir.SemanticInterpreter.getASRSemantic} instead,
+ * NOTE: do not use directly, but {@link mmir.SemanticInterpreter.interpret} instead,
  * 		since that function applies some pre- and post-processing to the text (stopword removal
  * 		en-/decoding of special characters etc.).
  * 
@@ -1324,100 +1250,6 @@ GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is o
 	
 })(isArray);//<- dependency util/isArray
 
-/**
- * 
- * @deprecated this is used for the old-style encoding / decoding for umlauts (now masking for ALL unicode chars is used!)
- * 
- * @param {String|Object} target
- * 							the String for wich all contained umlauts should be replaced with an encoded version.
- * 							If this parameter is not a String, it will be converted using <code>JSON.stringify()</code>
- * 							and the resulting String will be processed (may lead to errors if umlauts occur in "strange"
- * 							places within the stringified object).
- * @param {Boolean} [doAlsoEncodeUpperCase] OPTIONAL
- * 							if <code>true</code>, then upper-case umlauts will be encoded, too
- * 							DEFAULT: <code>false</code> (i.e. no encoding for upper-case umlauts)
- * 		
- * @returns {String|Object}
- * 				the String with encoded umlauts.
- * 				If the input argument <code>target</code> was an Object, the return value
- * 				will also be an Object, for which the processing stringified Object is converted
- * 				back using <code>JSON.parse()</code> (may lead to errors if umlauts occur in "strange"
- * 				places within the stringified object).
- */
-GrammarConverter.prototype.encodeUmlauts = function(target, doAlsoEncodeUpperCase){
-	var isString = typeof target === 'string';
-	var str;
-	if(isString){
-		str = target;
-	}
-	else {
-		str = JSON.stringify(target);
-	}
-	
-	//Java-Code:
-	//	data = data.replaceAll("\u00E4", "__ae__");//HTML: &#228;
-	//	data = data.replaceAll("\u00FC", "__ue__");//HTML: &#252;
-	//	data = data.replaceAll("\u00F6", "__oe__");//HTML: &#246;
-	//	data = data.replaceAll("\u00DF", "__ss__");//HTML: &#223;
-
-	//	data = data.replaceAll("\u00C4", "__Ae__");//HTML: &#196;
-	//	data = data.replaceAll("\u00DC", "__Ue__");//HTML: &#220;
-	//	data = data.replaceAll("\u00D6", "__Oe__");//HTML: &#214;
-	str = str.replace(/\u00F6/g,'__oe__').replace(/\u00E4/g,'__ae__').replace(/\u00FC/g,'__ue__').replace(/\u00DF/g,'__ss__');
-	if(doAlsoEncodeUpperCase){
-    	str = str.replace(/\u00D6/g,'__Oe__').replace(/\u00C4/g,'__Ae__').replace(/\u00DC/g,'__Ue__');
-	}
-	
-	if(isString){
-		return str;
-	}
-	else {
-		return JSON.parse(str);
-	}
-};
-
-/**
- * 
- * @deprecated this is used for the old-style encoding / decoding for umlauts (now masking for ALL unicode chars is used!)
- * 
- * @param {String|Object} target
- * 							the String for wich all contained umlauts-encoding should be replaced with the original umlauts.
- * 							If this parameter is not a String, it will be converted using <code>JSON.stringify()</code>
- * 							and the resulting String will be processed (may lead to errors if umlauts occur in "strange"
- * 							places within the stringified object).
- * @param {Boolean} [doAlsoEncodeUpperCase] OPTIONAL
- * 							if <code>true</code>, then upper-case umlauts-encodings will be decoded, too
- * 							DEFAULT: <code>false</code> (i.e. no decoding for upper-case umlauts-encodings)
- * 		
- * @returns {String|Object}
- * 				the String with decoded umlauts-encodings (i.e. with the "original" umlauts).
- * 				If the input argument <code>target</code> was an Object, the return value
- * 				will also be an Object, for which the processing stringified Object is converted
- * 				back using <code>JSON.parse()</code> (may lead to errors if umlauts occur in "strange"
- * 				places within the stringified object).
- */
-GrammarConverter.prototype.decodeUmlauts = function(target, doAlsoDecodeUpperCase){
-	var isString = typeof target === 'string';
-	var str;
-	if(isString){
-		str = target;
-	}
-	else {
-		str = JSON.stringify(target);
-	}
-	
-	str = str.replace(/__oe__/g,'\u00F6').replace(/__ae__/g,'\u00E4').replace(/__ue__/g,'\u00FC').replace(/__ss__/g,'\u00DF');
-	if(doAlsoDecodeUpperCase){
-    	str = str.replace(/__Oe__/g,'\u00D6').replace(/__Ae__/g,'\u00C4').replace(/__Ue__/g,'\u00DC');
-	}
-	
-	if(isString){
-		return str;
-	}
-	else {
-		return JSON.parse(str);
-	}
-};
 
 return GrammarConverter;
 
