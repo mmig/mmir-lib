@@ -59,6 +59,7 @@ function GrammarConverter(){
 	
 	this.entry_token_field = "tok";//must consist of ASCI "word chars", i.e. not whitepaces, numbers etc.
 	this.entry_index_field = "i";//must consist of ASCI "word chars", i.e. not whitepaces, numbers etc.
+	this.entry_type_field = "type";//must consist of ASCI "word chars", i.e. not whitepaces, numbers etc.
 	
 	//regular expression for detecting encoded chars (see mask/unmask functions)
 	this.enc_regexp_str = "~~([0-9|A-F|a-f]{4})~~";
@@ -80,8 +81,8 @@ function GrammarConverter(){
 	this.convertOldFormat = false;
 	
 
-	//alternative reg-exp for stop-words (a different method for detecting/removing stopwords must be used!)
-	this.stop_words_regexp_alt;
+//	//alternative reg-exp for stop-words (a different method for detecting/removing stopwords must be used!)
+//	this.stop_words_regexp_alt;
 	
 	//if execution of the grammar is asynchronously done (i.e. result is delivered using a callback)
 	this.is_async = false;
@@ -149,7 +150,7 @@ GrammarConverter.prototype.setStopWords = function(stopWordArray){
 	this.json_grammar_definition.stop_word = this.maskJSON(stopWordArray);
 	
 	this.parseStopWords();
-	this.parseStopWords_alt();
+//	this.parseStopWords_alt();
 	
 	//use unmask-function in order to ensure masking/unmasking is reversible
 	//  (or in case it is not: the error will be held in property stop_word)
@@ -276,35 +277,35 @@ GrammarConverter.prototype.parseStopWords = function(){
 //	this.parseStopWords_alt();
 };
 
-//initialize alternative version / regular expression for stopwords:
-GrammarConverter.prototype.parseStopWords_alt = function(){
-	
-	var json_stop_words = this.json_grammar_definition.stop_word;
-	var size = json_stop_words.length;
-	var stop_words = "";
-	
-	if(size > 0){
-		stop_words += "(";
-
-		for(var index=0; index < size ; ++index){
-			var stop_word = json_stop_words[index];
-			if (index > 0) {
-				stop_words += "|";
-			}
-			//create match pattern for: (1) stopword enclosed in spaces, (2) the stopword at 'line end' preceded by a space, (3) the stopword at 'line start' followed by a space
-			stop_words += " " + stop_word + " | " + stop_word + "$|^" + stop_word
-					+ " ";
-		}
-		
-		stop_words += ")";
-	}
-	else {
-		//for empty stopword definition: match empty string
-		//  (basically: remove nothing)
-		stop_words += '^$';
-	}
-	this.stop_words_regexp_alt = new RegExp(stop_words,"igm");
-};
+////initialize alternative version / regular expression for stopwords:
+//GrammarConverter.prototype.parseStopWords_alt = function(){
+//	
+//	var json_stop_words = this.json_grammar_definition.stop_word;
+//	var size = json_stop_words.length;
+//	var stop_words = "";
+//	
+//	if(size > 0){
+//		stop_words += "(";
+//
+//		for(var index=0; index < size ; ++index){
+//			var stop_word = json_stop_words[index];
+//			if (index > 0) {
+//				stop_words += "|";
+//			}
+//			//create match pattern for: (1) stopword enclosed in spaces, (2) the stopword at 'line end' preceded by a space, (3) the stopword at 'line start' followed by a space
+//			stop_words += " " + stop_word + " | " + stop_word + "$|^" + stop_word
+//					+ " ";
+//		}
+//		
+//		stop_words += ")";
+//	}
+//	else {
+//		//for empty stopword definition: match empty string
+//		//  (basically: remove nothing)
+//		stop_words += '^$';
+//	}
+//	this.stop_words_regexp_alt = new RegExp(stop_words,"igm");
+//};
 
 GrammarConverter.prototype.getStopWordsRegExpr = function(){
 	if(!this.stop_words_regexp){
@@ -339,13 +340,13 @@ GrammarConverter.prototype.getStopWordsEncRegExpr = function(){
 	return this.stop_words_regexp_enc;
 };
 
-//alternative version / regular expression for stopwords:
-GrammarConverter.prototype.getStopWordsRegExpr_alt = function(){
-	if(!this.stop_words_regexp_alt){
-		this.parseStopWords_alt();
-	}
-	return this.stop_words_regexp_alt;
-};
+////alternative version / regular expression for stopwords:
+//GrammarConverter.prototype.getStopWordsRegExpr_alt = function(){
+//	if(!this.stop_words_regexp_alt){
+//		this.parseStopWords_alt();
+//	}
+//	return this.stop_words_regexp_alt;
+//};
 
 /**
  * Get grammar definition text.
@@ -427,6 +428,313 @@ GrammarConverter.prototype.isAsyncExec = function(){
 };
 
 /**
+ * 
+ * @param {String} thePhrase
+ * 				the string from which to remove stopwords (and trim()'ed)
+ * @param {Array<Position>} [positions] OPTIONAL
+ * 				if provided, the positions at which stopwords were removed will be added
+ * 				to this array, where each position-object is comprised of
+ * 				<pre>
+ * 					{
+ * 						i: NUMBER the index at which the stopword was removed
+ * 						mlen: NUMBER the length of the stopword that was removed
+ * 					}
+ * 				</pre>
+ * 				the positions will order by occurance (i.e. by <code>pos.i</code>)
+ * 
+ * @returns {String}
+ * 				the string where stopwords were removed
+ */
+GrammarConverter.prototype.removeStopwords = function(thePhrase, positions){
+
+	var stop_words_regexp = this.getStopWordsRegExpr();
+	
+	var str = thePhrase;
+	
+	var replStr,//<- replacement string used in removeFunc
+		appendPos,//<- controls if position-info should append or prepended to position-list
+		replOffset,//<- global offset (i.e. offset with regard to input string thePhrase)
+		iCalc,//<- helper index for calculating offset in modified strings
+		calcPos,//<- helper function for calculating offset in modified strings
+		replPositions,//<- helper/temporary positions-array for calculating offset in modified strings
+		removeFunc;//<- replacement-function that also tracks the positions that were modified (via argument positions) 
+	
+	if(positions){
+		
+		//initialize helpers for tracking positions
+		
+		replOffset = 0;
+		iCalc = 0;
+		appendPos = true;
+		
+		removeFunc = function(){//HELPER for matched stopwords: log its position and remove it
+			
+			var argLen = arguments.length;
+			var match = arguments[0];
+			var offset = arguments[argLen-2];
+			
+			if(positions){
+				
+				var index = calcPos(offset);
+				
+//				//FIXM DEBUG
+//				var word = argLen === 4? arguments[1] : (argLen === 6? arguments[2] : 'WHITESPACE');			
+//				var start = index;
+//				var end = start + match.length;
+//				var isError = word !== 'WHITESPACE'? thePhrase.substring(start, end).trim() !== word : !/\s+/.test(thePhrase.substring(start, end));
+//				console[isError? 'error' : 'log']('matched "'+match+'" -> found stopword "'+word+'" from '+start+' to '+end+ ' -> "'+thePhrase.substring(start, end)+'"');
+////				console.log('    stopword-removal: ', arguments);
+//				//FIXM DEBUG END
+				
+				if(appendPos){
+					positions.push({i: index, mlen: match.length, len: replStr.length});
+				} else {
+					positions.unshift({i: index, mlen: match.length, len: replStr.length});
+				}
+			}
+			
+			return replStr;
+		};
+		
+		calcPos = function(offset){
+			
+			if(!replPositions){
+				return offset;
+			}
+			
+			var pos;
+			for(var size = replPositions.length; iCalc < size; ++iCalc){
+				pos = replPositions[iCalc];
+				if(pos.i > offset + replOffset){
+					break;
+				}
+				replOffset += pos.mlen - pos.len;
+			}
+			
+			return offset + replOffset;
+		};
+	}
+	
+	var encoded_stop_words_regexp = this.getStopWordsEncRegExpr();
+	replStr = ' ';
+	if(encoded_stop_words_regexp){
+		
+//		console.log('_______STOPWORD-rem-enc: "'+str+'"');//FIXM DEBUG
+		str = str.replace(this.stop_words_regexp_enc, positions? removeFunc : replStr);
+		
+		if(positions){
+			//update helper variables for calculating global offset (after string was modified):						
+			replOffset = 0;
+			iCalc = 0;
+			replPositions = positions.slice(0);
+		}
+	}
+
+//	console.log('_______STOPWORD-rem: "'+str+'"');//FIXM DEBUG
+	
+	replStr = '';
+	replLen = str.length;
+	str = str.replace(stop_words_regexp, positions? removeFunc : replStr);
+	
+	if(positions){
+		positions.sort(function(a,b){return a.i - b.i;});//<- positions may not be ordered, if encoded_stop_words_regexp was applied
+		//update helper variables for calculating global offset (after string was modified):
+		replOffset = 0;
+		iCalc = 0;
+		replPositions = positions.slice(0);
+	}
+	
+	if(positions){
+		
+		//trim with tracking of positions
+//		console.log('_______STOPWORD-rem-ws: "'+str+'"');//FIXM DEBUG
+		
+		replStr = '';		
+		str = str.replace(/\s+$/, removeFunc);//<- trim at end
+		
+		positions.sort(function(a,b){return a.i - b.i;});//<- positions may not be ordered, if words were removed from the end of the string
+		
+		//update helper variables for calculating global offset (after string was modified):
+		replOffset = 0;
+		iCalc = 0;
+		replPositions = positions.slice(0);
+		
+		appendPos = false;//<- prepending "start-trimming"-position may not be accurate, but should be "nearly" correct (w.r.t. to ordering by index pos.i)
+		
+		str = str.replace(/^\s+/, removeFunc);//<- trim at beginning
+		
+		positions.sort(function(a,b){return a.i - b.i;});//<- positions may not be ordered, if words were removed from the beginning of the string
+		
+
+//		console.log('_______STOPWORD-positions: "'+JSON.stringify(positions)+'"');//FIXM DEBUG
+
+	} else {
+		str = str.trim();
+	}
+	
+//	console.log(JSON.stringify(str));//FIXM DEBUG
+	
+	return str;
+};
+
+/**
+ * Apply pre-processing to the string, before applying the grammar:
+ *  * mask non-ASCI characters
+ *  * remove stopwords
+ * 
+ * @param {String} thePhrase
+ * @param {PlainObject} [pos] OPTIONAL
+ * 				in/out argument: if given, the pre-processor will add fields with information
+ * 								 on how the input string <code>thePhrase</code> was modified
+ * 				Namely, the position information for removed stopwords will be added to
+ * 				<code>pos.stopwords</code> (see {@link #removeStopwords} for more details)
+ * 
+ * 				NOTE that this may not work, if custom <code>maskFunc</code> and/or <code>stopwordFunc</code>
+ * 				     are provided as well.
+ * 
+ * @param {Function} [maskFunc] OPTIONAL
+ * 				custom function for masking non-ASCI characters:
+ * 				<pre>maskFunc(inputStr : STRING [, isCalcPosition: BOOLEAN]) : STRING | {str: STRING, pos: ARRAY<POSITION>}</pre>
+ * 				DEFAUL: use of <code>this.maskString(thePhrase, !!pos)</code>
+ * 
+ * @param {Function} [stopwordFunc] OPTIONAL
+ * 				custom function for removing stopwords
+ * 				<pre>stopwordFunc(inputStr : STRING [, positions: ARRAY]) : STRING | {str: STRING, pos: ARRAY<POSITION>}</pre>
+ * 				DEFAUL: use of <code>this.removeStopwords(str, [])</code>
+ * 				
+ * 				NOTE that <code>maskFunc</code> must also be specified, if this argument is used
+ * 
+ * @returns {String} the pre-processed string
+ */
+GrammarConverter.prototype.preproc = function(thePhrase, pos, maskFunc, stopwordFunc){
+	
+	if(typeof pos === 'function'){
+		stopwordFunc = maskFunc;
+		maskFunc = pos;
+		pos = void(0);
+	}
+	
+	var str = maskFunc? maskFunc(thePhrase) : this.maskString(thePhrase, !!pos);
+	
+	var maskedPos;
+	if(typeof str === 'object'){
+		if(pos){
+			maskedPos = str.pos;
+		}
+		str = str.str;
+	}
+	
+	var stopwordPos;
+	if(pos){
+		stopwordPos = [];
+		pos.stopwords = stopwordPos;
+	}
+	var result = stopwordFunc? stopwordFunc(str) : this.removeStopwords(str, stopwordPos);
+
+	if(pos && stopwordPos.length > 0){
+		
+//		console.log('___________masking-input-pos: '+JSON.stringify(maskedPos));
+//		console.log('___________stopword-input-pos: '+JSON.stringify(pos.stopwords));
+		
+		//recalculate stopword positions w.r.t. reverted masking:
+		var offset = 0, mi = 0, msize =  maskedPos.length;
+		var mpos, spos, sposend, mlen, mposi;
+		for(var i1=0, size1 = stopwordPos.length; i1 < size1; ++i1){
+			
+			spos = stopwordPos[i1];
+			
+			for(; mi < msize; ++mi){
+				
+				mpos = maskedPos[mi];
+				
+				mposi = mpos.i + offset;
+
+				sposend = spos.i + spos.mlen;
+				if(sposend <= mposi){
+					//if stopword ends before masking starts:
+					// we already tried all maskings that could have effected the stopword
+					//-> continue with next stopword
+					break;
+				}
+				
+				mlen = mpos.len - mpos.mlen;//<- length difference due to modification
+				offset += mlen;//<- offset for masked strings, after masking was applied (i.e. when stopwords are removed
+			
+				if(mposi < spos.i){
+					//if masking-position starts before stopword even begins:
+					// the masking can not effect the stopword
+					//-> continue with next masking position
+					continue;
+				}
+
+				if(mposi + mpos.len <= sposend){
+					
+					//if masking-position occurs within stopword:
+					//adjust stopword-length
+					spos.mlen = spos.mlen - mlen;
+					
+					//need to "pre-adjust" index, since offset was already (in this case falsely) adjusted
+					spos.i += mlen;
+					
+				} else {
+					//... otherwise continue with next stopword
+					break;
+				}
+			}
+			spos.i -= offset;
+		}
+
+//		//FIXM DEBUG
+//		console.log('__RECONST__stopword-input-pos: '+JSON.stringify(pos.stopwords));
+//		for(var li = 0, lsize = pos.stopwords.length; li < lsize; ++li){
+//			var lpos = pos.stopwords[li];
+//			console.log('    '+JSON.stringify(lpos) + ' "'+thePhrase.substring(lpos.i, lpos.i + lpos.mlen)+'"');
+//		}
+//		//FIXM DEBUG END
+	}
+	
+	return result;
+};
+
+/**
+ * Post-processes the result from the applied grammar:
+ *  * un-masks non-ASCI characters
+ *  
+ * @param {SemanticResult} procResult
+ * @param {Function} [recodeFunc]
+ * 				function that recodes non-ASCI characters (or reverts the recoding)
+ */
+GrammarConverter.prototype.postproc = function(procResult, recodeFunc){
+	if(recodeFunc){
+		return this.recodeJSON(procResult, recodeFunc);//this.decodeUmlauts(procResult, true);
+	}
+	//unmask previously mask non-ASCII chars in all Strings of the returned result:
+	return this.unmaskJSON(
+			procResult
+	);
+};
+
+GrammarConverter.prototype.removeStopwords_alt = function(thePhrase){
+
+	var stop_words_regexp = this.getStopWordsRegExpr_alt();
+	
+	while (thePhrase.match(stop_words_regexp)) {
+		thePhrase = thePhrase.replace(stop_words_regexp, ' ');
+		thePhrase = thePhrase.trim();
+	}
+	
+	return thePhrase;
+};
+
+//GrammarConverter.prototype.doProcessStopwords = function(thePhrase, func){
+//    var str = this.maskString( thePhrase );
+//    
+////	var str = this.encodeUmlauts(thePhrase, true);
+//	str = func(str);
+//	return this.unmaskString( str );//this.decodeUmlauts(str, true);
+//};
+
+/**
  * Execute the grammar.
  * 
  * NOTE: do not use directly, but {@link mmir.SemanticInterpreter.getASRSemantic} instead,
@@ -485,19 +793,45 @@ GrammarConverter.prototype.executeGrammar = function(text, callback){
  * 
  * @param {String} str
  * 				the String to process
+ * @param {Boolean} [computePositions] OPTIONAL
+ * 				DEFAULT: false
  * @param {String} [prefix] OPTIONAL
  * 				an alternative prefix used for masking, i.e instead of <code>~~</code>
  * 				(ignored, if argument has other type than <code>string</code>)
  * @param {String} [postfix] OPTIONAL
  * 				an alternative postfix used for masking, i.e instead of <code>~~</code>
  * 				(ignored, if argument has other type than <code>string</code>)
- * @returns {String} 
- * 				the masked string
+ * @returns {String|{str: String, pos: ARRAY<Position>}} 
+ * 				the masked string, or if <code>computePositions</code> was <code>true</code>
+ * 				a result object with
+ * 				<pre>
+ * 				{
+ * 					str: STRING, // the masked string
+ * 					pos: [POSITION] // array of maskink-positions: {i: NUMBER, len: NUMBER, mlen: NUMBER}
+ * 				}
+ * 				</pre>
+ * 				where POSITION is an object with
+ * 				<pre>
+ * 				{
+ * 					i: NUMBER, // the index within the modified string
+ * 					len: NUMBER, // the length before the modification (i.e. of sub-string that is to be masked)
+ * 					mlen: NUMBER // the length after the modification (i.e. of sub-string that that was masked)
+ * 				}
+ * 				</pre>
  */
-GrammarConverter.prototype.maskString = function (str, prefix, postfix) {
+GrammarConverter.prototype.maskString = function (str, computePositions, prefix, postfix) {
 	var i, s, ch, peek, result,
 		next, endline, push, mask,
 		spaces, source = str;
+	
+	var positions, esclen;//<- will only be used, if computePositions === TRUE
+	
+	//shift arguments if necessary
+	if(typeof computePositions === 'string'){
+		postfix = prefix;
+		prefix = computePositions;
+		computePositions = false;
+	}
 	
 	var ESC_START = typeof prefix  === 'string'? prefix  : '~~';
 	var ESC_END   = typeof postfix === 'string'? postfix : '~~';
@@ -514,13 +848,20 @@ GrammarConverter.prototype.maskString = function (str, prefix, postfix) {
 	};
 	
 	mask = function (theChar) {
+
+		if(computePositions){
+			//store position information for the masking:
+			// i: position in original string
+			// len: modified length of the string, i.e. the length of masking string
+			// mlen: original length of the string, i.e. the length of the string that will get masked (in this case it is always 1, i.e. 1 char)
+			positions.push({i: i-2, len: esclen, mlen: theChar.length});//<needed?:> , start: result.length});//<- would need to compute the actual position from current result-buffer content...
+		}
 		
 		result.push(ESC_START);
 		
 		var theUnicode = theChar.charCodeAt(0).toString(16).toUpperCase();
 		var j = theUnicode.length;
 		while (j < 4) {
-//			theUnicode = '0' + theUnicode;
 			result.push('0');
 			++j;
 		}
@@ -563,6 +904,10 @@ GrammarConverter.prototype.maskString = function (str, prefix, postfix) {
 	
 	
 	result = [];
+	if(computePositions){
+		esclen = ESC_START.length + 4 + ESC_END.length;
+		positions = [];
+	}
 
 	i = 0;
 	next();
@@ -573,6 +918,21 @@ GrammarConverter.prototype.maskString = function (str, prefix, postfix) {
 		push();
 	}
 	
+//	//FIXM DEBUG: show position-logging for masking
+//	if(computePositions && positions.length > 0){
+//		console.log('_______LOG-mask-pos("'+str+'" -> "'+result.join('')+'"): ');
+//		var lres = result.join('');
+//		var loffset = 0;
+//		for(var li = 0, lsize = positions.length; li < lsize; ++li){
+//			var lpos = positions[li];
+//			console.log('    '+JSON.stringify(lpos) + ' "'+str.substring(lpos.i, lpos.i + 1)+'" -> "'+lres.substring(loffset + lpos.i, loffset + lpos.i +lpos.len )+'"');
+//			loffset += lpos.len - 1;
+//		}
+//	}//END: DEBUG
+	
+	if(computePositions){
+		return {str: result.join(''), pos: positions};
+	}
 	return result.join('');
 };
 
@@ -612,38 +972,93 @@ GrammarConverter.prototype.maskAsUnicode = function (str) {
  * </p>
  * 
  * @param {String} str
+ * @param {Boolean} [computePositions] OPTIONAL
+ * 				DEFAULT: false
  * @param {RegExp} [detector] OPTIONAL
  * 				an alternative detector-RegExp:
  * 				the RegExp must conatin at least one grouping which detects a unicode number (HEX),
  * 				e.g. default detector is <code>~~([0-9|A-F|a-f]{4})~~</code> (note the grouping
  * 				for detecting a 4-digit HEX number within the brackets).
- * @returns {String} the unmasked string
+ * @returns {String|{str: String, pos: ARRAY<Position>}} 
+ * 				the masked string, or if <code>computePositions</code> was <code>true</code>
+ * 				a result object with
+ * 				<pre>
+ * 				{
+ * 					str: STRING, // the masked string
+ * 					pos: [POSITION] // array of maskink-positions: {i: NUMBER, len: NUMBER, mlen: NUMBER}
+ * 				}
+ * 				</pre>
+ * 				where POSITION is an object with
+ * 				<pre>
+ * 				{
+ * 					i: NUMBER, // the index within the modified string
+ * 					len: NUMBER, // the length before the modification (i.e. of sub-string that is to be masked)
+ * 					mlen: NUMBER // the length after the modification (i.e. of sub-string that that was masked)
+ * 				}
+ * 				</pre>
  */
-GrammarConverter.prototype.unmaskString = function (str, detector) {
-	var match, source = str, result = [], pos = 0, i, len = str.length;
+GrammarConverter.prototype.unmaskString = function (str, computePositions, detector) {
+	var match, mlen, ch, positions, source = str, result = [], pos = 0, i, len = str.length;
+	
+	//shift arguments if necessary
+	if(typeof computePositions === 'object'){
+		detector = computePositions;
+		computePositions = false;
+	}
+	
+	if(computePositions){
+		positions = [];
+	}
 	
 	//RegExpr for: ~~XXXX~~
 	// where XXXX is the unicode HEX number: ~~([0-9|A-F|a-f]{4})~~
 	var REGEXPR_ESC = detector? detector : new RegExp( this.enc_regexp_str, "igm");
 	
 	while(match = REGEXPR_ESC.exec(source)){
+		
 		i =  match.index;
+		mlen = match[0].length;
+		
 		//add previous:
 		if(i > pos){
 			result.push(source.substring(pos, i));
 		}
 		
 		//add matched ESC as UNICODE:
-		result.push(String.fromCharCode(  parseInt(match[1], 16) ));
+		ch = String.fromCharCode(  parseInt(match[1], 16) );
+		result.push(ch);
 		
 		//update position:
-		pos = i + match[0].length;
+		pos = i + mlen;
+		
+		if(computePositions){
+			//store position information for the masking:
+			// i: position in original string
+			// len: modified length of the string, i.e. the length of the unmasked string
+			// mlen: original length of the string, i.e. the length of the masked string, that will get unmasked
+			positions.push({i: i, len: ch.length, mlen: mlen});
+		}
 	}
 	
 	if(pos < len){
 		result.push(source.substring(pos));
 	}
-
+	
+//	//FIXM DEBUG: show position-logging for masking
+//	if(computePositions && positions.length > 0){
+//		console.log('--------LOG-UNMASK-pos("'+str+'" -> "'+result.join('')+'"): ');
+//		var lres = result.join('');
+//		var loffset = 0;
+//		for(var li = 0, lsize = positions.length; li < lsize; ++li){
+//			var lpos = positions[li];
+//			console.log('    '+JSON.stringify(lpos) + ' "'+str.substring(lpos.i, lpos.i + lpos.mlen)+'" -> "'+lres.substring(loffset + lpos.i, loffset + lpos.i + lpos.len)+'"');
+//			loffset += lpos.len - lpos.mlen;
+//		}
+//	}//END: DEBUG
+	
+	if(computePositions){
+		return {str: result.join(''), pos: positions};
+	}
 	return result.join('');
 };
 
@@ -688,19 +1103,151 @@ GrammarConverter.prototype.unmaskJSON = function (json, isMaskValues, isMaskName
  */
 GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is only the initializer (i.e. see returned function below)
 	
-	//recursive processing for an object
-	//returns: the processed object
-	var processJSON = function(obj, recodeFunc, isMaskValues, isMaskNames){
+	/**
+	 * HELPER for sorting position objects
+	 * 
+	 * @private
+	 */
+	var sortPosFunc = function(pos1, pos2){
+		return pos1.target.i - pos2.target.i;
+	};
+	
+	/**
+	 * HELPER for setting a recoded string value
+	 * 
+	 * @param {StringResult} recodedVal
+	 * 				the recoding-result:
+	 * 				<pre>{str: STRING, pos: ARRAY<POSITION>}</pre>
+	 * 
+	 * 				If undefined, nothing will be done
+	 * 
+	 * @param {String} origVal
+	 * 				the original string value (i.e. "un-recoded")
+	 * 
+	 * @param {Object} obj
+	 * 				the parent-object for the recoded string property
+	 * 
+	 * @param {String} pname
+	 * 				the property name in the parent-object for the recoded string property
+	 * 
+	 * @param {Array<Position>} [recodedPositions] OPTIONAL
+	 * 				if present, the modification information of the recoding will be added to the array
+	 * 				The elements of the array:
+	 * 				<pre>
+	 * 				{	
+	 * 					target: Token, // the token that was modified/recoded
+	 * 					mlen: NUMBER   // the length of the un-modified string (i.e. before recoding)
+	 * 				}
+	 * 				</pre>
+	 * 				where Token:
+	 * 				<pre>
+	 * 				{
+	 * 					i: NUMBER, // the index of the token w.r.t. to the input string
+	 * 					tok: STRING, // the (recoded/modified) token
+	 * 				}
+	 * 				</pre>
+	 * @private
+	 */
+	var setRecodedVal = function(recodedVal, origVal, obj, pname, recodedPositions){
 		
-		//different treatments for: STRING, ARRAY, OBJECT types (and 'REST' type, i.e. all ohters)
+		//only set, if there was a recoding:
+		if(typeof recodedVal !== 'undefined' && typeof recodedVal.str === 'string'){
+			
+			if(origVal !== recodedVal.str){
+				//set recoded value
+				var str = recodedVal.str;
+				obj[pname] = str;
+			}
+			
+			//special treatment for token-objects, i.e.
+			// {
+			//	tok: STRING,
+			//	i: NUMBER
+			// }
+			//
+			// -> store some information for recalculating the index, in case tokens were recoded
+			if(pname === 'tok' && typeof obj.i === 'number'){
+				
+//				var offset = 0;
+//				var pos;
+//				for(var i=recodedVal.pos.length-1; i >= 0; --i){
+//					pos = recodedVal.pos[i];
+//					offset += pos.mlen - pos.len;
+//				}
+				var modLen = origVal.length;// offset + str.length;
+//				if(offset + str.length !== origVal.length){
+//					console.error('ERROR: unexpected length!!!!');
+//				}
+				
+//				obj.len = origVal.length - offset;
+//				if(obj.len !== obj.tok.length){
+//					console.error('ERROR: unexpected length!!!!');
+//				}
+				
+				if(recodedPositions){
+					recodedPositions.push({target: obj, mlen: modLen});//, i: start});//recodedVal);
+				}
+			}
+		}
+	};
+	
+	/**
+	 * HELPER for adjusting the index-information in token-objects of an SemanticResult
+	 *        (w.r.t. recoded tokens).
+	 * 
+	 * @param {Array} recodedPositions
+	 * 			the list with modification information w.r.t. the tokens (as created by setRecodedVal)
+	 * 
+	 * @see #setRecodedVal
+	 * @private
+	 */
+	var recalculatePos = function(recodedPositions){
+		if(recodedPositions && recodedPositions.length > 0){
+			
+//			console.log('__________RECODE_pre-sort__'+JSON.stringify(recodedPositions));//FIXM DEBUG
+			
+			recodedPositions.sort(sortPosFunc);
+			
+//			console.log('__________RECODE_post-sort_'+JSON.stringify(recodedPositions));//FIXM DEBUG
+			
+			var repos, token;
+			var offset = 0;
+			for(var i=0, size = recodedPositions.length; i < size; ++i){
+				repos = recodedPositions[i];
+				token = repos.target;
+				token.i -= offset;
+				offset += repos.mlen - token.tok.length;
+			}
+		}
+	};
+	 
+	/**
+	 * Recursive processing for an object / recoding a JSON-like object.
+	 * NOTE: the recoding happens "in-place", i.e. the object itself is modified
+	 * 
+	 * See doc of recodeJSON() for details w.r.t. the arguments
+	 * 
+	 * NOTE: argument recodedPositions is an internal (OPITONAL) parameter
+	 *       that is used when recoding SemanticResult objects (applied grammar)
+	 *       
+	 * @returns {PlainObject} the object where its string-values are recoded
+	 * @private
+	 */
+	var processJSON = function(obj, recodeFunc, isMaskValues, isMaskNames, recodedPositions){
+		
+		//different treatments for: STRING, ARRAY, OBJECT types (and 'REST' type, i.e. all others)
 		if(typeof obj === 'string' && isMaskValues){
 			//STRING: encode the string
-			return recodeFunc.call(this, obj);
+			return recodeFunc.call(this, obj, true);
 		}
 		else if( isArray(obj) ) {
 			//ARRAY: process all entries:
 			for(var i=0, size = obj.length; i < size; ++i){
-				obj[i] = processJSON.call(this, obj[i], recodeFunc, isMaskValues, isMaskNames);
+				
+				var pv = obj[i];
+				
+				var pvn = processJSON.call(this, pv, recodeFunc, isMaskValues, isMaskNames, recodedPositions);
+				setRecodedVal(pvn, pv, obj, i, recodedPositions);
 			}
 			
 			return obj;
@@ -712,20 +1259,50 @@ GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is o
 			//OBJECT: process all the object's properties (but only, if they are not inherited)
 			for(var p in obj){
 				if(obj.hasOwnProperty(p)){
+
+					var pv = obj[p];
 					
-					obj[p] = processJSON.call(this, obj[p], recodeFunc, isMaskValues, isMaskNames);
+					//special treatment for token-lists, i.e. elements like:
+					//
+					// phrases: {
+					//   token1:[
+					//	 {
+					//		tok: STRING,
+					//		i: NUMBER
+					//	 },
+					//	 ...
+					//  ]
+					//  token2:
+					//	 ...
+					// }
+					//
+					// -> create list for storing some information for recalculating the index, in case tokens were recoded
+					var isCalcPos = false;
+					if(!recodedPositions && p === 'phrases' && typeof pv === 'object' && pv){// typeof pv.i === 'number' && typeof pv.tok === 'string'){
+						isCalcPos = true;
+						recodedPositions = [];
+					}
+					
+					var pvn = processJSON.call(this, pv, recodeFunc, isMaskValues, isMaskNames, recodedPositions);
+					setRecodedVal(pvn, pv, obj, p, recodedPositions);
+					
+					if(isCalcPos){
+						recalculatePos(recodedPositions);
+						recodedPositions = void(0);
+					}
 					
 					//if the property-name should also be encoded:
 					if(typeof p === 'string' && isMaskNames){
 						
 						var masked = recodeFunc.call(this, p);
-						if(masked !== p){
-							obj[masked] = obj[p];
+						if(masked && typeof masked.str === 'string' && masked.str !== p){
+							obj[masked.str] = obj[p];
 							delete obj[p];
 						}
 					}
 				}
 			}
+			
 			return obj;
 		}
 		else {
@@ -734,7 +1311,7 @@ GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is o
 	};
 	
 	return function (json, recodeFunc, isMaskValues, isMaskNames){
-		//evalate arguments:
+		//evaluate arguments:
 		if(typeof isMaskValues === 'undefined'){
 			isMaskValues = this.maskValues;
 		}

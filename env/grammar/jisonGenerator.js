@@ -199,17 +199,15 @@ var jisonGen = {
             	+ '  }\n'
             	+ '  return result;\n'
             	+ '};\n'
+            	+ 'options.stopwords='
+	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
+	        		+JSON.stringify(
+	        				theConverterInstance.getEncodedStopwords()
+	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
+        		+ ';\n'
             	+ 'semanticInterpreter.addGrammar("'
             		+instanceId
             		+'", grammarFunc, options);\n\n'
-            	+ 'semanticInterpreter.setStopwords("'
-            		+instanceId+'",'
-
-            		//store stopwords with their Unicode representation (only for non-ASCII chars)
-            		+JSON.stringify(
-            				theConverterInstance.getEncodedStopwords()
-            		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-            	+ ');\n'
             	+ 'return grammarFunc;\n'
             	+ '})();';
             
@@ -257,7 +255,6 @@ var jisonGen = {
                 	
                 	parseDummyFunc.hasErrors = true;
                 	
-                	//theConverterInstance = doGetGrammar(instanceId);
                 	theConverterInstance.setGrammarFunction(parseDummyFunc);
             	}
             	
@@ -336,7 +333,7 @@ var jisonGen = {
         	else {
         		console.error(msg);
         	}
-        	msg = '[INVALID GRAMMAR] ' + msg;
+        	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
         	grammarParser = 'var parser = { parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
         	hasError = true;
         }
@@ -428,6 +425,7 @@ var JisonGrammarConverterExt = {
 		
 		this.THE_INTERNAL_GRAMMAR_CONVERTER_INSTANCE_NAME = "theGrammarConverterInstance";
 		this._PARTIAL_MATCH_PREFIX = "$";
+		this._PARTIAL_LOCATION_PREFIX = '@';
 
 		this.grammar_tokens = "/* --- Token definitions --- */\n\n/* Characters to be ignored */\n"
 			+ "\\s+    /* skip whitespace */\n\n/* Non-associative tokens */\n";
@@ -448,6 +446,10 @@ var JisonGrammarConverterExt = {
 		this.token_variables += "  var semanticAnnotationResult = {};\n"
 			+ "  var _flatten = function(match){ if(!match.join){ return match;} for(var i=0, size = match.length; i < size; ++i){if(!match[i]){continue;}if(match[i].join){match[i] = _flatten(match[i])}} return match.join('') };\n"
 			+ "  var _tok = function(field, match){ match = _flatten(match); field[match] = match; return match;}\n"
+			+ "  var _offset = function(pos, str){var c=pos.first_column,l=pos.first_line;if(l===1){return c;}var renl=/\\r?\\n/gm;var i=0, res;while(++i<l && (res=renl.exec(str))){}return res?res.index+res[0].length + c:c;};\n"
+			
+			+ "  var _tokenList = function(match, list) {if(!list){list = [];}var size = match.length, t;for (var i = 0; i < size; ++i) {t = match[i];if (!t) {continue;}if (t."+this.entry_token_field+".join) {_tokenList(t."+this.entry_token_field+", list);} else {list.push(t."+this.entry_token_field+");}}return list;};\n"
+			+ "  var _getTok = function(phrases, type, index) {var count = 0, p;for(var i=0, size = phrases.length; i < size; ++i){p = phrases[i];if(p."+this.entry_type_field+" === type){if(index === count++){return typeof p."+this.entry_token_field+" === 'string'? p."+this.entry_token_field+" : p;}}}};\n"
 		;
 		
 		this.parseTokens();
@@ -485,28 +487,8 @@ var JisonGrammarConverterExt = {
 			var words = json_tokens[token_name];
 			
 			self.token_variables += "  var " + pref
-					+ token_name.toLowerCase() + " = {};\n";
+					+ token_name.toLowerCase() + " = [];\n";
 			
-			
-			//FIXME TODO handle RegExpr: need to be encoded without String-quoting!, i.e. instead of
-			//							 FLASE:   '[a-zA-Z_]+'
-			//							 CORRECT: [a-zA-Z_]+
-			
-			//OLD IMPL.:
-//			var grammar_token = token_name + "\n    = match:('";
-//			for(var i=0, size = words.length; i < size ; ++i){
-//				if(i > 0){
-//					grammar_token += "'/'";
-//				}
-//				grammar_token += words[i];
-//			}
-//			
-//			grammar_token += "')    " + token_name + " { " + self.variable_prefix
-//					+ token_name.toLowerCase() + "[match] = match; return match;};\n";
-//			
-//			self.grammar_tokens += grammar_token;
-			
-			//NEW IMPL.:
 			var sb = [];
 			
 			var isNotRegExpr = true;
@@ -569,11 +551,10 @@ var JisonGrammarConverterExt = {
 		var self = this; 
 		
 		self.token_variables += "  var " + self.variable_prefix
-				+ utterance_name.toLowerCase() + " = {};\n";
+				+ utterance_name.toLowerCase() + " = [];\n";
 		
 
 		var grammar_utterance = utterance_name + ":\n   ";
-		//self.grammar_phrases += utterance_name + "  " +  self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
 		self.grammar_phrases += utterance_name + "  " ;
 		var phrases = utterance_def.phrases;
 		var semantic  = self.doCreateSemanticInterpretationForUtterance(utterance_name, utterance_def);
@@ -612,15 +593,8 @@ var JisonGrammarConverterExt = {
 //			variableObj = /_\$([a-zA-Z_][a-zA-Z0-9_\-]*)(\[(\d+)\])?((\[(("(.*?[^\\])")|('(.*?[^\\])'))\])|(\.(\w+)))?/.exec(variable);
 	//"_$NAME[INDEX]['FIELD']":  _$NAME                  [ INDEX ]        [" FIELD "]  | [' FIELD ']      |   .FIELD
 			if (variable_index == null) {
-				remapped_variable_name = variable;
+				remapped_variable_name = "return " + variable;
 			} else {
-					remapped_variable_name = variable.replace(
-							  '[' + variable_index[1] + ']'
-							, "["
-								+ utterance_name.toLowerCase() + "_temp['phrases']['"
-								+ variable_name.toLowerCase() + "']["
-								+ variable_index[1]
-							+ "]."+this.entry_token_field+"]");
 					//TODO replace try/catch with safe_acc function
 					//     PROBLEM: currently, the format for variable-access is not well defined
 					//              -> in case of accessing the "semantic" field for a variable reference of another Utterance
@@ -639,12 +613,16 @@ var JisonGrammarConverterExt = {
 //								+ variable_index[1] 
 //								+ ")]"
 //							);
+					remapped_variable_name = "var res = _getTok("+utterance_name.toLowerCase() + "_temp['phrases'],'"
+									+ variable_name.toLowerCase() + "', "
+									+ variable_index[1]+");"
+									+ " return typeof res === 'string'? res : (typeof res === 'object' && res? "+variable+" : void(0))";
 			}
 			semantic_as_string = semantic_as_string.replace(
 					variables[0],
-					" function(){try{return " + remapped_variable_name
-						+ ";} catch(e){return void(0);}}() "
-//					"' + " + remapped_variable_name + " + '"//TODO replace try/catch with safe_acc function
+					//TODO replace try/catch with safe_acc function
+					" function(){try{ " + remapped_variable_name
+					+ ";} catch(e){return void(0);}}() "
 			);
 			variables =  this.variable_regexp.exec(semantic_as_string);
 		}
@@ -653,24 +631,18 @@ var JisonGrammarConverterExt = {
 	},
 	doCreateSemanticInterpretationForPhrase: function(utterance_name, utterance_def, phrase, semantic_as_string){
 		var phraseList = phrase.split(/\s+/),
-		length = phraseList.length,
-		duplicate_helper = {};
+			length = phraseList.length;
 	
 		var phraseStr = "";
-	//	var result = " { var _m = ";
 		var i = 0;
 		
-		var pharseMatchResult = " $$ = ";
-	//	for (; i < length; ++i){
-	//		pharseMatchResult += this._PARTIAL_MATCH_PREFIX + (i+1);
-	//		if(i < length){
-	//			pharseMatchResult += " + ' ' + ";
-	//		}
-	//	}
 		
-	//	result += "; var "+utterance_name+"_temp = {}; "+utterance_name+"_temp['phrases'] = {};";
+		var pharseMatchResult = " $$ = {"
+				+ this.entry_index_field + ": _offset("+ this._PARTIAL_LOCATION_PREFIX +"1),"
+				+ this.entry_type_field + ": '" + utterance_name + "',"
+				+ this.entry_token_field + ": null";
 		
-		var semanticProcResult = "var "+utterance_name+"_temp = {}; "+utterance_name+"_temp['phrases'] = {};";
+		var semanticProcResult = "var "+utterance_name+"_temp = {}, tempMatch; "+utterance_name+"_temp['phrases'] = [];";
 		var num;
 		for (i = 0; i < length; ++i) {
 			
@@ -679,37 +651,27 @@ var JisonGrammarConverterExt = {
 			//create STR for phrase-matching
 			phraseStr += " " + phraseList[i];
 			
-			//create STR for concatenated match of all partial phrases
-			pharseMatchResult += this._PARTIAL_MATCH_PREFIX + num;
-			if(num < length){
-				pharseMatchResult += " + ' ' + ";
-			}
-			
 			//create STR for semantic processing of phrase
-			if (typeof(duplicate_helper[phraseList[i]]) == "undefined") {
-				duplicate_helper[phraseList[i]] = 0;
-				semanticProcResult += utterance_name+"_temp['phrases']['"+phraseList[i].toLowerCase()+"'] = [];\n\t\t";
-			} else {
-				duplicate_helper[phraseList[i]] += 1;
-			}
-			semanticProcResult += utterance_name + "_temp['phrases']['"
-						+ phraseList[i].toLowerCase() + "']["
-						+ duplicate_helper[phraseList[i]] + "] = {"
-							+ this.entry_token_field + ": " + this._PARTIAL_MATCH_PREFIX + num + ","
-							+ this.entry_index_field + ": " + (num-1)
-						+"};\n\t\t";
+			semanticProcResult += "tempMatch = " + this._PARTIAL_MATCH_PREFIX + num + ";"
+						+ "tempMatch = (typeof tempMatch === 'string'? {"
+								+ this.entry_index_field + ": _offset("+ this._PARTIAL_LOCATION_PREFIX + num + "),"
+								+ this.entry_type_field + ": '" + phraseList[i].toLowerCase() + "',"
+								+ this.entry_token_field + ": tempMatch"
+							+ "} : tempMatch);"
+						+ utterance_name + "_temp['phrases'].push(tempMatch);\n\t\t";
 		}
 		
-		semanticProcResult += "var " + this.variable_prefix + "phrase = $$; " 
-				+ utterance_name + "_temp['phrase']=" + this.variable_prefix + "phrase; "
-				+ utterance_name + "_temp['utterance']='" + utterance_name + "'; "
-				+ utterance_name + "_temp['engine']='jison'; "//FIXME debug
-				+ utterance_name + "_temp['semantic'] = " + semantic_as_string
-				+ "; " + this.variable_prefix + utterance_name + "["
-				+ this.variable_prefix + "phrase] = " + utterance_name + "_temp; "
-				+ this.variable_prefix + "result = " + utterance_name + "_temp;";
+		pharseMatchResult += "}";
 		
-		return phraseStr + " %{\n\t   " + pharseMatchResult +  "; " + semanticProcResult + "; \n\t%} ";
+		semanticProcResult += "$$.tok = " + utterance_name + "_temp['phrases'];"
+				+ utterance_name + "_temp['phrase']=_tokenList("+utterance_name + "_temp['phrases']).join(' ');"
+				+ utterance_name + "_temp['utterance']='" + utterance_name + "'; "
+				+ utterance_name + "_temp['engine']='jison'; "
+				+ utterance_name + "_temp['semantic'] = " + semantic_as_string
+				+ "; " + this.variable_prefix + utterance_name + ".push(" + utterance_name + "_temp); "
+				+ this.variable_prefix + "result = " + utterance_name + "_temp";
+		
+		return phraseStr + " %{\n\t   " + pharseMatchResult + "; " + semanticProcResult + "; \n\t%} ";
 	},
 	_checkIfNotRegExpr: function(token){
 		

@@ -74,7 +74,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
      * 
      * @memberOf SemanticInterpreter#
      */
-    var GRAMMAR_FILE_FORMAT_VERSION = 4;
+    var GRAMMAR_FILE_FORMAT_VERSION = 5;
     
     
     /**
@@ -238,12 +238,14 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 		 * 					the file format is assumed to be out-dated and an Error will be thrown.
 		 * 					
 		 * 					If PlainObject, i.e. an options object, the following properties are evaluated
-		 * 					(all properties are opitional):
+		 * 					(all properties are optional):
 		 * 					<code>fileFormat: NUMBER, default: undefined</code>
 		 * 						(desc. see above)
 		 * 					<code>execMode: 'sync' | 'async', default: 'sync'</code>
 		 * 						if 'async' then the grammar is executed asynchronously, i.e. getASRSemantic()
 		 * 						must be invoked with a callback function in order to retrieve the result
+		 * 					<code>stopwords: Array<string>, default: null</code>
+		 * 						if given, the grammar (GrammarConverter) will be set with this stopword list, i.e. <code>grammar.setStopwords(stopwords)</code>
 		 * 
 	     * @throws Error if <code>fileFormatNo</code> is given, but does not match GRAMMAR_FILE_FORMAT_VERSION.
 	     * 
@@ -253,12 +255,15 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
     	var doAddGrammar = function(id, grammarImpl, fileFormatNo){
     		
     		var execMode = 'sync';
+    		var stopwords = null;
     		if(fileFormatNo && typeof fileFormatNo === 'object'){
     			
     			execMode = fileFormatNo.execMode;
+    			stopwords = fileFormatNo.stopwords;
     			
     			//lastly: overwrite fileFormatNo with the corresponding property:
     			fileFormatNo = fileFormatNo.fileFormat;
+    			
     		}
     		
     		//check if the added grammar has correct format
@@ -297,6 +302,10 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 //	        		currentGrammarId = id;
 //	        	}
 	        	grammarImplList.push(id);
+        	}
+        	
+        	if(stopwords){
+        		grammarImpl.setStopWords(stopwords);
         	}
         	
         	doSetEnabled(true);
@@ -499,7 +508,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	     * @private
 	     * @memberOf SemanticInterpreter#
          */
-        var process_asr_semantic = function(phrase, stopwordFunc, langCode, callback){
+        var process_asr_semantic = function(phrase, langCode, callback){
 
 			if(!doCheckIsEnabled()){
 				logger.warn('SemanticInterpreter.getASRSemantic: currently disabled!');
@@ -511,10 +520,11 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 				langCode = void(0);
 			}
         	
-			var execGrammar = function(grammarConverter, phrase, stopwordFunc, langCode, callback){
-        		
-	            var strPreparedPhrase = grammarConverter.maskString( phrase.toLowerCase() );
-	            strPreparedPhrase = stopwordFunc(strPreparedPhrase, langCode, grammarConverter);
+			var execGrammar = function(grammarConverter, phrase, langCode, callback){
+
+	    		//pre-process pharse (e.g. mask umlauts, remove stopwords)
+				var positions = {};//<- for storing modification information during pre-processing
+	            var strPreparedPhrase = grammarConverter.preproc( phrase.toLowerCase(), positions );
 	           
 	            if(logger.isDebug()) logger.debug('SemanticInterpreter.process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
 	            
@@ -522,10 +532,11 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 
 		    		grammarConverter.executeGrammar( strPreparedPhrase, function(result){
 		    			
-		    			//unmask previously mask non-ASCII chars in all Strings of the returned result:
-			    		result = grammarConverter.unmaskJSON(
+		    			//post-process result (e.g. unmask umlauts etc)
+			    		result = grammarConverter.postproc(
 			    				result
 			    		);
+			    		result.preproc = positions;
 			            
 			            callback(result);//TODO return copy instead of original instance?
 			            
@@ -537,10 +548,11 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	            	
 		    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
 		            
-		    		//unmask previously mask non-ASCII chars in all Strings of the returned result:
-		    		result = grammarConverter.unmaskJSON(
+		    		//post-process result (e.g. unmask umlauts etc)
+		    		result = grammarConverter.postproc(
 		    				result
 		    		);
+		    		result.preproc = positions;
 		            
 		            return result;//TODO return copy instead of original instance?
 	            }
@@ -555,9 +567,9 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 					var grammarConverter = doGetGrammar(langCode);
 					
 					if(grammarConverter.isAsyncExec()){
-						execGrammar(grammarConverter, phrase, stopwordFunc, langCode, callback);	
+						execGrammar(grammarConverter, phrase, langCode, callback);	
 					} else {
-						callback(execGrammar(grammarConverter, phrase, stopwordFunc, langCode));
+						callback(execGrammar(grammarConverter, phrase, langCode));
 					}
 				};
 			}
@@ -569,53 +581,17 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
     		}
         	
         	if(!grammarReadyCallback){
-        		return execGrammar(grammarConverter, phrase, stopwordFunc, langCode);
+        		return execGrammar(grammarConverter, phrase, langCode);
         	}
         };
-        
-        /**
-	     * @private
-	     * @memberOf SemanticInterpreter#
-         */
-		var removeStopwordsFunc =  function removeStopwords(thePhrase, lang, gc){
-			if(!gc){
-				gc = doGetGrammar(lang);
-			}
-    		var stop_words_regexp = gc.getStopWordsRegExpr();
-    		
-    		var str = thePhrase;
-    		var encoded_stop_words_regexp = gc.getStopWordsEncRegExpr();
-    		if(encoded_stop_words_regexp){
-    			str = str.replace(gc.stop_words_regexp_enc, ' ').trim();
-    		}
-    		
-        	return str.replace(stop_words_regexp, '').trim();
-    	};
     	
-    	/**
-	     * @private
-	     * @memberOf SemanticInterpreter#
-    	 */
-		var removeStopwordsAltFunc = function removeStopwords_alt(thePhrase, lang, gc){
-			if(!gc){
-				gc = doGetGrammar(lang);
-			}
-    		var stop_words_regexp = gc.getStopWordsRegExpr_alt();
-        	
-			while (thePhrase.match(stop_words_regexp)) {
-				thePhrase = thePhrase.replace(stop_words_regexp, ' ');
-				thePhrase = thePhrase.trim();
-			}
-			
-			return thePhrase;
-		};
         /**
 	     * @private
 	     * @memberOf SemanticInterpreter#
          */
-		var doRemoveStopWords = function(thePhrase, lang, func){
+		var doRemoveStopWords = function(thePhrase, lang, stopwordFunc){
 			if(!doCheckIsEnabled()){
-				logger.warn('SemanticInterpreter.'+func.name+': currently disabled!');
+				logger.warn('SemanticInterpreter.doProcessStopwords: currently disabled!');
 				return null;
 			}
 			
@@ -625,25 +601,15 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
     			throw 'NoGrammar_'+lang;
     		}
         	
-            var str = grammarConverter.maskString( thePhrase );
-            
-//			var str = grammarConverter.encodeUmlauts(thePhrase, true);
-			str = func(str, lang, grammarConverter);
-			return grammarConverter.unmaskString( str );//grammarConverter.decodeUmlauts(str, true);
+        	stopwordFunc = stopwordFunc || grammarConverter.removeStopwords;
+        	
+        	return grammarConverter.preproc(thePhrase);
 		};
 		
         var _tmpInstance = { // public members
         		
         	/**  @scope SemanticInterpreter# *///for jsdoc2
 
-			/**
-			 * @deprecated use {@link #removeStopwords} instead
-             * @memberOf SemanticInterpreter.prototype
-	         * @public
-			 */
-			removeStopwords_alt: function(thePhrase, lang){
-				return doRemoveStopWords(thePhrase, lang, removeStopwordsAltFunc);
-			},
         	/**
              * @param {String} phrase
              * 					the phrase that will be parsed
@@ -672,19 +638,11 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
              * 						 there is no return object.
              * 
 	         * @public
+	         * @memberOf SemanticInterpreter.prototype
              */
             interpret: function(phrase, langCode, callback){
             	
-            	return process_asr_semantic(phrase, removeStopwordsFunc, langCode, callback);
-            	
-            },
-            /**
-	         * @public
-             * @deprecated use {@link #getASRSemantic} instead
-             */
-            getASRSemantic_alt: function(phrase, langCode){
-            	
-            	return process_asr_semantic(phrase, removeStopwordsAltFunc, langCode);
+            	return process_asr_semantic(phrase, langCode, callback);
             	
             },
             /**
@@ -702,8 +660,8 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
              * 
 	         * @public
              */
-			removeStopwords: function(thePhrase, lang){
-				return doRemoveStopWords(thePhrase, lang, removeStopwordsFunc);
+			removeStopwords: function(thePhrase, lang, stopwordFunc){
+				return doRemoveStopWords(thePhrase, lang, stopwordFunc);
 			},
 			/** NOTE: the grammar must be compiled first, see getNewInstance(true)  @public */
 			getGrammarDefinitionText: function(id){

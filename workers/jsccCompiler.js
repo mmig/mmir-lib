@@ -186,7 +186,7 @@ function parse(grammarDefinition, config, id){
     	var msg = 'Error while compiling grammar: ' + (err.stack?err.stack:err);
     	hasError = msg;
     	
-    	msg = '[INVALID GRAMMAR] ' + msg;
+    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
     	grammarParser = 'var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;';
     }
   

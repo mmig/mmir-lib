@@ -146,7 +146,7 @@ function parse(grammarDefinition, config, id){
 
     	self.postMessage({error: msg, id: id});
     	
-    	msg = '[INVALID GRAMMAR] ' + msg;
+    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
     	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
     }
 	
