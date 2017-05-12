@@ -129,7 +129,7 @@ define(['commonUtils', 'presentationManager', 'dialogManager'],
             compatibilitySelf.translateHTML = translateHTML;
 
             /**
-             * 
+             * FIXME does not work, since PresentationManager.reRenderView was removed!
              * 
              * This function changes the application language and, if
              * requested, renders the current view again, so that the change
