@@ -3,7 +3,7 @@
  * loads the default grammar asynchronously using a WebWorker
  * 
  * NOTE usage of the grammar is also async:
- *      calls on getASRSemantic(text, callback) are re-directed to the WebWorker
+ *      calls on interpret(text, callback) are re-directed to the WebWorker
  * 
  */
 define(['constants', 'commonUtils', 'semanticInterpreter', 'util/deferred'], function(constants, utils, semanticInterpreter, deferred){
@@ -117,7 +117,7 @@ return {
 		
 		//if grammar is already loaded & available:
 		if(_loadedGrammars[langCode] === true){
-			semanticInterpreter.getASRSemantic(phrase, langCode, listener);
+			semanticInterpreter.interpret(phrase, langCode, listener);
 			return true;//////////////////// EARLY EXIT ////////////////////////
 		}
 		
@@ -153,7 +153,7 @@ return {
 				var onComplete = function(){
 					
 					if(typeof phrase !== 'undefined'){
-						semanticInterpreter.getASRSemantic(phrase, langCode, listener);
+						semanticInterpreter.interpret(phrase, langCode, listener);
 					} else {//TODO use grammar's example_phrase for init instead?
 						listener({});
 					}
