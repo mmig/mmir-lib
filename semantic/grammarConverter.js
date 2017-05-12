@@ -1041,7 +1041,7 @@ GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is o
 	/**
 	 * HELPER for setting a recoded string value
 	 * 
-	 * @param {StringResult} recodedVal
+	 * @param {StringResult|String} recodedVal
 	 * 				the recoding-result:
 	 * 				<pre>{str: STRING, pos: ARRAY<POSITION>}</pre>
 	 * 
@@ -1076,12 +1076,19 @@ GrammarConverter.prototype.recodeJSON = (function (isArray) {//<- NOTE this is o
 	 */
 	var setRecodedVal = function(recodedVal, origVal, obj, pname, recodedPositions){
 		
+		var recVal;
+		if(typeof recodedVal === 'string'){
+			recVal = recodedVal;
+		} else if(typeof recodedVal !== 'undefined' && typeof recodedVal.str === 'string'){
+			recVal = recodedVal.str;
+		}
+		
 		//only set, if there was a recoding:
-		if(typeof recodedVal !== 'undefined' && typeof recodedVal.str === 'string'){
+		if(typeof recVal !== 'undefined' && typeof recVal === 'string'){
 			
-			if(origVal !== recodedVal.str){
+			if(origVal !== recVal){
 				//set recoded value
-				var str = recodedVal.str;
+				var str = recVal;
 				obj[pname] = str;
 			}
 			
