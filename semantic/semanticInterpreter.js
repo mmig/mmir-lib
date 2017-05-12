@@ -109,7 +109,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	     * id (i.e. the <em>key</em> for map <tt>grammarImplMap</tt>) for currently used
 	     * grammar.
 	     * 
-	     * If for invocations of getASRSemantic(..) etc. function the ID/languageCode
+	     * If for invocations of interpret(..) etc. function the ID/languageCode
 	     * argument is missing/omitted, then this id will be used.
 	     * 
 	     * NOTE: if not <tt>NULL</tt>, the grammar must be available, either
@@ -189,7 +189,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	    /**
 	     * Flag for enabling/disabling processing of SemanticInterpreter.
 	     * 
-	     * If disabled, getASRSemantic(), removeStopwords() etc. (+ <tt>_alt</tt> versions) will return <tt>null</tt> values. 
+	     * If disabled, interpret(), removeStopwords() will return <tt>null</tt> values. 
 	     * 
 	     * NOTE: if no grammar for any language is available, the SemanticInterpreter should be disabled.
 	     * 
@@ -242,7 +242,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 		 * 					<code>fileFormat: NUMBER, default: undefined</code>
 		 * 						(desc. see above)
 		 * 					<code>execMode: 'sync' | 'async', default: 'sync'</code>
-		 * 						if 'async' then the grammar is executed asynchronously, i.e. getASRSemantic()
+		 * 						if 'async' then the grammar is executed asynchronously, i.e. interpret()
 		 * 						must be invoked with a callback function in order to retrieve the result
 		 * 					<code>stopwords: Array<string>, default: null</code>
 		 * 						if given, the grammar (GrammarConverter) will be set with this stopword list, i.e. <code>grammar.setStopwords(stopwords)</code>
@@ -511,7 +511,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
         var process_asr_semantic = function(phrase, langCode, callback){
 
 			if(!doCheckIsEnabled()){
-				logger.warn('SemanticInterpreter.getASRSemantic: currently disabled!');
+				logger.warn('SemanticInterpreter.interpret: currently disabled!');
 				return null;
 			}
 			
@@ -649,9 +649,9 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
              * Removes stopwords using the stopword-list from the parser/grammar
              * for <code>lang</code>.
              * 
-             * NOTE: <code>{@link #getASRSemantic}</code> automatically applies stopword-removal
+             * NOTE: <code>{@link #interpret}</code> automatically applies stopword-removal
              * 		 (i.e. there is no need to manually remove stopwords using this function
-             * 		  when using <code>{@link #getASRSemantic}</code>).
+             * 		  when using <code>{@link #interpret}</code>).
              * 
              * @param {String} thePhrase
              * 					the Phrase for which stopwords should be removed
@@ -723,7 +723,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	        /**
 	         * Sets the current grammar.
 	         * 
-	         * If in invocations of {@link #getASRSemantic} the grammar ID (e.g. language code) is missing,
+	         * If in invocations of {@link #interpret} the grammar ID (e.g. language code) is missing,
 	         * then this grammar that is set here is used.
 	         * 
 	         * The id must reference either a grammar that was compiled (i.e. generated JavaScript file)
