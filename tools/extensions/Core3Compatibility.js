@@ -1,4 +1,4 @@
-define(
+define(['semanticInterpreterCompatibility', 'configurationManager', 'controllerManager', 'presentationManager', 'dialogManager', 'dialogEngine', 'inputManager', 'commonUtils', 'languageManager', 'mediaManager', 'presentationManager', 'semanticInterpreter', 'modelManager', 'constants', 'notificationManager', 'grammarConverter'], 
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0) for module names and method names.
      * 
@@ -94,6 +94,8 @@ define(
 	 * @name mmir.Core.setToCompatibilityModeExtension
 	 * @static
 	 * 
+	 * @requires SemanticInterpreterCompatibility
+	 * 
 	 * @example
 	 * require(['core3Compatibility'], function(setCompatibility){
 	 * 		setCompatibility(mmir);
@@ -101,7 +103,7 @@ define(
 	 * 
 	 * @public
 	 */
-	function(){
+	function(semanticInterpreterCompatibility, configurationManager, controllerManager, presentationManager, dialogManager, dialogEngine, inputManager, commonUtils, languageManager, mediaManager, presentationManager, semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter){
 
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0).
@@ -120,52 +122,50 @@ define(
      */
     return setToCompatibilityMode = function(mmir) {
     	
-    	mmir.ConfigurationManager = mmir.conf;
-    	mmir.ControllerManager = mmir.ctrl;
-    	mmir.PresentationManager = mmir.present;
-    	mmir.DialogManager = mmir.dialog;
-    	mmir.DialogEngine = mmir.dialogEngine;
-    	mmir.InputManager = mmir.input;
-    	mmir.InputEngine = mmir.inputEngine;
-    	mmir.CommonUtils = mmir.util;
-    	mmir.LanguageManager = mmir.lang;
-    	mmir.MediaManager = mmir.media;
-    	mmir.PresentationManager = mmir.present;
-    	mmir.SemanticInterpreter = mmir.semantic;
-    	mmir.ModelManager = mmir.model;
-    	mmir.Constants = mmir.const;
-    	mmir.NotificationManager = mmir.notify
+    	mmir.ConfigurationManager = configurationManager;
+    	mmir.ControllerManager = controllerManager;
+    	mmir.PresentationManager = presentationManager;
+    	mmir.DialogManager = dialogManager;
+    	mmir.DialogEngine = mmir.dialogEngine;//TODO?
+    	mmir.InputManager = inputManager;
+    	mmir.InputEngine = mmir.inputEngine;//TODO?
+    	mmir.CommonUtils = commonUtils;
+    	mmir.LanguageManager = languageManager;
+    	mmir.MediaManager = mediaManager;
+    	mmir.PresentationManager = presentationManager;
+    	mmir.SemanticInterpreter = semanticInterpreter;
+    	mmir.ModelManager = modelManager;
+    	mmir.Constants = constants;
+    	mmir.NotificationManager = notificationManager;
     	
     	
 //    	mmir.media.textToSpech = mmir.media.tts;
 //    	mmir.media.setTextToSpeechVolume = mmir.media.ttsVolume;
     	
-    	mmir.present.renderView = mmir.present.render;
-    	mmir.semantic.getASRSemantic = mmir.semantic.interpret;
-    	mmir.ctrl.getController = mmir.ctrl.get;
-    	mmir.ctrl.getControllerNames = mmir.ctrl.getNames;
-    	mmir.model.getModel = mmir.model.get;
-    	mmir.model.getModels = mmir.model.getNames;
+    	presentationManager.renderView = presentationManager.render;
+    	semanticInterpreter.getASRSemantic = semanticInterpreter.interpret;
+    	controllerManager.getController = controllerManager.get;
+    	controllerManager.getControllerNames = controllerManager.getNames;
+    	modelManager.getModel = modelManager.get;
+    	modelManager.getModels = modelManager.getNames;
     	
     	var getInstance = function(){return this;};
-    	mmir.conf.getInstance = getInstance;
-    	mmir.ctrl.getInstance = getInstance;
-    	mmir.dialog.getInstance = getInstance;
-    	mmir.input.getInstance = getInstance;
-    	mmir.lang.getInstance = function(lang){
+    	controllerManager.getInstance = getInstance;
+    	dialogManager.getInstance = getInstance;
+    	inputManager.getInstance = getInstance;
+    	languageManager.getInstance = function(lang){
     		if(lang) {
     			setLanguage(lang);
     		}
     		
     		return this;
     	};
-    	mmir.media.getInstance = function(){
+    	mediaManager.getInstance = function(){
             return this.init(null, null);
         };
-        mmir.model.getInstance = getInstance;
-        mmir.notify.getInstance = getInstance;
-        mmir.present.getInstance = getInstance;
-        mmir.semantic.getInstance = getInstance;
+        modelManager.getInstance = getInstance;
+        notificationManager.getInstance = getInstance;
+        presentationManager.getInstance = getInstance;
     };
     
 });
