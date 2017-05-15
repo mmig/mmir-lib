@@ -3,53 +3,53 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engineConfig', 'module'],
 	/**
 	 * The InputManager handles input events.
-	 * 
+	 *
 	 * <p>
 	 * On initialization, the InputManager also creates the {@link mmir.InputEngine},
 	 * and returns it as the second argument of the {@link #init}() function's callback
 	 * (or the Promise's triggered callbacks).
-	 * 
+	 *
 	 * In addition, the InputEngine is exported as module <code>"inputEngine"</code> via
 	 * RequireJS' <code>define()</code> function.
-	 * 
+	 *
 	 * @example
 	 * //initialization of inputManager
 	 * require('inputManager').init().then( function(inputManagerInstance, inputEngineInstance){
 	 * 		//do something
 	 * });
-	 * 
-	 * 
+	 *
+	 *
 	 * @name mmir.InputManager
 	 * @static
 	 * @class
-     *  
+     *
      *  @requires mmir.require
      *  @requires mmir._define
-	 * 
+	 *
 	 */
 	function(
 		mmir, extend, deferred, commonUtils, Logger, engineConfig, module
@@ -57,17 +57,17 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.InputManager.prototype */
-	
+
 	/**
 	 * @memberOf mmir.InputManager#
 	 */
 	var _instance = {
 
 		/** @scope mmir.InputManager.prototype */
-		
+
 		/**
-		 * This function raises an event. 
-		 * 
+		 * This function raises an event.
+		 *
 		 * @function
 		 * @param {String} eventName
 		 * 				The name of the event which is to be raised
@@ -88,38 +88,38 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 
 	};
 
-	return extend({}, _instance, {
+	return extend(_instance, {
 
 		/**
 		 * @function
 		 * @name init
 		 * @returns {Deferred}
-		 * 
+		 *
 		 * @memberOf mmir.InputManager.prototype
 		 */
 		init : function() {
 			delete this.init;
-			
+
 			//"read" settings from requirejs' config (see mainConfig.js):
 			var url = module.config().scxmlDoc;
 			var mode = module.config().mode;
-			
+
 			//create a SCION engine:
 			var engine = engineConfig(url, mode);
-			
+
 			this._log = Logger.create(module);
 			engine._log = Logger.create(module.id+'Engine', module.config().logLevel);
 
 //			var _self = this;
 
 			var theDeferredObj = deferred();
-				
+
 			engine.load().then(function(_engine) {
-				
+
 				_instance.raise = function raise(){
 					_engine.raise.apply(_engine, arguments);
 				};
-				
+
 //					mmir.InputEngine = _engine;
 				delete _engine.gen;
 
@@ -130,11 +130,11 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 				//immediately load the module-definition:
 				mmir.require(['inputEngine'], function(){
 					//signal end of initialization process:
-					theDeferredObj.resolve({manager: _instance, engine: _engine});	
+					theDeferredObj.resolve({manager: _instance, engine: _engine});
 				});
-				
+
 			});
-			
+
 			return theDeferredObj;
 		}
 	});
