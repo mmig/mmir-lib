@@ -25,7 +25,7 @@
  */
 
 
-define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/isArray', 'paramsParseFunc', 'logger', 'module', 'require'],
+define(['mmirf/constants','mmirf/stringExtension','mmirf/util/deferred','mmirf/util/loadFile','mmirf/util/isArray','mmirf/paramsParseFunc','mmirf/logger', 'module', 'require'],
 	/**
 	 * A Utility class to support various functions.<br>
 	 * 
@@ -348,7 +348,7 @@ define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/
 			 * 
 		     * @returns {Promise} a deferred promise (see loadImpl())
 		     * 
-		     * @requires mmir.SemanticInterpreter (must be loaded as dependency "semanticInterpreter" at least once before this function is loaded)
+		     * @requires mmir.SemanticInterpreter (must be loaded as dependency "mmirf/semanticInterpreter" at least once before this function is loaded)
 		     * 
 			 * @async
 			 * @public
@@ -371,7 +371,7 @@ define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/
 									}
 								}
 							}
-							return require('semanticInterpreter').hasGrammar(id);
+							return require('mmirf/semanticInterpreter').hasGrammar(id);
 						} else {
 							return false;
 						}
@@ -1106,7 +1106,7 @@ define(['constants', 'stringExtension', 'util/deferred', 'util/loadFile', 'util/
 		    	}
 
 		    	requireFunction = requireFunction || require;
-		    	requireFunction(['commonUtilsCompatibility'],function(setCompatibility){
+		    	requireFunction(['mmirf/commonUtilsCompatibility'],function(setCompatibility){
 		    		
 		    		setCompatibility(instance);
 		    		

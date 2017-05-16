@@ -18,7 +18,7 @@
  *  			platform: ["browser" | "android" | "ios" | "default"],
  *  		}</pre>
  */
-define(['paramsParseFunc'], function(paramsParseFunc) {
+define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 	
 	var params = paramsParseFunc( window.location.search );
 	

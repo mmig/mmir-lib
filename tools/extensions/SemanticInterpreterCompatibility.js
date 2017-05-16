@@ -1,4 +1,4 @@
-define(['encodeUtils'],
+define(['mmirf/encodeUtils'],
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0) for SemanticInterpreter (and GrammarConvert).
      *  
@@ -7,8 +7,8 @@ define(['encodeUtils'],
 	 * @static
 	 * 
 	 * @example
-	 * require(['core3Compatibility'], function(setCompatibility){
-	 * 		setCompatibility(mmir);
+	 * require(['mmirf/semanticInterpreterCompatibility', 'mmirf/semanticInterpreter', 'mmirf/grammarConverter'], function(setCompatibility, semanticInterpreter, GrammarConverter){
+	 * 		setCompatibility(semanticInterpreter, GrammarConverter);
 	 * });
 	 * 
 	 * @public

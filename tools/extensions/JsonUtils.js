@@ -1,4 +1,4 @@
-define(['stringExtension'], function(){
+define(['mmirf/stringExtension'], function(){
 
 return {
     /**
@@ -18,7 +18,7 @@ return {
 	 * @memberOf mmir.extensions.JsonUtils.prototype
 	 * 
      * @example
-     *  var JsonUtils = mmir.require('jsonUtils');
+     *  var JsonUtils = mmir.require('mmirf/jsonUtils');
      *  var jsonValue = JsonUtils.toJSONStringValue(someValue);
      *  var data = JSON.parse('"theValue":"' + jsonValue + '"');
      */
@@ -53,7 +53,7 @@ return {
 	 * @memberOf mmir.extensions.JsonUtils.prototype
 	 * 
      * @example 
-     *  var JsonUtils = mmir.require('jsonUtils');
+     *  var JsonUtils = mmir.require('mmirf/jsonUtils');
      *  var jsonValue = JsonUtils.convertJSONStringValueToHTML(someValue);
      *  var data = JSON.parse('"theValue":"' + jsonValue + '"');
      *  ...

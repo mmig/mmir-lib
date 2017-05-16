@@ -1,4 +1,8 @@
-define(['semanticInterpreterCompatibility', 'configurationManager', 'controllerManager', 'presentationManager', 'dialogManager', 'dialogEngine', 'inputManager', 'commonUtils', 'languageManager', 'mediaManager', 'presentationManager', 'semanticInterpreter', 'modelManager', 'constants', 'notificationManager', 'grammarConverter'], 
+define(['mmirf/semanticInterpreterCompatibility',
+    'mmirf/configurationManager','mmirf/controllerManager','mmirf/presentationManager','mmirf/dialogManager','mmirf/dialogEngine',
+    'mmirf/inputManager','mmirf/inputEngine','mmirf/commonUtils','mmirf/languageManager','mmirf/mediaManager','mmirf/presentationManager',
+    'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/constants','mmirf/notificationManager','mmirf/grammarConverter'
+], 
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0) for module names and method names.
      * 
@@ -23,9 +27,9 @@ define(['semanticInterpreterCompatibility', 'configurationManager', 'controllerM
      *  </li><li> {@link mmir.ModelManager} as
      *          <b><u>mmir.model</u></b>
      *  </li><li> {@link mmir.NotificationManager} as
-     *          <b><u>mmir.notif</u></b>
+     *          <b><u>mmir.notifier</u></b>
      *  </li><li> {@link mmir.PresentationManager} as
-     *          <b><u>mmir.present</u></b>
+     *          <b><u>mmir.presentation</u></b>
      *  </li><li> {@link mmir.SemanticInterpreter} as
      *          <b><u>mmir.semantic</u></b>
      *  </li>
@@ -97,13 +101,16 @@ define(['semanticInterpreterCompatibility', 'configurationManager', 'controllerM
 	 * @requires SemanticInterpreterCompatibility
 	 * 
 	 * @example
-	 * require(['core3Compatibility'], function(setCompatibility){
+	 * require(['mmirf/core3Compatibility', 'mmirf/core'], function(setCompatibility, mmir){
 	 * 		setCompatibility(mmir);
 	 * });
 	 * 
 	 * @public
 	 */
-	function(semanticInterpreterCompatibility, configurationManager, controllerManager, presentationManager, dialogManager, dialogEngine, inputManager, commonUtils, languageManager, mediaManager, presentationManager, semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter){
+	function(semanticInterpreterCompatibility,
+		configurationManager, controllerManager, presentationManager, dialogManager, dialogEngine,
+		inputManager, inputEngine, commonUtils, languageManager, mediaManager, presentationManager,
+		semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter){
 
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0).
@@ -126,21 +133,19 @@ define(['semanticInterpreterCompatibility', 'configurationManager', 'controllerM
     	mmir.ControllerManager = controllerManager;
     	mmir.PresentationManager = presentationManager;
     	mmir.DialogManager = dialogManager;
-    	mmir.DialogEngine = mmir.dialogEngine;//TODO?
+    	mmir.DialogEngine = dialogEngine;
     	mmir.InputManager = inputManager;
-    	mmir.InputEngine = mmir.inputEngine;//TODO?
+    	mmir.InputEngine = inputEngine;
     	mmir.CommonUtils = commonUtils;
     	mmir.LanguageManager = languageManager;
     	mmir.MediaManager = mediaManager;
-    	mmir.PresentationManager = presentationManager;
     	mmir.SemanticInterpreter = semanticInterpreter;
     	mmir.ModelManager = modelManager;
     	mmir.Constants = constants;
     	mmir.NotificationManager = notificationManager;
     	
-    	
-//    	mmir.media.textToSpech = mmir.media.tts;
-//    	mmir.media.setTextToSpeechVolume = mmir.media.ttsVolume;
+//    	mediaManager.textToSpech = mediaManager.tts;
+//    	mediaManager.setTextToSpeechVolume = mediaManager.ttsVolume;
     	
     	presentationManager.renderView = presentationManager.render;
     	semanticInterpreter.getASRSemantic = semanticInterpreter.interpret;
@@ -166,6 +171,9 @@ define(['semanticInterpreterCompatibility', 'configurationManager', 'controllerM
         modelManager.getInstance = getInstance;
         notificationManager.getInstance = getInstance;
         presentationManager.getInstance = getInstance;
+        
+        configurationManager = getLanguage = function(){ return languageManager.getLanguage(); };
+        configurationManager.setLanguage = function(lang){ languageManager.setLanguage(lang); };
     };
     
 });

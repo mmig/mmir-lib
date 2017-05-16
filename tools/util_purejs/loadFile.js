@@ -43,7 +43,7 @@
  * @requires util/extend
  * @requires window.location
  */
-define(['util/extend'], function(extend){
+define(['mmirf/util/extend'], function(extend){
 
 var jsonpID = 0,
     key,

@@ -22,7 +22,7 @@ define(function() {
      * 	</pre>
      * <p>
      * 
-     * The returnd "dictionary" has the following functions:
+     * The returned "dictionary" has the following functions:
      * <ul>
      * <li>has(String key): returns <code>true</code> if the
      * dictionary contains an entry for <code>key</code></li>

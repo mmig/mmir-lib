@@ -25,7 +25,7 @@
  */
 
 
-define(['md5'],
+define(['mmirf/md5'],
 	/**
 	 * A Utility class for creating / reading checksum (files).<br>
 	 * 

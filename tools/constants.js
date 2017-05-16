@@ -26,7 +26,7 @@
 
 
 //define(['module'], function(module){//TODO remove module-dependency? -> would need different mechanism for querying env-configuration...
-define(['env', 'module'], 
+define(['mmirf/env', 'module'], 
 /**
  * A Utility class that provides various <i>constants</i>.<br>
  * 
@@ -43,7 +43,7 @@ define(['env', 'module'],
  * 
  * @requires org.apache.cordova.device: cordova plugin add org.apache.cordova.device
  * 
- * @example var appBase = mmir.Constants.getBasePath();
+ * @example var appBase = mmir.const.getBasePath();
  */
 function(
 		env, module
