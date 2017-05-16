@@ -26,8 +26,8 @@
 
 
 
-define (['commonUtils', 'languageManager', 'controllerManager', 'presentationManager', 'parserModule', 'viewConstants',
-         'logger', 'module'
+define (['mmirf/commonUtils','mmirf/languageManager','mmirf/controllerManager','mmirf/presentationManager','mmirf/parserModule','mmirf/viewConstants',
+         'mmirf/logger', 'module'
    ], 
    
    /**
@@ -652,7 +652,7 @@ define (['commonUtils', 'languageManager', 'controllerManager', 'presentationMan
 	    		//NOTE previously, there was a dependency cycle: upon loading of templateRendererUtils.js, the presentationManager was not yet loaded.
 		    	//     This should not happen anymore, but just to be save, load the presentationManager, if it is not available yet
 		    	if(!presentationManager){
-		    		presentationManager = require('presentationManager');
+		    		presentationManager = require('mmirf/presentationManager');
 		    	}
 		    	
     			var partial = presentationManager.getPartial(ctrl, partialName);

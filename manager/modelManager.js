@@ -26,7 +26,7 @@
 
 
 
-define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', 'module' ],
+define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/deferred', 'module' ],
 	/**
 	 * 
 	 * A class for managing the models of the application (MVC-Component). <br>
@@ -421,10 +421,10 @@ define( [ 'dictionary', 'constants', 'commonUtils', 'logger', 'util/deferred', '
 			 * 					a deferred promise that gets fulfilled when models are loaded.
 			 * @example
 			 * 	function afterLoadingModels(modelManagerInstance){
-			 * 		var userModel = modelManagerInstance.getModel('User');
+			 * 		var userModel = modelManagerInstance.get('User');
 			 * 		//do something...
 			 * 	} 
-			 * 	mmir.ModelManager.create(afterLoadingModels);
+			 * 	mmir.model.create(afterLoadingModels);
 			 * @public
 			 */
 			init: _init

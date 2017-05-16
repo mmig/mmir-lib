@@ -1,11 +1,5 @@
 ﻿
-//TODO additional dependency on LanguageManager for 
-//		* getLanguage() -> languageManager.getLanguage()
-//		* setLanguage(lang) -> languageManager.setLanguage(lang)
-//
-// should the dependency on LanguageManager be made OPTIONAL?
-//
-define(['constants', 'util/loadFile', 'util/isArray'],
+define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 	/**
 	 * A class for managing the configuration. <br>
 	 * It's purpose is to load the configuration and settings automatically.
@@ -57,41 +51,41 @@ define(['constants', 'util/loadFile', 'util/isArray'],
     	 */
     	var configData = null;
     	
-    	/**
-         * Reference to the {@link mmir.LanguageManager} instance.
-         * 
-         * Will be initialized lazily
-         * 
-         * @type LanguageManager
-         * @private
-         * 
-         * @see #getLanguage
-         * @see #setLanguage
-         * 
-    	 * @memberOf LanguageManager#
-         */
-        var languageManager = null;
-        /**
-         * HELPER returns (and sets if necessary) {@link #languageManager}
-         * 
-         * @returns {mmir.LanguageManager} the LanguageManager instance
-         * @private
-         * 
-    	 * @memberOf LanguageManager#
-         */
-        var getLanguageManager = function(){
-        	if(!languageManager){
-            	var req;
-            	if(typeof mmir === 'undefined'){
-            		//fallback if global mmir is undefined, try to use global require-function
-            		req = require;
-            	} else {
-            		req = mmir.require;
-            	}
-        		languageManager = req('languageManager');
-        	}
-        	return languageManager;
-        };
+//    	/**
+//         * Reference to the {@link mmir.LanguageManager} instance.
+//         * 
+//         * Will be initialized lazily
+//         * 
+//         * @type LanguageManager
+//         * @private
+//         * 
+//         * @see #getLanguage
+//         * @see #setLanguage
+//         * 
+//    	 * @memberOf LanguageManager#
+//         */
+//        var languageManager = null;
+//        /**
+//         * HELPER returns (and sets if necessary) {@link #languageManager}
+//         * 
+//         * @returns {mmir.LanguageManager} the LanguageManager instance
+//         * @private
+//         * 
+//    	 * @memberOf LanguageManager#
+//         */
+//        var getLanguageManager = function(){
+//        	if(!languageManager){
+//            	var req;
+//            	if(typeof mmir === 'undefined'){
+//            		//fallback if global mmir is undefined, try to use global require-function
+//            		req = require;
+//            	} else {
+//            		req = mmir.require;
+//            	}
+//        		languageManager = req('mmirf/languageManager');
+//        	}
+//        	return languageManager;
+//        };
     	
     	/**
     	 * Helper that loads configuration file synchronously.
@@ -221,44 +215,44 @@ define(['constants', 'util/loadFile', 'util/isArray'],
         	
         	// public members
         	
-			/**
-			 * Returns the currently used language. 
-			 * 
-			 * <p>This does not return the language of the configuration, but is a
-			 * shortcut for {@link mmir.LanguageManager#getLanguage}.
-			 * 
-			 * 
-			 * @deprecated use {@link mmir.LanguageManager#getLanguage}() instead!
-			 * 
-			 * @requires mmir.LanguageManager
-			 * 
-			 * @function
-			 * @returns {String} The currently used language
-			 * @public
-			 * 
-			 * @memberOf ConfigurationManager.prototype
-			 */
-            getLanguage: function(){
-                return getLanguageManager().getLanguage();
-            },
-			/**
-			 * Sets the currently used language.
-			 * 
-			 * <p>This does not set the language of the configuration, but is a
-			 * shortcut for {@link mmir.LanguageManager#setLanguage}.
-			 * 
-			 * 
-			 * @deprecated use {@link mmir.LanguageManager#setLanguage}(lang) instead!
-			 * 
-			 * @requires mmir.LanguageManager
-			 * 
-			 * @function
-			 * @param {String} lang The language which is to be used
-			 * @public
-			 */
-            setLanguage: function(lang){
-            	getLanguageManager().setLanguage(lang);
-            },
+//			/**
+//			 * Returns the currently used language. 
+//			 * 
+//			 * <p>This does not return the language of the configuration, but is a
+//			 * shortcut for {@link mmir.LanguageManager#getLanguage}.
+//			 * 
+//			 * 
+//			 * @deprecated use {@link mmir.LanguageManager#getLanguage}() instead!
+//			 * 
+//			 * @requires mmir.LanguageManager
+//			 * 
+//			 * @function
+//			 * @returns {String} The currently used language
+//			 * @public
+//			 * 
+//			 * @memberOf ConfigurationManager.prototype
+//			 */
+//            getLanguage: function(){
+//                return getLanguageManager().getLanguage();
+//            },
+//			/**
+//			 * Sets the currently used language.
+//			 * 
+//			 * <p>This does not set the language of the configuration, but is a
+//			 * shortcut for {@link mmir.LanguageManager#setLanguage}.
+//			 * 
+//			 * 
+//			 * @deprecated use {@link mmir.LanguageManager#setLanguage}(lang) instead!
+//			 * 
+//			 * @requires mmir.LanguageManager
+//			 * 
+//			 * @function
+//			 * @param {String} lang The language which is to be used
+//			 * @public
+//			 */
+//            setLanguage: function(lang){
+//            	getLanguageManager().setLanguage(lang);
+//            },
 			/**
 			 * Returns the value of a property.
 			 *  

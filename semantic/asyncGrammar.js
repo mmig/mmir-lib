@@ -6,7 +6,7 @@
  *      calls on interpret(text, callback) are re-directed to the WebWorker
  * 
  */
-define(['constants', 'commonUtils', 'semanticInterpreter', 'util/deferred'], function(constants, utils, semanticInterpreter, deferred){
+define(['mmirf/constants', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred'], function(constants, utils, semanticInterpreter, deferred){
 
 //
 var _pendingCmds = {};

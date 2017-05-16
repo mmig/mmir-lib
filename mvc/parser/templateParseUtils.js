@@ -39,9 +39,9 @@
 
 //(function ( mmir ) {
 
-define([ 'parserModule', 'parsingResult', 'templateProcessor'
-        , 'templateLexer', 'ES3Lexer', 'ES3Parser', 'contentLexer', 'contentParser'
-        , 'scriptLexer', 'scriptParser', 'antlr3'
+define([ 'mmirf/parserModule','mmirf/parsingResult','mmirf/templateProcessor'
+        ,'mmirf/templateLexer','mmirf/ES3Lexer','mmirf/ES3Parser','mmirf/contentLexer','mmirf/contentParser'
+        ,'mmirf/scriptLexer','mmirf/scriptParser','mmirf/antlr3'
     ], 
     
     /**
@@ -636,12 +636,12 @@ define([ 'parserModule', 'parsingResult', 'templateProcessor'
 	 */
 	function internalParse(text) {
 
-	    var input = new org.antlr.runtime.ANTLRStringStream(text);//FIXME change, how dependency 'antlr3' is exported?
+	    var input = new org.antlr.runtime.ANTLRStringStream(text);//FIXME change, how dependency 'mmirf/antlr3' is exported?
 	  	var lexer = new MmirTemplateLexer(input);
 	  	
 	  	lexer.isDebug = isDebug;
 	  	
-	  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);//FIXME change, how dependency 'antlr3' is exported?
+	  	var tokens = new org.antlr.runtime.CommonTokenStream(lexer);//FIXME change, how dependency 'mmirf/antlr3' is exported?
 
 		var result 				= {};
 		result.rawTemplateText 	= tokens.toString();

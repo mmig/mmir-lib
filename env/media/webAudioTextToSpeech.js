@@ -64,22 +64,22 @@ newMediaPlugin = {
 			 * @type mmir.LanguageManager
 			 * @memberOf WebAudioTextToSpeech#
 			 */
-			var languageManager = require('languageManager');
+			var languageManager = require('mmirf/languageManager');
 			/** 
 			 * @type mmir.Constants
 			 * @memberOf WebAudioTextToSpeech#
 			 */
-			var constants = require('constants');
+			var constants = require('mmirf/constants');
 			/** 
 			 * @type mmir.ConfigurationManager
 			 * @memberOf WebAudioTextToSpeech#
 			 */
-			var configurationManager = require('configurationManager');
+			var configurationManager = require('mmirf/configurationManager');
 			/** 
 			 * @type mmir.CommonUtils
 			 * @memberOf WebAudioTextToSpeech#
 			 */
-			var commonUtils = require('commonUtils');
+			var commonUtils = require('mmirf/commonUtils');
 			
 
 			/**  

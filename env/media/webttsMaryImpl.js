@@ -43,19 +43,19 @@ newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 		 * @type mmir.ConfigurationManager
 		 * @memberOf MaryWebAudioTTSImpl#
 		 */
-		var _configurationManager = require('configurationManager');
+		var _configurationManager = require('mmirf/configurationManager');
 
 		/** 
 		 * @type mmir.LanguageManager
 		 * @memberOf MaryWebAudioTTSImpl#
 		 */
-		var _langManager = require('languageManager');
+		var _langManager = require('mmirf/languageManager');
 		
 		/** 
 		 * @type mmir.MediaManager
 		 * @memberOf MaryWebAudioTTSImpl#
 		 */
-		var _mediaManager = require('mediaManager');
+		var _mediaManager = require('mmirf/mediaManager');
 		
 		/**
 		 * separator char for language- / country-code (specific to TTS service)

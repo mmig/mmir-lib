@@ -1,5 +1,5 @@
 
-define(['jscc', 'constants', 'configurationManager', 'grammarConverter', 'util/deferred', 'util/extend', 'util/toArray', 'util/loadFile', 'logger', 'module'],
+define(['mmirf/jscc','mmirf/constants','mmirf/configurationManager','mmirf/grammarConverter','mmirf/util/deferred','mmirf/util/extend','mmirf/util/toArray','mmirf/util/loadFile','mmirf/logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -219,7 +219,7 @@ var jsccGen = {
         var compileParserModule = function(grammarParserStr, hasError){
         	
 	        var addGrammarParserExec = 
-	    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
+	    	  '(function(){\n  var semanticInterpreter = require("mmirf/semanticInterpreter");\n'//FIXME
 	        	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
 	        	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
 	    			//TODO active/use safe_acc (instead of try-catch construct in semantic-result extraction

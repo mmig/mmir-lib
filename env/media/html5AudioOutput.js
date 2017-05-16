@@ -37,7 +37,7 @@ newMediaPlugin = {
 			 * @type Function
 			 * @memberOf Html5AudioOutput#
 			 */
-			var extend = require('util/extend');
+			var extend = require('mmirf/util/extend');
 			
 			/**
 			 * Media error (codes):

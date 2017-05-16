@@ -25,7 +25,7 @@
  */
 
 
-define(['parsingResult', 'storageUtils'],
+define(['mmirf/parsingResult', 'mmirf/storageUtils'],
 	//this comment is needed by jsdoc2 [copy of comment for: function YieldDeclaration(...]
 	/**
 	 * The YieldDeclaration class holds the name of the yield-declaration (which is a place-holder for the contentFor-fields and is used in the layouts: content, header, footer, dialogs, ...)
@@ -162,7 +162,7 @@ define(['parsingResult', 'storageUtils'],
 	   	//function for iterating over the property-list and generating JSON-like entries in the string-buffer
 	   	var appendStringified = parser.appendStringified;
 	   	
-	   	var sb = ['require("storageUtils").restoreObject({ classConstructor: "yield"', ','];
+	   	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/yield"', ','];
 	   	
 	   	appendStringified(this, propList, sb);
 	   	

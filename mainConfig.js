@@ -6,12 +6,14 @@ var mmirf_config = {
 
 	/** @memberOf mmir.require.config */
 	baseUrl: './'
+		
+		,debugMode: true
 
 	//configurations for the modules:
 	, config: {
 
 		/** @memberOf mmir.require.config.moduleConfig */
-	    'inputManager': {
+	    'mmirf/inputManager': {
 	        scxmlDoc: 'config/statedef/inputDescriptionSCXML.xml'
 	        // simple | mode
 	        , mode: 'extended'
@@ -19,7 +21,7 @@ var mmirf_config = {
 //		    , logLevel: 'info'
 	    }
 		/** @memberOf mmir.require.config.moduleConfig */
-	    , 'dialogManager': {
+	    , 'mmirf/dialogManager': {
 	        scxmlDoc: 'config/statedef/dialogDescriptionSCXML.xml'
 	        // simple | mode
 	        , mode: 'extended'
@@ -30,7 +32,7 @@ var mmirf_config = {
         //EXAMPLE: set module-specific log-level to 'warn'
 	    //         log-levels: 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled'
 	    //         or number:     0           1        2        3         4           5           6
-//	    , 'view': { logLevel: 'warn' }
+//	    , 'mmirf/view': { logLevel: 'warn' }
 
 	}
 
@@ -38,42 +40,42 @@ var mmirf_config = {
 	, paths : {
 		/** @memberOf mmir.require.config.paths */
 	    // core
-		  'core': 'mmirf/core'
- 	    , 'main': 'mmirf/main'
+		  'mmirf/core': 'mmirf/core'
+ 	    , 'mmirf/main': 'mmirf/main'
 
 	    // lib
- 	    , 'scion': 'mmirf/vendor/libs/scion-amd-mod.min'
+ 	    , 'mmirf/scion': 'mmirf/vendor/libs/scion-amd-mod.min'
 
 	    // globals and AMDs
- 	    , 'constants': 'mmirf/tools/constants'
- 	    , 'commonUtils': 'mmirf/tools/commonUtils'
-	    , 'stringExtension': 'mmirf/tools/extensions/StringExtensions'
-	    , 'dictionary': 'mmirf/tools/dictionary'
-	    , 'paramsParseFunc': 'mmirf/tools/paramsParseFunc'
-		, 'env': 'mmirf/tools/envDetect'
+ 	    , 'mmirf/constants': 'mmirf/tools/constants'
+ 	    , 'mmirf/commonUtils': 'mmirf/tools/commonUtils'
+	    , 'mmirf/stringExtension': 'mmirf/tools/extensions/StringExtensions'
+	    , 'mmirf/dictionary': 'mmirf/tools/dictionary'
+	    , 'mmirf/paramsParseFunc': 'mmirf/tools/paramsParseFunc'
+		, 'mmirf/env': 'mmirf/tools/envDetect'
 
 	    // dialog/input manager
-	    , 'inputManager': 'mmirf/manager/dialog/inputManager'
-	    , 'dialogManager': 'mmirf/manager/dialog/dialogManager'
-	    , 'engineConfig': 'mmirf/manager/dialog/engineConfig'
+	    , 'mmirf/inputManager': 'mmirf/manager/dialog/inputManager'
+	    , 'mmirf/dialogManager': 'mmirf/manager/dialog/dialogManager'
+	    , 'mmirf/engineConfig': 'mmirf/manager/dialog/engineConfig'
 
-	    , 'scionEngine': 'mmirf/manager/dialog/scion/scionEngine'
-	    , 'scionUtil': 'mmirf/manager/dialog/scion/scionUtil'
+	    , 'mmirf/scionEngine': 'mmirf/manager/dialog/scion/scionEngine'
+	    , 'mmirf/scionUtil': 'mmirf/manager/dialog/scion/scionUtil'
 
 	    // controllers/models
-	    , 'controllerManager': 'mmirf/manager/controllerManager'
-	    , 'controller': 'mmirf/mvc/controllers/controller'
-	    , 'helper': 'mmirf/mvc/controllers/helper'
-	    , 'modelManager': 'mmirf/manager/modelManager'
+	    , 'mmirf/controllerManager': 'mmirf/manager/controllerManager'
+	    , 'mmirf/controller': 'mmirf/mvc/controllers/controller'
+	    , 'mmirf/helper': 'mmirf/mvc/controllers/helper'
+	    , 'mmirf/modelManager': 'mmirf/manager/modelManager'
 
 	    // #####################################################################
 	    // ####################### PRESENTATION LAYER ##########################
 	    // #####################################################################
 
-	    , 'presentationManager': 'mmirf/manager/presentationManager'
+	    , 'mmirf/presentationManager': 'mmirf/manager/presentationManager'
 
 	    //default view-engine (this ID is used in core.viewEngine)
-	    , 'jqmViewEngine': 'mmirf/env/view/jqmViewEngine'
+	    , 'mmirf/jqmViewEngine': 'mmirf/env/view/jqmViewEngine'
 
 	    //TODO extract/make optional:
 	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
@@ -81,87 +83,88 @@ var mmirf_config = {
 		, 'jqm': 'mmirf/vendor/libs/jquery.mobile-1.4.5'
 		, 'jqmSimpleModal': 'mmirf/vendor/libs/jquery.simplemodal-1.4.4'
 
-		, 'waitDialog': 'mmirf/tools/stdlne-wait-dlg'
+		, 'mmirf/waitDialog': 'mmirf/tools/stdlne-wait-dlg'
 
 	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
-	    , 'antlr3': 'mmirf/vendor/libs/antlr3-all'
+	    , 'mmirf/antlr3': 'mmirf/vendor/libs/antlr3-all'
 
-	    , 'configurationManager': 'mmirf/manager/settings/configurationManager'
+	    , 'mmirf/configurationManager': 'mmirf/manager/settings/configurationManager'
 
 	    // @chsc03 required by contentElement, renderUtils, declared in presentationManager [@russa not really...]
-	    , 'languageManager': 'mmirf/manager/settings/languageManager'
+	    , 'mmirf/languageManager': 'mmirf/manager/settings/languageManager'
 
-	    , 'mediaManager': 'mmirf/manager/mediaManager'
-		, 'notificationManager': 'mmirf/manager/notificationManager'
+	    , 'mmirf/mediaManager': 'mmirf/manager/mediaManager'
+		, 'mmirf/notificationManager': 'mmirf/manager/notificationManager'
 
 
-		, 'viewConstants': 'mmirf/mvc/views/viewConstants'
+		, 'mmirf/viewConstants': 'mmirf/mvc/views/viewConstants'
 	    // @chsc03 depends on parseUtils, renderUtils, yield, required in presentationManager
-	    , 'layout': 'mmirf/mvc/views/layout'
+	    , 'mmirf/layout': 'mmirf/mvc/views/layout'
 	    // @chsc03 depends on parseUtils, renderUtils, contentElement, required in presentationManager
-	    , 'view': 'mmirf/mvc/views/view'
+	    , 'mmirf/view': 'mmirf/mvc/views/view'
 	    // @chsc03 depends on parseUtils, renderUtils, contentElement, required in presentationManager
-	    , 'partial': 'mmirf/mvc/views/partial'
-	    , 'contentElement': 'mmirf/mvc/views/contentElement'
-	    , 'yield': 'mmirf/mvc/views/yield'
+	    , 'mmirf/partial': 'mmirf/mvc/views/partial'
+	    , 'mmirf/contentElement': 'mmirf/mvc/views/contentElement'
+	    , 'mmirf/yield': 'mmirf/mvc/views/yield'
 	    	
 	    // view loader: loads compiled views or raw views & compiles them:
-	    , 'viewLoader': 'mmirf/env/view/viewLoader'
+	    , 'mmirf/viewLoader': 'mmirf/env/view/viewLoader'
 
     	// @chsc03 renderUtils required by viewInitializer and depends on parserModule
-	    , 'renderUtils': 'mmirf/mvc/parser/templateRenderUtils'
-	    , 'parserModule': 'mmirf/mvc/parser/parserModule'
+	    , 'mmirf/renderUtils': 'mmirf/mvc/parser/templateRenderUtils'
+	    , 'mmirf/parserModule': 'mmirf/mvc/parser/parserModule'
 
-		, 'storageUtils': 'mmirf/mvc/parser/storageUtils'
+		, 'mmirf/storageUtils': 'mmirf/mvc/parser/storageUtils'
 
 	    // @chsc03 parseUtils depends on the following paths
-	    , 'parseUtils': 'mmirf/mvc/parser/templateParseUtils'
-	    , 'ES3Lexer': 'mmirf/gen/parser/ES3Lexer'
-	    , 'ES3Parser': 'mmirf/gen/parser/ES3Parser'
-	    , 'scriptLexer': 'mmirf/gen/parser/MmirScriptLexer'
-	    , 'scriptParser': 'mmirf/gen/parser/MmirScriptParser'
-	    , 'contentLexer': 'mmirf/gen/parser/MmirScriptContentLexer'
-	    , 'contentParser': 'mmirf/gen/parser/MmirScriptContentParser'
-	    , 'templateLexer': 'mmirf/gen/parser/MmirTemplateLexer'
-	    , 'templateParser': 'mmirf/gen/parser/MmirTemplateParser'
+	    , 'mmirf/parseUtils': 'mmirf/mvc/parser/templateParseUtils'
+	    , 'mmirf/ES3Lexer': 'mmirf/gen/parser/ES3Lexer'
+	    , 'mmirf/ES3Parser': 'mmirf/gen/parser/ES3Parser'
+	    , 'mmirf/scriptLexer': 'mmirf/gen/parser/MmirScriptLexer'
+	    , 'mmirf/scriptParser': 'mmirf/gen/parser/MmirScriptParser'
+	    , 'mmirf/contentLexer': 'mmirf/gen/parser/MmirScriptContentLexer'
+	    , 'mmirf/contentParser': 'mmirf/gen/parser/MmirScriptContentParser'
+	    , 'mmirf/templateLexer': 'mmirf/gen/parser/MmirTemplateLexer'
+	    , 'mmirf/templateParser': 'mmirf/gen/parser/MmirTemplateParser'
 
 	    // @chsc03 templateProcessor depends on parsingResult
-	    , 'templateProcessor': 'mmirf/mvc/parser/templateProcessor'
-	    , 'parsingResult': 'mmirf/mvc/parser/parsingResult'
+	    , 'mmirf/templateProcessor': 'mmirf/mvc/parser/templateProcessor'
+	    , 'mmirf/parsingResult': 'mmirf/mvc/parser/parsingResult'
 
 	    // #####################################################################
 	    // ########                SEMANTIC PROCESSING              ############
 	    // ######## (grammar generation/compilation, execution etc) ############
 	    // #####################################################################
-		, 'grammarConverter': 'mmirf/semantic/grammarConverter'
-		, 'semanticInterpreter': 'mmirf/semantic/semanticInterpreter'
-		, 'asyncGrammar': 'mmirf/semantic/asyncGrammar'
-		, 'stemmer': 'mmirf/semantic/stemmer'
-		, 'jscc': 'mmirf/vendor/libs/jscc-amd'
-		, 'jison': 'mmirf/vendor/libs/jison'
-		, 'pegjs': 'mmirf/vendor/libs/peg-0.9.0'
-		, 'asyncGen': 'mmirf/env/grammar/asyncGenerator'
-		, 'jsccGen': 'mmirf/env/grammar/jsccGenerator'
-		, 'jsccAsyncGen': 'mmirf/env/grammar/jsccAsyncGenerator'
-		, 'jisonGen': 'mmirf/env/grammar/jisonGenerator'
-		, 'jisonAsyncGen': 'mmirf/env/grammar/jisonAsyncGenerator'
-		, 'pegjsGen': 'mmirf/env/grammar/pegjsGenerator'
-		, 'pegjsAsyncGen': 'mmirf/env/grammar/pegjsAsyncGenerator'
+		, 'mmirf/grammarConverter': 'mmirf/semantic/grammarConverter'
+		, 'mmirf/semanticInterpreter': 'mmirf/semantic/semanticInterpreter'
+		, 'mmirf/asyncGrammar': 'mmirf/semantic/asyncGrammar'
+		, 'mmirf/stemmer': 'mmirf/semantic/stemmer'
+		, 'mmirf/jscc': 'mmirf/vendor/libs/jscc-amd'
+		, 'mmirf/jison': 'mmirf/vendor/libs/jison'
+		, 'mmirf/pegjs': 'mmirf/vendor/libs/peg-0.9.0'
+		, 'mmirf/asyncGen': 'mmirf/env/grammar/asyncGenerator'
+		, 'mmirf/jsccGen': 'mmirf/env/grammar/jsccGenerator'
+		, 'mmirf/jsccAsyncGen': 'mmirf/env/grammar/jsccAsyncGenerator'
+		, 'mmirf/jisonGen': 'mmirf/env/grammar/jisonGenerator'
+		, 'mmirf/jisonAsyncGen': 'mmirf/env/grammar/jisonAsyncGenerator'
+		, 'mmirf/pegjsGen': 'mmirf/env/grammar/pegjsGenerator'
+		, 'mmirf/pegjsAsyncGen': 'mmirf/env/grammar/pegjsAsyncGenerator'
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)
-		, 'md5': 'mmirf/vendor/libs/md5'
-		, 'checksumUtils': 'mmirf/tools/checksumUtils'
+		, 'mmirf/md5': 'mmirf/vendor/libs/md5'
+		, 'mmirf/checksumUtils': 'mmirf/tools/checksumUtils'
 
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
-		, 'loadCss': 'mmirf/tools/loadCss'
+		, 'mmirf/loadCss': 'mmirf/tools/loadCss'
 
-		, 'encodeUtils': 'mmirf/tools/extensions/EncodeUtils' 
-		, 'jsonUtils': 'mmirf/tools/extensions/JsonUtils'
-	    , 'commonUtilsCompatibility': 'mmirf/tools/extensions/CommonUtilsCompatibility'
-	    , 'languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerCompatibility'
-	    , 'core3Compatibility' : 'mmirf/tools/extensions/Core3Compatibility'
-	    , 'semanticInterpreterCompatibility' : 'mmirf/tools/extensions/SemanticInterpreterCompatibility'
+		, 'mmirf/encodeUtils': 'mmirf/tools/extensions/EncodeUtils' 
+		, 'mmirf/jsonUtils': 'mmirf/tools/extensions/JsonUtils'
+		, 'mmirf/resizeToFit': 'mmirf/tools/extensions/ResizeFitToSourroundingBox'
+	    , 'mmirf/commonUtilsCompatibility': 'mmirf/tools/extensions/CommonUtilsCompatibility'
+	    , 'mmirf/languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerCompatibility'
+	    , 'mmirf/core3Compatibility' : 'mmirf/tools/extensions/Core3Compatibility'
+	    , 'mmirf/semanticInterpreterCompatibility' : 'mmirf/tools/extensions/SemanticInterpreterCompatibility'
 
 
 	    //optional or "dynamically" loaded modules
@@ -171,31 +174,31 @@ var mmirf_config = {
 	    // ##### (depending on configuration in core.js or global vars) ########
 	    // #####################################################################
 
-	    // (console) logging related modules (either 'loggerEnabled' or 'loggerDisabled' will be mapped to 'logger', depending on configuration
-    	, 'loggerEnabled': 'mmirf/tools/logger'
-    	, 'loggerDisabled': 'mmirf/tools/loggerDisabled'
-	    , 'stacktrace': 'mmirf/vendor/libs/stacktrace-v0.6.4'
+	    // (console) logging related modules (either 'mmirf/loggerEnabled' or 'mmirf/loggerDisabled' will be mapped to 'mmirf/logger', depending on configuration
+    	, 'mmirf/loggerEnabled': 'mmirf/tools/logger'
+    	, 'mmirf/loggerDisabled': 'mmirf/tools/loggerDisabled'
+	    , 'mmirf/stacktrace': 'mmirf/vendor/libs/stacktrace-v0.6.4'
 
 	},//END: paths : {...
 
 	shim : {
 
 		/** @memberOf mmir.require.config.shim */
-	    'antlr3':			{deps: ['parsingResult'], exports : 'org'}
+	    'mmirf/antlr3':			{deps: ['mmirf/parsingResult'], exports : 'org'}
 
 		/** @memberOf mmir.require.config.shim */
-		, 'md5':            {exports : 'CryptoJS'}
+		, 'mmirf/md5':            {exports : 'CryptoJS'}
 
-		, 'pegjs':       	{exports: 'PEG'}
+		, 'mmirf/pegjs':       	{exports: 'PEG'}
 
-		, 'ES3Lexer':       {deps: ['antlr3'], init: function(org){ return ES3Lexer;} }
-		, 'ES3Parser':      {deps: ['antlr3'], init: function(org){ return ES3Parser;} }
-    	, 'scriptLexer':    {deps: ['antlr3'], init: function(org){ return MmirScriptLexer;} }
-    	, 'scriptParser':   {deps: ['antlr3'], init: function(org){ return MmirScriptParser;} }
-    	, 'contentLexer':   {deps: ['antlr3'], init: function(org){ return MmirScriptContentLexer;} }
-    	, 'contentParser':  {deps: ['antlr3'], init: function(org){ return MmirScriptContentParser;} }
-    	, 'templateLexer':  {deps: ['antlr3'], init: function(org){ return MmirTemplateLexer;} }
-    	, 'templateParser': {deps: ['antlr3'], init: function(org){ return MmirTemplateParser;} }
+		, 'mmirf/ES3Lexer':       {deps: ['mmirf/antlr3'], init: function(org){ return ES3Lexer;} }
+		, 'mmirf/ES3Parser':      {deps: ['mmirf/antlr3'], init: function(org){ return ES3Parser;} }
+    	, 'mmirf/scriptLexer':    {deps: ['mmirf/antlr3'], init: function(org){ return MmirScriptLexer;} }
+    	, 'mmirf/scriptParser':   {deps: ['mmirf/antlr3'], init: function(org){ return MmirScriptParser;} }
+    	, 'mmirf/contentLexer':   {deps: ['mmirf/antlr3'], init: function(org){ return MmirScriptContentLexer;} }
+    	, 'mmirf/contentParser':  {deps: ['mmirf/antlr3'], init: function(org){ return MmirScriptContentParser;} }
+    	, 'mmirf/templateLexer':  {deps: ['mmirf/antlr3'], init: function(org){ return MmirTemplateLexer;} }
+    	, 'mmirf/templateParser': {deps: ['mmirf/antlr3'], init: function(org){ return MmirTemplateParser;} }
 
     	//dependencies for jqmViewEngine (may not be loaded if jqmViewEngine is not loaded)
     	, 'jqm': ['jquery']
@@ -204,13 +207,9 @@ var mmirf_config = {
 
 	
 	, packages: [{
-		'name': 'util',
+		'name': 'mmirf/util',
 		'location': 'mmirf/tools/util_purejs'
      }]
-	
-//	, bundles: {
-//		'util_modules': ['util/loadFile', 'util/deferred', 'util/isArray', 'util/extend', 'util/forEach', 'util/toArray', 'util/deferredWithState']
-//	}
 
 };//END: require.config({...
 
@@ -239,28 +238,28 @@ var reqInstance = requirejs.config(mmirf_config);
 var defInstance = define;
 
 //start mmir initialization by (re-)loading the core-module, pre-configuring mmir, and then load the framework's start-module:
-reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core){
+reqInstance(['mmirf/core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core){
 
 	//attach the local-require instance:
 	core.require = reqInstance;
 	core._define = defInstance;
 
-	//get the "entry-point", i.e. module-name/-id that will be loaded (default: "main")
+	//get the "entry-point", i.e. module-name/-id that will be loaded (default: "mmirf/main")
 	var startModule = core.startModule;
 
 	//setup the logger implementation:
-	// map 'logger' to one of  ['loggerEnabled' | 'loggerDisabled']
+	// map 'mmirf/logger' to one of  ['mmirf/loggerEnabled' | 'mmirf/loggerDisabled']
 	var isEnableLogger = core.debug !== false;//NOTE: only explicitly setting debug to boolean false will disable logging
-	var implName = isEnableLogger? 'loggerEnabled': 'mmirf/loggerDisabled';
+	var implName = isEnableLogger? 'mmirf/loggerEnabled': 'mmirf/loggerDisabled';
 	var implPath = mmirf_config.paths[implName];
-	var logConfig = {paths:{'logger': implPath}};
+	var logConfig = {paths:{'mmirf/logger': implPath}};
 
 	//if the "functional" logger is set, configure it
 	// (NOTE: for "disabled" logger, the implementation is provided with no-op functions etc.)
 	if(isEnableLogger) {
 
-		logConfig.config = {'logger': {}};
-		var logSettings = logConfig.config['logger'];
+		logConfig.config = {'mmirf/logger': {}};
+		var logSettings = logConfig.config['mmirf/logger'];
 
 		//retrieve/set the default log-level:
 		if(typeof core.logLevel !== 'undefined'){
@@ -280,7 +279,7 @@ reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core)
 		else {
 			//define dummy module for stacktrace library
 			// (will not be used anyway, but this avoids loading the actual stacktrace impl. from file)
-			define('stacktrace', function(){ return function(){}; });
+			define('mmirf/stacktrace', function(){ return function(){}; });
 			logSettings.trace = false;
 		}
 
@@ -303,7 +302,7 @@ reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core)
 			paths: {'jquery': void(0)},
 			//configure tools to use jQuery implementation:
 			packages: [{
-				'name': 'util',
+				'name': 'mmirf/util',
 				'location': 'mmirf/tools/util_jquery'
 			}]
 		});
@@ -321,7 +320,7 @@ reqInstance(['core'], /** @memberOf mmir.mainConfig */ function mmirLoader(core)
 
 
 	//finally: trigger framework loading
-	core.require(['logger',startModule]);
+	core.require(['mmirf/logger',startModule]);
 });
 
 }(requirejs, define));//END: (function(){...

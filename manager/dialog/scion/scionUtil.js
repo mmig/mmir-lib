@@ -4,7 +4,7 @@
  * 
  * @class mmir.env.statemachine.engine.extended
  */	
-define(['dictionary', 'stringExtension'], function(Dictionary) {
+define(['mmirf/dictionary', 'mmirf/stringExtension'], function(Dictionary) {
 
 	/**
 	 * @param {Engine} _scion

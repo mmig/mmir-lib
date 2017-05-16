@@ -25,7 +25,7 @@
  */
 
 
-define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter', 'util/deferred', 'util/loadFile', 'logger', 'module'],
+define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred', 'mmirf/util/loadFile', 'mmirf/logger', 'module'],
 		
 	/**
 	 * A class for managing the language of the application. <br>
@@ -805,7 +805,7 @@ define(['constants', 'configurationManager', 'commonUtils', 'semanticInterpreter
 				    		defer.then(success, success);
 				    	}
 				    	requireFunction = requireFunction || require;
-				    	requireFunction(['languageManagerCompatibility'],function(setCompatibility){
+				    	requireFunction(['mmirf/languageManagerCompatibility'],function(setCompatibility){
 				    		
 				    		setCompatibility(instance);
 				    		

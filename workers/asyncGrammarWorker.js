@@ -72,7 +72,7 @@ var semanticInterpreterImpl = {
 };
 
 require = function(name){
-	if (name === 'semanticInterpreter') return semanticInterpreterImpl;
+	if (name === 'mmirf/semanticInterpreter') return semanticInterpreterImpl;
 	else console.error('unknown module: "'+name+'"');
 };
 

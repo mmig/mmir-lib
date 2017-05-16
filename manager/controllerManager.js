@@ -28,7 +28,7 @@
 
 
 
-define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' ],
+define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/util/deferred' ],
 
 	/**
 	 * A class for managing the controllers of the application. <br>
@@ -502,7 +502,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 * 				a deferred promise that will get fulfilled when controllers are loaded
 			 * @example
 			 *  //recommended style:
-			 *  require(['controllerManager', ...], function(controllerManager, ...) {
+			 *  require(['mmirf/controllerManager', ...], function(controllerManager, ...) {
 			 *  	controllerManager.init().then(function(theInitializedControllerInstance){
 			 *  		...
 			 *  	});
@@ -513,7 +513,7 @@ define(['dictionary', 'controller', 'constants', 'commonUtils', 'util/deferred' 
 			 * 		var appCtrl = controllerManagerInstance.get('Application');
 			 * 		//do something...
 			 * 	} 
-			 * 	mmir.ControllerManager.init(afterLoadingControllers);
+			 * 	mmir.ctrl.init(afterLoadingControllers);
 			 * @public
 			 */
 			init: _init

@@ -7,7 +7,7 @@
  * If called multiple times, the existing module instance is returned.
  * 
  * If a function <code>require</code> exists, the module tries to registers itself
- * according to the <em>RequireJS</em> interface (using the default as its module name, i.e. "core").
+ * according to the <em>RequireJS</em> interface (using the default as its module name, i.e. "mmirf/core").
  * 
  * @name mmir
  * @export initMmir as mmir
@@ -383,10 +383,10 @@ function initMmir() {
 			 * mmir.config({config: { 'moduleName': {logLevel: 'warn'}}});
 			 * 
 			 * //modify default log-levels for dialogManager and inputManager:
-			 * mmir.config({config: { 'dialogManager': {logLevel: 'warn'}, 'inputManager': {logLevel: 'warn'}}});
+			 * mmir.config({config: { 'mmirf/dialogManager': {logLevel: 'warn'}, 'mmirf/inputManager': {logLevel: 'warn'}}});
 			 * 
 			 * //... or using alternative SCXML definition for dialog-engine:
-			 * mmir.config({config: { 'dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
+			 * mmir.config({config: { 'mmirf/dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
 			 * 
 			 * //overwrite module location (BEWARE: you should know what you are doing, if you use this)
 			 * mmir.config({paths: {'jquery': 'content/libs/zepto'}};
@@ -465,10 +465,10 @@ function initMmir() {
 			 * @memberOf mmir
 			 * @name startModule
 			 * @type String
-			 * @default {String} "main" will load the module specified in /main.js
+			 * @default {String} "mmirf/main" will load the module specified in /main.js
 			 * @public
 			 */
-			startModule: 'main',
+			startModule: 'mmirf/main',
 			
 			/**
 			 * The jQuery instance that will be used by the MMIR library.
@@ -498,10 +498,10 @@ function initMmir() {
 			 * @memberOf mmir
 			 * @name viewEngine
 			 * @type String
-			 * @default "jqmViewEngine" will load the default view-engine that uses jQuery Mobile
+			 * @default "mmirf/jqmViewEngine" will load the default view-engine that uses jQuery Mobile
 			 * @public
 			 */
-			viewEngine: 'jqmViewEngine',
+			viewEngine: 'mmirf/jqmViewEngine',
 			
 			
 			/**

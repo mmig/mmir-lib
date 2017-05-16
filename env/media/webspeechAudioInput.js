@@ -35,17 +35,17 @@ newMediaPlugin = {
 			 * @type mmir.LanguageManager
 			 * @memberOf WebspeechAudioInput#
 			 */
-			var languageManager = require('languageManager');
+			var languageManager = require('mmirf/languageManager');
 			/**
 			 * @type mmir.ConfigurationManager
 			 * @memberOf WebspeechAudioInput#
 			 */
-			var config = require('configurationManager');
+			var config = require('mmirf/configurationManager');
 			/**
 			 * @type mmir.Logger
 			 * @memberOf WebspeechAudioInput#
 			 */
-			var logger = require('logger').create(_pluginName);
+			var logger = require('mmirf/logger').create(_pluginName);
 
 			/** @type SpeechRecognition
 			 * @memberOf WebspeechAudioInput# */

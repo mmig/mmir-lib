@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['constants', 'grammarConverter', 'logger', 'module', 'require'
+define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', 'require'
         ], 
 	/**
 	 * @name SemanticInterpreter
@@ -154,6 +154,13 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	     * @private
 	     * @memberOf SemanticInterpreter#
 	     */
+	    var GRAMMAR_MODULE_ID_PREFIX = 'mmirf/';
+	    /**
+	     * @type String
+	     * @constant
+	     * @private
+	     * @memberOf SemanticInterpreter#
+	     */
 	    var GRAMMAR_MODULE_ID_POSTFIX = 'Gen';
 	    /**
 	     * @type String
@@ -231,8 +238,9 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
 	     * 					IF {GrammarConverter}: the impl. with valid member {Function} {@link GrammarConverter.executeGrammar()}
 	     * 					IF {Function}: the {Function} {@link GrammarConverter.executeGrammar()} - 
 	     * 									In this case, if no GrammarConverter instance fo <tt>id</tt> is present, a new one will be created; 
-	     * 									The stopwords must already be set, or must additionally be set for the GrammarConverter instance
-	     * 									  (e.g. using {@link mmir.SemanticInterpreter.setStopwords})
+	     * 									The stopwords must already be set, be part of the options-argument 
+	     * 									  (see doc for <code>fileFormatNo</code>), or must additionally be set for the GrammarConverter 
+	     * 									  instance (e.g. using {@link mmir.SemanticInterpreter.setStopwords})
 	     * @param {Number|PlainObject} [fileFormatNo] OPTIONAL
 		 * 					If Number and the number given does not match {@link #GRAMMAR_FILE_FORMAT_VERSION}
 		 * 					the file format is assumed to be out-dated and an Error will be thrown.
@@ -433,7 +441,7 @@ define(['constants', 'grammarConverter', 'logger', 'module', 'require'
         	function build_grammar(theConverterInstance){//<- argument is the GrammarConverter instance
         	    
         		var genId   = doGetGrammarEngine();//one of ['jscc' | 'pegjs' | 'jison'];
-        		var genName = genId + (_isAsyncCompileMode? GRAMMAR_ASYNC_MODULE_MODIFIER : '') + GRAMMAR_MODULE_ID_POSTFIX;
+        		var genName = GRAMMAR_MODULE_ID_PREFIX + genId + (_isAsyncCompileMode? GRAMMAR_ASYNC_MODULE_MODIFIER : '') + GRAMMAR_MODULE_ID_POSTFIX;
         		
         		var onModuleLoaded = function onLoad(gen){ 
         			

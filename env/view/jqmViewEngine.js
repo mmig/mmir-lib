@@ -1,6 +1,6 @@
 
 
-define(['constants', 'jquery', 'loadCss', 'require'],
+define(['mmirf/constants', 'jquery', 'mmirf/loadCss', 'require'],
 /**
  * View engine that uses jQuery Mobile for loading the views as new jQM pages.
  * 
@@ -52,7 +52,7 @@ define(['constants', 'jquery', 'loadCss', 'require'],
  * 
  * @example
  * //use page-transition with effect 'slide' (animated as not-reversed motion)
- * mmir.DialogManager.render('theController', 'theView', {transition: 'slide', reverse: false});
+ * mmir.dialog.render('theController', 'theView', {transition: 'slide', reverse: false});
  * 
  * 
  * 
@@ -102,7 +102,7 @@ function(consts, jquery, loadCss, require){
 	 */
 	var promise = jquery.Deferred();
 	
-	require(['jquery', 'commonUtils', 'renderUtils', 'languageManager', 'controllerManager', 'util/forEach',
+	require(['jquery', 'mmirf/commonUtils', 'mmirf/renderUtils', 'mmirf/languageManager', 'mmirf/controllerManager', 'mmirf/util/forEach',
 	         'jqm','jqmSimpleModal'],
 	    function(jq, commonUtils, renderUtils, languageManager, controllerManager, forEach
 	){
@@ -427,7 +427,7 @@ function(consts, jquery, loadCss, require){
 		 * partials and contents that helper methods have provided. Then
 		 * Dialogs are created and the pageContainer id is updated. At last
 		 * all the content is localized using
-		 * {@link mmir.LanguageManager#translateHTML}, and appended to
+		 * {@link mmir.LanguageManager#getText}, and appended to
 		 * the HTML document of the application, while the old one is
 		 * removed.<br>
 		 * At the end the <b>on_page_load</b> action is performed.

@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['languageManager', 'parserModule', 'storageUtils'],
+define(['mmirf/languageManager', 'mmirf/parserModule', 'mmirf/storageUtils'],
 	//this comment is needed by jsdoc2 [copy of comment for: function ContentElement(...]
 	/**
 	 * The ContentElement represents "content" parts of a view; it may itself contain one or more ContentElements.
@@ -1183,7 +1183,7 @@ ContentElement.prototype.stringify = function(){
 	//function for iterating over the property-list and generating JSON-like entries in the string-buffer
 	var appendStringified = parser_context.appendStringified;
 	
-	var sb = ['require("storageUtils").restoreObject({ classConstructor: "contentElement"', ','];
+	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/contentElement"', ','];
 	
 	appendStringified(this, propList, sb);
 	
@@ -1221,7 +1221,7 @@ ContentElement.prototype.stringify = function(){
 		sb.push( JSON.stringify(this.getController().getName()) );
 		
 		// ... and the getter/setter code:
-		sb.push( '; this.view = require("presentationManager").get');
+		sb.push( '; this.view = require("mmirf/presentationManager").get');
 		sb.push(this['view'].constructor.name);//<- insert getter-name dependent on the view-type (e.g. View, Partial)
 		sb.push('(ctrlName, viewName); this.getView = function(){return this.view;}; return this.view; },' );
 		
@@ -1239,7 +1239,7 @@ ContentElement.prototype.stringify = function(){
 		//  (NOTE: needs to be called before view/controller can be accessed!)
 		sb.push( 'initRenderer: function(){');
 		// ... and the getter/setter code:
-		sb.push( ' this.renderer = require("renderUtils"); }' );
+		sb.push( ' this.renderer = require("mmirf/renderUtils"); }' );
 		
 		//NOTE: need to add comma in a separate entry 
 		//      (-> in order to not break the removal method of last comma, see below)

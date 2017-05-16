@@ -18,7 +18,7 @@
  * 
  * @requires cordova.plugins.queuePlugin: needed for Android < 4.4 -> Cordova plugin for non-WebWorker-based execution-queue
  */
-define(['constants', 'scionEngine', 'util/extend'], function(constants, createScionEngine, extend) {
+define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(constants, createScionEngine, extend) {
 
 	/**
 	 * HELPER logging for state-changes
@@ -355,8 +355,8 @@ define(['constants', 'scionEngine', 'util/extend'], function(constants, createSc
      * the engine-creator should replace this with a "real" implementation
      * e.g. something like this (see also init() in dialogManager):
      *
-     *  engine = require('engineConfig')('some-url', 'some-mode');
-     *  engine._log = require('logger').create('my-module-id');
+     *  engine = require('mmirf/engineConfig')('some-url', 'some-mode');
+     *  engine._log = require('mmirf/logger').create('my-module-id');
      *  
      * @memberOf mmir.env.statemachine.engine.exec#
      */

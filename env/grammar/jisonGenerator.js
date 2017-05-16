@@ -1,6 +1,6 @@
 
 
-define(['jison', 'constants', 'configurationManager', 'grammarConverter', 'util/deferred', 'util/extend', 'util/toArray', 'logger', 'module'],
+define(['mmirf/jison','mmirf/constants','mmirf/configurationManager','mmirf/grammarConverter','mmirf/util/deferred','mmirf/util/extend','mmirf/util/toArray','mmirf/logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -186,7 +186,7 @@ var jisonGen = {
         var compileParserModule = function(grammarParser, hasError){
         	
             var addGrammarParserExec = 
-        	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'
+        	  '(function(){\n  var semanticInterpreter = require("mmirf/semanticInterpreter");\n'
             	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
             	+ 'var module = {};\n'
             	+ grammarParser

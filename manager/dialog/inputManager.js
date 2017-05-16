@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engineConfig', 'module'],
+define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtils','mmirf/logger','mmirf/engineConfig','module'],
 	/**
 	 * The InputManager handles input events.
 	 *
@@ -33,12 +33,12 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 	 * and returns it as the second argument of the {@link #init}() function's callback
 	 * (or the Promise's triggered callbacks).
 	 *
-	 * In addition, the InputEngine is exported as module <code>"inputEngine"</code> via
+	 * In addition, the InputEngine is exported as module <code>"mmirf/inputEngine"</code> via
 	 * RequireJS' <code>define()</code> function.
 	 *
 	 * @example
 	 * //initialization of inputManager
-	 * require('inputManager').init().then( function(inputManagerInstance, inputEngineInstance){
+	 * require('mmirf/inputManager').init().then( function(inputManagerInstance, inputEngineInstance){
 	 * 		//do something
 	 * });
 	 *
@@ -82,7 +82,7 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 		raise : function(eventName, eventData) {
 			//NOTE the functional implementation will be set during initialization (see below #init())
 			throw new Error('InputEngine not initialized yet: '
-					+'call mmir.InputManager.init(callback) and wait for the callback.'
+					+'call mmir.input.init(callback) and wait for the callback.'
 			);
 		}
 
@@ -120,15 +120,14 @@ define(['core', 'util/extend', 'util/deferred', 'commonUtils', 'logger', 'engine
 					_engine.raise.apply(_engine, arguments);
 				};
 
-//					mmir.InputEngine = _engine;
 				delete _engine.gen;
 
-				//register the InputEngine with requirejs as module "inputEngine":
-				mmir._define("inputEngine", function(){
+				//register the InputEngine with requirejs as module 'mmirf/inputEngine':
+				mmir._define('mmirf/inputEngine', function(){
 					return _engine;
 				});
 				//immediately load the module-definition:
-				mmir.require(['inputEngine'], function(){
+				mmir.require(['mmirf/inputEngine'], function(){
 					//signal end of initialization process:
 					theDeferredObj.resolve({manager: _instance, engine: _engine});
 				});

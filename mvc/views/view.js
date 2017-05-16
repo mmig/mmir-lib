@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define ( ['commonUtils', 'contentElement', 'storageUtils'],
+define ( ['mmirf/commonUtils','mmirf/contentElement','mmirf/storageUtils'],
 	//this comment is needed by jsdoc2 [copy of comment for: function View(...]
 	/**
 	 * The View class is a kind of interface-class which gives access to the methods and data of a helper (which itself belongs to a controller)<br>
@@ -40,8 +40,8 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	 * 			May be empty: in this case the processed contents must be
 	 * 						  added manually (cf. parser.StorageUtils)
 	 * 
-	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
-	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["mmirf/renderUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["mmirf/parseUtils"]...</code>)
 	 * 
 	 * @name View
 	 * @class
@@ -68,8 +68,8 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
  * 			May be empty: in this case the processed contents must be
  * 						  added manually (cf. parser.StorageUtils)
  * 
- * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
- * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+ * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["mmirf/renderUtils"]...</code>)
+ * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["mmirf/parseUtils"]...</code>)
  * 
  */
  function View(ctrl, name, definition){
@@ -127,8 +127,8 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
     
     if(this.def){
 	    
-	    var parserUtils = require('parseUtils');
-	    var renderUtils = require('renderUtils');
+	    var parserUtils = require('mmirf/parseUtils');
+	    var renderUtils = require('mmirf/renderUtils');
 	    
 	    var parseResult = parserUtils.parse(this.def, this);
 	    
@@ -219,16 +219,7 @@ View.prototype.stringify = function(){
 	
 	var moduleNameString = '"'+this.name+this.getController().getName()+'View"';
 	
-
-	//TODO use requirejs mechanism? (NOTE there may occur timing problems for loading/registering the JS file, and querying the PresentationManager for it ...)
-	//TODO(2) should all dependencies be added?
-	// eg. -> [...,"presentationManager","controllerManager","view"]
-	// and function(...,presentationManager,controllerManager,View)
-	//... this would require to gather all nested dependencies and "apply" them here...
-	//
-//	var sb = ['define('+moduleNameString+', ["storageUtils"], function(parser){ return parser.restoreObject({ classConstructor: "view"', ','];
-	
-	var sb = ['require("storageUtils").restoreObject({ classConstructor: "view"', ','];
+	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/view"', ','];
 	
 	appendStringified(this, propList, sb);
 	
@@ -249,9 +240,8 @@ View.prototype.stringify = function(){
 		return buf.join('');
 	});
 	
-	//TODO should require() be replaced by define()-dependency declaration?
-	//     NOTE the use of require() here, assumes that the dependency has already been loaded (i.e. has already been request by some other module!)
-	sb.push( 'initPublish: function(){ require("presentationManager").addView(this.getController(), this); }');
+	//NOTE the use of require() here, assumes that the dependency has already been loaded (i.e. has already been request by some other module!)
+	sb.push( 'initPublish: function(){ require("mmirf/presentationManager").addView(this.getController(), this); }');
 	sb.push(',');
 	
 	//TODO is there a better way to store the controller? -> by its contoller's name, and add a getter function...
@@ -266,7 +256,7 @@ View.prototype.stringify = function(){
 		sb.push( JSON.stringify(this.getController().getName()) );
 		
 		// ... and the getter/setter code:
-		sb.push( '; this.controller = require("controllerManager").getController(ctrlName); },' );//TODO see remark about use of require() above
+		sb.push( '; this.controller = require("mmirf/controllerManager").get(ctrlName); },' );//TODO see remark about use of require() above
 		
 		//add initializer function
 		//  (NOTE: needs to be called before controller or renderer can be accessed!)

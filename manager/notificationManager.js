@@ -25,7 +25,7 @@
  */
 
 
-define(['module', 'constants', 'mediaManager', 'dictionary'], 
+define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'], 
 	/**
 	 * 
 	 * @name NotificationManager

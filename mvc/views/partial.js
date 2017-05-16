@@ -25,7 +25,7 @@
  */
 
 
-define ( ['commonUtils', 'contentElement', 'storageUtils'],  
+define ( ['mmirf/commonUtils','mmirf/contentElement','mmirf/storageUtils'],  
 	//this comment is needed by jsdoc2 [copy of comment for: function Partial(...]
 	/**
 	 * The Partial class is a containing the definition of the partial and methods to access the definition.
@@ -39,8 +39,8 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	 * 			May be empty: in this case the processed contents must be
 	 * 						  added manually (cf. parser.StorageUtils)
 	 * 
-	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
-	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["mmirf/renderUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["mmirf/parseUtils"]...</code>)
 	 * 
 	 * @name Partial
 	 * @class
@@ -66,8 +66,8 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 	 * 			May be empty: in this case the processed contents must be
 	 * 						  added manually (cf. parser.StorageUtils)
 	 * 
-	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
-	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["mmirf/renderUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["mmirf/parseUtils"]...</code>)
 	 * 
 	 */
 	function Partial(ctrl, name, definition){
@@ -90,7 +90,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 		    		name : this.controller.getName() + 'Partial',
 		    		content : this.def
 		    	};
-		    this.contentElement = new ContentElement(contentElementInfo, this, require('parseUtils'), require('renderUtils'));
+		    this.contentElement = new ContentElement(contentElementInfo, this, require('mmirf/parseUtils'), require('mmirf/renderUtils'));
 	    }
 	}
 	
@@ -153,9 +153,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 		
 		var moduleNameString = '"'+this.name+this.getController().getName()+'Partial"';
 		
-		//TODO use requirejs mechanism? (NOTE there may occur timing problems for loading/registering the JS file, and querying the PresentationManager for it ...)
-//		var sb = ['define('+moduleNameString+', ["storageUtils"], function(parser){ return parser.restoreObject({ classConstructor: "partial"', ','];
-		var sb = ['require("storageUtils").restoreObject({ classConstructor: "partial"', ','];
+		var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/partial"', ','];
 		
 		appendStringified(this, propList, sb);
 		
@@ -165,9 +163,8 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 		});
 		
 
-		//TODO should require() be replaced by define()-dependency declaration?
-		//     NOTE the use of require() here, assumes that the dependency has already been loaded (i.e. has already been request by some other module!)
-		sb.push( 'initPublish: function(){ require("presentationManager").addPartial(this.getController(), this); }');
+		//NOTE the use of require() here, assumes that the dependency has already been loaded (i.e. has already been request by some other module!)
+		sb.push( 'initPublish: function(){ require("mmirf/presentationManager").addPartial(this.getController(), this); }');
 		sb.push(',');
 		
 		//TODO is there a better way to store the controller? -> by its contoller's name, and add a getter function...
@@ -182,7 +179,7 @@ define ( ['commonUtils', 'contentElement', 'storageUtils'],
 			sb.push( JSON.stringify(this.getController().getName()) );
 			
 			// ... and the getter/setter code:
-			sb.push( '; this.controller = require("controllerManager").getController(ctrlName); },' );//TODO see remark about use of require() above
+			sb.push( '; this.controller = require("mmirf/controllerManager").get(ctrlName); },' );//TODO see remark about use of require() above
 			
 			
 			//add initializer function

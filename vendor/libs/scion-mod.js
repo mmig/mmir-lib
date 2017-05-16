@@ -271,7 +271,7 @@ var util = require('../core/util/util');
 exports.platform = {
 
     /** @expose */
-    ajax : window.jQuery,   //this can be overridden
+    ajax : requirejs('mmirf/util/loadFile'),   //this can be overridden
 
     //used in parsing
     eval : require('../base-platform/eval'),

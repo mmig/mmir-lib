@@ -37,7 +37,7 @@
  * 
  */
 
-define(['parserModule'], 
+define(['mmirf/parserModule'], 
 //this comment is needed by jsdoc2 [copy of comment for: function ParsingResult(...]
 /**
  * ParsingResult represents an element that was detected during parsing.
@@ -707,7 +707,7 @@ ParsingResult.prototype.stringify = function(){
 	//function for iterating over the property-list and generating JSON-like entries in the string-buffer
 	var  appendStringified = parser.appendStringified;
 
-	var sb = ['require("storageUtils").restoreObject({ classConstructor: "parsingResult"', ','];
+	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/parsingResult"', ','];
 
 	//TODO property dataPos: {start: Number, end: Number}
 	if(this['dataPos']){

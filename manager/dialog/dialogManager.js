@@ -24,9 +24,9 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define([  'core', 'util/extend', 'util/deferred'
-        , 'commonUtils', 'module', 'engineConfig', 'controllerManager', 'presentationManager', 'logger'
-        , 'modelManager'
+define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
+        ,'mmirf/commonUtils','mmirf/engineConfig','mmirf/controllerManager','mmirf/presentationManager','mmirf/logger','module'
+        ,'mmirf/modelManager'
 	],
 	/**
 	 * The DialogManager gives access to the most commonly used functions of
@@ -37,12 +37,12 @@ define([  'core', 'util/extend', 'util/deferred'
 	 * and returns it as the second argument of the {@link #init}() function's callback
 	 * (or the Promise's triggered callbacks).
 	 *
-	 * In addition, the DialogEngine is exported as module <code>"dialogEngine"</code> via
+	 * In addition, the DialogEngine is exported as module <code>"mmirf/dialogEngine"</code> via
 	 * RequireJS' <code>define()</code> function.
 	 *
 	 * @example
 	 * //initialization of inputManager
-	 * require('dialogManager').init().then( function(dialogManagerInstance, dialogEngineInstance){
+	 * require('mmirf/dialogManager').init().then( function(dialogManagerInstance, dialogEngineInstance){
 	 * 		//do something
 	 * });
 	 *
@@ -60,7 +60,7 @@ define([  'core', 'util/extend', 'util/deferred'
 	 */
 	function(
 			mmir, extend, deferred,
-			commonUtils, module, engineConfig, controllerManager, presentationManager, Logger
+			commonUtils, engineConfig, controllerManager, presentationManager, Logger, module
 ) {
 
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -101,7 +101,7 @@ define([  'core', 'util/extend', 'util/deferred'
 		raise : function(eventName, eventData) {
 			//NOTE the functional implementation will be set during initialization (see below #init())
 			throw new Error('DialogEngine not initialized yet: '
-					+'call DialogManager.init(callback) and wait for the callback.'
+					+'call mmir.dialog.init(callback) and wait for the callback.'
 			);
 		},
 
@@ -270,7 +270,7 @@ define([  'core', 'util/extend', 'util/deferred'
 		 */
 		render : function(ctrlName, viewName, data) {
 
-			var defer = presentationManager.renderView(ctrlName, viewName, data);
+			var defer = presentationManager.render(ctrlName, viewName, data);
 
 			if (typeof onPageRenderedFunc === 'function') {
 				var ctrl = controllerManager.get(ctrlName);
@@ -356,16 +356,14 @@ define([  'core', 'util/extend', 'util/deferred'
 					_engine.raise.apply(_engine, arguments);
 				};
 
-//					mmir.DialogEngine = _engine;
-//					mmir.DialogEngine.gen('init', _self);
 				delete _engine.gen;
 
-				//register the DialogeEngine with requirejs as module "dialogEngine":
-				mmir._define("dialogEngine", function(){
+				//register the DialogeEngine with requirejs as module 'mmirf/dialogEngine':
+				mmir._define('mmirf/dialogEngine', function(){
 					return _engine;
 				});
 				//immediately load the module-definition:
-				mmir.require(['dialogEngine'], function(){
+				mmir.require(['mmirf/dialogEngine'], function(){
 					//signal end of initialization process:
 					theDeferredObj.resolve({manager: _instance, engine: _engine});
 				});

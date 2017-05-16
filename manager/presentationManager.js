@@ -26,10 +26,10 @@
 
 
 
-define([ 'controllerManager', 'commonUtils', 'viewLoader'
-         , 'dictionary', 'logger'
-         , 'util/deferredWithState', 'core', 'module'
-         , 'stringExtension'
+define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
+         , 'mmirf/dictionary', 'mmirf/logger'
+         , 'mmirf/util/deferredWithState', 'mmirf/core', 'module'
+         , 'mmirf/stringExtension'
     ],
     
     /**
@@ -81,7 +81,7 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
 	  * @constant
 	  * @memberOf mmir.PresentationManager#
 	  * 
-	  * @example var defaultLayoutName = mmir.Constants.get(mmir.PresentationManager.CONFIG_DEFAULT_LAYOUT);
+	  * @example var defaultLayoutName = mmir.const.get(mmir.presentation.CONFIG_DEFAULT_LAYOUT);
 	  */
 	 var DEFAULT_LAYOUT_NAME = 'Default';
 	 
@@ -97,7 +97,7 @@ define([ 'controllerManager', 'commonUtils', 'viewLoader'
 	  * @constant
 	  * @memberOf mmir.PresentationManager#
 	  * 
-	  * @example var defaultLayout = mmir.Constants.get(mmir.PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME);
+	  * @example var defaultLayout = mmir.const.get(mmir.presentation.CONFIG_DEFAULT_LAYOUT_NAME);
 	  * 
 	  */
 	 var CONFIG_DEFAULT_LAYOUT_NAME = 'defaultLayoutName';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...

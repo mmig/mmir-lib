@@ -1,7 +1,7 @@
 
 
 
-define(['util/extend', 'parserModule'],
+define(['mmirf/util/extend', 'mmirf/parserModule'],
 /**
  * Extends the parser-module with helper functions for
  * storing/restoring compiled templates (eHTML -> layout, view, partial etc)
@@ -25,7 +25,7 @@ function(extend, parser){
  * @constant
  * @memberOf mmir.parser
  */
-var STORAGE_FILE_FORMAT_NUMBER = 2;
+var STORAGE_FILE_FORMAT_NUMBER = 3;
 parser.STORAGE_FILE_FORMAT_NUMBER = STORAGE_FILE_FORMAT_NUMBER;
 
 /**
@@ -36,13 +36,11 @@ parser.STORAGE_FILE_FORMAT_NUMBER = STORAGE_FILE_FORMAT_NUMBER;
  * may contain function definitions.
  * 
  * <p>
- * The storedObject must have a String property <strong>classConstructor</strong>
+ * The storedObject must have a String property <strong>classConstructor</strong> (type <code>String</code>)
  * <ul>
- * 	<li>that must correspond to a constructor function (which will be invoked with <tt>new</tt>)</li>
+ * 	<li>that must correspond to a require'able module that represents a constructor function (which will be invoked with <tt>new</tt>)</li>
+ * 	<li>the require'able module must be represents a constructor function (which will be invoked with <tt>new</tt>)</li>
  * 	<li>the constructor function must be invokable without parameters</li>
- * 	<li>the constructor function must be accessable from the global namespace
- * 		(or <tt>classConstuctor</tt> must contain the code for retrieving the constructor
- * 		 function from the global namespace)</li>
  * </ul>
  * 
  * 

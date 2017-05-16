@@ -1,10 +1,10 @@
 define([
-    'layout', 'view', 'partial'
-    , 'util/deferredWithState', 'util/loadFile', 'util/forEach'
-	, 'configurationManager', 'checksumUtils', 'controllerManager', 'constants', 'core', 'commonUtils'
-	, 'logger', 'module'
-	, 'parserModule'//<- loaded, but not directly used
-	//,'renderUtils' DISABLED: loaded on-demand (see loadViews())
+    'mmirf/layout', 'mmirf/view', 'mmirf/partial'
+    , 'mmirf/util/deferredWithState', 'mmirf/util/loadFile', 'mmirf/util/forEach'
+	, 'mmirf/configurationManager', 'mmirf/checksumUtils', 'mmirf/controllerManager', 'mmirf/constants', 'mmirf/core', 'mmirf/commonUtils'
+	, 'mmirf/logger', 'module'
+	, 'mmirf/parserModule'//<- loaded, but not directly used
+	//,'mmirf/renderUtils' DISABLED: loaded on-demand (see loadViews())
 ],function(
 	Layout, View, Partial,
 	deferred, loadFile, forEach,
@@ -124,7 +124,7 @@ define([
 		 * @constant
 		 * @memberOf ViewLoader.init
 		 *
-		 * @example var isUsePrecompiledViews = mmir.Constants.getBoolean("usePrecompiledViews");
+		 * @example var isUsePrecompiledViews = mmir.const.getBoolean("usePrecompiledViews");
 		 *
 		 */
 		var CONFIG_PRECOMPILED_VIEWS_MODE = 'usePrecompiledViews';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...
@@ -162,7 +162,7 @@ define([
 		function loadPrecompiledView(rawViewData, targetpath, success, fail){
 
 			//NOTE: stored template require the renderUtils:
-			core.require(['renderUtils'], function(){
+			core.require(['mmirf/renderUtils'], function(){
 
 				if(! isUpToDate(rawViewData, targetpath)){
 					if(fail) fail('Precompiled view file is outdated!');
@@ -532,7 +532,7 @@ define([
 		 * HELPER: creates a template-object (e.g. a View or a Partial) for the
 		 *         raw template conent.
 		 *
-		 *         If necessary, the parser-classes (module 'parseUtils') are loaded,
+		 *         If necessary, the parser-classes (module 'mmirf/parseUtils') are loaded,
 		 *         which are necessary to process the raw template content.
 		 *
 		 * @private
@@ -575,7 +575,7 @@ define([
 		var doParseTemplate = function(controller, templateName, config, templateContent, status){
 
 			//NOTE need to request renderUtils here too, since it is needed during parsing!
-			core.require(['parseUtils', 'renderUtils'], function(){
+			core.require(['mmirf/parseUtils', 'mmirf/renderUtils'], function(){
 
 				var templateObj;
 				if(controller){

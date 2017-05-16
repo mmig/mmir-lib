@@ -82,7 +82,7 @@ newMediaPlugin = {
 		initialize: function(callBack){//, mediaManager, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
 			
 			
-			require(['waitDialog'], function(dlg){
+			require(['mmirf/waitDialog'], function(dlg){
 
 				/**  @memberOf WaitReadyIndicatorImpl# */
 				var _pluginName = 'waitReadyIndicator';
@@ -91,7 +91,7 @@ newMediaPlugin = {
 				 * @type mmir.LanguageManager
 				 * @memberOf WaitReadyIndicatorImpl#
 				 */
-				var languageManager = require('languageManager');
+				var languageManager = require('mmirf/languageManager');
 				
 				/**  @memberOf WaitReadyIndicatorImpl# */
 				var _id = 'media-plugin-wait';

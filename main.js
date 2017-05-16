@@ -24,10 +24,10 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurationManager', 'languageManager'
-     , 'controllerManager', 'modelManager'
-     , 'presentationManager', 'inputManager', 'dialogManager', 'module'
-     , 'semanticInterpreter', 'mediaManager', 'notificationManager'
+define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/configurationManager', 'mmirf/languageManager'
+     , 'mmirf/controllerManager', 'mmirf/modelManager'
+     , 'mmirf/presentationManager', 'mmirf/inputManager', 'mmirf/dialogManager', 'module'
+     , 'mmirf/semanticInterpreter', 'mmirf/mediaManager', 'mmirf/notificationManager'
   ],
   /**
    * Initializes the MMIR framework:
@@ -61,7 +61,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 	/** @memberOf mmir */
 	mmir.conf = configurationManager;
 	/** @memberOf mmir */
-	mmir.notify = notificationManager.init();
+	mmir.notifier = notificationManager.init();
 	
 	/**
 	 * HELPER create a "namespace" from a package-definition (dot-separated string) from configuration
@@ -262,7 +262,7 @@ define(['core', 'env', 'util/deferred', 'constants', 'commonUtils', 'configurati
 
 					isVisualsLoaded = true;
 		
-					mmir.present = presentationManager;
+					mmir.presentation = presentationManager;
 					checkInitCompleted();
 					
 				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });

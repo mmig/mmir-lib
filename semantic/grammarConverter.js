@@ -35,7 +35,7 @@
 * @requires util/loadFile
 * @requires util/isArray
 */
-define(['util/isArray', 'util/loadFile'], function(isArray, loadFile){
+define(['mmirf/util/isArray', 'mmirf/util/loadFile'], function(isArray, loadFile){
 
 
 

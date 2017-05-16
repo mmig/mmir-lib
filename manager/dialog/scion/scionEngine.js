@@ -1,7 +1,7 @@
 ﻿
 //TODO doc
 
-define(['scion', 'scionUtil', 'util/deferred'], function( scion, scionUtil, deferred ) {
+define(['mmirf/scion', 'mmirf/scionUtil', 'mmirf/util/deferred'], function( scion, scionUtil, deferred ) {
 
     /**
      * An array containing all states active.

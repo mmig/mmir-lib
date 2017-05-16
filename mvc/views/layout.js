@@ -25,7 +25,7 @@
  */
 
 
-define (['commonUtils', 'viewConstants', 'yield', 'storageUtils', 'contentElement' ],
+define (['mmirf/commonUtils','mmirf/viewConstants','mmirf/yield','mmirf/storageUtils','mmirf/contentElement' ],
 	//this comment is needed by jsdoc2 [copy of comment for: function Layout(...]
 	/**
 	 * The Layout class 
@@ -38,9 +38,9 @@ define (['commonUtils', 'viewConstants', 'yield', 'storageUtils', 'contentElemen
 	 * 			May be empty: in this case the processed contents must be
 	 * 						  added manually (cf. parser.StorageUtils)
 	 * 
-	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["mmirf/renderUtils"]...</code>)
 	 * 			
-	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+	 * @requires if param definition is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["mmirf/parseUtils"]...</code>)
 	 * 
 	 * @name Layout
 	 * @class
@@ -65,9 +65,9 @@ define (['commonUtils', 'viewConstants', 'yield', 'storageUtils', 'contentElemen
  * 			May be empty: in this case the processed contents must be
  * 						  added manually (cf. parser.StorageUtils)
  * 
- * @requires if param <code>definition</code> is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["renderUtils"]...</code>)
+ * @requires if param <code>definition</code> is NOT empty: parser.RenderUtils (must be loaded beforehand via <code>require(["mmirf/renderUtils"]...</code>)
  * 			
- * @requires if param <code>definition</code> is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["parseUtils"]...</code>)
+ * @requires if param <code>definition</code> is NOT empty: parser.ParseUtils (must be loaded beforehand via <code>require(["mmirf/parseUtils"]...</code>)
  * 
  */
 function Layout(name, definition, remote, ignoreMissingBody){
@@ -182,10 +182,10 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	    if(this.def){
 		    
 		    //console.debug('Layout<constructor>: start rendering layout for "'+this.name+'"'+(remote?' (REMOTE)':'')+', RAW: '+this.def);
-		    var parser = require('parseUtils');
+		    var parser = require('mmirf/parseUtils');
 	    	var parseResult = parser.parse(this.def, this);
 	    	
-	    	var renderer = require('renderUtils');
+	    	var renderer = require('mmirf/renderUtils');
 	    	var renderedLayout = renderer.renderLayout(parseResult, null/*FIXME?*/);
 
 	    	//DISABLED: parsing a string as HTML via jQuery etc. does not work (removes head, body,... tags):
@@ -726,14 +726,12 @@ Layout.prototype.stringify = function(){
 	
 	var moduleNameString = '"'+this.name+'Layout"';
 
-	//TODO use requirejs mechanism? (NOTE there may occur timing problems for loading/registering the JS file, and querying the PresentationManager for it ...)
-//	var sb = ['define('+moduleNameString+', ["storageUtils"], function(parser){ return parser.restoreObject({ classConstructor: "layout"', ','];
-	
-	var sb = ['require("storageUtils").restoreObject({ classConstructor: "layout"', ','];
+	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/layout"', ','];
 		
 	appendStringified(this, propList, sb);
 	
-	sb.push( 'initPublish: function(){ this._extHeaderElements(); this.bodyContents=this.bodyContentElement.definition; require("presentationManager").addLayout(this); }');
+	//NOTE the use of require() here, assumes that the dependency has already been loaded (i.e. has already been request by some other module!)
+	sb.push( 'initPublish: function(){ this._extHeaderElements(); this.bodyContents=this.bodyContentElement.definition; require("mmirf/presentationManager").addLayout(this); }');
 	sb.push(',');
 	
 	//non-primitives properties with stringify() function:

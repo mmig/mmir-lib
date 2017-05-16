@@ -25,7 +25,7 @@
  */
 
 
-define ( [ 'commonUtils', 'helper', 'logger', 'module' ],
+define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	//this comment is needed by jsdoc2 [copy of comment for: function Controller(...]
 	/**
 	 * The Controller Class is a kind of interface-class which gives access to the methods of a controller and its helper. <br>

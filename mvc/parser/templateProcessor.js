@@ -25,9 +25,9 @@
  */
 
 	
-define([	  'core', 'commonUtils', 'parserModule', 'parsingResult'
-        	, 'ES3Lexer', 'ES3Parser', 'contentLexer', 'contentParser'
-        	, 'scriptLexer', 'scriptParser', 'antlr3'
+define([	  'mmirf/core','mmirf/commonUtils','mmirf/parserModule','mmirf/parsingResult'
+        	,'mmirf/ES3Lexer','mmirf/ES3Parser','mmirf/contentLexer','mmirf/contentParser'
+        	,'mmirf/scriptLexer','mmirf/scriptParser','mmirf/antlr3'
         ],
         /**
          * Main implementation for parsing (view) templates.

@@ -1,5 +1,5 @@
 
-define(['pegjs', 'constants', 'configurationManager', 'grammarConverter', 'util/deferred', 'util/extend', 'util/toArray', 'logger', 'module'],
+define(['mmirf/pegjs','mmirf/constants','mmirf/configurationManager','mmirf/grammarConverter','mmirf/util/deferred','mmirf/util/extend','mmirf/util/toArray','mmirf/logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 
@@ -184,7 +184,7 @@ var pegjsGen = {
         var compileParserModule = function(grammarParser, hasError){
         	
 	        var addGrammarParserExec = 
-	    	  '(function(){\n  var semanticInterpreter = require("semanticInterpreter");\n'//FIXME
+	    	  '(function(){\n  var semanticInterpreter = require("mmirf/semanticInterpreter");\n'//FIXME
 	        	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
 	        	+ 'var parser = '
 	        	+ grammarParser
