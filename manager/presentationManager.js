@@ -29,7 +29,6 @@
 define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
          , 'mmirf/dictionary', 'mmirf/logger'
          , 'mmirf/util/deferredWithState', 'mmirf/core', 'module'
-         , 'mmirf/stringExtension'
     ],
     
     /**

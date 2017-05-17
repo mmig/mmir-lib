@@ -473,7 +473,7 @@ function ContentElement(group, view, parser, renderer){
 				e.name = e.name || val;
 				e.nameType = e.nameType || 'Identifier';
 			} else {
-				val.startsWith('@')? val.substring(1) : val;//normalize var-name if necessary
+				val[0] === '@'? val.substring(1) : val;//normalize var-name if necessary
 			}
 			
 			if(dict[val]){
@@ -499,7 +499,7 @@ function ContentElement(group, view, parser, renderer){
 	 */
 	var isVarInList = function(varList, varName){
 
-		varName = varName.startsWith('@')? varName.substring(1) : varName;
+		varName = varName[0] === '@'? varName.substring(1) : varName;
 		var e, val;
 		for(var i=varList.length-1; i >= 0; --i){
 			e = varList[i];
@@ -605,7 +605,7 @@ function ContentElement(group, view, parser, renderer){
 			for(var i=0; i < size; ++i){
 				v = templateVars[i];
 				vname = v.getValue(v.name, v.nameType);
-				if(vname.startsWith('@')){
+				if(vname[0] === '@'){
 					nvname = vname.substring(1);
 				} else {
 					nvname = vname;
@@ -758,7 +758,7 @@ function ContentElement(group, view, parser, renderer){
 			forElement.forListName = this.definition.substring(forListNameRef.getStart(), forListNameRef.getEnd());
 
 			//special case FOR-statement: "implicitly declare" property-name variable, if it is not declared yet (i.e. make available for JS code within for-loop)
-			var normalizedPropName = forElement.forPropName.startsWith('@')? forElement.forPropName.substring(1) : forElement.forPropName;
+			var normalizedPropName = forElement.forPropName[0] === '@'? forElement.forPropName.substring(1) : forElement.forPropName;
 			if(!isVarInList(allVars, normalizedPropName) && !isVarInList(this._contentVars, normalizedPropName)){
 				//add name to ParsingResult, so that there is no need to extract it from raw-template anymore:
 				forPropNameRef.name = normalizedPropName;
@@ -767,10 +767,10 @@ function ContentElement(group, view, parser, renderer){
 			}
 			
 			//prepend variable-names with template-var-prefix if necessary:
-			if( ! forElement.forPropName.startsWith('@')){
+			if( ! forElement.forPropName[0] === '@'){
 				forElement.forPropName = '@' + forElement.forPropName;
 			}
-			if( ! forElement.forListName.startsWith('@')){
+			if( ! forElement.forListName[0] === '@'){
 				forElement.forListName = '@' + forElement.forListName;
 			}
 			

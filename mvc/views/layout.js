@@ -426,7 +426,8 @@ function Layout(name, definition, remote, ignoreMissingBody){
 		    if(matchBodyTag && matchBodyTag[1] && matchBodyTag[1].length > '<body>'.length){
 		    	
 //		    	//NOTE: 1st case should really never occur.
-//		    	var bodyAttrEnd = matchBodyTag[1].endsWith('/>')? matchBodyTag[1].length-2 : matchBodyTag[1].length-1;
+//		    	var reTagSelfClose = /\/>$/;
+//		    	var bodyAttrEnd = reTagSelfClose.test(matchBodyTag[1])? matchBodyTag[1].length-2 : matchBodyTag[1].length-1;
 //		    	var bodyAttr = '<div ' + matchBodyTag[1].substring('<body'.length, bodyAttrEnd) + '</div>';
 //		    	bodyAttr = jQuery(bodyAttr);
 		    	

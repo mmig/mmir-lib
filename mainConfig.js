@@ -53,7 +53,6 @@ var mmirf_config = {
 	    // globals and AMDs
  	    , 'mmirf/constants': 'mmirf/tools/constants'
  	    , 'mmirf/commonUtils': 'mmirf/tools/commonUtils'
-	    , 'mmirf/stringExtension': 'mmirf/tools/extensions/StringExtensions'
 	    , 'mmirf/dictionary': 'mmirf/tools/dictionary'
 	    , 'mmirf/paramsParseFunc': 'mmirf/tools/paramsParseFunc'
 		, 'mmirf/env': 'mmirf/tools/envDetect'
@@ -159,9 +158,12 @@ var mmirf_config = {
 		, 'mmirf/loadCss': 'mmirf/tools/loadCss'
 
 		//"backward compatibility-restorer":
-		, 'mmirf/encodeUtils': 'mmirf/tools/extensions/EncodeUtils' 
+		, 'mmirf/encodeUtils': 'mmirf/tools/extensions/EncodeUtils'
 		, 'mmirf/jsonUtils': 'mmirf/tools/extensions/JsonUtils'
+		, 'mmirf/stringUtils': 'mmirf/tools/extensions/StringUtils'
 		, 'mmirf/resizeToFit': 'mmirf/tools/extensions/ResizeFitToSourroundingBox'
+	    , 'mmirf/stringExtension': 'mmirf/tools/extensions/StringExtensions'
+	    , 'mmirf/core2Compatibility' : 'mmirf/tools/extensions/Core2Compatibility'
 	    , 'mmirf/commonUtilsCompatibility': 'mmirf/tools/extensions/CommonUtilsCompatibility'
 	    , 'mmirf/languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerCompatibility'
 	    , 'mmirf/core3Compatibility' : 'mmirf/tools/extensions/Core3Compatibility'

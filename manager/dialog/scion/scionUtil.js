@@ -4,7 +4,7 @@
  * 
  * @class mmir.env.statemachine.engine.extended
  */	
-define(['mmirf/dictionary', 'mmirf/stringExtension'], function(Dictionary) {
+define(['mmirf/dictionary'], function(Dictionary) {
 
 	/**
 	 * @param {Engine} _scion
@@ -63,7 +63,7 @@ define(['mmirf/dictionary', 'mmirf/stringExtension'], function(Dictionary) {
 				stateObj = states[n];
 
 				var id = stateObj.id;
-				if (!id.startsWith('$')){
+				if (id[0] !== '$'){
 					_states.push(id);
 				}
 

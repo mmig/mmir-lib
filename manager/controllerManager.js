@@ -224,6 +224,9 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	    	var rawControllerName= removeFileExt(controllerName);
 	    	controllerName = rawControllerName;
 	    	
+	    	//helper: check if string starts with the controller's name (ignoring case)
+	    	var reStartsWithCtrl = new RegExp('^'+controllerName, 'i');
+	    	
 	    	
 	    	var viewsPath = constants.getViewPath() + controllerName;
 	    	var genViewsPath = constants.getCompiledViewPath() + controllerName;
@@ -268,10 +271,11 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 
 	    	var helperSuffix = constants.getHelperSuffix();
 	    	var helperInfo = null;
+	    	var reHelpersEnd = new RegExp(helperSuffix+'\.js$', 'i');
 	    	if(helpersFileList != null){
 	    		
 	    		for(i=0, size = helpersFileList.length; i < size; ++i){
-		    		if(helpersFileList[i].startsWith(controllerName, true) && helpersFileList[i].endsWith(helperSuffix+'.js', true)){
+		    		if(reStartsWithCtrl.test(helpersFileList[i]) && reHelpersEnd.test(helpersFileList)){
 		    	    	
 		    			var name = removeFileExt(helpersFileList[i]);
 		    			helperInfo = {
@@ -293,7 +297,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	    	if(layoutsFileList != null){
 		    	for(i=0, size = layoutsFileList.length; i < size; ++i){
 		    		
-		    		if( layoutsFileList[i].startsWith(controllerName, true) ){
+		    		if( reStartsWithCtrl.test(layoutsFileList[i]) ){
 		    			
 		    			var layoutName = removeFileExt(layoutsFileList[i]);
 		    	    	layoutInfo = {

@@ -875,7 +875,7 @@ define (['mmirf/commonUtils','mmirf/languageManager','mmirf/controllerManager','
 		    		
 		    		if(renderingMode === RENDER_MODE_JS_SOURCE_FORCE_VAR_PREFIX){
 		    			//ensure that the replacement variable-name starts with an @:
-		    			if( ! varName.startsWith('@')){
+		    			if( ! varName[0] === '@'){
 		    				varName = '@' + varName;
 		    			}
 		    		}
@@ -887,7 +887,7 @@ define (['mmirf/commonUtils','mmirf/languageManager','mmirf/controllerManager','
 
 	    		} else {
 	    			//render variable (without leading @ symbol)
-	    			renderingBuffer.push(varName.startsWith('@')? varName.substring(1) : varName);
+	    			renderingBuffer.push(varName[0] === '@'? varName.substring(1) : varName);
 	    		}
 	    		
 	    		return renderingBuffer;

@@ -25,7 +25,7 @@
  */
 
 
-define(['mmirf/constants','mmirf/stringExtension','mmirf/util/deferred','mmirf/util/loadFile','mmirf/util/isArray','mmirf/paramsParseFunc','mmirf/logger', 'module', 'require'],
+define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/util/isArray','mmirf/paramsParseFunc','mmirf/logger', 'module', 'require'],
 	/**
 	 * A Utility class to support various functions.<br>
 	 * 
@@ -36,10 +36,8 @@ define(['mmirf/constants','mmirf/stringExtension','mmirf/util/deferred','mmirf/u
 	 * 
 	 * @public
 	 * 
-	 * @requires StringExtensions
 	 * @requires Constants (optionally: jQuery)
 	 * @requires mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
-	 * @requires require
 	 * 
      * @requires util/isArray
      * @requires util/deferred	 in #loadImpl, #loadDirectoryStructure, #setToCompatibilityMode
@@ -50,7 +48,7 @@ define(['mmirf/constants','mmirf/stringExtension','mmirf/util/deferred','mmirf/u
 	 * 
 	 */
 	function(
-		constants, stringExt, deferred, loadFile, _isArray, paramsParseFunc, Logger, module, require
+		constants, deferred, loadFile, _isArray, paramsParseFunc, Logger, module, require
 ) {
 	/** @scope mmir.CommonUtils.prototype *///for jsdoc2
 	
@@ -146,18 +144,22 @@ define(['mmirf/constants','mmirf/stringExtension','mmirf/util/deferred','mmirf/u
 	
 				// FIXME this is a HACK; TODO handle this in a general way!
 				var basePath = constants.getBasePath();
-		
-				if (pathname.startsWith(basePath)) {
-				    pathname = pathname.substring(basePath.length);
+
+				if(basePath){
+			    	//helper: check if string starts with basePath (case-sensitive)
+			    	var re = new RegExp('^'+basePath);
+					if (re.test(pathname)) {
+					    pathname = pathname.substring(basePath.length);
+					}
 				}
 		
-				if (pathname.indexOf("file://") != -1) {
+				if (pathname.indexOf("file://") !== -1) {
 				    pathname = pathname.replace("file://", "");
 				}
-				if (pathname[pathname.length - 1] == "/") {
+				if (pathname[pathname.length - 1] === "/") {
 				    pathname = pathname.substring(0, pathname.length - 1);
 				}
-				if (pathname[0] != "/") {
+				if (pathname[0] !== "/") {
 				    pathname = "/" + pathname;
 				}
 		
@@ -1062,59 +1064,6 @@ define(['mmirf/constants','mmirf/stringExtension','mmirf/util/deferred','mmirf/u
 				
 				return initPromise;
 			}
-		    
-		    /**
-		     * Set to "backwards compatibility mode" (for pre version 2.0).
-		     * 
-		     * This function re-adds deprecated and removed functions and
-		     * properties to the CommonUtils instance.
-		     * 
-		     * NOTE that once set to compatibility mode, it cannot be reset to
-		     * non-compatibility mode.
-		     * 
-             * NOTE: Requires jQuery to be present.
-             * 
-		     * @deprecated use only for backwards compatibility
-		     * 
-		     * @async
-		     * @requires jQuery
-		     * @requires mmir.CommonUtils.setToCompatibilityModeExtension
-		     * 
-		     * @param {Function} [success]
-		     * 				a callback function that is invoked, after compatibility mode
-		     * 				was set (alternatively the returned promise can be used).
-		     * @param {Function} [requireFunction]
-		     * 				the require-function that is configured for loading the compatibility module/file.
-		     * 				Normally, this would be the function <code>mmir.require</code>.
-		     * 				If omitted, the default (local dependency) <code>require</code> function will be used.
-		     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
-		     * 				      you want to specify this argument
-		     * @returns {Promise}
-		     * 				a deferred promise that is resolved, after compatibility mode
-		     * 				was set
-		     * 
-	    	 * @memberOf mmir.CommonUtils.prototype
-	    	 * 
-		     * @see mmir.CommonUtils.setToCompatibilityModeExtension
-		     * 
-		     */
-		    , setToCompatibilityMode : function(success, requireFunction) {
-		    	
-		    	var defer = deferred();
-		    	if(success){
-		    		defer.then(success, success);
-		    	}
-
-		    	requireFunction = requireFunction || require;
-		    	requireFunction(['mmirf/commonUtilsCompatibility'],function(setCompatibility){
-		    		
-		    		setCompatibility(instance);
-		    		
-		    		defer.resolve();
-		    	});
-		    	
-		    	return defer;
-		    }
 			
 		};// END: return {...
 	

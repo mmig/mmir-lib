@@ -1,10 +1,12 @@
 define(['mmirf/semanticInterpreterCompatibility',
     'mmirf/configurationManager','mmirf/controllerManager','mmirf/presentationManager','mmirf/dialogManager','mmirf/dialogEngine',
     'mmirf/inputManager','mmirf/inputEngine','mmirf/commonUtils','mmirf/languageManager','mmirf/mediaManager','mmirf/presentationManager',
-    'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/constants','mmirf/notificationManager','mmirf/grammarConverter'
+    'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/constants','mmirf/notificationManager','mmirf/grammarConverter', 'mmirf/util/deferred',
+    //only loaded, not used as argument:
+    'mmirf/stringExtension'
 ], 
 	/**
-     * Set to "backwards compatibility mode" (for pre version 4.0) for module names and method names.
+     * Set to "backwards compatibility mode v3" (for pre version 4.0) for module names and method names.
      * 
 	 * This function adds old names/synonyms for modules names (on <code>mmir</code> object/namespace):
      * <ul>
@@ -90,6 +92,20 @@ define(['mmirf/semanticInterpreterCompatibility',
      *  </li>
      * </ul>
      * 
+     * Lastly, removed methods will be added:
+     * <ul>
+     * 	 <li> {@link mmir.CommonUtils}
+     * 		<ul>
+     * 			<li><b><u>setToCompatibilityMode</u></b> <em>(removed)</em> to {@link CommonUtils}</li>
+     * 		</ul>
+     *   </li>
+     * 	 <li> {@link mmir.LanguageManager}
+     * 		<ul>
+     * 			<li><b><u>setToCompatibilityMode</u></b> <em>(removed)</em> to {@link mmir.LanguageManager}</li>
+     * 		</ul>
+     *   </li>
+     * </ul>
+     * 
      * @param {mmir} mmir
      * 			the (core) instance/namespace for MMIR
      * 
@@ -110,7 +126,8 @@ define(['mmirf/semanticInterpreterCompatibility',
 	function(semanticInterpreterCompatibility,
 		configurationManager, controllerManager, presentationManager, dialogManager, dialogEngine,
 		inputManager, inputEngine, commonUtils, languageManager, mediaManager, presentationManager,
-		semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter){
+		semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter, deferred
+	){
 
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0).
@@ -174,6 +191,111 @@ define(['mmirf/semanticInterpreterCompatibility',
         
         configurationManager = getLanguage = function(){ return languageManager.getLanguage(); };
         configurationManager.setLanguage = function(lang){ languageManager.setLanguage(lang); };
+        
+        /**
+	     * Set to "backwards compatibility mode" (for pre version 2.0).
+	     * 
+	     * This function re-adds deprecated and removed functions and
+	     * properties to the CommonUtils instance.
+	     * 
+	     * NOTE that once set to compatibility mode, it cannot be reset to
+	     * non-compatibility mode.
+	     * 
+         * NOTE: Requires jQuery to be present.
+         * 
+	     * @deprecated use only for backwards compatibility
+	     * 
+	     * @async
+	     * @requires jQuery
+	     * @requires mmir.CommonUtils.setToCompatibilityModeExtension
+	     * 
+	     * @param {Function} [success]
+	     * 				a callback function that is invoked, after compatibility mode
+	     * 				was set (alternatively the returned promise can be used).
+	     * @param {Function} [requireFunction]
+	     * 				the require-function that is configured for loading the compatibility module/file.
+	     * 				Normally, this would be the function <code>mmir.require</code>.
+	     * 				If omitted, the default (local dependency) <code>require</code> function will be used.
+	     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
+	     * 				      you want to specify this argument
+	     * @returns {Promise}
+	     * 				a deferred promise that is resolved, after compatibility mode
+	     * 				was set
+	     * 
+    	 * @memberOf mmir.Core.setToCompatibilityMode2Extension
+    	 * 
+	     * @see mmir.CommonUtils.setToCompatibilityModeExtension
+	     * 
+	     */
+	    commonUtils.setToCompatibilityMode = function(success, requireFunction) {
+	    	
+	    	var defer = deferred();
+	    	if(success){
+	    		defer.then(success, success);
+	    	}
+
+	    	requireFunction = requireFunction || require;
+	    	requireFunction(['mmirf/commonUtilsCompatibility'],function(setCompatibility){
+	    		
+	    		setCompatibility(commonUtils);
+	    		
+	    		defer.resolve();
+	    	});
+	    	
+	    	return defer;
+	    }
+	    
+	    /**
+         * Set to "backwards compatibility mode" (for pre version 2.0).
+         * 
+         * This function re-adds deprecated and removed functions and
+         * properties to the CommonUtils instance.
+         * 
+         * NOTE that once set to compatibility mode, it cannot be reset to
+         * non-compatibility mode.
+         * 
+         * NOTE: Requires jQuery to be present.
+         * 
+         * @deprecated use only for backwards compatibility
+         * 
+         * @public
+         * @async
+	     * @requires jQuery
+	     * @requires mmir.LanguageManager.setToCompatibilityModeExtension
+	     * 
+	     * @param {Function} [success]
+	     * 				a callback function that is invoked, after compatibility mode
+	     * 				was set (alternatively the returned promise can be used).
+	     * @param {Function} [requireFunction]
+	     * 				the require-function that is configured for loading the compatibility module/file.
+	     * 				Normally, this would be the function <code>mmir.require</code>.
+	     * 				If omitted, the global <code>require</code> function will be used.
+	     * 				NOTE: this argument is positional, i.e. argument <code>success</code> must be present, if
+	     * 				      you want to specify this argument
+	     * @returns {Promise}
+	     * 				a deferred promise that is resolved, after compatibility mode
+	     * 				was set
+	     * 
+    	 * @memberOf mmir.Core.setToCompatibilityMode2Extension
+	     * @see mmir.LanguageManager.setToCompatibilityModeExtension
+         */
+        languageManager.setToCompatibilityMode = function(success, requireFunction) {
+        	
+        	var defer = deferred();
+	    	if(success){
+	    		defer.then(success, success);
+	    	}
+	    	requireFunction = requireFunction || require;
+	    	requireFunction(['mmirf/languageManagerCompatibility'],function(setCompatibility){
+	    		
+	    		setCompatibility(languageManager);
+	    		
+	    		defer.resolve();
+	    	});
+	    	
+	    	return defer;
+            
+        }//END: setToCompatibilityMode()
     };
     
 });
