@@ -6,8 +6,6 @@ var mmirf_config = {
 
 	/** @memberOf mmir.require.config */
 	baseUrl: './'
-		
-		,debugMode: true
 
 	//configurations for the modules:
 	, config: {
@@ -27,6 +25,12 @@ var mmirf_config = {
 	        , mode: 'extended'
 	        //EXAMPLE: set module-specific log-level to 'verbose'
 //		    , logLevel: 'verbose'
+	    }
+	    , 'mmirf/simpleViewEngine': {
+	    	//ID attribute when inserting simpleViewEngine style:
+	    	cssId: 'simple-view'
+	    	//the path to the css file for the simpleViewEngine style:
+	    	, cssUrl: 'mmirf/vendor/styles/simpleViewLayout.css'
 	    }
 
         //EXAMPLE: set module-specific log-level to 'warn'
@@ -73,20 +77,12 @@ var mmirf_config = {
 	    // #####################################################################
 
 	    , 'mmirf/presentationManager': 'mmirf/manager/presentationManager'
-
-	    //default view-engine (this ID is used in core.viewEngine)
-	    , 'mmirf/jqmViewEngine': 'mmirf/env/view/jqmViewEngine'
-
-	    //TODO extract/make optional:
-	    //dependencies for the jqmViewEngine (NOTE these may not be loaded, if jqmViewEngine is not loaded)
-//	 	, 'jquery': 'mmirf/vendor/libs/jquery-2.2.3'
-		, 'jqm': 'mmirf/vendor/libs/jquery.mobile-1.4.5'
-		, 'jqmSimpleModal': 'mmirf/vendor/libs/jquery.simplemodal-1.4.4'
-
+	    
+	    //simple viewEngine for inserting/rendering views into the HTML page 
+	    , 'mmirf/simpleViewEngine': 'mmirf/env/view/simpleViewEngine'
+	    
+	    //helper module that provides a "please wait"-kind of overlay dialog
 		, 'mmirf/waitDialog': 'mmirf/tools/stdlne-wait-dlg'
-
-	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
-	    , 'mmirf/antlr3': 'mmirf/vendor/libs/antlr3-all'
 
 	    , 'mmirf/configurationManager': 'mmirf/manager/settings/configurationManager'
 
@@ -95,7 +91,6 @@ var mmirf_config = {
 
 	    , 'mmirf/mediaManager': 'mmirf/manager/mediaManager'
 		, 'mmirf/notificationManager': 'mmirf/manager/notificationManager'
-
 
 		, 'mmirf/viewConstants': 'mmirf/mvc/views/viewConstants'
 	    // @chsc03 depends on parseUtils, renderUtils, yield, required in presentationManager
@@ -115,7 +110,12 @@ var mmirf_config = {
 	    , 'mmirf/parserModule': 'mmirf/mvc/parser/parserModule'
 
 		, 'mmirf/storageUtils': 'mmirf/mvc/parser/storageUtils'
+		
+		
+		//// template processing / compiling: ////////////
 
+	    // @chsc03 required by parseUtils and all its dependencies declared in presentationManager
+	    , 'mmirf/antlr3': 'mmirf/vendor/libs/antlr3-all'
 	    // @chsc03 parseUtils depends on the following paths
 	    , 'mmirf/parseUtils': 'mmirf/mvc/parser/templateParseUtils'
 	    , 'mmirf/ES3Lexer': 'mmirf/gen/parser/ES3Lexer'
@@ -158,6 +158,7 @@ var mmirf_config = {
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
 		, 'mmirf/loadCss': 'mmirf/tools/loadCss'
 
+		//"backward compatibility-restorer":
 		, 'mmirf/encodeUtils': 'mmirf/tools/extensions/EncodeUtils' 
 		, 'mmirf/jsonUtils': 'mmirf/tools/extensions/JsonUtils'
 		, 'mmirf/resizeToFit': 'mmirf/tools/extensions/ResizeFitToSourroundingBox'
@@ -199,10 +200,6 @@ var mmirf_config = {
     	, 'mmirf/contentParser':  {deps: ['mmirf/antlr3'], init: function(org){ return MmirScriptContentParser;} }
     	, 'mmirf/templateLexer':  {deps: ['mmirf/antlr3'], init: function(org){ return MmirTemplateLexer;} }
     	, 'mmirf/templateParser': {deps: ['mmirf/antlr3'], init: function(org){ return MmirTemplateParser;} }
-
-    	//dependencies for jqmViewEngine (may not be loaded if jqmViewEngine is not loaded)
-    	, 'jqm': ['jquery']
-    	, 'jqmSimpleModal': ['jqm']
 	}
 
 	
@@ -214,13 +211,6 @@ var mmirf_config = {
 };//END: require.config({...
 
 
-//var base = mmirf_config.baseUrl, path;
-//mmirf_config.baseUrl = '';
-//if(base) for(var mod in mmirf_config.paths){
-//	path = mmirf_config.paths[mod];
-//	mmirf_config.paths[mod] = base +'/'+ path;
-//}
-
 //allow to change baseUrl for mmir-lib
 var coreName = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
 var mmirCore = window[coreName];
@@ -229,7 +219,6 @@ if(typeof mmirCore !== 'undefined'){
 		mmirf_config.baseUrl = mmirCore._mmirLibPath;
 	}
 }
-
 
 /** apply mmir-configuration and retrieve (local) requirejs instance
  * @type requirejs

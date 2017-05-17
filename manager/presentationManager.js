@@ -527,7 +527,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
             	
             	var defer = deferred();
             	
-            	var isViewEngineLoaded = false;//MOD modularize view-engine jqm
+            	var isViewEngineLoaded = false;//MOD modularize view-engine
             	var isViewsLoaded = false;//MOD modularize view-loading & -compiling
             	
             	var checkResolved = function(){
@@ -540,7 +540,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
         			defer.reject(msg);
         		};
 
-        		//MOD modularize view-engine jqm: load viewEngine (default is based on jQuery Mobile)
+        		//MOD modularize view-engine: load viewEngine (default uses standard HTML document API)
         		core.require([core.viewEngine], function(viewEngineInit){
         			viewEngineInit.then(
         				function(viewEngine){

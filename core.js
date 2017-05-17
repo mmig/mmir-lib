@@ -498,10 +498,10 @@ function initMmir() {
 			 * @memberOf mmir
 			 * @name viewEngine
 			 * @type String
-			 * @default "mmirf/jqmViewEngine" will load the default view-engine that uses jQuery Mobile
+			 * @default "mmirf/simpleViewEngine" will load the default view-engine that uses standard HTML document API
 			 * @public
 			 */
-			viewEngine: 'mmirf/jqmViewEngine',
+			viewEngine: 'mmirf/simpleViewEngine',
 			
 			
 			/**

@@ -9,7 +9,7 @@ Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library
 This is the mere source code of the bare library (i.e. without any tooling etc.)
 
 Usually, the content of this repository (of the root directory)
-would be placed within the directory ```mmirf/``` of the web application:
+would be placed within the directory `mmirf/` of the web application:
 
     ...
     /controllers/
@@ -25,7 +25,7 @@ For examples, see the [StarterKit][1] or the [minimal Cordova example][2].
 #### Including mmir-lib as subtree
 
 This repository can be included as GIT _subtree_ so that updates can be easily fetched.
-E.g. for including the repository as subtree in the directory ```www/mmirf``` the
+E.g. for including the repository as subtree in the directory `www/mmirf` the
 following command can be used:
 
     git subtree add --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
@@ -53,10 +53,8 @@ _Note: these directions assume, that your web application is located in the
 --
 #### Used Libraries
 
-(see contents of ```/vendor/libs/```)
+(see contents of `/vendor/libs/`)
 
- * jQuery 2.2.3
- * jQuery Mobile 1.4.5
  * RequireJS 2.1.9
  * SCION
  * JS/CC 0.30
@@ -73,7 +71,7 @@ directories into JavaScript files).
 
 NOTE: Integration with / loading of Cordova is now designed to work with the _build process_
       of **Cordova 5** or later (see [MMIR skeleton project][2] for integration / tooling of the MMIR framework
-      in combination with Cordova 5).
+      in combination with Cordova 5 and later versions).
 
 --
 #### License
