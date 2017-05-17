@@ -166,6 +166,7 @@ var mmirf_config = {
 	    , 'mmirf/languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerCompatibility'
 	    , 'mmirf/core3Compatibility' : 'mmirf/tools/extensions/Core3Compatibility'
 	    , 'mmirf/semanticInterpreterCompatibility' : 'mmirf/tools/extensions/SemanticInterpreterCompatibility'
+	    , 'mmirf/core3ModuleIdCompatibility' : 'mmirf/tools/extensions/Core3ModuleIdCompatibility'
 
 
 	    //optional or "dynamically" loaded modules
