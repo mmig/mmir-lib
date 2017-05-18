@@ -694,6 +694,59 @@ GrammarConverter.prototype.executeGrammar = function(text, callback){
 	console.warn('GrammarConverter.executeGrammar: this is only a stub. No grammar implementation set yet...');
 };
 
+//TODO move code-wrapper generator functions to separate generator module?
+
+/**
+ * Get code-prefix for wrapping generated, executable grammars.
+ * 
+ * @param {Number} fileFormatVersion
+ * 				the file format (see {@link mmir.SemanticInterpreter#getFileVersion})
+ * @param {String} execMode
+ * 				the execution mode for the generated grammar: 'sync' | 'async'
+ * 
+ * @returns {String} the prefix code for generated grammars (i.e. prepend to generated grammar code)
+ */
+GrammarConverter.prototype.getCodeWrapPrefix = function(fileFormatVersion, execMode){
+
+	return  '(function(global){\n' +
+			  	'var mmirName = typeof MMIR_CORE_NAME === "string"? MMIR_CORE_NAME : "mmir";\n'+
+			  	'var mmir = global[mmirName];\n'+
+			  	'var require = mmir && mmir.require? mmir.require : require;\n'+
+			  	'var semanticInterpreter = require("mmirf/semanticInterpreter");\n'+
+			  	'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(execMode)+'};\n';
+};
+
+/**
+ * Get code-suffix for wrapping generated, executable grammars.
+ * 
+ * @param {Array<string>} encodedStopwords
+ * 				the list of encoded stopwords (see {@link #getEncodedStopwords})
+ * @param {String} grammarFuncName
+ * 				the (variable's) name of the grammar function that was generated
+ * 				(and will be used in {@link #executeGrammar})
+ * @param {String} grammarId
+ * 				the ID for the grammar (e.g. language code) with which the grammar
+ * 				will be registered with SemanticInterpreter (see {@link mmir.SemanticInterpreter#addGrammar})
+ * 
+ * @returns {String} the suffix code for generated grammars (i.e. append to generated grammar code)
+ */
+GrammarConverter.prototype.getCodeWrapSuffix = function(encodedStopwords, grammarFuncName, grammarId){
+
+	return '\noptions.stopwords=' +
+					//store stopwords with their Unicode representation (only for non-ASCII chars)
+					JSON.stringify(encodedStopwords).replace(/\\\\u/gm,'\\u') +//<- revert JSON.stringify encoding for the Unicodes
+				';\n' +
+				//add "self registering" for the grammar-function
+				//  i.e. register the grammar-function for the ID with the SemanticInterpreter
+				'semanticInterpreter.addGrammar("' +
+					grammarId + '", ' + grammarFuncName + ', options);\n\n' +
+				'return ' + grammarFuncName + ';\n' +
+				'})(window);\n'
+};
+
+
+//TODO move masking/recoding functions to separate utility module?
+
 /**
  * Masks unicoded characters strings.
  * 

@@ -727,7 +727,7 @@ Layout.prototype.stringify = function(){
 	
 	var moduleNameString = '"'+this.name+'Layout"';
 
-	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/layout"', ','];
+	var sb = [storageUtils.STORAGE_CODE_WRAP_PREFIX, 'require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/layout"', ','];
 		
 	appendStringified(this, propList, sb);
 	
@@ -769,6 +769,7 @@ Layout.prototype.stringify = function(){
 //			+ moduleNameString + ']);');
 	
 	sb.push(' }, true, '+storageUtils.STORAGE_FILE_FORMAT_NUMBER+');');
+	sb.push(storageUtils.STORAGE_CODE_WRAP_SUFFIX);
 	
 	return sb.join('');
 };

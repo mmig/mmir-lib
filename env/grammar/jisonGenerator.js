@@ -185,12 +185,8 @@ var jisonGen = {
         //HELPER function for generating the parser-module (after parser was generated)
         var compileParserModule = function(grammarParser, hasError){
         	
-            var addGrammarParserExec = 
-        	  '(function(){\n  var semanticInterpreter = require("mmirf/semanticInterpreter");\n'
-            	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
-            	+ 'var module = {};\n'
+            var addGrammarParserExec = theConverterInstance.getCodeWrapPrefix(fileFormatVersion, JSON.stringify(options.execMode))
             	+ grammarParser
-//            	+ ';\nvar grammarFunc = function(){ return parser.parse.apply(parser, arguments);};\n'
             	+ ';\nvar grammarFunc = function(){\n'
             	+ '  var result;  try {\n'
             	+ '    result = parser.parse.apply(parser, arguments);\n'
@@ -199,17 +195,7 @@ var jisonGen = {
             	+ '  }\n'
             	+ '  return result;\n'
             	+ '};\n'
-            	+ 'options.stopwords='
-	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
-	        		+JSON.stringify(
-	        				theConverterInstance.getEncodedStopwords()
-	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-        		+ ';\n'
-            	+ 'semanticInterpreter.addGrammar("'
-            		+instanceId
-            		+'", grammarFunc, options);\n\n'
-            	+ 'return grammarFunc;\n'
-            	+ '})();';
+            	+ theConverterInstance.getCodeWrapSuffix(theConverterInstance.getEncodedStopwords(), 'grammarFunc', instanceId);
             
             if(options.genSourceUrl){
             	

@@ -183,12 +183,9 @@ var pegjsGen = {
         
         var compileParserModule = function(grammarParser, hasError){
         	
-	        var addGrammarParserExec = 
-	    	  '(function(){\n  var semanticInterpreter = require("mmirf/semanticInterpreter");\n'//FIXME
-	        	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
+	        var addGrammarParserExec = theConverterInstance.getCodeWrapPrefix(fileFormatVersion, JSON.stringify(options.execMode))
 	        	+ 'var parser = '
 	        	+ grammarParser
-	//        	+ ';\nvar grammarFunc = parser.parse;\n'
 	        	+ ';\nvar grammarFunc = function(){\n'
 	        	+ '  var result;  try {\n'
 	        	+ '    result = parser.parse.apply(this, arguments);\n'
@@ -197,17 +194,7 @@ var pegjsGen = {
 	        	+ '  }\n'
 	        	+ '  return result;\n'
 	        	+ '};\n'
-            	+ 'options.stopwords='
-	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
-	        		+JSON.stringify(
-	        				theConverterInstance.getEncodedStopwords()
-	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-        		+ ';\n'
-	        	+ 'semanticInterpreter.addGrammar("'
-	        		+instanceId
-	        		+'", grammarFunc, options);\n\n'
-	        	+ 'return grammarFunc;\n'
-	        	+ '})();';
+            	+ theConverterInstance.getCodeWrapSuffix(theConverterInstance.getEncodedStopwords(), 'grammarFunc', instanceId);
 	        
 	        if(options.genSourceUrl){
             	

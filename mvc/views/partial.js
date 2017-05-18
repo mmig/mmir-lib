@@ -153,7 +153,7 @@ define ( ['mmirf/commonUtils','mmirf/contentElement','mmirf/storageUtils'],
 		
 		var moduleNameString = '"'+this.name+this.getController().getName()+'Partial"';
 		
-		var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/partial"', ','];
+		var sb = [parser.STORAGE_CODE_WRAP_PREFIX, 'require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/partial"', ','];
 		
 		appendStringified(this, propList, sb);
 		
@@ -203,6 +203,7 @@ define ( ['mmirf/commonUtils','mmirf/contentElement','mmirf/storageUtils'],
 //				+ moduleNameString + ']);');
 		
 		sb.push(' }, true, '+parser.STORAGE_FILE_FORMAT_NUMBER+');');
+		sb.push(parser.STORAGE_CODE_WRAP_SUFFIX);
 		return sb.join('');
 	};
 

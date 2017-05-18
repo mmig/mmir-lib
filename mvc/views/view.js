@@ -219,7 +219,7 @@ View.prototype.stringify = function(){
 	
 	var moduleNameString = '"'+this.name+this.getController().getName()+'View"';
 	
-	var sb = ['require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/view"', ','];
+	var sb = [parser.STORAGE_CODE_WRAP_PREFIX, 'require("mmirf/storageUtils").restoreObject({ classConstructor: "mmirf/view"', ','];
 	
 	appendStringified(this, propList, sb);
 	
@@ -279,6 +279,7 @@ View.prototype.stringify = function(){
 //			+ moduleNameString + ']);');
 	
 	sb.push(' }, true, '+parser.STORAGE_FILE_FORMAT_NUMBER+');');
+	sb.push(parser.STORAGE_CODE_WRAP_SUFFIX);
 	
 	return sb.join('');
 };

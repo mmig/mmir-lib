@@ -218,28 +218,9 @@ var jsccGen = {
         
         var compileParserModule = function(grammarParserStr, hasError){
         	
-	        var addGrammarParserExec = 
-	    	  '(function(){\n  var semanticInterpreter = require("mmirf/semanticInterpreter");\n'//FIXME
-	        	+ 'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(options.execMode)+'};\n'
-	        	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){'
-	    			//TODO active/use safe_acc (instead of try-catch construct in semantic-result extraction
-	//        			+ "var safe_acc = function(obj){\n  \tvar len = arguments.length;\n  \tif(len === 1){\n  \t    return null;\n  \t}\n  \tvar curr = obj, prop = arguments[1], i = 2;\n  \tfor(; i < len; ++i){\n  \tif(obj[prop] != null){\n  \t    obj = obj[prop];\n  \t}\n  \tprop = arguments[i];\n  \t}\n  \tvar res = obj[prop];\n  \treturn typeof res !== 'undefined'? res : null;\n  \t};"
-	    			+ grammarParserStr
-	        	+ '\n};\n'
-            	+ 'options.stopwords='
-	        		//store stopwords with their Unicode representation (only for non-ASCII chars)
-	        		+JSON.stringify(
-	        				theConverterInstance.getEncodedStopwords()
-	        		).replace(/\\\\u/gm,'\\u')//<- revert JSON.stringify encoding for the Unicodes
-        		+ ';\n'
-	        	//add "self registering" for the grammar-function
-	        	//  i.e. register the grammar-function for the ID with the SemanticInterpreter
-	        	+ 'semanticInterpreter.addGrammar("'
-	        		+instanceId
-	        		+'", grammarFunc, options);\n\n'
-	        	+ 'return grammarFunc;\n'
-	        	+ '})();'
-	        ;
+	        var addGrammarParserExec = theConverterInstance.getCodeWrapPrefix(fileFormatVersion, JSON.stringify(options.execMode))
+	        	+ 'var grammarFunc = function('+INPUT_FIELD_NAME+'){' + grammarParserStr + '\n};\n'
+            	+ theConverterInstance.getCodeWrapSuffix(theConverterInstance.getEncodedStopwords(), 'grammarFunc', instanceId);
 
 	        if(options.genSourceUrl){
             	

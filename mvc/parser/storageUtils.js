@@ -1,7 +1,7 @@
 
 
 
-define(['mmirf/util/extend', 'mmirf/parserModule'],
+define(['mmirf/util/extend', 'mmirf/parserModule', 'require'],
 /**
  * Extends the parser-module with helper functions for
  * storing/restoring compiled templates (eHTML -> layout, view, partial etc)
@@ -18,7 +18,7 @@ define(['mmirf/util/extend', 'mmirf/parserModule'],
  * @memberOf mmir.parser
  * 
  */		
-function(extend, parser){
+function(extend, parser, require){
 
 /**
  * @public
@@ -27,6 +27,41 @@ function(extend, parser){
  */
 var STORAGE_FILE_FORMAT_NUMBER = 3;
 parser.STORAGE_FILE_FORMAT_NUMBER = STORAGE_FILE_FORMAT_NUMBER;
+
+/**
+ * Prefix for wrapping persisted objects:
+ * 
+ * <ul>
+ *  <li> wraps code into a closure
+ *  </li><li> makes global namespace available as variable <code>global</code> (see {@link #STORAGE_CODE_WRAP_PREFIX} for setting global namespace)
+ *  </li><li> makes mmirf/core available as variable <code>mmir</code> (if mmirf/core is present in global namespace)
+ *  </li><li> makes mmirf/core's require function available as <code>require</code> (if mmirf/core is present and has require function)
+ * </ul>
+ * 
+ * @public
+ * @constant
+ * @memberOf mmir.parser
+ */
+var STORAGE_CODE_WRAP_PREFIX = ';(function(global){\n'
+	+ 'var mmirName = typeof MMIR_CORE_NAME === "string"? MMIR_CORE_NAME : "mmir";\n'
+	+ 'var mmir = global[mmirName];\n'
+	+ 'var require = mmir && mmir.require? mmir.require : require;\n';
+parser.STORAGE_CODE_WRAP_PREFIX = STORAGE_CODE_WRAP_PREFIX;
+
+/**
+ * Suffix for wrapping persisted objects:
+ * 
+ * <ul>
+ *  <li> sets global namespace to <code>window</code>
+ *  </li>
+ * </ul>
+ * 
+ * @public
+ * @constant
+ * @memberOf mmir.parser
+ */
+var STORAGE_CODE_WRAP_SUFFIX = '\n})(window);';
+parser.STORAGE_CODE_WRAP_SUFFIX = STORAGE_CODE_WRAP_SUFFIX;
 
 /**
  * Creates the appropriate object from a JSON-like <tt>storedObject</tt>.
