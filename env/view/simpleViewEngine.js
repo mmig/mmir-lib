@@ -2,24 +2,15 @@
 /**
  * Example for a simplified view/rendering engine:
  *
- * uses the jQuery Mobile styles, but instead of jQM page transitions,
- * page-contents are simply replaced upon page-changes.
+ * uses the standard document API for rendering / inserting views into the current document.
  *
- * <h3>Side Effects</h3>
- * <ul>
- * 	<li>loads the jQuery Mobile CSS file</li>
- * </ul>
  *
  * @example
- * //use page-transition with effect 'slide' (animated as not reversed motion)
  * mmir.DialogManager.render('theController', 'theView');
  *
  * @class
  * @name jqmSimpleViewEngine
  * @static
- *
- * Libraries:
- *  - jQuery (>= v1.6.2)
  *
  *  @depends document (DOM object)
  *  @depends HTMLElement.parentElement
