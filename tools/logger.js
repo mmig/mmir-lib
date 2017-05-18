@@ -32,7 +32,7 @@ define(['mmirf/dictionary', 'mmirf/stacktrace', 'module'],
  * 
  * @example 
  *  //use logger
- *  var Logger = require('mmirf/logger');
+ *  var Logger = mmir.require('mmirf/logger');
  *  var log = Logger.create('example');
  *  
  *  if(log.isVerbose()) log.debug('test');//will write the message to debug-console)

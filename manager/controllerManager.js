@@ -506,7 +506,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 * 				a deferred promise that will get fulfilled when controllers are loaded
 			 * @example
 			 *  //recommended style:
-			 *  require(['mmirf/controllerManager', ...], function(controllerManager, ...) {
+			 *  mmir.require(['mmirf/controllerManager', ...], function(controllerManager, ...) {
 			 *  	controllerManager.init().then(function(theInitializedControllerInstance){
 			 *  		...
 			 *  	});
