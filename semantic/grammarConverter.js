@@ -705,13 +705,15 @@ GrammarConverter.prototype.executeGrammar = function(text, callback){
  * 				the execution mode for the generated grammar: 'sync' | 'async'
  * 
  * @returns {String} the prefix code for generated grammars (i.e. prepend to generated grammar code)
+ * 
+ * @see mmir.parser#STORAGE_CODE_WRAP_PREFIX
  */
 GrammarConverter.prototype.getCodeWrapPrefix = function(fileFormatVersion, execMode){
 
 	return  '(function(global){\n' +
 			  	'var mmirName = typeof MMIR_CORE_NAME === "string"? MMIR_CORE_NAME : "mmir";\n'+
-			  	'var mmir = global[mmirName];\n'+
-			  	'var require = mmir && mmir.require? mmir.require : require;\n'+
+			  	'var mmir = global? global[mmirName] : void(0);\n'+
+			  	'var require = mmir && mmir.require? mmir.require : (typeof requirejs !== "undefined"? requirejs : (global? global.require : require));\n'+
 			  	'var semanticInterpreter = require("mmirf/semanticInterpreter");\n'+
 			  	'var options = {fileFormat:'+fileFormatVersion+',execMode:'+JSON.stringify(execMode)+'};\n';
 };
@@ -729,6 +731,8 @@ GrammarConverter.prototype.getCodeWrapPrefix = function(fileFormatVersion, execM
  * 				will be registered with SemanticInterpreter (see {@link mmir.SemanticInterpreter#addGrammar})
  * 
  * @returns {String} the suffix code for generated grammars (i.e. append to generated grammar code)
+ * 
+ * @see mmir.parser#STORAGE_CODE_WRAP_SUFFIX
  */
 GrammarConverter.prototype.getCodeWrapSuffix = function(encodedStopwords, grammarFuncName, grammarId){
 

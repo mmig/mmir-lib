@@ -41,10 +41,13 @@ parser.STORAGE_FILE_FORMAT_NUMBER = STORAGE_FILE_FORMAT_NUMBER;
  * @public
  * @constant
  * @memberOf mmir.parser
+ * 
+ * @see GrammarConverter#getCodeWrapPrefix
  */
 var STORAGE_CODE_WRAP_PREFIX = ';(function(global){\n'
 	+ 'var mmirName = typeof MMIR_CORE_NAME === "string"? MMIR_CORE_NAME : "mmir";\n'
-	+ 'var mmir = global[mmirName];\n'
+  	+ 'var mmir = global? global[mmirName] : void(0);\n'
+  	+ 'var require = mmir && mmir.require? mmir.require : (typeof requirejs !== "undefined"? requirejs : (global? global.require : require));\n'
 	+ 'var require = mmir && mmir.require? mmir.require : require;\n';
 parser.STORAGE_CODE_WRAP_PREFIX = STORAGE_CODE_WRAP_PREFIX;
 
@@ -59,6 +62,8 @@ parser.STORAGE_CODE_WRAP_PREFIX = STORAGE_CODE_WRAP_PREFIX;
  * @public
  * @constant
  * @memberOf mmir.parser
+ * 
+ * @see GrammarConverter#getCodeWrapSuffix
  */
 var STORAGE_CODE_WRAP_SUFFIX = '\n})(window);';
 parser.STORAGE_CODE_WRAP_SUFFIX = STORAGE_CODE_WRAP_SUFFIX;
