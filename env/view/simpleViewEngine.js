@@ -26,7 +26,7 @@
  *  @depends HTMLElement.removeChild
  *
  */
-define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module'],function(loadCss, Logger, Deferred, module){
+define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(loadCss, Logger, Deferred, module, require){
 
 	var log = Logger.create(module);
 	
