@@ -1,5 +1,5 @@
 define(['mmirf/semanticInterpreterCompatibility',
-    'mmirf/configurationManager','mmirf/controllerManager','mmirf/presentationManager','mmirf/dialogManager','mmirf/dialogEngine',
+    'mmirf/configurationManager','mmirf/controllerManager','mmirf/dialogManager','mmirf/dialogEngine',
     'mmirf/inputManager','mmirf/inputEngine','mmirf/commonUtils','mmirf/languageManager','mmirf/mediaManager','mmirf/presentationManager',
     'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/constants','mmirf/notificationManager','mmirf/grammarConverter', 'mmirf/util/deferred',
     //only loaded, not used as argument:
@@ -130,7 +130,7 @@ define(['mmirf/semanticInterpreterCompatibility',
 	 * @public
 	 */
 	function(semanticInterpreterCompatibility,
-		configurationManager, controllerManager, presentationManager, dialogManager, dialogEngine,
+		configurationManager, controllerManager, dialogManager, dialogEngine,
 		inputManager, inputEngine, commonUtils, languageManager, mediaManager, presentationManager,
 		semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter, deferred
 	){
@@ -171,11 +171,13 @@ define(['mmirf/semanticInterpreterCompatibility',
 //    	mediaManager.setTextToSpeechVolume = mediaManager.ttsVolume;
     	
     	presentationManager.renderView = presentationManager.render;
-    	semanticInterpreter.getASRSemantic = semanticInterpreter.interpret;
     	controllerManager.getController = controllerManager.get;
     	controllerManager.getControllerNames = controllerManager.getNames;
     	modelManager.getModel = modelManager.get;
     	modelManager.getModels = modelManager.getNames;
+    	
+    	//set backwards-compatibility mode for semanticInterpreter and GrammarConverter
+        semanticInterpreterCompatibility(semanticInterpreter, GrammarConverter);
     	
     	var getInstance = function(){return this;};
     	controllerManager.getInstance = getInstance;
@@ -197,6 +199,7 @@ define(['mmirf/semanticInterpreterCompatibility',
         
         configurationManager = getLanguage = function(){ return languageManager.getLanguage(); };
         configurationManager.setLanguage = function(lang){ languageManager.setLanguage(lang); };
+        
         
         /**
 	     * Set to "backwards compatibility mode" (for pre version 2.0).
