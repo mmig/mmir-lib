@@ -182,7 +182,7 @@ var mmirf_config = {
 	    // (console) logging related modules (either 'mmirf/loggerEnabled' or 'mmirf/loggerDisabled' will be mapped to 'mmirf/logger', depending on configuration
     	, 'mmirf/loggerEnabled': 'mmirf/tools/logger'
     	, 'mmirf/loggerDisabled': 'mmirf/tools/loggerDisabled'
-	    , 'mmirf/stacktrace': 'mmirf/vendor/libs/stacktrace-v0.6.4'
+	    , 'mmirf/stacktrace': 'mmirf/vendor/libs/stacktrace-v0.6.4-mod'
 
 	},//END: paths : {...
 
