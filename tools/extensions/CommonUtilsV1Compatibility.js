@@ -1,6 +1,6 @@
 define(['mmirf/jsonUtils', 'mmirf/resizeToFit'],
 	/**
-     * Set to "backwards compatibility mode" (for pre version 2.0) for CommonUtils.
+     * Set to "backwards compatibility mode v1" (for pre version 2.0) for CommonUtils.
      * NOTE: needs {@link mmir.Core.setToCompatibilityModeExtension} to be set first!
      *
      * This function re-adds deprecated and removed functions and
@@ -46,7 +46,7 @@ define(['mmirf/jsonUtils', 'mmirf/resizeToFit'],
 	 * @static
 	 *
 	 * @example
-	 * require(['mmirf/core3Compatibility', 'mmirf/commonUtilsCompatibility', 'mmirf/core', 'mmirf/commonUtils'], function(setCoreCompatibility, setCompatibility, core, utils){
+	 * mmir.require(['mmirf/core3Compatibility', 'mmirf/commonUtilsCompatibility', 'mmirf/core', 'mmirf/commonUtils'], function(setCoreCompatibility, setCompatibility, core, utils){
 	 * 		setCoreCompatibility(core);
 	 * 		setCompatibility(utils);
 	 * });

@@ -163,11 +163,12 @@ var mmirf_config = {
 		, 'mmirf/stringUtils': 'mmirf/tools/extensions/StringUtils'
 		, 'mmirf/resizeToFit': 'mmirf/tools/extensions/ResizeFitToSourroundingBox'
 	    , 'mmirf/stringExtension': 'mmirf/tools/extensions/StringExtensions'
+	    , 'mmirf/core1Compatibility' : 'mmirf/tools/extensions/Core1Compatibility'
+	    , 'mmirf/commonUtilsCompatibility': 'mmirf/tools/extensions/CommonUtilsV1Compatibility'
+	    , 'mmirf/languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerV1Compatibility'
 	    , 'mmirf/core2Compatibility' : 'mmirf/tools/extensions/Core2Compatibility'
-	    , 'mmirf/commonUtilsCompatibility': 'mmirf/tools/extensions/CommonUtilsCompatibility'
-	    , 'mmirf/languageManagerCompatibility': 'mmirf/tools/extensions/LanguageManagerCompatibility'
 	    , 'mmirf/core3Compatibility' : 'mmirf/tools/extensions/Core3Compatibility'
-	    , 'mmirf/semanticInterpreterCompatibility' : 'mmirf/tools/extensions/SemanticInterpreterCompatibility'
+	    , 'mmirf/semanticInterpreterCompatibility' : 'mmirf/tools/extensions/SemanticInterpreterV3Compatibility'
 	    , 'mmirf/core3ModuleIdCompatibility' : 'mmirf/tools/extensions/Core3ModuleIdCompatibility'
 
 

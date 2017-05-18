@@ -111,13 +111,19 @@ define(['mmirf/semanticInterpreterCompatibility',
      * 
 	 * 
 	 * @class
-	 * @name mmir.Core.setToCompatibilityModeExtension
+	 * @name mmir.Core.setToCompatibilityMode3Extension
 	 * @static
 	 * 
 	 * @requires SemanticInterpreterCompatibility
 	 * 
 	 * @example
-	 * require(['mmirf/core3Compatibility', 'mmirf/core'], function(setCompatibility, mmir){
+	 * mmir.require(['mmirf/core3Compatibility', 'mmirf/core'], function(setCompatibility, mmir){
+	 * 		setCompatibility(mmir);
+	 * });
+	 * 
+	 * //OR: if mmir-lib modules were require'd in application code, add v3 module-ID aliases first:
+	 * mmir.require(['mmirf/core3ModuleIdCompatibility', 'mmirf/core3Compatibility', 'mmirf/core'], function(core3ModuleIdCompatibility, setCompatibility, mmir){
+	 * 		core3ModuleIdCompatibility(mmir.require, window);
 	 * 		setCompatibility(mmir);
 	 * });
 	 * 
@@ -142,7 +148,7 @@ define(['mmirf/semanticInterpreterCompatibility',
      * @param {mmir} mmir
      * 			the (core) instance/namespace for MMIR
      * 
-     * @constructs mmir.Core.setToCompatibilityModeExtension
+     * @constructs mmir.Core.setToCompatibilityMode3Extension
      */
     return setToCompatibilityMode = function(mmir) {
     	
@@ -222,10 +228,7 @@ define(['mmirf/semanticInterpreterCompatibility',
 	     * 				a deferred promise that is resolved, after compatibility mode
 	     * 				was set
 	     * 
-    	 * @memberOf mmir.Core.setToCompatibilityMode2Extension
-    	 * 
-	     * @see mmir.CommonUtils.setToCompatibilityModeExtension
-	     * 
+    	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
 	     */
 	    commonUtils.setToCompatibilityMode = function(success, requireFunction) {
 	    	
@@ -276,8 +279,7 @@ define(['mmirf/semanticInterpreterCompatibility',
 	     * 				a deferred promise that is resolved, after compatibility mode
 	     * 				was set
 	     * 
-    	 * @memberOf mmir.Core.setToCompatibilityMode2Extension
-	     * @see mmir.LanguageManager.setToCompatibilityModeExtension
+    	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
          */
         languageManager.setToCompatibilityMode = function(success, requireFunction) {
         	

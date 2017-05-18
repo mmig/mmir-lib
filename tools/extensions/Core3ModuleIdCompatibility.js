@@ -5,10 +5,13 @@ define(['mmirf/util/isArray'],
      * 
 	 * 
 	 * @class
-	 * @name mmir.Core.getCompatibilityModuleId
+	 * @name mmir.Core.getCompatibility3ModuleId
 	 * @static
 	 * 
 	 * @example
+	 * mmir.require(['mmirf/core3ModuleIdCompatibility', 'mmirf/core'], function(core3ModuleIdCompatibility, mmir){
+	 * 		core3ModuleIdCompatibility(mmir.require, window, false);
+	 * });
 	 * 
 	 * @public
 	 */
@@ -17,7 +20,7 @@ define(['mmirf/util/isArray'],
 	/**
 	 * Map v3 IDs (input) to v4 IDs (output)
 	 * 
-	 * @memberOf mmir.Core.getCompatibilityModuleId
+	 * @memberOf mmir.Core.getCompatibility3ModuleId
 	 */
 	var core3Ids = {
 			
@@ -116,7 +119,7 @@ define(['mmirf/util/isArray'],
 	/**
 	 * requirejs shim configuration for v3 modules (that are no longer used in v4).
 	 * 
-	 * @memberOf mmir.Core.getCompatibilityModuleId
+	 * @memberOf mmir.Core.getCompatibility3ModuleId
 	 */
 	var core3Shims = {
 		shim: {
@@ -135,7 +138,7 @@ define(['mmirf/util/isArray'],
      * @returns {String}
      * 			the corresponding v4 module ID
      * 
-	 * @memberOf mmir.Core.getCompatibilityModuleId
+	 * @memberOf mmir.Core.getCompatibility3ModuleId
      */
     var getId = function(id) {
     	
@@ -153,7 +156,7 @@ define(['mmirf/util/isArray'],
      * @example
      * mmir.config(compat.getLegacyConfig());
      * 
-	 * @memberOf mmir.Core.getCompatibilityModuleId
+	 * @memberOf mmir.Core.getCompatibility3ModuleId
      */
     var getLegacyConfig = function() {
     	
@@ -174,7 +177,7 @@ define(['mmirf/util/isArray'],
      * @param {mmir} mmir
      * 			the (core) instance/namespace for MMIR
      * 
-	 * @memberOf mmir.Core.getCompatibilityModuleId
+	 * @memberOf mmir.Core.getCompatibility3ModuleId
      */
     var setToCompatibilityMode = function(requirejs, context, isSetJsOnly) {
     	

@@ -1,17 +1,20 @@
 define(['mmirf/encodeUtils'],
 	/**
-     * Set to "backwards compatibility mode" (for pre version 4.0) for SemanticInterpreter (and GrammarConvert).
-     *  
+     * Set to "backwards compatibility mode v3" (for pre version 4.0) for SemanticInterpreter (and GrammarConvert).
+     * 
+     * Used by {@link mmir.Core.setToCompatibilityMode3Extension}.
+     * 
 	 * @class
 	 * @name mmir.SemanticInterpreter.setToCompatibilityModeExtension
 	 * @static
 	 * 
 	 * @example
-	 * require(['mmirf/semanticInterpreterCompatibility', 'mmirf/semanticInterpreter', 'mmirf/grammarConverter'], function(setCompatibility, semanticInterpreter, GrammarConverter){
+	 * mmir.require(['mmirf/semanticInterpreterCompatibility', 'mmirf/semanticInterpreter', 'mmirf/grammarConverter'], function(setCompatibility, semanticInterpreter, GrammarConverter){
 	 * 		setCompatibility(semanticInterpreter, GrammarConverter);
 	 * });
 	 * 
 	 * @public
+	 * @see mmir.Core.setToCompatibilityMode3Extension
 	 */
 	function(encodeUtils){
 

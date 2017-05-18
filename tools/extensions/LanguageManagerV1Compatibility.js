@@ -1,6 +1,6 @@
 define(['mmirf/commonUtils', 'mmirf/presentationManager', 'mmirf/dialogManager'],
 	/**
-     * Set to "backwards compatibility mode" (for pre version 2.0) for LanguageManager.
+     * Set to "backwards compatibility mode v1" (for pre version 2.0) for LanguageManager.
      * NOTE: needs {@link mmir.Core.setToCompatibilityModeExtension} to be set first!
      * 
 	 * This function re-adds deprecated and removed functions and
@@ -40,7 +40,7 @@ define(['mmirf/commonUtils', 'mmirf/presentationManager', 'mmirf/dialogManager']
 	 * @static
 	 * 
 	 * @example
-	 * require(['mmirf/core3Compatibility', 'mmirf/languageManagerCompatibility', 'mmirf/core', 'mmirf/languageManager'], function(setCoreCompatibility, setCompatibility, mmir, languageManager){
+	 * mmir.require(['mmirf/core3Compatibility', 'mmirf/languageManagerCompatibility', 'mmirf/core', 'mmirf/languageManager'], function(setCoreCompatibility, setCompatibility, mmir, languageManager){
 	 * 		setCoreCompatibility(mmir);
 	 * 		setCompatibility(languageManager);
 	 * });
