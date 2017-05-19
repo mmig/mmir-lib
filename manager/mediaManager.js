@@ -873,7 +873,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			, voice: OPTIONAL String, the voice (language specific) for synthesis; NOTE that the specific available voices depend on the TTS engine
     			 * 			, success: OPTIONAL Function, the on-playing-completed callback (see arg onPlayedCallback)
     			 * 			, error: OPTIONAL Function, the error callback (see arg failureCallback)
-    			 * 			, ready: OPTIONAL Function, the audio-ready callback (see arg onInitCallback)
+    			 * 			, ready: OPTIONAL Function, the audio-ready callback (see arg onReadyCallback)
     			 * 		}</pre>
     			 * 
     			 * @param {Function} [onPlayedCallback] OPTIONAL
@@ -884,13 +884,16 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			callback that is invoked in case an error occured:
     			 * 			<pre>failureCallback(error: String | Error)</pre>
     			 * 
-    			 * @param {Function} [onInitCallback] OPTIONAL
-    			 * 			callback that is invoked in case an error occured:
-    			 * 			<pre>onInitCallback(isReady: Boolean, audio: IAudio)</pre>
+    			 * @param {Function} [onReadyCallback] OPTIONAL
+    			 * 			callback that is invoked when audio becomes ready / is starting to play.
+    			 * 			If, after the first invocation, audio is paused due to preparing the next audio,
+    			 * 			then the callback will be invoked with <code>false</code>, and then with <code>true</code>
+    			 * 			(as first argument), when the audio becomes ready again, i.e. the callback signature is:
+    			 * 			<pre>onReadyCallback(isReady: Boolean, audio: IAudio)</pre>
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			tts: function(options, onPlayedCallback, failureCallback, onInitCallback){
+    			tts: function(options, onPlayedCallback, failureCallback, onReadyCallback){
     				
     				if(typeof options === 'function'){
     					onInitCallback = failureCallback;
