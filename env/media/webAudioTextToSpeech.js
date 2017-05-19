@@ -122,20 +122,24 @@ newMediaPlugin = {
 			 */
 			var commonUtils = _req('commonUtils');
 
-			
-			/**
-			 * @type mmir.Logger
-			 * @memberOf WebAudioTextToSpeech#
-			 */
-			var _logger;
-
 			/**  
 			 * Will be set/"overwritten" by specific implementation.
 			 * 
 			 * @protected
 			 * @memberOf WebAudioTextToSpeech#
+			 * @see #initImpl
 			 */
 			var _pluginName;
+			
+			/**
+			 * Will be set when specific implementation is initialized.
+			 * 
+			 * @type mmir.Logger
+			 * @protected
+			 * @memberOf WebAudioTextToSpeech#
+			 * @see #initImpl
+			 */
+			var _logger;
 
 			/**  
 			 * Will be set/"overwritten" by specific implementation.
@@ -287,18 +291,6 @@ newMediaPlugin = {
 				
 			};
 			
-			/** 
-			 * HELPER for splitting a single String into "sentences", i.e. Array of Strings
-			 * @param {String} text
-			 * 			the input String
-			 * @returns {Array<String>} a list of strings
-			 * @memberOf WebAudioTextToSpeech#
-			 */
-			var defaultSplitter = function(text){
-				text = text.replace(/\.\s|\?\s|\!\s/g,"#");
-				return text.split("#");
-			};
-			
 			/**  @memberOf WebAudioTextToSpeech# */
 			var getLangParam = function(options, langSeparator){
 				return options && options.language? options.language : languageManager.getLanguageConfig(_pluginName, 'language', langSeparator);
@@ -346,7 +338,7 @@ newMediaPlugin = {
 						
 						if(!startedImmediatelely){
 							
-							if(_logger.isd()) _logger.d('LongTTS '+playIndex+': not ready yet...');
+							if(_logger.isd()) _logger.d('LongTTS '+playIndex+': preparing...');
 							mediaManager._preparing(_pluginName);
 							audioArray[playIndex].__notready = true;
 							
@@ -413,7 +405,7 @@ newMediaPlugin = {
 							function(){
 								mediaManager._ready(_pluginName);
 								if(onLoad){
-									onLoad();
+									onLoad(true, this);
 								}
 							});
 					ttsMedia.play();
@@ -526,7 +518,7 @@ newMediaPlugin = {
 										mediaManager._ready(_pluginName);
 										onInit(true, this);
 									} else if(this.__notready && onReadyCallback){
-										if(_logger.isd()) _logger.d('LongTTS: ready again');
+										if(_logger.isd()) _logger.d('LongTTS: ready again.');
 										mediaManager._ready(_pluginName);
 										onReadyCallback(true, this);
 									}
@@ -563,6 +555,12 @@ newMediaPlugin = {
 				
 				_pluginName = pluginName;
 				_logger = _req('logger').create(_pluginName);
+				
+				var logLevel = configurationManager.get([_pluginName, 'logLevel'], true, null);
+				if(logLevel !== null){
+					_logger.setLevel(logLevel);
+				}
+				
 				createAudio = createAudioFunc;
 				
 				//optional: set default implementations, if imp. "requests" it by specifying a setter function
@@ -587,11 +585,12 @@ newMediaPlugin = {
 					return this.tts.apply(this, arguments);
 				},
 				/**
+				 * @copydoc mmir.MediaManager#tts
 				 * @public
 				 * @memberOf WebAudioTextToSpeech.prototype
-				 * @see mmir.MediaManager#textToSpeech
+				 * @see mmir.MediaManager#tts
 				 */
-				tts: function(parameter, successCallback, failureCallback, onInit, options){
+				tts: function(options, successCallback, failureCallback, onReadyCallback, options2){//NOTE params onReadyCallback and options2 are deprecated, use (first) param options instead
 					var errMsg;
 					if (!isReady) {
 						
@@ -614,37 +613,21 @@ newMediaPlugin = {
 					
 					var text;
 					var isMultiple = false;
-					if (typeof parameter === 'object'){
+					if (typeof options === 'object'){
 						
-						if (parameter.text && commonUtils.isArray(parameter.text)){
-							if (parameter.forceSingleSentence){
-								text = commonUtils.concatArray(parameter.text);
-							} else {
-								text = parameter.text;
-							}
-						} 
-
-						//if text is string: apply splitting, if requested:
-						if (typeof parameter.text === 'string'){
-							if (parameter.split || parameter.splitter){
-								var splitter = parameter.splitter || defaultSplitter;
-								text = splitter(parameter.text);
-							} else {
-								text = parameter.text;
-							}
-						}
+						text = options.text;
 						
 						if(!text){
-							text = parameter;
+							text = options;
 						}
 						
-						if(!options){
-							options = parameter;
+						if(!options2){
+							options2 = options;
 						}
-						//TODO else: merge parameter into options
+						//TODO else: merge options into options2
 						
 					} else {
-						text = parameter;
+						text = options;
 					}
 						
 					if(text && commonUtils.isArray(text)){
@@ -671,11 +654,11 @@ newMediaPlugin = {
 					
 					if(!isMultiple){
 						
-						ttsSingleSentence(text, successCallback, failureCallback, onInit, options);
+						ttsSingleSentence(text, successCallback, failureCallback, onReadyCallback, options2);
 						
 					} else {
 						
-						ttsSentenceArray(text, successCallback, failureCallback, onInit, options);
+						ttsSentenceArray(text, successCallback, failureCallback, onReadyCallback, options2);
 					}
 				},
 				/**
@@ -684,10 +667,10 @@ newMediaPlugin = {
 				 * @see mmir.MediaManager#cancelSpeech
 				 */
 				cancelSpeech: function(successCallback, failureCallback){
-//					_logger.debug('cancel tts...');
+					_logger.debug('cancel tts...');
 					try {
 						
-						//immediately disable onInit / ready callbacks:
+						//immediately disable onReadyCallback / ready callbacks:
 						onReadyCallback = null;
 
 						//EXPERIMENTAL: use command-queue in case TTS is currently in use -> empty queue
@@ -766,7 +749,7 @@ newMediaPlugin = {
 				//if no configuration: use default impl.
 				implFile = _defaultImplFile;
 				
-			} else if(!/\.js$/.test(implFile)){
+			} else if(!/\.js$/i.test(implFile)){
 				implFile += '.js';
 			}
 			
