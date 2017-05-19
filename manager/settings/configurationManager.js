@@ -214,45 +214,6 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
         return {
         	
         	// public members
-        	
-//			/**
-//			 * Returns the currently used language. 
-//			 * 
-//			 * <p>This does not return the language of the configuration, but is a
-//			 * shortcut for {@link mmir.LanguageManager#getLanguage}.
-//			 * 
-//			 * 
-//			 * @deprecated use {@link mmir.LanguageManager#getLanguage}() instead!
-//			 * 
-//			 * @requires mmir.LanguageManager
-//			 * 
-//			 * @function
-//			 * @returns {String} The currently used language
-//			 * @public
-//			 * 
-//			 * @memberOf ConfigurationManager.prototype
-//			 */
-//            getLanguage: function(){
-//                return getLanguageManager().getLanguage();
-//            },
-//			/**
-//			 * Sets the currently used language.
-//			 * 
-//			 * <p>This does not set the language of the configuration, but is a
-//			 * shortcut for {@link mmir.LanguageManager#setLanguage}.
-//			 * 
-//			 * 
-//			 * @deprecated use {@link mmir.LanguageManager#setLanguage}(lang) instead!
-//			 * 
-//			 * @requires mmir.LanguageManager
-//			 * 
-//			 * @function
-//			 * @param {String} lang The language which is to be used
-//			 * @public
-//			 */
-//            setLanguage: function(lang){
-//            	getLanguageManager().setLanguage(lang);
-//            },
 			/**
 			 * Returns the value of a property.
 			 *  
@@ -266,23 +227,25 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 			 * 						  so that the <code>value</code> at:
 			 * 						  <code>some: {property: &lt;value&gt;}</code>
 			 * 						  will be returned
+			 * @param {any} [defaultValue] OPTIONAL
+			 * 					a default value that will be returned, in case there is no property
+			 * 					<code>propertyName</code>.
 			 * @param {Boolean} [useSafeAccess] OPTIONAL
 			 * 					if <code>true</code>, resolution of dot-separated paths
 			 * 					will be done "safely", i.e. if a path-element does not
 			 * 					exists, no <code>error</code> will be thrown, but instead
 			 * 					the function will return the <code>defaultValue</code>
 			 * 					(which will be <code>undefined</code> if the argument is not given).
-			 * @param {any} [defaultValue] OPTIONAL
-			 * 					a default value that will be returned, in case there is no property
-			 * 					<code>propertyName</code>.
 			 * 
-             * 					NOTE: if this argument is used, <code>useSafeAccess</code> must also be given!
+			 * 					<br>DEFAULT: <code>true</code>
+             * 					<br>NOTE: if this argument is used, param <code>defaultValue</code> must also be given!
 			 * 
 			 * @returns {any} 
 			 * 					The value of the property
 			 * @public
+			 * @memberOf ConfigurationManager.prototype
 			 */
-            get: function(propertyName, useSafeAccess, defaultValue){
+            get: function(propertyName, defaultValue, useSafeAccess){
             	
             	if(configData){
             		
@@ -295,6 +258,10 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
             		//ASSERT path.length == 1: already handled by if(configData[propertyName]...
             		
             		if(path.length > 1){
+            			
+            			if(typeof useSafeAccess === 'undefined'){
+            				useSafeAccess = true;
+            			}
             			
             			if(useSafeAccess && typeof configData[ path[0] ] === 'undefined'){
             				return defaultValue;///////////// EARLY EXIT /////////////////////////
@@ -349,6 +316,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 			 * 					already exists AND its type is not 'object' 
 			 * 
 			 * @public
+			 * @memberOf ConfigurationManager.prototype
 			 */
             set: function(propertyName, value){
             	if(!configData){
@@ -406,15 +374,12 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
              * 				  to a Boolean value, if necessary. 
              * 
              * @see {@link #get}
+			 * @memberOf ConfigurationManager.prototype
              */
-            getBoolean: function(propertyName, useSafeAccess, defaultValue){
+            getBoolean: function(propertyName, defaultValue, useSafeAccess){
             	
-            	var val = this.get(propertyName, useSafeAccess);
-            	
-            	if(typeof val === 'undefined' && typeof defaultValue !== 'undefined' ){
-            		val = defaultValue;
-            	}
-            	
+            	var val = this.get(propertyName, defaultValue, useSafeAccess);
+            	            	
             	if(typeof val !== 'undefined'){
             		
             		if( val === 'false'){
@@ -448,15 +413,12 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
              * 				  to a String value, if necessary. 
              * 
              * @see {@link #get}
+			 * @memberOf ConfigurationManager.prototype
              */
-            getString: function(propertyName, useSafeAccess, defaultValue){
+            getString: function(propertyName, defaultValue, useSafeAccess){
             	
-            	var val = this.get(propertyName, useSafeAccess);
-            	
-            	if(typeof val === 'undefined' && typeof defaultValue !== 'undefined' ){
-            		val = defaultValue;
-            	}
-            	
+            	var val = this.get(propertyName, defaultValue, useSafeAccess);
+            	            	
             	if(typeof val !== 'undefined'){
             		
             		if(typeof val === 'string'){
@@ -471,7 +433,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
             
         };//END: return {...
         
-    }//END: construcor = function(){...
+    }//END: constructor = function(){...
 
 		    	
 	instance = new constructor();

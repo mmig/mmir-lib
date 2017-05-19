@@ -178,7 +178,7 @@ var jisonGen = {
         var grammarDefinition = theConverterInstance.getGrammarDef();
         
         //load options from configuration:
-        var config = configManager.get(pluginName, true, {});
+        var config = configManager.get(pluginName, {});
         //combine with default default options:
         var options = extend({id: instanceId}, DEFAULT_OPTIONS, config);
         

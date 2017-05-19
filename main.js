@@ -72,7 +72,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 	 * @memberOf main
 	 */
 	var getContextFor = function(ctxConfigName){
-		var ctxName = configurationManager.get(ctxConfigName, true);
+		var ctxName = configurationManager.get(ctxConfigName);
 		if(ctxName){
 			var namespaces = ctxName.split('.');
 			var ctx = window, name;
@@ -208,7 +208,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 				 * @see mmir.SemanticInterpreter#setGrammarEngine
 				 * @type String 
 				 * @memberOf main */
-				var grammarEngine = configurationManager.get('grammarCompiler', true);
+				var grammarEngine = configurationManager.get('grammarCompiler');
 				if(grammarEngine){
 					semanticInterpreter.setGrammarEngine(grammarEngine);
 				}
@@ -216,13 +216,13 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 				 * @see mmir.SemanticInterpreter#setEngineCompileMode
 				 * @type Boolean
 				 * @memberOf main */
-				var grammarCompileMode = configurationManager.get('grammarAsyncCompileMode', true);
+				var grammarCompileMode = configurationManager.get('grammarAsyncCompileMode');
 				if(typeof grammarCompileMode !== 'undefined'){
 					semanticInterpreter.setEngineCompileMode(grammarCompileMode);
 				}
 				
 				//TODO impl. automated sync/async loading&execution for compiled grammars
-//				var grammarExecMode = configurationManager.get('grammarExecMode', true);
+//				var grammarExecMode = configurationManager.get('grammarExecMode');
 //				if(typeof grammarExecMode !== 'undefined'){
 //					semanticInterpreter.setGrammarExecMode(grammarExecMode);//TODO add async-loaded grammars to ignoreGrammarFiles-list (to prevent loading them in "sync-exec mode")
 //				}
@@ -231,7 +231,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 				 * @type String
 				 * @memberOf main
 				 */
-				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', true, void(0));
+				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', void(0));
 
 				commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
 					

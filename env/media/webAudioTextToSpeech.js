@@ -556,7 +556,7 @@ newMediaPlugin = {
 				_pluginName = pluginName;
 				_logger = _req('logger').create(_pluginName);
 				
-				var logLevel = configurationManager.get([_pluginName, 'logLevel'], true, null);
+				var logLevel = configurationManager.get([_pluginName, 'logLevel'], null);
 				if(logLevel !== null){
 					_logger.setLevel(logLevel);
 				}
@@ -735,13 +735,13 @@ newMediaPlugin = {
 				
 			} else if(ctxId){
 				//if plugin was loaded into a specific context, check, if there is a configuration value for this context)
-				implFile = configurationManager.get(configPath, true);
+				implFile = configurationManager.get(configPath);
 			}
 			
 			if(!implFile){
 				//use default configuration path
 				configPath[1] = _defaultCtxName;
-				implFile = configurationManager.get(configPath, true);
+				implFile = configurationManager.get(configPath);
 			}
 			
 			if(!implFile){

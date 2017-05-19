@@ -105,11 +105,31 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      *  </li>
      * </ul>
      * 
+     * Methods with changed signature will be re-mapped to match their old signature
+     * <ul>
+     * 	 <li> {@link mmir.ConfigurationManager}
+     * 		<ul>
+     * 			<li>map <b><u>get(propertyName, defaultValue, useSafeAccess)</u></b> back to <br>
+     * 				get(propertyName, useSafeAccess, defaultValue)<br>
+     * 				the original function will be available via <em>_get(propertyName, useSafeAccess, defaultValue)</em>
+     * 			</li>
+     * 			<li>map <b><u>getBoolean(propertyName, defaultValue, useSafeAccess)</u></b> back to <br>
+     * 				getBoolean(propertyName, useSafeAccess, defaultValue)<br>
+     * 				the original function will be available via <em>_getBoolean(propertyName, useSafeAccess, defaultValue)</em>
+     * 			</li>
+     * 			<li>map <b><u>getString(propertyName, defaultValue, useSafeAccess)</u></b> back to <br>
+     * 				getString(propertyName, useSafeAccess, defaultValue)<br>
+     * 				the original function will be available via <em>_getString(propertyName, useSafeAccess, defaultValue)</em>
+     * 			</li>
+     * 		</ul>
+     *   </li>
+     * </ul>
+     * 
      * Lastly, removed methods will be added:
      * <ul>
      * 	 <li> {@link mmir.CommonUtils}
      * 		<ul>
-     * 			<li><b><u>setToCompatibilityMode</u></b> <em>(removed)</em> to {@link CommonUtils}</li>
+     * 			<li><b><u>setToCompatibilityMode</u></b> <em>(removed)</em> to {@link mmir.CommonUtils}</li>
      * 		</ul>
      *   </li>
      * 	 <li> {@link mmir.LanguageManager}
@@ -230,8 +250,21 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
         
         renderUtils.getInstance = getInstance;
         
-        configurationManager = getLanguage = function(){ return languageManager.getLanguage(); };
+        configurationManager.getLanguage = function(){ return languageManager.getLanguage(); };
         configurationManager.setLanguage = function(lang){ languageManager.setLanguage(lang); };
+        
+        configurationManager._get = configurationManager.get;
+        configurationManager.get = function(propertyName, useSafeAccess, defaultValue){
+        	return this._get(propertyName, defaultValue, useSafeAccess);
+        };
+        configurationManager._getBoolean = configurationManager.getBoolean;
+        configurationManager.getBoolean = function(propertyName, useSafeAccess, defaultValue){
+        	return this._getBoolean(propertyName, defaultValue, useSafeAccess);
+        };
+        configurationManager._getString = configurationManager.getString;
+        configurationManager.getString = function(propertyName, useSafeAccess, defaultValue){
+        	return this._getString(propertyName, defaultValue, useSafeAccess);
+        };
         
         
         /**

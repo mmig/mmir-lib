@@ -214,10 +214,10 @@ newMediaPlugin = {
             var intermediate_results = false;
             
 
-            var loglevel = config.get([_pluginName, 'log'], true);
-						if(typeof loglevel !== 'undefined'){
-							logger.setLevel(loglevel);
-						}
+            var loglevel = config.get([_pluginName, 'log']);
+			if(typeof loglevel !== 'undefined'){
+				logger.setLevel(loglevel);
+			}
 
 			/** 
 			 * field for storing the previous (main) recontion result

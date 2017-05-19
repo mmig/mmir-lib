@@ -127,7 +127,7 @@ newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 			var voice = _getVoiceParam(options);
 			var voiceParamStr = voice? '&VOICE='+voice : '';
 			
-			return _configurationManager.get([_pluginName, "serverBasePath"], true, _defaultServerPath) +'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
+			return _configurationManager.get([_pluginName, "serverBasePath"], _defaultServerPath) +'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
 		};
 		
 		/**  @memberOf MaryWebAudioTTSImpl# */

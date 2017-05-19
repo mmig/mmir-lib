@@ -131,7 +131,7 @@ define([
 
 
 		// determine if default-layout has a custom name (or is disabled, in it was set to null)
-		var defLayoutName = configurationManager.get(CONFIG_DEFAULT_LAYOUT_NAME, true, void(0));
+		var defLayoutName = configurationManager.get(CONFIG_DEFAULT_LAYOUT_NAME, void(0));
 		if(typeof defLayoutName !== 'undefined'){
 			defaultLayoutName = defLayoutName;
 		}
@@ -192,7 +192,7 @@ define([
 		 * @default false: use templates files (*.ehtml) and compile them (freshly) on-the-fly
 		 * @memberOf ViewLoader.init
 		 */
-		var isUsePreCompiledViews = configurationManager.getBoolean(CONFIG_PRECOMPILED_VIEWS_MODE, true, false);
+		var isUsePreCompiledViews = configurationManager.getBoolean(CONFIG_PRECOMPILED_VIEWS_MODE, false);
 
 		/**
 		 * Read the checksum file that was created when the pre-compiled view was created:

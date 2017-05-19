@@ -1484,7 +1484,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	var env = configurationName;
     	var pluginArray = [];
 
-    	var dataFromConfig = configurationManager.get('mediaManager.plugins', true);
+    	var dataFromConfig = configurationManager.get('mediaManager.plugins');
     	
     	if(!env){
     		
