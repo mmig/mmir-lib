@@ -122,6 +122,103 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     };
     
     /**
+     * Reference to the core mmir-lib object.
+     * 
+     * Do not use directly, or call {@link #_getVersion} at least once, in order to initialize this field.
+     * 
+     * NOTE: the reference may be undefined, if the core is not visible in the global namespace.
+     * 
+     * 
+     * @private
+     * @type mmir
+     * 
+	 * @memberOf MediaManager#
+	 * 
+	 * @see _getVersion
+     */
+    var _mmirLib;
+    
+    /**
+     * Get the version from the core mmir-lib.
+     * 
+     * NOTE: may be undefined, if the core is not visible in the global namespace.
+     * 
+     * @returns {String} the version of the core mmir-lib 
+     *                   (or undefined, if the mmir-lib is not available in the global namespace)
+     * 
+     * @private
+	 * @memberOf MediaManager#
+     */
+    var _getVersion = function(){
+    	
+    	if(!_mmirLib){
+    		var mmirName = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
+    		_mmirLib = window[mmirName];
+    	}
+    	
+    	if(_mmirLib){
+    		return _mmirLib.version;
+    	}
+    };
+    
+    /**
+     * Check if the version number corresponds to the most significant (right-most)
+     * part of the mmir-lib's version number, i.e. check
+     * 
+     * "is <code>version</code> <code>comp</code> than the mmir-lib version?"
+     * 
+     * NOTE: may return undefined, if the mmir-lib version cannot be accessed, i.e.
+     *       check result strictly <code>=== true</code> and <code> === false</code>.
+     * 
+     * @param {Number} version
+     * 			the version number to check against
+     * @param {String} [comp] OPTIONAL
+     * 			the comparison type, e.g. ">" | "<" | ">=" | "<=" | "==" | "===" | "!=" | "!=="
+     * 			<br>Will be used as follows: <code>version comp mmir-lib-version</code>
+     * 			<br>DEFAULT: "==="
+     * 			<br>NOTE: "=" will be interpreted as "=="
+     * 
+     * @returns {Boolean|Void} returns the result of the comparison to most significant part
+     *                         of the mmir-lib version number,
+     *                         or <code>VOID</code> if the mmir-lib version number is not available.
+     * 
+     * @private
+	 * @memberOf MediaManager#
+     */
+    var _isVersion = function(version, comp){
+    	
+    	var ver = _getVersion();
+    	if(ver){
+    		var sigNum = /^.*?\d+\./.exec(ver);
+    		sigNum = parseInt(sigNum, 10);
+    		if(isFinite(sigNum)){
+    			
+    			switch(comp){
+    			case '>=':
+    				return version >= sigNum;
+    			case '<=':
+    				return version <= sigNum;
+    			case '>':
+    				return version > sigNum;
+    			case '<':
+    				return version < sigNum;
+    			case '!=':
+    				return version != sigNum;
+    			case '!==':
+    				return version !== sigNum;
+    			case '='://
+    			case '==':
+    				return version == sigNum;
+    			case '===':
+				default:
+    				return version === sigNum;
+    			}
+    		}
+    	}
+    	return void(0);
+    };
+    
+    /**
      * Load an media-module implementation from plugin file.
      * 
      * @param {String} fileName
@@ -1530,12 +1627,13 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
          * where the function f is called with a set of functions e, then those functions in e 
          * are added to the visibility of audioInput, and will from now on be applicable by calling
          * mmir.MediaManager.<function name>().
-         * 
-         * NOTE should only be used by plugin implementations for loading (dependent/sub-) plugins.
-         * 
+         *          * 
          * @function
          * @protected
          * @memberOf mmir.MediaManager.prototype
+         * 
+         * @example
+         * NOTE should only be used by plugin implementations for loading (dependent/sub-) plugins.
          * 
          */
     	loadFile: function(filePath,successCallback, failureCallback, execId){
@@ -1545,7 +1643,28 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     		
     		loadPlugin(filePath,successCallback, failureCallback, execId);
 			
-    	}
+    	},
+    	/**
+         * @copydoc MediaManager#_getVersion
+         * @function
+         * @protected
+         * @memberOf mmir.MediaManager.prototype
+         * 
+         * @example
+         * NOTE should only be used by plugin implementations.
+         */
+    	getVersion: _getVersion,
+
+    	/**
+         * @copydoc MediaManager#_isVersion
+         * @function
+         * @protected
+         * @memberOf mmir.MediaManager.prototype
+         * 
+         * @example
+         * NOTE should only be used by plugin implementations.
+         */
+    	isVersion: _isVersion
     };
     
     return _stub;
