@@ -772,7 +772,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		    		    
 		    //FIXME as of now, the LanguageManager needs to be initialized,
-		    //		either by calling getInstance() or init()
+		    //		by calling init()
 		    //		-> should this be done explicitly (async-loading for dictionary and grammar? with returned Deferred?)
 		    instance = new constructor();
 		    		    
