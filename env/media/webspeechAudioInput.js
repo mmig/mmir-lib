@@ -31,21 +31,55 @@ newMediaPlugin = {
 			
 			/** @memberOf WebspeechAudioInput# */
 			var _pluginName = 'webspeechAudioInput';
+			
+			/** 
+			 * legacy mode: use pre-v4 API of mmir-lib
+			 * @memberOf WebspeechAudioInput#
+			 */
+			var _isLegacyMode = true;
+			/** 
+			 * Reference to the mmir-lib core (only available in non-legacy mode)
+			 * @type mmir
+			 * @memberOf WebspeechAudioInput#
+			 */
+			var _mmir = null;
+			if(mediaManager._get_mmir){
+				//_get_mmir() is only available for >= v4
+				_mmir = mediaManager._get_mmir();
+				//just to make sure: set legacy-mode if version is < v4
+				_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
+			}
+			/**
+			 * HELPER for require(): 
+			 * 		use module IDs (and require instance) depending on legacy mode
+			 * 
+			 * @param {String} id
+			 * 			the require() module ID
+			 * 
+			 * @returns {any} the require()'ed module
+			 * 
+			 * @memberOf WebspeechAudioInput#
+			 */
+			var _req = function(id){
+				var name = (_isLegacyMode? '' : 'mmirf/') + id;
+				return _mmir? _mmir.require(name) : require(name);
+			};
+			
 			/**
 			 * @type mmir.LanguageManager
 			 * @memberOf WebspeechAudioInput#
 			 */
-			var languageManager = require('mmirf/languageManager');
+			var languageManager = _req('languageManager');
 			/**
 			 * @type mmir.ConfigurationManager
 			 * @memberOf WebspeechAudioInput#
 			 */
-			var config = require('mmirf/configurationManager');
+			var config = _req('configurationManager');
 			/**
 			 * @type mmir.Logger
 			 * @memberOf WebspeechAudioInput#
 			 */
-			var logger = require('mmirf/logger').create(_pluginName);
+			var logger = _req('logger').create(_pluginName);
 
 			/** @type SpeechRecognition
 			 * @memberOf WebspeechAudioInput# */

@@ -79,10 +79,42 @@
 
 newMediaPlugin = {
 		/**  @memberOf WaitReadyIndicatorImpl# */
-		initialize: function(callBack){//, mediaManager, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
+		initialize: function(callBack, mediaManager){//, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
 			
+			/** 
+			 * legacy mode: use pre-v4 API of mmir-lib
+			 * @memberOf WaitReadyIndicatorImpl#
+			 */
+			var _isLegacyMode = true;
+			/** 
+			 * Reference to the mmir-lib core (only available in non-legacy mode)
+			 * @type mmir
+			 * @memberOf WaitReadyIndicatorImpl#
+			 */
+			var _mmir = null;
+			if(mediaManager._get_mmir){
+				//_get_mmir() is only available for >= v4
+				_mmir = mediaManager._get_mmir();
+				//just to make sure: set legacy-mode if version is < v4
+				_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
+			}
+			/**
+			 * HELPER for require(): 
+			 * 		use module IDs (and require instance) depending on legacy mode
+			 * 
+			 * @param {String} id
+			 * 			the require() module ID
+			 * 
+			 * @returns {any} the require()'ed module
+			 * 
+			 * @memberOf WaitReadyIndicatorImpl#
+			 */
+			var _req = function(id){
+				var name = (_isLegacyMode? '' : 'mmirf/') + id;
+				return _mmir? _mmir.require(name) : require(name);
+			};
 			
-			require(['mmirf/waitDialog'], function(dlg){
+			_req(['waitDialog'], function(dlg){
 
 				/**  @memberOf WaitReadyIndicatorImpl# */
 				var _pluginName = 'waitReadyIndicator';
@@ -91,7 +123,7 @@ newMediaPlugin = {
 				 * @type mmir.LanguageManager
 				 * @memberOf WaitReadyIndicatorImpl#
 				 */
-				var languageManager = require('mmirf/languageManager');
+				var languageManager = _req('languageManager');
 				
 				/**  @memberOf WaitReadyIndicatorImpl# */
 				var _id = 'media-plugin-wait';

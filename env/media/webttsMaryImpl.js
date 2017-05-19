@@ -35,6 +35,41 @@ newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 			
 		/**  @memberOf MaryWebAudioTTSImpl# */
 		var _pluginName = 'maryTextToSpeech';
+		
+		/** 
+		 * legacy mode: use pre-v4 API of mmir-lib
+		 * @memberOf WebspeechAudioInput#
+		 */
+		var _isLegacyMode = true;
+		/** 
+		 * Reference to the mmir-lib core (only available in non-legacy mode)
+		 * @type mmir
+		 * @memberOf MaryWebAudioTTSImpl#
+		 */
+		var _mmir = null;
+		
+		//get mmir-lib core from global namespace:
+		_mmir = window[typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir'];
+		if(_mmir){
+			// set legacy-mode if version is < v4
+			_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
+		}
+		
+		/**
+		 * HELPER for require(): 
+		 * 		use module IDs (and require instance) depending on legacy mode
+		 * 
+		 * @param {String} id
+		 * 			the require() module ID
+		 * 
+		 * @returns {any} the require()'ed module
+		 * 
+		 * @memberOf MaryWebAudioTTSImpl#
+		 */
+		var _req = function(id){
+			var name = (_isLegacyMode? '' : 'mmirf/') + id;
+			return _mmir? _mmir.require(name) : require(name);
+		};
 
 		/**  @memberOf MaryWebAudioTTSImpl# */
 		var _defaultServerPath = 'http://mary.dfki.de:59125/';
@@ -43,19 +78,19 @@ newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 		 * @type mmir.ConfigurationManager
 		 * @memberOf MaryWebAudioTTSImpl#
 		 */
-		var _configurationManager = require('mmirf/configurationManager');
+		var _configurationManager = _req('configurationManager');
 
 		/** 
 		 * @type mmir.LanguageManager
 		 * @memberOf MaryWebAudioTTSImpl#
 		 */
-		var _langManager = require('mmirf/languageManager');
+		var _langManager = _req('languageManager');
 		
 		/** 
 		 * @type mmir.MediaManager
 		 * @memberOf MaryWebAudioTTSImpl#
 		 */
-		var _mediaManager = require('mmirf/mediaManager');
+		var _mediaManager = _req('mediaManager');
 		
 		/**
 		 * separator char for language- / country-code (specific to TTS service)
