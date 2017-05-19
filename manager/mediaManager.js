@@ -587,6 +587,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * @see #_preparing
     			 * @see #_ready
     			 * 
+				 * @memberOf mmir.MediaManager#
+				 * 
     			 * @example
     			 * //define custom wait/ready implementation:
     			 * var impl = {
@@ -624,7 +626,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * @param {Function} [failureCallBack] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
-	    		 * 				<code>callback(error)</code> 
+	    		 * 				<code>callback(error)</code>
+	    		 * 
+				 * @memberOf mmir.MediaManager# 
 	    		 */
     			recognize: function(successCallBack, failureCallBack){
     				
@@ -667,6 +671,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 			by invoking the successCallback
 	    		 * 
 	    		 * @see #stopRecord
+				 * @memberOf mmir.MediaManager#
 	    		 */
     			startRecord: function(successCallBack,failureCallBack, isWithIntermediateResults){
     				
@@ -701,6 +706,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 				<code>callback(error)</code>
 	    		 * 
 	    		 * @see #startRecord
+				 * @memberOf mmir.MediaManager#
 	    		 */
     			stopRecord: function(successCallBack,failureCallBack){
     				
@@ -720,6 +726,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	   		 * Cancel currently active speech recognition.
     	   		 * 
     	   		 * Has no effect, if no recognition is active.
+    	   		 * 
+				 * @memberOf mmir.MediaManager#
     	   		 */
     			cancelRecognition: function(successCallBack,failureCallBack){
     				
@@ -738,6 +746,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	   		
     			/**
     			 * Play PCM audio data.
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     	   		playWAV: function(blob, onPlayedCallback, failureCallBack){
     	   			
@@ -754,6 +764,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			},
     			/**
     			 * Play audio file from the specified URL.
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			playURL: function(url, onPlayedCallback, failureCallBack){
     				
@@ -773,7 +785,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
     			 * Convenience function for {@link #playWAV} and {@link #playURL}:
     			 * if first argument is a String, then <code>playURL</code> will be invoked,
-    			 * otherwise <code>playWAV</code>
+    			 * otherwise <code>playWAV</code>.
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			play: function(urlOrData, onPlayedCallback, failureCallBack){
     				if(typeof urlOrData === 'string'){
@@ -810,6 +824,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * @returns {mmir.env.media.IAudio} the audio
     			 * 
     			 * @see {mmir.env.media.IAudio#_constructor}
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			getURLAsAudio: function(url, onPlayedCallback, failureCallBack, onLoadedCallBack){
     				
@@ -832,6 +848,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * Convenience function for {@link #getURLAsAudio} and {@link #getWAVAsAudio}:
     			 * if first argument is a String, then <code>getURLAsAudio</code> will be invoked,
     			 * otherwise <code>getWAVAsAudio</code> (if the module supports this function).
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			getAudio: function(urlOrData, onPlayedCallback, failureCallBack, onLoadedCallBack){
     				if(typeof urlOrData === 'string'){
@@ -875,6 +893,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * @returns {mmir.env.media.IAudio} the audio
     			 * 
     			 * @see {mmir.env.media.IAudio#_constructor}
+				 * @memberOf mmir.MediaManager#
 				 */
 				createEmptyAudio: function(){
 					return {
@@ -910,6 +929,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			, split: OPTIONAL boolean, if true and the text is a single string, it will be split using a splitter function
     			 * 			, splitter: OPTIONAL function, replaces the default splitter-function. It takes a simple string as input and gives a string Array as output
     			 * 		}</pre>
+    			 * 
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			tts: function(parameter, onPlayedCallback, failureCallBack){
     				
@@ -927,6 +949,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			
     			/**
     			 * @deprecated use {@link #tts} instead
+				 * @memberOf mmir.MediaManager#
     			 */
     			textToSpeech: function(parameter, onPlayedCallback, failureCallBack){
     				
@@ -943,6 +966,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			},
     			/**
     			 * Cancel current synthesis.
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			cancelSpeech: function(successCallBack,failureCallBack){
     				
@@ -964,6 +989,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
     			 * @param {Number} newValue
     			 * 				TODO specify format / range
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			setTextToSpeechVolume: function(newValue){
     				
@@ -1005,6 +1032,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	    	 * @param {Function} eventHandler
     	    	 * 
     	    	 * @function
+				 * @memberOf mmir.MediaManager#
     	    	 */
     			, addListener: addListenerImpl
     			/**
@@ -1022,16 +1050,34 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	    	 * 		removed, and <code>false</code> otherwise.
     	    	 * 
     	    	 * @function
+				 * @memberOf mmir.MediaManager#
     	    	 */
     			, removeListener: removeListenerImpl
     			/** 
+    			 * Add an event listener.
+    			 * 
+    			 * @param {String} eventName
+    			 * 				the name of the event
+    			 * @param {Function} eventHandler
+    			 * 				the event handler / callback function
+    			 * 
+    			 * 
     			 * @function
-    			 * @see #addListener
+				 * @memberOf mmir.MediaManager#
+    			 * @see #off
     			 */
-    			, on:addListenerImpl
+    			, on: addListenerImpl
     			/** 
+    			 * Add an event listener.
+    			 * 
+    			 * @param {String} eventName
+    			 * 				the name of the event
+    			 * @param {Function} eventHandler
+    			 * 				the event handler / callback function
+    			 * 
     			 * @function
-    			 * @see #removeListener
+				 * @memberOf mmir.MediaManager#
+    			 * @see #on
     			 */
     			, off: removeListenerImpl
     			/**
@@ -1039,6 +1085,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
     			 * @returns {Array<Function>} of event-handlers. 
     			 * 				Empty, if there are no event handlers for eventName
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			, getListeners: function(eventName){
     				var list = listener.get(eventName);
@@ -1053,6 +1101,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
     			 * @returns {Boolean} <code>true</code> if at least 1 handler is registered 
     			 * 					  for eventName; otherwise <code>false</code>.
+    			 * 
+				 * @memberOf mmir.MediaManager#
     			 */
     			, hasListeners: function(eventName){
     				var list = listener.get(eventName);
@@ -1067,6 +1117,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	    	 * 					the list of arguments with which the event-handlers
     	    	 * 					will be called.
     	    	 * @protected
+				 * @memberOf mmir.MediaManager#
+				 * @see #on
     			 */
     			, _fireEvent: function(eventName, argsArray){
     				var list = listener.get(eventName);
@@ -1088,6 +1140,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	    	 * 					the event-handler function that has changed.
     	    	 * 
     			 * @protected
+				 * @memberOf mmir.MediaManager#
+				 * @see #on
+				 * @see #off
     			 */
     			, _notifyObservers: function(eventName, actionType, eventHandler){//actionType: one of "added" | "removed"
     				var list = listenerObserver.get(eventName);
@@ -1117,6 +1172,10 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
     	    	 * @param {String} eventName
     	    	 * @param {Function} observerCallback
+    	    	 * 
+    	    	 * @protected
+    	    	 * @see #_removeListenerObserver
+				 * @memberOf mmir.MediaManager#
     			 */
     			, _addListenerObserver: function(eventName, observerCallback){
     				var list = listenerObserver.get(eventName);
@@ -1128,7 +1187,13 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					list.push(observerCallback);
     				}
     			}
-    			
+    			/**
+    			 * Remove an observer that gets notified on registration / removal of event-handler.
+    			 * 
+    	    	 * @protected
+    	    	 * @see #_addListenerObserver
+				 * @memberOf mmir.MediaManager#
+    			 */
     			, _removeListenerObserver: function(eventName, observerCallback){
     				var isRemoved = false;
     				var list = listenerObserver.get(eventName);
@@ -1173,6 +1238,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			Or if <code>ctx</code> is not <code>falsy</code> but there is no valid execution
     			 * 			context <code>ctx</code> in MediaManager.
     			 * 
+				 * @memberOf mmir.MediaManager#
     			 * @example
     			 * 
     			 *  //same as mmir.MediaManager.ctx.android.textToSpeech("...", function...):
@@ -1246,6 +1312,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			Or if <code>ctx</code> is not <code>falsy</code> but there is no valid execution
     			 * 			context <code>ctx</code> in MediaManager.
     			 * 
+				 * @memberOf mmir.MediaManager#
     			 * @example
     			 * 
     			 *  //same as mmir.MediaManager.ctx.android.textToSpeech("...", function...):
@@ -1315,6 +1382,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * @throws {ReferenceError}
     			 * 			if <code>ctxId</code> is no valid context
     			 * 
+				 * @memberOf mmir.MediaManager#
     			 * @example
     			 * 
     			 * //if context "nuance" exists:
@@ -1352,6 +1420,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	    	 * 
     	    	 * @function
     	    	 * @protected
+				 * @memberOf mmir.MediaManager#
     	    	 * 
     	    	 * @see #waitReadyImpl
     	    	 * @see #_ready
@@ -1375,6 +1444,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	    	 * 
     	    	 * @function
     	    	 * @protected
+				 * @memberOf mmir.MediaManager#
     	    	 * 
     	    	 * @see #waitReadyImpl
     	    	 * @see #_ready
