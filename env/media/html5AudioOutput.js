@@ -28,16 +28,49 @@
 newMediaPlugin = {
 
 		/**  @memberOf Html5AudioOutput# */
-		initialize: function(callBack, mediaManagerInstance){
+		initialize: function(callBack, mediaManager){
 			
 			/**  @memberOf Html5AudioOutput# */
 			var _pluginName = 'html5AudioOutput';
 			
 			/** 
+			 * legacy mode: use pre-v4 API of mmir-lib
+			 * @memberOf Html5AudioOutput#
+			 */
+			var _isLegacyMode = true;
+			/** 
+			 * Reference to the mmir-lib core (only available in non-legacy mode)
+			 * @type mmir
+			 * @memberOf Html5AudioOutput#
+			 */
+			var _mmir = null;
+			if(mediaManager._get_mmir){
+				//_get_mmir() is only available for >= v4
+				_mmir = mediaManager._get_mmir();
+				//just to make sure: set legacy-mode if version is < v4
+				_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
+			}
+			/**
+			 * HELPER for require(): 
+			 * 		use module IDs (and require instance) depending on legacy mode
+			 * 
+			 * @param {String} id
+			 * 			the require() module ID
+			 * 
+			 * @returns {any} the require()'ed module
+			 * 
+			 * @memberOf Html5AudioOutput#
+			 */
+			var _req = function(id){
+				var name = (_isLegacyMode? '' : 'mmirf/') + id;
+				return _mmir? _mmir.require(name) : require(name);
+			};
+			
+			/** 
 			 * @type Function
 			 * @memberOf Html5AudioOutput#
 			 */
-			var extend = require('mmirf/util/extend');
+			var extend = _req('util/extend');
 			
 			/**
 			 * Media error (codes):
@@ -257,7 +290,7 @@ newMediaPlugin = {
 				 * @memberOf CordovaAudioOutput.prototype
 				 * @see mmir.MediaManager#play
 				 */
-				play: mediaManagerInstance.play,
+				play: mediaManager.play,
 				
 				/**
 				 * @public
@@ -267,7 +300,7 @@ newMediaPlugin = {
 				getWAVAsAudio: function(blob, callback, onEnd, failureCallback, onInit, emptyAudioObj){
 					
 					if(!emptyAudioObj){
-						emptyAudioObj = mediaManagerInstance.createEmptyAudio();
+						emptyAudioObj = mediaManager.createEmptyAudio();
 					}
 					
 					try {
@@ -379,7 +412,10 @@ newMediaPlugin = {
 									if (enabled){
 										
 										if (ready){
+											
 											my_media.play();
+											return true;
+											
 										} else {
 											
 											var autoPlay = function(){
@@ -393,10 +429,10 @@ newMediaPlugin = {
 												}
 											};
 											my_media.addEventListener('canplay', autoPlay , false);
-											
 										}
-
-									};
+										
+									}
+									return false;
 								},
 								/**
 								 * Stop playing audio.
@@ -413,7 +449,7 @@ newMediaPlugin = {
 										}
 										else {
 											my_media.pause();
-											//apparently, browser treat pause() differently: Chrome pauses, Firefox seems to stop... -> add try-catch-block in case, pause was really stop...
+											//apparently, browsers treat pause() differently: Chrome pauses, Firefox seems to stop... -> add try-catch-block in case, pause was really stop...
 											try{
 												my_media.currentTime=0;
 
@@ -423,9 +459,13 @@ newMediaPlugin = {
 												if(my_media.currentTime != 0){
 													my_media.load();
 												}
-											}catch(e){};
+											}catch(e){
+												return false;
+											};
 										}
+										return true;
 									}
+									return false;
 								},
 								/**
 								 * Enable audio (should only be used internally).
@@ -589,7 +629,7 @@ newMediaPlugin = {
 				 * @memberOf CordovaAudioOutput.prototype
 				 * @see mmir.MediaManager#getAudio
 				 */
-				getAudio: mediaManagerInstance.getAudio,
+				getAudio: mediaManager.getAudio,
 			});
 		}
 };

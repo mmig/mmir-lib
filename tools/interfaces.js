@@ -55,6 +55,11 @@ var IAudio = {
 	/**
 	 * Play audio.
 	 * 
+	 * @returns {Boolean} <code>true</code>, if playing was started immediately.
+	 *                    If <code>false</code>, the Audio object may have been disabled,
+	 *                    or is still preparing (in which case it is auto-started, when
+	 *                    preparing completes)
+	 * 
 	 * @public
 	 * @name play
 	 * @function
@@ -63,6 +68,8 @@ var IAudio = {
 	play: function(){},
 	/**
 	 * Stop playing audio.
+	 * 
+	 * @returns {Boolean} <code>true</code>, if stopping was successful.
 	 * 
 	 * @public
 	 * @name stop

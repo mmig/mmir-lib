@@ -177,7 +177,9 @@ newMediaPlugin = {
 								play: function(){
 									if (enabled){
 										my_media.play();
+										return playStatus >= 1;
 									}
+									return false;
 								},
 								/**
 								 * Stop playing audio.
@@ -200,6 +202,7 @@ newMediaPlugin = {
 									//only try to stop if playing and/or paused
 									if(playStatus == 2 || playStatus == 3){
 										my_media.stop();
+										return true;
 									}
 									
 //									if(playStatus == 2){//playing
@@ -209,6 +212,7 @@ newMediaPlugin = {
 //										my_media.seekTo(0);
 //									}
 ////									my_media.stop();
+									return playStatus === 4;
 								},
 								/**
 								 * Enable audio (should only be used internally).
