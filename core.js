@@ -271,6 +271,64 @@ function initMmir() {
         return true;
 	}
 	
+	/**
+     * Check if the version number corresponds to the most significant (right-most)
+     * part of the mmir-lib's version number, i.e. check
+     * 
+     * "is <code>version</code> <code>comp</code> than the mmir-lib version?"
+     * 
+     * <br>
+     * NOTE: changing the {@link mmir.version} field will have no effect on this function
+     *       (i.e. it will use the original value of <code>version</code>)
+     * 
+     * @param {Number} version
+     * 			the version number to check against
+     * @param {String} [comp] OPTIONAL
+     * 			the comparison type, e.g. <code> ">" | "<" | ">=" | "<=" | "==" | "===" | "!=" | "!==" </code>
+     * 			<br>Will be used as follows: <code>{mmir-lib version} {comp} {version}</code>
+     * 			<br>DEFAULT: "==="
+     * 			<br>NOTE: "=" will be interpreted as "=="
+     * 
+     * @returns {Boolean|Void} returns the result of the comparison to most the significant part
+     *                         of the mmir-lib version number,
+     *                         or <code>VOID</code> if the mmir-lib version number is not available.
+     * 
+	 * @memberOf mmir.internal
+	 * @private
+     */
+    var _isVersion = function(version, comp){
+    	
+    	var ver = CORE_VERSION;
+    	if(ver){
+    		var sigNum = /^.*?(\d+)\./.exec(ver);
+    		sigNum = parseInt(sigNum[1], 10);
+    		if(isFinite(sigNum)){
+    			
+    			switch(comp){
+    			case '>=':
+    				return sigNum >= version;
+    			case '<=':
+    				return sigNum <= version;
+    			case '>':
+    				return sigNum > version;
+    			case '<':
+    				return sigNum < version;
+    			case '!=':
+    				return sigNum != version;
+    			case '!==':
+    				return sigNum !== version;
+    			case '='://
+    			case '==':
+    				return sigNum == version;
+    			case '===':
+				default:
+    				return sigNum === version;
+    			}
+    		}
+    	}
+    	return void(0);
+    };
+	
 	//DISABLED: un-used for now
 //	/**
 //	 * Helper for detecting array type.
@@ -437,6 +495,15 @@ function initMmir() {
 			 * @protected
 			 */
 			applyConfig: applyConfigs,
+			
+			/**
+			 * @copydoc mmir.internal._isVersion
+			 * @memberOf mmir
+			 * @name isVersion
+			 * @function
+			 * @public
+			 */
+			isVersion: _isVersion,
 			
 			/**
 			 * The name of the (this) the core module:
