@@ -124,7 +124,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     /**
      * Reference to the core mmir-lib object.
      * 
-     * Do not use directly, or call {@link #_getVersion} at least once, in order to initialize this field.
+     * Do not use directly, or call {@link #_getMmir} at least once, in order to initialize this field.
      * 
      * NOTE: the reference may be undefined, if the core is not visible in the global namespace.
      * 
@@ -139,84 +139,27 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     var _mmirLib;
     
     /**
-     * Get the version from the core mmir-lib.
+     * Get the core mmir-lib from the global namespace.
      * 
      * NOTE: may be undefined, if the core is not visible in the global namespace.
      * 
-     * @returns {String} the version of the core mmir-lib 
-     *                   (or undefined, if the mmir-lib is not available in the global namespace)
+     * @returns {mmir} the core mmir-lib 
+     *                 (or undefined, if the mmir-lib is not available in the global namespace)
      * 
      * @private
 	 * @memberOf MediaManager#
      */
-    var _getVersion = function(){
+    var _getMmir = function(){
     	
     	if(!_mmirLib){
     		var mmirName = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
     		_mmirLib = window[mmirName];
     	}
     	
-    	if(_mmirLib){
-    		return _mmirLib.version;
-    	}
+    	return _mmirLib;
     };
     
-    /**
-     * Check if the version number corresponds to the most significant (right-most)
-     * part of the mmir-lib's version number, i.e. check
-     * 
-     * "is <code>version</code> <code>comp</code> than the mmir-lib version?"
-     * 
-     * NOTE: may return undefined, if the mmir-lib version cannot be accessed, i.e.
-     *       check result strictly <code>=== true</code> and <code> === false</code>.
-     * 
-     * @param {Number} version
-     * 			the version number to check against
-     * @param {String} [comp] OPTIONAL
-     * 			the comparison type, e.g. ">" | "<" | ">=" | "<=" | "==" | "===" | "!=" | "!=="
-     * 			<br>Will be used as follows: <code>version comp mmir-lib-version</code>
-     * 			<br>DEFAULT: "==="
-     * 			<br>NOTE: "=" will be interpreted as "=="
-     * 
-     * @returns {Boolean|Void} returns the result of the comparison to most significant part
-     *                         of the mmir-lib version number,
-     *                         or <code>VOID</code> if the mmir-lib version number is not available.
-     * 
-     * @private
-	 * @memberOf MediaManager#
-     */
-    var _isVersion = function(version, comp){
-    	
-    	var ver = _getVersion();
-    	if(ver){
-    		var sigNum = /^.*?\d+\./.exec(ver);
-    		sigNum = parseInt(sigNum, 10);
-    		if(isFinite(sigNum)){
-    			
-    			switch(comp){
-    			case '>=':
-    				return version >= sigNum;
-    			case '<=':
-    				return version <= sigNum;
-    			case '>':
-    				return version > sigNum;
-    			case '<':
-    				return version < sigNum;
-    			case '!=':
-    				return version != sigNum;
-    			case '!==':
-    				return version !== sigNum;
-    			case '='://
-    			case '==':
-    				return version == sigNum;
-    			case '===':
-				default:
-    				return version === sigNum;
-    			}
-    		}
-    	}
-    	return void(0);
-    };
+    
     
     /**
      * Load an media-module implementation from plugin file.
@@ -277,7 +220,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 		    								//need to "re-map" the execution context for the functions,
 		    								// so that "they think" they are actually executed within the MediaManager instance
 			    							
-		    								(function(mediaManagerInstance, originalFunc, name, context){
+		    								(function(mediaManagerInstance, originalFunc, name, context, ttsFieldExists){
 		    									//NOTE need closure to "preserve" values of for-iteration
 		    									mediaManagerInstance.ctx[context][name] = function(){
 //					    								console.log('executing '+context+'.'+name+', in context '+mediaManagerInstance,mediaManagerInstance);//DEBUG
@@ -285,11 +228,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 				    							};
 				    							
 				    							//add alias 'tts' for 'textToSpeech'
-				    							if(name === 'textToSpeech'){
+				    							if(!ttsFieldExists && name === 'textToSpeech'){
 				    								mediaManagerInstance.ctx[context]['tts'] = mediaManagerInstance.ctx[context]['textToSpeech'];
 				    							}
 				    							
-		    								})(instance, func, p, execId);
+		    								})(instance, func, p, execId, exportedFunctions['tts']);
 		    								
 		    							}
 		    							else {
@@ -298,7 +241,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 			    							instance.ctx[execId][p] = func;
 			    							
 			    							//add alias 'tts' for 'textToSpeech'
-			    							if(p === 'textToSpeech'){
+			    							if(p === 'textToSpeech' && !exportedFunctions['tts']){
 			    								mediaManagerInstance.ctx[execId]['tts'] = func;
 			    							}
 		    							}
@@ -326,7 +269,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    				else {
 	    					extend(instance,exportedFunctions);
 	    					//add alias 'tts' for 'textToSpeech'
-							if(typeof exportedFunctions['textToSpeech'] === 'function'){
+							if(typeof exportedFunctions['textToSpeech'] === 'function' && !exportedFunctions['tts']){
 								instance['tts'] = exportedFunctions['textToSpeech'];
 							}
 	    					newMediaPlugin = null;
@@ -619,25 +562,25 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 
 	    		 * @async
 	    		 * 
-	    		 * @param {Function} [successCallBack] OPTIONAL
+	    		 * @param {Function} [successCallback] OPTIONAL
 	    		 * 			callback function that is triggered when a text result is available.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(textResult)</code>
-	    		 * @param {Function} [failureCallBack] OPTIONAL
+	    		 * @param {Function} [failureCallback] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(error)</code>
 	    		 * 
 				 * @memberOf mmir.MediaManager# 
 	    		 */
-    			recognize: function(successCallBack, failureCallBack){
+    			recognize: function(successCallback, failureCallback){
     				
     				var funcName = 'recognize';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Input: Speech Recognition is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Input: Speech Recognition is not supported.");
     				}
     				else {
     					console.error("Audio Input: Speech Recognition is not supported.");
@@ -658,11 +601,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 
 	    		 * @async
 	    		 * 
-	    		 * @param {Function} [successCallBack] OPTIONAL
+	    		 * @param {Function} [successCallback] OPTIONAL
 	    		 * 			callback function that is triggered when a text result is available.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(textResult)</code>
-	    		 * @param {Function} [failureCallBack] OPTIONAL
+	    		 * @param {Function} [failureCallback] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(error)</code>
@@ -673,14 +616,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * @see #stopRecord
 				 * @memberOf mmir.MediaManager#
 	    		 */
-    			startRecord: function(successCallBack,failureCallBack, isWithIntermediateResults){
+    			startRecord: function(successCallback,failureCallback, isWithIntermediateResults){
     				
     				var funcName = 'startRecord';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Input: Speech Recognition (recording) is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     				else {
     					console.error("Audio Input: Speech Recognition (recording) is not supported.");
@@ -696,11 +639,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 
 	    		 * @async
 	    		 * 
-	    		 * @param {Function} [successCallBack] OPTIONAL
+	    		 * @param {Function} [successCallback] OPTIONAL
 	    		 * 			callback function that is triggered when a text result is available.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(textResult)</code>
-	    		 * @param {Function} [failureCallBack] OPTIONAL
+	    		 * @param {Function} [failureCallback] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(error)</code>
@@ -708,14 +651,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * @see #startRecord
 				 * @memberOf mmir.MediaManager#
 	    		 */
-    			stopRecord: function(successCallBack,failureCallBack){
+    			stopRecord: function(successCallback,failureCallback){
     				
     				var funcName = 'stopRecord';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Input: Speech Recognition (recording) is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     				else {
     					console.error("Audio Input: Speech Recognition (recording) is not supported.");
@@ -729,14 +672,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	   		 * 
 				 * @memberOf mmir.MediaManager#
     	   		 */
-    			cancelRecognition: function(successCallBack,failureCallBack){
+    			cancelRecognition: function(successCallback,failureCallback){
     				
     				var funcName = 'cancelRecognition';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: canceling Recognize Speech is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: canceling Recognize Speech is not supported.");
     				}
     				else {
     					console.error("Audio Output: canceling Recognize Speech is not supported.");
@@ -749,14 +692,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    	   		playWAV: function(blob, onPlayedCallback, failureCallBack){
+    	   		playWAV: function(blob, onPlayedCallback, failureCallback){
     	   			
     	   			var funcName = 'playWAV';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: play WAV audio is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: play WAV audio is not supported.");
     				}
     				else {
     					console.error("Audio Output: play WAV audio is not supported.");
@@ -767,14 +710,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			playURL: function(url, onPlayedCallback, failureCallBack){
+    			playURL: function(url, onPlayedCallback, failureCallback){
     				
     				var funcName = 'playURL';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: play audio from URL is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: play audio from URL is not supported.");
     				}
     				else {
     					console.error("Audio Output: play audio from URL is not supported.");
@@ -789,7 +732,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			play: function(urlOrData, onPlayedCallback, failureCallBack){
+    			play: function(urlOrData, onPlayedCallback, failureCallback){
     				if(typeof urlOrData === 'string'){
     					return this.playURL.apply(this, arguments);
     				} else {
@@ -818,8 +761,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
     			 * @param {String} url
     			 * @param {Function} [onPlayedCallback] OPTIONAL
-    			 * @param {Function} [failureCallBack] OPTIONAL
-    			 * @param {Function} [onLoadedCallBack] OPTIONAL
+    			 * @param {Function} [failureCallback] OPTIONAL
+    			 * @param {Function} [onLoadedCallback] OPTIONAL
     			 * 
     			 * @returns {mmir.env.media.IAudio} the audio
     			 * 
@@ -827,14 +770,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			getURLAsAudio: function(url, onPlayedCallback, failureCallBack, onLoadedCallBack){
+    			getURLAsAudio: function(url, onPlayedCallback, failureCallback, onLoadedCallback){
     				
     				var funcName = 'getURLAsAudio';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: create audio from URL is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: create audio from URL is not supported.");
     				}
     				else {
     					console.error("Audio Output: create audio from URL is not supported.");
@@ -851,7 +794,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			getAudio: function(urlOrData, onPlayedCallback, failureCallBack, onLoadedCallBack){
+    			getAudio: function(urlOrData, onPlayedCallback, failureCallback, onLoadedCallback){
     				if(typeof urlOrData === 'string'){
     					return this.getURLAsAudio.apply(this, arguments);
     				} else {
@@ -900,8 +843,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 						_enabled: true,
 						_play: false,
 						_volume: 1,
-						play: function(){ this._play = true; },
-						stop: function(){ this._play = true; },
+						play: function(){ this._play = true; return false;},
+						stop: function(){ this._play = false; return true;},
 						enable: function(){ this._enabled = true; },
 						disable: function(){ this._enabled = false; },
 						release: function(){ this._enabled = false; },
@@ -916,31 +859,51 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			/**
     			 * Synthesizes ("read out loud") text.
     			 * 
-    			 * @param {String|Array<String>|PlainObject} parameter
+    			 * @param {String|Array<String>|PlainObject} options
     			 * 		if <code>String</code> or <code>Array</code> of <code>String</code>s
-    			 * 			  synthesizes the text of the String, for an Array: each entry is interpreted as "sentence";
+    			 * 			  synthesizes the text of the String(s).
+    			 * 			  <br>For an Array: each entry is interpreted as "sentence";
     			 * 				after each sentence, a short pause is inserted before synthesizing the
     			 * 				the next sentence<br>
     			 * 		for a <code>PlainObject</code>, the following properties should be used:
     			 * 		<pre>{
-    			 * 			  text: string OR string Array, text that should be read aloud
-    			 * 			, pauseLength: OPTIONAL Length of the pauses between sentences in milliseconds
-    			 * 			, forceSingleSentence: OPTIONAL boolean, if true, a string Array will be turned into a single string
-    			 * 			, split: OPTIONAL boolean, if true and the text is a single string, it will be split using a splitter function
-    			 * 			, splitter: OPTIONAL function, replaces the default splitter-function. It takes a simple string as input and gives a string Array as output
+    			 * 			  text: String | String[], text that should be read aloud
+    			 * 			, pauseDuration: OPTIONAL Number, the length of the pauses between sentences (i.e. for String Arrays) in milliseconds
+    			 * 			, language: OPTIONAL String, the language for synthesis (if omitted, the current language setting is used)
+    			 * 			, voice: OPTIONAL String, the voice (language specific) for synthesis; NOTE that the specific available voices depend on the TTS engine
+    			 * 			, success: OPTIONAL Function, the on-playing-completed callback (see arg onPlayedCallback)
+    			 * 			, error: OPTIONAL Function, the error callback (see arg failureCallback)
+    			 * 			, ready: OPTIONAL Function, the audio-ready callback (see arg onInitCallback)
     			 * 		}</pre>
     			 * 
+    			 * @param {Function} [onPlayedCallback] OPTIONAL
+    			 * 			callback that is invoked when the audio of the speech synthesis finished playing:
+    			 * 			<pre>onPlayedCallback()</pre>
+    			 * 
+    			 * @param {Function} [failureCallback] OPTIONAL
+    			 * 			callback that is invoked in case an error occured:
+    			 * 			<pre>failureCallback(error: String | Error)</pre>
+    			 * 
+    			 * @param {Function} [onInitCallback] OPTIONAL
+    			 * 			callback that is invoked in case an error occured:
+    			 * 			<pre>onInitCallback(isReady: Boolean, audio: IAudio)</pre>
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			tts: function(parameter, onPlayedCallback, failureCallBack){
+    			tts: function(options, onPlayedCallback, failureCallback, onInitCallback){
     				
-    				var funcName = 'textToSpeech';
+    				if(typeof options === 'function'){
+    					onInitCallback = failureCallback;
+    					failureCallback = onPlayedCallback;
+    					onPlayedCallback = options;
+    				}
+    				
+    				var funcName = 'tts';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: Text To Speech is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: Text To Speech is not supported.");
     				}
     				else {
     					console.error("Audio Output: Text To Speech is not supported.");
@@ -951,14 +914,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * @deprecated use {@link #tts} instead
 				 * @memberOf mmir.MediaManager#
     			 */
-    			textToSpeech: function(parameter, onPlayedCallback, failureCallBack){
+    			textToSpeech: function(parameter, onPlayedCallback, failureCallback){
     				
     				var funcName = 'textToSpeech';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: Text To Speech is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: Text To Speech is not supported.");
     				}
     				else {
     					console.error("Audio Output: Text To Speech is not supported.");
@@ -969,14 +932,14 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
-    			cancelSpeech: function(successCallBack,failureCallBack){
+    			cancelSpeech: function(successCallback,failureCallback){
     				
     				var funcName = 'cancelSpeech';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
-    				else if(failureCallBack){
-    					failureCallBack("Audio Output: canceling Text To Speech is not supported.");
+    				else if(failureCallback){
+    					failureCallback("Audio Output: canceling Text To Speech is not supported.");
     				}
     				else {
     					console.error("Audio Output: canceling Text To Speech is not supported.");
@@ -1714,8 +1677,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     		loadPlugin(filePath,successCallback, failureCallback, execId);
 			
     	},
+    	
     	/**
-         * @copydoc MediaManager#_getVersion
+         * @copydoc MediaManager#_getMmir
          * @function
          * @protected
          * @memberOf mmir.MediaManager.prototype
@@ -1723,18 +1687,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
          * @example
          * NOTE should only be used by plugin implementations.
          */
-    	getVersion: _getVersion,
-
-    	/**
-         * @copydoc MediaManager#_isVersion
-         * @function
-         * @protected
-         * @memberOf mmir.MediaManager.prototype
-         * 
-         * @example
-         * NOTE should only be used by plugin implementations.
-         */
-    	isVersion: _isVersion
+    	_get_mmir: _getMmir
     };
     
     return _stub;
