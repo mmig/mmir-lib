@@ -36,6 +36,14 @@ function initMmir() {
 		}
 	}
 	
+	/**
+	 * the version of mmir-lib
+	 * 
+	 * @memberOf mmir.internal
+	 * @private
+	 */	
+	var CORE_VERSION = "3.8.0";
+	
     
 	/**
 	 * STATE: state variable for indicating "doc is already loaded" (this needs to be set/reset manually)
@@ -446,6 +454,17 @@ function initMmir() {
 			 * @public
 			 */
 			mmirName: CORE_NAME,
+			
+			/**
+			 * The version of mmir-lib.
+			 * 
+			 * @memberOf mmir
+			 * @name version
+			 * @type String
+			 * @readonly
+			 * @public
+			 */
+			version: CORE_VERSION,
 			
 			/**
 			 * The name / ID of the RequireJS module that will
