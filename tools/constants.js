@@ -31,9 +31,9 @@ define(['mmirf/env', 'module'],
  * A Utility class that provides various <i>constants</i>.<br>
  * 
  * <p>
- * Note that the actual values depend on the execution environment (e.g. ANDROID
- * vs. BROWSER). As a consequence the constants object has 2 modes, that can be
- * switchted via the getInstance()-method, e.g. <code>getInstance(false)</code>
+ * Note that the actual values depend on the execution environment (e.g. ANDROID vs. BROWSER).
+ * As a consequence the constants object has 2 modes, that can be
+ * switched via the {@link #init} -method, e.g. <code>init(false)</code>.
  * 
  * 
  * @name Constants
@@ -574,13 +574,6 @@ function(
 	         */
 			getEnvPlatform: function(){
 				return envInfo.platform;
-			},
-			
-			/**
-			 * @deprecated instead, use Constants-object directly: mmir.Constants
-			 */
-			getInstance: function(forBrowserParameter){
-				return this.init(forBrowserParameter);
 			}
 		};//END: return{}
 		

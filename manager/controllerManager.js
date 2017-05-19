@@ -78,9 +78,6 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	 * @memberOf mmir.ControllerManager#
 	 */
 	function _init(callback, ctx) {
-
-		//replace create-method with instance-getter:
-		_instance.create = _instance.getInstance;
 		
 		//shift arguments if necessary:
 		if(!ctx && typeof callback !== 'function'){

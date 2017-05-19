@@ -154,15 +154,6 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 			ctx = initCallbackFunction;
 			initCallbackFunction = void(0);
 		}
-		
-		/**
-		 * <code>init</code> as alias for #getInstance
-		 * @private
-		 * @function
-		 * @name init
-		 * @memberOf mmir.ModelManager#
-		 */
-		_instance.init = _instance.getInstance;
 
 		/**
 		 * 

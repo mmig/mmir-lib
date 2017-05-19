@@ -174,12 +174,6 @@ define(['mmirf/scion', 'mmirf/scionUtil', 'mmirf/util/deferred'], function( scio
             
         };//END: load = function(){...
 
-        /**
-    	 * @deprecated instead use the object directly
-    	 */
-        instanceContext.getInstance= function () {
-        	return this;
-        };
         instanceContext.load = load;
         instanceContext.onload = null;
         instanceContext.doc = null;

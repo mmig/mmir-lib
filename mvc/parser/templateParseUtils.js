@@ -812,19 +812,6 @@ define([ 'mmirf/parserModule','mmirf/parsingResult','mmirf/templateProcessor'
 	    }//END: constructor()
 	    
 	    instance = new constructor();
-
-	    /**
-	     * @deprecated instead, use ParseUtils object directly (i.e. omit getInstance() call)
-	     * 
-		 * @function
-		 * @name getInstance
-		 * 
-   		 * @public
-	     * @memberOf ParserUtils#
-	     */
-	    instance.getInstance = function(){
-	    	return this;
-	    };
 	    
 	    //FIXME should the renderer be exported to parser.ParserUtils here?
 	    parser.ParserUtils = instance;

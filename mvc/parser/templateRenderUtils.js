@@ -1135,18 +1135,6 @@ define (['mmirf/commonUtils','mmirf/languageManager','mmirf/controllerManager','
 		
 	    instance = new constructor();
 	    
-	    /**
-	     * @deprecated instead, use RenderUtils object directly (i.e. omit getInstance() call)
-	     * 
-		 * @function
-		 * @name getInstance
-		 * @public
-	     * @memberOf mmir.parser.RenderUtils#
-	     */
-	    instance.getInstance = function(){
-	    	return this;
-	    };
-	    
 	    //FIXME should the renderer be exported to parser.RenderUtils here?
 	    parser.RenderUtils = instance;
 	    

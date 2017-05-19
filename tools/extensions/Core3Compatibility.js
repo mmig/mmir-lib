@@ -1,7 +1,8 @@
-define(['mmirf/semanticInterpreterCompatibility',
+define(['require', 'mmirf/semanticInterpreterCompatibility',
     'mmirf/configurationManager','mmirf/controllerManager','mmirf/dialogManager','mmirf/dialogEngine',
     'mmirf/inputManager','mmirf/inputEngine','mmirf/commonUtils','mmirf/languageManager','mmirf/mediaManager','mmirf/presentationManager',
     'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/constants','mmirf/notificationManager','mmirf/grammarConverter', 'mmirf/util/deferred',
+    'mmirf/parseUtils', 'mmirf/renderUtils', 'mmirf/scionEngine',
     //only loaded, not used as argument:
     'mmirf/stringExtension'
 ], 
@@ -43,6 +44,10 @@ define(['mmirf/semanticInterpreterCompatibility',
      * 		<ul>
      * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.ConfigurationManager}</li>
      * 		</ul>
+     *  </li><li> {@link mmir.Constants}
+     * 		<ul>
+     * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.Constants}</li>
+     * 		</ul>
      *  </li><li> {@link mmir.ControllerManager}
      * 		<ul>
      * 			<li><b><u>get</u></b> for {@link mmir.ControllerManager#getController}</li>
@@ -83,6 +88,14 @@ define(['mmirf/semanticInterpreterCompatibility',
      * 		<ul>
      * 			<li><b><u>renderView</u></b> for {@link mmir.PresentationManager#render}</li>
      * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.PresentationManager}</li>
+     * 		</ul>
+     *  </li><li> {@link mmir.parser.ParserUtils}
+     * 		<ul>
+     * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.parser.ParserUtils}</li>
+     * 		</ul>
+     *  </li><li> {@link mmir.parser.RenderUtils}
+     * 		<ul>
+     * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.parser.RenderUtils}</li>
      * 		</ul>
      *  </li><li> {@link mmir.SemanticInterpreter}
      * 		<ul>
@@ -129,10 +142,11 @@ define(['mmirf/semanticInterpreterCompatibility',
 	 * 
 	 * @public
 	 */
-	function(semanticInterpreterCompatibility,
+	function(require, semanticInterpreterCompatibility,
 		configurationManager, controllerManager, dialogManager, dialogEngine,
 		inputManager, inputEngine, commonUtils, languageManager, mediaManager, presentationManager,
-		semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter, deferred
+		semanticInterpreter, modelManager, constants, notificationManager, GrammarConverter, deferred,
+		parseUtils, renderUtils, scionEngine
 	){
 
 	/**
@@ -180,6 +194,9 @@ define(['mmirf/semanticInterpreterCompatibility',
         semanticInterpreterCompatibility(semanticInterpreter, GrammarConverter);
     	
     	var getInstance = function(){return this;};
+    	var getInstanceAsInit = function(){return this.init.apply(this, arguments);};
+    	
+    	constants.getInstance = getInstanceAsInit;
     	controllerManager.getInstance = getInstance;
     	dialogManager.getInstance = getInstance;
     	inputManager.getInstance = getInstance;
@@ -193,9 +210,25 @@ define(['mmirf/semanticInterpreterCompatibility',
     	mediaManager.getInstance = function(){
             return this.init(null, null);
         };
-        modelManager.getInstance = getInstance;
+        modelManager.getInstance = getInstanceAsInit;
         notificationManager.getInstance = getInstance;
         presentationManager.getInstance = getInstance;
+        
+        parseUtils.getInstance = getInstance;
+        
+        //DISABLED would not effect scionEngine instances, that were already created
+        //         ... and scionEninge (and created instance) are only internally used, so application code should be not effected...
+//        requirejs.undef('mmirf/scionEngine');
+//        define('mmirf/scionEngine', function(){
+//        	return function(configuration , context){
+//            	var instance = scionEngine(configuration , context);
+//            	instance.getInstance = getInstance;
+//            	return instance;
+//            };
+//        });
+//        require(['mmirf/scionEngine']);
+        
+        renderUtils.getInstance = getInstance;
         
         configurationManager = getLanguage = function(){ return languageManager.getLanguage(); };
         configurationManager.setLanguage = function(lang){ languageManager.setLanguage(lang); };
