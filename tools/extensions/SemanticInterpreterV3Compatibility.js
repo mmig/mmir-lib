@@ -54,7 +54,7 @@ define(['mmirf/encodeUtils'],
     	 */
 		var removeStopwordsAltFunc = function removeStopwords_alt(thePhrase, lang, gc){
 			if(!gc){
-				gc = doGetGrammar(lang);
+				gc = semanticInterpreter.getGrammarConverter(lang);
 			}
     		var stop_words_regexp = gc.getStopWordsRegExpr_alt();
         	
@@ -66,20 +66,68 @@ define(['mmirf/encodeUtils'],
 			return thePhrase;
 		};
 		
-		//FIXME impl:
-		semanticInterpreter.getASRSemantic_alt = function(phrase, langCode){
+		//helper: pre-processing with legacy alternative stopword removal function
+		var preprocAlt = function preproc_alt(thePhrase, pos, maskFunc, stopwordFunc){
+			return removeStopwordsAltFunc(thePhrase, null, this);
+		};
+
+		//helper: post-processing with legacy alternative stopword removal function
+		var postprocAlt = function postproc_alt(procResult, recodeFunc){
+			return this.unmaskJSON(procResult);
+		};
+		
+		/**
+		 * WARNING: there must only be 1 active call at a time of either of <code>getASRSemantic_alt</code>
+		 *            and of <code>getASRSemantic</code>.
+		 *            
+		 * NOTE: in difference to the original implementation, this backwards-compatibility version offers
+		 *       an optional 3rd parameter for a callback function, allowing asynchronous grammar execution.
+		 *       WARNING: A compiled grammar must already exist, i.e. this function does not support
+		 *                "auto-compilation", if the compiled version of the grammar does not exist yet
+		 *                (that will most likely result in an error).
+		 *                As a work-around, you can use first the non-alt version (<code>getASRSemantic(phrase, lanc, callback)</code>)
+		 *                for the same language and using a callback, and after the callback was invoked, use this alt-version
+		 *                for getting the ASR semantic result.
+		 */
+		semanticInterpreter.getASRSemantic_alt = function(phrase, langCode, callback){
+			
+			var gc = this.getGrammarConverter(langCode);
+			
+			var orig_preproc = gc.preproc;
+			var orig_postproc = gc.postproc;
+			gc.preproc = preprocAlt;
+			gc.postproc = postprocAlt;
         	
-        	return process_asr_semantic(phrase, removeStopwordsAltFunc, langCode);
+			var isSync = false;//helper for detecting, if getASRSemantic is executed asynchronously
+			var resultSync, resultAsync;
+        	resultSync = this.getASRSemantic(phrase, langCode, function(res){
+        		
+        		isSync = true;
+        		
+        		resultAsync = res;
+
+    			gc.preproc = orig_preproc;
+    			gc.postproc = orig_postproc;
+    			
+    			if(callback){
+    				callback.apply(null, arguments);
+    			}
+        	});
         	
+        	if(isSync){//if synchronously executed, then isSync is true at this point (-> must not restore preproc, postproc if async exec)
+
+    			gc.preproc = orig_preproc;
+    			gc.postproc = orig_postproc;
+        	}
+        	return resultSync? resultSync : resultAsync;
         };
         
-      //FIXME impl:
         /**
          * @memberOf SemanticInterpreter.prototype
          * @public
 		 */
         semanticInterpreter.removeStopwords_alt = function(thePhrase, lang){
-			return doRemoveStopWords(thePhrase, lang, removeStopwordsAltFunc);
+			return this.removeStopwords(thePhrase, lang, removeStopwordsAltFunc);
 		};
 
     	/**
