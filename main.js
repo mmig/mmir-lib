@@ -173,7 +173,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 						 */
 						var requireConfig = configurationManager.get('config');
 						if(requireConfig){
-							require.config(requireConfig);
+							mmir.require = require.config(requireConfig);
 						}
 						
 						//"give signal" that the framework is now initialized / ready

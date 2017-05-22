@@ -133,7 +133,7 @@ function initMmir() {
 				}
 			}
 			
-			require.config( conf );
+			mmir.require = require.config( conf );
 		}
 		
 		//if there were non-merged conf.config-values:
@@ -149,7 +149,7 @@ function initMmir() {
 			}
 			
 			//now apply all conf.config-values (including mainConfig.config-values):
-			require.config( {config: confConfig} );
+			mmir.require = require.config( {config: confConfig} );
 		}
 		
 	}
