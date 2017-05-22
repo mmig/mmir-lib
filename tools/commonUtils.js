@@ -115,10 +115,9 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 		 */
 		var directoriesToParse = [
 			 "controllers", 
-			 "views", 
-			 "models", 
-			 "config", 
-			 "mmirf/plugins", 
+			 "views",
+			 "models",
+			 "config",
 			 "helpers"
 		 ];
 	
@@ -222,86 +221,6 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 		     */
 		    loadScript : function(url, successCallback, errorCallback) {
 				return this.getLocalScript.apply(this, arguments);
-		    },
-	
-		    /**
-		     * Load all plugins (i.e. JavaScript interfaces for
-		     * Cordova/Java-Impl. plugins).
-		     * 
-		     * @function
-		     * @param {String} [pluginsPath] OPTIONAL 
-		     *            Path of the plugins which should be
-		     *            loaded, e.g.
-		     *            <b>mmirf/plugins/</b>
-		     *            
-		     *            If omitted: the default plugin-path is used
-		     *            (see {@link mmir.Constants#getPluginsPath})
-		     *            
-		     * @param {Function} [cbFunction] OPTIONAL 
-		     *            The function that should be executed after
-		     *            the plugins are loaded. If the execution of following
-		     *            functions is dependent on the present of plugins, they
-		     *            should be triggered from inside the callback-function
-		     *            
-		     * @returns {Promise} a deferred promise (see loadImpl())
-		     * 
-		     * @requires window
-		     * 
-		     * @async
-		     * @public
-	    	 * @memberOf mmir.CommonUtils.prototype
-		     */
-		    loadAllCordovaPlugins : function(pluginsPath, cbFunction) {
-
-		    	if(typeof pluginsPath === 'function'){
-		    		cbFunction = pluginsPath;
-		    		pluginsPath = null;
-		    	}
-		    	
-		    	if(typeof pluginsPath !== 'string'){
-		    		pluginsPath = constants.getPluginsPath();
-		    	}
-		    	
-		    	// reads all *.js files in /assets/www/mmirf/plugins
-	        	// and loads them dynamically
-	        	// IMPORTANT: /assets/www/config/directories.json must be up-to-date!
-	        	//				(it contains the list of JS-files for the plugins)
-	        	//				-> use ANT /build.xml for updating 
-	        	// IMPORTANT: the Java-side implementations of the plugins must be enabled 
-	        	//				by corresponding entries in /res/plugins.xml file!
-	        	
-		    	
-		    	//FIXME: Cordova 2.x mechanism!!! (remove when switching to 3.x ?)
-		    	window.plugins = window.plugins || {};
-		    	
-		    	
-				return instance.loadImpl(
-	            	  pluginsPath, 
-	            	  false, 
-	            	  cbFunction,
-					  function isPluginAlreadyLoaded(pluginFileName) {
-					      if (window.plugins[pluginFileName.replace(/\.[^.]+$/g, "")]) {//<- regexpr for removing file extension
-					    	  return true;
-					      }
-						  else {
-							  return false;
-					      }
-					  },
-					  function(status, fileName, msg){
-					      if (status === 'info') {
-					    	  if(logger.isInfo()) logger.info('CommonUtils', 'loadAllCordovaPlugins', 'loaded "'+ fileName + '": ' + msg);
-					      }
-						  else if (status === 'warning') {
-							  if(logger.isWarn()) logger.warn('CommonUtils', 'loadAllCordovaPlugins', 'loading "'+ fileName + '": ' + msg);
-					      }
-						  else if (status === 'error') {
-							  logger.error('CommonUtils', 'loadAllCordovaPlugins', 'loading "'+ fileName + '": ' + msg);
-					      }
-						  else {
-							  logger.error('CommonUtils', 'loadAllCordovaPlugins', status + ' (UNKNOWN STATUS) -> "'+ fileName + '": ' + msg);
-					      }
-					  }
-				);
 		    },
 	
 		    /**

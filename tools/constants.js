@@ -91,15 +91,7 @@ function(
 	 * @memberOf Constants#
 	 */
 	var workerPath = frameworkBasePath + "workers/";
-	/**
-	 * the path for plugins
-	 *  
-	 * TODO deprecated? since Cordova 3.x brings its own loading mechanism now...
-	 * 
-	 * @private
-	 * @memberOf Constants#
-	 */
-	var pluginsPath = frameworkBasePath + "plugins/";
+	
 	/**
 	 * the path for Extensions (i.e. extending JavaScript base classes)
 	 * @private
@@ -330,15 +322,6 @@ function(
 			 */
 			getBasePath: function(){
 				return basePath;
-			},
-			/**
-			 * Returns a string with the path to the plugins.
-			 * @function
-			 * @public
-			 * @returns {String} plugin path
-			 */
-			getPluginsPath: function(){
-				return basePath+pluginsPath;
 			},
 			/**
 			 * Returns a string with the path to the layouts.

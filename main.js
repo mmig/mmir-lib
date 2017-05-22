@@ -111,32 +111,10 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 			//load plugins (if in CORDOVA environment)
 			.then(function() {
 
-				languageManager.init().then(function(langMng){
+				return languageManager.init().then(function(langMng){
 					mmir.lang = langMng;
 				});
 				
-				/** 
-				 * @type Deferred
-				 * @memberOf main
-				 */
-				var defer = deferred();
-		        
-				//if in Cordova env:
-				// * load cordova library
-				// * then load the (Cordova) plugins
-				// -> after this: continue (i.e. resolve promise)
-				var isCordova = env.isCordovaEnv;
-				if(isCordova){
-					commonUtils.loadAllCordovaPlugins()
-						.then(defer.resolve());
-		        }
-		        else {
-		        	// otherwise (e.g. BROWSER env):
-		        	// just continue by resolving the promise immediately
-		        	defer.resolve();
-		        }
-
-	        	return defer;
 			})
 			// start the ControllerManager
 			.then(function() {
