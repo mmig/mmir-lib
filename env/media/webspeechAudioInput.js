@@ -64,6 +64,21 @@ newMediaPlugin = {
 				var name = (_isLegacyMode? '' : 'mmirf/') + id;
 				return _mmir? _mmir.require(name) : require(name);
 			};
+			/**
+			 * HELPER for cofigurationManager.get() backwards compatibility (i.e. legacy mode)
+			 * 
+			 * @param {String|Array<String>} path
+			 * 			the path to the configuration value
+			 * @param {any} [defaultValue]
+			 * 			the default value, if there is no configuration value for <code>path</code>
+			 * 
+			 * @returns {any} the configuration value
+			 * 
+			 * @memberOf WebspeechAudioInput#
+			 */
+			var _conf = function(path, defaultValue){
+				return _isLegacyMode? config.get(path, true, defaultValue) : config.get(path, defaultValue);
+			};
 			
 			/**
 			 * @type mmir.LanguageManager
@@ -214,7 +229,7 @@ newMediaPlugin = {
             var intermediate_results = false;
             
 
-            var loglevel = config.get([_pluginName, 'log']);
+            var loglevel = _conf([_pluginName, 'log']);
 			if(typeof loglevel !== 'undefined'){
 				logger.setLevel(loglevel);
 			}

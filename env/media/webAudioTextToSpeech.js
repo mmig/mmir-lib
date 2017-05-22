@@ -92,6 +92,22 @@ newMediaPlugin = {
 				var name = (_isLegacyMode? '' : 'mmirf/') + id;
 				return _mmir? _mmir.require(name) : require(name);
 			};
+			/**
+			 * HELPER for cofigurationManager.get() backwards compatibility (i.e. legacy mode)
+			 * 
+			 * @param {String|Array<String>} path
+			 * 			the path to the configuration value
+			 * @param {any} [defaultValue]
+			 * 			the default value, if there is no configuration value for <code>path</code>
+			 * 
+			 * @returns {any} the configuration value
+			 * 
+			 * @memberOf WebAudioTextToSpeech#
+			 */
+			var _conf = function(path, defaultValue){
+				return _isLegacyMode? configurationManager.get(path, true, defaultValue) : configurationManager.get(path, defaultValue);
+			};
+			
 			
 			//backwards compatibility (pre 3.?)
 			if(!mediaManager._preparing){
@@ -556,7 +572,7 @@ newMediaPlugin = {
 				_pluginName = pluginName;
 				_logger = _req('logger').create(_pluginName);
 				
-				var logLevel = configurationManager.get([_pluginName, 'logLevel'], null);
+				var logLevel = _conf([_pluginName, 'logLevel'], null);
 				if(logLevel !== null){
 					_logger.setLevel(logLevel);
 				}
@@ -735,13 +751,13 @@ newMediaPlugin = {
 				
 			} else if(ctxId){
 				//if plugin was loaded into a specific context, check, if there is a configuration value for this context)
-				implFile = configurationManager.get(configPath);
+				implFile = _conf(configPath);
 			}
 			
 			if(!implFile){
 				//use default configuration path
 				configPath[1] = _defaultCtxName;
-				implFile = configurationManager.get(configPath);
+				implFile = _conf(configPath);
 			}
 			
 			if(!implFile){

@@ -70,6 +70,22 @@ newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 			var name = (_isLegacyMode? '' : 'mmirf/') + id;
 			return _mmir? _mmir.require(name) : require(name);
 		};
+		
+		/**
+		 * HELPER for cofigurationManager.get() backwards compatibility (i.e. legacy mode)
+		 * 
+		 * @param {String|Array<String>} path
+		 * 			the path to the configuration value
+		 * @param {any} [defaultValue]
+		 * 			the default value, if there is no configuration value for <code>path</code>
+		 * 
+		 * @returns {any} the configuration value
+		 * 
+		 * @memberOf MaryWebAudioTTSImpl#
+		 */
+		var _conf = function(path, defaultValue){
+			return _isLegacyMode? _configurationManager.get(path, true, defaultValue) : _configurationManager.get(path, defaultValue);
+		};
 
 		/**  @memberOf MaryWebAudioTTSImpl# */
 		var _defaultServerPath = 'http://mary.dfki.de:59125/';
@@ -127,7 +143,7 @@ newWebAudioTtsImpl = (function MaryWebAudioTTSImpl(){
 			var voice = _getVoiceParam(options);
 			var voiceParamStr = voice? '&VOICE='+voice : '';
 			
-			return _configurationManager.get([_pluginName, "serverBasePath"], _defaultServerPath) +'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
+			return _conf([_pluginName, "serverBasePath"], _defaultServerPath) +'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
 		};
 		
 		/**  @memberOf MaryWebAudioTTSImpl# */
