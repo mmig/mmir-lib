@@ -12,6 +12,10 @@
  *  * removed settings.data processing (e.g. serializing, appending to GET URL...)
  *  * removed beforeSend & complete callbacks, and timeout option/setting
  *  * use XHR object as default context for callbacks
+ *  
+ * Additions/Extension (adapted from jQuery.ajax):
+ *  * added xhrFields handling (analogous to jQuery.ajax) for ajax options
+ *  * correctly read non-text results (w.r.t. xhr.responseType) from response (analogous to jQuery.ajax)
  */
 
 /**
@@ -67,7 +71,10 @@ var ajax = function(options){
       baseHeaders = { },
       protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
       xhr = ajax.settings.xhr()
-
+  
+  // Apply custom fields if provided (MODIFIED: adapted from jQuery)
+  if (settings.xhrFields) for (key in settings.xhrFields) xhr[key] = settings.xhrFields[key];
+  
   if(!settings.context) settings.context = xhr;
 
   if (!settings.crossDomain) baseHeaders['X-Requested-With'] = 'XMLHttpRequest'
@@ -85,7 +92,7 @@ var ajax = function(options){
       var result, error = false
       if ((xhr.status >= 200 && xhr.status < 300) || xhr.status == 304 || (xhr.status == 0 && protocol == 'file:')) {
         dataType = dataType || mimeToDataType(xhr.getResponseHeader('content-type'))
-        result = xhr.responseText
+        result = (xhr.responseType || "text") !== "text" || typeof xhr.responseText !== "string" ? xhr.response : xhr.responseText;// adapted from jQuery: handle non-text (i.e. binary) results
 
         try {
           if (dataType == 'xml')  result = xhr.responseXML
