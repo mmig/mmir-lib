@@ -627,29 +627,36 @@ newMediaPlugin = {
 					}
 					isReady = false;
 					
-					var text;
-					var isMultiple = false;
-					if (typeof options === 'object'){
-						
-						text = options.text;
-						
-						if(!text){
-							text = options;
-						}
-						
-						if(!options2){
-							options2 = options;
-						}
-						//TODO else: merge options into options2
-						
-					} else {
-						text = options;
+					
+					//convert first argument to options-object, if necessary
+					if(typeof options === 'string' || commonUtils.isArray(options)){
+						options = {text: options};
 					}
-						
-					if(text && commonUtils.isArray(text)){
-						isMultiple = true;
-					} else if (typeof text !== 'string'){
-						text = typeof text !== 'undefined' && text !== null? text.toString() : '' + text;
+					
+					if(successCallback){
+						options.success = successCallback;
+					}
+
+					if(failureCallback){
+						options.error = failureCallback;
+					}
+
+					if(onReadyCallback){
+						options.ready = onReadyCallback;
+					}
+					
+					//backwards-compatibility: copy old-API options-object over, if necessary
+					if(options2){
+						for(var p in options2){
+							if(options2.hasOwnProperty(p)) options[p] = options2[p];
+						}
+					}
+					
+					var text = options.text;
+					var isMultiple = commonUtils.isArray(text);
+					if(typeof text !== 'string' && !commonUtils.isArray(text)){
+						text = text? text.toString() : '' + text;
+						options.text = text;
 					}
 					
 					if(text.length === 0){
@@ -670,11 +677,11 @@ newMediaPlugin = {
 					
 					if(!isMultiple){
 						
-						ttsSingleSentence(text, successCallback, failureCallback, onReadyCallback, options2);
+						ttsSingleSentence(text, options.success, options.error, options.ready, options);
 						
 					} else {
 						
-						ttsSentenceArray(text, successCallback, failureCallback, onReadyCallback, options2);
+						ttsSentenceArray(text, options.success, options.error, options.ready, options);
 					}
 				},
 				/**
