@@ -127,8 +127,14 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      * 
      * Lastly, removed methods will be added:
      * <ul>
+     * 	<li> {@link mmir.Constants}
+     * 		<ul>
+     * 			<li><b><u>getPluginsPath</u></b> <em>(removed)</em> to {@link mmir.CommonUtils}</li>
+     * 		</ul>
+     *   </li>
      * 	 <li> {@link mmir.CommonUtils}
      * 		<ul>
+     * 			<li><b><u>loadAllCordovaPlugins</u></b> <em>(removed)</em> to {@link mmir.CommonUtils}</li>
      * 			<li><b><u>setToCompatibilityMode</u></b> <em>(removed)</em> to {@link mmir.CommonUtils}</li>
      * 		</ul>
      *   </li>
@@ -315,7 +321,7 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 	    	});
 	    	
 	    	return defer;
-	    }
+	    };
 	    
 	    /**
          * Set to "backwards compatibility mode" (for pre version 2.0).
@@ -366,7 +372,96 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 	    	
 	    	return defer;
             
-        }//END: setToCompatibilityMode()
+        };
+        
+        /**
+		 * Returns a string with the path to the (Cordova v2.x) plugins directory.
+		 * @function
+		 * @public
+		 * @returns {String} plugins directory path
+		 * 
+    	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
+		 */
+        constants.getPluginsPath = function(){
+			return constants.getBasePath()+'mmirf/plugins/';
+		};
+        
+
+	    /**
+	     * Load all plugins (i.e. JavaScript interfaces for
+	     * Cordova v2 / JavaScript-impl. plugins).
+	     * 
+	     * @function
+	     * @param {String} [pluginsPath] OPTIONAL 
+	     *            Path of the plugins which should be
+	     *            loaded, e.g.
+	     *            <b>mmirf/plugins/</b>
+	     *            
+	     *            If omitted: the default plugin-path is used
+	     *            (see {@link mmir.Core.setToCompatibilityMode3Extension#getPluginsPath})
+	     *            
+	     * @param {Function} [cbFunction] OPTIONAL 
+	     *            The function that should be executed after
+	     *            the plugins are loaded. If the execution of following
+	     *            functions is dependent on the present of plugins, they
+	     *            should be triggered from inside the callback-function
+	     *            
+	     * @returns {Promise} a Deferred.promise (see loadImpl())
+	     * 
+	     * @async
+	     * @public
+    	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
+	     */
+	    commonUtils.loadAllCordovaPlugins = function(pluginsPath, cbFunction) {
+
+	    	if(typeof pluginsPath === 'function'){
+	    		cbFunction = pluginsPath;
+	    		pluginsPath = null;
+	    	}
+	    	
+	    	if(typeof pluginsPath !== 'string'){
+	    		pluginsPath = constants.getPluginsPath();
+	    	}
+	    	
+	    	// reads all *.js files in www/mmirf/plugins/
+        	// and loads them dynamically
+        	// IMPORTANT: /assets/www/config/directories.json must be up-to-date!
+        	//				(it contains the list of JS-files for the plugins)
+        	//				-> use "cordova prepare" for updating
+        	
+	    	
+	    	//FIXME: Cordova 2.x mechanism!!! (remove when switching to 3.x ?)
+	    	window.plugins = window.plugins || {};
+	    	
+	    	
+			return commonUtils.loadImpl(
+            	  pluginsPath, 
+            	  false, 
+            	  cbFunction,
+				  function isPluginAlreadyLoaded(pluginFileName) {
+				      if (window.plugins[pluginFileName.replace(/\.[^.]+$/g, "")]) {//<- regexpr for removing file extension
+				    	  return true;
+				      }
+					  else {
+						  return false;
+				      }
+				  },
+				  function(status, fileName, msg){
+				      if (status === 'info') {
+				    	  if(logger.isInfo()) logger.info('CommonUtils', 'loadAllCordovaPlugins', 'loaded "'+ fileName + '": ' + msg);
+				      }
+					  else if (status === 'warning') {
+						  if(logger.isWarn()) logger.warn('CommonUtils', 'loadAllCordovaPlugins', 'loading "'+ fileName + '": ' + msg);
+				      }
+					  else if (status === 'error') {
+						  logger.error('CommonUtils', 'loadAllCordovaPlugins', 'loading "'+ fileName + '": ' + msg);
+				      }
+					  else {
+						  logger.error('CommonUtils', 'loadAllCordovaPlugins', status + ' (UNKNOWN STATUS) -> "'+ fileName + '": ' + msg);
+				      }
+				  }
+			);
+	    }
     };
     
 });
