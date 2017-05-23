@@ -299,7 +299,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 //    		//  * uses code-naming feature for eval'ed code: //@ sourceURL=...
 //    		//i.e. eval(..) is used ...
 //    		var targetPath = constants.getMediaPluginPath()+filePath;
-//    		$.ajax({
+//    		ajax({
 //                async: true,
 //                dataType: "text",
 //                url: targetPath,
@@ -557,23 +557,67 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		/**
 	    		 * Start speech recognition with <em>end-of-speech</em> detection:
 	    		 * 
-	    		 * the recognizer automatically tries to detect when speech has finished and then
-	    		 * triggers the callback with the result.
+	    		 * the recognizer automatically tries to detect when speech has finished and
+	    		 * triggers the status-callback accordingly with results.
 	    		 * 
 	    		 * @async
 	    		 * 
-	    		 * @param {Function} [successCallback] OPTIONAL
-	    		 * 			callback function that is triggered when a text result is available.
+	    		 * @param {PlainObject} [options] OPTIONAL
+    			 * 		options for Automatic Speech Recognition:
+    			 * 		<pre>{
+    			 * 			  success: OPTIONAL Function, the status-callback (see arg statusCallback)
+    			 * 			, error: OPTIONAL Function, the error callback (see arg failureCallback)
+    			 * 			, language: OPTIONAL String, the language for recognition (if omitted, the current language setting is used)
+    			 * 			, intermediate: OTPIONAL Boolean, set true for receiving intermediate results (NOTE not all ASR engines may support intermediate results)
+    			 * 			, results: OTPIONAL Number, set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
+    			 * 			, mode: OTPIONAL "search" | "dictation", set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
+    			 * 			, eosPause: OTPIONAL "short" | "long", length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option)
+    			 * 			, disableImprovedFeedback: OTPIONAL Boolean, disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option)
+    			 * 		}</pre>
+    			 * 
+	    		 * @param {Function} [statusCallback] OPTIONAL
+	    		 * 			callback function that is triggered when, recognition starts, text results become available, and recognition ends.
 	    		 * 			The callback signature is:
-	    		 * 				<code>callback(textResult)</code>
+	    		 * 				<pre>
+	    		 * 				callback(
+	    		 * 					text: String | "",
+	    		 * 					confidence: Number | Void,
+	    		 * 					status: "FINAL"|"INTERIM"|"INTERMEDIATE"|"RECORDING_BEGIN"|"RECORDING_DONE",
+	    		 * 					alternatives: Array<{result: String, score: Number}> | Void,
+	    		 * 					unstable: String | Void
+	    		 * 				)
+	    		 * 				</pre>
+	    		 * 			
+	    		 * 			Usually, for status <code>"FINAL" | "INTERIM" | "INTERMEDIATE"</code> text results are returned, where
+	    		 * 			<pre>
+	    		 * 			  "INTERIM": an interim result, that might still change
+	    		 * 			  "INTERMEDIATE": a stable, intermediate result
+	    		 * 			  "FINAL": a (stable) final result, before the recognition stops
+	    		 * 			</pre>
+	    		 * 			If present, the <code>unstable</code> argument provides a preview for the currently processed / recognized text.
+	    		 * 
+	    		 * 			<br>NOTE that when using <code>intermediate</code> mode, status-calls with <code>"INTERMEDIATE"</code> may
+	    		 * 			     contain "final intermediate" results, too.
+	    		 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.success</code>, this argument will supersede the options
+    			 * 
 	    		 * @param {Function} [failureCallback] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(error)</code>
 	    		 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.error</code>, this argument will supersede the options
+    			 * 
+	    		 * 
 				 * @memberOf mmir.MediaManager# 
 	    		 */
-    			recognize: function(successCallback, failureCallback){
+    			recognize: function(options, statusCallback, failureCallback){
+    				
+    				if(typeof options === 'function'){
+    					failureCallback = statusCallback;
+    					statusCallback = options;
+    					options = void(0);
+    				}
     				
     				var funcName = 'recognize';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
@@ -591,32 +635,65 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 
 	    		 * The recognizer continues until {@link #stopRecord} is called.
 	    		 * 
-	    		 * <p>
-	    		 * If <code>isWithIntermediateResults</code> is used, the recognizer may
-	    		 * invoke the callback with intermediate recognition results.
-	    		 * 
-	    		 * TODO specify whether stopRecord should return the "gathered" intermediate results, or just the last one
-	    		 * 
-	    		 * NOTE that not all implementation may support this feature.
-	    		 * 
 	    		 * @async
 	    		 * 
-	    		 * @param {Function} [successCallback] OPTIONAL
-	    		 * 			callback function that is triggered when a text result is available.
+    			 * @param {PlainObject} [options] OPTIONAL
+    			 * 		options for Automatic Speech Recognition:
+    			 * 		<pre>{
+    			 * 			  success: OPTIONAL Function, the status-callback (see arg statusCallback)
+    			 * 			, error: OPTIONAL Function, the error callback (see arg failureCallback)
+    			 * 			, language: OPTIONAL String, the language for recognition (if omitted, the current language setting is used)
+    			 * 			, intermediate: OTPIONAL Boolean, set true for receiving intermediate results (NOTE not all ASR engines may support intermediate results)
+    			 * 			, results: OTPIONAL Number, set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
+    			 * 			, mode: OTPIONAL "search" | "dictation", set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
+    			 * 			, eosPause: OTPIONAL "short" | "long", length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option)
+    			 * 			, disableImprovedFeedback: OTPIONAL Boolean, disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option)
+    			 * 		}</pre>
+    			 * 
+	    		 * @param {Function} [statusCallback] OPTIONAL
+	    		 * 			callback function that is triggered when, recognition starts, text results become available, and recognition ends.
 	    		 * 			The callback signature is:
-	    		 * 				<code>callback(textResult)</code>
+	    		 * 				<pre>
+	    		 * 				callback(
+	    		 * 					text: String | "",
+	    		 * 					confidence: Number | Void,
+	    		 * 					status: "FINAL"|"INTERIM"|"INTERMEDIATE"|"RECORDING_BEGIN"|"RECORDING_DONE",
+	    		 * 					alternatives: Array<{result: String, score: Number}> | Void,
+	    		 * 					unstable: String | Void
+	    		 * 				)
+	    		 * 				</pre>
+	    		 * 			
+	    		 * 			Usually, for status <code>"FINAL" | "INTERIM" | "INTERMEDIATE"</code> text results are returned, where
+	    		 * 			<pre>
+	    		 * 			  "INTERIM": an interim result, that might still change
+	    		 * 			  "INTERMEDIATE": a stable, intermediate result
+	    		 * 			  "FINAL": a (stable) final result, before the recognition stops
+	    		 * 			</pre>
+	    		 * 			If present, the <code>unstable</code> argument provides a preview for the currently processed / recognized text.
+	    		 * 
+	    		 * 			<br>NOTE that when using <code>intermediate</code> mode, status-calls with <code>"INTERMEDIATE"</code> may
+	    		 * 			     contain "final intermediate" results, too.
+	    		 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.success</code>, this argument will supersede the options
+    			 * 
 	    		 * @param {Function} [failureCallback] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(error)</code>
-	    		 * @param {Boolean} [isWithIntermediateResults] OPTIONAL
-	    		 * 			if <code>true</code>, the recognizer will return intermediate results
-	    		 * 			by invoking the successCallback
 	    		 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.error</code>, this argument will supersede the options
+    			 * 
 	    		 * @see #stopRecord
 				 * @memberOf mmir.MediaManager#
 	    		 */
-    			startRecord: function(successCallback,failureCallback, isWithIntermediateResults){
+    			startRecord: function(options, statusCallback, failureCallback, isWithIntermediateResults){//TODO remove arg isWithIntermediateResults -> deprecated: use options instead
+    				
+    				if(typeof options === 'function'){
+    					isWithIntermediateResults = failureCallback;
+    					failureCallback = statusCallback;
+    					statusCallback = options;
+    					options = void(0);
+    				}
     				
     				var funcName = 'startRecord';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
@@ -635,23 +712,46 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * After {@link #startRecord} was called, invoking this function will stop the recognition
 	    		 * process and return the result by invoking the <code>succesCallback</code>.
 	    		 * 
-	    		 * TODO specify whether stopRecord should return the "gathered" intermediate results, or just the last one
+	    		 * Note, that the <code>statusCallback</code> may not return an actual text result (i.e. the last
+	    		 * text result may have been return in the <code>statusCallback</code> of the <code>startRecord()</code> call)
 	    		 * 
 	    		 * @async
 	    		 * 
-	    		 * @param {Function} [successCallback] OPTIONAL
-	    		 * 			callback function that is triggered when a text result is available.
+	    		 * 
+	    		 * @param {Function} [statusCallback] OPTIONAL
+	    		 * 			callback function that is triggered when, recognition starts, text results become available, and recognition ends.
 	    		 * 			The callback signature is:
-	    		 * 				<code>callback(textResult)</code>
+	    		 * 				<pre>
+	    		 * 				callback(
+	    		 * 					text: String | "",
+	    		 * 					confidence: Number | Void,
+	    		 * 					status: "FINAL"|"INTERIM"|"INTERMEDIATE"|"RECORDING_BEGIN"|"RECORDING_DONE",
+	    		 * 					alternatives: Array<{result: String, score: Number}> | Void,
+	    		 * 					unstable: String | Void
+	    		 * 				)
+	    		 * 				</pre>
+	    		 * 			
+	    		 * 			Usually, for status <code>"FINAL" | "INTERIM" | "INTERMEDIATE"</code> text results are returned, where
+	    		 * 			<pre>
+	    		 * 			  "INTERIM": an interim result, that might still change
+	    		 * 			  "INTERMEDIATE": a stable, intermediate result
+	    		 * 			  "FINAL": a (stable) final result, before the recognition stops
+	    		 * 			</pre>
+	    		 * 			If present, the <code>unstable</code> argument provides a preview for the currently processed / recognized text.
+	    		 * 
+	    		 * 			<br>NOTE that when using <code>intermediate</code> mode (as option in <code>startRecord()</code>),
+	    		 * 				 status-calls with <code>"INTERMEDIATE"</code> may contain "final intermediate" results, too.
+    			 * 
 	    		 * @param {Function} [failureCallback] OPTIONAL
 	    		 * 			callback function that is triggered when an error occurred.
 	    		 * 			The callback signature is:
 	    		 * 				<code>callback(error)</code>
+    			 * 
 	    		 * 
 	    		 * @see #startRecord
 				 * @memberOf mmir.MediaManager#
 	    		 */
-    			stopRecord: function(successCallback,failureCallback){
+    			stopRecord: function(successCallback, failureCallback){
     				
     				var funcName = 'stopRecord';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
@@ -859,7 +959,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			/**
     			 * Synthesizes ("read out loud") text.
     			 * 
-    			 * @param {String|Array<String>|PlainObject} options
+    			 * @param {String|Array<String>|PlainObject} [options] OPTIONAL
     			 * 		if <code>String</code> or <code>Array</code> of <code>String</code>s
     			 * 			  synthesizes the text of the String(s).
     			 * 			  <br>For an Array: each entry is interpreted as "sentence";
@@ -880,9 +980,13 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			callback that is invoked when the audio of the speech synthesis finished playing:
     			 * 			<pre>onPlayedCallback()</pre>
     			 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.success</code>, this argument will supersede the options
+    			 * 
     			 * @param {Function} [failureCallback] OPTIONAL
-    			 * 			callback that is invoked in case an error occured:
+    			 * 			callback that is invoked in case an error occurred:
     			 * 			<pre>failureCallback(error: String | Error)</pre>
+    			 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.error</code>, this argument will supersede the options
     			 * 
     			 * @param {Function} [onReadyCallback] OPTIONAL
     			 * 			callback that is invoked when audio becomes ready / is starting to play.
@@ -890,6 +994,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * 			then the callback will be invoked with <code>false</code>, and then with <code>true</code>
     			 * 			(as first argument), when the audio becomes ready again, i.e. the callback signature is:
     			 * 			<pre>onReadyCallback(isReady: Boolean, audio: IAudio)</pre>
+    			 * 
+    			 * 			<br>NOTE: if used in combination with <code>options.ready</code>, this argument will supersede the options
     			 * 
 				 * @memberOf mmir.MediaManager#
     			 */
@@ -899,6 +1005,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					onInitCallback = failureCallback;
     					failureCallback = onPlayedCallback;
     					onPlayedCallback = options;
+    					options = void(0);
     				}
     				
     				var funcName = 'tts';
