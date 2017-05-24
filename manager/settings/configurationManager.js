@@ -109,7 +109,13 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 	    			}
 	    		},
 	    		error: function(data){
-	    			console.error("ConfigurationManager.constructor: failed to load configuration from '"+constants.getConfigurationFileUrl()+"'! ERROR: "+ JSON.stringify(data));
+	    			var errStr = "ConfigurationManager.constructor: failed to load configuration from '"+constants.getConfigurationFileUrl()+"'! ERROR: ";
+	    			try{
+	    				errStr += JSON.stringify(data);
+		    			console.error(errStr);
+	    			}catch(e){
+		    			console.error(errStr, errStr);
+	    			}
 	    		}
 	    	});
     	}
