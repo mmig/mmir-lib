@@ -229,6 +229,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 				    							
 				    							//add alias 'tts' for 'textToSpeech'
 				    							if(!ttsFieldExists && name === 'textToSpeech'){
+				    								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 				    								mediaManagerInstance.ctx[context]['tts'] = mediaManagerInstance.ctx[context]['textToSpeech'];
 				    							}
 				    							
@@ -242,6 +243,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 			    							
 			    							//add alias 'tts' for 'textToSpeech'
 			    							if(p === 'textToSpeech' && !exportedFunctions['tts']){
+			    								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 			    								mediaManagerInstance.ctx[execId]['tts'] = func;
 			    							}
 		    							}
@@ -270,6 +272,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    					extend(instance,exportedFunctions);
 	    					//add alias 'tts' for 'textToSpeech'
 							if(typeof exportedFunctions['textToSpeech'] === 'function' && !exportedFunctions['tts']){
+								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 								instance['tts'] = exportedFunctions['textToSpeech'];
 							}
 	    					newMediaPlugin = null;
