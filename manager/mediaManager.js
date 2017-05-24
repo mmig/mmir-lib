@@ -717,6 +717,13 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * 
 	    		 * @async
 	    		 * 
+	    		 * @param {PlainObject} [options] OPTIONAL
+    			 * 		options for stopping the Automatic Speech Recognition:
+    			 * 		<pre>{
+    			 * 			  success: OPTIONAL Function, the status-callback (see arg statusCallback)
+    			 * 			, error: OPTIONAL Function, the error callback (see arg failureCallback)
+    			 * 		}</pre>
+    			 * 
 	    		 * 
 	    		 * @param {Function} [statusCallback] OPTIONAL
 	    		 * 			callback function that is triggered when, recognition starts, text results become available, and recognition ends.
@@ -751,7 +758,13 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		 * @see #startRecord
 				 * @memberOf mmir.MediaManager#
 	    		 */
-    			stopRecord: function(successCallback, failureCallback){
+    			stopRecord: function(options, successCallback, failureCallback){
+    				
+    				if(typeof options === 'function'){
+    					failureCallback = statusCallback;
+    					statusCallback = options;
+    					options = void(0);
+    				}
     				
     				var funcName = 'stopRecord';
     				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
