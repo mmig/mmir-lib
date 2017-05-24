@@ -789,8 +789,19 @@ newMediaPlugin = {
 				 * @memberOf WebspeechAudioInput.prototype
 				 * @see mmir.MediaManager#stopRecord
 				 */
-				stopRecord: function(statusCallback,failureCallback){
-					// TODO: at end of recording return whole recognized stuff in success callback
+				stopRecord: function(options, statusCallback, failureCallback){
+					
+					if(typeof options === 'function'){
+						failureCallback = statusCallback;
+						statusCallback = options;
+						options = void(0);
+					}
+					
+					if(options){
+						statusCallback = statusCallback? statusCallback : options.success;
+						failureCallback = failureCallback? failureCallback : options.error;
+					}
+					
 					recording = mediaManager.micLevelsAnalysis.active(false);
 
 					var isSuccessTriggered = false;
