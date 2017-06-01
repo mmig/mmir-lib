@@ -229,7 +229,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                semanticInterpreter.setCurrentGrammar(grammarLang);
 		            }
 					else {
-		                logger.warn('Could not find any grammar for one of [' + languages.join(', ') + '], disabling SemanticInterpret.');
+		                logger.info('Could not find any grammar for one of [' + languages.join(', ') + '], disabling SemanticInterpret.');
 		                semanticInterpreter.setEnabled(false);
 		            }
 		        }
