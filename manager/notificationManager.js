@@ -47,12 +47,11 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
 	
 	
 	/**
-	 * TODO replace by "real" ENV mechanism ... instead of !forBrowser / ! constants.isBrowserEnv()
 	 * 
 	 * @private
 	 * @memberOf NotificationManager#
 	 */
-	var isCordovaEnv = ! constants.isBrowserEnv();
+	var isCordovaEnv = constants.isCordovaEnv();
 	
 	/**
 	 * @private
@@ -134,6 +133,9 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
     	 * @function
     	 */
     	var _init = function(){
+    		
+    		var isNavigator = typeof navigator !== 'undefined';
+    		
 	    	if(isCordovaEnv){
 	    		
 	    		if(navigator.notification && navigator.notification.vibrate){
@@ -148,19 +150,19 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
 	    		}
 	    		
 	    	}
-	    	else if (navigator.vibrate){
+	    	else if (isNavigator && navigator.vibrate){
 //	    		console.debug('Vibrate API');
 	    		/** @ignore */
 	    		doVibrate = function vibrate(n){ navigator.vibrate(n); };
 	    	}
-	    	else if (navigator.webkitVibrate){
+	    	else if (isNavigator && navigator.webkitVibrate){
 //	    		console.debug('Vibrate: webkit');
 	    		/** @ignore */
 	    		doVibrate = function vibrate(n){ navigator.webkitVibrate(n); };
 	    	}
 	    	
 	    	//set confirm-implementation
-	    	if(navigator.notification && navigator.notification.confirm){
+	    	if(isNavigator && navigator.notification && navigator.notification.confirm){
 //	    		console.debug('Confirm: navigator.notification');
     			/** @ignore */
 	    		doConfirm = function confirm(message, confirmCallback, title, buttonLabels){
@@ -192,7 +194,7 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
     		}
 	    	
 	    	//set alert-implementation
-	    	if(navigator.notification && navigator.notification.alert){
+	    	if(isNavigator && navigator.notification && navigator.notification.alert){
 //	    		console.debug('Alert: navigator.notification');
     			/** @ignore */
 	    		doAlert = function confirm(message, alertCallback, title, buttonLabels){

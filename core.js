@@ -17,7 +17,7 @@
  * @returns the module instance <code>mmir</code>
  * 
  */
-function initMmir() {
+function initMmir(window) {
 	
 	/**
 	 * the name of the global variable which will hold the core-module
@@ -81,6 +81,25 @@ function initMmir() {
 		func.call(mmir);
 	};
 	
+
+	/**
+	 * HELPER apply requirejs configuration
+	 * 
+	 * @param {PlainObject} [configuration]
+	 *			the requirejs configuration value
+	 * @param {requirejs} [reqInstance] OPTIONAL
+	 * 			the requirejs instance, with attached <code>config</code> function
+	 * @memberOf mmir.internal
+	 * @private
+	 */
+	function _reqConfig (configuration, reqInstance) {
+		var req = reqInstance? reqInstance : (mmir && mmir.require? mmir.require : (typeof requirejs !== 'undefined'? requirejs : require));
+		if(!req.config){
+			req = req('requirejs');
+		}
+		return req.config(configuration);
+	};
+	
 	/**
 	 * STATE: state variable for indicating "configs for requirejs are already applied"
 	 * @memberOf mmir.internal
@@ -105,7 +124,7 @@ function initMmir() {
 	 * 
 	 * @see #mergeModuleConfigs
 	 */
-	function applyConfigs(mainConfig){
+	function applyConfigs(mainConfig, reqInstance){
 		
 		if(typeof require === 'undefined'){
 			return;
@@ -133,7 +152,7 @@ function initMmir() {
 				}
 			}
 			
-			mmir.require = require.config( conf );
+			mmir.require = _reqConfig( conf, reqInstance );
 		}
 		
 		//if there were non-merged conf.config-values:
@@ -149,7 +168,7 @@ function initMmir() {
 			}
 			
 			//now apply all conf.config-values (including mainConfig.config-values):
-			mmir.require = require.config( {config: confConfig} );
+			mmir.require = _reqConfig( {config: confConfig}, reqInstance );
 		}
 		
 	}
@@ -463,7 +482,7 @@ function initMmir() {
 			 */
 			config: function(options){
 				if(_isApplied && typeof require !== 'undefined'){
-					require.config(options);
+					_reqConfig(options, this.require);
 				}
 				else {
 					_configList.push(options);
@@ -731,4 +750,4 @@ function initMmir() {
 	window[CORE_NAME] = mmir;
 	
 	return mmir;
-}());
+}(typeof window !== 'undefined'? window : global));

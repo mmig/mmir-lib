@@ -295,6 +295,10 @@ function createErr(msg, error){
 	
 	return err+msg+errMsg;
 }
+
+//in some environments console.debug may not exits -> use console.log instead
+var DEBUG_FUNC_NAME = console.debug? 'debug' : 'log';
+
 /**
  * @private
  * @memberOf Logger.prototype
@@ -308,7 +312,7 @@ function print(loggerName, logLevel, msg){
 		break;
 	case 1:
 		prefix = '[DEBUG] ';
-		func = 'debug';
+		func = DEBUG_FUNC_NAME;
 		break;
 	case 2:
 		prefix = '[INFO] ';

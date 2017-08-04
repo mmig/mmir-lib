@@ -745,7 +745,7 @@ GrammarConverter.prototype.getCodeWrapSuffix = function(encodedStopwords, gramma
 				'semanticInterpreter.addGrammar("' +
 					grammarId + '", ' + grammarFuncName + ', options);\n\n' +
 				'return ' + grammarFuncName + ';\n' +
-				'})(window);\n'
+				'})(typeof window !== "undefined"? window : global);\n'
 };
 
 

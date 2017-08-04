@@ -90,7 +90,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
      * 
 	 * @memberOf mmir.ModelManager#
      */
-	var GLOBAL_NAMESPACE = window;
+	var GLOBAL_NAMESPACE = typeof window !== 'undefined'? window : global;
 
 	/**
 	 * 

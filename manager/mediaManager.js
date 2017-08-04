@@ -153,7 +153,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	
     	if(!_mmirLib){
     		var mmirName = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
-    		_mmirLib = window[mmirName];
+    		_mmirLib = typeof window !== 'undefined'? window[mmirName] : global[mmirName];
     	}
     	
     	return _mmirLib;
@@ -1636,7 +1636,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     		//if there is no env value yet, use default criteria browser vs. cordova env:
     		if(!env){
     			
-	    		var isCordovaEnvironment = ! constants.isBrowserEnv();
+	    		var isCordovaEnvironment = constants.isCordovaEnv();
 	        	if (isCordovaEnvironment) {
 	        		env = 'cordova';
 	        	} else {

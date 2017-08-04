@@ -1,4 +1,4 @@
-(function (requirejs, define) {//execute in anonymous namespace/closure:
+(function (requirejs, define, window) {//execute in anonymous namespace/closure:
 
 
 /** @memberOf mmir.mainConfig */
@@ -303,7 +303,7 @@ reqInstance(['mmirf/core'], /** @memberOf mmir.mainConfig */ function mmirLoader
 
 
 	//apply all configs / modifications that were made on the core-module
-	core.applyConfig(mmirf_config);
+	core.applyConfig(mmirf_config, requirejs);
 	
 	if(jq){
 		core._define('jquery', function(){
@@ -316,4 +316,4 @@ reqInstance(['mmirf/core'], /** @memberOf mmir.mainConfig */ function mmirLoader
 	core.require(['mmirf/logger',startModule]);
 });
 
-}(requirejs, define));//END: (function(){...
+}(requirejs, define, typeof window !== 'undefined'? window : global));//END: (function(){...

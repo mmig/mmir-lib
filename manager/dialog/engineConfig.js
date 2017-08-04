@@ -313,11 +313,11 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
     	var hasWebWorkers = typeof window.Worker !== 'undefined';
     	
     	//TODO make this configurable? through ConfigurationManager?
-    	if(hasWebWorkers){// && constants.isBrowserEnv()){
+    	if(hasWebWorkers){
     		return _browserFactory; //_browser;
     	}
     	else {
-    		var isCordovaEnv = !constants.isBrowserEnv();
+    		var isCordovaEnv = constants.isCordovaEnv();
     		//if queue-plugin is available:
         	if(isCordovaEnv && cordova.plugins && cordova.plugins.queuePlugin){
         		return _queuePluginFactory;//_cordova;

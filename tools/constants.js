@@ -286,6 +286,11 @@ function(
 			
 			basePath = "";
 		}
+		else if (isBrowserEnvParam && isBrowserEnvParam.isNodeEnv){
+			
+			//TODO should this be the absolute path for node-env?
+			basePath = "file:";
+		}
 		else if (isBrowserEnvParam === false || typeof isBrowserEnvParam === 'undefined'){
 			//BACKWARD COMPATIBILITY: false and omitted argument are interpreted as Android env
 			//TODO remove this?
@@ -536,6 +541,15 @@ function(
 	         */
 			isBrowserEnv: function(){//FIXME replace with real environment-setting/-mechanism
 				return isBrowserEnv;
+			},
+			
+			/**
+	         * @function
+	         * @returns {Boolean}
+	         * @public
+	         */
+			isCordovaEnv: function(){
+				return env.isCordovaEnv;
 			},
 			
 

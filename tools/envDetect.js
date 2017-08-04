@@ -20,10 +20,12 @@
  */
 define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 	
-	var params = paramsParseFunc( window.location.search );
+	var paramsStr = typeof window !== 'undefined'? window.location.search : '?env=node';
+	var params = paramsParseFunc( paramsStr );
 	
 	var isBrowserEnv;
 	var isCordovaEnv;
+	var isNodeEnv;
 	var envSetting = '';
 	var envParamSetting = '';
 	
@@ -54,10 +56,18 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 		else {
 			isCordovaEnv = false;
 		}
+		
+		if(envSetting === 'node'){
+			isNodeEnv = true;
+		}
+		else {
+			isNodeEnv = false;
+		}
 	}
 	else {
 		isBrowserEnv = true;
 		isCordovaEnv = false;
+		isNodeEnv = false;
 	}
 	
 	var env;
@@ -78,7 +88,7 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 				env = 'default';
 			}
 			
-		} else {
+		} else if(typeof navigator !== 'undefined') {
 			
 			//fallback: use UserAgent for detecting env
 			var userAgent = navigator.userAgent;
@@ -91,6 +101,11 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 				env = 'default';
 			}
 			
+		} else if(isNodeEnv) {
+			env = 'node';
+		} else {//TODO handle other platforms
+			console.warn('Unknown platform');
+			env = 'default';
 		}
 		
 	}
@@ -98,6 +113,7 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 	return {
 		  isBrowserEnv: isBrowserEnv,
 		  isCordovaEnv: isCordovaEnv,
+		  isNodeEnv: isNodeEnv,
 		  envSetting: envSetting,
 		  platform: env
 //		, params : params

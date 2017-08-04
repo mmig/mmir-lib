@@ -69,7 +69,7 @@ var ajax = function(options){
 
   var mime = settings.accepts[dataType],
       baseHeaders = { },
-      protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : window.location.protocol,
+      protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : typeof window !== 'undefined' && window.location? window.location.protocol : 'file:',
       xhr = ajax.settings.xhr()
   
   // Apply custom fields if provided (MODIFIED: adapted from jQuery)
@@ -141,7 +141,7 @@ ajax.settings = {
   context: null,
   // Transport
   xhr: function () {
-    return new window.XMLHttpRequest()
+    return new (typeof window !== 'undefined' && window.XMLHttpRequest? window : require("xmlhttprequest")).XMLHttpRequest();
   },
   // MIME types mapping
   accepts: {
