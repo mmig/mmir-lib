@@ -1,11 +1,11 @@
 ﻿
-version notes for MMIR framework code (v 3.8.0)
+version notes for MMIR framework code (v 4.0.0)
 
- * using Cordova 5.x.x - 6.x.x library
+ * using Cordova 5.x.x - 7.x.x library
 
 optional
- * using jQuery 2.1.x library
- * using jQuery Mobile 1.4.x library
+ * jQuery 2.x - 3.x library
+ * jQuery Mobile 1.4.x library (note: requires jQuery 2.x)
 
 
  NOTE: for versions older than MMIR 3.x, the change-information refers to the MMIG StarterKit code.
@@ -26,17 +26,284 @@ optional
  --------------
 
 ##################
- Version 3.8.0
+ Version 4.0.0
 ##################
+
+ ----------------- [starter-kit backward compat settting]  ----------------- 
+
+index.html: add jQuery, e.g. v2 or v3
+<script type="text/javascript" src="jquery-2.2.3.js"></script>
+
+preinit.js:
+change paths -> remove leading '../' from requirejs module-ID declarations
+
+app.js:
+mmir.ready(function () {mmir.require(['core3Compatibility'], function(core3Compatibility){
+...
+});
+ ----------------- [starter-kit backward compat settting]  ----------------- 
+
+
+----------------- < Migration Guide > -----------------
+
+
+> see also migration resources at (T.B.D.)  
+> https://github.com/mmig/mmir-migration/
+
+
+update build-resources:
+ * replace build/ directory with new mmir-tooling resources
+ * follow the instructions of the mmir-tooling README, or for short:
+   * install gulp-cli (`npm install -g gulp-cli`)
+   * execute `npm install` in build/
+   * run `gulp` in build/
+
+update web-resources:
+ * replace <web resources>/mmirf/ directory with new mmir-lib resources
+ * delete <web resources>/gen/ directory
+ * if the app uses require():
+   due to the changed baseUrl configuration, the paths may have changed:
+                                           instead of require('../appjs/some-script') [OLD]
+                                           use        require('./appjs/some-script')  [NEW]
+                                           or         require('appjs/some-script')    [NEW]
+                                           
+
+ * if the app uses jQuery:
+   jQuery does not ship with mmir-lib anymore, i.e. needs to added separately, if it is required
+   (e.g. insert <script> for jQuery in index.html)
+   
+ * if the app uses jQuery Mobile:
+   jQuery Mobile does not ship with mmir-lib anymore, i.e. needs to added separately, if it is required
+   (e.g. insert <script> and <link> for jQuery Mobile and its styles in index.html)
+ 
+ * dealing with changed API:
+ 
+   1) use compatibility module(s):
+      (a) if the app does NOT require() mmir-lib modules, simply extend mmir.ready() callback (e.g. in app.js):
+           mmir.ready(function () {
+             //add compatibility closure:
+             mmir.require(['mmirf/core3Compatibility'], function(core3Compatibility){
+              
+              core3Compatibility(mmir);
+              
+              ...<old code>
+              
+             });//end of compatibility closure
+           });//end of mmir.ready() callback
+           
+      (b) if the app DOES require() mmir-lib modules, extend mmir.ready() callback, and first add old module-ID compatibility (e.g. in app.js):
+           mmir.ready(function () {
+             //add compatibility closure:
+             mmir.require(['mmirf/core3ModuleIdCompatibility', 'mmirf/core3Compatibility'], function(core3ModuleIdCompatibility, core3Compatibility){
+              
+              core3ModuleIdCompatibility(mmir.require, window);
+              core3Compatibility(mmir);
+              
+              ...<old code>
+              
+             });//end of compatibility closure
+           });//end of mmir.ready() callback
+           
+   2) change app code according to [breaking change] comments (see below)
+
+-------------------------------------------------------
+
 
 MODFIFICATIONS:
 
-  * REFACTOR removed dependency on jQuery
-    * added util-implementations that either use jQuery (if present) or use an alternative implementation, see tools/util_purejs/ and tools/util_jquery
-    * replaced jQuery dependencies with specific function-dependencies (of utility functions), e.g. util/deferred, util/extend etc
-    * detect jQuery presence and use its implementation when present (see mainConfig and core)
+ * REFACTOR [breaking change] removed dependency on jQuery
+   * removed jQuery library (i.e. does not "ship" with mmir-lib anymore)
+   * added util-implementations that either use jQuery (if present) or use an alternative implementation, see tools/util_purejs/ and tools/util_jquery
+   * replaced jQuery dependencies with specific function-dependencies (of utility functions), e.g. util/deferred, util/extend etc
+   * detect jQuery presence and use its implementation when present (see mainConfig and core)
+  
+ * REFACTOR [breaking change] removed dependency on jQuery Mobile
+   * removed jQuery Mobile library and its styles (i.e. does not "ship" with mmir-lib anymore)
+   * set default view-engine to mmirf/simpleViewEngine (that has no additional dependencies)
+   * extracted jqmViewEngine (jQuery Mobile-based) to separate component, that can be used instead of the new default view-engine
+    
+ * REFACTOR [breaking change] mainConfig: set baseUrl to './' for requirejs (instead of './mmirf')
+    * if requirejs was not used in application code, nothing changed
+    * NOTE for external use of requirejs (in application code):
+                                the base-path/-URL for require-ing scripts is now now the www-root, e.g.
+                                           instead of require('../appjs/some-script') [OLD]
+                                           use        require('./appjs/some-script')  [NEW]
+                                           or         require('appjs/some-script')    [NEW]
+
+ * REFACTOR [breaking change] renamed requirejs module IDs by using prefix "mmirf/" in module IDs now
+    * if code did not use require() for accessing mmir-lib modules, nothing changed
+    * in old code that require()'ed mmir-lib modules, add prefix "mmirf/" to module ID,
+                                          example 1:
+                                           instead of require('presentationManager')        [OLD]
+                                           use:       require('mmirf/presentationManager')  [NEW]
+                                          example 2:
+                                           instead of require('grammarConverter')           [OLD]
+                                           use:       require('mmirf/grammarConverter')     [NEW]
+                                           
+ * MODIFY  [breaking change] changed core modules in mmir namespace to shorter names
+   * removed deprecated getInstance() from
+     * mmirf/constants
+     * mmirf/controllerManager
+     * mmirf/dialogManager
+     * mmirf/inputManager
+     * mmirf/mediaManager
+     * mmirf/modelManager
+     * mmirf/notificationManager
+     * mmirf/presentationManager
+     * mmirf/parseUtils
+     * mmirf/renderUtils
+     * mmirf/semanticInterpreter
+   * RENAME shorter module names in core/mmir:
+	 * mmir.ConfigurationManager 	-> mmir.conf
+	 * mmir.ControllerManager 		-> mmir.ctrl
+	 * mmir.PresentationManager 	-> mmir.present
+	 * mmir.DialogManager 			-> mmir.dialog
+	 * mmir.DialogEngine 			-> mmir.dialogEngine
+	 * mmir.InputManager 			-> mmir.input
+	 * mmir.InputEngine 			-> mmir.inputEngine
+	 * mmir.CommonUtils	 			-> mmir.util
+	 * mmir.LanguageManager 		-> mmir.lang
+	 * mmir.MediaManager	 		-> mmir.media
+	 * mmir.SemanticInterpreter 	-> mmir.semantic
+	 * mmir.ModelManager	 		-> mmir.model
+	 * mmir.Constants 				-> mmir.const
+	 * mmir.NotificationManager 	-> mmir.notifier
+   * MODIFY Constants: removed getter for plugins directory path (see also comments below for auto-loading mechanism of plugins)
+	 * REMOVE: getPluginsPath()
+   * MODIFY SemanticInterpreter:
+	 * renamed: getASRSemantic -> interpret
+   * MODIFY MediaManager:
+	 * renamed: textToSpeech -> tts
+	   NOTE: textToSpeech() is still available as deprecated
+   * MODIFY PresentationManager:
+	 * renamed: renderView -> render
+   * MODIFY ControllerManager:
+	 * renamed: getController -> get
+	 * renamed: getControllerNames -> getNames
+   * MODIFY ModelManager:
+	 * renamed: getModel -> get
+	 * renamed: getModels -> getNames
+   * MODIFY ConfigurationManager: removed deprecated methods
+	 * REMOVE: getLanguage() : STRING
+	 * REMOVE: setLanguage(STRING)
+	 * CHANGED signature for get(), getBoolean(), and getString():
+	           [OLD] function(propertyName, useSafeAccess, defaultValue)
+	           [NEW] function(propertyName, defaultValue, useSafeAccess)
+   * MODIFY CommonUtils: removed compatibility-mode function (use separate module mmirf/core2Compatibility instead)
+	 * REMOVE: setToCompatibilityMode()
+	 * REMOVE: loadAllCordovaPlugins()
+   * MODIFY LanguageManager: removed compatibility-mode function (use separate module mmirf/core2Compatibility instead)
+	 * REMOVE: setToCompatibilityMode()
+	 
+  * REMOVE [breaking change] of internal module scionEngine: created SCION engines do not have a getInstance method anymore
+                             (since this module is only used internally, as well as the created instances, the change have no effect on application code)
+  
+  * MODIFY [breaking change] semanticInterpreter / grammarConverter:
+    * MODIFY increased GRAMMAR_FILE_FORMAT_VERSION to 5 (new file format for compiled grammars)
+    * MODIFY when registering compiled grammars, add stopwords via options (instead of separate function call)
+    * REMOVE deprecated functions / fields
+     * semanticInterpreter.getASRSemantic_alt()
+     * semanticInterpreter.removeStopwords_alt()
+     * grammarConverter.stop_words_regexp_alt()
+     * grammarConverter.parseStopWords_alt()
+     * grammarConverter.getStopWordsRegExpr_alt()
+  * ADDITION grammarConverter: added functions preproc() and postproc() that are executed on the input-string before and after applying a grammar (i.e. pre-processing and post-processing of the input-string in semanticInterpreter.interpret())
+     * prepoc(): pre-processing of input-string, before applying grammar
+     * postpoc(): post-processing of input-string, after grammar was applied (i.e. on semantic-result)
+  * MODIFY changed signature for grammarConverter.maskString():
+     old signature: (str: STRING[, prefix: STRING, postfix: STRING]) -> STRING
+     new signature: (str: STRING[, computePositions: BOOLEAN, prefix: STRING, postfix: STRING]) -> STRING | {str: STRING, pos: ARRAY<POSITION>}
+  * MODIFY changed signature for grammarConverter.unmaskString():
+     old signature: (str: STRING[, detector: RegExp]) -> STRING
+     new signature: (str: STRING[, computePositions: BOOLEAN, detector: RegExp]) -> STRING | {str: STRING, pos: ARRAY<POSITION>}
+  * MODIFY jsccGenerator / jisonGenerator / pegjsGenerator:
+     changed format of semantic-results (i.e. results of applying a grammar):
+     * field phrases is now a list of tokens/utterances (instead of a map/dictionary)
+     * phrases contain position information for the tokens / utterances
+     * in list of field phrases: the tokens / utterances entries have addition type field
+     * additional field preproc: contains information on pre-processing w.r.t. to the semantic-result
+       * has property stopwords, which is a list of position-information of all removed stopwords
+  * REFACTOR grammarConverter: moved/extracted (deprecated) umlaut-encoding functions to separate utils-module
+     * added new encoding-utils module 'encodeUtils'
+     * moved functions from grammarConverter to encodeUtils:
+       * encodeUmlauts
+       * decodeUmlauts
+     
+  * REMOVE [breaking change] deprecated methods from presentationManager (not restored with core3Compatibility module):
+    * reRenderView(): use renderView() with corresponding arguments instead
+    * renderPreviousView(): use renderView() with corresponding arguments instead
+    
+    
+  * REMOVE [breaking change] legacy directory plugins/ and its auto-load function were removed (not automatically restored with core3Compatibility module):
+           the plugin-directory was used for auto-loading Cordova 2 plugins. Since Cordova 3, the
+           Cordova framework has its own loading mechanism.
+           If this directory was used in applications, for auto-loading JS files, the functionality
+           can be replaced by using a list/array of file names (the list needs to be maintained
+           manually though), and using the function loadImpl() (e.g. require('mmirf/commonUtils').loadImpl())
+           * For restoring auto-loading of (Cordova/cutom) plugins "manually":
+             * configure mmir-tooling to create a file-list for the plugins-directory:
+               open file mmir-build.properties (in project root directory) and modify the entry for directoriesToParse
+               by adding the plugins directory (relative to the www-root), e.g. for (the original) "mmirf/plugins":
+               directoriesToParse=<...>,gen/grammar,gen/views,mmirf/plugins
+             * (re-) generate the file list, e.g. by invoking "cordova prepare"
+             * load the 'mmirf/core3Compatibility' module, and invoke mmir.CommonUtils.loadAllCordovaPlugins(pluginDir, completionCallback)
+               where pluginDir is the same (relative) directory path, that was added to directoriesToParse, and 
+               completionCallback is (an optional) callback, that is invoked after the plugins were loaded.
+   
+  * ADDITION added function/module 'mmirf/core3Compatibility' for restoring backward-compatibility to mmir-lib v3 (except for changed module IDs, see below), e.g.:
+   
+   	    mmir.ready(function () {
+   		  require(['mmirf/core3Compatibility'], function(setCore3Compatibility){
+		    setCore3Compatibility(mmir);
+		    //... -> restored compatibility with pre v4
+    
+  * ADDITION added function/module 'mmirf/core2Compatibility' for restoring backward-compatibility to mmir-lib v2 (except for changed module IDs, see below), e.g.:
+   
+   	    mmir.ready(function () {
+   		  require(['mmirf/core2Compatibility'], function(setCore2Compatibility){
+		    setCore2Compatibility(mmir);
+		    //... -> restored compatibility with pre v3
+		    
+  * ADDITION added function/module 'mmirf/core1Compatibility' for restoring backward-compatibility to mmir-lib v1 (except for changed module IDs, see below), e.g.:
+   
+   	    mmir.ready(function () {
+   		  require(['mmirf/core1Compatibility'], function(setCore1Compatibility){
+		    setCore1Compatibility(mmir);
+		    //... -> restored compatibility with pre v2
+    
+  * ADDITION added function/module 'mmirf/core3ModuleIdCompatibility' for restoring backward-compatibility w.r.t. changed module IDs, e.g.:
+    (NOTE if used in combination with mmirf/core1Compatibility, or mmirf/core2Compatibility, or mmirf/core3Compatibility, then the mmirf/core3ModuleIdCompatibility module should be used first)
+   
+   	    mmir.ready(function () {
+   		  require(['mmirf/core3ModuleIdCompatibility'], function(core3ModuleIdCompatibility){
+		    core3ModuleIdCompatibility(core.require, window);
+		    //... -> can use old module IDs as aliases for new ones, e.g. require('languageManager') instead of / in addition of require('mmirf/languageManager')
+     
+  * MODIFICATION grammarConverter: recodeJSON() now re-calculates token indices in semantic results (if position information is present for them)
+  * MODIFICATION jsccGenerator / jisonGenerator / pegjsGenerator: error messages contain error-stack (if available)
+  * MODIFICATION workers/jsccCompiler / workers/jsccCompiler / workers/jsccCompiler: error messages contain error-stack (if available)
+  
+  * MODIFICATION mediaManager / ASR plugins: added options parameter to recognize(), startRecord(), and stopRecord() as optional first parameter
+  * MODIFICATION mediaManager / TTS plugins: normalized options parameter (or text/text-array parameter) for tts() as first parameter
+  
+                                           
+  * REFACTOR removed deprecated tools/envInit (not needed anymore)
+  
+  * REFACTOR presentationManager: extracted view-loading and -compilation from presentationManager into separate module env/view/viewLoader
+  
+  * ADDITION mmir/core:
+    * added field version that holds version number (as String) of the mmir-lib
+    * added method isVersion(ver: String, comparator: ">=" | "<=" | ...)
+  
+  * ADDITION tools/constants: added function isCordovaEnv()
 
   * IMPROVE tools/loadCss: enable setting 'class' and 'data-' attributes, if provided in options
+
+
+BUGFIX:
+
+  * BUGFIX tools/commonUtil: fix BUG in case the duplicate-detection-callback marks the last file as 'duplicate' (in serial-loading-mode): loading did not signal "finish" in this case
+  * BUGFIX mvc/contentElement: fix for stringify(): correctly include initEvalFunctions() in stringified init() function if needed
 
 
 ##################
