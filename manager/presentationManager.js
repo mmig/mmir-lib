@@ -589,7 +589,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
              * 
              * <br>
              * The implementation of the default view-engine is at
-             * <code>mmirf/env/view/presentation/jqmViewEngine.js</code>.
+             * <code>mmirf/env/view/presentation/simpleViewEngine.js</code>.
              * 
              * @param {Object} theRenderEngine
              * 			the render-engine for views
