@@ -86,7 +86,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		}
 		
 		//set ctx to global/window, if not already set:
-		ctx = ctx || typeof window !== 'undefined'? window : global;
+		ctx = ctx || (typeof window !== 'undefined'? window : global);
 		
 		//create return value
 		var defer = deferred();
