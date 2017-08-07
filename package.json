@@ -1,0 +1,25 @@
+{
+  "name": "mmir-lib",
+  "version": "4.0.0",
+  "description": "MMIR (Mobile Multimodal Interaction and Rendering) library",
+  "types": "mmir.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mmig/mmir-lib.git"
+  },
+  "keywords": [
+    "mmir",
+    "multimodal",
+    "dialog",
+    "system",
+    "speech",
+    "asr",
+    "tts"
+  ],
+  "author": "russaa",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mmig/mmir-lib/issues"
+  },
+  "homepage": "https://github.com/mmig/mmir-lib#readme"
+}
