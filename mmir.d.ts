@@ -30,23 +30,25 @@ export interface MmirCore {
   debug: boolean;//DEFAULT: true;
   logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
   logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+  version: string;
+  isVersion: (version: string, comp : ">" | "<" | ">=" | "<=" | "==" | "===" | "!=" | "!==") => boolean;
 }
 
 export interface MmirModule extends MmirCore {
-  CommonUtils: CommonUtils;
-  ConfigurationManager: ConfigurationManager;
-  Constants: Constants;
-  ControllerManager: ControllerManager;
-  DialogEngine: DialogEngine;
-  DialogManager: DialogManager;
-  InputEngine: InputEngine;
-  InputManager: InputManager;
-  LanguageManager: LanguageManager;
-  MediaManager: MediaManager;
-  ModelManager: ModelManager;
-  NotificationManager: NotificationManager;
-  PresentationManager: PresentationManager;
-  SemanticInterpreter: SemanticInterpreter;
+  util: CommonUtils;
+  conf: ConfigurationManager;
+  const: Constants;
+  ctrl: ControllerManager;
+  dialogEngine: DialogEngine;
+  dialog: DialogManager;
+  inputEngine: InputEngine;
+  input: InputManager;
+  lang: LanguageManager;
+  media: MediaManager;
+  model: ModelManager;
+  notifier: NotificationManager;
+  present: PresentationManager;
+  semantic: SemanticInterpreter;
 }
 
 //mmir core module:
@@ -60,23 +62,22 @@ export var logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 
 export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
 
 //mmir module (extending core module)
-export var CommonUtils: CommonUtils;
-export var ConfigurationManager: ConfigurationManager;
-export var Constants: Constants;
-export var ControllerManager: ControllerManager;
-export var DialogEngine: DialogEngine;
-export var DialogManager: DialogManager;
-export var InputEngine: InputEngine;
-export var InputManager: InputManager;
-export var LanguageManager: LanguageManager;
-export var MediaManager: MediaManager;
-export var ModelManager: ModelManager;
-export var NotificationManager: NotificationManager;
-export var PresentationManager: PresentationManager;
-export var SemanticInterpreter: SemanticInterpreter;
+export var util: CommonUtils;
+export var conf: ConfigurationManager;
+// export var const: Constants;
+export var ctrl: ControllerManager;
+export var dialogEngine: DialogEngine;
+export var dialog: DialogManager;
+export var inputEngine: InputEngine;
+export var input: InputManager;
+export var lang: LanguageManager;
+export var media: MediaManager;
+export var model: ModelManager;
+export var notifier: NotificationManager;
+export var present: PresentationManager;
+export var semantic: SemanticInterpreter;
 
 export interface GrammarConverter {
-
 
   loadGrammar: (successCallback: ()=> any, errorCallback: ()=> any, grammarUrl: string, doLoadSynchronously?: boolean) => void;
   loadResource: (successCallback: ()=> any, errorCallback: ()=> any, resourceUrl: string, doLoadSynchronously?: boolean) => void;
@@ -95,18 +96,16 @@ export interface GrammarConverter {
 
   isAsyncExec: () => boolean;
 
+  preproc: (thePhrase: string, pos?: {stopwords: Array<Pos>}, maskFunc?: (inputStr : string, isCalcPosition?: boolean) => string | {str: string, pos: Array<Pos>}, stopwordFunc?: (inputStr : string, positions?: Array<Pos>) => string | {str: string, pos: Array<Pos>}) => string;
   executeGrammar: (text: string, callback?: (semanticResult: {}) => void) => void;
+  postproc: (procResult: any, recodeFunc?: (inputObj: any) => any) => any;
 
-  maskString:  (str: string, prefix?: string, postfix?: string) => string;
+  maskString:  (str: string, computePositions?: boolean, prefix?: string, postfix?: string) => string | {str: String, pos: Array<Pos>};
   maskAsUnicode:  (str: string) => string;
-  unmaskString:  (str: string, detector?: RegExp) => string;
+  unmaskString:  (str: string, computePositions?: boolean, detector?: RegExp) => string | {str: String, pos: Array<Pos>};
 
   unmaskJSON:  (json: any, isMaskValues?: boolean, isMaskNames?: boolean) => any;
   recodeJSON: (json: any, recodeFunc:(str:string)=>string, isMaskValues?: boolean, isMaskNames?: boolean) => any;
-
-  encodeUmlauts: (target: string | {}, doAlsoEncodeUpperCase?: boolean) => string | {};
-
-  decodeUmlauts: (target: string | {}, doAlsoEncodeUpperCase?: boolean) => string | {};
 
   //semi-private fileds
   variable_prefix: string;
@@ -126,9 +125,23 @@ export interface GrammarConverter {
 	convertOldFormat: boolean;
 }
 
+export interface EncodeUtils {
+  encodeUmlauts: (target: string | {}, doAlsoEncodeUpperCase?: boolean) => string | {};
+  decodeUmlauts: (target: string | {}, doAlsoEncodeUpperCase?: boolean) => string | {};
+}
+
+export interface Pos {
+  //index
+  i: number;
+  //original word length (i.e. before modification)
+  len: number;
+  //modified word legnth (i.e. after modification)
+  mlen?: number;
+}
+
 export interface SemanticInterpreter {
 
-  getASRSemantic: (phrase: string, langCode?: string, callback?: (semanticResult: any) => void) => any;//TODO typ'ing result
+  interpret: (phrase: string, langCode?: string, callback?: (semanticResult: any) => void) => any;//TODO typ'ing result
   removeStopwords: (thePhrase: string, lang?: string) => string;
   getGrammarDefinitionText: (id: string) => string;
   getGrammarParserText: (id: string) => string;
@@ -166,23 +179,19 @@ export interface CommonUtils {
    isArray: (object: any) => any;
    isRunningOnAndroid: () => any;
    isRunningOnSmartphone: () => any;
-   loadAllCordovaPlugins: (pluginsPath: any, cbFunction: any) => any;
    loadCompiledGrammars: (generatedGrammarsPath: any, cbFunction: any, ignoreGrammarIds: any) => any;
    loadDirectoryStructure: (success: any, errorFunc: any) => any;
    loadImpl: (librariesPath: any, isSerial: any, completedCallback: any, checkIsAlreadyLoadedFunc: any, statusCallback: any) => any;
    loadScript: (url: any, successCallback: any, errorCallback: any, ...args: any[]) => any;
    parseParamsToDictionary: (urlParamsPartStrings: any) => any;
    resizeFitToSourroundingBox: (class_name: any) => void;
-   setToCompatibilityMode: (success: any) => any;
    stripPathName: (pathname: any) => any;
 }
 export interface ConfigurationManager {
-    get: (propertyName: string, useSafeAccess?: boolean, defaultValue?: any) => any;
-    getBoolean: (propertyName: string, useSafeAccess?: boolean, defaultValue?: any) => any;
-    getLanguage: () => string;
-    getString: (propertyName: string, useSafeAccess?: boolean, defaultValue?: any) => any;
+    get: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
+    getBoolean: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
+    getString: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
     set: (propertyName: string, value: any) => void;
-    setLanguage: (lang: string) => void;
 }
 export interface Constants {
     getBasePath: () => string;
@@ -207,20 +216,19 @@ export interface Constants {
     getMediaPluginPath: () => string;
     getModelPath: () => string;
     getPartialsPrefix: () => string;
-    getPluginsPath: () => string;
     getSpeechConfigFileName: () => string;
     getViewPath: () => string;
     getWorkerPath: () => string;
     init: (theForBrowserParameter: any) => any;
     isBrowserEnv: () => boolean;
+    isCordovaEnv: () => boolean;
 }
 export interface ControllerManager {
-    create: () => any;
-    getController: (ctrlName: string) => any;
-    getControllerNames: () => Array<string>;
+    get: (ctrlName: string) => Controller | undefined;
+    getNames: () => Array<string>;
     init: (callback: any, ctx: any) => any;
-    perform: (ctrlName: string, actionName: string, data: any) => any;
-    performHelper: (ctrlName: string, actionName: string, data: any, ...args: any[]) => any;
+    perform: (ctrlName: string, actionName: string, data?: any) => any;
+    performHelper: (ctrlName: string, actionName: string, data?: any, ...args: any[]) => any;
 }
 export interface DialogEngine {
     doc: string;
@@ -240,16 +248,16 @@ export interface DialogEngine {
     start: () => void;
 }
 export interface DialogManager {
-    getOnPageRenderedHandler: () => any;
-    hideCurrentDialog: (...args: any[]) => void;
-    hideWaitDialog: (...args: any[]) => void;
-    perform: (ctrlName: any, actionName: any, data: any) => any;
-    performHelper: (ctrlName: any, helper_method_name: any, data: any, ...args: any[]) => any;
-    raise: (...args: any[]) => void;
-    render: (ctrlName: any, viewName: any, data: any) => void;
-    setOnPageRenderedHandler: (onPageRenderedHook: any) => void;
-    showDialog: (ctrlName: any, dialogId: any, data: any, ...args: any[]) => void;
-    showWaitDialog: (text: any, theme: any, ...args: any[]) => void;
+    getOnPageRenderedHandler: () => Function | undefined;
+    hideCurrentDialog: () => void;
+    hideWaitDialog: () => void;
+    perform: (ctrlName: any, actionName: any, data?: any) => any;
+    performHelper: (ctrlName: any, helper_method_name: any, data?: any) => any;
+    raise: (eventName: string, data?: any) => void;
+    render: (ctrlName: any, viewName: any, data?: any) => void;
+    setOnPageRenderedHandler: (onPageRenderedHook: Function) => void;
+    showDialog: (ctrlName: any, dialogId: any, data?: any) => void;
+    showWaitDialog: (text: any, theme: any) => void;
 }
 export interface InputEngine {
     doc: string;
@@ -269,14 +277,14 @@ export interface InputEngine {
     start: () => void;
 }
 export interface InputManager {
-    raise: (...args: any[]) => void;
+    raise: (eventName: string, data?: any) => void;
 }
 export interface LanguageManager {
-    determineLanguage: (lang: string) => any;
-    existsDictionary: (lang: string) => any;
-    existsGrammar: (lang: string) => any;
-    existsSpeechConfig: (lang: string) => any;
-    fixLang: (providerName: any, langCode: any) => any;
+    determineLanguage: (lang: string) => string;
+    existsDictionary: (lang: string) => boolean;
+    existsGrammar: (lang: string) => boolean;
+    existsSpeechConfig: (lang: string) => boolean;
+    fixLang: (providerName: string, langCode: string) => string;
     getDefaultLanguage: () => string;
     getDictionary: () => {[id:string]: string};
     getLanguage: () => string;
@@ -286,42 +294,103 @@ export interface LanguageManager {
     init: (lang: string) => any;
     setLanguage: (lang: string) => any;
     setNextLanguage: () => string;
-    setToCompatibilityMode: (success: Function) => any;
 }
 export interface MediaManager {
-    ctx: any;
-    waitReadyImpl: any;
+    ctx: {[ctxId: string]: any};
+    waitReadyImpl: IWaitReadyImpl;
+
+    init: (successCallback?: Function, failureCallback?: Function, listenerList?: any) => any;
+    loadFile: (filePath: any, successCallback: Function, failureCallback: Function, execId: any) => void;
+
     addListener: (eventName: string, eventHandler: Function) => void;
+    removeListener: (eventName: string, eventHandler: Function) => any;
+    getListeners: (eventName: string) => Array<Function>;
+    hasListeners: (eventName: string) => boolean;
+    off: (eventName: string, eventHandler: Function) => any;
+    on: (eventName: string, eventHandler: Function) => void;
+
+    getFunc: (ctx: string, funcName: string) => any;
+    perform: (ctx: string, funcName: string, args: Array<any>) => any;
+    setDefaultCtx: (ctxId: string) => void;
+
+    createEmptyAudio: () => IAudio;
+
+    getURLAsAudio: (url: string, onEnd: Function, failureCallback: Function, successCallback: Function, audioObj: IAudio, ...args: any[]) => any;
+    getWAVAsAudio: (blob: Blob, callback: Function, onEnd: Function, failureCallback: Function, onInit: Function, emptyAudioObj: IAudio) => any;
+
+    playURL: (url: string, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
+    playWAV: (blob: Blob, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
+
+    recognize: (options?: ASROptions, statusCallback?: ASROnStatus, failureCallback?: ASROnError, isIntermediateResults?: boolean) => void;
+    startRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError, intermediateResults?: boolean) => void;
+    stopRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError) => void;
+
+    tts: (parameter: TTSOptions | string | Array<string>, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, options?: any, ...args: any[]) => void;
+    /** @deprecated use #tts instead */
+    textToSpeech: (parameter: TTSOptions | string | Array<string>, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, options?: any, ...args: any[]) => void;
+    setTextToSpeechVolume: (newValue: number) => void;
 
     cancelRecognition: (successCallback?: Function, failureCallback?: Function) => void;
     cancelSpeech: (successCallBack?: Function, failureCallBack?: Function) => void;
-    createEmptyAudio: () => any;
 
-    getFunc: (ctx: any, funcName: any, ...args: any[]) => any;
-    getListeners: (eventName: any) => any;
-    getURLAsAudio: (url: any, onEnd: any, failureCallback: any, successCallback: any, audioObj: any, ...args: any[]) => any;
-    getWAVAsAudio: (blob: any, callback: any, onEnd: any, failureCallback: any, onInit: any, emptyAudioObj: any) => any;
-    hasListeners: (eventName: any) => any;
-    init: (successCallback?: Function, failureCallback?: Function, listenerList?: any) => any;
-    loadFile: (filePath: any, successCallback: Function, failureCallback: Function, execId: any) => void;
-    off: (eventName: string, eventHandler: Function) => any;
-    on: (eventName: string, eventHandler: Function) => void;
-    perform: (ctx: string, funcName: string, args: Array<any>) => any;
+    // internal / "half public" functions (for use in plugin implementations)
+    _fireEvent: (eventName: string, args: any[]) => void;
 
-    playURL: (url: any, onEnd?: Function, failureCallback?: Function, successCallback?: Function) => void;
-    playWAV: (blob: any, onEnd?: Function, failureCallback?: Function, successCallback?: Function) => void;
+    _addListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler) => void) => void;
+    _removeListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler) => void) => void;
+    _notifyObservers: (eventName: string, actionType: "added" | "removed", eventHandler) => void;
 
-    recognize: (successCallback?: Function, failureCallback?: Function, isIntermediateResults?: boolean) => void;
-    removeListener: (eventName: string, eventHandler: Function) => any;
-    setDefaultCtx: (ctxId: string) => void;
-    setTextToSpeechVolume: (newValue: number) => void;
-    startRecord: (successCallback?: Function, failureCallback?: Function, intermediateResults?: boolean) => void;
-
-    stopRecord: (successCallback?: Function, failureCallback?: Function) => void;
-    textToSpeech: (parameter: any, successCallback?: Function, failureCallback?: Function, onInit?: Function, options?: any, ...args: any[]) => void;
-
-
+    _preparing: (moduleName: string) => void;
+    _ready: (moduleName: string) => void;
 }
+
+export interface TTSOptions {
+    text: string | string[];//<- text that should be read aloud
+    pauseDuration?: number;//<- the length of the pauses between sentences (i.e. for String Arrays) in milliseconds
+    language?: string;//<- the language for synthesis (if omitted, the current language setting is used)
+    voice?: string;//<- the voice (language specific) for synthesis; NOTE that the specific available voices depend on the TTS engine
+    success?: TTSOnComplete;//<- the on-playing-completed callback (see arg onPlayedCallback)
+    error?: TTSOnError;//<- the error callback (see arg failureCallback)
+    ready?: TTSOnReady;//<- the audio-ready callback (see arg onReadyCallback)
+}
+
+export interface ASROptions {
+    success?: ASROnStatus;//<- the status-callback (see arg statusCallback)
+    error?: ASROnError;//<- the error callback (see arg failureCallback)
+    language?: string;//<- the language for recognition (if omitted, the current language setting is used)
+    intermediate?: boolean;//<- set true for receiving intermediate results (NOTE not all ASR engines may support intermediate results)
+    results?: number;//<- set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
+    mode?: "search" | "dictation";//<- set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
+    eosPause?: "short" | "long";//<- length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option)
+    disableImprovedFeedback?: boolean;//<- disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option)
+}
+
+export type TTSOnComplete = () => void;
+export type TTSOnError = (error: string | Error) => void;
+export type TTSOnReady = (isReady?: Boolean, audio?: IAudio) => void;
+
+export type ASROnStatus = (text: string | "", confidence: number | undefined, status: ASRStatus, alternatives?: Array<{result: string, score: number}>, unstable?: string) => void;
+export type ASRStatus = "FINAL" | "INTERIM" | "INTERMEDIATE" | "RECORDING_BEGIN" | "RECORDING_DONE";
+export type ASROnError = (error: string | Error) => void;
+
+export interface IAudio {
+	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
+	play:  () => void;
+	stop:  () => void;
+	enable:  () => void;
+	disable:  () => void;
+	release:  () => void;
+	setVolume:  (volume: number) => void;
+	getDuration:  () => number;
+	isPaused: () => boolean;
+	isEnabled: () => boolean;
+}
+
+export interface IWaitReadyImpl {
+  preparing: (moduleName: string) => void;
+  ready: (moduleName: string) => void;
+}
+
 export interface MicLevelsAnalysis {
     active: (active: any) => any;
     enabled: (enable: any) => any;
@@ -329,21 +398,21 @@ export interface MicLevelsAnalysis {
     stop: () => void;
 }
 export interface ModelManager {
-    getModel: (modelName: any) => any;
-    getModels: () => any;
+    get: (modelName: string) => any;
+    getNames: () => Array<string>;
     init: () => any;
 }
 export interface NotificationManager {
-    alert: (message: any, alertCallback: any, title: any, buttonName: any) => void;
+    alert: (message: string, alertCallback: Function, title: string, buttonName: string) => void;
+    confirm: (message: string, confirmCallback: Function, title: string, buttonLabels: string[]) => void;
     beep: (times: number) => void;
-    confirm: (message: any, confirmCallback: any, title: any, buttonLabels: any) => void;
     createSound: (name: string, url: string, isKeepOnPause: boolean) => void;
     getVolume: () => number;
     init: () => any;
     initBeep: () => void;
     initSound: (name: string) => void;
-    isVibrateAvailable: () => any;
-    isVibrateEnabled: () => any;
+    isVibrateAvailable: () => boolean;
+    isVibrateEnabled: () => boolean;
     playSound: (name: string, times: number, onFinished: Function, onError: Function) => void;
     setVibrateEnabled: (enabled: boolean) => void;
     setVolume: (vol: number) => void;
@@ -361,11 +430,9 @@ export interface PresentationManager {
     getView: (controllerName: string, viewName: string) => any;
     hideCurrentDialog: (...args: any[]) => void;
     hideWaitDialog: (...args: any[]) => void;
-    reRenderView: () => void;
-    renderPreviousView: () => void;
-    renderView: (ctrlName: string, viewName: string, data: any) => void;
-    setRenderEngine: (theRenderEngine: any) => void;
-    showDialog: (ctrlName: string, dialogId: string, data: any, ...args: any[]) => any;
+    render: (ctrlName: string, viewName: string, data?: any) => void;
+    setRenderEngine: (theRenderEngine: RenderEngine) => void;
+    showDialog: (ctrlName: string, dialogId: string, data?: any, ...args: any[]) => any;
     showWaitDialog: (text: string, data: any, ...args: any[]) => void;
 }
 export interface RequireJs extends Function {
@@ -374,6 +441,7 @@ export interface RequireJs extends Function {
     specified: (id: any) => any;
     toUrl: (moduleNamePlusExt: any) => any;
     undef: (id: any) => void;
+    config: (any) => void;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -531,7 +599,7 @@ export type FileInfo = {name: string, path: string, fileName?: string};
 
 export interface Helper {
     constructor(ctrl: string, name: string, ctx: any);
-    perform(actionName: string, data: any, ...args: any[]): any;
+    perform(actionName: string, data?: any, ...args: any[]): any;
 }
 
 export interface Controller {
