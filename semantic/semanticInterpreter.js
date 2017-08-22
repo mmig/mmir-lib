@@ -647,7 +647,7 @@ define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
              * 						 there is no return object.
              * 
 	         * @public
-	         * @memberOf SemanticInterpreter.prototype
+	         * @memberOf mmir.SemanticInterpreter.prototype
              */
             interpret: function(phrase, langCode, callback){
             	
