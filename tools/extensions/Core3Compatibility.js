@@ -374,6 +374,38 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
             
         };
         
+
+
+        /**
+         * Cycles through the available languages.
+         * 
+         * @function
+         * @returns {String} The (new) current language
+         * @public
+         * 
+    	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
+         */
+        languageManager.setNextLanguage = function() {
+        	var languages = languageManager.getLanguages();
+        	var currentLanguage = languageManager.getLanguage();
+            var indexCurrentLanguage = languages.indexOf(currentLanguage);
+
+//            if (logger.isVerbose()) logger.v("[LanguageManager] Current language is " + currentLanguage);
+
+            if (indexCurrentLanguage > -1) {
+                indexCurrentLanguage = indexCurrentLanguage + 1;
+                if (indexCurrentLanguage > languages.length - 1) {
+                    indexCurrentLanguage = 0;
+                }
+                currentLanguage = languages[indexCurrentLanguage];
+
+//                if (logger.isVerbose()) logger.v("[LanguageManager] Next language is " + currentLanguage);
+                
+                return languageManager.setLanguage(currentLanguage);
+            }
+            return currentLanguage;
+        };
+        
         /**
 		 * Returns a string with the path to the (Cordova v2.x) plugins directory.
 		 * @function
