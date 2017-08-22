@@ -424,6 +424,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 * @function
 			 * @returns {Array<String>} Names of all loaded controllers
 			 * @public
+			 * @memberOf mmir.ControllerManager.prototype
 			 */
 			getNames: function(){
 
@@ -440,6 +441,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 * @param {Object} data optional data that can be submitted to the action
 			 * @returns {Object} the return object of the performed action
 			 * @public
+			 * @memberOf mmir.ControllerManager.prototype
 			 */
 			perform: function(ctrlName, actionName, data){
 				var ctrl = this.get(ctrlName);
@@ -461,6 +463,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 * @param {Object} data optional data that can be submitted to the action
 			 * @returns {Object} the return object of the performed action
 			 * @public
+			 * @memberOf mmir.ControllerManager.prototype
 			 */
 			performHelper: function(ctrlName, actionName, data) {
 
@@ -516,6 +519,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 * 	} 
 			 * 	mmir.ctrl.init(afterLoadingControllers);
 			 * @public
+			 * @memberOf mmir.ControllerManager.prototype
 			 */
 			init: _init
 

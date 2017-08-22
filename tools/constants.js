@@ -315,7 +315,7 @@ function(
 		isBrowserEnv = envInfo.isBrowserEnv;
 		setBasePath(env);
 		
-		/** @lends Constants.prototype */
+		/** @lends mmir.Constants.prototype */
 		return {
 			/**
 			 * Returns a string with the base path.
@@ -333,10 +333,15 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} layout path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getLayoutPath: function(){
 				return basePath+layoutPath;
 			},
+			/**
+			 * @memberOf mmir.Constants.prototype
+			 */
 			getCompiledLayoutPath: function(){
 				return basePath+genLayoutPath;
 			},
@@ -345,6 +350,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} model path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getModelPath: function(){
 				return basePath+modelPath;
@@ -354,11 +361,15 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} view path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getViewPath: function(){
 				return basePath+viewPath;
 			},
-			
+			/**
+			 * @memberOf mmir.Constants.prototype
+			 */
 			getCompiledViewPath: function(){
 				return basePath + genViewPath;
 			},
@@ -367,6 +378,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} language path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getLanguagePath: function(){
 				return basePath+languagePath;
@@ -376,6 +389,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} controller path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getControllerPath: function(){
 				return basePath+controllerPath;
@@ -385,6 +400,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} worker path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getWorkerPath: function(){
 				return basePath+workerPath;
@@ -394,6 +411,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} helper path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getHelperPath: function(){
 				return basePath+helperPath;
@@ -403,6 +422,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} extensions path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getExtensionsPath: function(){
 				return basePath + extensionsPath;
@@ -412,6 +433,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} MediaPlugin path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getMediaPluginPath: function(){
 				return basePath + mediaPluginPath;
@@ -422,7 +445,9 @@ function(
 			 * 
 			 * @function
 			 * @public
-			 * @returns {String} Grammar Plugin path (
+			 * @returns {String} Grammar Plugin path
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getGrammarPluginPath: function(){
 				return basePath + grammarPluginPath;
@@ -432,6 +457,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path for generated grammars (JavaScript files)
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getGeneratedGrammarsPath: function(){
 				return basePath + genGrammarsPath;
@@ -441,6 +468,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path to configuration file
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getConfigurationFileUrl: function(){
 				return basePath+configurationFileUrl;
@@ -450,6 +479,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path to directories file
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getDirectoriesFileUrl: function(){
 				return basePath+directoriesFileUrl;
@@ -459,6 +490,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path to beep wav file
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getBeepUrl: function(){
 				return basePath+beepURL;
@@ -468,6 +501,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} dictionary filename
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getDictionaryFileName: function(){
 				return dictionaryFileName;
@@ -478,6 +513,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} dictionary filename
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getSpeechConfigFileName: function(){
 				return speechConfigFileName;
@@ -487,6 +524,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} grammar filename
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getGrammarFileName: function(){
 				return grammarFileName;
@@ -496,6 +535,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} prefix for partial filenames
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getPartialsPrefix: function(){
 				return partialsPrefix;
@@ -505,6 +546,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} suffix for helper filenames
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getHelperSuffix: function(){
 				return helperSuffix;
@@ -514,6 +557,8 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} default language
+			 * 
+			 * @memberOf mmir.Constants.prototype
 			 */
 			getLanguage: function(){
 				return language;
@@ -526,6 +571,8 @@ function(
 	         * @param {Boolean} forBrowserParameter <tt>true</tt> for browser-environment, if <tt>false</tt> ANDROID environment
 	         * @returns {Object} Object containing the instance of the class {@link mmir.Constants}
 	         * @public
+			 * 
+			 * @memberOf mmir.Constants.prototype
 	         */
 			init: function(theForBrowserParameter){
 				if (theForBrowserParameter && theForBrowserParameter != isBrowserEnv){
@@ -538,6 +585,8 @@ function(
 	         * @function
 	         * @returns {Boolean}
 	         * @public
+			 * 
+			 * @memberOf mmir.Constants.prototype
 	         */
 			isBrowserEnv: function(){//FIXME replace with real environment-setting/-mechanism
 				return isBrowserEnv;
@@ -547,6 +596,8 @@ function(
 	         * @function
 	         * @returns {Boolean}
 	         * @public
+			 * 
+			 * @memberOf mmir.Constants.prototype
 	         */
 			isCordovaEnv: function(){
 				return env.isCordovaEnv;
@@ -558,6 +609,8 @@ function(
 	         * @returns {String}
 	         * @values "browser" | "cordova" | (or: VALUE set in document's query-parameter "?env=VALUE"
 	         * @public
+			 * 
+			 * @memberOf mmir.Constants.prototype
 	         */
 			getEnv: function(){
 				return envInfo.envSetting? envInfo.envSetting : 'browser';
@@ -568,6 +621,8 @@ function(
 	         * @returns {String}
 	         * @values "android" | "ios" | "browser" | "default"
 	         * @public
+			 * 
+			 * @memberOf mmir.Constants.prototype
 	         */
 			getEnvPlatform: function(){
 				return envInfo.platform;

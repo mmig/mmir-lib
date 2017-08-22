@@ -216,7 +216,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
     		return pathList;
         }
     	
-        /** @lends ConfigurationManager */
+        /** @lends mmir.ConfigurationManager.prototype */
         return {
         	
         	// public members
@@ -249,7 +249,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 			 * @returns {any} 
 			 * 					The value of the property
 			 * @public
-			 * @memberOf ConfigurationManager.prototype
+			 * @memberOf mmir.ConfigurationManager.prototype
 			 */
             get: function(propertyName, defaultValue, useSafeAccess){
             	
@@ -322,7 +322,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 			 * 					already exists AND its type is not 'object' 
 			 * 
 			 * @public
-			 * @memberOf ConfigurationManager.prototype
+			 * @memberOf mmir.ConfigurationManager.prototype
 			 */
             set: function(propertyName, value){
             	if(!configData){
@@ -380,7 +380,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
              * 				  to a Boolean value, if necessary. 
              * 
              * @see {@link #get}
-			 * @memberOf ConfigurationManager.prototype
+			 * @memberOf mmir.ConfigurationManager.prototype
              */
             getBoolean: function(propertyName, defaultValue, useSafeAccess){
             	
@@ -419,7 +419,7 @@ define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
              * 				  to a String value, if necessary. 
              * 
              * @see {@link #get}
-			 * @memberOf ConfigurationManager.prototype
+			 * @memberOf mmir.ConfigurationManager.prototype
              */
             getString: function(propertyName, defaultValue, useSafeAccess){
             	

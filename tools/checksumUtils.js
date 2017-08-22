@@ -124,7 +124,7 @@ define(['mmirf/md5'],
 	};
 	
 	/**
-	 * @lends ChecksumUtils.prototype
+	 * @lends mmir.tools.ChecksumUtils.prototype
 	 */
 	return {
 		/**

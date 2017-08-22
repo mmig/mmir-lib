@@ -123,6 +123,7 @@ function Dictionary() {
 		 *          <code>false</code>
 		 * 
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		containsKey : function(key) {
 			return typeof map[lookupKey(key)] !== 'undefined';
@@ -144,6 +145,7 @@ function Dictionary() {
 		 *          <code>false</code>
 		 * 
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		containsValue : function(value, useStrict) {
 			for (var i = 0, size = keyList.length; i < size; ++i) {
@@ -169,6 +171,7 @@ function Dictionary() {
 		 *          the <tt>key</tt>.
 		 * 
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		get : function(key) {
 			return map[lookupKey(key)];
@@ -187,6 +190,7 @@ function Dictionary() {
 		 *          removed, <code>false</code> is returned.
 		 * 
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		remove : function(key) {
 
@@ -224,6 +228,7 @@ function Dictionary() {
 		 * 
 		 * @returns {Array<String>} a list of all keys
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		getKeys : function() {
 			var prefixLen = KEY_PREFIX.length;
@@ -240,6 +245,7 @@ function Dictionary() {
 		 * 
 		 * @returns {Number} the count of entries in the dictionary
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		size : function() {
 			return keyList.length;
@@ -251,6 +257,7 @@ function Dictionary() {
 		 * NOTE that this may execute rather slowly, with O(n).
 		 * 
 		 * @public
+		 * @memberOf Dictionary.prototype
 		 */
 		clear : function() {
 			// var size = keyList.length;

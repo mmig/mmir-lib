@@ -614,6 +614,7 @@ define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
         	return grammarConverter.preproc(thePhrase);
 		};
 		
+		/** @lends mmir.SemanticInterpreter.prototype */
         var _tmpInstance = { // public members
         		
         	/**  @scope SemanticInterpreter# *///for jsdoc2

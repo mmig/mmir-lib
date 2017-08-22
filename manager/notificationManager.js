@@ -673,6 +673,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
         	 * @function
         	 * @returns {Boolean} <code>true</code> if {@link #vibrate} is functional
         	 * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
         	 */
             isVibrateEnabled: function(){
             	if (isHapticEnabled && doVibrate){
@@ -692,6 +694,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
         	 * @function
         	 * @returns {Boolean} <code>true</code> if {@link #vibrate} is functional
         	 * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
         	 */
             isVibrateAvailable: function(){
             	if (doVibrate){
@@ -711,6 +715,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
         	 * 
         	 * @param {Boolean} enabled
         	 * 			set vibrate function to <code>enable</code>
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
         	 */
             setVibrateEnabled: function(enabled){
             	isHapticEnabled = enabled;
@@ -730,6 +736,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * 				(may not be provided / settable in all execution environments)
              * @function
              * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             alert: function(message, alertCallback, title, buttonName){
             	if(doAlert){
@@ -759,6 +767,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * 
              * @function
              * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             confirm: function(message, confirmCallback, title, buttonLabels){
             	if(doConfirm){
@@ -775,6 +785,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * @param {Number} times
              * 			how many times should to beep repeated
              * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             beep: function(times){
         		if (times>0){
@@ -782,6 +794,9 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
         		}
             },
             
+            /**
+        	 * @memberOf mmir.NotificationManager.prototype
+        	 */
             getVolume: function(){
             	return beepVolume;
             },
@@ -792,6 +807,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * 			the new volume: a number between [0, 1]
              * 
              * @see mmir.env.media.IAudio#setVolume
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             setVolume: function(vol){
             	if(typeof vol !== 'number'){
@@ -830,6 +847,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * @public
              * 
              * @see #createSound
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             ,playSound: function(name, times, onFinished, onError){
         		if (times>0){
@@ -856,6 +875,8 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * 			<br>
              * 			DEFAULT: <code>false</code> 
              * @public
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             createSound: function(name, url, isKeepOnPause){ // TODO add callbacks? this would make the impl. more complex ..., successCallback, errorCallback){
             	initAudioSoundEntry(name, url, isKeepOnPause);
@@ -873,12 +894,18 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * @function
              * @param {String} name 
              * 			the name / identifier for the sound
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             ,stopSound: function(name){
         		stopAudioSound(name);
             }
-            
-            , initBeep: function(){//<- used by framework to initialize the default beep-sound
+            /**
+             * <em>used by framework to initialize the default beep-sound</em>
+        	 * @private
+        	 * @memberOf mmir.NotificationManager.prototype
+             */
+            , initBeep: function(){
             	//initialize beep sound:
         		playAudioSound(null, 0);
             }
@@ -904,11 +931,18 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
              * @public
              * 
              * @see #createSound
+             * 
+        	 * @memberOf mmir.NotificationManager.prototype
              */
             , initSound: function(name){
             	//initialize sound (identified by its name):
         		playAudioSound(name, 0);
             }
+            /**
+             * <em>used by framework to initialize the NotificationManager</em>
+        	 * 
+        	 * @memberOf mmir.NotificationManager.prototype
+             */
             , init: function(){//<- used by framework to initialize the NotificationManager
             	_init();
             	this.init = function(){ return this; };

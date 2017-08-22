@@ -747,7 +747,7 @@ define([ 'mmirf/parserModule','mmirf/parsingResult','mmirf/templateProcessor'
 	    function constructor(){
 	        //private members (currently none)
 	    	
-	    	/** @lends ParserUtils.prototype */
+	    	/** @lends mmir.parser.ParserUtils.prototype */
 	    	return {
 	        	//public members:
 
@@ -782,6 +782,7 @@ define([ 'mmirf/parserModule','mmirf/parsingResult','mmirf/templateProcessor'
 	    		 * @returns {mmir.parser.ParsingResult} the parsing result
 	    		 * 
 	    		 * @public
+	    		 * @memberOf mmir.parser.ParserUtils.prototype
 	    		 */
 	    		parseJS: function(rawTemplateString, parseEntryRuleName, view, inViewOffset){
 	    			

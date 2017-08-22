@@ -187,6 +187,7 @@ define(['mmirf/parserModule'],
  * 												if the parameter is a single Token object, then the start- and end-
  * 												property for the new instance is set by this token object
  * @class
+ * @constructor
  * @name ParsingResult
  * @memberOf mmir.parser
  */		
@@ -402,6 +403,7 @@ function ParsingResult (thetokens){
  * 												when provided, the TokenStream is used to set the start-property of this object.
  * 
  * @public
+ * @memberOf mmir.parser.ParsingResult
  */
 ParsingResult.prototype.setStartFrom = function(thetokens){
 	//NOTE: must invoke getTokens() for initializing size() etc.!
@@ -421,7 +423,7 @@ ParsingResult.prototype.setStartFrom = function(thetokens){
  * 												when provided, the TokenStream is used to set the end-property of this object.
  * 
  * @public
- * @alias mmir.parser.ParsingResult
+ * @memberOf mmir.parser.ParsingResult
  */
 ParsingResult.prototype.setEndFrom = function(thetokens){
 	//NOTE: must invoke getTokens() for initializing size() etc.!
@@ -432,9 +434,11 @@ ParsingResult.prototype.setEndFrom = function(thetokens){
 		this.end = -1;
 	}
 };
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.getStart = function(){
 	return this.start;
 };
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.getEnd = function(){
 	return this.end;
 };
@@ -448,14 +452,19 @@ ParsingResult.prototype.getEnd = function(){
  * @return {mmir.parser.element} the type for this ParsingResult
  * 
  * @public
+ * @memberOf mmir.parser.ParsingResult
  */
 ParsingResult.prototype.getType = function(){
 	return this.type;
 };
 
-//helper function for converting properties to the correct value.
-// By default, the ParsingResult only contains "raw" property values.
-// Which properties are available, depends on the type of the ParsingResult (see templateProcessor.js)
+/**
+ * helper function for converting properties to the correct value.
+ * By default, the ParsingResult only contains "raw" property values.
+ * Which properties are available, depends on the type of the ParsingResult (see templateProcessor.js)
+ * 
+ * @memberOf mmir.parser.ParsingResult
+ */
 ParsingResult.prototype.getValue = function(rawPropertyValue, proptertyType, data){
 	
 	if(proptertyType === 'StringLiteral'){
@@ -491,116 +500,116 @@ ParsingResult.prototype.getValue = function(rawPropertyValue, proptertyType, dat
 	else
 		return rawPropertyValue;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.hasVarReferences = function(){
 	return false;//TODO implement this
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isScriptTag = function(){
 	if( parser.element.INCLUDE_SCRIPT === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isStyleTag = function(){
 	if( parser.element.INCLUDE_STYLE === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isLocalize = function(){
 	if( parser.element.LOCALIZE === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isYield = function(){
 	if( parser.element.YIELD_DECLARATION === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isYieldContent = function(){
 	if( parser.element.YIELD_CONTENT === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isScriptBlock = function(){
 	if( parser.element.BLOCK === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isScriptStatement = function(){
 	if( parser.element.STATEMENT === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isHelper = function(){
 	if( parser.element.HELPER === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isIf = function(){
 	if( parser.element.IF === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.hasElse = function(){
 	if(this.isIf() && typeof this.elseContent != 'undefined'){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isElse = function(){
 	if( parser.element.ELSE === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isFor = function(){
 	if( parser.element.FOR === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isRender = function(){
 	if( parser.element.RENDER === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isEscapeEnter = function(){
 	if( parser.element.ESCAPE_ENTER === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isEscapeExit = function(){
 	if( parser.element.ESCAPE_EXIT === this.getType() ){
 		return true;
 	}
 	return false;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.isEscape = function(){
 	return this.isEscapeEnter() || this.isEscapeExit();
 };
@@ -610,8 +619,9 @@ ParsingResult.prototype.isEscape = function(){
  * 
  * @returns {String} a String representation (name) for this ParsingResult's type
  * 
- * @see #getType
+ * @memberOf mmir.parser.ParsingResult
  */
+
 ParsingResult.prototype.getTypeName = function(){
 	
 	if(this.typeName){
@@ -627,23 +637,23 @@ ParsingResult.prototype.getTypeName = function(){
 	
 	return void(0);
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.hasCallData = function(){
 	return typeof this.dataPos !== 'undefined';
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.getCallDataStart = function(){
 	return this.dataPos.start;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.getCallDataEnd = function(){
 	return this.dataPos.end;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.getCallDataType = function(){
 	return this.dataType;
 };
-
+/**  @memberOf mmir.parser.ParsingResult */
 ParsingResult.prototype.stringify = function(){
 	
 	//TODO use constants for lists
@@ -762,7 +772,7 @@ ParsingResult.prototype.stringify = function(){
  * @static
  * @private
  * @param {String} parserNamerspace
- * 			the namespace object of the ANTLR parser (should be the object org which is exported by antlr3 module/shim) 
+ * 			the namespace object of the ANTLR parser (should be the object org which is exported by antlr3 module/shim)
  */
 ParsingResult._nsParserInit = function(parserNamerspace){
 	
