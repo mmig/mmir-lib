@@ -24,6 +24,7 @@ export interface MmirCore {
   // setInitialized: () => void;//DISABLED: "officially" this function has visibility protected
   config: (requirejsConfig: {}) => void;
   ready: (onFrameworkReady: (...args: any[]) => any) => any;
+  isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
   require: RequireJs;
   startModule: string;//DEFAULT: 'main';
   viewEngine: string;//DEFAULT: "jqViewEngine";
@@ -31,7 +32,6 @@ export interface MmirCore {
   logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
   logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
   version: string;
-  isVersion: (version: string, comp : ">" | "<" | ">=" | "<=" | "==" | "===" | "!=" | "!==") => boolean;
 }
 
 export interface MmirModule extends MmirCore {
@@ -51,31 +51,39 @@ export interface MmirModule extends MmirCore {
   semantic: SemanticInterpreter;
 }
 
-//mmir core module:
-export function config(requirejsConfig: {}): void;
-export function ready(onFrameworkReady: (...args: any[]) => any): any;
-export var require: RequireJs;
-export var startModule: string;//DEFAULT: 'main';
-export var viewEngine: string;//DEFAULT: "jqViewEngine";
-export var debug: boolean;//DEFAULT: true;
-export var logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
-export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+// //mmir core module:
+// export function config(requirejsConfig: {}): void;
+// export function ready(onFrameworkReady: (...args: any[]) => any): any;
+// export function isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
+// export var require: RequireJs;
+// export var startModule: string;//DEFAULT: 'main';
+// export var viewEngine: string;//DEFAULT: "jqViewEngine";
+// export var debug: boolean;//DEFAULT: true;
+// export var logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
+// export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+// export var version: string;
 
-//mmir module (extending core module)
-export var util: CommonUtils;
-export var conf: ConfigurationManager;
+
+// //mmir module (extending core module)
+// export var util: CommonUtils;
+// export var conf: ConfigurationManager;
 // export var const: Constants;
-export var ctrl: ControllerManager;
-export var dialogEngine: DialogEngine;
-export var dialog: DialogManager;
-export var inputEngine: InputEngine;
-export var input: InputManager;
-export var lang: LanguageManager;
-export var media: MediaManager;
-export var model: ModelManager;
-export var notifier: NotificationManager;
-export var present: PresentationManager;
-export var semantic: SemanticInterpreter;
+// export var ctrl: ControllerManager;
+// export var dialogEngine: DialogEngine;
+// export var dialog: DialogManager;
+// export var inputEngine: InputEngine;
+// export var input: InputManager;
+// export var lang: LanguageManager;
+// export var media: MediaManager;
+// export var model: ModelManager;
+// export var notifier: NotificationManager;
+// export var present: PresentationManager;
+// export var semantic: SemanticInterpreter;
+
+export interface Positions {
+  str: string;
+  pos: Array<Pos>;
+}
 
 export interface GrammarConverter {
 
@@ -96,33 +104,34 @@ export interface GrammarConverter {
 
   isAsyncExec: () => boolean;
 
-  preproc: (thePhrase: string, pos?: {stopwords: Array<Pos>}, maskFunc?: (inputStr : string, isCalcPosition?: boolean) => string | {str: string, pos: Array<Pos>}, stopwordFunc?: (inputStr : string, positions?: Array<Pos>) => string | {str: string, pos: Array<Pos>}) => string;
-  executeGrammar: (text: string, callback?: (semanticResult: {}) => void) => void;
-  postproc: (procResult: any, recodeFunc?: (inputObj: any) => any) => any;
+  preproc(thePhrase: string, pos?: {stopwords: Array<Pos>}, maskFunc?: (inputStr : string, isCalcPosition?: boolean) => string | Positions, stopwordFunc?: (inputStr : string, pos?: Array<Pos>) => string | Positions): string;
+  postproc(procResult: any, recodeFunc?: (inputStr : string, ...args: any[]) => string): any;
 
-  maskString:  (str: string, computePositions?: boolean, prefix?: string, postfix?: string) => string | {str: String, pos: Array<Pos>};
+  executeGrammar: (text: string, callback?: (semanticResult: {}) => void) => void;
+
+  maskString:  (str: string, computePositions?: boolean, prefix?: string, postfix?: string) => string | Positions;
   maskAsUnicode:  (str: string) => string;
-  unmaskString:  (str: string, computePositions?: boolean, detector?: RegExp) => string | {str: String, pos: Array<Pos>};
+  unmaskString:  (str: string, computePositions?: boolean, detector?: RegExp) => string | Positions;
 
   unmaskJSON:  (json: any, isMaskValues?: boolean, isMaskNames?: boolean) => any;
   recodeJSON: (json: any, recodeFunc:(str:string)=>string, isMaskValues?: boolean, isMaskNames?: boolean) => any;
 
   //semi-private fileds
   variable_prefix: string;
-	variable_regexp: RegExp;
+  variable_regexp: RegExp;
 
-	entry_token_field: string;
-	entry_index_field: string;
-	enc_regexp_str: string;
+  entry_token_field: string;
+  entry_index_field: string;
+  enc_regexp_str: string;
 
-	jscc_grammar_definition: string;
-	js_grammar_definition: string;
-	json_grammar_definition: Grammar;
-	stop_words_regexp: RegExp;
+  jscc_grammar_definition: string;
+  js_grammar_definition: string;
+  json_grammar_definition: Grammar;
+  stop_words_regexp: RegExp;
 
-	maskValues: boolean;
+  maskValues: boolean;
   maskNames: boolean;
-	convertOldFormat: boolean;
+  convertOldFormat: boolean;
 }
 
 export interface EncodeUtils {
@@ -189,8 +198,8 @@ export interface CommonUtils {
 }
 export interface ConfigurationManager {
     get: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
-    getBoolean: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
-    getString: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
+    getBoolean: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => boolean;
+    getString: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => string;
     set: (propertyName: string, value: any) => void;
 }
 export interface Constants {
@@ -224,11 +233,12 @@ export interface Constants {
     isCordovaEnv: () => boolean;
 }
 export interface ControllerManager {
+    create: () => any;
     get: (ctrlName: string) => Controller | undefined;
     getNames: () => Array<string>;
     init: (callback: any, ctx: any) => any;
     perform: (ctrlName: string, actionName: string, data?: any) => any;
-    performHelper: (ctrlName: string, actionName: string, data?: any, ...args: any[]) => any;
+    performHelper: (ctrlName: string, actionName: string, data?: any) => any;
 }
 export interface DialogEngine {
     doc: string;
@@ -293,41 +303,36 @@ export interface LanguageManager {
     getText: (textVarName: string) => string;
     init: (lang: string) => any;
     setLanguage: (lang: string) => any;
-    setNextLanguage: () => string;
 }
 export interface MediaManager {
     ctx: {[ctxId: string]: any};
     waitReadyImpl: IWaitReadyImpl;
 
-    init: (successCallback?: Function, failureCallback?: Function, listenerList?: any) => any;
-    loadFile: (filePath: any, successCallback: Function, failureCallback: Function, execId: any) => void;
+    init: (successCallback?: Function, failureCallback?: Function, listenerList?: Array<{name: string, listener: Function}>) => any;
+    loadFile: (filePath: string, successCallback?: Function, failureCallback?: Function, execId?: string) => void;
 
     addListener: (eventName: string, eventHandler: Function) => void;
-    removeListener: (eventName: string, eventHandler: Function) => any;
-    getListeners: (eventName: string) => Array<Function>;
     hasListeners: (eventName: string) => boolean;
-    off: (eventName: string, eventHandler: Function) => any;
+    getListeners: (eventName: string) => Function | void;
+    removeListener: (eventName: string, eventHandler: Function) => boolean;
+    off: (eventName: string, eventHandler: Function) => boolean;
     on: (eventName: string, eventHandler: Function) => void;
 
-    getFunc: (ctx: string, funcName: string) => any;
-    perform: (ctx: string, funcName: string, args: Array<any>) => any;
-    setDefaultCtx: (ctxId: string) => void;
-
     createEmptyAudio: () => IAudio;
-
-    getURLAsAudio: (url: string, onEnd: Function, failureCallback: Function, successCallback: Function, audioObj: IAudio, ...args: any[]) => any;
-    getWAVAsAudio: (blob: Blob, callback: Function, onEnd: Function, failureCallback: Function, onInit: Function, emptyAudioObj: IAudio) => any;
-
+    getURLAsAudio: (url: string, onEnd: any, failureCallback: any, successCallback: any, audioObj: IAudio, ...args: any[]) => IAudio;
+    getWAVAsAudio: (blob: any, callback: any, onEnd: any, failureCallback: any, onInit: any, emptyAudioObj: IAudio) => IAudio;
     playURL: (url: string, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
-    playWAV: (blob: Blob, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
+    playWAV: (blob: any, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
+
+    getFunc: (ctx: string, funcName: string) => any;
+    perform: (ctx: string, funcName: string, args?: Array<any>) => any;
+    setDefaultCtx: (ctxId: string) => void;
 
     recognize: (options?: ASROptions, statusCallback?: ASROnStatus, failureCallback?: ASROnError, isIntermediateResults?: boolean) => void;
     startRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError, intermediateResults?: boolean) => void;
     stopRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError) => void;
 
-    tts: (parameter: TTSOptions | string | Array<string>, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, options?: any, ...args: any[]) => void;
-    /** @deprecated use #tts instead */
-    textToSpeech: (parameter: TTSOptions | string | Array<string>, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, options?: any, ...args: any[]) => void;
+    tts: (options: TTSOptions, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, ...args: any[]) => void;
     setTextToSpeechVolume: (newValue: number) => void;
 
     cancelRecognition: (successCallback?: Function, failureCallback?: Function) => void;
@@ -377,11 +382,11 @@ export interface IAudio {
 	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
 	play:  () => void;
 	stop:  () => void;
-	enable:  () => void;
-	disable:  () => void;
-	release:  () => void;
+	enable: () => void;
+	disable: () => void;
+	release: () => void;
 	setVolume:  (volume: number) => void;
-	getDuration:  () => number;
+	getDuration: () => number;
 	isPaused: () => boolean;
 	isEnabled: () => boolean;
 }
