@@ -505,7 +505,10 @@ newMediaPlugin = {
 								function onend(){
 							
 									if(_logger.isd()) _logger.d("LongTTS done playing "+currIndex+ " '"+sentenceArray[currIndex]+"'");
-									audioArray[currIndex].release();
+									
+									if(audioArray[currIndex]){//GUARD: audio object may have been removed by cancelSpeech(), and this listener triggered async
+										audioArray[currIndex].release();
+									}
 									
 									playNextAfterPause();
 								},
