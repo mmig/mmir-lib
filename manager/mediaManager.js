@@ -506,7 +506,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     			 * TODO add doc
     			 * 
 				 * @name ctx
-				 * @type mmir.Logger
+				 * @type Object
 				 * @default Object (empty context, i.e. plugins are loaded into the "root context", and no plugins loaded into the execution context)
 				 * @public
 				 * 
