@@ -240,7 +240,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
 
 					isVisualsLoaded = true;
 		
-					mmir.presentation = presentationManager;
+					mmir.present = presentationManager;
 					checkInitCompleted();
 					
 				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });
