@@ -122,14 +122,22 @@ newMediaPlugin = {
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack( {
 				__triggerError: function(options, successCallback, failureCallback){
+					
 					if(typeof options === 'function'){
 						failureCallback = successCallback;
 						successCallback = options;
 						options = void(0);
 					}
+					
+					if(options){
+						successCallback = successCallback? successCallback : options.success;
+						failureCallback = failureCallback? failureCallback : options.error;
+					}
+					
 					alert(msg);
+					
 					if(failureCallback)
-						failureCallback();
+						failureCallback(msg);
 				}
 			/**
 			 * @public
@@ -160,7 +168,7 @@ newMediaPlugin = {
 			 * @memberOf WebspeechAudioInput.dummy.prototype
 			 * @see mmir.MediaManager#startRecord
 			 */
-			, cancelRecognition: function(successCallBack,failureCallBack){
+			, cancelRecognition: function(successCallback,failureCallback){
 				this.__triggerError(successCallback, failureCallback);
 			}
 			});
