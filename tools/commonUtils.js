@@ -883,8 +883,8 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 				
 				//ASSERT: navigator exists
 				
-				if(!navigator.connection){
-					if(logger.isInfo()) logger.warn('Cannot check network status: object navigator.connection is not available');
+				if(!navigator.connection || !navigator.connection.type || typeof Connection === 'undefined'){
+					if(logger.isInfo()) logger.info('Cannot use Cordova plugin network-information for checking network status: object navigator.connection is not available');
 					if(typeof navigator.onLine !== 'undefined'){
 						return navigator.onLine;
 					}
