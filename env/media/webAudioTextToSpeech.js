@@ -404,6 +404,7 @@ newMediaPlugin = {
 								if(onEnd){
 									onEnd();
 								}
+								ttsMedia.release();
 								//EXPERIMENTAL: command-queue feature.
 								processNextInCommandQueue();
 							},
