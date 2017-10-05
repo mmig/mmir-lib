@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 4.0.0)
+version notes for MMIR framework code (v 4.0.1)
 
  * using Cordova 5.x.x - 7.x.x library
 
@@ -24,6 +24,28 @@ optional
  --------------
  Change Log
  --------------
+ 
+##################
+ Version 4.0.1
+##################
+
+MODFIFICATIONS:
+
+ * REFACTOR [breaking change] languageManager: removed setNextLanguage
+   use mmirf/core3Compatibility for restoring this functionality to languageManager
+ * ADD mmirf/util/extendDeep for deep-copy/cloning of objects (equal to jQuery syntax/API)
+ * IMPROVE AudioOutput implementations: revoke/release generated data-URLs upon resources-release
+
+BUGFIX:
+
+ * mmir.present: fixed to documented reference name mmir.present (instead of mmir.presentation)
+ * webAudioTextToSpeech: added existence-check before invoking release() for an audio-object, since code might get triggered asynchronously after audio-object has already been removed
+ * webspeechAudioInput: non-functional dummy plugin implementation
+   * BUGFIX var typo in cancelRecognition() impl.
+   * FIX evaluate options object (if present
+ * mmir.util: fixed checkNetworkConnection(): check all necessary fields/classes before assuming that Cordova network-information plugin can be used for checking the network status
+ * webAudioTextToSpeech: do release audio resources in single-sentence mode (not only in multiple-sentence mode)
+   
 
 ##################
  Version 4.0.0

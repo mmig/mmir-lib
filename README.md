@@ -82,7 +82,7 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 --
 ##### Version Information
 
- MMIR Version 4.0.0
+ MMIR Version 4.0.1
 
 
 [1]: https://github.com/mmig/mmir-starter-kit
