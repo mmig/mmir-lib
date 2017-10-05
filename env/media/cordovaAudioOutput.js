@@ -31,6 +31,27 @@ newMediaPlugin = {
 			/**  @memberOf CordovaAudioOutput# */
 			var _pluginName = 'codovaAudioOutput';
 			
+			/**
+			 * HELPER for releasing data-URL
+			 * 
+			 * @param {String} dataUrl
+			 * 			The data URL for the audio blob
+			 * 
+			 * @memberOf Html5AudioOutput#
+			 */
+			function releaseDataUrl(dataUrl){
+				
+				if(window.URL){
+					window.URL.revokeObjectURL(dataUrl);
+				}
+				else if(window.webkitURL){
+					window.webkitURL.revokeObjectURL(dataUrl);
+				}
+				else {
+					mediaManager._log.d('cannot release media URL: no URL.revokeObjectURL() available!')
+				}
+			}
+			
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
 				/**
@@ -47,6 +68,7 @@ newMediaPlugin = {
 //									console.log('WAV Audio created');
 
 									my_media.release();
+									releaseDataUrl(blobURL);
 									if(successCallback){
 										successCallback();
 									}
@@ -78,7 +100,7 @@ newMediaPlugin = {
 									if(successCallback){
 										successCallback.apply(my_media,arguments);
 									}
-								} ,
+								},
 								failureCallback
 						);
 

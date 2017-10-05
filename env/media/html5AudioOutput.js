@@ -216,6 +216,28 @@ newMediaPlugin = {
 				}
 				
 			}
+			
+			/**
+			 * HELPER for releasing data-URL
+			 * 
+			 * @param {String} dataUrl
+			 * 			The data URL for the audio blob
+			 * 
+			 * @memberOf Html5AudioOutput#
+			 */
+			function releaseDataUrl(dataUrl){
+				
+				if(window.URL){
+					window.URL.revokeObjectURL(dataUrl);
+				}
+				else if(window.webkitURL){
+					window.webkitURL.revokeObjectURL(dataUrl);
+				}
+				else {
+					mediaManager._log.d('cannot release media URL: no URL.revokeObjectURL() available!')
+				}
+				
+			}
 
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
@@ -231,7 +253,12 @@ newMediaPlugin = {
 						var self = this;
 						createDataUrl(blob, function(dataUrl){
 							
-							self.playURL(dataUrl, onEnd, failureCallback, successCallback);
+							self.playURL(dataUrl, 
+									function onend(){
+										releaseDataUrl(dataUrl);
+										onEnd && onEnd.apply(this, arguments);
+									},
+									failureCallback, successCallback);
 							
 						});
 						
@@ -314,6 +341,13 @@ newMediaPlugin = {
 							//do not start creating the blob, if the audio was already discarded:
 							if(emptyAudioObj.isEnabled()){
 								audioObj = self.getURLAsAudio(dataUrl, onEnd, failureCallback, onInit, emptyAudioObj);
+								audioObj._wavrelease = audioObj.release;
+								audioObj.release = function(){
+									if(this.isEnabled()){
+										releaseDataUrl(dataUrl);
+									}
+									return this._wavrelease();
+								};
 							} else {
 								audioObj = emptyAudioObj;
 							}
