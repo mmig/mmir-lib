@@ -587,7 +587,7 @@ var JsccGrammarConverterExt = {
 				if(i > 0){
 					grammar_token += "|";
 				}
-				grammar_token += words[i];
+				grammar_token += this._prepareToken(words[i]);
 			}
 			
 			grammar_token += "'    " + token_name + " [* " + 
@@ -732,6 +732,10 @@ var JsccGrammarConverterExt = {
 				+ this.variable_prefix + "result = " + utterance_name + "_temp;";
 		
 		return " [* " + pharseMatchResult + "; " + semanticProcResult + " *]";
+	},
+	_prepareToken: function(token){
+		//need to mask delimiting quotes, i.e. '
+		return token.replace(/'/g, "\\'");
 	}
 };
 

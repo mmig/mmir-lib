@@ -482,7 +482,7 @@ var PegJsGrammarConverterExt = {
 				}
 				
 				//add TOKEN string:
-				sb.push( isNotRegExpr? words[i] : this._convertRegExpr(words[i]));
+				sb.push( isNotRegExpr? this._prepareToken(words[i]) : this._convertRegExpr(words[i]));
 
 				
 				if( isNotRegExpr ){
@@ -646,6 +646,10 @@ var PegJsGrammarConverterExt = {
 				+ this.variable_prefix + "result = " + utterance_name + "_temp";
 		
 		return phraseStr + " {\n\t   " + pharseMatchResult +  "; " + semanticProcResult + "; return _m; \n\t} ";
+	},
+	_prepareToken: function(token){
+		//need to mask delimiting quotes, i.e. '
+		return token.replace(/'/g, "\\'");
 	},
 	_checkIfNotRegExpr: function(token){
 		

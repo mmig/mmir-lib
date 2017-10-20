@@ -491,7 +491,7 @@ var JisonGrammarConverterExt = {
 				
 				//add TOKEN string:
 				if(isNotRegExpr){
-					sb.push(words[i]);
+					sb.push(this._prepareToken(words[i]));
 				}
 				else {
 					var special_token_name = "regexpr" + (++ this.grammar_special_tokens_no);
@@ -658,6 +658,10 @@ var JisonGrammarConverterExt = {
 				+ this.variable_prefix + "result = " + utterance_name + "_temp";
 		
 		return phraseStr + " %{\n\t   " + pharseMatchResult + "; " + semanticProcResult + "; \n\t%} ";
+	},
+	_prepareToken: function(token){
+		//need to mask delimiting quotes, i.e. "
+		return token.replace(/"/g, '\\"');
 	},
 	_checkIfNotRegExpr: function(token){
 		
