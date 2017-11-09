@@ -602,7 +602,7 @@ newMediaPlugin = {
 				 * @memberOf WebAudioTextToSpeech.prototype
 				 */
 				textToSpeech: function(){
-					return this.tts.apply(this, arguments);
+					return mediaManager.perform(ctxId, 'tts', arguments);
 				},
 				/**
 				 * @copydoc mmir.MediaManager#tts
