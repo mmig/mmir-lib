@@ -344,7 +344,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			var engine = engineConfig(url, mode);
 
 			this._log = Logger.create(module);
-			engine._log = Logger.create(module.id+'Engine', module.config().logLevel);
+			engine._logger = Logger.create(module.id+'Engine', module.config().logLevel);
 
 //			var _self = this;
 

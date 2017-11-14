@@ -16,9 +16,13 @@
  * 
  * @class mmir.env.statemachine.engine.exec
  * 
- * @requires cordova.plugins.queuePlugin: needed for Android < 4.4 -> Cordova plugin for non-WebWorker-based execution-queue
+ * @requires cordova.plugins.queuePlugin [Cordova/android]: needed for Android before 4.4 -> Cordova plugin for non-WebWorker-based execution-queue
+ * or
+ * @requires Worker (WebWorker) on window or global object
+ * or
+ * @requires setTimeout (fallback/stub implementation)
  */
-define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(constants, createScionEngine, extend) {
+define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], function(constants, createScionEngine, extend) {
 
 	/**
 	 * HELPER logging for state-changes
@@ -29,13 +33,13 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
 	var printDebugStates = function(ctx){
-		if(!ctx._log.isDebug()){
+		if(!ctx._logger.isDebug()){
 			return;
 		}
-		ctx._log.debug(ctx.name, 'current state: ' + JSON.stringify(ctx.getStates()));
-		ctx._log.debug(ctx.name, 'active states: ' + JSON.stringify(ctx.getActiveStates()));
-		ctx._log.debug(ctx.name, 'active events: ',+ JSON.stringify(ctx.getActiveEvents()));
-		ctx._log.debug(ctx.name, 'active transitions: '+ JSON.stringify(ctx.getStates()) + ":"+ JSON.stringify(ctx.getActiveTransitions()));
+		ctx._logger.debug(ctx.name, 'current state: ' + JSON.stringify(ctx.getStates()));
+		ctx._logger.debug(ctx.name, 'active states: ' + JSON.stringify(ctx.getActiveStates()));
+		ctx._logger.debug(ctx.name, 'active events: ',+ JSON.stringify(ctx.getActiveEvents()));
+		ctx._logger.debug(ctx.name, 'active transitions: '+ JSON.stringify(ctx.getStates()) + ":"+ JSON.stringify(ctx.getActiveTransitions()));
 	};
 
 	/**
@@ -71,7 +75,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 
     		onraise : function() {
 
-    			if (this._log.isd()) {
+    			if (this._logger.isd()) {
     				printDebugStates(_instance);
     			};
 
@@ -90,7 +94,8 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
     			//            _scion as not-a-plain-object (this should really be FIXed in the scion library itself...)
     			//
     			//TODO russa: check if we really need a deep copy here (maybe we should make a copy TO scion and replace _instance with the ext. scion obj. ...?)
-    			scion['_scion'].constructor = function dummy(){};
+    			if(scion['_scion']) scion['_scion'].constructor = function dummy(){};//NOTE _scion only does exist on old SCION lib version!
+
     			extend(_instance, scion);//<- FIXME should this be a deep-copy? e.g. jQuery.exted(true, ...)
 
     			_instance.worker = envFactory.createWorker(_instance, _instance.gen);//_instance._genFuncFactory(_instance, _instance.gen);
@@ -129,7 +134,8 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
     	name: 'webworkerGen',
 		createWorker: function(_instance, gen) {
 
-			var scionQueueWorker = new Worker(
+			var ctx = typeof window !== 'undefined'? window : global;
+			var scionQueueWorker = new ctx.Worker(
 					constants.getWorkerPath()+ 'ScionQueueWorker.js'
 			);
 			scionQueueWorker._engineInstance = _instance;
@@ -139,7 +145,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 
 				if (e.data.command == "toDo") {
 					var inst = this._engineInstance;
-					inst._log.debug('raising:' + e.data.toDo.event);
+					inst._logger.debug('raising:' + e.data.toDo.event);
 
 					this._engineGen.call(inst, e.data.toDo.event, e.data.toDo.eventData);
 
@@ -160,7 +166,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 			return function(event, eventData) {
 
 				if (eventData){
-					this._log.debug('new Job:' + event);
+					this._logger.debug('new Job:' + event);
 				}
 
 				_instance.worker.postMessage({
@@ -211,7 +217,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 
 				function failureFallbackHandler(err){
 
-					_instance._log.error('failed to initialize SCION extension for ANDROID evn');
+					_instance._logger.error('failed to initialize SCION extension for ANDROID evn');
 					_instance.worker = (function(gen){
 						return {
 							raiseCordova: function fallback(event, eventData){
@@ -225,22 +231,22 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 
 				callBackList.push(function(data){
 					var inst = _instance;
-					if(inst._log.isv()) inst._log.debug('raising:'+ data.event);
+					if(inst._logger.isv()) inst._logger.debug('raising:'+ data.event);
 					var generatedState = gen.call(inst, data.event, data.eventData);
-					if(inst._log.isv()) inst._log.debug('QueuePlugin: processed event '+id+' for '+ data.event+' -> new state: '+JSON.stringify(generatedState)+ ' at ' + inst.url);
+					if(inst._logger.isv()) inst._logger.debug('QueuePlugin: processed event '+id+' for '+ data.event+' -> new state: '+JSON.stringify(generatedState)+ ' at ' + inst.url);
 					execQueue.readyForJob(id, successCallBackHandler, failureFallbackHandler);
 
 					inst.onraise();
 				});
 				execQueue.newQueue(id, function(args){
-						if(_instance._log.isv()) _instance._log.debug('QueuePlugin: entry '+id+' created.' + ' at ' + _instance.url);
+						if(_instance._logger.isv()) _instance._logger.debug('QueuePlugin: entry '+id+' created.' + ' at ' + _instance.url);
 					}, failureFallbackHandler
 				);
 
 				return {
 					_engineInstance: _instance,
 					raiseCordova: function (event, eventData){
-						if(this._engineInstance._log.isv()) this._engineInstance._log.debug('QueuePlugin: new Job: '+ id + ' at ' + this._engineInstance.url);
+						if(this._engineInstance._logger.isv()) this._engineInstance._logger.debug('QueuePlugin: new Job: '+ id + ' at ' + this._engineInstance.url);
 						execQueue.newJob(id, {event: event, eventData: eventData}, successCallBackHandler,failureFallbackHandler);
 					}
 				};
@@ -252,7 +258,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 		createRaise: function(_instance){
 			return function(event, eventData) {
 
-				if (eventData) _instance._log.log('new Job:' + event);
+				if (eventData) _instance._logger.log('new Job:' + event);
 
 				_instance.worker.raiseCordova(event, eventData);
 			};
@@ -280,9 +286,11 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 		createWorker: function(_instance, gen) {
 
 			return { 
+				_engineGen: gen,
+				_engineInstance: _instance,
 				raiseStubImpl: function fallback(event, eventData){
 					setTimeout(function(){
-						gen(event, eventData);
+						gen.call(_instance, event, eventData);
 					}, 50);
 				}
 			};
@@ -291,7 +299,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 		createRaise: function(_instance){
 			return function(event, eventData) {
 
-				if (eventData) _instance._log.log('new Job:' + event);
+				if (eventData) _instance._logger.log('new Job:' + event);
 
 				_instance.worker.raiseStubImpl(event, eventData);
 			};
@@ -310,7 +318,8 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
      */
     function getScionEnvFactory(){
     	
-    	var hasWebWorkers = typeof window.Worker !== 'undefined';
+    	var ctx = typeof window !== 'undefined'? window : null;//DISABLED for now, no support for Workers in nodejs://global;
+    	var hasWebWorkers = ctx && typeof ctx.Worker !== 'undefined';
     	
     	//TODO make this configurable? through ConfigurationManager?
     	if(hasWebWorkers){
@@ -356,7 +365,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
      * e.g. something like this (see also init() in dialogManager):
      *
      *  engine = require('mmirf/engineConfig')('some-url', 'some-mode');
-     *  engine._log = require('mmirf/logger').create('my-module-id');
+     *  engine._logger = require('mmirf/logger').create('my-module-id');
      *  
      * @memberOf mmir.env.statemachine.engine.exec#
      */
@@ -386,7 +395,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend'], function(c
 		var baseFactory = _baseFactory;
 		var scionEnvConfig = getScionEnvFactory();
 
-		var _instance = {url: url,_log: nolog};
+		var _instance = {url: url,_logger: nolog};
 //		var scionConfig = scionEnvConfig(_instance);
 		var scionConfig = baseFactory( _instance,  scionEnvConfig);
 		
