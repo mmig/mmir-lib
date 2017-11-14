@@ -485,7 +485,7 @@ define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
         				logger.warn('Cannot use asynchronous compilation for '+genId+
         						': no async module available, using sync compilation instead...'
         				);
-        				genName = genId + GRAMMAR_MODULE_ID_POSTFIX;
+        				genName = GRAMMAR_MODULE_ID_PREFIX + genId + GRAMMAR_MODULE_ID_POSTFIX;
         				
         				require([genName], onModuleLoaded);
         			}
