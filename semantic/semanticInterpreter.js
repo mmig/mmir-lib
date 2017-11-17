@@ -493,14 +493,26 @@ define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
                 
             }//END function build_grammar
         	
-            if(typeof doRecompile === 'string'){// arg. is URL for JSON grammar definition
-            	
-            	//interpret STRING as URL for the JSON grammar:
-            	gc.loadGrammar(build_grammar, function(err){
-            			throw 'Could not find JSON grammar file at "'+doRecompile+'": '+err;
-            		}, doRecompile, true
-            	);
-            } else if(typeof doRecompile === 'object'){// arg. is JSONObject (ie. JSON grammar defintion)
+        	if(typeof doRecompile === 'string'){// arg. is URL for JSON grammar definition
+
+        		//interpret STRING as URL for the JSON grammar:
+        		gc.loadGrammar(build_grammar, function(err){
+
+        			var errMsg = err;
+        			if(err){
+        				if(err.stack){
+        					errMsg = err.stack;
+        				} else {
+        					try{
+        						errMsg = JSON.stringify(err);
+        					} catch(e){}
+        				}
+        			}
+        			
+        			throw 'Could not find JSON grammar file at "'+doRecompile+'": '+errMsg;
+        		}, doRecompile, true
+        		);
+        	} else if(typeof doRecompile === 'object'){// arg. is JSONObject (ie. JSON grammar definition)
             	
             	//ASSERT if doRecompile === null => throws error!
             	
