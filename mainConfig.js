@@ -140,7 +140,7 @@ var mmirf_config = {
 		, 'mmirf/stemmer': 'mmirf/semantic/stemmer'
 		, 'mmirf/jscc': 'mmirf/vendor/libs/jscc-amd'
 		, 'mmirf/jison': 'mmirf/vendor/libs/jison'
-		, 'mmirf/pegjs': 'mmirf/vendor/libs/peg-0.9.0'
+		, 'mmirf/pegjs': 'mmirf/vendor/libs/peg-0.9.0_amd'
 		, 'mmirf/asyncGen': 'mmirf/env/grammar/asyncGenerator'
 		, 'mmirf/jsccGen': 'mmirf/env/grammar/jsccGenerator'
 		, 'mmirf/jsccAsyncGen': 'mmirf/env/grammar/jsccAsyncGenerator'
@@ -193,8 +193,6 @@ var mmirf_config = {
 
 		/** @memberOf mmir.require.config.shim */
 		, 'mmirf/md5':            {exports : 'CryptoJS'}
-
-		, 'mmirf/pegjs':       	{exports: 'PEG'}
 
 		, 'mmirf/ES3Lexer':       {deps: ['mmirf/antlr3'], init: function(org){ return ES3Lexer;} }
 		, 'mmirf/ES3Parser':      {deps: ['mmirf/antlr3'], init: function(org){ return ES3Parser;} }
