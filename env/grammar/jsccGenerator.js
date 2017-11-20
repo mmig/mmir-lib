@@ -249,7 +249,7 @@ var jsccGen = {
 	        	//			  eg. use esprima (http://esprima.org) ...?
 	        	//			... as optional dependency (see deferred initialization above?)
 	        	
-	        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err;
+	        	var evalMsg = 'Error during eval() for "'+ instanceId +'": ' + err + ', source code:\n'+addGrammarParserExec+'\n\ntemplate code:\n'+theConverterInstance.TEMPLATE;
 	        	
 	        	if(jscc.get_printError()){
 	        		jscc.get_printError()(evalMsg);
