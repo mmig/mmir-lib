@@ -305,6 +305,8 @@ newMediaPlugin = {
 					
 				}, 10);
 				
+				//silence did start to play immediately, so return TRUE
+				return true;
 			};
 			
 			/**  @memberOf WebAudioTextToSpeech# */
