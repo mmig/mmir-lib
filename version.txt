@@ -1,11 +1,18 @@
 ﻿
-version notes for MMIR framework code (v 4.0.1)
+version notes for MMIR framework code (v 4.1.0)
 
  * using Cordova 5.x.x - 7.x.x library
 
 optional
- * jQuery 2.x - 3.x library
+ * jQuery 2.x - 3.x library (presence is auto-detected, if loaded before mmir-lib)
  * jQuery Mobile 1.4.x library (note: requires jQuery 2.x)
+
+
+additional, required dependencies when running in node environment
+ * scxml (tested with version 3.1.5)
+ * xmlhttprequest (tested with version 1.8.0)
+ * requirejs (tested with version 2.3.3)
+ * webworker-threads (OPTIONAL, tested with version 0.7.13)
 
 
  NOTE: for versions older than MMIR 3.x, the change-information refers to the MMIG StarterKit code.
@@ -24,6 +31,30 @@ optional
  --------------
  Change Log
  --------------
+ 
+##################
+ Version 4.1.0
+##################
+
+MODFIFICATIONS:
+
+ * improved node compatibility:
+   * dialogManager/inputManager: renamed internal logger to _logger (for compatibility with newer SCION libraries)
+   * scionEngine: added compatibility code for newer SCION lib versions
+   * grammerEngine/pegjs: use AMD library variant, instead of node-incompatible requirejs shim
+ 
+
+BUGFIX:
+
+ * grammer/[jscc/jison/peg]Generator: for generating intermediate grammars: need to mask/recode delimiting quote character (i.e. quotes that are used within the intermediate grammar to delimit the token-definition)
+ * media/webAudioTextToSpeech:
+   * in legacy textToSpeech-function: must use mediaManager.perform() instead of this-reference
+   * handle "play silence" correctly: must return TRUE on play(), since silence did start immediately (i.e. delay due to loading resources etc)
+ * semanticInterpreter: in sync-compile fallback, must use mmirf/<modoule> instead of only <module> for loading
+ * dialog/engineConfig:
+   * save access window/global object
+   * consistently access Worker (through window/global object)
+   * stub-factory impl.: invoke gen in context of engine-instance
  
 ##################
  Version 4.0.1

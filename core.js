@@ -42,7 +42,7 @@ function initMmir(window) {
 	 * @memberOf mmir.internal
 	 * @private
 	 */	
-	var CORE_VERSION = "4.0.1";
+	var CORE_VERSION = "4.1.0";
 	
     
 	/**
