@@ -55,87 +55,106 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtil
 		mmir, extend, deferred, commonUtils, Logger, engineConfig, module
 ){
 
-	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
-	/** @scope mmir.InputManager.prototype */
 
-	/**
-	 * @memberOf mmir.InputManager#
-	 */
-	var _instance = {
-
+	var _create = function(){
+		
+		//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 		/** @scope mmir.InputManager.prototype */
-
+	
 		/**
-		 * This function raises an event.
-		 *
-		 * @function
-		 * @param {String} eventName
-		 * 				The name of the event which is to be raised
-		 * @param {Object} [eventData] OPTIONAL
-		 * 				Data belonging to the event
-		 * @throws {Error} if this function is invoked while the internal
-		 * 				   event/state engine (i.e. {@link mmir.InputEngine}
-		 * 				   is not initialized yet
-		 * @public
-		 * @memberOf mmir.InputManager.prototype
+		 * @memberOf mmir.InputManager#
 		 */
-		raise : function(eventName, eventData) {
-			//NOTE the functional implementation will be set during initialization (see below #init())
-			throw new Error('InputEngine not initialized yet: '
-					+'call mmir.input.init(callback) and wait for the callback.'
-			);
-		}
-
+		var _instance = {
+	
+			/** @scope mmir.InputManager.prototype */
+	
+			/**
+			 * This function raises an event.
+			 *
+			 * @function
+			 * @param {String} eventName
+			 * 				The name of the event which is to be raised
+			 * @param {Object} [eventData] OPTIONAL
+			 * 				Data belonging to the event
+			 * @throws {Error} if this function is invoked while the internal
+			 * 				   event/state engine (i.e. {@link mmir.InputEngine}
+			 * 				   is not initialized yet
+			 * @public
+			 * @memberOf mmir.InputManager.prototype
+			 */
+			raise : function(eventName, eventData) {
+				//NOTE the functional implementation will be set during initialization (see below #init())
+				throw new Error('InputEngine not initialized yet: '
+						+'call mmir.input.init(callback) and wait for the callback.'
+				);
+			}
+	
+		};
+	
+		var inst =  extend(_instance, {
+	
+			/**
+			 * @function
+			 * @name init
+			 * @returns {Deferred}
+			 *
+			 * @memberOf mmir.InputManager.prototype
+			 */
+			init : function(isRegisterEngine) {
+				
+				isRegisterEngine = isRegisterEngine !== false;
+				
+//				delete this.init;
+	
+				//"read" settings from requirejs' config (see mainConfig.js):
+				var url = module.config().scxmlDoc;
+				var mode = module.config().mode;
+	
+				//create a SCION engine:
+				var engine = engineConfig(url, mode);
+	
+				this._log = Logger.create(module);
+				engine._logger = Logger.create(module.id+'Engine', module.config().logLevel);
+	
+	//			var _self = this;
+	
+				var theDeferredObj = deferred();
+	
+				engine.load().then(function(engine) {
+	
+					inst.raise = function raise(){
+						engine.raise.apply(engine, arguments);
+					};
+	
+//					delete engine.gen;
+	
+					if(isRegisterEngine){
+						//register the InputEngine with requirejs as module 'mmirf/inputEngine':
+						mmir._define('mmirf/inputEngine', function(){
+							return engine;
+						});
+						//immediately load the module-definition:
+						mmir.require(['mmirf/inputEngine'], function(){
+							//signal end of initialization process:
+							theDeferredObj.resolve({manager: inst, engine: engine});
+						});
+					} else {
+						//signal end of initialization process:
+						theDeferredObj.resolve({manager: inst, engine: engine});
+					}
+	
+				});
+	
+				return theDeferredObj;
+			},
+			_create: _create
+			
+		});
+		
+		return inst;
+		
 	};
-
-	return extend(_instance, {
-
-		/**
-		 * @function
-		 * @name init
-		 * @returns {Deferred}
-		 *
-		 * @memberOf mmir.InputManager.prototype
-		 */
-		init : function() {
-			delete this.init;
-
-			//"read" settings from requirejs' config (see mainConfig.js):
-			var url = module.config().scxmlDoc;
-			var mode = module.config().mode;
-
-			//create a SCION engine:
-			var engine = engineConfig(url, mode);
-
-			this._log = Logger.create(module);
-			engine._logger = Logger.create(module.id+'Engine', module.config().logLevel);
-
-//			var _self = this;
-
-			var theDeferredObj = deferred();
-
-			engine.load().then(function(_engine) {
-
-				_instance.raise = function raise(){
-					_engine.raise.apply(_engine, arguments);
-				};
-
-				delete _engine.gen;
-
-				//register the InputEngine with requirejs as module 'mmirf/inputEngine':
-				mmir._define('mmirf/inputEngine', function(){
-					return _engine;
-				});
-				//immediately load the module-definition:
-				mmir.require(['mmirf/inputEngine'], function(){
-					//signal end of initialization process:
-					theDeferredObj.resolve({manager: _instance, engine: _engine});
-				});
-
-			});
-
-			return theDeferredObj;
-		}
-	});
+	
+	return _create();
 
 });

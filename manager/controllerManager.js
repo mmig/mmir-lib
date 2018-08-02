@@ -49,17 +49,6 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ControllerManager.prototype */
 	
-	// private members
-	/**
-	 * Array of controller-instances
-	 * 
-	 * @type Dictionary
-	 * @private
-	 * 
-	 * @memberOf mmir.ControllerManager#
-	 */
-	var controllers = new Dictionary();
-	
 	/**
 	 * Initialize ControllerManager:
 	 * 
@@ -77,7 +66,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	 * 
 	 * @memberOf mmir.ControllerManager#
 	 */
-	function _init(callback, ctx) {
+	function _init(callback, ctx, _instance, ctrlList) {
 		
 		//shift arguments if necessary:
 		if(!ctx && typeof callback !== 'function'){
@@ -368,7 +357,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 							controller.loadHelper(helperName,helperPath, ctx);
 						}
 
-						controllers.put(controller.getName(), controller);
+						ctrlList.put(controller.getName(), controller);
 					}
 					else if(status==='warning'){
 						console.warn('[loadController] "'+fileName+'": '+msg);
@@ -386,16 +375,37 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		return defer;
 
 	};
-
+	
 	/**
-     * Object containing the instance of the class {@link mmir.ControllerManager} 
-     * 
-     * @type Object
-     * @private
-	 * @augments mmir.ControllerManager
-	 * @ignore
-     */
-	var _instance = {
+	 * Array of controller-instances
+	 * 
+	 * @type Dictionary
+	 * @private
+	 * 
+	 * @memberOf mmir.ControllerManager#
+	 */
+	var _create = function(){
+		
+		// private members
+		/**
+		 * Array of controller-instances
+		 * 
+		 * @type Dictionary
+		 * @private
+		 * 
+		 * @memberOf mmir.ControllerManager#
+		 */
+		var controllers = new Dictionary();
+
+		/**
+	     * Object containing the instance of the class {@link mmir.ControllerManager} 
+	     * 
+	     * @type Object
+	     * @private
+		 * @augments mmir.ControllerManager
+		 * @ignore
+	     */
+		var _instance = {
 			/** @scope mmir.ControllerManager.prototype *///for jsdoc2
 
 			// public members           
@@ -521,12 +531,19 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 * @public
 			 * @memberOf mmir.ControllerManager.prototype
 			 */
-			init: _init
+			init: function(callback, ctx){
+				return _init(callback, ctx, _instance, controllers);
+			},
+			_create: _create
 
+		};
+		
+		/**@ignore*/
+		return _instance;
 	};
-	/**@ignore*/
-	return _instance;
 	
+	
+	return _create();
 });
 
 
