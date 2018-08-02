@@ -138,7 +138,12 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary'],
     		
 	    	if(isCordovaEnv){
 	    		
-	    		if(navigator.notification && navigator.notification.vibrate){
+	    		if(navigator.vibrate){
+//		    		console.debug('Vibrate: navigator (API)');
+	    			/** @ignore */
+		    		doVibrate = function vibrate(n){ navigator.vibrate(n); };
+	    		}
+	    		else if(navigator.notification && navigator.notification.vibrate){
 //		    		console.debug('Vibrate: navigator.notification');
 	    			/** @ignore */
 		    		doVibrate = function vibrate(n){ navigator.notification.vibrate(n); };
