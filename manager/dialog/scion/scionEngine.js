@@ -180,7 +180,10 @@ define(['mmirf/scion', 'mmirf/scionUtil', 'mmirf/util/deferred'], function( scio
                         if(err) throw err;
 
                         listener.onError = function(error) {
-                        	if (instanceContext._logger.isError()) instanceContext._logger.debug('SCXML ERROR: in <'+error.tagname+'> ('+error.line+':'+error.column+'): ' + error.reason);
+                        	if (instanceContext._logger.isError()){
+                        		var stackInfo = error.stack? ', ' + (error.stack.replace? error.stack.replace(error.reason, '') : error.stack) : '';
+                        		instanceContext._logger.error('SCXML ERROR: in <'+error.tagname+'> ('+error.line+':'+error.column+'): ' + error.reason + stackInfo);
+                        	}
                         }
 
                         //instantiate the interpreter
