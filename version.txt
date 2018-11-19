@@ -1,5 +1,5 @@
 ﻿
-version notes for MMIR framework code (v 4.1.0)
+version notes for MMIR framework code (v 4.2.0)
 
  * using Cordova 5.x.x - 7.x.x library
 
@@ -27,10 +27,106 @@ additional, required dependencies when running in node environment
                            NOTE: the mmir-lib and mmir-tooling code that is used within this example
                                  project may lack behind the most current version of their base
                                  repositories of mmir-lib and mmir-tooling.
-
  --------------
  Change Log
  --------------
+
+##################
+ Version 4.2.0
+##################
+
+FIX:
+
+ * env/html5AudioOutput: added mechanism to handle rejected play-promise for new WebAudio-play implementations
+   * cf. https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
+   * now event 'errorplay' will be triggered on mediaManager, if play() causes a rejected promise
+   * basic example for handling:
+   		
+          mmir.media.on('errorplay', function(audio, domException){
+
+            const btn = document.createElement('button');
+            btn.style.position = 'absolute';
+            btn.style.top = 'calc(50% - 75px)';
+            btn.style.left = 'calc(50% - 200px)';
+            btn.style.width = '400px';
+            btn.style.height = '150px';
+            btn.style.fontSize = '24px';
+            btn.style.backgroundColor = 'rgba(255, 200, 200, 0.8)';
+            btn.innerText = 'Prevented to play audio: Please confirm that audio should be played by clicking here within 10 next seconds!';
+
+            //allow user to reject auto-play:
+            // either provide cancel-option, or something else like "auto-timeout":
+            var timer = setTimeout(function(){
+              mmir.media.cancelSpeech();
+              btn.remove();
+            }, 10000);
+
+            btn.onclick = function(){
+              clearTimeout(timer);
+              audio.play();
+              this.remove();
+            };
+            document.body.appendChild(btn);
+        });
+
+
+MODFIFICATIONS:
+
+ * manager: added multi-client capability
+    * added support for creating multiple instance of controllerManager, dialogManager, and inputManager
+    * usage example: 
+    
+		function createClientSession(mmir, globalCtx, options){
+		
+		  var isDebug = options.isDebug;
+		
+		  //create shallow copy of mmir namespace:
+		  var _mmir = mmir.require('mmirf/util/extend')({}, mmir);
+		
+		  return new Promise(function(resolve, reject){
+		
+		    var ctrl = _mmir.ctrl._create();
+		
+		    ctrl.init(globalCtx).then(function(ctrl){
+		
+		      if(isDebug) console.log('**************************** initialized ctrl instance...');
+		
+		      _mmir.ctrl = ctrl;
+		
+		      var dialog = _mmir.dialog._create();
+		      var input  = _mmir.input._create();
+		
+		      Promise.all([
+		        dialog.init(false).then(function(dlg){
+		          if(isDebug) console.log('**************************** initialized dialog instance...');
+		          _mmir.dialog = dlg.manager;
+		          _mmir.dialogEngine = dlg.engine;
+		          _mmir.dialog._setControllerManager(ctrl);
+		        }),
+		        input.init(false).then(function(inp){
+		          if(isDebug) console.log('**************************** initialized input instance...');
+		          _mmir.input = inp.manager;
+		          _mmir.inputEngine = inp.engine;
+		        })
+		      ]).then(function(){
+		        if(isDebug) console.log('**************************** creating controller instances using separate instances for ctrl, dialog, input ...');
+		        resolve(_mmir);
+		      })
+		
+		    });
+		
+		  });
+		}
+
+
+
+ * improved error output for SCION engine
+ 
+
+BUGFIX:
+
+ * manager/notificationManager: updated implementation for changed cordova vibrate() implementation
+
  
 ##################
  Version 4.1.0
@@ -273,7 +369,7 @@ MODFIFICATIONS:
      changed format of semantic-results (i.e. results of applying a grammar):
      * field phrases is now a list of tokens/utterances (instead of a map/dictionary)
      * phrases contain position information for the tokens / utterances
-     * in list of field phrases: the tokens / utterances entries have addition type field
+     * in list of field phrases: the tokens / utterances entries have additional type field
      * additional field preproc: contains information on pre-processing w.r.t. to the semantic-result
        * has property stopwords, which is a list of position-information of all removed stopwords
   * REFACTOR grammarConverter: moved/extracted (deprecated) umlaut-encoding functions to separate utils-module
