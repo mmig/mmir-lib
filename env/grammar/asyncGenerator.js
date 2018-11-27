@@ -1,6 +1,6 @@
 
 
-define(['mmirf/constants'],
+define(['mmirf/constants', 'require'],
 /**
  * Module that provides a generator for parser-compiler WebWorker instances:
  *
@@ -46,7 +46,7 @@ define(['mmirf/constants'],
  * });
  *
  */
-function(constants){
+function(constants, require){
 
 var COMPILER_WORKER_POSTFIX = 'Compiler.js';
 
@@ -95,13 +95,18 @@ return {
 		/**  @memberOf CompileWebWorker# */
 		var workerPath = constants.getWorkerPath() + parserEngineId + COMPILER_WORKER_POSTFIX;
 
+		//webpack web worker wrapper:
+		var WpWorker = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? require('../../workers/' + parserEngineId + COMPILER_WORKER_POSTFIX) : null;
+
 		/**
 		 * web-worker for compile jobs
 		 *
 		 * @class CompileWebWorker
 		 * @memberOf AsyncCompiler.createWorker
 		 */
-		var asyncCompiler = new Worker(workerPath);
+		var asyncCompiler = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+					new WpWorker() :
+					new Worker(workerPath);
 
 		/**
 		 * dictionary for currently active compilations
@@ -145,15 +150,15 @@ return {
 		 * 				the sync parser generator
 		 * @param {Deferred} asyncDef
 		 * 				the deferred that should be resolved when async generator is initialized
-		 * @param {requirejs} require
-		 * 				the require instance that is used for loading the MMIR framework
+		 * @param {mmir} core
+		 * 				the mmir instance that is used for loading the MMIR framework
 		 *
 		 * @returns {AsyncInitMesssage}
 		 * 				the message object that should be sent to the async generator's WebWorker
 		 *
 		 * @memberOf CompileWebWorker#
 		 */
-		asyncCompiler.prepareOnInit = function(syncGen, asyncDef, require){
+		asyncCompiler.prepareOnInit = function(syncGen, asyncDef, core){
 
 			//setup async init-signaling:
 			var isSyncGenInit = false;
@@ -181,7 +186,7 @@ return {
 				}
 				checkInit();
 			};
-			var engineUrl = require.toUrl(MODULE_ID_PREFIX + syncGen.engineId)
+			var engineUrl = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? null : require.toUrl(MODULE_ID_PREFIX + syncGen.engineId)
 			return {cmd:'init', engineUrl: engineUrl};
 
 		};

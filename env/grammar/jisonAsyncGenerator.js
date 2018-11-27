@@ -1,31 +1,31 @@
 
 
-define(['mmirf/constants','mmirf/jisonGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend', 'require'],
+define(['mmirf/constants','mmirf/jisonGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
- * 
+ *
  * <p>
  * This generator uses Jison for compiling the JSON grammar.
- * 
+ *
  * <p>
  * Usage of this compile is the same as for synchronously working JisonGenerator.
- *  
+ *
  * @see JisonGenerator
- * 
+ *
  * @class
  * @constant
  * @public
  * @name JisonAsyncGenerator
  * @memberOf mmir.env.grammar
- * 
+ *
  * @requires JisonGenerator
- */		
-function(constants, jisonGen, asyncGen, deferred, extend, require){
+ */
+function(constants, jisonGen, asyncGen, deferred, extend){
 
 /**
  * Counter for generating IDs for compile-jobs that
  * are sent to the WebWorker
- * 
+ *
  * @private
  * @memberOf JisonAsyncGenerator#
  */
@@ -33,7 +33,7 @@ var _taskId = 1;
 
 /**
  * WebWorker instance for compiling parser asynchronously
- * 
+ *
  * @private
  * @memberOf JisonAsyncGenerator#
  */
@@ -41,7 +41,7 @@ var asyncCompiler = asyncGen.createWorker(jisonGen.engineId);
 
 /**
  * printError function reference for compile-errors
- * 
+ *
  * @private
  * @memberOf JisonAsyncGenerator#
  */
@@ -54,7 +54,7 @@ asyncCompiler._onerror = printError;
 
 //setup async init-signaling:
 var initDef = deferred();
-var initMsg = asyncCompiler.prepareOnInit(jisonGen, initDef, require);
+var initMsg = asyncCompiler.prepareOnInit(jisonGen, initDef);
 asyncCompiler.postMessage(initMsg);
 
 /**
@@ -65,8 +65,8 @@ asyncCompiler.postMessage(initMsg);
  */
 var jisonAsyncGen = {
 	/** @scope JisonAsyncGenerator.prototype */
-		
-	/** 
+
+	/**
 	 * @see JisonAsyncGenerator#init
 	 * @memberOf JisonAsyncGenerator.prototype
 	 */
@@ -77,20 +77,20 @@ var jisonAsyncGen = {
 		}
 		return initDef;
 	},
-	
+
 	/**
 	 * @returns {Boolean} if this engine compilation works asynchronously.
 	 * 						The current implementation works asynchronously (returns TRUE)
-	 * 
+	 *
 	 * @memberOf JisonAsyncGenerator.prototype
 	 */
 	isAsyncCompilation: function(){ return true; },
 	/**
 	 * @see JisonGenerator#_compileParser
-	 * @protected 
+	 * @protected
 	 */
 	_compileParser: function(grammarDefinition, options, onAfterCompileParserResult){
-		
+
         //start compilation in web-worker:
         asyncCompiler.postMessage({
     		cmd: 'parse',
@@ -98,36 +98,36 @@ var jisonAsyncGen = {
     		config: options,
     		text: grammarDefinition
     	});
-        
+
 	},
 //	/**
 //	 * @see JisonGenerator#_preparePrintError
-//	 * @protected 
+//	 * @protected
 //	 */
 //	_preparePrintError: function(){},//<- overwrite with NOOP
 	/**
 	 * @see JisonGenerator#_afterCompileParser
-	 * @protected 
+	 * @protected
 	 */
 	_afterCompileParser: function(compileParserModuleFunc){
-		
+
 		//callback-ID:
         var taskId = '' + _taskId++;
-        
+
         //register callback for messages from web-worker:
         asyncCompiler.addCallback(taskId, function(evtData){
-        	
+
         	if(evtData.error){
-        		
+
         		//handle error message:
-        		
+
         		if(printError){
             		printError(evtData.error);
             	}
             	else {
             		console.error(evtData.error);
             	}
-        		
+
         		//////////////////// EARLY EXIT /////////////////
         		//NOTE this is not the final message from the compiler-thread...
         		return;
@@ -135,10 +135,10 @@ var jisonAsyncGen = {
 
         	var hasError = evtData.isError;
         	var grammarParser = evtData.def;
-        
+
         	compileParserModuleFunc(grammarParser, hasError);
         });
-		
+
         return taskId;
 	}
 };

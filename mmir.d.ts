@@ -1,8 +1,77 @@
 
 /**
  * export global variable mmir
+ *
+ * @type MmirModule
  */
 export as namespace mmir;
+
+////////////////////// namespace / module definition (type MmirModule) /////////////////////////////////
+
+// interface MmirCore:
+// export function applyConfig (mainConfig: {}) : void;//DISABLED: "officially" this function has visibility protected
+// export function setInitialized: () : void;//DISABLED: "officially" this function has visibility protected
+export function config(requirejsConfig: {}): void;
+export function ready(onFrameworkReady: (...args: any[]) => any): any;
+export function isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
+export const require: RequireJs;
+export const version: string;
+//NOTE changing exported var_s only has effect, if done before initialization
+export var startModule: string;//DEFAULT: 'main';
+export var viewEngine: string;//DEFAULT: "jqViewEngine";
+export var debug: boolean;//DEFAULT: true;
+export var logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
+export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+
+// interface MmirModule:
+export const util: CommonUtils;
+export const conf: ConfigurationManager;
+declare const __const: Constants; export {__const as const};//WORKAROUND for exporting namespace propery with reserved name "const"
+export const ctrl: ControllerManager;
+export const dialogEngine: DialogEngine;
+export const dialog: DialogManager;
+export const inputEngine: InputEngine;
+export const input: InputManager;
+export const lang: LanguageManager;
+export const media: MediaManager;
+export const model: ModelManager;
+export const notifier: NotificationManager;
+export const present: PresentationManager;
+export const semantic: SemanticInterpreter;
+
+////////////////////// end of namespace / module definition /////////////////////////////////
+
+export interface MmirCore {
+  // applyConfig: (mainConfig: {}) => void;//DISABLED: "officially" this function has visibility protected
+  // setInitialized: () => void;//DISABLED: "officially" this function has visibility protected
+  config: (requirejsConfig: {}) => void;
+  ready: (onFrameworkReady: (...args: any[]) => any) => any;
+  isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
+  readonly require: RequireJs;
+  readonly version: string;
+  startModule: string;//DEFAULT: 'main';
+  viewEngine: string;//DEFAULT: "jqViewEngine";
+  debug: boolean;//DEFAULT: true;
+  logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
+  logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+}
+
+export interface MmirModule extends MmirCore {
+  readonly util: CommonUtils;
+  readonly conf: ConfigurationManager;
+  readonly const: Constants;
+  readonly ctrl: ControllerManager;
+  readonly dialogEngine: DialogEngine;
+  readonly dialog: DialogManager;
+  readonly inputEngine: InputEngine;
+  readonly input: InputManager;
+  readonly lang: LanguageManager;
+  readonly media: MediaManager;
+  readonly model: ModelManager;
+  readonly notifier: NotificationManager;
+  readonly present: PresentationManager;
+  readonly semantic: SemanticInterpreter;
+}
 
 /**
  * interface definition for JSON grammar
@@ -18,67 +87,6 @@ export interface Grammar {
   utterances: { [id: string]: { 'phrases': Array<string>, 'semantic': any } };
 
 }
-
-export interface MmirCore {
-  // applyConfig: (mainConfig: {}) => void;//DISABLED: "officially" this function has visibility protected
-  // setInitialized: () => void;//DISABLED: "officially" this function has visibility protected
-  config: (requirejsConfig: {}) => void;
-  ready: (onFrameworkReady: (...args: any[]) => any) => any;
-  isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
-  require: RequireJs;
-  startModule: string;//DEFAULT: 'main';
-  viewEngine: string;//DEFAULT: "jqViewEngine";
-  debug: boolean;//DEFAULT: true;
-  logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
-  logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
-  version: string;
-}
-
-export interface MmirModule extends MmirCore {
-  util: CommonUtils;
-  conf: ConfigurationManager;
-  const: Constants;
-  ctrl: ControllerManager;
-  dialogEngine: DialogEngine;
-  dialog: DialogManager;
-  inputEngine: InputEngine;
-  input: InputManager;
-  lang: LanguageManager;
-  media: MediaManager;
-  model: ModelManager;
-  notifier: NotificationManager;
-  present: PresentationManager;
-  semantic: SemanticInterpreter;
-}
-
-// //mmir core module:
-// export function config(requirejsConfig: {}): void;
-// export function ready(onFrameworkReady: (...args: any[]) => any): any;
-// export function isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
-// export var require: RequireJs;
-// export var startModule: string;//DEFAULT: 'main';
-// export var viewEngine: string;//DEFAULT: "jqViewEngine";
-// export var debug: boolean;//DEFAULT: true;
-// export var logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
-// export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
-// export var version: string;
-
-
-// //mmir module (extending core module)
-// export var util: CommonUtils;
-// export var conf: ConfigurationManager;
-// export var const: Constants;
-// export var ctrl: ControllerManager;
-// export var dialogEngine: DialogEngine;
-// export var dialog: DialogManager;
-// export var inputEngine: InputEngine;
-// export var input: InputManager;
-// export var lang: LanguageManager;
-// export var media: MediaManager;
-// export var model: ModelManager;
-// export var notifier: NotificationManager;
-// export var present: PresentationManager;
-// export var semantic: SemanticInterpreter;
 
 export interface Positions {
   str: string;

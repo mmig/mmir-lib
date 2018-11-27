@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtils','mmirf/logger','mmirf/engineConfig','module'],
+define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtils','mmirf/logger','mmirf/engineConfig','module','require'],
 	/**
 	 * The InputManager handles input events.
 	 *
@@ -52,22 +52,22 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtil
 	 *
 	 */
 	function(
-		mmir, extend, deferred, commonUtils, Logger, engineConfig, module
+		mmir, extend, deferred, commonUtils, Logger, engineConfig, module, require
 ){
 
 
 	var _create = function(){
-		
+
 		//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 		/** @scope mmir.InputManager.prototype */
-	
+
 		/**
 		 * @memberOf mmir.InputManager#
 		 */
 		var _instance = {
-	
+
 			/** @scope mmir.InputManager.prototype */
-	
+
 			/**
 			 * This function raises an event.
 			 *
@@ -88,11 +88,11 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtil
 						+'call mmir.input.init(callback) and wait for the callback.'
 				);
 			}
-	
+
 		};
-	
+
 		var inst =  extend(_instance, {
-	
+
 			/**
 			 * @function
 			 * @name init
@@ -101,40 +101,41 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtil
 			 * @memberOf mmir.InputManager.prototype
 			 */
 			init : function(isRegisterEngine) {
-				
+
 				isRegisterEngine = isRegisterEngine !== false;
-				
+
 //				delete this.init;
-	
+
 				//"read" settings from requirejs' config (see mainConfig.js):
-				var url = module.config().scxmlDoc;
-				var mode = module.config().mode;
-	
+				var modConf = module.config(module);
+				var url = modConf.scxmlDoc;
+				var mode = modConf.mode;
+
 				//create a SCION engine:
 				var engine = engineConfig(url, mode);
-	
+
 				this._log = Logger.create(module);
-				engine._logger = Logger.create(module.id+'Engine', module.config().logLevel);
-	
+				engine._logger = Logger.create(module.id+'Engine', modConf.logLevel);
+
 	//			var _self = this;
-	
+
 				var theDeferredObj = deferred();
-	
+
 				engine.load().then(function(engine) {
-	
+
 					inst.raise = function raise(){
 						engine.raise.apply(engine, arguments);
 					};
-	
+
 //					delete engine.gen;
-	
+
 					if(isRegisterEngine){
 						//register the InputEngine with requirejs as module 'mmirf/inputEngine':
-						mmir._define('mmirf/inputEngine', function(){
+						define('mmirf/inputEngine', function(){
 							return engine;
 						});
 						//immediately load the module-definition:
-						mmir.require(['mmirf/inputEngine'], function(){
+						require(['mmirf/inputEngine'], function(){
 							//signal end of initialization process:
 							theDeferredObj.resolve({manager: inst, engine: engine});
 						});
@@ -142,19 +143,19 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtil
 						//signal end of initialization process:
 						theDeferredObj.resolve({manager: inst, engine: engine});
 					}
-	
+
 				});
-	
+
 				return theDeferredObj;
 			},
 			_create: _create
-			
+
 		});
-		
+
 		return inst;
-		
+
 	};
-	
+
 	return _create();
 
 });

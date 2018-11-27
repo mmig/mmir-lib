@@ -3,66 +3,65 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
 //define(['module'], function(module){//TODO remove module-dependency? -> would need different mechanism for querying env-configuration...
-define(['mmirf/env', 'module'], 
+define(['mmirf/env', 'module'],
 /**
  * A Utility class that provides various <i>constants</i>.<br>
- * 
+ *
  * <p>
  * Note that the actual values depend on the execution environment (e.g. ANDROID vs. BROWSER).
  * As a consequence the constants object has 2 modes, that can be
  * switched via the {@link #init} -method, e.g. <code>init(false)</code>.
- * 
- * 
+ *
+ *
  * @name Constants
  * @memberOf mmir
  * @static
  * @class
- * 
+ *
  * @requires org.apache.cordova.device: cordova plugin add org.apache.cordova.device
- * 
+ *
  * @example var appBase = mmir.const.getBasePath();
  */
 function(
 		env, module
 ){
-	
-	var _modConf = module.config();
+	var _modConf = module.config(module);
 	if(_modConf.basePath){
 		env.basePath = _modConf.basePath;
 	}
-	
+
 	/**
-	 * Object containing the instance of the class constants 
-	 * 
+	 * Object containing the instance of the class constants
+	 *
 	 * @type mmir.Constants
 	 * @private
 	 * @memberOf Constants#
 	 */
 	var instance = null;
-	
+
 	/**
 	 * @memberOf Constants#
 	 */
@@ -75,23 +74,23 @@ function(
 	 * @memberOf Constants#
 	 */
     var basePath = "";
-	
+
     ///////////////////////////////////////////////////// Paths /////////////////////////////////////////////////////
-    
+
     /**
 	 * the base path of the (i.e. this) library
 	 * @private
 	 * @memberOf Constants#
 	 */
 	var frameworkBasePath = "mmirf/";
-	
+
 	/**
 	 * the path for WebWorkers
 	 * @private
 	 * @memberOf Constants#
 	 */
 	var workerPath = frameworkBasePath + "workers/";
-	
+
 	/**
 	 * the path for Extensions (i.e. extending JavaScript base classes)
 	 * @private
@@ -171,9 +170,9 @@ function(
 	 * @memberOf Constants#
 	 */
 	var grammarPluginPath = frameworkBasePath + "env/grammar/";
-	
+
 	///////////////////////////////////////////////////// Resource Names /////////////////////////////////////////////////////
-    
+
 	/**
 	 * the name of speech (output) configuration files
 	 * @private
@@ -204,19 +203,19 @@ function(
 	 * @memberOf Constants#
 	 */
 	var directoriesFileUrl = "config/directories.json";
-	
-	
+
+
 	////////////////////////////////////////////////// General Constant Values///////////////////////////////////////////////////
-    
+
 	/**
 	 * the default language setting
 	 * @private
 	 * @memberOf Constants#
 	 */
 	var language = "en";
-	
+
 	// Prefixes
-	
+
 	/**
 	 * the prefix for partial-view file-names
 	 * @private
@@ -229,19 +228,19 @@ function(
 	 * @memberOf Constants#
 	 */
 	var helperSuffix = "Helper";
-	
+
 	/**
 	 * Object that holds information about the execution
 	 * environment / platform.
-	 * 
+	 *
 	 * (set on initialization)
-	 * 
+	 *
 	 * @private
 	 * @type env
 	 * @memberOf Constants#
 	 */
 	var envInfo = void(0);
-	
+
 	/**
 	 * @private
 	 * @memberOf Constants#
@@ -249,27 +248,27 @@ function(
 	function setBasePath(isBrowserEnvParam){
 		// if not on browser: basepath must be different
 		if(typeof isBrowserEnvParam === 'string'){
-			
+
 			basePath = isBrowserEnvParam;
 		}
 		else if (isBrowserEnvParam && isBrowserEnvParam.basePath){
-			
+
 			basePath = isBrowserEnvParam.basePath;
-			
+
 		} else if (isBrowserEnvParam && isBrowserEnvParam.isCordovaEnv){
 
 			//if cordova env, try to use the specific platform
 			var env = isBrowserEnvParam.envSetting;
 			if(env === 'cordova'){
-				
+
 				env = isBrowserEnvParam.platform;
-				
+
 				if(env === 'default'){
 					console.warn('Unknown cordova platform "'+env+'", using default base path /');
 				}
-				
+
 			}
-			
+
 			switch(env){
 				case 'android':
 					basePath = "file:///android_asset/www/";
@@ -280,14 +279,14 @@ function(
 				default:
 					basePath = "";
 			}
-			
+
 		}
 		else if (isBrowserEnvParam && isBrowserEnvParam.isBrowserEnv){
-			
+
 			basePath = "";
 		}
 		else if (isBrowserEnvParam && isBrowserEnvParam.isNodeEnv){
-			
+
 			//TODO should this be the absolute path for node-env?
 			basePath = "file:";
 		}
@@ -300,12 +299,12 @@ function(
 			//default:
 			basePath = "";
 		}
-		
+
 	}
-	
+
 	/**
 	 * Constructor-Method of Class {@link Constants}<br>
-	 * 
+	 *
 	 * @constructs Constants#
 	 * @memberOf mmir.Constants.prototype
 	 * @private
@@ -314,7 +313,7 @@ function(
     	envInfo = env;
 		isBrowserEnv = envInfo.isBrowserEnv;
 		setBasePath(env);
-		
+
 		/** @lends mmir.Constants.prototype */
 		return {
 			/**
@@ -322,7 +321,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} base path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getBasePath: function(){
@@ -333,7 +332,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} layout path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getLayoutPath: function(){
@@ -350,7 +349,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} model path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getModelPath: function(){
@@ -361,7 +360,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} view path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getViewPath: function(){
@@ -378,7 +377,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} language path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getLanguagePath: function(){
@@ -389,7 +388,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} controller path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getControllerPath: function(){
@@ -400,7 +399,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} worker path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getWorkerPath: function(){
@@ -411,7 +410,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} helper path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getHelperPath: function(){
@@ -422,7 +421,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} extensions path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getExtensionsPath: function(){
@@ -433,7 +432,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} MediaPlugin path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getMediaPluginPath: function(){
@@ -442,11 +441,11 @@ function(
 			/**
 			 * Returns a string with the path to the Grammar-Plugins
 			 * (ie. engines for grammar generation).
-			 * 
+			 *
 			 * @function
 			 * @public
 			 * @returns {String} Grammar Plugin path
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getGrammarPluginPath: function(){
@@ -457,7 +456,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path for generated grammars (JavaScript files)
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getGeneratedGrammarsPath: function(){
@@ -468,7 +467,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path to configuration file
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getConfigurationFileUrl: function(){
@@ -479,7 +478,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path to directories file
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getDirectoriesFileUrl: function(){
@@ -490,18 +489,20 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} path to beep wav file
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getBeepUrl: function(){
-				return basePath+beepURL;
+				return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+								require('../vendor/sounds/beep-notification.mp3') :
+								basePath + beepURL;
 			},
 			/**
-			 * Returns the name of the dictionary filename as string 
+			 * Returns the name of the dictionary filename as string
 			 * @function
 			 * @public
 			 * @returns {String} dictionary filename
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getDictionaryFileName: function(){
@@ -509,33 +510,33 @@ function(
 			},
 			/**
 			 * Returns the name of the filename for
-			 * the speech configuration as string 
+			 * the speech configuration as string
 			 * @function
 			 * @public
 			 * @returns {String} dictionary filename
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getSpeechConfigFileName: function(){
 				return speechConfigFileName;
 			},
 			/**
-			 * Returns the name of the grammar filename as string 
+			 * Returns the name of the grammar filename as string
 			 * @function
 			 * @public
 			 * @returns {String} grammar filename
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getGrammarFileName: function(){
 				return grammarFileName;
 			},
 			/**
-			 * Returns the prefix for partial filenames as string 
+			 * Returns the prefix for partial filenames as string
 			 * @function
 			 * @public
 			 * @returns {String} prefix for partial filenames
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getPartialsPrefix: function(){
@@ -546,7 +547,7 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} suffix for helper filenames
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getHelperSuffix: function(){
@@ -557,21 +558,21 @@ function(
 			 * @function
 			 * @public
 			 * @returns {String} default language
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getLanguage: function(){
 				return language;
 			},
-			
+
 			/**
 	         * Initialize the Constants singleton.
-	         * 
+	         *
 	         * @function
 	         * @param {Boolean} forBrowserParameter <tt>true</tt> for browser-environment, if <tt>false</tt> ANDROID environment
 	         * @returns {Object} Object containing the instance of the class {@link mmir.Constants}
 	         * @public
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 	         */
 			init: function(theForBrowserParameter){
@@ -580,59 +581,59 @@ function(
     			}
 				return this;
 			},
-			
+
 			/**
 	         * @function
 	         * @returns {Boolean}
 	         * @public
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 	         */
 			isBrowserEnv: function(){//FIXME replace with real environment-setting/-mechanism
 				return isBrowserEnv;
 			},
-			
+
 			/**
 	         * @function
 	         * @returns {Boolean}
 	         * @public
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 	         */
 			isCordovaEnv: function(){
 				return env.isCordovaEnv;
 			},
-			
+
 
 			/**
 	         * @function
 	         * @returns {String}
 	         * @values "browser" | "cordova" | (or: VALUE set in document's query-parameter "?env=VALUE"
 	         * @public
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 	         */
 			getEnv: function(){
 				return envInfo.envSetting? envInfo.envSetting : 'browser';
 			},
-			
+
 			/**
 	         * @function
 	         * @returns {String}
 	         * @values "android" | "ios" | "browser" | "default"
 	         * @public
-			 * 
+			 *
 			 * @memberOf mmir.Constants.prototype
 	         */
 			getEnvPlatform: function(){
 				return envInfo.platform;
 			}
 		};//END: return{}
-		
+
 	}//END: constructor()
-	
+
 	instance = new constructor(env);
-	
+
 	return instance;
 
 });

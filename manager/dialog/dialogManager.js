@@ -25,7 +25,7 @@
  */
 
 define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
-        ,'mmirf/commonUtils','mmirf/engineConfig','mmirf/controllerManager','mmirf/presentationManager','mmirf/logger','module'
+        ,'mmirf/commonUtils','mmirf/engineConfig','mmirf/controllerManager','mmirf/presentationManager','mmirf/logger','module','require'
         ,'mmirf/modelManager'
 	],
 	/**
@@ -60,11 +60,11 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 	 */
 	function(
 			mmir, extend, deferred,
-			commonUtils, engineConfig, controllerManager, presentationManager, Logger, module
+			commonUtils, engineConfig, controllerManager, presentationManager, Logger, module, require
 ) {
 
 	var _create = function(){
-		
+
 		//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 		/** @scope mmir.DialogManager.prototype */
 
@@ -78,17 +78,17 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 		 * @memberOf mmir.DialogManager#
 		 */
 		var onPageRenderedFunc;
-		
+
 		var ctrlManager = controllerManager;
 		var presentManager = presentationManager;
-	
+
 		/**
 		 * @memberOf mmir.DialogManager#
 		 */
 		var _instance = {
-	
+
 			/** @scope mmir.DialogManager.prototype */
-	
+
 			/**
 			 * This function raises an event.
 			 *
@@ -109,7 +109,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 						+'call mmir.dialog.init(callback) and wait for the callback.'
 				);
 			},
-	
+
 			/**
 			 * This function performs an action of a controller by calling
 			 * the method {@link mmir.ControllerManager#perform} of the
@@ -129,19 +129,19 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			 * @public
 			 */
 			perform : function(ctrlName, actionName, data) {
-	
+
 				//@russa what is this for?
 	//			var _data = {};
 	//			_data.timestamp = new Date().getTime();
 	//			_data.ctrl = ctrlName;
 	//			_data.name = actionName;
 	//			_data.args = data;
-	
+
 				// if(logger.isDebug()) logger.debug("going to perform ('" + ctrlName + "','" + actionName + "')");//debug
-	
+
 				return ctrlManager.perform(ctrlName, actionName, data);
 			},
-	
+
 			/**
 			 * This function performs an action of a helper-class for a
 			 * controller by calling the method
@@ -162,21 +162,21 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			 * @public
 			 */
 			performHelper : function(ctrlName, helper_method_name, data) {
-	
+
 				if (arguments.length > 3) {
-	
+
 					return ctrlManager.performHelper(
 							ctrlName, helper_method_name, data, arguments[3]
 					);
 				}
 				else {
-	
+
 					return ctrlManager.performHelper(
 							ctrlName, helper_method_name, data
 					);
 				}
 			},
-	
+
 			/**
 			 * This function displays a dialog of a controller by calling
 			 * the method {@link mmir.PresentationManager#showDialog} of the
@@ -196,7 +196,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			showDialog : function(ctrlName, dialogId, data) {
 				presentManager.showDialog.apply(presentManager, arguments);
 			},
-	
+
 			/**
 			 * This function closes a dialog of a controller by calling the
 			 * method {@link mmir.PresentationManager#hideCurrentDialog} of
@@ -226,7 +226,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			showWaitDialog : function(text, theme) {
 				presentManager.showWaitDialog.apply(presentManager, arguments);
 			},
-	
+
 			/**
 			 * Hides / closes the "wait" dialog.
 			 *
@@ -245,7 +245,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			hideWaitDialog : function() {
 				presentManager.hideWaitDialog.apply(presentManager, arguments);
 			},
-	
+
 			/**
 			 * This function displays a view of a controller by calling the
 			 * method {@link mmir.PresentationManager#renderView} of the
@@ -274,9 +274,9 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			 * @public
 			 */
 			render : function(ctrlName, viewName, data) {
-	
+
 				var defer = presentManager.render(ctrlName, viewName, data);
-	
+
 				if (typeof onPageRenderedFunc === 'function') {
 					var ctrl = ctrlManager.get(ctrlName);
 					if(defer){
@@ -287,7 +287,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 						onPageRenderedFunc.call(ctrl, ctrlName, viewName, data);
 					}
 				}
-	
+
 				return defer;
 			},
 			/**
@@ -338,46 +338,47 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 			_setPresentationManager: function(presentManager){
 				presentManager = presentManager;
 			}
-	
+
 		};//END: _instance = {...
-		
+
 		var inst = extend(_instance, {
 
 			init : function(isRegisterEngine) {
-				
+
 				isRegisterEngine = isRegisterEngine !== false;
-	
+
 	//			delete this.init;
-	
+
 				//"read" settings from requirejs' config (see mainConfig.js):
-				var url = module.config().scxmlDoc;
-				var mode = module.config().mode;
-	
+				var modConf = module.config(module);
+				var url = modConf.scxmlDoc;
+				var mode = modConf.mode;
+
 				//create a SCION engine:
 				var engine = engineConfig(url, mode);
-	
+
 				this._log = Logger.create(module);
-				engine._logger = Logger.create(module.id+'Engine', module.config().logLevel);
-	
+				engine._logger = Logger.create(module.id+'Engine', modConf.logLevel);
+
 	//			var _self = this;
-	
+
 				var theDeferredObj = deferred();
-	
+
 				engine.load().then(function(engine) {
-	
+
 					inst.raise = function raise(){
 						engine.raise.apply(engine, arguments);
 					};
-	
+
 //					delete engine.gen;
-	
+
 					if(isRegisterEngine){
 						//register the DialogeEngine with requirejs as module 'mmirf/dialogEngine':
-						mmir._define('mmirf/dialogEngine', function(){
+						define('mmirf/dialogEngine', function(){
 							return engine;
 						});
 						//immediately load the module-definition:
-						mmir.require(['mmirf/dialogEngine'], function(){
+						require(['mmirf/dialogEngine'], function(){
 							//signal end of initialization process:
 							theDeferredObj.resolve({manager: inst, engine: engine});
 						});
@@ -386,17 +387,17 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 						theDeferredObj.resolve({manager: inst, engine: engine});
 					}
 				});
-	
+
 				return theDeferredObj;
-	
+
 			},//END: init()
 			_create: _create
-	
+
 		});//END $.extend(...
-		
+
 		return inst;
 	};
-	
+
 	return _create();
 
 });//END: define(...

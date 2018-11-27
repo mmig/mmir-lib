@@ -1,33 +1,35 @@
 (
 /**
  * Main module / namespace for the MMIR framework.
- * 
+ *
  * On initialization, a global module <code>window.mmir</code> is created.
- * 
+ *
  * If called multiple times, the existing module instance is returned.
- * 
+ *
  * If a function <code>require</code> exists, the module tries to registers itself
  * according to the <em>RequireJS</em> interface (using the default as its module name, i.e. "mmirf/core").
- * 
+ *
  * @name mmir
  * @export initMmir as mmir
  * @class
  * @namespace
- * 
+ *
  * @returns the module instance <code>mmir</code>
- * 
+ *
  */
 function initMmir(window) {
-	
+
+	var moduleConfigHelper = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? require('build-tool/module-config-helper') : null;
+
 	/**
 	 * the name of the global variable which will hold the core-module
 	 * @memberOf mmir.internal
 	 * @private
-	 */	
+	 */
 	var CORE_NAME = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
-    
+
 	if(window[CORE_NAME]){
-		
+
 		//if window[CORE_NAME] is the core-module: register it and return
 		//(note: if it is not the core-module, its properties will be merged/copied to the core-module -> see below)
 		if(typeof window[CORE_NAME].startModule === 'string' && typeof define === 'function'){
@@ -35,21 +37,21 @@ function initMmir(window) {
 			return window[CORE_NAME];
 		}
 	}
-	
+
 	/**
 	 * the version of mmir-lib
-	 * 
+	 *
 	 * @memberOf mmir.internal
 	 * @private
-	 */	
+	 */
 	var CORE_VERSION = "4.2.0";
-	
-    
+
+
 	/**
 	 * STATE: state variable for indicating "doc is already loaded" (this needs to be set/reset manually)
 	 * @memberOf mmir.internal
 	 * @private
-	 */	
+	 */
 	var _isReady = false;
 	/**
 	 * @memberOf mmir.internal
@@ -80,11 +82,11 @@ function initMmir(window) {
 		//run function in context of the document (with library reference as argument)
 		func.call(mmir);
 	};
-	
+
 
 	/**
 	 * HELPER apply requirejs configuration
-	 * 
+	 *
 	 * @param {PlainObject} [configuration]
 	 *			the requirejs configuration value
 	 * @param {requirejs} [reqInstance] OPTIONAL
@@ -99,7 +101,7 @@ function initMmir(window) {
 		}
 		return req.config(configuration);
 	};
-	
+
 	/**
 	 * STATE: state variable for indicating "configs for requirejs are already applied"
 	 * @memberOf mmir.internal
@@ -114,30 +116,30 @@ function initMmir(window) {
 	/**
 	 * Applies all <code>config</code>s (that were added by
 	 * {@link mmir.config}) to the requirejs instance.
-	 * 
+	 *
 	 * @param {PlainObject} mainConfig
 	 * 			the main configuration for the framework
 	 * 			(this is used as reference for merging config options if necessary - see also mainConfig.js)
-	 * 
+	 *
 	 * @memberOf mmir.internal
 	 * @private
-	 * 
+	 *
 	 * @see #mergeModuleConfigs
 	 */
 	function applyConfigs(mainConfig, reqInstance){
-		
-		if(typeof require === 'undefined'){
+
+		if(typeof require === 'undefined' && !moduleConfigHelper){
 			return;
 		}
-		
-		
+
+
 		_isApplied = true;
 		var conf;
 		var confConfig, p;
 		while(_configList.length > 0){
-			
+
 			conf = mergeModuleConfigs(_configList.shift(), mainConfig);
-			
+
 			//copy/remember all conf.config values that were not merged
 			if(conf.config){
 				for(p in conf.config){
@@ -151,56 +153,67 @@ function initMmir(window) {
 					}
 				}
 			}
-			
-			mmir.require = _reqConfig( conf, reqInstance );
+
+			if(!moduleConfigHelper){
+				mmir.require = _reqConfig( conf, reqInstance );
+			}
 		}
-		
+
 		//if there were non-merged conf.config-values:
 		//   we cannot just apply these, since they would overwrite the mainConfig.config
 		//   -> so we copy all (possibly) merged values from the mainConfig.config over
 		//      and then apply all the conf.config-values at once here
 		if(confConfig){
-			
+
 			for(p in mainConfig.config){
 				if(mainConfig.config.hasOwnProperty(p) && typeof mainConfig.config[p] !== 'undefined'){
 					confConfig[p] = mainConfig.config[p];
 				}
 			}
-			
+
+			if(moduleConfigHelper){
+				moduleConfigHelper.setConfig({config: confConfig});
+				return;
+			}
+
 			//now apply all conf.config-values (including mainConfig.config-values):
 			mmir.require = _reqConfig( {config: confConfig}, reqInstance );
 		}
-		
+
+		if(moduleConfigHelper){
+			moduleConfigHelper.setConfig(mainConfig||{});
+		}
+
 	}
-	
+
 	/**
 	 * Helper for merging additional module-configurations with the (requirejs) main-config
 	 * of the framework.
-	 * 
+	 *
 	 * <p>
-	 * This allows to add module configurations outside the main-configuration (otherwise: 
+	 * This allows to add module configurations outside the main-configuration (otherwise:
 	 * requirejs by default overwrites additional module-config settings).
-	 * 
+	 *
 	 * <p>
 	 * Merge behavior: if values in <code>mainConfig.config</code> exists, the primitive values
 	 * 				   are overwritten with values from <code>conf.config</code> and object-values
-	 * 				   are merged (recursively). Arrays are treated as primitive values (i.e. 
+	 * 				   are merged (recursively). Arrays are treated as primitive values (i.e.
 	 * 				   overwritten, not merged/extended).
-	 * 
+	 *
 	 * <p>
 	 * Note: removes <code>conf.config</code> if present and merges the values
 	 *       into <code>mainConfig.config</code>.
-	 * 
+	 *
 	 * @param {PlainObject} conf
 	 * 			the additional configuration options
 	 * @param {PlainObject} mainConfig
 	 * 			the main configuration for the framework
 	 * 			(this is used as reference for merging config options if necessary - see mainConfig.js)
-	 * 
+	 *
 	 * @return {PlainObject} the <code>conf</code> setting.
 	 * 			If necessary (i.e. if <code>conf.config</code> was present), the module-configuration
 	 * 			was merged with the main-configuration
-	 * 
+	 *
 	 * @memberOf mmir.internal
 	 * @private
 	 */
@@ -209,13 +222,13 @@ function initMmir(window) {
 			return conf;
 		}
 		//ASSERT mainConfig.config and conf.config exist
-		
+
 		var count = 0, merged = 0;
 		for(var cname in conf.config){
 			if(conf.config.hasOwnProperty(cname)){
-				
+
 				++count;
-				
+
 			    //merge property cname into mainConfig
 				if(doMergeInto(conf.config, mainConfig.config, cname)){
 					//remove merge property from conf.config
@@ -224,7 +237,7 @@ function initMmir(window) {
 				}
 			}
 		}
-		
+
 		//lastly: remove the conf.config property itself, if
 		//        all of its properties were merged
 		if(count === merged){
@@ -233,12 +246,12 @@ function initMmir(window) {
 
 		return conf;
 	}
-	
+
 	/**
 	 * Helper for recursively merging config values from <code>conf1</code> into
 	 * <code>conf2</code> (and removing merged values from <code>conf1</code>) IF
 	 * an object-property <code>name</code> already exists in <code>conf2</code>.
-	 * 
+	 *
 	 * @param {PlainObject} conf1
 	 * 			the configuration object from which to take values (and removing them after merging)
 	 * @param {PlainObject} conf2
@@ -248,18 +261,18 @@ function initMmir(window) {
 	 * @param {Boolean} [isNotRoot] OPTIONAL
 	 * 			when cursively called, this should be TRUE, otherwise FALSE
 	 * 			(i.e. this should only be used in the function's internal invocation)
-	 * 
+	 *
 	 * @return {Boolean} <code>true</code> if property <code>name</code> was merged into conf2.
-	 * 
+	 *
 	 * @memberOf mmir.internal
 	 * @private
 	 */
 	function doMergeInto(conf1, conf2, name, isNotRoot){
-		
+
 		var v = conf1[name];
-		
+
 		if(typeof conf2[name] === 'undefined' || typeof v !== typeof conf2[name] || typeof v !== 'object'){
-			
+
 			//if not set in conf2 OR types differ OR value is primitive:
 			if( ! isNotRoot){
 				//... if it is at the root-level of the config-value:
@@ -267,7 +280,7 @@ function initMmir(window) {
 				//  -> signal that it was not merged, and should not be removed
 				return false; ////////////////////////// EARLY EXIT ////////////
 			} else {
-				//... if not at root-level, we must move the property over to conf2, 
+				//... if not at root-level, we must move the property over to conf2,
 				//    otherwise requirejs.config() would overwrite the entire property in conf2 with the one from conf1
 				//    -> move property (copy to conf2, remove from conf1)
 				//    -> signal that we merge the property
@@ -276,9 +289,9 @@ function initMmir(window) {
 				return true; ////////////////////////// EARLY EXIT ////////////
 			}
 		}
-		
+
 		//ASSERT v has type object AND conf2 has an object value too
-		
+
 		//-> recursively merge
 		for(var cname in conf1[name]){
 			if(conf1[name].hasOwnProperty(cname)){
@@ -289,17 +302,17 @@ function initMmir(window) {
 
         return true;
 	}
-	
+
 	/**
      * Check if the version number corresponds to the most significant (right-most)
      * part of the mmir-lib's version number, i.e. check
-     * 
+     *
      * "is <code>version</code> <code>comp</code> than the mmir-lib version?"
-     * 
+     *
      * <br>
      * NOTE: changing the {@link mmir.version} field will have no effect on this function
      *       (i.e. it will use the original value of <code>version</code>)
-     * 
+     *
      * @param {Number} version
      * 			the version number to check against
      * @param {String} [comp] OPTIONAL
@@ -307,22 +320,22 @@ function initMmir(window) {
      * 			<br>Will be used as follows: <code>{mmir-lib version} {comp} {version}</code>
      * 			<br>DEFAULT: "==="
      * 			<br>NOTE: "=" will be interpreted as "=="
-     * 
+     *
      * @returns {Boolean|Void} returns the result of the comparison to most the significant part
      *                         of the mmir-lib version number,
      *                         or <code>VOID</code> if the mmir-lib version number is not available.
-     * 
+     *
 	 * @memberOf mmir.internal
 	 * @private
      */
     var _isVersion = function(version, comp){
-    	
+
     	var ver = CORE_VERSION;
     	if(ver){
     		var sigNum = /^.*?(\d+)\./.exec(ver);
     		sigNum = parseInt(sigNum[1], 10);
     		if(isFinite(sigNum)){
-    			
+
     			switch(comp){
     			case '>=':
     				return sigNum >= version;
@@ -347,16 +360,16 @@ function initMmir(window) {
     	}
     	return void(0);
     };
-	
+
 	//DISABLED: un-used for now
 //	/**
 //	 * Helper for detecting array type.
-//	 * 
+//	 *
 //	 * @param {any} obj
 //	 * 			the object which should be checked
-//	 * 
+//	 *
 //	 * @return {Boolean} <code>true</code> if <code>obj</code> is an Array
-//	 * 
+//	 *
 //	 * @memberOf mmir.internal
 //	 * @private
 //	 */
@@ -371,13 +384,13 @@ function initMmir(window) {
 //			};
 //		}
 //	})();
-	
+
 	var mmir = {
-			
+
 			/**
 			 * Set the framework to "initialized" status (i.e. will
 			 * trigger the "ready" event/callbacks)
-			 * 
+			 *
 			 * <p>
 			 * WARNING: use this only, if you know what
 			 *          you are doing -- normally this
@@ -385,48 +398,48 @@ function initMmir(window) {
 			 *          during initialization by the
 			 *          framework to signal that all
 			 *          settings, classes, set-up etc
-			 *          for the framework are now 
+			 *          for the framework are now
 			 *          initialized.
 			 * <p>
-			 * 
-			 * NOTE: this is a semi-private function that 
+			 *
+			 * NOTE: this is a semi-private function that
 			 *          should only be used by the initialization
 			 *          process.
-			 * 
+			 *
 			 * @memberOf mmir
 			 * @name setInitialized
 			 * @function
 			 * @private
 			 */
 			setInitialized : function() {
-				
+
 				_isReady = true;
 
 				//apply configurations to requirejs instance:
 				applyConfigs();
-				
+
 				//execute all callbacks in queue
 				while(!isEmpty()){
 					deqExec();
 				}
 			},
-			
+
 			/**
 			 * Register callbacks for initialization-event of framework.
-			 * 
+			 *
 			 * If used after framework has been initialized, the callback is invoked immediately.
-			 * 
+			 *
 			 * @memberOf mmir
 			 * @name ready
 			 * @function
 			 * @public
-			 * 
+			 *
 			 * @param {Function} func
-			 * 				callback Function that will be triggered when the framework has been initialized 
+			 * 				callback Function that will be triggered when the framework has been initialized
 			 */
 			ready: function(func) {
-		
-				//SPECIAL MODE: if already active, execute the callback 
+
+				//SPECIAL MODE: if already active, execute the callback
 				//				(if queue is not empty yet: queue function call in order to preserve the execution ordering)
 				if(_isReady && isEmpty()){
 					deqExec(func);
@@ -435,48 +448,48 @@ function initMmir(window) {
 					_funcList.push(func);
 				}
 			},
-			
+
 			/**
 			 * Set options / settings for overwriting the default
 			 * configuration for RequireJS:
-			 * 
+			 *
 			 * <br>
 			 * Options / configurations that are added by this
 			 * method will overwrite settings specified in
 			 * <code>mainConfig.js</code>.
-			 * 
+			 *
 			 * <p>
 			 * NOTE: the options added here will be applied in the order
 			 *       they were added, i.e. if a later option specifies
 			 *       settings that were already set by a previous call,
 			 *       then these later options will overwrite the earlier
 			 *       ones.
-			 * 
+			 *
 			 * @memberOf mmir
 			 * @name config
 			 * @function
 			 * @param {PlainObject} options
 			 * 			options for RequireJS
 			 * @public
-			 * 
+			 *
 			 * @example
-			 * 
+			 *
 			 * //IMPORTANT these calls need to done, AFTER core.js is loaded, but BEFORE require.js+mainConfig.js is loaded
 			 * //(see example index.html in starter-kit)
-			 * 
+			 *
 			 * //set specific log-level for module "moduleName":
 			 * mmir.config({config: { 'moduleName': {logLevel: 'warn'}}});
-			 * 
+			 *
 			 * //modify default log-levels for dialogManager and inputManager:
 			 * mmir.config({config: { 'mmirf/dialogManager': {logLevel: 'warn'}, 'mmirf/inputManager': {logLevel: 'warn'}}});
-			 * 
+			 *
 			 * //... or using alternative SCXML definition for dialog-engine:
 			 * mmir.config({config: { 'mmirf/dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
-			 * 
+			 *
 			 * //overwrite module location (BEWARE: you should know what you are doing, if you use this)
 			 * mmir.config({paths: {'jquery': 'content/libs/zepto'}};
-			 * 
-			 * 
+			 *
+			 *
 			 * //add ID and location for own module (NOTE: need to omit file-extension ".js" in location! see requirejs docs):
 			 * mmir.config({paths: {'customAppRouter': 'content/libs/router'}};
 			 */
@@ -488,33 +501,33 @@ function initMmir(window) {
 					_configList.push(options);
 				}
 			},
-			
+
 			/**
 			 * Applies settings that were added via
 			 * {@link #config}.
-			 * 
+			 *
 			 * <p>
 			 * WARNING: use this only, if you know what
 			 *          you are doing -- normally this
 			 *          functions is only called once
 			 *          during initialization by the
 			 *          framework, after the default
-			 *          configuration settings for 
+			 *          configuration settings for
 			 *          RequireJS in <code>mainConfig.js</code>
 			 *          were applied.
 			 * <p>
-			 * 
-			 * NOTE: this is a semi-private function that 
+			 *
+			 * NOTE: this is a semi-private function that
 			 *          should only be used by the initialization
 			 *          process.
-			 * 
+			 *
 			 * @memberOf mmir
 			 * @name applyConfigs
 			 * @function
 			 * @protected
 			 */
 			applyConfig: applyConfigs,
-			
+
 			/**
 			 * @copydoc mmir.internal._isVersion
 			 * @memberOf mmir
@@ -523,15 +536,15 @@ function initMmir(window) {
 			 * @public
 			 */
 			isVersion: _isVersion,
-			
+
 			/**
 			 * The name of the (this) the core module:
 			 * this is also the global variable by which the core module (this) can be accessed.
-			 * 
-			 * 
+			 *
+			 *
 			 * NOTE: changing this name here will have no affect on the name of the global variable
-			 * 
-			 * 
+			 *
+			 *
 			 * @memberOf mmir
 			 * @name mmirName
 			 * @type String
@@ -540,10 +553,10 @@ function initMmir(window) {
 			 * @public
 			 */
 			mmirName: CORE_NAME,
-			
+
 			/**
 			 * The version of mmir-lib.
-			 * 
+			 *
 			 * @memberOf mmir
 			 * @name version
 			 * @type String
@@ -551,22 +564,22 @@ function initMmir(window) {
 			 * @public
 			 */
 			version: CORE_VERSION,
-			
+
 			/**
 			 * The name / ID of the RequireJS module that will
 			 * be loaded, after the configuration in
 			 * <code>mainConfig.js</code> was applied.
-			 * 
+			 *
 			 * <p>
 			 * This module should first start-up the framework and
 			 * then signal the application (via {@link mmir.setInitialized})
 			 * that it is ready to be used, i.e. fully initialized now.
-			 * 
+			 *
 			 * <p>
-			 * NOTE: If set to <code>undefined</code>, no module will be 
+			 * NOTE: If set to <code>undefined</code>, no module will be
 			 * loaded after configuration in <code>mainConfig.js</code>
 			 * was applied.
-			 * 
+			 *
 			 * @memberOf mmir
 			 * @name startModule
 			 * @type String
@@ -574,19 +587,19 @@ function initMmir(window) {
 			 * @public
 			 */
 			startModule: 'mmirf/main',
-			
+
 			/**
 			 * The jQuery instance that will be used by the MMIR library.
-			 * 
+			 *
 			 * Will be automatically set, if jQuery is loaded before the MMIR library initializes
 			 * (or can be manually set, before the MMIR library initializes).
-			 * 
+			 *
 			 * If jQuery is present, the MMIR library will utilize its implementation for some
 			 * utility functions (otherwise alternative, internal utiltiy implemenations will be used).
-			 * 
+			 *
 			 * NOTE: changing this field after the MMIR library has initialized will have no effect.
-			 * 
-			 * 
+			 *
+			 *
 			 * @memberOf mmir
 			 * @name jquery
 			 * @type jQuery
@@ -599,7 +612,7 @@ function initMmir(window) {
 			 * Name / ID / load-path (requirejs) for the module
 			 * that handles the views (i.e. "rendering" that is
 			 * change from one view to the next).
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name viewEngine
 			 * @type String
@@ -607,35 +620,35 @@ function initMmir(window) {
 			 * @public
 			 */
 			viewEngine: 'mmirf/simpleViewEngine',
-			
-			
+
+
 			/**
 			 * Property for enabling / disabling logging:
 			 * if set to <code>true</code> (or omitted), the default Logger implementation <code>tools/logger.js</code>
 			 * will be loaded as "logger" module.
-			 * 
+			 *
 			 * If set to <code>false</code> the "dummy" Logger implementation <code>tools/loggerDisabled.js</code> will
 			 * be loaded as "logger" module which essentially will create no logging output.
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name debug
 			 * @type Boolean
 			 * @default true
 			 * @public
-			 * 
+			 *
 			 * @see mmir.logLevel
 			 */
 			debug: true,
-			
+
 			/**
 			 * Property for the log-level of the Logger module:
 			 * if set, and property <code>debug</code> is <code>true</code>, then the logger module
 			 * will use the log-level as default log-level.
-			 * 
+			 *
 			 * If omitted, the Logger's implementation defaults will be used.
-			 * 
+			 *
 			 * If set, the property must be either a Number or a String with one of the following values:
-			 * 
+			 *
 			 * 0: "verbose"
 			 * 1: "debug"
 			 * 2: "info"
@@ -643,26 +656,26 @@ function initMmir(window) {
 			 * 4: "error"
 			 * 5: "critical"
 			 * 6: "disabled"
-			 * 
+			 *
 			 * NOTE: if you want to disable logging completely, use {@link mmir.debug}.
 			 *       Setting the logLevel to "disabled" will still allow specific module's to create logging output
 			 *       (if their log-level is set appropriately)
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name logLevel
 			 * @type Integer | String
 			 * @default "debug"
 			 * @public
-			 * 
+			 *
 			 * @see mmir.debug
 			 */
 			logLevel: 'debug',
-			
+
 			/**
 			 * Property for enabling / disabling trace output in the Logger module:
-			 * if set to <code>true</code>, and property <code>debug</code> is <code>true</code>, then 
+			 * if set to <code>true</code>, and property <code>debug</code> is <code>true</code>, then
 			 * the logger module will print a stack-trace for each log-message.
-			 * 
+			 *
 			 * If set to a configuration object:
 			 * <pre>
 			 * {
@@ -673,56 +686,56 @@ function initMmir(window) {
 			 * 									//DEFAULT: other
 			 * }
 			 * </pre>
-			 * 
+			 *
 			 * i.e. <code>{trace: true}</code> would be the same as using <code>true</code> (or omitting this property).
-			 * 
-			 * 
+			 *
+			 *
 			 * The default value (also if omitted!) is <code>true</code>.
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name logTrace
 			 * @type Boolean | PlainObject
 			 * @default true
 			 * @public
-			 * 
+			 *
 			 * @see mmir.debug
 			 * @see mmir.logLevel
 			 */
 			logTrace: true,	//{trace: true, depth: 'full'},
-			
+
 			/**
 			 * Attached require-function that is used by the framework to load dependencies.
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name require
 			 * @type Function
 			 * @default requirejs
 			 * @public
-			 * 
+			 *
 			 * @see https://requirejs.org/
 			 */
 			require: null,//is intialized in mainConfig.js
 			/**
 			 * Attached define-function for "declaring" modules that is used by the framework.
-			 * 
+			 *
 			 * See requirejs documentation on details about the <code>define</code> function.
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name _define
 			 * @type Function
 			 * @default define
 			 * @protected
-			 * 
+			 *
 			 * @see https://requirejs.org/
 			 */
 			_define: null,//is intialized in mainConfig.js
-			
+
 			/**
 			 * The (relative) path pointing to the mmir-lib, in case the library is located
 			 * somewhere other than <code>mmirf/</code> (relative to the main HTML page).
-			 * 
+			 *
 			 * Normally, it should not be necessary to change this.
-			 * 			 
+			 *
 			 * @memberOf mmir
 			 * @name _mmirLibPath
 			 * @type String
@@ -731,11 +744,11 @@ function initMmir(window) {
 			 */
 			_mmirLibPath: void(0)
 	};
-	
+
 	if(typeof define === 'function'){
 		define(function(){ return mmir; });
 	}
-	
+
 	//if window[CORE_NAME] already exists:
 	//  copy all its properties to the new core-mmir object
 	if(window[CORE_NAME]){
@@ -745,9 +758,9 @@ function initMmir(window) {
 			}
 		}
 	}
-	
+
 	//export core-module into global namespace:
 	window[CORE_NAME] = mmir;
-	
+
 	return mmir;
 }(typeof window !== 'undefined'? window : global));

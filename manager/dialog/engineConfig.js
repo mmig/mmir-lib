@@ -1,7 +1,6 @@
-
 /**
  * Factory for creating the state-machine's <em>raise()</em> function.
- * 
+ *
  * Creates implementation for the state-engine's
  * <pre>
  * {
@@ -13,23 +12,23 @@
  * 		raise: FUNCTION     // default impl. for raise-function: use execution-queue for allowing raise-invocations from within SCXML scripts
  * }
  * </pre>
- * 
+ *
  * @class mmir.env.statemachine.engine.exec
- * 
+ *
  * @requires cordova.plugins.queuePlugin [Cordova/android]: needed for Android before 4.4 -> Cordova plugin for non-WebWorker-based execution-queue
  * or
  * @requires Worker (WebWorker) on window or global object
  * or
  * @requires setTimeout (fallback/stub implementation)
  */
-define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], function(constants, createScionEngine, extend) {
+define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'], function(constants, createScionEngine, extend, require) {
 
 	/**
 	 * HELPER logging for state-changes
-	 * 
+	 *
 	 * @param {Engine} ctx
 	 * 				the context for the state-machine, i.e. the DialogEngine or InputEngine instance
-	 * 
+	 *
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
 	var printDebugStates = function(ctx){
@@ -54,15 +53,15 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
 	 * 		raise: FUNCTION     // raise-function created by envFactory(_instance)
 	 * }
 	 * </pre>
-	 * 
+	 *
 	 * @param {Engine} _engine
 	 * 				the instance of the SCION state-machine
-	 * 
+	 *
 	 * @param {ExecFactory} envFactory
 	 * 				the factory for creating the Worker/Thread and the raise() function
-	 * 
+	 *
 	 * @returns the implementation with raise-function
-	 * 
+	 *
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
     var _baseFactory = function(_instance, envFactory){ /** @class StateEngineDefaultImpl */ return {
@@ -96,7 +95,8 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
     			//TODO russa: check if we really need a deep copy here (maybe we should make a copy TO scion and replace _instance with the ext. scion obj. ...?)
     			if(scion['_scion']) scion['_scion'].constructor = function dummy(){};//NOTE _scion only does exist on old SCION lib version!
 
-    			extend(_instance, scion);//<- FIXME should this be a deep-copy? e.g. jQuery.exted(true, ...)
+    			extend(_instance, scion);
+    			_instance.__proto__ = scion.constructor.prototype;//FIX: in newer SCION implementations we need the prototype too
 
     			_instance.worker = envFactory.createWorker(_instance, _instance.gen);//_instance._genFuncFactory(_instance, _instance.gen);
 
@@ -111,33 +111,36 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
     			_instance.start();
 
     			deferred.resolve(_instance);
-    			
+
     		},//END: onload
-    		
+
     		raise: envFactory.createRaise(_instance)
     	};
     };
-    
+
     /**
 	 * Factory for WebWorker-based implementation of raise function.
-	 * 
+	 *
 	 * Provide creator-functions:
 	 * <code>createWorker(_engineInstance, genFunc) : WebWorker</code>
 	 * <code>createRaise(_engineInstance) : Function</code>
-	 *  
+	 *
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
     var _browserFactory = {
 		/** @scope  StateEngineWebWorkerImpl */
 
 		/** @memberOf  StateEngineWebWorkerImpl */
-    	name: 'webworkerGen',
+		name: 'webworkerGen',
+		workerConstructor: void(0),
 		createWorker: function(_instance, gen) {
 
-			var ctx = typeof window !== 'undefined'? window : global;
-			var scionQueueWorker = new ctx.Worker(
-					constants.getWorkerPath()+ 'ScionQueueWorker.js'
+			var scionQueueWorker = new this.workerConstructor(
+				typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+						void(0) :
+						constants.getWorkerPath()+ 'ScionQueueWorker.js'
 			);
+
 			scionQueueWorker._engineInstance = _instance;
 			scionQueueWorker._engineGen = gen;
 
@@ -180,17 +183,17 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
 		}
 
     };
-    
+
     /**
 	 * Factory for CordovaPlugin-based implementation of raise function.
-	 * 
+	 *
 	 * Provide creator-functions:
 	 * <code>createWorker(_engineInstance, genFunc) : WebWorker</code>
 	 * <code>createRaise(_engineInstance) : Function</code>
-	 * 
-	 * 
-	 * @requires cordova.plugins.queuePlugin (Cordova plugin for execution-queue) 
-	 *  
+	 *
+	 *
+	 * @requires cordova.plugins.queuePlugin (Cordova plugin for execution-queue)
+	 *
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
     var _queuePluginFactory = {
@@ -250,11 +253,11 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
 						execQueue.newJob(id, {event: event, eventData: eventData}, successCallBackHandler,failureFallbackHandler);
 					}
 				};
-				
+
 			};//END: workerFactory(_instance, gen)
 
 		})(),//END: initWorkerFactory()
-		
+
 		createRaise: function(_instance){
 			return function(event, eventData) {
 
@@ -268,14 +271,14 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
 
     /**
 	 * Factory for stub/dummy implementation of raise function.
-	 * 
+	 *
 	 * Provide creator-functions:
 	 * <code>createWorker(_engineInstance, genFunc) : WebWorker</code>
 	 * <code>createRaise(_engineInstance) : Function</code>
-	 * 
-	 * 
-	 * @requires cordova.plugins.queuePlugin (Cordova plugin for execution-queue) 
-	 * 
+	 *
+	 *
+	 * @requires cordova.plugins.queuePlugin (Cordova plugin for execution-queue)
+	 *
      * @memberOf mmir.env.statemachine.engine.exec#
 	 */
     var _stubFactory = {
@@ -285,7 +288,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
         name: 'stubGen',
 		createWorker: function(_instance, gen) {
 
-			return { 
+			return {
 				_engineGen: gen,
 				_engineInstance: _instance,
 				raiseStubImpl: function fallback(event, eventData){
@@ -308,21 +311,24 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
 
     /**
      * Get factory for raise-impl. depending on the runtime environment.
-     * 
+     *
      * Currently there are 3 impl. available
      *  * WebWorker
      *  * Android QueuePlugin
      *  * STUB IMPLEMENTATION
-     * 
+     *
      * @memberOf mmir.env.statemachine.engine.exec#
      */
     function getScionEnvFactory(){
-    	
+
     	var ctx = typeof window !== 'undefined'? window : null;//DISABLED for now, no support for Workers in nodejs://global;
     	var hasWebWorkers = ctx && typeof ctx.Worker !== 'undefined';
-    	
+
     	//TODO make this configurable? through ConfigurationManager?
     	if(hasWebWorkers){
+				if(!_browserFactory.workerConstructor){
+					_browserFactory.workerConstructor = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? require('../../workers/ScionQueueWorker.js') : ctx.Worker;
+				}
     		return _browserFactory; //_browser;
     	}
     	else {
@@ -334,11 +340,11 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
         	else {
         		//otherwise use fallback:
         		return _stubFactory;//_stub;
-        	}	
+        	}
     	}
-    	
+
     }
-    
+
     /**
      * no-op function for dummy logger
      * @memberOf mmir.env.statemachine.engine.exec#
@@ -366,7 +372,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
      *
      *  engine = require('mmirf/engineConfig')('some-url', 'some-mode');
      *  engine._logger = require('mmirf/logger').create('my-module-id');
-     *  
+     *
      * @memberOf mmir.env.statemachine.engine.exec#
      */
     var nolog = {
@@ -384,24 +390,24 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extendDeep'], functi
     	isDebug: deny,
     	isd: deny
     };
-    
+
     /**
      * Exported factory function for creating / adding impl. to SCION engine instance
-     *  
+     *
      * @memberOf mmir.env.statemachine.engine.exec#
      */
 	return function create(url, _mode) {
-		
+
 		var baseFactory = _baseFactory;
 		var scionEnvConfig = getScionEnvFactory();
 
 		var _instance = {url: url,_logger: nolog};
 //		var scionConfig = scionEnvConfig(_instance);
 		var scionConfig = baseFactory( _instance,  scionEnvConfig);
-		
+
 		scionConfig.doc = url;
 		_instance = createScionEngine(scionConfig, _instance);
-		
+
 		return _instance;
 	};
 

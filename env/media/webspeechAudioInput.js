@@ -3,24 +3,24 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -32,12 +32,12 @@ newMediaPlugin = {
 		/** @memberOf WebspeechAudioInput# */
 		var _pluginName = 'webspeechAudioInput';
 
-		/** 
+		/**
 		 * legacy mode: use pre-v4 API of mmir-lib
 		 * @memberOf WebspeechAudioInput#
 		 */
 		var _isLegacyMode = true;
-		/** 
+		/**
 		 * Reference to the mmir-lib core (only available in non-legacy mode)
 		 * @type mmir
 		 * @memberOf WebspeechAudioInput#
@@ -50,14 +50,14 @@ newMediaPlugin = {
 			_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
 		}
 		/**
-		 * HELPER for require(): 
+		 * HELPER for require():
 		 * 		use module IDs (and require instance) depending on legacy mode
-		 * 
+		 *
 		 * @param {String} id
 		 * 			the require() module ID
-		 * 
+		 *
 		 * @returns {any} the require()'ed module
-		 * 
+		 *
 		 * @memberOf WebspeechAudioInput#
 		 */
 		var _req = function(id){
@@ -66,14 +66,14 @@ newMediaPlugin = {
 		};
 		/**
 		 * HELPER for cofigurationManager.get() backwards compatibility (i.e. legacy mode)
-		 * 
+		 *
 		 * @param {String|Array<String>} path
 		 * 			the path to the configuration value
 		 * @param {any} [defaultValue]
 		 * 			the default value, if there is no configuration value for <code>path</code>
-		 * 
+		 *
 		 * @returns {any} the configuration value
-		 * 
+		 *
 		 * @memberOf WebspeechAudioInput#
 		 */
 		var _conf = function(path, defaultValue){
@@ -122,20 +122,20 @@ newMediaPlugin = {
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack( {
 				__triggerError: function(options, successCallback, failureCallback){
-					
+
 					if(typeof options === 'function'){
 						failureCallback = successCallback;
 						successCallback = options;
 						options = void(0);
 					}
-					
+
 					if(options){
 						successCallback = successCallback? successCallback : options.success;
 						failureCallback = failureCallback? failureCallback : options.error;
 					}
-					
+
 					alert(msg);
-					
+
 					if(failureCallback)
 						failureCallback(msg);
 				}
@@ -176,7 +176,7 @@ newMediaPlugin = {
 		}
 
 		/**
-		 * @constant 
+		 * @constant
 		 * @memberOf WebspeechAudioInput# */
 		var EVENT_RESULT_FIELD = "transcript";
 		/**
@@ -196,7 +196,7 @@ newMediaPlugin = {
 
 		/**
 		 * Result types (returned by the native/Cordova plugin)
-		 * 
+		 *
 		 * @type Enum
 		 * @constant
 		 * @memberOf WebspeechAudioInput#
@@ -249,7 +249,7 @@ newMediaPlugin = {
 			logger.setLevel(loglevel);
 		}
 
-		/** 
+		/**
 		 * field for storing the previous (main) recontion result
 		 * (this is used for calculating "unstable" parts, see {@link #helper_extract_results})
 		 * @type String
@@ -257,16 +257,16 @@ newMediaPlugin = {
 		 */
 		var _prevResult;
 		/**
-		 * create callback-arguments for ASR-result callback: 
-		 * 
-		 * @returns Array with 
-		 * 		[	String result, 
-		 * 			Number score, 
-		 * 			String type ["INTERIM" | "FINAL" ], 
+		 * create callback-arguments for ASR-result callback:
+		 *
+		 * @returns Array with
+		 * 		[	String result,
+		 * 			Number score,
+		 * 			String type ["INTERIM" | "FINAL" ],
 		 * 			Array<Results> alternatives,		//OPTIONAL
 		 * 			String unstable						//OPTIONAL
 		 * 		]
-		 * 
+		 *
 		 * @memberOf WebspeechAudioInput#
 		 */
 		var helper_extract_results = function(eventResultsObject){
@@ -315,7 +315,7 @@ newMediaPlugin = {
 			//NOTE "unstable" part of ASR result is not "natively" supported by webkitSpeechInput...
 			//HACK: detect unstable for non-final results:
 			//      * set to unstable if confidence is lower than UNSTABLE_LIMIT
-			//      * otherwise (ie. result is basically STABLE), try 
+			//      * otherwise (ie. result is basically STABLE), try
 			//        to detect an UNSTABLE part using the previous result
 			//        (if previous result contained more than the current stable one...)
 			if( ! eventResultsObject.isFinal){
@@ -360,7 +360,7 @@ newMediaPlugin = {
 
 			}
 			else {
-				//if FINAL, reset field for previous-result 
+				//if FINAL, reset field for previous-result
 				_prevResult = void(0);
 			}
 
@@ -369,19 +369,19 @@ newMediaPlugin = {
 		};
 
 		/**
-		 * Counter for error-in-a-row: 
+		 * Counter for error-in-a-row:
 		 * each time an error is encountered, this counter is increased.
 		 * On starting/canceling, or on an internal success/result callback,
 		 * the counter is reset.
-		 * 
+		 *
 		 * Thus, this counter keeps track how many times in a row
 		 * the (internal) error-callback was triggered.
-		 * 
+		 *
 		 * NOTE: this is currently used, to try restarting <code>max_error_retry</code>
-		 * 		 times the ASR, even on "critical" errors (during repeat-mode). 
-		 * 
+		 * 		 times the ASR, even on "critical" errors (during repeat-mode).
+		 *
 		 * @see #max_error_retry
-		 * 
+		 *
 		 * @memberOf AndroidAudioInput#
 		 */
 		var error_counter = 0;
@@ -389,9 +389,9 @@ newMediaPlugin = {
 		/**
 		 * Maximal number of errors-in-a-row for trying to restart
 		 * recognition in repeat-mode.
-		 * 
+		 *
 		 * @see #error_counter
-		 * 
+		 *
 		 * @memberOf WebspeechAudioInput#
 		 * @default 5
 		 */
@@ -399,16 +399,16 @@ newMediaPlugin = {
 
 		/**
 		 * default helper for error-events:
-		 * 
+		 *
 		 * determines, if RESTART is allowed/possible (in case of RECORDing mode),
 		 * AND otherwise triggers the current failure-callbacks.
-		 * 
+		 *
 		 * SIDE-EFFECTS: sets private field aborted:=true if RESTART is NOT possible.
-		 * 
+		 *
 		 * @returns {Boolean} true, if the function could process the error
-		 * 		 (i.e. return false for unknown errors; these should be handled by 
+		 * 		 (i.e. return false for unknown errors; these should be handled by
 		 *        the invoking code of this helper function)
-		 *        
+		 *
 		 * @memberOf WebspeechAudioInput#
 		 */
 		helper_error_handler = function(event) {
@@ -417,9 +417,9 @@ newMediaPlugin = {
 
 			switch(type){
 			case "no-speech":
-				
+
 				if (logger.isi()) logger.info("event " + type);
-				
+
 				// no errorcallback, just restart (if in RECORD mode)...
 				return true;
 
@@ -469,9 +469,9 @@ newMediaPlugin = {
 			case "language-not-supported":
 				// do not automatically restart!, change the language
 				aborted = true;
-				
+
 				if (logger.isw()) logger.warn("event " + type);
-				
+
 				currentFailureCallback && currentFailureCallback(event.error);
 				return true;
 
@@ -506,11 +506,11 @@ newMediaPlugin = {
 
 		/**
 		 * Side-Effects:
-		 * 
+		 *
 		 * sets recognition-status to "active"
-		 * 
+		 *
 		 * starts audio-analysis (if listeners are registered for mic-levels-changed event)
-		 * 
+		 *
 		 * @memberOf WebspeechAudioInput.recognition#
 		 */
 		recognition.onaudiostart = function(event){
@@ -537,7 +537,7 @@ newMediaPlugin = {
 		/** @memberOf WebspeechAudioInput.recognition# */
 		recognition.onaudioend = function(event){
 			active = false;
-			
+
 			if (logger.isd()) logger.debug("Audio END");
 
 //			mediaManager.micLevelsAnalysis.stop();// MOVED to onend: in some cases, onaudioend will not be triggered, but onend will always get triggered
@@ -556,20 +556,20 @@ newMediaPlugin = {
 		};
 		/**
 		 * Side-Effects:
-		 * 
+		 *
 		 * sets recognition-status to "inactive"
-		 * 
+		 *
 		 * re-starts recognition if in "recoring" mode OR calls stopped-callback
-		 * 
+		 *
 		 * @memberOf WebspeechAudioInput.recognition#
 		 */
 		recognition.onend  = function(event){
-			
+
 			active = false;
-			
+
 			if (logger.isd()) logger.debug("Recognition END (active: "+active+")");
 
-			//NOTE there may be no analysis open, but stopping here (and not e.g. in onaudioen) 
+			//NOTE there may be no analysis open, but stopping here (and not e.g. in onaudioen)
 			//     will ensure that we _always_ remove analysis, if it is present:
 			mediaManager.micLevelsAnalysis.stop();
 
@@ -589,16 +589,16 @@ newMediaPlugin = {
 			}
 		};
 
-		/** 
+		/**
 		 * @type function
 		 * @memberOf WebspeechAudioInput.recognition#
 		 */
 		recognition.onerror = default_error_function;
 
 
-		/** 
-		 * set maximum number of SpeechRecognitionAlternatives per result. 
-		 *  
+		/**
+		 * set maximum number of SpeechRecognitionAlternatives per result.
+		 *
 		 * @type Number
 		 * @memberOf WebspeechAudioInput.recognition#
 		 */
@@ -610,9 +610,9 @@ newMediaPlugin = {
 				/**
 				 * Start speech recognition (without <em>end-of-speech</em> detection):
 				 * after starting, the recognition continues until {@link #stopRecord} is called.
-				 * 
+				 *
 				 * @async
-				 * 
+				 *
 				 * @param {PlainObject} [options] OPTIONAL
 				 * 		options for Automatic Speech Recognition:
 				 * 		<pre>{
@@ -625,7 +625,7 @@ newMediaPlugin = {
 				 * 			, eosPause: OTPIONAL "short" | "long", length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option)
 				 * 			, disableImprovedFeedback: OTPIONAL Boolean, disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option)
 				 * 		}</pre>
-				 * 
+				 *
 				 * @param {Function} [statusCallback] OPTIONAL
 				 * 			callback function that is triggered when, recognition starts, text results become available, and recognition ends.
 				 * 			The callback signature is:
@@ -638,7 +638,7 @@ newMediaPlugin = {
 				 * 					unstable: String | Void
 				 * 				)
 				 * 				</pre>
-				 * 			
+				 *
 				 * 			Usually, for status <code>"FINAL" | "INTERIM" | "INTERMEDIATE"</code> text results are returned, where
 				 * 			<pre>
 				 * 			  "INTERIM": an interim result, that might still change
@@ -646,19 +646,19 @@ newMediaPlugin = {
 				 * 			  "FINAL": a (stable) final result, before the recognition stops
 				 * 			</pre>
 				 * 			If present, the <code>unstable</code> argument provides a preview for the currently processed / recognized text.
-				 * 
+				 *
 				 * 			<br>NOTE that when using <code>intermediate</code> mode, status-calls with <code>"INTERMEDIATE"</code> may
 				 * 			     contain "final intermediate" results, too.
-				 * 
+				 *
 				 * 			<br>NOTE: if used in combination with <code>options.success</code>, this argument will supersede the options
-				 * 
+				 *
 				 * @param {Function} [failureCallback] OPTIONAL
 				 * 			callback function that is triggered when an error occurred.
 				 * 			The callback signature is:
 				 * 				<code>callback(error)</code>
-				 * 
+				 *
 				 * 			<br>NOTE: if used in combination with <code>options.error</code>, this argument will supersede the options
-				 * 
+				 *
 				 * @memberOf WebspeechAudioInput.prototype
 				 * @see mmir.MediaManager#startRecord
 				 */
@@ -682,7 +682,7 @@ newMediaPlugin = {
 					//TODO
 //					options.disableImprovedFeedback =
 //					options.mode =
-//					options.eosPause = 
+//					options.eosPause =
 
 					var errMsg;
 					if (active == true){
@@ -708,7 +708,7 @@ newMediaPlugin = {
 
 					// set recognition language
 					recognition.lang = options.language;
-					
+
 					// set max. alternative results:
 					recognition.maxAlternatives = options.results;
 
@@ -742,7 +742,7 @@ newMediaPlugin = {
 
 						// if event.results[event.resultIndex].isFinal is true, then there is a pause.
 						if (evtResults.isFinal) {
-							
+
 							if (logger.isd())logger.debug("final result");
 
 							finalResult = evtResults[0][EVENT_RESULT_FIELD];
@@ -798,18 +798,18 @@ newMediaPlugin = {
 				 * @see mmir.MediaManager#stopRecord
 				 */
 				stopRecord: function(options, statusCallback, failureCallback){
-					
+
 					if(typeof options === 'function'){
 						failureCallback = statusCallback;
 						statusCallback = options;
 						options = void(0);
 					}
-					
+
 					if(options){
 						statusCallback = statusCallback? statusCallback : options.success;
 						failureCallback = failureCallback? failureCallback : options.error;
 					}
-					
+
 					recording = mediaManager.micLevelsAnalysis.active(false);
 
 					var isSuccessTriggered = false;
@@ -827,7 +827,7 @@ newMediaPlugin = {
 							var evtResults = event.results[event.resultIndex];
 							// if event.results[event.resultIndex].isFinal is true, then there is a pause.
 							if (evtResults.isFinal) {
-								
+
 								if (logger.isd()) logger.debug("final result");
 
 								finalResult = evtResults[0][EVENT_RESULT_FIELD];
@@ -899,20 +899,20 @@ newMediaPlugin = {
 
 				/**
 				 * Start speech recognition with <em>end-of-speech</em> detection:
-				 * 
+				 *
 				 * the recognizer automatically tries to detect when speech has finished and
 				 * triggers the status-callback accordingly with results.
-				 * 
+				 *
 				 * <p>
 				 * NOTE:  no end event, if recognize() is stopped via stopRecord()
-				 * 
+				 *
 				 * @public
 				 * @memberOf WebspeechAudioInput.prototype
 				 * @see mmir.MediaManager#recognize
 				 * @see #startRecord
 				 */
 				recognize: function(options, statusCallback, failureCallback, intermediateResults){//argument intermediateResults is deprecated (use options.intermediate instead)
-					
+
 					if(typeof options === 'function'){
 						intermediateResults = failureCallback;
 						failureCallback = statusCallback;
@@ -931,7 +931,7 @@ newMediaPlugin = {
 					//TODO
 //					options.disableImprovedFeedback =
 //					options.mode =
-//					options.eosPause = 
+//					options.eosPause =
 
 					var errMsg;
 					if (active == true){
@@ -984,7 +984,7 @@ newMediaPlugin = {
 
 						// if event.results[event.resultIndex].isFinal is true, then there is a pause.
 						if (event.results[event.resultIndex].isFinal) {
-							
+
 							if (logger.isd()) logger.debug("final result");
 
 							//stop recording - finish after one sentence!
@@ -996,7 +996,7 @@ newMediaPlugin = {
 							// TODO: dirty hack - somehow it does not throw end event after recognition if recognize is used
 							self.cancelRecognition();
 							currentSuccessCallback && currentSuccessCallback.apply(self, returnArgs);//finalResult);
-						} 
+						}
 					};
 
 					// start the recognition
@@ -1110,7 +1110,7 @@ newMediaPlugin = {
 			});
 		}
 		else {
-			//micLevelsAnalysis already loaded 
+			//micLevelsAnalysis already loaded
 
 			// -> immediately invoke initializer-callback and export the public functions:
 			callBack(pluginExports);
@@ -1119,3 +1119,7 @@ newMediaPlugin = {
 	}//END: initialize()
 
 };
+
+if(typeof module === 'object' && module.exports){
+	module.exports = newMediaPlugin;
+}

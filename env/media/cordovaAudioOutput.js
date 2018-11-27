@@ -3,44 +3,44 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 newMediaPlugin = {
 		/**  @memberOf CordovaAudioOutput# */
 		initialize: function(callBack, mediaManager){
-			
+
 			/**  @memberOf CordovaAudioOutput# */
 			var _pluginName = 'codovaAudioOutput';
-			
+
 			/**
 			 * HELPER for releasing data-URL
-			 * 
+			 *
 			 * @param {String} dataUrl
 			 * 			The data URL for the audio blob
-			 * 
+			 *
 			 * @memberOf Html5AudioOutput#
 			 */
 			function releaseDataUrl(dataUrl){
-				
+
 				if(window.URL){
 					window.URL.revokeObjectURL(dataUrl);
 				}
@@ -51,7 +51,7 @@ newMediaPlugin = {
 					mediaManager._log.d('cannot release media URL: no URL.revokeObjectURL() available!')
 				}
 			}
-			
+
 			//invoke the passed-in initializer-callback and export the public functions:
 			callBack({
 				/**
@@ -64,7 +64,7 @@ newMediaPlugin = {
 						var blobURL = window.URL.createObjectURL(blob);
 						var my_media = new Media(
 								blobURL,
-								function(){ 
+								function(){
 //									console.log('WAV Audio created');
 
 									my_media.release();
@@ -92,8 +92,8 @@ newMediaPlugin = {
 					try {
 //						console.log(url);
 						var my_media = new Media(
-								url, 
-								function(){ 
+								url,
+								function(){
 //									console.log('Audio played');
 
 									my_media.release();
@@ -124,9 +124,9 @@ newMediaPlugin = {
 				 * @see mmir.MediaManager#getURLAsAudio
 				 */
 				getURLAsAudio: function(url, onEnd, failureCallback, onCanPlay){
-					
+
 					try {
-						
+
 						/**
 						 * @private
 						 * @memberOf AudioCordovaImpl#
@@ -150,7 +150,7 @@ newMediaPlugin = {
 											onCanPlay.apply(mediaImpl, arguments);
 											onCanPlay = null;//remove onCanPlay callback after first invocation
 										}
-									} 
+									}
 //									else if (status==2){
 //									console.log("Audio started");
 //									}
@@ -159,29 +159,29 @@ newMediaPlugin = {
 //									}
 									else if(status == 4){
 										if (onEnd){
-											onEnd.apply(mediaImpl, arguments);				    					 
+											onEnd.apply(mediaImpl, arguments);
 										}
 									}
 								}
 						);
-						
+
 						/**
 						 * @private
 						 * @memberOf AudioCordovaImpl#
 						 */
 						var enabled = true;
-						
-						
+
+
 						/**
 						 * The Audio abstraction that is returned by {@link mmir.MediaManager#getURLAsAudio}.
-						 * 
+						 *
 						 * <p>
 						 * NOTE: when an audio object is not used anymore, its {@link #release} method should
 						 * 		 be called.
-						 * 
+						 *
 						 * <p>
 						 * This is the same interface as {@link mmir.env.media.AudioHtml5Impl}.
-						 * 
+						 *
 						 * @class
 						 * @name AudioCordovaImpl
 						 * @memberOf mmir.env.media
@@ -191,7 +191,7 @@ newMediaPlugin = {
 						var mediaImpl = {
 								/**
 								 * Play audio.
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name play
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -205,7 +205,7 @@ newMediaPlugin = {
 								},
 								/**
 								 * Stop playing audio.
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name stop
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -220,13 +220,13 @@ newMediaPlugin = {
 //											+', position '+my_media.position
 ////											+', currentPosition '+my_media.getCurrentPosition()
 //											+']: '+url);
-									
+
 									//only try to stop if playing and/or paused
 									if(playStatus == 2 || playStatus == 3){
 										my_media.stop();
 										return true;
 									}
-									
+
 //									if(playStatus == 2){//playing
 //										my_media.stop();
 //									}
@@ -238,7 +238,7 @@ newMediaPlugin = {
 								},
 								/**
 								 * Enable audio (should only be used internally).
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name enable
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -248,7 +248,7 @@ newMediaPlugin = {
 								},
 								/**
 								 * Disable audio (should only be used internally).
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name disable
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -262,10 +262,10 @@ newMediaPlugin = {
 								/**
 								 * Release audio: should be called when the audio
 								 * file is not used any more.
-								 * 
+								 *
 								 * NOTE Android has limited resources available - not releasing resources
 								 *      may result in not being able to instantiate new (audio) resources.
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name release
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -282,11 +282,11 @@ newMediaPlugin = {
 								},
 								/**
 								 * Set the volume of this audio file
-								 * 
+								 *
 								 * @param {Number} value
 								 * 			the new value for the volume:
 								 * 			a number between [0.0, 1.0]
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name setVolume
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -298,9 +298,9 @@ newMediaPlugin = {
 								},
 								/**
 								 * Get the duration of the audio file
-								 * 
+								 *
 								 * @returns {Number} the duration in MS (or -1 if unknown)
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name getDuration
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -313,11 +313,11 @@ newMediaPlugin = {
 								},
 								/**
 								 * Check if audio is currently paused.
-								 * 
+								 *
 								 * NOTE: "paused" is a different status than "stopped".
-								 * 
+								 *
 								 * @returns {Boolean} TRUE if paused, FALSE otherwise
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name isPaused
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -330,9 +330,9 @@ newMediaPlugin = {
 								},
 								/**
 								 * Check if audio is currently enabled
-								 * 
+								 *
 								 * @returns {Boolean} TRUE if enabled
-								 * 
+								 *
 								 * @inheritdoc
 								 * @name isEnabled
 								 * @memberOf mmir.env.media.AudioCordovaImpl.prototype
@@ -369,7 +369,11 @@ newMediaPlugin = {
 						return this.getURLAsAudio.apply(this, arguments);
 					}
 				}
-				
+
 			});//END: callBack({...
 		}
 };
+
+if(typeof module === 'object' && module.exports){
+	module.exports = newMediaPlugin;
+}

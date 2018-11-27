@@ -28,48 +28,53 @@
  * @module workers/jscc-compiler
  */
 
-
-importScripts('asyncCompileUtil.js');
+ typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+ 			 import('./asyncCompileUtil.js') :
+			 importScripts('asyncCompileUtil.js');
 
 /////////////// stub for define()/require() //////////////////////////////
 // NOTE only single-requires are supported here! (i.e. no lists of required modules)
 
-var _modules = {
-	_idgen: 1,
-	_customid: '',//<- set custom ID for next loaded module (will be reset after loading)
-	_defined: {},
-	_get: function(id){
-		return this._defined[id];
-	}
-};
+if(typeof WEBPACK_BUILD === 'undefined'){
+	var _modules = {
+		_idgen: 1,
+		_customid: '',//<- set custom ID for next loaded module (will be reset after loading)
+		_defined: {},
+		_get: function(id){
+			return this._defined[id];
+		}
+	};
 
-define = function(moduleCreateFunc){
-	var modId;
-	if(_modules._customid){
-		modId = _modules._customid;
-		_modules._customid = '';
-	} else {
-		modId = moduleCreateFunc.name? moduleCreateFunc.name : 'mod'+(this._idgen++);
-	}
-	_modules._defined[modId] =  moduleCreateFunc();
-};
+	self.define = function(moduleCreateFunc){
+		var modId;
+		if(_modules._customid){
+			modId = _modules._customid;
+			_modules._customid = '';
+		} else {
+			modId = moduleCreateFunc.name? moduleCreateFunc.name : 'mod'+(this._idgen++);
+		}
+		_modules._defined[modId] =  moduleCreateFunc();
+	};
 
-require = function(id, cb){
-	if(cb){
-		return cb(_modules._get(id));
-	}
-	return _modules._get(id);
-};
+	self.require = function(id, cb){
+		if(cb){
+			return cb(_modules._get(id));
+		}
+		return _modules._get(id);
+	};
+}
 
 
 /////////////// JS/CC compiler setup //////////////////////////////
 
 var jscc;
-function _init(url){
+self._init = function(url){
 
-	var libUrl = getPath(url) + '.js';
-	_modules._customid = 'mmirf/jscc';
-	importScripts(libUrl);
+	if(typeof WEBPACK_BUILD === 'undefined'){
+		var libUrl = getPath(url) + '.js';
+		_modules._customid = 'mmirf/jscc';
+		importScripts(libUrl);
+	}
 
 	//set global var that holds JS/CC:
 	jscc = require('mmirf/jscc');

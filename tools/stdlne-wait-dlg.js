@@ -1,14 +1,14 @@
 /*
  * Standalone Wait Dialog (extracted from jQuery Mobile 1.4.3)
- * 
+ *
  * stdlne-wait-dlg
  *
  * <div class="stdlne-wait-dlg stdlne-style-b stdlne-wait-dlg-verbose"><span class="stdlne-icon"></span><h1>title</h1></div>
- * 
+ *
  * version 0.2
  * Copyright (C) 2015 russa, DFKI GmbH
  * MIT license
- * 
+ *
  * Dependencies:
  *   * document (DOM): body, head
  *     * createElement: div, span, h1
@@ -20,6 +20,8 @@
 
 //(function(module){
 define(['module'], function(module){
+
+var _modConf = module.config(module);
 
 //configurable via requirejs' module:
 // * activeClass: (String) the CSS for setting the dialog to 'active' state
@@ -33,23 +35,23 @@ define(['module'], function(module){
 // * defaultTitle: (String) default title / caption for the wait-dialog
 //                DEFAULT: ""
 
-/** 
+/**
  * Temporary variable for retrieving configuration values.
- * 
+ *
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
-var tmpConfig = module.config().activeClass;
+var tmpConfig = _modConf.activeClass;
 
-/** 
+/**
  * @type String
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
 var activatorClass = tmpConfig? tmpConfig : 'stdlne-active';
 
-tmpConfig = module.config().fileName;
-/** 
+tmpConfig = _modConf.fileName;
+/**
  * @type String
  * @private
  * @memberOf StandaloneWaitDialog.prototype
@@ -58,7 +60,7 @@ var defaultStyleUrl = tmpConfig? tmpConfig : 'stdlne-wait-dlg.css';
 
 
 
-/** 
+/**
  * @constant
  * @private
  * @memberOf StandaloneWaitDialog.prototype
@@ -69,7 +71,7 @@ var types = {
 };
 
 //set default type
-tmpConfig = module.config().defaultType;
+tmpConfig = _modConf.defaultType;
 if(!tmpConfig){
 	tmpConfig = 'stdlne-wait-dlg-verbose';
 } else {
@@ -79,7 +81,7 @@ types['default'] = tmpConfig;
 
 
 
-/** 
+/**
  * @constant
  * @private
  * @memberOf StandaloneWaitDialog.prototype
@@ -90,7 +92,7 @@ var themes = {
 };
 
 //set default theme
-tmpConfig = module.config().defaultTheme;
+tmpConfig = _modConf.defaultTheme;
 if(!tmpConfig){
 	tmpConfig = 'stdlne-style-a';
 } else {
@@ -100,12 +102,12 @@ themes['default'] = tmpConfig;
 
 
 //setting up the default title (used in StandaloneWaitDialog class)
-/** 
+/**
  * @private
  * @type String
  * @memberOf StandaloneWaitDialog.prototype
  */
-var tmpDefaultTitle = module.config().defaultTitle;
+var tmpDefaultTitle = _modConf.defaultTitle;
 
 if(!tmpDefaultTitle){
 	tmpDefaultTitle = '';
@@ -113,10 +115,10 @@ if(!tmpDefaultTitle){
 
 
 
-tmpConfig = module.config().defaultId;
-/** 
+tmpConfig = _modConf.defaultId;
+/**
  * ID for default wait dialog (i.e. when show() is used without ID argument).
- * 
+ *
  * @type String
  * @private
  * @memberOf StandaloneWaitDialog.prototype
@@ -126,14 +128,14 @@ var defaultDialogId = tmpConfig? tmpConfig : 'default-stdlne-wait-dlg';
 
 /**
  * HELPER set type, theme classes to a wait-dialog DOM element
- *  
+ *
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
 function _applyClasses(domEl, typeCl, themeCl, isActivate){
 
 	if(typeCl){
-		
+
 		if(typeCl !== types['small']){
 			domEl.classList.remove(types['small']);
 		} else if(typeCl !== types['verbose']){
@@ -141,15 +143,15 @@ function _applyClasses(domEl, typeCl, themeCl, isActivate){
 		}
 		domEl.classList.add(typeCl);
 	}
-	
+
 	if(themeCl){
-		
+
 		if(themeCl !== themes['a']){
 			domEl.classList.remove(themes['a']);
 		} else if(themeCl !== themes['b']){
 			domEl.classList.remove(themes['b']);
 		}
-		
+
 		domEl.classList.add(themeCl);
 	}
 
@@ -161,12 +163,12 @@ function _applyClasses(domEl, typeCl, themeCl, isActivate){
 
 /**
  * Default options for wait dialog.
- * 
+ *
  * <p>
- * Different wait dialogs are managed 
+ * Different wait dialogs are managed
  * in the <code>defaultOptions</code> map
  * (map-key is their ID).
- * 
+ *
  * @class
  * @see StandaloneWaitDialog#defaultOptions
  */
@@ -175,20 +177,20 @@ function Options(options, owner){
 }
 
 Options.prototype = {
-	
+
 	set: function(options, owner){
-		
+
 		if(owner){
 			this._owner = owner;
 		}
-		
+
 		if(options.theme){
 			this._theme = themes[options.theme];
 		}
 		if(options.type){
 			this._type = types[options.type];
 		}
-		
+
 		if(options.style){
 			this._style = options.style;
 		}
@@ -234,10 +236,10 @@ Options.prototype = {
 
 /**
  * The Wait Dialog interface.
- * 
+ *
  * <p>
  * Allows to create multiple wait dialogs.
- * 
+ *
  * @class
  * @singleton
  */
@@ -255,21 +257,21 @@ StandaloneWaitDialog.prototype = {
 		styleUrl:     defaultStyleUrl,
 		_isCssLoaded: false,
 		_getDom: function(id){//returns: Array
-			
+
 			if(id){//if id: only return one element (in an array)
 				var element = document.getElementById(id);
 				return element? [element] : [];
 			}
 			return document.getElementsByClassName('stdlne-wait-dlg');
-			
+
 		},
 		_loadStyle: function(url, isForceReloading){
-			
+
 			if(typeof url === 'boolean'){
 				isForceReloading = url;
 				url = void(0);
 			}
-			
+
 			if(this._isCssLoaded && !isForceReloading){
 				return;
 			}
@@ -280,27 +282,27 @@ StandaloneWaitDialog.prototype = {
 			//     -> just use simple FLAG
 			//     (application must deal with possible loading-problems)
 			this._isCssLoaded = true;
-			
+
 			if(!url){
 				url = this.styleUrl;
 			}
-			
+
 			var link = document.createElement("link");
 			link.type = "text/css";
 			link.rel  = "stylesheet";
 			link.href = url;
 			document.getElementsByTagName("head")[0].appendChild(link);
-			
+
 		},
 		_getDefaults: function(id){
 			return defaultOptions.get(id);
 		},
 		setDefaults: function(id, options){//NOTE not allowed for default-wait-dialog (-> set properties on StandaloneWaitDialog instance itself!)
-			
+
 			if(!id || !options){
 				throw new Error('Invalid argument(s): '+(!id? 'missing ID (got: '+id+')':'')+(!options? 'missing options (got: '+options+')':''));
 			}
-			
+
 			var defs = defaultOptions.get(id);
 			if(!defs){
 				defs = new Options(options, this);
@@ -311,34 +313,34 @@ StandaloneWaitDialog.prototype = {
 			}
 		},
 		create: function(id, options){
-			
+
 			var _id = id;
-			
+
 			var container = document.createElement("div");
 			container.classList.add('stdlne-wait-dlg');
-			
+
 			if(_id){
-				
+
 				container.id = _id;
-				
+
 				if(options){
 					this.setDefaults(_id, options);
 				}
 			}
-			
+
 			var icon = document.createElement("span");
 			icon.className = 'stdlne-icon';
-			
+
 			var caption = document.createElement("h1");
 //			caption.className = 'stdlne-caption';
-			
+
 			container.appendChild(icon);
 			container.appendChild(caption);
-			
+
 			return container;
 		},
 		/**
-		 * 
+		 *
 		 * @param {String|Object} [title] OPTIONAL
 		 * 			if String: the tile to show in the dialog (NOTE: only visible, if dialog-style is "verbose")
 		 * 			if Object: an options object with (OPTIONAL) properties:
@@ -350,11 +352,11 @@ StandaloneWaitDialog.prototype = {
 		 * 				an ID for the dialog to show (if omitted the default dialog will be shown)
 		 */
 		show: function(title, id, options){
-			
+
 			var _title, _id, _type, _theme, _defaults;
-			
+
 			var _style, _classes, _elStyle;
-			
+
 			//re-map argument: is 2nd argument the options object?
 			if(!options && id !== null && typeof id === 'object'){
 				options = id;
@@ -364,9 +366,9 @@ StandaloneWaitDialog.prototype = {
 			if(id){
 				_id = id;
 			}
-			
+
 			if(title){
-				
+
 				if(typeof title === 'string'){
 					_title = title;
 				}
@@ -378,18 +380,18 @@ StandaloneWaitDialog.prototype = {
 					_theme = typeof title.theme !== 'undefined'? themes[title.theme] : _theme;
 					_id    = typeof title.id    !== 'undefined'? title.id            : id;
 				}
-				
+
 			} else {
-				
+
 				_title = this.defaultTitle;
 			}
-			
+
 			if(_id){
-				
+
 				if(options){
 					this.setDefaults(_id, options);
 				}
-				
+
 				_defaults = this._getDefaults(_id);
 				if(_defaults){
 					if(_defaults.getType() && typeof _type === 'undefined'){
@@ -410,7 +412,7 @@ StandaloneWaitDialog.prototype = {
 					}
 				}
 			}
-			
+
 			if(typeof _type === 'undefined'){
 				_type = this.defaultType;
 			}
@@ -420,11 +422,11 @@ StandaloneWaitDialog.prototype = {
 			if(typeof _title === 'undefined'){
 				_title = this.defaultTitle;
 			}
-			
+
 			if(typeof _id === 'undefined'){
 				_id = defaultDialogId;
 			}
-			
+
 			var list = this._getDom(_id);
 			var size = list.length;
 			if(size < 1){
@@ -432,16 +434,16 @@ StandaloneWaitDialog.prototype = {
 				size = 1;
 				document.body.appendChild(list[0]);
 			}
-			
+
 			var curr;
 			for(var i=0; i < size; ++i){
 				curr = list[i];
 				_applyClasses(curr, _type, _theme, true);
 				curr.childNodes.item(1).textContent = _title;
-				
+
 				if(typeof _style !== 'undefined'){
 					//TODO should this just overwrite the complete style-attribute?
-					//     ...because now, the removal (see hide()) is somewhat hacked 
+					//     ...because now, the removal (see hide()) is somewhat hacked
 					//        and also may "overlook" added semicolon...
 					_elStyle = curr.getAttribute('style');
 					if(!_elStyle){
@@ -458,7 +460,7 @@ StandaloneWaitDialog.prototype = {
 			}
 		},
 		/**
-		 * 
+		 *
 		 * @param {String} [id] OPTIONAL
 		 * 			the ID for the dialog element (if omitted all dialogs will be hidden)
 		 */
@@ -467,11 +469,11 @@ StandaloneWaitDialog.prototype = {
 			for(var i=0,size = list.length; i < size; ++i){
 				curr = list[i];
 				curr.classList.remove(activatorClass);
-				
+
 				if(curr.id){
-					
+
 					defs = this._getDefaults(curr.id);
-					
+
 					//remove style and classes from defaults
 					if(defs){
 						currStyle = curr.getAttribute('style');
@@ -488,14 +490,14 @@ StandaloneWaitDialog.prototype = {
 };
 //module.waitDialog = dlg;
 
-/** 
+/**
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
 var dlg = new StandaloneWaitDialog();
 //dlg.newInstance = StandaloneWaitDialog;
 
-/** 
+/**
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
@@ -515,7 +517,7 @@ var defaultOptions = {
 	'$': new Options({}, dlg)
 };
 
-/** 
+/**
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */

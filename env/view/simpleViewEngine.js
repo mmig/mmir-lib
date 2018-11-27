@@ -20,8 +20,8 @@
 define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(loadCss, Logger, Deferred, module, require){
 
 	var log = Logger.create(module);
-	
-	var modConfig = module.config();
+
+	var modConfig = module.config(module);
 	//load CSS, if one is set/configured:
 	var JQM_CSS_ID   = modConfig.cssId;
 	var JQM_CSS_HREF = modConfig.cssUrl;
@@ -34,7 +34,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 	require(['mmirf/commonUtils', 'mmirf/renderUtils', 'mmirf/languageManager', 'mmirf/controllerManager', 'mmirf/waitDialog', 'mmirf/util/forEach'],
 	    function(commonUtils, renderUtils, languageManager, controllerManager, dlg, forEach
 	){
-		
+
 		var nodeFind = function(node, tagType, attrName, attrVal){
 			var list = node.getElementsByTagName(tagType);
 			var result = [], el;
@@ -323,7 +323,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 				var layoutDialogs = renderUtils.renderViewDialogs(layout.getDialogsContents(), layout.getYields(), view.contentFors, data);
 
 				var dialogs = document.getElementById("applications_dialogs");//<- TODO make this ID a CONST & export/collect all CONSTs in one place
-				
+
 				if(!dialogs){
 					dialogs = document.getElementsByTagName('dialog');
 					if(dialogs.length > 1){
@@ -331,7 +331,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 					}
 					dialogs = dialogs[0];//<- dialogs is set to undefined, if no <dialog>-elements were found
 				}
-				
+
 				if(dialogs){
 					dialogs.innerHTML = layoutDialogs;
 				}
@@ -422,9 +422,9 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
              * @public
              */
             hideCurrentDialog : function() {
-            	
+
             	//TODO implement this!
-            	
+
 //                if (jq.modal != null) {
 //                	//TODO implement this!
 //                }
@@ -458,7 +458,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 				var ctrl = controllerManager.getController(ctrlName);
 
 				if (ctrl != null) {
-					
+
 					//TODO implement something!?!
 
 				} else {
