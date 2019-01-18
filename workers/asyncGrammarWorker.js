@@ -50,6 +50,10 @@ var semanticInterpreterImpl = {
 		}
 		
 		self.postMessage({cmd: 'setgrammar', id: langCode, options: options});
+		
+		if(options && options.stopwords){
+			this.setStopwords(langCode, options.stopwords);
+		}
 	},
 	
 	setStopwords: function(langCode, stopwordList){
