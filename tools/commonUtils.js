@@ -239,7 +239,7 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 	    	 * @memberOf mmir.CommonUtils.prototype
 			 */
 		    getCompiledGrammarPath : function(generatedGrammarsPath, grammarId, isFileNameOnly) {
-		    	var files = instance.listDir(librariesPath, /^.*\.js$/ig);//get *.js files
+		    	var files = instance.listDir(generatedGrammarsPath, /^.*\.js$/ig);//get *.js files
 		    	if(!files){
 		    		return '';
 		    	}
