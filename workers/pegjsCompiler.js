@@ -29,7 +29,7 @@
  */
 
  typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
- 			 import('./asyncCompileUtil.js') :
+ 			 require('./asyncCompileUtil.js') :
 			 importScripts('asyncCompileUtil.js');
 
 var pegjs;
@@ -38,14 +38,19 @@ self._init = function(url){
 	if(typeof WEBPACK_BUILD === 'undefined'){
 
 		var libUrl = getPath(url) +'.js';
-		importScripts(libUrl);//'../vendor/libs/peg-x.x.x.js');
+		try {
+			importScripts(libUrl);
+		} catch(err){
+			console.log('pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ', err.stack);
+			self.postMessage({error: 'pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") '+ err.stack});
+		}
 
 		//set global var that holds jison
 		pegjs = PEG;
 
 	} else {
 
-		pegjs = require('mmirf/pegjs')
+		pegjs = require('mmirf/pegjs');
 	}
 
 }

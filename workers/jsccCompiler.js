@@ -29,7 +29,7 @@
  */
 
  typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
- 			 import('./asyncCompileUtil.js') :
+ 			 require('./asyncCompileUtil.js') :
 			 importScripts('asyncCompileUtil.js');
 
 /////////////// stub for define()/require() //////////////////////////////
@@ -73,7 +73,12 @@ self._init = function(url){
 	if(typeof WEBPACK_BUILD === 'undefined'){
 		var libUrl = getPath(url) + '.js';
 		_modules._customid = 'mmirf/jscc';
-		importScripts(libUrl);
+		try {
+			importScripts(libUrl);
+		} catch(err){
+			console.log('jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ', err.stack);
+			self.postMessage({error: 'jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") '+ err.stack});
+		}
 	}
 
 	//set global var that holds JS/CC:
@@ -100,7 +105,7 @@ var defaultOptions = {
 function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name*/, taskId){
 	return function(){
 		var args = _makeArray(arguments);
-		log.postMessage({error: args, level: level, id: taskId});
+		log.postMessage({message: args, level: level, id: taskId});
 	};
 }
 

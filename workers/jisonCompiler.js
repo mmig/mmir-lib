@@ -29,7 +29,7 @@
  */
 
  typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
- 				import('./asyncCompileUtil.js') :
+ 				require('./asyncCompileUtil.js') :
 				importScripts('asyncCompileUtil.js');
 
 var jison;
@@ -37,7 +37,12 @@ self._init = function(url){
 
 	if(typeof WEBPACK_BUILD === 'undefined'){
 		var libUrl = getPath(url) +'.js';
-		importScripts(libUrl);//'../vendor/libs/jison.js');
+		try {
+			 importScripts(libUrl);
+		} catch(err){
+			console.log('jison ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ', err.stack);
+			self.postMessage({error: 'jison ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") '+ err.stack});
+		}
 	} else {
 		require('mmirf/jison');
 	}
