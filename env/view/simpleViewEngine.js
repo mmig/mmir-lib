@@ -48,7 +48,6 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 		};
 
 		//prepare resources for standalone-wait-dialog
-		dlg.styleUrl = 'mmirf/vendor/styles/' + dlg.styleUrl;
 		dlg._loadStyle();
 		var _viewEngineWaitId = 'view-wait-dlg';
 

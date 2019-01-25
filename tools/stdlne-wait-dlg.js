@@ -19,7 +19,7 @@
  */
 
 //(function(module){
-define(['module'], function(module){
+define(['mmirf/constants', 'module'], function(consts, module){
 
 var _modConf = module.config(module);
 
@@ -56,7 +56,7 @@ tmpConfig = _modConf.fileName;
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
-var defaultStyleUrl = tmpConfig? tmpConfig : 'stdlne-wait-dlg.css';
+var defaultStyleUrl = tmpConfig? tmpConfig : consts.getMmirBasePath() + 'vendor/styles/stdlne-wait-dlg.css';
 
 
 
