@@ -61,7 +61,8 @@ if(typeof console === 'undefined'){
 self.getPath = function(scriptUrl){
 
 	//if starts with protocol "*://" -> absolute path
-	if(/^[^/]+:\/\//.test(scriptUrl)){
+	//OR if there is thread object present with a nextTick() function -> (probably) node WebWorker implementation (instead of "real" WebWorker)
+	if(/^[^/]+:\/\//.test(scriptUrl) || (self.thread && typeof self.thread.nextTick === 'function')){
 		return scriptUrl;
 	}
 
