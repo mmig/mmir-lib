@@ -47,11 +47,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mm
      , presentationManager, inputManager, dialogManager, module
      , semanticInterpreter, mediaManager, notificationManager
 ){
-	/**
-	 * @private 
-	 * @memberOf mmir */
-	var isInit = false;
-	
+
 	//export framework functions/objects:
 	
 	/** @memberOf mmir */
