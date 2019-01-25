@@ -56,7 +56,12 @@ tmpConfig = _modConf.fileName;
  * @private
  * @memberOf StandaloneWaitDialog.prototype
  */
-var defaultStyleUrl = tmpConfig? tmpConfig : consts.getMmirBasePath() + 'vendor/styles/stdlne-wait-dlg.css';
+var defaultStyleUrl = tmpConfig? tmpConfig : (
+			typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+				//include default styles in webpack build:
+				require('../vendor/styles/stdlne-wait-dlg.css') : //FIXME detect, if the wait-dialog is used/included & if cssUrl-config-value points to the default styles -> only include css-file if both apply
+				consts.getMmirBasePath() + 'vendor/styles/stdlne-wait-dlg.css'
+			);
 
 
 
