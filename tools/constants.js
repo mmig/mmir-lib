@@ -75,34 +75,50 @@ function(
 	 */
     var basePath = "";
 
-    ///////////////////////////////////////////////////// Paths /////////////////////////////////////////////////////
+		///////////////////////////////////////////// Paths of library resources (sub-paths within library) ////////////////////////////////////////////////
 
-    /**
+	/**
 	 * the base path of the (i.e. this) library
 	 * @private
 	 * @memberOf Constants#
 	 */
-	var frameworkBasePath = "mmirf/";
+	var frameworkBasePath = typeof _modConf.mmirBasePath === 'string'? _modConf.mmirBasePath : "mmirf/";
 
 	/**
-	 * the path for WebWorkers
+	 * the path for WebWorkers (within {link #frameworkBasePath})
 	 * @private
 	 * @memberOf Constants#
 	 */
-	var workerPath = frameworkBasePath + "workers/";
+	var workerPath = "workers/";
 
 	/**
-	 * the path for Extensions (i.e. extending JavaScript base classes)
+	 * the path for Extensions (i.e. extending JavaScript base classes; within {link #frameworkBasePath})
 	 * @private
 	 * @memberOf Constants#
 	 */
-	var extensionsPath = frameworkBasePath + "tools/extensions/";
+	var extensionsPath = "tools/extensions/";
 	/**
-	 * the path to the audio file containing the default beep sound.
+	 * the path to the audio file containing the default beep sound (within {link #frameworkBasePath}).
 	 * @private
 	 * @memberOf Constants#
 	 */
-	var beepURL = frameworkBasePath + "vendor/sounds/beep-notification.mp3";
+	var beepURL = "vendor/sounds/beep-notification.mp3";
+
+	/**
+	 * the path to media plugins / modules (within {link #frameworkBasePath})
+	 * @private
+	 * @memberOf Constants#
+	 */
+	var mediaPluginPath = "env/media/";
+	/**
+	 * the path to grammar engine implementations / modules (within {link #frameworkBasePath})
+	 * @private
+	 * @memberOf Constants#
+	 */
+	var grammarPluginPath = "env/grammar/";
+
+	///////////////////////////////////////////////////// Paths of app resources /////////////////////////////////////////////////////
+
 	/**
 	 * the path to the app's controllers
 	 * @private
@@ -158,18 +174,6 @@ function(
 	 */
 	var genGrammarsPath = "gen/grammar/";
 
-	/**
-	 * the path to media plugins / modules
-	 * @private
-	 * @memberOf Constants#
-	 */
-	var mediaPluginPath = frameworkBasePath + "env/media/";
-	/**
-	 * the path to grammar engine implementations / modules
-	 * @private
-	 * @memberOf Constants#
-	 */
-	var grammarPluginPath = frameworkBasePath + "env/grammar/";
 
 	///////////////////////////////////////////////////// Resource Names /////////////////////////////////////////////////////
 
@@ -196,13 +200,13 @@ function(
 	 * @private
 	 * @memberOf Constants#
 	 */
-	var configurationFileUrl = "config/configuration.json";
+	var configurationFileUrl = _modConf["configuration.json"]? _modConf["configuration.json"] : "config/configuration.json";
 	/**
 	 * the name of the app's directory-/file-information file
 	 * @private
 	 * @memberOf Constants#
 	 */
-	var directoriesFileUrl = "config/directories.json";
+	var directoriesFileUrl = _modConf["directories.json"]? _modConf["directories.json"] : "config/directories.json";
 
 
 	////////////////////////////////////////////////// General Constant Values///////////////////////////////////////////////////
@@ -246,6 +250,13 @@ function(
 	 * @memberOf Constants#
 	 */
 	function setBasePath(isBrowserEnvParam){
+
+		var frameworkBasePathIndex;
+		//for adjusting framework path, if it is a sub-path of basePath
+		if(typeof basePath === 'string' && frameworkBasePath && frameworkBasePath.indexOf(basePath) === 0){
+			frameworkBasePathIndex = basePath.length;
+		}
+
 		// if not on browser: basepath must be different
 		if(typeof isBrowserEnvParam === 'string'){
 
@@ -288,7 +299,7 @@ function(
 		else if (isBrowserEnvParam && isBrowserEnvParam.isNodeEnv){
 
 			//TODO should this be the absolute path for node-env?
-			basePath = "file:";
+			basePath = "";//"file:";
 		}
 		else if (isBrowserEnvParam === false || typeof isBrowserEnvParam === 'undefined'){
 			//BACKWARD COMPATIBILITY: false and omitted argument are interpreted as Android env
@@ -298,6 +309,11 @@ function(
 		else {
 			//default:
 			basePath = "";
+		}
+
+		//adjust framework path if basePath & framework path had been set before AND framework path had been a sub-path of basePath
+		if(isFinite(frameworkBasePathIndex) && (frameworkBasePathIndex > 0 || basePath.length > 0)){
+			frameworkBasePath = basePath + frameworkBasePath.substring(frameworkBasePathIndex);
 		}
 
 	}
@@ -326,6 +342,9 @@ function(
 			 */
 			getBasePath: function(){
 				return basePath;
+			},
+			getMmirBasePath: function(){
+				return frameworkBasePath;
 			},
 			/**
 			 * Returns a string with the path to the layouts.
@@ -403,7 +422,7 @@ function(
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getWorkerPath: function(){
-				return basePath+workerPath;
+				return frameworkBasePath + workerPath;
 			},
 			/**
 			 * Returns a string with the path to the helpers.
@@ -425,7 +444,7 @@ function(
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getExtensionsPath: function(){
-				return basePath + extensionsPath;
+				return frameworkBasePath + extensionsPath;
 			},
 			/**
 			 * Returns a string with the path to the Media-Plugins.
@@ -436,7 +455,7 @@ function(
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getMediaPluginPath: function(){
-				return basePath + mediaPluginPath;
+				return frameworkBasePath + mediaPluginPath;
 			},
 			/**
 			 * Returns a string with the path to the Grammar-Plugins
@@ -449,7 +468,7 @@ function(
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getGrammarPluginPath: function(){
-				return basePath + grammarPluginPath;
+				return frameworkBasePath + grammarPluginPath;
 			},
 			/**
 			 * Returns a string with the path to the directory that contains the generated/executable grammars.
@@ -495,7 +514,7 @@ function(
 			getBeepUrl: function(){
 				return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
 								require('../vendor/sounds/beep-notification.mp3') :
-								basePath + beepURL;
+								frameworkBasePath + beepURL;
 			},
 			/**
 			 * Returns the name of the dictionary filename as string
