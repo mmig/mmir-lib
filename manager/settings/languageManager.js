@@ -3,64 +3,64 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 
 define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred', 'mmirf/util/loadFile', 'mmirf/logger', 'module'],
-		
+
 	/**
 	 * A class for managing the language of the application. <br>
 	 * It's purpose is to load the controllers and their views / partials and provide functions to find controllers or
 	 * perform actions or helper-actions.
-	 * 
+	 *
 	 * This "class" is structured as a singleton - so that only one instance is in use.<br>
-	 * 
+	 *
 	 * @name LanguageManager
 	 * @memberOf mmir
 	 * @class
-	 * 
-	 * 
+	 *
+	 *
 	 * @requires mmir.Constants
 	 * @requires mmir.CommonUtils
 	 * @requires mmir.SemanticInterpreter
-	 * 
+	 *
 	 */
-	function( 
+	function(
 			constants, configurationManager, commonUtils, semanticInterpreter, deferred, loadFile, Logger, module
 ){
 			//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 			/** @scope mmir.LanguageManager.prototype */
-			
+
 		    /**
 		     * Object containing the instance of the class
 		     * {@link LanguageManager}
-		     * 
+		     *
 		     * @type Object
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    var instance = null;
-		    
+
 		    /**
 		     * @private
 		     * @type Logger
@@ -71,40 +71,40 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		    /**
 		     * JSON object containing the contents of a dictionary file - which are
 		     * found in 'config/languages/&lt;language&gt;/dictionary.json'.
-		     * 
+		     *
 		     * @type JSON
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    var dictionary = null;
 
 		    /**
 		     * A String holding the currently loaded language, e.g. "en".
-		     * 
+		     *
 		     * @type String
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    var currentLanguage = null;
 
 		    /**
 		     * A JSON-Object holding the speech-configuration for the currently loaded language.
-		     * 
+		     *
 		     * @type JSON-Object
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    var currentSpeechConfig = null;
 
 		    /**
 		     * An array of all available languages.
-		     * 
+		     *
 		     * @type Array
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    var languages = null;
@@ -114,11 +114,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		     * language.<br>
 		     * If this keyword is used inside a view or partial, it is replaced by the
 		     * current language string.
-		     * 
+		     *
 		     * @type String
 		     * @private
 		     * @example @localize('current_language')
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    var keyword_current_language = 'current_language';
@@ -126,13 +126,13 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		    /**
 		     * Function to set a new language, but only, if the new language is
 		     * different from the current language.
-		     * 
+		     *
 		     * @function
 		     * @param {String}
 		     *            lang The language of the dictionary which should be loaded.
 		     * @returns {String} The (new) current language
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    function setLanguage(lang) {
@@ -165,10 +165,10 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		    /**
 		     * Request grammar for the provided language.
-		     * 
+		     *
 		     * If there is no grammar available for the requested language, no new
 		     * grammar is set.
-		     * 
+		     *
 		     * A grammar is available, if at least one of the following is true for the
 		     * requested language
 		     * <ul>
@@ -177,16 +177,16 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		     * <li>there exists a compiled JavaScript grammar file (with correct name
 		     * 		and at the correct location)</li>
 		     * </ul>
-		     * 
+		     *
 		     * TODO document location for JSON and JavaScript grammar files
-		     * 
+		     *
 		     * @function
 		     * @param {String}
 		     *            lang The language of the grammar which should be loaded.
 		     * @returns {String} The current grammar language
 		     * @async
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    function requestGrammar(lang, doSetNextBestAlternative) {
@@ -239,14 +239,14 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		    /**
 		     * Loads the speech-configuration for the provided language and updates the current
 		     * language.
-		     * 
+		     *
 		     * @function
 		     * @param {String} lang
 		     *            The language of the speech-configuration which should be loaded.
 		     * @returns {String} The (new) current language
 		     * @async
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    function loadSpeechConfig(lang) {
@@ -260,11 +260,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            dataType : "json",
 		            url : path,
 		            success : function(data) {
-		                
+
 		            	if(logger.isVerbose()) logger.v("[LanguageManager] Success. " + data);
-		                
+
 		            	currentSpeechConfig = data;
-		                
+
 		                if(logger.isVerbose()) logger.v("[LanguageManager] " + JSON.stringify(dictionary));
 		            },
 		            error : function(xhr, statusStr, error) {
@@ -277,14 +277,14 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		    /**
 		     * Loads the dictionary for the provided language and updates the current
 		     * language.
-		     * 
+		     *
 		     * @function
 		     * @param {String}
 		     *            lang The language of the dictionary which should be loaded.
 		     * @returns {String} The (new) current language
 		     * @async
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    function loadDictionary(lang) {
@@ -309,13 +309,13 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		    /**
 		     * Translates a keyword using the current dictionary and returns the
 		     * translation.
-		     * 
+		     *
 		     * @function
 		     * @param {String}
 		     *            textVarName The keyword which should be looked up
 		     * @returns {String} the translation of the keyword
 		     * @private
-		     * 
+		     *
 		     * @memberOf LanguageManager#
 		     */
 		    function internalGetText(textVarName) {
@@ -335,74 +335,74 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		    /**
 		     * Constructor-Method of Singleton mmir.LanguageManager.<br>
-		     * 
+		     *
 		     * @constructs LanguageManager
 		     * @memberOf LanguageManager#
 		     * @private
 		     * @ignore
-		     * 
+		     *
 		     */
 		    function constructor() {
-		    			    	
+
 		        var _isInitialized = false;
-		        
+
 		        /** @lends mmir.LanguageManager.prototype */
 		        return {
-		        	
+
 		        	/**
 		        	 * @param {String} [lang] OPTIONAL
 		        	 * 				a language code for setting the current language and
 		        	 * 				selecting the corresponding language resources
-		        	 * 
+		        	 *
 		        	 * @returns {Promise}
 		        	 * 				a deferred promise that gets resolved when the language manager is initialized
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		        	 */
 		        	init: function(lang){
-		        		
+
 		        		if (!lang && !currentLanguage) {
 
 		        			//try to retrieve language from configuration:
 				            var appLang = configurationManager.get("language");
 				            if (appLang) {
-				            	
+
 				                lang = appLang;
 				                logger.info("[LanguageManager] No language argument specified: using language from configuration '" + appLang + "'.");
-				                
+
 				            }
 				            else {
-				            	
+
 					            appLang = constants.getLanguage();
-					            
+
 				            	if (appLang) {
-				            
+
 					                lang = appLang;
 					                logger.info("[LanguageManager] No language argument specified: using language from mmir.constants '" + appLang + "'.");
 					            }
 				            	else {
-					            	
+
 					                if (languages.length > 0) {
-					                	
+
 					                	appLang = this.determineLanguage(lang);
 					                	if(appLang){
-					                		
+
 					                		lang = appLang;
-					                		
+
 					                		logger.info("[LanguageManager] No language argument specified: used determinLanguage() for selecting language '" + appLang + "'.");
 					                	}
 					                }
-					                
+
 					            }//END: else(consts::lang)
-				            	
+
 				            }//END: else(config::lang)
-				        
+
 			        		if(!lang){
 			        			logger.warn("[LanguageManager.init] No language specified. And no language could be read from directory '" + constants.getLanguagePath() + "'.");
 			        		}
-			        		
+
 				        }//END: if(!lang && !currentLanguage)
-		        		
+
 
 				        // get all the languages/dictionaries by name
 				        languages = commonUtils.listDir(constants.getLanguagePath());
@@ -410,25 +410,35 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				        if (logger.isDebug()) logger.debug("[LanguageManager] Found dictionaries for: " + JSON.stringify(languages));// debug
 
 				        var defer = deferred();
-				        
-				        loadDictionary(lang);   
-				        loadSpeechConfig(lang);
+
+				        if(this.existsDictionary(lang)){
+				        	loadDictionary(lang);
+				        } else if(logger.isDebug()){
+				        	logger.debug("[LanguageManager] init: no dictionary for language " + lang);// debug
+				        }
+
+				        if(this.existsSpeechConfig(lang)){
+				        	loadSpeechConfig(lang);
+				        } else if(logger.isDebug()){//TODO set/generate default speech-config?
+				        	logger.debug("[LanguageManager] init: no speech-config (asr/tts) for language " + lang);// debug
+				        }
+
 				        requestGrammar(lang, true);//2nd argument TRUE: if no grammar is available for lang, try to find/set any available grammar
-				        
+
 				        _isInitialized = true;
 				        defer.resolve(this);
-				        
+
 				        return defer;
 		        	},
-		        	
+
 		            /**
 		             * Returns the dictionary of the currently used language.
-		             * 
+		             *
 		             * @function
 		             * @returns {Object} The JSON object for the dictionary of the
 		             *          currently used language
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getDictionary : function() {
@@ -438,14 +448,14 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            /**
 		             * If a dictionary exists for the given language, 'true' is
 		             * returned. Else the method returns 'false'.
-		             * 
+		             *
 		             * @function
 		             * @returns {Boolean} True if a dictionary exists for given
 		             *          language.
 		             * @param {String}
 		             *            Language String, i.e.: en, de
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            existsDictionary : function(lang) {
@@ -465,17 +475,17 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		            /**
 		             * If a speech-configuration (file) exists for the given language.
-		             * 
+		             *
 		             * @function
 		             * @returns {Boolean}
 		             * 				<code>true</code>if a speech-configuration exists for given language.
 		             * 				Otherwise <code>false</code>.
-		             * 
+		             *
 		             * @param {String} lang
 		             *            the language for which existence of the configuration should be checked, e.g. en, de
-		             *            
+		             *
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            existsSpeechConfig : function(lang) {
@@ -496,20 +506,20 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            /**
 		             * If a JSON grammar file exists for the given language, 'true' is
 		             * returned. Else the method returns 'false'.
-		             * 
+		             *
 		             * @function
 		             * @returns {Boolean} True if a grammar exists for given language.
 		             * @param {String}
 		             *            Language String, i.e.: en, de
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            existsGrammar : doCheckExistsGrammar,
 
 		            /**
 		             * Chooses a language for the application.
-		             * 
+		             *
 		             * <p>
 		             * The language selection is done as follows:
 		             * <ol>
@@ -532,11 +542,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		             * <li>If a language exists, take it (the first one) </li>
 		             * <li>Take the default language - no matter what </li>
 		             * </ol>
-		             * 
+		             *
 		             * @function
 		             * @returns {String} The determined language
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            determineLanguage : function(lang) {
@@ -607,11 +617,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            /**
 		             * Sets a new language, but only, if the new language is different
 		             * from the current language.
-		             * 
+		             *
 		             * @function
 		             * @returns {String} The (new) current language
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            setLanguage : function(lang) {
@@ -620,11 +630,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		            /**
 		             * Gets the language currently used for the translation.
-		             * 
+		             *
 		             * @function
 		             * @returns {String} The current language
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getLanguage : function() {
@@ -633,11 +643,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		            /**
 		             * Gets the default language.
-		             * 
+		             *
 		             * @function
 		             * @returns {String} The default language
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getDefaultLanguage : function() {
@@ -646,12 +656,12 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		            /**
 		             * Gets an array of all for the translation available languages.<br>
-		             * 
+		             *
 		             * @function
 		             * @returns {String} An array of all for the translation available
 		             *          languages
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getLanguages : function() {
@@ -661,24 +671,24 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            /**
 		             * Looks up a keyword in the current dictionary and returns the
 		             * translation.
-		             * 
+		             *
 		             * @function
 		             * @param {String}
 		             *            textVarName The keyword which is to be translated
 		             * @returns {String} The translation of the keyword
 		             * @public
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getText : function(textVarName) {
 		                return internalGetText(textVarName);
 		            },
-		            
+
 		            /**
 		             * Get the language code setting for a specific plugin.
-		             * 
+		             *
 		             * Returns the default setting, if no specific setting for the specified plugin was defined.
-		             * 
+		             *
 		             * @public
 		             * @param {String} pluginId
 		             * @param {String|Array<String>} [feature] OPTIONAL
@@ -690,19 +700,19 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		             * 				the speparator-string that should be used for separating
 		             * 				the country-part and the language-part of the code
 		             * @returns {String} the language-setting/-code
-		        	 * 
+		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getLanguageConfig : function(pluginId, feature, separator) {
-		                
+
 		                //if nothing is specfied:
 		            	//	return default language-setting
 		                if(typeof pluginId === 'undefined'){
 		                	return currentSpeechConfig.language; /////////// EARLY EXIT ///////////////
 		                }
-		                
+
 		                //ASSERT pluginId is defined
-		                
+
 		                //default feature is language
 		                if(typeof feature === 'undefined'){
 		                	feature = 'language';
@@ -717,61 +727,61 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                	//otherwise take the default setting (NOTE: the name "plugins" is not allowed for features!)
 		                	value = currentSpeechConfig[feature];
 		                }
-		                
+
 		                //if there is a separator specified: replace default separator '-' with this one
 		                if(value && typeof separator !== 'undefined'){
 		                	value = value.replace(/-/, separator);
 		                }
-		                
+
 		                return value;
 		            },
-		            
+
 		            /**
 		             * HELPER for dealing with specific language / country code quirks of speech services:
 		             * Get the language code for a specific ASR or TTS service, that is if the service requires some
 		             * specific codes/transformations, then the transformed code is retruned by this function
 		             * (otherwise the unchanged langCode is returned).
-		             * 
+		             *
 		             * @public
 		             * @param {String} providerName
 		             * 					corrections for: "nuance" | "mary"
 		             * @param {String} langCode
 		             * 					the original language / country code
 		             * @returns {String} the (possibly "fixed") language-setting/-code
-		             * 
+		             *
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            fixLang : function(providerName, langCode) {
-		            	
+
 		            	if(providerName === 'nuance'){
-		            		
+
 		            		//QUIRK nuanceasr short-language code for the UK is UK instead of GB:
 		            		//  replace en-GB with en-UK if necessary (preserving separator char)
 		            		langCode = langCode.replace(/en(.)GB/i, 'en$1UK');
-		            		
+
 		            	} else if(providerName === 'mary'){
-		            		
+
 		            		//QUIRK marytts does not accept language+country code for German:
 		        			//  must only be language code
 		        			if(/de.DE/i.test(langCode)){
 		        				langCode = 'de';
 		        			}
 		            	}
-		            	
+
 		            	return langCode;
 		            }
-		            
+
 		        };//END: return{}
-		        
-		        
+
+
 		    }//END: construcor = function(){...
 
-		    		    
+
 		    //FIXME as of now, the LanguageManager needs to be initialized,
 		    //		by calling init()
 		    //		-> should this be done explicitly (async-loading for dictionary and grammar? with returned Deferred?)
 		    instance = new constructor();
-		    		    
+
 		    return instance;
-			
+
 });
