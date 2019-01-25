@@ -1,15 +1,15 @@
 
 /**
- * Example for a simplified view/rendering engine:
+ * Stub for view/rendering engine:
  *
- * uses the standard document API for rendering / inserting views into the current document.
+ * mocks the function calls and invokes the hooks on the controllers without actually rendering anything.
  *
  *
  * @example
  * mmir.DialogManager.render('theController', 'theView');
  *
  * @class
- * @name jqmSimpleViewEngine
+ * @name stubViewEngine
  * @static
  *
  *  @depends document (DOM object)
@@ -48,7 +48,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 		}
 
 		if(!ctrl){
-			log.e('PresentationManager[simpleViewEngine].__doRemoveElementsAfterViewLoad: missing controller (and view)!',data.options);
+			log.e('PresentationManager[stubViewEngine].__doRemoveElementsAfterViewLoad: missing controller (and view)!',data.options);
 			return;
 		}
 
@@ -154,9 +154,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 		render: doRenderView,
 		/**
            * Closes a modal window / dialog.<br>
-           *
-           * @depends jQuery Mobile SimpleModal
-           *
+           *           *
            * @function hideCurrentDialog
            * @public
            */
@@ -166,10 +164,6 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
           },
           /**
            * Opens the requested dialog.<br>
-           *
-           * @depends jQuery Mobile SimpleModal
-           * @depends mmir.ControllerManager
-           *
            *
            * @function showDialog
            * @param {String}
@@ -205,9 +199,6 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 		 *
 		 * @public
 		 *
-		 * @depends stdlne-wait-dlg (Standalone Wait Dialog)
-		 * @depends mmir.LanguageManager
-		 *
 		 * @see #hideWaitDialog
 		 */
 		showWaitDialog : function(text, theme) {
@@ -220,8 +211,6 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 		 *
 		 * @function hideWaitDialog
 		 * @public
-		 *
-		 * @depends stdlne-wait-dlg (Standalone Wait Dialog)
 		 *
 		 * @see #showWaitDialog
 		 */
