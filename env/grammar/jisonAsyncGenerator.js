@@ -77,6 +77,18 @@ var jisonAsyncGen = {
 		}
 		return initDef;
 	},
+	/**
+	 * frees up the resources of the async compiler
+	 * (cannot be used afterwards!)
+	 *
+	 * @memberOf JisonAsyncGenerator.prototype
+	 */
+	destroy: function(){
+		if(asyncCompiler && asyncCompiler.terminate){
+			asyncCompiler.terminate();
+			asyncCompiler = null;
+		}
+	},
 
 	/**
 	 * @returns {Boolean} if this engine compilation works asynchronously.
