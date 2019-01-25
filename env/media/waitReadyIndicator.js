@@ -45,10 +45,12 @@
  *   "mediaManager": {
  *    "plugins": {
  *      "browser": ["waitReadyIndicator",
+ *                  // OR: {"mod": "waitReadyIndicator", "config": "url to css styles"},
  *                  "html5AudioOutput",
  *                  ...
  *      ],
  *      "cordova": ["waitReadyIndicator",
+ *                  // OR: {"mod": "waitReadyIndicator", "config": "url to css styles"},
  *                  "androidAudioInput",
  *                  ...
  *      ]
@@ -57,6 +59,9 @@
  *  },
  *  ...
  * </pre>
+ * NOTE: the optional configuration value specifies an URL to a CSS file for styling the
+ *       wait-/ready-indication dialog.
+ *       If not specified, the default styling of stlne-wait-dlg is used.
  *
  * @example
  *
@@ -79,7 +84,7 @@
 
 newMediaPlugin = {
 		/**  @memberOf WaitReadyIndicatorImpl# */
-		initialize: function(callBack, mediaManager){//, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
+		initialize: function(callBack, mediaManager, ctxId, moduleConfig){
 
 			/**
 			 * legacy mode: use pre-v4 API of mmir-lib
@@ -99,19 +104,33 @@ newMediaPlugin = {
 				_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
 			}
 			/**
+			 * HELPER for require IDs:
+			 * 		return correct module IDs (and require instance) depending on legacy mode
+			 *
+			 * @param {String} id
+			 * 			the require() module ID
+			 *
+			 * @returns {any} the require()'ed module ID
+			 *
+			 * @memberOf WaitReadyIndicatorImpl#
+			 */
+			var _getId = function(id){
+				return (_isLegacyMode? '' : 'mmirf/') + id;
+			};
+			/**
 			 * HELPER for require():
 			 * 		use module IDs (and require instance) depending on legacy mode
 			 *
-			 * @param {String} id
+			 * @param {String|Array<String>} id
 			 * 			the require() module ID
 			 *
 			 * @returns {any} the require()'ed module
 			 *
 			 * @memberOf WaitReadyIndicatorImpl#
 			 */
-			var _req = function(id){
-				var name = (_isLegacyMode? '' : 'mmirf/') + id;
-				return _mmir? _mmir.require(name) : require(name);
+			var _req = function(id, callback){
+				var name = Array.isArray(id)? id.map(_getId) : _getId(id);
+				return _mmir? _mmir.require(name, callback) : require(name, callback);
 			};
 
 			_req(['waitDialog'], function(dlg){
@@ -132,7 +151,7 @@ newMediaPlugin = {
 				var caption;
 
 				/**  @memberOf WaitReadyIndicatorImpl# */
-				var cssUrl = 'mmirf/vendor/styles/' + dlg.styleUrl;//TODO make this configurable / retrieve this setting from somewhere
+				var cssUrl = moduleConfig? moduleConfig : dlg.styleUrl;
 
 				//load the stylesheet file for the wait-dialog
 				// (does nothing, if this load-function was already called before)
@@ -206,4 +225,7 @@ newMediaPlugin = {
 
 if(typeof module === 'object' && module.exports){
 	module.exports = newMediaPlugin;
+	if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+		require.resolve('mmirf/waitDialog')
+	}
 }
