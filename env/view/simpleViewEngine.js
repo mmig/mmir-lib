@@ -9,7 +9,7 @@
  * mmir.DialogManager.render('theController', 'theView');
  *
  * @class
- * @name jqmSimpleViewEngine
+ * @name simpleViewEngine
  * @static
  *
  *  @depends document (DOM object)
@@ -23,10 +23,15 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 
 	var modConfig = module.config(module);
 	//load CSS, if one is set/configured:
-	var JQM_CSS_ID   = modConfig.cssId;
-	var JQM_CSS_HREF = modConfig.cssUrl;
-	if(JQM_CSS_HREF){
-		loadCss({href: JQM_CSS_HREF, id: JQM_CSS_ID});
+	var SVE_CSS_ID   = modConfig.cssId;
+	var SVE_CSS_HREF = modConfig.cssUrl;
+	if(SVE_CSS_HREF){
+		//include default styles for simpleViewEngine in webpack build
+		if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+			//FIXME detect, if mmirf/simpleViewEngine is used/included & if cssUrl-config-value points to the default styles -> only include css-file if both apply
+			SVE_CSS_HREF = require('../../vendor/styles/simpleViewLayout.css');
+		}
+		loadCss({href: SVE_CSS_HREF, id: SVE_CSS_ID});
 	}
 
 	var promise = new Deferred();
@@ -514,10 +519,10 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 			},
 
 			/////////////////////////////////// Additional non-standard functions & properties /////////////
-			styleTagId: JQM_CSS_ID,
-			styleTagHref: JQM_CSS_HREF,
+			styleTagId: SVE_CSS_ID,
+			styleTagHref: SVE_CSS_HREF,
 			isStylePresent: function(){
-				if(!JQM_CSS_HREF){
+				if(!SVE_CSS_HREF){
 					//if no css URL was configured: always return state as if stylesheet was already loaded
 					return true;
 				}
