@@ -1,4 +1,4 @@
-﻿/*
+/*
  * 	Copyright (C) 2012-2013 DFKI GmbH
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence

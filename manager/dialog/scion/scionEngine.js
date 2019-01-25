@@ -1,4 +1,4 @@
-﻿
+
 //TODO doc
 
 define(['mmirf/scion', 'mmirf/scionUtil', 'mmirf/util/deferred'], function( scion, scionUtil, deferred ) {

@@ -1,4 +1,4 @@
-﻿
+
 define(['mmirf/constants', 'mmirf/util/loadFile', 'mmirf/util/isArray'],
 	/**
 	 * A class for managing the configuration. <br>

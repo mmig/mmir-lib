@@ -1,4 +1,4 @@
-﻿
+
 //exports a function:
 //  function(STRING):STRING
 define(function(){
