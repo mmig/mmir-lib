@@ -95,11 +95,14 @@ function initMmir(window) {
 	 * @private
 	 */
 	function _reqConfig (configuration, reqInstance) {
-		var req = reqInstance? reqInstance : (mmir && mmir.require? mmir.require : (typeof requirejs !== 'undefined'? requirejs : require));
-		if(!req.config){
-			req = req('requirejs');
+		var req = reqInstance? reqInstance : (mmir && mmir.require? mmir.require : null);
+		if(configuration){
+			if(!req || !req.config){
+				req = typeof requirejs !== 'undefined'? requirejs : typeof require !== 'undefined'? require : req && req('requirejs');
+			}
+			return req.config(configuration) || req;
 		}
-		return req.config(configuration);
+		return req;
 	};
 
 	/**
@@ -148,14 +151,21 @@ function initMmir(window) {
 							confConfig = {};
 						}
 						confConfig[p] = conf.config[p];
-						//remove them from the conf, so that they do not overwrite anything in mainConfig.config:
-						conf.config[p] = void(0);
 					}
 				}
 			}
 
 			if(!moduleConfigHelper){
-				mmir.require = _reqConfig( conf, reqInstance );
+				for(p in conf){
+					if(p === 'config'){
+						continue;
+					}
+					if(mainConfig[p] && typeof mainConfig[p] === 'object'){
+						Object.assign(mainConfig[p], conf[p]);
+					} else {
+						mainConfig[p] = conf[p];
+					}
+				}
 			}
 		}
 
@@ -176,12 +186,16 @@ function initMmir(window) {
 				return;
 			}
 
-			//now apply all conf.config-values (including mainConfig.config-values):
-			mmir.require = _reqConfig( {config: confConfig}, reqInstance );
+			// replace mainConfig's config with merged & collected config-values:
+			mainConfig.config = confConfig;
 		}
 
-		if(moduleConfigHelper){
-			moduleConfigHelper.setConfig(mainConfig||{});
+		if(mainConfig){
+			if(moduleConfigHelper){
+				moduleConfigHelper.setConfig(mainConfig);
+			} else {
+				mmir.require = _reqConfig(mainConfig, reqInstance);
+			}
 		}
 
 	}
@@ -746,7 +760,7 @@ function initMmir(window) {
 	};
 
 	if(typeof define === 'function'){
-		define(function(){ return mmir; });
+		define('mmirf/core', function(){ return mmir; });
 	}
 
 	//if window[CORE_NAME] already exists:
