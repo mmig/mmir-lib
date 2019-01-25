@@ -26,7 +26,7 @@
 
 //load basic utilities for web-worker:
 typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
-				import('./workerUtil.js') :
+				require('./workerUtil.js') :
 				importScripts('workerUtil.js');
 
 self._makeArray = function(obj) {

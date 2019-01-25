@@ -25,7 +25,7 @@
  */
 
 typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
-				import('./workerUtil.js') :
+				require('./workerUtil.js') :
 				importScripts('workerUtil.js');
 
 var semanticInterpreterImpl = {
