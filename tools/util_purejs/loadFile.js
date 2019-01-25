@@ -12,7 +12,9 @@
  *  * removed settings.data processing (e.g. serializing, appending to GET URL...)
  *  * removed beforeSend & complete callbacks, and timeout option/setting
  *  * use XHR object as default context for callbacks
- *  
+ *  * added xhr implementation selection: require("xmlhttprequest") if no global/window object XMLHttpRequest is present (i.e. running in node environment)
+ *  * added option-setting localPrefix (string|false) for indicating if 'file:' should be prefixed to local requestes (required by node-module "xmlhttprequest")
+ *
  * Additions/Extension (adapted from jQuery.ajax):
  *  * added xhrFields handling (analogous to jQuery.ajax) for ajax options
  *  * correctly read non-text results (w.r.t. xhr.responseType) from response (analogous to jQuery.ajax)
@@ -37,7 +39,7 @@
  * 	data: SERIALZED_DATA_STRING
  * }
  * </pre>
- * 
+ *
  * where <code>data</code> must be string in the the <code>SERIALZED_DATA_STRING</code>
  * format, i.e. name-value pairs (with name and value <code>encodeURIComponent()</code>'ed), e.g.
  * <pre>
@@ -71,10 +73,10 @@ var ajax = function(options){
       baseHeaders = { },
       protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : typeof window !== 'undefined' && window.location? window.location.protocol : 'file:',
       xhr = ajax.settings.xhr()
-  
+
   // Apply custom fields if provided (MODIFIED: adapted from jQuery)
   if (settings.xhrFields) for (key in settings.xhrFields) xhr[key] = settings.xhrFields[key];
-  
+
   if(!settings.context) settings.context = xhr;
 
   if (!settings.crossDomain) baseHeaders['X-Requested-With'] = 'XMLHttpRequest'
@@ -107,6 +109,8 @@ var ajax = function(options){
     }
   }
 
+  if (!settings.crossDomain && settings.localPrefix && !/^([\w-]+:)?\/\/([^\/]+)/.test(settings.url)) settings.url = settings.localPrefix + settings.url;//MODIFIED: auto-prefix relative requests
+
   var async = 'async' in settings ? settings.async : true
   xhr.open(settings.type, settings.url, async)
 
@@ -130,6 +134,16 @@ function ajaxError(error, type, xhr, settings) {
 // Empty function, used as default callback
 function empty() {}
 
+//MODIFIED: detect/load xhr implementation context
+var is_xhr_node_impl, xhrImplCtx;
+if (typeof window !== 'undefined' && window.XMLHttpRequest) {
+	is_xhr_node_impl = false;
+	xhrImplCtx = window;
+} else {
+	is_xhr_node_impl = true;
+	xhrImplCtx = require("xmlhttprequest");
+}
+
 ajax.settings = {
   // Default type of request
   type: 'GET',
@@ -141,7 +155,7 @@ ajax.settings = {
   context: null,
   // Transport
   xhr: function () {
-    return new (typeof window !== 'undefined' && window.XMLHttpRequest? window : require("xmlhttprequest")).XMLHttpRequest();
+    return new xhrImplCtx.XMLHttpRequest();
   },
   // MIME types mapping
   accepts: {
@@ -149,7 +163,8 @@ ajax.settings = {
     text:   'text/plain'
   },
   // Whether the request is to another domain
-  crossDomain: false
+  crossDomain: false,
+  localPrefix: is_xhr_node_impl? 'file:' : false //MODIFIED: auto-prefix relative URLs with 'file:' (needed for node module "xmlhttprequest")
 }
 
 function mimeToDataType(mime) {
