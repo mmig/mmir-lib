@@ -65,7 +65,7 @@ parser.STORAGE_CODE_WRAP_PREFIX = STORAGE_CODE_WRAP_PREFIX;
  *
  * @see GrammarConverter#getCodeWrapSuffix
  */
-var STORAGE_CODE_WRAP_SUFFIX = '\n})(typeof typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : this);';
+var STORAGE_CODE_WRAP_SUFFIX = '\n})(typeof window !== "undefined" ? window : typeof self !== "undefined" ? self : typeof global !== "undefined" ? global : this);';
 parser.STORAGE_CODE_WRAP_SUFFIX = STORAGE_CODE_WRAP_SUFFIX;
 
 /**
