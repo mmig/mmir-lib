@@ -784,7 +784,7 @@ newMediaPlugin = {
 
 			var implPath = constants.getMediaPluginPath() + implFile;
 
-			var ctx = typeof window !== 'undefined'? window : global;
+			var ctx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
 
 			var processLoaded = function success(){
 

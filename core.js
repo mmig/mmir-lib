@@ -777,4 +777,4 @@ function initMmir(window) {
 	window[CORE_NAME] = mmir;
 
 	return mmir;
-}(typeof window !== 'undefined'? window : global));
+}(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this));

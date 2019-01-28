@@ -13,7 +13,7 @@
 				// Browser globals
 				root.mmirConfig = factory();
 		}
-}(typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this, function () {
+}(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this, function () {
 
 //copied requirejs config from mmirf/mainConfig.js
 //MODIFICATIONS:

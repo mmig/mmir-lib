@@ -153,7 +153,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 
     	if(!_mmirLib){
     		var mmirName = typeof MMIR_CORE_NAME === 'string'? MMIR_CORE_NAME : 'mmir';
-    		_mmirLib = typeof window !== 'undefined'? window[mmirName] : global[mmirName];
+    		var ctx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
+    		_mmirLib = ctx[mmirName];
     	}
 
     	return _mmirLib;
@@ -189,7 +190,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 
     			filePath += '.js';
     		}
-    		var ctx = typeof window !== 'undefined'? window : global;
+    		var ctx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
 
     		var processLoaded = function(){
 

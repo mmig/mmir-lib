@@ -13,7 +13,7 @@
 				// Browser globals
 				root.mmirInit = factory();
 		}
-}(typeof self !== 'undefined' ? self : typeof window !== 'undefined' ? window : typeof global !== 'undefined' ? global : this, function () {
+}(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this, function () {
 
 
 	return function mmirConfigInit(core, mmirf_config, reqInstance, defInstance) {

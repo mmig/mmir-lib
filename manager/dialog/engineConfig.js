@@ -321,7 +321,7 @@ define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'],
      */
     function getScionEnvFactory(){
 
-    	var ctx = typeof window !== 'undefined'? window : global;
+    	var ctx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
     	var hasWebWorkers = ctx && typeof ctx.Worker !== 'undefined';
 
     	//TODO make this configurable? through ConfigurationManager?

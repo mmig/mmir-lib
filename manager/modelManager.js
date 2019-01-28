@@ -3,24 +3,24 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -28,27 +28,27 @@
 
 define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/deferred', 'module' ],
 	/**
-	 * 
+	 *
 	 * A class for managing the models of the application (MVC-Component). <br>
 	 * It's purpose is to load the models automatically.
-	 * 
+	 *
 	 * This "class" is a singleton - so that only one instance is in
 	 * use.<br>
-	 * 
+	 *
 	 * TODO add example for usage (models as "class" / models as "singleton")
-	 * 
+	 *
 	 * @class
 	 * @name ModelManager
 	 * @memberOf mmir
 	 * @static
-	 * 
+	 *
 	 */
-	function( 
+	function(
     		Dictionary,  constants, commonUtils, Logger, deferred, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ModelManager.prototype */
-	
+
 	/**
 	 * @private
 	 * @type Logger
@@ -60,48 +60,48 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 	// private members
     /**
      * Array of models
-     * 
+     *
      * @type Dictionary
      * @private
-     * 
+     *
 	 * @memberOf mmir.ModelManager#
      */
 	var models = new Dictionary();
-	
+
 	/**
-     * Name of the default namespace 
-     * (within the global space) 
+     * Name of the default namespace
+     * (within the manager's space)
      * into which Models will be loaded
-     * 
+     *
      * @constant
      * @type String
      * @private
-     * 
+     *
 	 * @memberOf mmir.ModelManager#
      */
 	var MODEL_DEFAULT_NAMESPACE_NAME = 'mmir';
-	
+
 	/**
-     * The global namespace
-     * 
+     * The "global" namespace for the model manager
+     *
      * @constant
      * @type Object
      * @private
-     * 
+     *
 	 * @memberOf mmir.ModelManager#
      */
-	var GLOBAL_NAMESPACE = typeof window !== 'undefined'? window : global;
+	var MODEL_MANAGER_NAMESPACE = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
 
 	/**
-	 * 
+	 *
 	 * This function returns the fully qualified model name (including namespace(s)).
-	 * 
+	 *
 	 * @function
 	 * @param {String}
 	 *            modelClassName the model's class-name (i.e. without namespace)
 	 * @returns {String} fully qualified name for the model
 	 * @private
-	 * 
+	 *
 	 * @memberOf mmir.ModelManager#
 	 */
     function getFullModelName(modelClassName){
@@ -112,11 +112,11 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
     		return MODEL_DEFAULT_NAMESPACE_NAME + '.' + modelClassName;
     	}
     }
-    
+
     /**
-	 * 
-	 * This function returns all loaded models. 
-	 * 
+	 *
+	 * This function returns all loaded models.
+	 *
 	 * @function
 	 * @returns {Array<String>} all loaded model names
 	 * @public
@@ -130,24 +130,24 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 	 * This function invokes the method
 	 * {@link mmir.ModelManager#foundModelsCallBack} to load all
 	 * models in the path specified by *modelPath*.
-	 * 
+	 *
 	 * @function
 	 * @param {Function} [initCallbackFunction] OPTIONAL
 	 *            The callback function from the constructor
 	 *            which shall be called after the initialization of the
 	 *            {@link mmir.ModelManager}.
-	 *            
+	 *
 	 * @param {Object} [ctx] OPTIONAL
 	 * 				the context for the model implementations (DEFAULT: the global context, i.e. window)
-	 * @returns {Promise} 
+	 * @returns {Promise}
 	 * 					a deferred promise that gets fulfilled when models are loaded.
 	 * @private
 	 * @memberOf mmir.ModelManager#
 	 */
 	function _init(initCallbackFunction, ctx) {
-		
+
 		/** @scope mmir.ModelManager.prototype */
-		
+
 		//shift arguments if necessary:
 		//shift arguments if necessary:
 		if(!ctx && typeof initCallbackFunction !== 'function'){
@@ -156,9 +156,9 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 		}
 
 		/**
-		 * 
-		 * This function returns the fully qualified model name (incl. namespace(s)). 
-		 * 
+		 *
+		 * This function returns the fully qualified model name (incl. namespace(s)).
+		 *
 		 * @function
 		 * @name getModelByName
 		 * @param {String|Array<String>} fullModelName the fully qualified model name (i.e. with namespace(s))
@@ -166,22 +166,22 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 		 * 								If {Array<String>} the entries correspond to the namespace components (without dots),
 		 * 								  where the last entry corresponds to the class/singleton name
 		 * @param {Object} [ctx] OPTIONAL
-		 * 				the (base) context for the model implementations (DEFAULT: the global context GLOBAL_NAMESPACE)
+		 * 				the (base) context for the model implementations (DEFAULT: the global context MODEL_MANAGER_NAMESPACE)
 		 * @returns {Object} the "raw" model object (may be a constructor or the main-singleton-namespace).
 		 * 					 Or <tt>null</tt> if there is no Model with the name.
 		 * @private
-		 * 
+		 *
 		 * @requires mmir.CommonUtils#isArray
-		 * 
+		 *
 		 * @see mmir.ModelManager#getFullModelName
 		 * @see mmir.ModelManager#doGetModelInstance
-		 * 
+		 *
 		 * @memberOf mmir.ModelManager#
 		 */
         function getModelByName(fullModelName, ctx){
-        	
-        	ctx = ctx || GLOBAL_NAMESPACE;
-        	
+
+        	ctx = ctx || MODEL_MANAGER_NAMESPACE;
+
         	var components;
         	if(commonUtils.isArray(fullModelName)){
         		components = fullModelName;
@@ -189,7 +189,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
         	else {
         		components = fullModelName.split('.');
         	}
-        	
+
         	//try to resolve fully-qualified name (without triggering an error)
         	var currentNameSpace = ctx;
         	for(var i=0, size = components.length; i < size; ++i){
@@ -203,14 +203,14 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
     				break;
     			}
         	}
-        	
+
         	if(size > 0 && ctx[components[size-1]]){
         		//try simple model name
         		return ctx[components[size-1]];
         	}
-        	
-        	var isReTry = ctx !== GLOBAL_NAMESPACE;
-        	
+
+        	var isReTry = ctx !== MODEL_MANAGER_NAMESPACE;
+
         	var logFunc = isReTry? 'info' : 'error';
         	logger[logFunc]('ModelManager.getModelByName: could not find model'
         			+(isReTry? ' in model context with path "<modelContext>.' : ' "')
@@ -219,32 +219,32 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 					+(isReTry? 'there is no' : 'invalid')
 					+' namespace/class: "'
 					+components[i]
-					+'"' 
+					+'"'
 					+(isReTry? ', trying to find model in global namespace ...' : '')
 			);
-        	
+
         	return null;
         }
-        
+
         /**
          * Returns the instance for a model implementation:
-         * 
+         *
          * If the model-object is a constructor (i.e. a function),
          * a new instance is created and returned.
-         * 
-         * Otherwise the model-object itself is returned (e.g. for 
+         *
+         * Otherwise the model-object itself is returned (e.g. for
          * singleton pattern models).
-         * 
+         *
          * @function
          * @private
-         * 
+         *
 		 * @see mmir.ModelManager#getModelByName
-		 * 
+		 *
 		 * @memberOf mmir.ModelManager#
          */
         function doGetModelInstance(modelImplObject){
-        	
-        	
+
+
         	if(typeof modelImplObject === 'function'){
         		return new modelImplObject();
         	}
@@ -258,10 +258,10 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
         	else{
         		return modelImplObject;
         	}
-        	
+
         	//TODO export to requirejs?
         	//define(modelImplObject.toString(), function(){ return THE_MODEL_INSTANCE;});
-        	
+
         }
 
 		var _defer = deferred();
@@ -271,12 +271,12 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 
 		commonUtils.loadImpl(
 
-				constants.getModelPath(), 
+				constants.getModelPath(),
 
-				false, 
+				false,
 
 				function () {
-					
+
 					logger.debug('[loadModels] done');
 
 					_defer.resolve(_instance);
@@ -284,14 +284,14 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 
 				function isAlreadyLoaded(name) {
 					return false; // ( _instance && _instance.getModel(name) ); TODO
-				}, 
+				},
 
 				function callbackStatus(status, fileName, msg) {
-					
+
 					if (status === 'info') {
-						
+
 						logger.info('[loadModel] "' + fileName);
-						
+
 						var modelName = fileName.charAt(0).toUpperCase() + fileName.slice(1).replace(/\.[^.]+$/g, "");
 						var fullName = getFullModelName(modelName);
 						var modelImpl = getModelByName(fullName, ctx);
@@ -306,7 +306,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 							modelInstance = modelName;
 						}
 						models.put(fullName, modelInstance);
-						
+
 					}
 					else if (status === 'warning') {
 						logger.warn('[loadModel] "' + fileName + '": ' + msg);
@@ -340,7 +340,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 
 	/**
 	 * Object containing the instance of the class {@link mmir.ModelManager}
-	 * 
+	 *
 	 * @type Object
 	 * @private
 	 * @ignore
@@ -351,7 +351,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 			// public members
 			/**
 			 * This function gets the model by name.
-			 * 
+			 *
 			 * @function
 			 * @param {String}
 			 *            modelName Name of the model which should be returned
@@ -377,7 +377,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 
 			/**
 			 * This function returns all loaded model names.
-			 * 
+			 *
 			 * @function
 			 * @returns {Array<string>} All loaded model names
 			 * @public
@@ -387,34 +387,34 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 			},
 
 			/**
-			 * This function must be called before using the {@link mmir.ModelManager}. The Initialization process is asynchronous, 
+			 * This function must be called before using the {@link mmir.ModelManager}. The Initialization process is asynchronous,
 			 * because javascript-files must be loaded (the models), so it forces a synchronous behavior by using
-			 * a callback function containing the instructions, which rely on the presence of the loaded models.<br>   
-			 * 
+			 * a callback function containing the instructions, which rely on the presence of the loaded models.<br>
+			 *
 			 * It loads the models and then calls the callback functions and returns the instance of this class.
-			 * 
+			 *
 			 * <div class="box important">
 			 * <b>Note:</b>
-			 * The callback function should contain all (!) instructions which require the prior loading of the models.<br> 
+			 * The callback function should contain all (!) instructions which require the prior loading of the models.<br>
 			 * The callback mechanism is necessary, because loading the models is asynchronous.<br><br>
 			 * If provided, the callback function is invoked with 1 argument, the ModelManager instance:<br>
 			 * <code> callbackFunction(modelManagerInstance) </code>
 			 * </div>
-			 * 
+			 *
 			 * NOTE: use EITHER callback-function OR returned Promise -- do not use both!
-			 * 
+			 *
 			 * @function
-			 * @param {Function} [callbackFunction] 
+			 * @param {Function} [callbackFunction]
 			 * 					The function which should be called after loading all controllers
 			 * @param {Object} [ctx] OPTIONAL
 			 * 				the context for the model implementations (DEFAULT: the global context, i.e. window)
-			 * @returns {Promise} 
+			 * @returns {Promise}
 			 * 					a deferred promise that gets fulfilled when models are loaded.
 			 * @example
 			 * 	function afterLoadingModels(modelManagerInstance){
 			 * 		var userModel = modelManagerInstance.get('User');
 			 * 		//do something...
-			 * 	} 
+			 * 	}
 			 * 	mmir.model.create(afterLoadingModels);
 			 * @public
 			 */
@@ -423,5 +423,5 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 	};
 
 	return _instance;
-	
+
 });

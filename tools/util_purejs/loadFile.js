@@ -12,6 +12,7 @@
  *  * removed settings.data processing (e.g. serializing, appending to GET URL...)
  *  * removed beforeSend & complete callbacks, and timeout option/setting
  *  * use XHR object as default context for callbacks
+ *  * added global_context variable: the window-object, in browsers, self in WebWorkers, and global in node environment
  *  * added xhr implementation selection: require("xmlhttprequest") if no global/window object XMLHttpRequest is present (i.e. running in node environment)
  *  * added option-setting localPrefix (string|false) for indicating if 'file:' should be prefixed to local requestes (required by node-module "xmlhttprequest")
  *
@@ -56,7 +57,8 @@ var jsonpID = 0,
     name,
     xmlTypeRE = /^(?:text|application)\/xml/i,
     jsonType = 'application/json',
-    blankRE = /^\s*$/
+    blankRE = /^\s*$/,
+		global_context = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this
 
 var ajax = function(options){
   var settings = extend({}, options || {})
@@ -71,7 +73,7 @@ var ajax = function(options){
 
   var mime = settings.accepts[dataType],
       baseHeaders = { },
-      protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : typeof window !== 'undefined' && window.location? window.location.protocol : 'file:',
+      protocol = /^([\w-]+:)\/\//.test(settings.url) ? RegExp.$1 : global_context.location? global_context.location.protocol : 'file:',
       xhr = ajax.settings.xhr()
 
   // Apply custom fields if provided (MODIFIED: adapted from jQuery)
@@ -136,7 +138,7 @@ function empty() {}
 
 //MODIFIED: detect/load xhr implementation context
 var is_xhr_node_impl, xhrImplCtx;
-if (typeof window !== 'undefined' && window.XMLHttpRequest) {
+if (global_context.XMLHttpRequest) {
 	is_xhr_node_impl = false;
 	xhrImplCtx = window;
 } else {
