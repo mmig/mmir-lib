@@ -184,7 +184,7 @@ return {
 		, 'mmirf/stemmer': 'semantic/stemmer'
 		, 'mmirf/jscc': 'vendor/libs/jscc-amd'
 		, 'mmirf/jison': 'vendor/libs/jison'
-		, 'mmirf/pegjs': 'vendor/libs/peg-0.9.0'
+		, 'mmirf/pegjs': 'vendor/libs/peg-0.9.0_amd'
 		, 'mmirf/asyncGen': 'env/grammar/asyncGenerator'
 		, 'mmirf/jsccGen': 'env/grammar/jsccGenerator'
 		, 'mmirf/jsccAsyncGen': 'env/grammar/jsccAsyncGenerator'
@@ -195,7 +195,7 @@ return {
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)
-		, 'mmirf/md5': 'vendor/libs/md5'
+		, 'mmirf/md5': 'vendor/libs/md5_umd'
 		, 'mmirf/checksumUtils': 'tools/checksumUtils'
 
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
@@ -238,10 +238,10 @@ return {
 		/** @memberOf mmir.require.config.shim */
 	    'mmirf/antlr3':			{deps: ['mmirf/parsingResult'], exports : 'org'}
 
-		/** @memberOf mmir.require.config.shim */
-		, 'mmirf/md5':            {exports : 'CryptoJS'}
+		// /** @memberOf mmir.require.config.shim */
+		// , 'mmirf/md5':            {exports : 'CryptoJS'}
 
-		, 'mmirf/pegjs':       	{exports: 'PEG'}
+		// , 'mmirf/pegjs':       	{exports: 'PEG'}
 
 		, 'mmirf/ES3Lexer':       {deps: ['mmirf/antlr3'], init: function(org){ return ES3Lexer;} }
 		, 'mmirf/ES3Parser':      {deps: ['mmirf/antlr3'], init: function(org){ return ES3Parser;} }
