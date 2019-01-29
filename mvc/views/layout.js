@@ -182,10 +182,10 @@ function Layout(name, definition, remote, ignoreMissingBody){
 	    if(this.def){
 
 		    //console.debug('Layout<constructor>: start rendering layout for "'+this.name+'"'+(remote?' (REMOTE)':'')+', RAW: '+this.def);
-		    var parser = require('mmirf/parseUtils');
+		    var parser = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? __webpack_require__('mmirf/parseUtils') : require('mmirf/parseUtils');
 	    	var parseResult = parser.parse(this.def, this);
 
-	    	var renderer = require('mmirf/renderUtils');
+	    	var renderer = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? __webpack_require__('mmirf/renderUtils') : require('mmirf/renderUtils');
 	    	var renderedLayout = renderer.renderLayout(parseResult, null/*FIXME?*/);
 
 	    	//DISABLED: parsing a string as HTML via jQuery etc. does not work (removes head, body,... tags):

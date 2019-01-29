@@ -89,8 +89,10 @@ define ( ['mmirf/commonUtils','mmirf/contentElement','mmirf/storageUtils','requi
 		    		//this name is purely informational:
 		    		name : this.controller.getName() + 'Partial',
 		    		content : this.def
-		    	};
-		    this.contentElement = new ContentElement(contentElementInfo, this, require('mmirf/parseUtils'), require('mmirf/renderUtils'));
+		    };
+		    var parserUtils = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? __webpack_require__('mmirf/parseUtils') : require('mmirf/parseUtils');
+		    var renderUtils = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? __webpack_require__('mmirf/renderUtils') : require('mmirf/renderUtils');
+		    this.contentElement = new ContentElement(contentElementInfo, this, parserUtils, renderUtils);
 	    }
 	}
 

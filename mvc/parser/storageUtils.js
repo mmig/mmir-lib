@@ -135,7 +135,7 @@ function restoreObject(storedObject, isTriggerPublish, fileFormatNo){
 
 
 	//NOTE: for require-ing to work, all Classes (i.e. JS-files) need to already have been loaded & required (i.e. "async-required" once before)
-	var constructor = require(storedObject.classConstructor);
+	var constructor = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? __webpack_require__(storedObject.classConstructor) : require(storedObject.classConstructor);
 
 	var obj = classExtender.extend( new constructor(), storedObject);
 	if(typeof obj.init === 'function'){
