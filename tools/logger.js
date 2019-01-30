@@ -934,12 +934,18 @@ var instance =
 	 */
     create: function(loggerName, logLevel){
 
-    	//special argument: is first argument is a (requirejs) module?
-    	if(typeof loggerName === 'object' && loggerName && loggerName.id && typeof loggerName.config === 'function'){
-    		//extract parameters from module object:
-    		logLevel = loggerName.config().logLevel;//<- may be undefined
-    		loggerName = loggerName.id;
-    	}
+			//special argument: is first argument is a (requirejs) module?
+			if(typeof loggerName === 'object' && loggerName && loggerName.id){
+				//extract parameters from module object:
+				if(typeof loggerName.config === 'function'){
+					logLevel = loggerName.config(loggerName).logLevel;//<- may be undefined
+				} else if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+					//NOTE automatic injection by webpack of config-function (into module) does not work here, because loggerName is generic & webpack cannot statically inter its type as Module
+					//     -> explicitly use module.config() helper module:
+					logLevel = require('build-tool/module-config-helper').config(loggerName).logLevel;//<- may be undefined
+				}
+				loggerName = loggerName.id;
+			}
 
         //no logger specified: return default logger
         if(! loggerName){
