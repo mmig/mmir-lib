@@ -28,7 +28,7 @@
 
 
 
-define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/util/deferred' ],
+define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/util/deferred', 'mmirf/logger', 'module' ],
 
 	/**
 	 * A class for managing the controllers of the application. <br>
@@ -44,10 +44,19 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	 *
 	 */
 	function(
-		Dictionary, Controller, constants, commonUtils, deferred
+		Dictionary, Controller, constants, commonUtils, deferred, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ControllerManager.prototype */
+
+
+	/**
+	 * The logger for the ControllerManager.
+	 *
+	 * @private
+	 * @memberOf mmir.ControllerManager
+	 */
+	var logger = Logger.create(module);//initialize with requirejs-module information
 
 	/**
 	 * Initialize ControllerManager:
@@ -136,6 +145,83 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
     		return infoObj;
 	    }
 
+			/**
+		 * HELPER FUNC: parse file list and extract info for view/partial/layout/helper.
+		 *
+		 * @param {Array<String>} fileList
+		 * 				list of file names (retrieved via CommonUtils.listDir())
+		 *
+		 * @param {String} dirPath
+		 * 				path the the directory, where the (source) file is located,
+		 * 				e.g. eHTML template or JS helper implementation
+		 *
+		 * @param {String} genDirPath
+		 * 				path the the directory, where the file for the generated view-element
+		 * 				is potentially located (generated file may not exists)
+		 *
+		 * @param {String} [removeNamePrefix] OPTIONAL
+		 * 				prefix of the file-name which should be removed when extracting the InfoObj.name, e.g. in case of Partials:
+		 * 				<code>removeFileExt(fileName) === removeNamePrefix + infoObj.name</code> (+ file-extension)
+		 *
+		 * @param {RegExpr} [regExpFileFilter] OPTIONAL
+		 * 				regular expression for filtering the fileList, i.e. only files that match the expression will be
+		 * 				included in the returned list of FileInfo objects
+		 *
+		 * @returns {Array<FileInfo>}
+		 * 				list of file-info objects:
+		 * 					FileInfo.name: {String} the name that will be used to identify the resource
+		 * 					FileInfo.path: {String} the path to the source file, e.g. for loading the resource
+		 * 					FileInfo.genPath: {String} the path to generated/executable resource
+		 * @private
+		 *
+		 * @memberOf mmir.ControllerManager#
+		 */
+		 function processFileList(fileList, dirPath, genDirPath, removeNamePrefix, regExpFileFilter){
+
+					if(removeNamePrefix && typeof removeNamePrefix === 'object'){
+						regExpFileFilter = removeNamePrefix;
+						removeNamePrefix = '';
+					} else {
+						removeNamePrefix = removeNamePrefix || '';
+					}
+
+					var infoList = [], entry;
+					if (fileList != null) {
+					  for (var i = 0, size = fileList.length; i < size; ++i) {
+					    entry = fileList[i];
+							if(!regExpFileFilter || regExpFileFilter.test(entry)){
+						    infoList.push(addGenPath(genDirPath, {
+						      // remove leading "~" indicating it is a partial
+						      name: removeFileExt(!removeNamePrefix? entry : entry.replace(removeNamePrefix, '')),
+						      path: dirPath + '/' + entry
+
+						    }, removeNamePrefix));
+							}
+					  }
+					}
+					return infoList;
+			}
+
+			/**
+			 * HELPER get first entry from FileInfo list and transform its name (i.e. so that first letter is upper case)
+			 *
+			 * @param  {[type]} infoList the list of FileInfo objects
+			 * @param  {String} type the type of resources listed in infoList, e.g. "layout" or "helper"
+			 * @return {FileInfo} the first FileInfo object or NULL
+			 */
+			function getFirstInfo(infoList, type){
+				var len = infoList.length;
+				if(len > 1){
+					logger.warn('Invalid number of '+type+': only 1 is allowed, using first of list ...');
+				}
+				if(len >= 1){
+					var info = infoList[0];
+					info.name = firstToUpperCase(info.name);
+					return info;
+				}
+				return null;
+			}
+
 		/**
 		 * This function gets the controller file names and builds a JSON object containing information about
 		 * the location, file name etc. for the controller itself, its views, partials, layout, and helper.
@@ -182,20 +268,17 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		 *     }
 		 *   ],
 		 *   "helper": {
-		 *     "fileName": "applicationHelper",
 		 *     "name": "ApplicationHelper",
-		 *     "path": "helpers/applicationHelper.js"
+		 *     "path": "helpers/applicationHelper.js",
+		 *     "genPath": "helpers/applicationHelper.js"
 		 *   },
 		 *   "layout": {
-		 *     "fileName": "application",
 		 *     "name": "application",
 		 *     "path": "views/layouts/application.ehtml",
 		 *     "genPath": "gen/views/layouts/application.js"
 		 *   }
 		 * }
-		 * //NOTE 1: genPath is an optional field, i.e. it will only be added
-		 *           if the corresponding file exists
-		 * //NOTE 2: layout may be NULL
+		 * //NOTE: layout and helper may be NULL
 		 *
 		 * @requires mmir.CommonUtils
 		 * @requires mmir.Constants
@@ -204,124 +287,68 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		 */
 	    function getControllerResources(controllerName, controllerPath){
 
-	    	var partialsPrefix = commonUtils.getPartialsPrefix();
-	    	var controllerFilePath = controllerPath + controllerName;
+				var partialsPrefix = commonUtils.getPartialsPrefix();
+			 var controllerFilePath = controllerPath + controllerName;
 
-	    	var rawControllerName= removeFileExt(controllerName);
-	    	controllerName = rawControllerName;
+			 var rawControllerName= removeFileExt(controllerName);
+			 controllerName = rawControllerName;
 
-	    	//helper: check if string starts with the controller's name (ignoring case)
-	    	var reStartsWithCtrl = new RegExp('^'+controllerName, 'i');
+			 var viewsPath = constants.getViewPath() + controllerName;
+			 var genViewsPath = constants.getCompiledViewPath() + controllerName;
 
+			 controllerName = firstToUpperCase(controllerName);
 
-	    	var viewsPath = constants.getViewPath() + controllerName;
-	    	var genViewsPath = constants.getCompiledViewPath() + controllerName;
-
-	    	controllerName = firstToUpperCase(controllerName);
-
-	    	var reView = new RegExp('^(?!'+partialsPrefix+').*\\.ehtml$', 'ig');//<- for finding ehtml files that do NOT start with ~ (i.e. exluding partials)
-	    	var viewsFileList = commonUtils.listDir(viewsPath, reView);
-
-	    	var i, size;
-	    	var viewsList = [];
-	    	if(viewsFileList != null){
-	    		for (i=0, size = viewsFileList.length; i < size; ++i){
-
-	    			viewsList.push(addGenPath( genViewsPath, {
-		    			name: removeFileExt(viewsFileList[i]),
-		    			path: viewsPath+"/"+viewsFileList[i]
-		    		}));
-		    	}
-	    	}
+			 var reView = new RegExp('^(?!'+partialsPrefix+').*\\.ehtml$', 'ig');//<- for finding ehtml files that do NOT start with ~ (i.e. exluding partials)
+			 var viewsFileList = commonUtils.listDir(viewsPath, reView);
+			 var viewsList = processFileList(viewsFileList, viewsPath, genViewsPath);
 
 
-	    	var rePartials = new RegExp('^'+partialsPrefix+'.*\\.ehtml$', 'ig');//<- for finding ehtml files that start with ~ (i.e. partials)
-	    	var partialsFileList = commonUtils.listDir(viewsPath, rePartials);
+			 var rePartials = new RegExp('^'+partialsPrefix+'.*\\.ehtml$', 'ig');//<- for finding ehtml files that start with ~ (i.e. partials)
+			 var partialsFileList = commonUtils.listDir(viewsPath, rePartials);
+			 var partialsInfoList = processFileList(partialsFileList, viewsPath, genViewsPath, partialsPrefix);
 
-	    	var partialsInfoList = [];
-	    	if(partialsFileList != null) {
-	    		for (i=0, size = partialsFileList.length; i < size; ++i){
 
-		    		partialsInfoList.push(addGenPath(genViewsPath, {
-				    		// remove leading "~" indicating it is a partial
-				    		name: removeFileExt( partialsFileList[i].replace(partialsPrefix,'') ),
-				        	path: viewsPath+"/"+partialsFileList[i]
+			 var helpersPath = constants.getHelperPath().replace(/\/$/, '');//<- remove trailing slash;
+			 var helpersFileList = commonUtils.listDir(helpersPath, /^.*\.js$/ig);//get *.js files
 
-					}, partialsPrefix));
-		        }
-	    	}
+			 var helperSuffix = constants.getHelperSuffix();
+			 var reHelpersFileName = new RegExp('^'+controllerName+helperSuffix+'\.js$', 'i');
+			 var helpersList = processFileList(helpersFileList, helpersPath, helpersPath, reHelpersFileName);
+			 var helperInfo = getFirstInfo(helpersList, 'helper');
 
-	    	var helpersPath = constants.getHelperPath();
-	    	helpersPath = helpersPath.substring(0, helpersPath.length-1);//remove trailing slash
-	    	var helpersFileList = commonUtils.listDir(helpersPath, /^.*\.js$/ig);//get *.js files
 
-	    	var helperSuffix = constants.getHelperSuffix();
-	    	var helperInfo = null;
-	    	var reHelpersEnd = new RegExp(helperSuffix+'\.js$', 'i');
-	    	if(helpersFileList != null){
+			 var layoutsPath = constants.getLayoutPath().replace(/\/$/, '');//<- remove trailing slash
+			 var reLayout = new RegExp('^(?!'+partialsPrefix+').*\\.ehtml$', 'ig');//<- for finding ehtml files that do NOT start with ~ (i.e. exluding partials)
+			 var layoutsFileList = commonUtils.listDir(layoutsPath, reLayout);
 
-	    		for(i=0, size = helpersFileList.length; i < size; ++i){
-		    		if(reStartsWithCtrl.test(helpersFileList[i]) && reHelpersEnd.test(helpersFileList)){
+			 var layoutGenPath = constants.getCompiledLayoutPath().replace(/\/$/, '');//<- remove trailing slash
+ 			 //helper: check if string starts with the controller's name (ignoring case)
+ 			 var reStartsWithCtrl = new RegExp('^'+controllerName, 'i');
+			 var layoutsList = processFileList(layoutsFileList, layoutsPath, layoutGenPath, reStartsWithCtrl);
+			 var layoutInfo = getFirstInfo(layoutsList, 'layout');
 
-		    			var name = removeFileExt(helpersFileList[i]);
-		    			helperInfo = {
-		    	    			fileName: name,
-		    	    			name: firstToUpperCase(name),
-		    	    			path: helpersPath+"/"+helpersFileList[i]
-		    	    	};
-		    		}
-		    	}
 
-	        }
+			 var ctrlInfo = {
+				 fileName: rawControllerName,
+				 name:     controllerName,
+				 path:     controllerFilePath,
 
-	    	var layoutsPath = constants.getLayoutPath();
-	    	layoutsPath = layoutsPath.substring(0, layoutsPath.length-1);//remove trailing slash
-	    	var reLayout = new RegExp('^(?!'+partialsPrefix+').*\\.ehtml$', 'ig');//<- for finding ehtml files that do NOT start with ~ (i.e. exluding partials)
-	    	var layoutsFileList = commonUtils.listDir(layoutsPath, reLayout);
+				 views:    viewsList,
+				 partials: partialsInfoList,
+				 helper:   helperInfo,
+				 layout:   layoutInfo
+			 };
 
-	    	var layoutInfo = null, layoutGenPath;
-	    	if(layoutsFileList != null){
-		    	for(i=0, size = layoutsFileList.length; i < size; ++i){
+	    	// //TEST compare info with "reference" result from original impl.:
+	    	// var test = {
+				// 	application: '{"fileName":"application","name":"Application","path":"controllers/application","views":[{"name":"login","path":"views/application/login.ehtml"},{"name":"registration","path":"views/application/registration.ehtml"},{"name":"welcome","path":"views/application/welcome.ehtml"}],"partials":[{"name":"languageMenu","path":"views/application/~languageMenu.ehtml"}],"helper":null,"layout":null}',
+				// 	calendar: '{"fileName":"calendar","name":"Calendar","path":"controllers/calendar","views":[{"name":"create_appointment","path":"views/calendar/create_appointment.ehtml"}],"partials":[],"helper":null,"layout":null}'
+				// };
+	    	// var isEqual = (JSON.stringify(ctrlInfo) === test[ctrlInfo.fileName]);
+	    	// console[isEqual? 'info':'error']('compliance-test: isEual? '+  isEqual);
+				// console.log(' ######## ctrlInfo -> ', JSON.stringify(ctrlInfo));
 
-		    		if( reStartsWithCtrl.test(layoutsFileList[i]) ){
-
-		    			var layoutName = removeFileExt(layoutsFileList[i]);
-		    	    	layoutInfo = {
-				    		fileName: layoutName,
-				    		name: firstToUpperCase(layoutName),
-				        	path: layoutsPath+"/"+layoutsFileList[i],
-		    	    	};
-
-		    	    	layoutGenPath = constants.getCompiledLayoutPath();
-		    	    	addGenPath(layoutGenPath.substring(0, layoutGenPath.length-1), layoutInfo);
-
-		    	    	//there can be max. 1 layout per controller
-			        	break;
-		    		}
-		        }
-	    	}
-
-	    	var ctrlInfo = {
-	    		fileName: rawControllerName,
-	    		name:     controllerName,
-	    		path:     controllerFilePath,
-
-	    		views:    viewsList,
-	    		partials: partialsInfoList,
-	    		helper:   helperInfo,
-	    		layout:   layoutInfo
-	    	};
-
-	    	//TEST compare info with "reference" result from original impl.:
-//	    	var test ={
-//	    			application: '{"fileName":"application","name":"Application","path":"controllers/application.js","views":[{"name":"login","path":"views/application/login.ehtml"},{"name":"registration","path":"views/application/registration.ehtml"},{"name":"welcome","path":"views/application/welcome.ehtml"}],"partials":[{"name":"languageMenu","path":"views/application/~languageMenu.ehtml"}],"helper":{"fileName":"applicationHelper","name":"ApplicationHelper","path":"helpers/applicationHelper.js"},"layout":{"fileName":"application","name":"application","path":"views/layouts/application.ehtml"}}',
-//	    			calendar: '{"fileName":"calendar","name":"Calendar","path":"controllers/calendar.js","views":[{"name":"create_appointment","path":"views/calendar/create_appointment.ehtml"}],"partials":[],"helper":null,"layout":null}'
-//	    	};
-//
-//	    	var isEqual = (JSON.stringify(ctrlInfo) === test[ctrlInfo.fileName]);
-//	    	console[isEqual? 'info':'error']('compliance-test: isEual? '+  isEqual);
-
-	        return ctrlInfo;
+				return ctrlInfo;
 		};
 
 		commonUtils.loadImpl(
@@ -345,8 +372,6 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 				function callbackStatus(status, fileName, msg) {
 					if(status==='info'){
 
-						console.info('[loadController] "'+fileName);
-
 						var ctrlInfo = getControllerResources(fileName, constants.getControllerPath());
 
 						var controller = new Controller(ctrlInfo.name, ctrlInfo, ctx);
@@ -358,15 +383,17 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 						}
 
 						ctrlList.put(controller.getName(), controller);
+
+						logger.info('[loadController] "'+fileName+'" loaded.');
 					}
 					else if(status==='warning'){
-						console.warn('[loadController] "'+fileName+'": '+msg);
+						logger.warn('[loadController] "'+fileName+'": '+msg);
 					}
 					else if(status==='error'){
-						console.error('[loadController] "'+fileName+'": '+msg);
+						logger.error('[loadController] "'+fileName+'": '+msg);
 					}
 					else{
-						console.error('[loadController] '+status+' (UNKNOWN STATUS) -> "'+fileName+'": '+msg);
+						logger.error('[loadController] '+status+' (UNKNOWN STATUS) -> "'+fileName+'": '+msg);
 					}
 				}
 

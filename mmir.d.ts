@@ -467,7 +467,7 @@ export interface RenderEngine {
     showWaitDialog(text?: string, theme?: string): void;
 }
 
-export interface Layout {
+export declare class Layout {
     constructor(name: string, definition: string, remote?: boolean, ignoreMissingBody?: boolean);
 
     getBodyContents(): string;
@@ -482,7 +482,7 @@ export interface Layout {
     //static getTagAttr(str: any, target: any): any;
 }
 
-export interface YieldDeclaration {
+export declare class YieldDeclaration {
     constructor(parsingElement: ParsingResult, contentAreaType: any);
 
     getName(): string;
@@ -496,7 +496,7 @@ export interface YieldDeclaration {
     stringify(): string;
 }
 
-export interface View {
+export declare class View {
     constructor(ctrl: any, name: string, definition: string);
 
     getContentElement(name: string): ContentElement;
@@ -506,7 +506,7 @@ export interface View {
     stringify(): string;
 }
 
-export interface Partial {
+export declare class Partial {
     constructor(ctrl: Controller, name: string, definition: string);
 
     getContentElement(): ContentElement;
@@ -516,7 +516,7 @@ export interface Partial {
     stringify(): string;
 }
 
-export interface ContentElement {
+export declare class ContentElement {
     constructor(group: ParsingResult|Array<string>|{name: string, content: string, offset?: number, parent?: ContentElement}, view: View, parser: any, renderer: any, ...args: any[]);
 
     getController(): Controller;
@@ -545,7 +545,7 @@ export interface ContentElement {
 
 }
 
-export interface ParsingResult {
+export declare class ParsingResult {
     constructor(thetokens: any);
 
     getCallDataEnd(): number;
@@ -608,14 +608,14 @@ export interface ParsingResult {
 
 }
 
-export type FileInfo = {name: string, path: string, fileName?: string};
+export type FileInfo = {name: string, path: string, genPath: string};
 
-export interface Helper {
+export declare class Helper {
     constructor(ctrl: string, name: string, ctx: any);
     perform(actionName: string, data?: any, ...args: any[]): any;
 }
 
-export interface Controller {
+export declare class Controller {
     constructor(name: any, jsonDef: any, ctx: any);
 
     getName(): string;
