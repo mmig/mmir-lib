@@ -134,22 +134,29 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		 *
 		 * @memberOf mmir.ControllerManager#
 		 */
-	    function addGenPath(genDirPath, infoObj, fileNamePrefix){
+		function addGenPath(genDirPath, infoObj, fileNamePrefix){
 
-	    	var prefix = fileNamePrefix? fileNamePrefix : '';
-	    	var genPath = commonUtils.listDir(genDirPath, prefix + infoObj.name + '.js');
-    		if(genPath && genPath.length > 0){
-    			infoObj.genPath = genDirPath + '/' + genPath[0];
-    		}
+			if(infoObj.genPath){
+				return infoObj;
+			}
 
-    		return infoObj;
-	    }
+			var prefix = fileNamePrefix? fileNamePrefix : '';
+			var filter = prefix + infoObj.name + '.js';
+			var path = genDirPath + '/';
+			if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+				path = '';
+				filter = new RegExp('^mmirf/view/[^/]+/'+filter+'$', 'i');
+			}
+			var genPath = commonUtils.listDir(genDirPath, filter);
+			if(genPath && genPath.length > 0){
+				infoObj.genPath = path + genPath[0];
+			}
+
+			return infoObj;
+		}
 
 			/**
 		 * HELPER FUNC: parse file list and extract info for view/partial/layout/helper.
-		 *
-		 * @param {Array<String>} fileList
-		 * 				list of file names (retrieved via CommonUtils.listDir())
 		 *
 		 * @param {String} dirPath
 		 * 				path the the directory, where the (source) file is located,
@@ -159,11 +166,16 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		 * 				path the the directory, where the file for the generated view-element
 		 * 				is potentially located (generated file may not exists)
 		 *
+		 * @param {QueryFilter} queryFilter
+		 * 				the filter for querying (i.e. filtering) <code>commonUtils.listDir()</code>:
+		 * 					queryFilter.nameStart: {String} an regular expression that the file-name must match (or empty string, if all file-names should match)
+		 * 					queryFilter.ext: {String} the file-extension that should match, with dot e.g. "js" or "ehtml"
+		 *
 		 * @param {String} [removeNamePrefix] OPTIONAL
 		 * 				prefix of the file-name which should be removed when extracting the InfoObj.name, e.g. in case of Partials:
 		 * 				<code>removeFileExt(fileName) === removeNamePrefix + infoObj.name</code> (+ file-extension)
 		 *
-		 * @param {RegExpr} [regExpFileFilter] OPTIONAL
+		 * @param {RegExp} [regExpFileFilter] OPTIONAL
 		 * 				regular expression for filtering the fileList, i.e. only files that match the expression will be
 		 * 				included in the returned list of FileInfo objects
 		 *
@@ -176,7 +188,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		 *
 		 * @memberOf mmir.ControllerManager#
 		 */
-		 function processFileList(fileList, dirPath, genDirPath, removeNamePrefix, regExpFileFilter){
+		 function processFileList(dirPath, genDirPath, queryFilter, removeNamePrefix, regExpFileFilter){
 
 					if(removeNamePrefix && typeof removeNamePrefix === 'object'){
 						regExpFileFilter = removeNamePrefix;
@@ -185,18 +197,33 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 						removeNamePrefix = removeNamePrefix || '';
 					}
 
-					var infoList = [], entry;
+					var isSourceList = true;
+					var queryFileName = queryFilter.nameStart? '^' + queryFilter.nameStart + '.*' : '';
+					var fileList = commonUtils.listDir(dirPath, new RegExp(queryFileName + '\\.' + queryFilter.ext + '$', 'i'));
+					var wpBuild = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD;
+					if(!fileList){
+						// -> query gen-dir instead
+						isSourceList = false;
+						if(wpBuild){
+							//NOTE in webpack build the entry is not a file-name, but a module ID, like "mmirf/view/application/login.js"
+							queryFileName = queryFilter.nameStart? '^mmirf/view/[^/]+/' + queryFilter.nameStart + '[^/]*' : '';;
+						}
+						//NOTE file-extension in gen-dir is always .js
+						fileList = commonUtils.listDir(genDirPath, new RegExp(queryFileName+ '\\.js$', 'i'));
+					}
+
+					var infoList = [], entry, name;
 					if (fileList != null) {
 					  for (var i = 0, size = fileList.length; i < size; ++i) {
 					    entry = fileList[i];
-							if(!regExpFileFilter || regExpFileFilter.test(entry)){
-						    infoList.push(addGenPath(genDirPath, {
-						      // remove leading "~" indicating it is a partial
-						      name: removeFileExt(!removeNamePrefix? entry : entry.replace(removeNamePrefix, '')),
-						      path: dirPath + '/' + entry
-
-						    }, removeNamePrefix));
-							}
+						if(!regExpFileFilter || regExpFileFilter.test(entry)){
+							name = removeFileExt(!removeNamePrefix? entry : entry.replace(removeNamePrefix, ''));
+							infoList.push(addGenPath(genDirPath, {
+							  name: wpBuild? name.replace(/^.*\//, '') : name,													//<- in webpack build: remove everything from ID (i.e. the name) except for the last segement
+							  path: isSourceList? dirPath + '/' + entry : null,
+							  genPath: isSourceList? null : (wpBuild? entry : genDirPath + '/' + name)	//<- in webpack build the genPath is the module ID, otherwise it's the path to the generated file
+							}, removeNamePrefix));
+						}
 					  }
 					}
 					return infoList;
@@ -298,33 +325,20 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 
 			 controllerName = firstToUpperCase(controllerName);
 
-			 var reView = new RegExp('^(?!'+partialsPrefix+').*\\.ehtml$', 'ig');//<- for finding ehtml files that do NOT start with ~ (i.e. exluding partials)
-			 var viewsFileList = commonUtils.listDir(viewsPath, reView);
-			 var viewsList = processFileList(viewsFileList, viewsPath, genViewsPath);
+			 var viewsList = processFileList(viewsPath, genViewsPath, {nameStart: '(?!'+partialsPrefix+')', ext: 'ehtml'});
 
-
-			 var rePartials = new RegExp('^'+partialsPrefix+'.*\\.ehtml$', 'ig');//<- for finding ehtml files that start with ~ (i.e. partials)
-			 var partialsFileList = commonUtils.listDir(viewsPath, rePartials);
-			 var partialsInfoList = processFileList(partialsFileList, viewsPath, genViewsPath, partialsPrefix);
-
+			 var partialsInfoList = processFileList(viewsPath, genViewsPath, {nameStart: partialsPrefix, ext: 'ehtml'}, partialsPrefix);
 
 			 var helpersPath = constants.getHelperPath().replace(/\/$/, '');//<- remove trailing slash;
-			 var helpersFileList = commonUtils.listDir(helpersPath, /^.*\.js$/ig);//get *.js files
-
 			 var helperSuffix = constants.getHelperSuffix();
 			 var reHelpersFileName = new RegExp('^'+controllerName+helperSuffix+'\.js$', 'i');
-			 var helpersList = processFileList(helpersFileList, helpersPath, helpersPath, reHelpersFileName);
+			 var helpersList = processFileList(helpersPath, helpersPath, {nameStart: '', ext: 'js'}, reHelpersFileName);
 			 var helperInfo = getFirstInfo(helpersList, 'helper');
 
-
 			 var layoutsPath = constants.getLayoutPath().replace(/\/$/, '');//<- remove trailing slash
-			 var reLayout = new RegExp('^(?!'+partialsPrefix+').*\\.ehtml$', 'ig');//<- for finding ehtml files that do NOT start with ~ (i.e. exluding partials)
-			 var layoutsFileList = commonUtils.listDir(layoutsPath, reLayout);
-
 			 var layoutGenPath = constants.getCompiledLayoutPath().replace(/\/$/, '');//<- remove trailing slash
- 			 //helper: check if string starts with the controller's name (ignoring case)
  			 var reStartsWithCtrl = new RegExp('^'+controllerName, 'i');
-			 var layoutsList = processFileList(layoutsFileList, layoutsPath, layoutGenPath, reStartsWithCtrl);
+			 var layoutsList = processFileList(layoutsPath, layoutGenPath, {nameStart: '(?!'+partialsPrefix+')', ext: 'ehtml'}, reStartsWithCtrl);
 			 var layoutInfo = getFirstInfo(layoutsList, 'layout');
 
 
