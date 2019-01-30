@@ -152,13 +152,36 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        var langFiles = null;
 		        var retValue = false;
 
-		        if (lang != null) {
+		        if (lang) {
+
+								//check for existence of JSON grammar
 		            langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
-		            if (langFiles != null) {
+		            if (langFiles) {
 		                if (langFiles.indexOf(constants.getGrammarFileName()) > -1) {
 		                    retValue = true;
 		                }
 		            }
+
+								//check for existence of compiled grammar
+								if(!langFiles || !retValue){
+
+									langFiles =	commonUtils.listDir(constants.getGeneratedGrammarsPath().replace(/\/$/, ''));
+									if(langFiles){
+										var re = new RegExp(
+															typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+																	'^mmirf/grammar/'+lang+'.js$' :
+																	'^'+lang+'_'+constants.getGrammarFileName().replace(/\.json/i, '.js')+'$',
+															'i'
+										);
+										for(var i=langFiles.length - 1; i >= 0; --i){
+											if(re.test(langFiles[i])){
+												retValue = true;
+												break;
+											}
+										}
+									}
+
+								}
 		        }
 		        return retValue;
 		    }
