@@ -282,9 +282,10 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 					false,
 					cbFunction,
 					function isGrammarAlreadyLoaded(grammarFileName) {
-						var i = grammarFileName.lastIndexOf('_');
-						if (i !== -1) {
-							var id = grammarFileName.substring(0, i);
+						// "file name" for webpack is "mmirf/grammar/<grammar ID>", otherwise the file-name is "<grammar ID>_grammar.js"
+						var m = (typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? /\/([^/]+)$/ : /^([^_]+)/).exec(grammarFileName);
+						if (m) {
+							var id = m[1];
 							if(ignoreGrammarIds){
 								for(var p in ignoreGrammarIds){
 									if(ignoreGrammarIds.hasOwnProperty(p) && ignoreGrammarIds[p] == id){
