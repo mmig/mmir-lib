@@ -146,24 +146,35 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		    /**
 		     * @function
+		     * @private
+				 * @param {String} lang
+				 *            Language String, i.e.: en, de
+				 * @param {"source"|"bin"} [grammarType] OPTIONAL
+				 *            only check grammar specifications ("source", i.e. JSON grammar),
+				 *            or executable grammar ("bin", i.e. compiled grammar) existence
+				 * @returns {Boolean|"source"|"bin"} TRUE if a grammar exists for given language
+				 * 																			 (and if grammarType was given, when the
+				 * 																			  existing grammar matches the grammar type)
 		     * @memberOf LanguageManager#
 		     */
-		    function doCheckExistsGrammar(lang) {
+		    function doCheckExistsGrammar(lang, grammarType) {
 		        var langFiles = null;
 		        var retValue = false;
 
 		        if (lang) {
 
 								//check for existence of JSON grammar
-		            langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
-		            if (langFiles) {
-		                if (langFiles.indexOf(constants.getGrammarFileName()) > -1) {
-		                    retValue = true;
-		                }
-		            }
+								if(!grammarType || grammarType === 'source'){
+			            langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
+			            if (langFiles) {
+			                if (langFiles.indexOf(constants.getGrammarFileName()) > -1) {
+			                    retValue = true;
+			                }
+			            }
+								}
 
 								//check for existence of compiled grammar
-								if(!langFiles || !retValue){
+								if(!langFiles || !retValue && (!grammarType || grammarType === 'bin')){
 
 									langFiles =	commonUtils.listDir(constants.getGeneratedGrammarsPath().replace(/\/$/, ''));
 									if(langFiles){
@@ -531,9 +542,14 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		             * returned. Else the method returns 'false'.
 		             *
 		             * @function
-		             * @returns {Boolean} True if a grammar exists for given language.
-		             * @param {String}
+		             * @param {String} lang
 		             *            Language String, i.e.: en, de
+		             * @param {"source"|"bin"} [grammarType] OPTIONAL
+		             *            only check grammar specifications ("source", i.e. JSON grammar),
+		             *            or executable grammar ("bin", i.e. compiled grammar) existence
+		             * @returns {Boolean|"source"|"bin"} TRUE if a grammar exists for given language
+		             * 																			 (and if grammarType was given, when the
+		             * 																			  existing grammar matches the grammar type)
 		             * @public
 		        	 *
 		        	 * @memberOf mmir.LanguageManager.prototype
