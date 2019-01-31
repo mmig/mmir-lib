@@ -86,54 +86,15 @@ newMediaPlugin = {
 		/**  @memberOf WaitReadyIndicatorImpl# */
 		initialize: function(callBack, mediaManager, ctxId, moduleConfig){
 
-			/**
-			 * legacy mode: use pre-v4 API of mmir-lib
-			 * @memberOf WaitReadyIndicatorImpl#
-			 */
-			var _isLegacyMode = true;
+
 			/**
 			 * Reference to the mmir-lib core (only available in non-legacy mode)
 			 * @type mmir
 			 * @memberOf WaitReadyIndicatorImpl#
 			 */
-			var _mmir = null;
-			if(mediaManager._get_mmir){
-				//_get_mmir() is only available for >= v4
-				_mmir = mediaManager._get_mmir();
-				//just to make sure: set legacy-mode if version is < v4
-				_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
-			}
-			/**
-			 * HELPER for require IDs:
-			 * 		return correct module IDs (and require instance) depending on legacy mode
-			 *
-			 * @param {String} id
-			 * 			the require() module ID
-			 *
-			 * @returns {any} the require()'ed module ID
-			 *
-			 * @memberOf WaitReadyIndicatorImpl#
-			 */
-			var _getId = function(id){
-				return (_isLegacyMode? '' : 'mmirf/') + id;
-			};
-			/**
-			 * HELPER for require():
-			 * 		use module IDs (and require instance) depending on legacy mode
-			 *
-			 * @param {String|Array<String>} id
-			 * 			the require() module ID
-			 *
-			 * @returns {any} the require()'ed module
-			 *
-			 * @memberOf WaitReadyIndicatorImpl#
-			 */
-			var _req = function(id, callback){
-				var name = Array.isArray(id)? id.map(_getId) : _getId(id);
-				return _mmir? _mmir.require(name, callback) : require(name, callback);
-			};
+			var _mmir = mediaManager._get_mmir();
 
-			_req(['waitDialog'], function(dlg){
+			_mmir.require(['mmirf/waitDialog'], function(dlg){
 
 				/**  @memberOf WaitReadyIndicatorImpl# */
 				var _pluginName = 'waitReadyIndicator';
@@ -142,7 +103,7 @@ newMediaPlugin = {
 				 * @type mmir.LanguageManager
 				 * @memberOf WaitReadyIndicatorImpl#
 				 */
-				var languageManager = _req('languageManager');
+				var languageManager = _mmir.require('mmirf/languageManager');
 
 				/**  @memberOf WaitReadyIndicatorImpl# */
 				var _id = 'media-plugin-wait';
