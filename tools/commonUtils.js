@@ -390,7 +390,7 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 				if(typeof librariesPath === 'string'){
 					theFileList = instance.listDir(librariesPath, /\.js$/ig);//get *.js files
 					if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
-						librariesPath = 'require:/';
+						librariesPath = 'require://';
 						theFileList = theFileList.map(function(file){ return file.replace(/\.js$/ig, '')});
 					}
 				}
@@ -587,9 +587,9 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 		     */
 		    getLocalScript : function(scriptUrl, success, fail) {
 
-				if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD && /^require:\//.test(scriptUrl)){
+				if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD && /^require:\/\//.test(scriptUrl)){
 					try {
-						__webpack_require__(scriptUrl.substring('require:/'.length));
+						__webpack_require__(scriptUrl.substring('require://'.length));
 						if(success){
 							setTimeout(function(){success.apply(this, arguments)}, 10);
 						}
