@@ -376,20 +376,23 @@ define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 
         	if(!doNotResolve && ! checkHasGrammar(id) ){
 
-						if(instance.exists_gen_grammar(id)){
-
-							require('mmirf/commonUtils').loadCompiledGrammars(constants.getGeneratedGrammarsPath(), function(){
-
-								if(!isDefaultCallback) callback();
-								else if(logger.isInfo()) logger.info('initialized executable grammar for "'+id+'".');
-
-							}, require('mmirf/languageManager').getLanguages().filter(function(lang){ return lang !== id}))
-
-						} else {
-
-							var jsonGrammarUrl = instance.get_json_grammar_url(id);
-							createAndAddGrammar(jsonGrammarUrl, id, callback);
-						}
+						//DISABLED: check for executable grammar (that was not loaded yet), before trying to compile json-grammar
+						//          -> this would pull in too many dependencies(?) ...
+						//
+						// if(instance.exists_gen_grammar(id)){
+						//
+						// 	require('mmirf/commonUtils').loadCompiledGrammars(constants.getGeneratedGrammarsPath(), function(){
+						//
+						// 		if(!isDefaultCallback) callback();
+						// 		else if(logger.isInfo()) logger.info('initialized executable grammar for "'+id+'".');
+						//
+						// 	}, require('mmirf/languageManager').getLanguages().filter(function(lang){ return lang !== id}))
+						//
+						// } else {
+						//
+						// 	var jsonGrammarUrl = instance.get_json_grammar_url(id);
+						// 	createAndAddGrammar(jsonGrammarUrl, id, callback);
+						// }
 
 						var jsonGrammarUrl = instance.get_json_grammar_url(id);
 
