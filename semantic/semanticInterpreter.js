@@ -864,15 +864,12 @@ define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 
 	        //FIXME rename/move functions
 	        get_json_grammar_url: function(id){
-	        	var configLangPath = constants.getLanguagePath();
-	        	var jsonGrammarFileName = constants.getGrammarFileName();
-
-	        	return configLangPath + id + '/' +jsonGrammarFileName;
-	        },
-	        exists_gen_grammar: function(id){
-	        	var lang = require('mmirf/languageManager');
-	        	return lang.existsGrammar(id, 'bin');
-	        }
+	        	return constants.getGrammarFileUrl(id);
+	        }//,
+	        // exists_gen_grammar: function(id){
+	        // 	var lang = require('mmirf/languageManager');
+	        // 	return lang.existsGrammar(id, 'bin');
+	        // }
         };//END: var _tmpInstance = {...
 
         return _tmpInstance;

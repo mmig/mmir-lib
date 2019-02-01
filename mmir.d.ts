@@ -217,13 +217,13 @@ export interface Constants {
     getCompiledViewPath: () => string;
     getConfigurationFileUrl: () => string;
     getControllerPath: () => string;
-    getDictionaryFileName: () => string;
+    getDictionaryFileUrl: (langCode?: string) => string;
     getDirectoriesFileUrl: () => string;
     getEnv: () => any;
     getEnvPlatform: () => any;
     getExtensionsPath: () => string;
     getGeneratedGrammarsPath: () => string;
-    getGrammarFileName: () => string;
+    getGrammarFileUrl: (langCode?: string) => string;
     getGrammarPluginPath: () => string;
     getHelperPath: () => string;
     getHelperSuffix: () => string;
@@ -233,7 +233,7 @@ export interface Constants {
     getMediaPluginPath: () => string;
     getModelPath: () => string;
     getPartialsPrefix: () => string;
-    getSpeechConfigFileName: () => string;
+    getSpeechConfigFileUrl: (langCode?: string) => string;
     getViewPath: () => string;
     getWorkerPath: () => string;
     init: (theForBrowserParameter: any) => any;

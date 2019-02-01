@@ -167,7 +167,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 								if(!grammarType || grammarType === 'source'){
 			            langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
 			            if (langFiles) {
-			                if (langFiles.indexOf(constants.getGrammarFileName()) > -1) {
+			                if (langFiles.indexOf(constants.getGrammarFileUrl()) > -1) {
 			                    retValue = true;
 			                }
 			            }
@@ -181,7 +181,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 										var re = new RegExp(
 															typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
 																	'^mmirf/grammar/'+lang+'.js$' :
-																	'^'+lang+'_'+constants.getGrammarFileName().replace(/\.json/i, '.js')+'$',
+																	'^'+lang+'_'+constants.getGrammarFileUrl().replace(/\.json/i, '.js')+'$',
 															'i'
 										);
 										for(var i=langFiles.length - 1; i >= 0; --i){
@@ -288,7 +288,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        if (lang && currentLanguage != lang) {
 		            currentLanguage = lang;
 		        }
-		        var path = constants.getLanguagePath() + lang + "/" + constants.getSpeechConfigFileName();
+		        var path = constants.getSpeechConfigFileUrl(lang);
 		        loadFile({
 		            async : false,
 		            dataType : "json",
@@ -326,7 +326,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        if (lang && currentLanguage != lang) {
 		            currentLanguage = lang;
 		        }
-		        var path = constants.getLanguagePath() + lang + "/" + constants.getDictionaryFileName();
+		        var path = constants.getDictionaryFileUrl(lang);
 		        loadFile({
 		            async : false,
 		            dataType : "json",
@@ -499,7 +499,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                if (lang != null) {
 		                    langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
 		                    if (langFiles != null) {
-		                        if (langFiles.indexOf(constants.getDictionaryFileName()) > -1) {
+		                        if (langFiles.indexOf(constants.getDictionaryFileUrl()) > -1) {
 		                            retValue = true;
 		                        }
 		                    }
@@ -529,7 +529,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                if (lang != null) {
 		                    langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
 		                    if (langFiles != null) {
-		                        if (langFiles.indexOf(constants.getSpeechConfigFileName()) > -1) {
+		                        if (langFiles.indexOf(constants.getSpeechConfigFileUrl()) > -1) {
 		                            retValue = true;
 		                        }
 		                    }

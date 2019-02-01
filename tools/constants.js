@@ -524,11 +524,19 @@ function(
 			 * Returns the name of the dictionary filename as string
 			 * @function
 			 * @public
-			 * @returns {String} dictionary filename
+			 * @param {String} [langCode] OPTIONAL
+			 * 									the language code (i.e. the ID) for the dictionary file
+			 * @returns {String} dictionary filename,
+			 * 										or, if langCode is provided, the path to the dictionary file
 			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
-			getDictionaryFileName: function(){
+			getDictionaryFileUrl: function(langCode){
+				if(langCode){
+					return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+												'mmirf/dictionary/' + langCode :
+												this.getLanguagePath() + langCode + '/' + dictionaryFileName;
+				}
 				return dictionaryFileName;
 			},
 			/**
@@ -536,22 +544,39 @@ function(
 			 * the speech configuration as string
 			 * @function
 			 * @public
-			 * @returns {String} dictionary filename
+			 * @returns {String} speech-configuration filename
+			 * @param {String} [langCode] OPTIONAL
+			 * 									the language code (i.e. the ID) for the speech-configuration file
+			 * @returns {String} speech-configuration filename,
+			 * 										or, if langCode is provided, the path to the speech-configuration file
 			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
-			getSpeechConfigFileName: function(){
+			getSpeechConfigFileUrl: function(langCode){
+				if(langCode){
+					return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+												'mmirf/speechconfig/' + langCode :
+												this.getLanguagePath() + langCode + '/' + speechConfigFileName;
+				}
 				return speechConfigFileName;
 			},
 			/**
 			 * Returns the name of the grammar filename as string
 			 * @function
 			 * @public
-			 * @returns {String} grammar filename
+			 * @param {String} [langCode] OPTIONAL
+			 * 									the language code (i.e. the ID) for the grammar file
+			 * @returns {String} grammar filename,
+			 * 										or, if langCode is provided, the path to the grammar file
 			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
-			getGrammarFileName: function(){
+			getGrammarFileName: function(langCode){
+				if(langCode){
+					return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+												'mmirf/grammar/source/' + langCode :
+												this.getLanguagePath() + langCode + '/' + grammarFileName;
+				}
 				return grammarFileName;
 			},
 			/**
