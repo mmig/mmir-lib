@@ -571,10 +571,10 @@ function(
 			 *
 			 * @memberOf mmir.Constants.prototype
 			 */
-			getGrammarFileName: function(langCode){
+			getGrammarFileUrl: function(langCode){
 				if(langCode){
 					return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
-												'mmirf/grammar/source/' + langCode :
+												'mmirf/settings/grammar/' + langCode :
 												this.getLanguagePath() + langCode + '/' + grammarFileName;
 				}
 				return grammarFileName;
