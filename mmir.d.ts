@@ -196,7 +196,7 @@ export interface CommonUtils {
    isArray: (object: any) => any;
    isRunningOnAndroid: () => any;
    isRunningOnSmartphone: () => any;
-   loadCompiledGrammars: (generatedGrammarsPath: any, cbFunction: any, ignoreGrammarIds: any) => any;
+   loadCompiledGrammars: (generatedGrammarsPath: string, cbFunction: Function, ignoreGrammarIds?: Array<string>) => any;
    loadDirectoryStructure: (success: any, errorFunc: any) => any;
    loadImpl: (librariesPath: any, isSerial: any, completedCallback: any, checkIsAlreadyLoadedFunc: any, statusCallback: any) => any;
    loadScript: (url: any, successCallback: any, errorCallback: any, ...args: any[]) => any;
@@ -297,10 +297,11 @@ export interface InputEngine {
 export interface InputManager {
     raise: (eventName: string, data?: any) => void;
 }
+export type GrammarType = 'source' | 'bin';
 export interface LanguageManager {
     determineLanguage: (lang: string) => string;
     existsDictionary: (lang: string) => boolean;
-    existsGrammar: (lang: string) => boolean;
+    existsGrammar: (lang: string, grammarType?: GrammarType) => boolean;
     existsSpeechConfig: (lang: string) => boolean;
     fixLang: (providerName: string, langCode: string) => string;
     getDefaultLanguage: () => string;
@@ -312,6 +313,7 @@ export interface LanguageManager {
     init: (lang: string) => any;
     setLanguage: (lang: string) => any;
 }
+export type MediaEventHandler = Function;
 export interface MediaManager {
     ctx: {[ctxId: string]: any};
     waitReadyImpl: IWaitReadyImpl;
@@ -319,12 +321,12 @@ export interface MediaManager {
     init: (successCallback?: Function, failureCallback?: Function, listenerList?: Array<{name: string, listener: Function}>) => any;
     loadFile: (filePath: string, successCallback?: Function, failureCallback?: Function, execId?: string) => void;
 
-    addListener: (eventName: string, eventHandler: Function) => void;
+    addListener: (eventName: string, eventHandler: MediaEventHandler) => void;
     hasListeners: (eventName: string) => boolean;
-    getListeners: (eventName: string) => Function | void;
-    removeListener: (eventName: string, eventHandler: Function) => boolean;
-    off: (eventName: string, eventHandler: Function) => boolean;
-    on: (eventName: string, eventHandler: Function) => void;
+    getListeners: (eventName: string) => MediaEventHandler | void;
+    removeListener: (eventName: string, eventHandler: MediaEventHandler) => boolean;
+    off: (eventName: string, eventHandler: MediaEventHandler) => boolean;
+    on: (eventName: string, eventHandler: MediaEventHandler) => void;
 
     createEmptyAudio: () => IAudio;
     getURLAsAudio: (url: string, onEnd: any, failureCallback: any, successCallback: any, audioObj: IAudio, ...args: any[]) => IAudio;
@@ -349,9 +351,9 @@ export interface MediaManager {
     // internal / "half public" functions (for use in plugin implementations)
     _fireEvent: (eventName: string, args: any[]) => void;
 
-    _addListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler) => void) => void;
-    _removeListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler) => void) => void;
-    _notifyObservers: (eventName: string, actionType: "added" | "removed", eventHandler) => void;
+    _addListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
+    _removeListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
+    _notifyObservers: (eventName: string, actionType: "added" | "removed", eventHandler: MediaEventHandler) => void;
 
     _preparing: (moduleName: string) => void;
     _ready: (moduleName: string) => void;
@@ -454,7 +456,7 @@ export interface RequireJs extends Function {
     specified: (id: any) => any;
     toUrl: (moduleNamePlusExt: any) => any;
     undef: (id: any) => void;
-    config: (any) => void;
+    config: (configuration: any) => void;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
