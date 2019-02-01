@@ -490,7 +490,9 @@ function(
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getConfigurationFileUrl: function(){
-				return basePath+configurationFileUrl;
+				return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+												'mmirf/settings/configuration' :
+												basePath+configurationFileUrl;
 			},
 			/**
 			 * Returns a string with the path to the directories file (directory-strucure / file-list).
@@ -501,7 +503,9 @@ function(
 			 * @memberOf mmir.Constants.prototype
 			 */
 			getDirectoriesFileUrl: function(){
-				return basePath+directoriesFileUrl;
+				return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+												'mmirf/settings/directories' :
+												basePath+directoriesFileUrl;
 			},
 			/**
 			 * Returns a string with the path to the beep audio-file.
