@@ -534,7 +534,7 @@ function(
 			getDictionaryFileUrl: function(langCode){
 				if(langCode){
 					return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
-												'mmirf/dictionary/' + langCode :
+												'mmirf/settings/dictionary/' + langCode :
 												this.getLanguagePath() + langCode + '/' + dictionaryFileName;
 				}
 				return dictionaryFileName;
@@ -555,7 +555,7 @@ function(
 			getSpeechConfigFileUrl: function(langCode){
 				if(langCode){
 					return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
-												'mmirf/speechconfig/' + langCode :
+												'mmirf/settings/speech/' + langCode :
 												this.getLanguagePath() + langCode + '/' + speechConfigFileName;
 				}
 				return speechConfigFileName;
