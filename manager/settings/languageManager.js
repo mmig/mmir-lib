@@ -270,6 +270,25 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		        return semanticInterpreter.getCurrentGrammar();
 		    }
+
+				/**
+				 *
+				 * @param  {"dictionary" | "speechConfig" | "grammar"} type the type of the resource
+				 * @param  {String} lang the language code / ID
+				 * @return {String} the resource ID for loading
+				 */
+				function getResourceUri(type, lang){
+					if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+						// webpack ID: 'mmirf/settings/(dictionary|speechConfig|grammar)/<lang>'
+						var id = 'mmirf/settings/'+type.replace(/Config$/, '')+'/'+lang;
+						if(__webpack_modules__[id]){
+							return __webpack_require__(id);
+						}
+					}
+					var funcName = 'get' + type[0].toUpperCase() + type.substring(1) + 'FileUrl';
+					return constants[funcName](lang);
+				}
+
 		    /**
 		     * Loads the speech-configuration for the provided language and updates the current
 		     * language.
@@ -288,7 +307,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        if (lang && currentLanguage != lang) {
 		            currentLanguage = lang;
 		        }
-		        var path = constants.getSpeechConfigFileUrl(lang);
+		        var path = getResourceUri('speechConfig', lang);
 		        loadFile({
 		            async : false,
 		            dataType : "json",
@@ -326,7 +345,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        if (lang && currentLanguage != lang) {
 		            currentLanguage = lang;
 		        }
-		        var path = constants.getDictionaryFileUrl(lang);
+		        var path = getResourceUri('dictionary', lang);
 		        loadFile({
 		            async : false,
 		            dataType : "json",
@@ -743,6 +762,14 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getLanguageConfig : function(pluginId, feature, separator) {
+
+									if(!currentSpeechConfig){
+										logger.warn('no speech configuration ('+constants.getSpeechConfigFileUrl()+') available for '+currentLanguage);
+										if(!feature || feature === 'language'){
+											return currentLanguage;
+										}
+										return void(0);
+									}
 
 		                //if nothing is specfied:
 		            	//	return default language-setting
