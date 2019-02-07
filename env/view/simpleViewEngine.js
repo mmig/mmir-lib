@@ -330,11 +330,19 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 
 				if(!dialogs){
 					dialogs = document.getElementsByTagName('dialog');
-					if(dialogs.length > 1){
+					var len = dialogs.length;
+					if(len === 0){
+						log.warn('PresentationManager[simpleViewEngine].doRenderView: no dialogs container, inserting new one into document.body.');
+						dialogs = document.createElement('div');
+						dialogs.id = 'applications_dialogs';
+						dialogs.innerHTML = layoutDialogs;
+						document.body.appendChild(dialogs);
+					} else if(len > 1){
 						log.warn('PresentationManager[simpleViewEngine].doRenderView: too many <dialog> definitions ('+dialogs.length+').');
 					}
 					dialogs = dialogs[0];//<- dialogs is set to undefined, if no <dialog>-elements were found
 				}
+
 
 				if(dialogs){
 					dialogs.innerHTML = layoutDialogs;
@@ -393,10 +401,14 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 				var pageContainer = oldContent;
 				if(pageContainer && pageContainer.parentElement){
 					pageContainer.parentElement.innerHTML = newPage;
-					newPage = document.getElementById(newId);
 				} else {
-					log.error('PresentationManager[simpleViewEngine].doRenderView: could not find parent for pageContainer ', pageContainer);
+					log.error('PresentationManager[simpleViewEngine].doRenderView: could not find parent for pageContainer, inserting new one into document.body!');
+					var pageContainerWrapper = document.createElement('div');
+					pageContainerWrapper.id = 'pageContainer';
+					pageContainerWrapper.innerHTML = newPage;
+					document.body.appendChild(pageContainerWrapper);
 				}
+				newPage = document.getElementById(newId);
 				doRemoveElementsAfterViewLoad.call(newPage,{},changeOptions);
 			};
 
