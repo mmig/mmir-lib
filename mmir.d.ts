@@ -613,12 +613,12 @@ export declare class ParsingResult {
 export type FileInfo = {name: string, path: string, genPath: string};
 
 export declare class Helper {
-    constructor(ctrl: string, name: string, ctx: any);
+    constructor(ctrl: string, name: string, instanceConstr: Function);
     perform(actionName: string, data?: any, ...args: any[]): any;
 }
 
 export declare class Controller {
-    constructor(name: any, jsonDef: any, ctx: any);
+    constructor(name: any, jsonDef: any, instanceConstr: Function);
 
     getName(): string;
 

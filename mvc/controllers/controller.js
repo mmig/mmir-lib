@@ -3,24 +3,24 @@
  * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
  * 	German Research Center for Artificial Intelligence
  * 	http://www.dfki.de
- * 
- * 	Permission is hereby granted, free of charge, to any person obtaining a 
- * 	copy of this software and associated documentation files (the 
- * 	"Software"), to deal in the Software without restriction, including 
- * 	without limitation the rights to use, copy, modify, merge, publish, 
- * 	distribute, sublicense, and/or sell copies of the Software, and to 
- * 	permit persons to whom the Software is furnished to do so, subject to 
+ *
+ * 	Permission is hereby granted, free of charge, to any person obtaining a
+ * 	copy of this software and associated documentation files (the
+ * 	"Software"), to deal in the Software without restriction, including
+ * 	without limitation the rights to use, copy, modify, merge, publish,
+ * 	distribute, sublicense, and/or sell copies of the Software, and to
+ * 	permit persons to whom the Software is furnished to do so, subject to
  * 	the following conditions:
- * 
- * 	The above copyright notice and this permission notice shall be included 
+ *
+ * 	The above copyright notice and this permission notice shall be included
  * 	in all copies or substantial portions of the Software.
- * 
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS 
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF 
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY 
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+ *
+ * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+ * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+ * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+ * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+ * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
@@ -30,18 +30,18 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	/**
 	 * The Controller Class is a kind of interface-class which gives access to the methods of a controller and its helper. <br>
 	 * Also holds information about views and partials associated with the controller.
-	 * 
+	 *
 	 * @param {String} name Name of the Controller
 	 * @param {Object} jsonDef Information about the controllers, views, and partials
-	 * @param {Object} [ctx] OPTIONAL the context for the controller implementation (DEFAULT: global context, i.e. window)
-	 * 
+	 * @param {Function} instanceConstr the constructor for creating a new controller instance
+	 *
 	 * @name Controller
 	 * @class
 	 */
 	function (
 			commonUtils, Helper, Logger, module
 ){
-	
+
 	/**
 	 * @private
 	 * @type Logger
@@ -49,46 +49,46 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	 * @see mmir.Logging#create
 	 */
 	var logger = Logger.create(module);
-	
+
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope Controller.prototype */
-	
+
 	//set to @ignore in order to avoid doc-duplication in jsdoc3
 	/**
 	 * @ignore
-	 * 
+	 *
 	 * The Controller Class is a kind of interface-class which gives access to the methods of a controller and its helper. <br>
 	 * Also holds information about views and partials associated with the controller.
-	 * 
+	 *
 	 * @constructs Controller
 	 * @param {String} name Name of the Controller
 	 * @param {Object} jsonDef Information about the controllers, views, and partials
-	 * @param {Object} ctx the context for the controller implementation, i.e. where the constructor exists: ctx.<controller name>()
+	 * @param {Function} instanceConstr the constructor for creating a new controller instance
 	 */
-	function Controller(name, jsonDef, ctx){
+	function Controller(name, jsonDef, instanceConstr){
 //	    console.log("controller name " + name);
 
 	    /**
-	     * The json definition of the views and partials associated with the controller. Also contains paths to controller and its views/partials. 
-	     * 
+	     * The json definition of the views and partials associated with the controller. Also contains paths to controller and its views/partials.
+	     *
 	     * @type Object
 	     * @public
 	     */
 	    this.def = jsonDef;
 
 	    /**
-	     * The name of the controller. 
-	     * 
+	     * The name of the controller.
+	     *
 	     * @type String
 	     * @public
 	     */
 	    this.name = name;
-	    
+
 	    var viewDefs = this.def.views;
 
 	    /**
-	     * An array holding the names of all views associated with the controller.  
-	     * 
+	     * An array holding the names of all views associated with the controller.
+	     *
 	     * @type Array<String>
 	     * @public
 	     */
@@ -97,11 +97,11 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	    // parsing the partials and saving the names in an array
 	    var partialDefs = this.def.partials;
-	    
+
 
 	    /**
-	     * An array holding the names of all partials associated with the controller.  
-	     * 
+	     * An array holding the names of all partials associated with the controller.
+	     *
 	     * @type Array<String>
 	     * @public
 	     */
@@ -110,13 +110,13 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 
 	    /**
-	     * The instance of the with the controller associated helper.  
-	     * 
+	     * The instance of the with the controller associated helper.
+	     *
 	     * @type Helper
 	     * @public
 	     */
 	    this.helper;
-	    
+
 	    /**
 	     * The layout (info) for this controller (if undefined, the default layout should be used)
 	     * @type Object
@@ -126,18 +126,17 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	    /**
 	     * The definition of the controller object, i.e. its (application specific) implementation,
 	     * containing all properties and functions of the controller.<br>
-	     * 
+	     *
 	     * A method of the controller implementation can be called via:
 		 * <pre>
 		 * 	this.instance.method(parameter);
 		 * </pre>
-	     * 
+	     *
 	     * @type Object
 	     * @protected
 	     */
-		// this can only be invoked, if a function with the name "name" exists in the object/context ctx
-	    this.impl = new ctx[name](this);
-	    
+	    this.impl = new instanceConstr(this);
+
 	    /**
 	     * @deprecated use {@link #impl} instead
 	     * @protected
@@ -148,58 +147,77 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * This function loads the helper of the controller - if it exists.
-	 * 
+	 *
 	 * @function
 	 * @param {String} name Name of the Helper to be loaded
 	 * @param {String} helperPath Path to the helper file to load
-	 * @param {Object} ctx the context for the helper implementation, i.e. where the constructor exists: ctx.<helper name>()
+	 * @param {Object} ctx the context for the helper implementation, i.e. where the constructor (will) exists: ctx.<helper name>()
 	 * @protected
 	 */
 	Controller.prototype.loadHelper = function(name, helperPath, ctx){
-		
-		var self = this;
-		
-		//TODO move check of helper existence to Controller.foundControllersCallBack ?
 
-		//determine if there is a helper for the controller:
-		var path = helperPath;
-		var fileName = path;
-		var lastPathSeparatorIndex = path.lastIndexOf('/');
-		if(lastPathSeparatorIndex !== -1){
-			path = path.substring(0,lastPathSeparatorIndex);
-			fileName = fileName.substring( lastPathSeparatorIndex + 1 );
+		if(typeof ctx[name] === 'function' && ctx[name].name === name){
+			//helper implementation was already loaded -> immediately create helper
+			if(logger.isVerbose()) logger.v("[HELPER] already loaded "+name);//debug
+			self.helper = new Helper(self, name, ctx[name]);
 		}
-		//get contents of the helper directory:
-		var dirContents = commonUtils.listDir(path);
-		if(!dirContents){
-			logger.warn('Could not determine contents for directory "'+path+'"');
-			return; ////////////////////// EARLY EXIT //////////////////////////////
-		}
-		else if(! commonUtils.isArray(dirContents) || dirContents.length < 1){
-			logger.warn('Invalid information for contents of directory "'+path+'": '+dirContents);
-			return; ////////////////////// EARLY EXIT //////////////////////////////
-		}
-		
-		//check, if there is an implementation file for this helper:
-		var helperIsSpecified = false;
-		for(var i=0, size= dirContents.length; i < size; ++i){
-			if(dirContents[i] === fileName){
-				helperIsSpecified = true;
-				break;
+
+		self.helper = new Helper(self, name, constr);
+
+		var self = this;
+
+		if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+			helperPath = 'require://' + helperPath.replace(/\.js/i, '');
+		} else {
+			//TODO move check of helper existence to Controller.foundControllersCallBack ?
+
+			//determine if there is a helper for the controller:
+			var path = helperPath;
+			var fileName = path;
+			var lastPathSeparatorIndex = path.lastIndexOf('/');
+			if(lastPathSeparatorIndex !== -1){
+				path = path.substring(0,lastPathSeparatorIndex);
+				fileName = fileName.substring( lastPathSeparatorIndex + 1 );
+			}
+			//get contents of the helper directory:
+			var dirContents = commonUtils.listDir(path);
+			if(!dirContents){
+				logger.warn('Could not determine contents for directory "'+path+'"');
+				return; ////////////////////// EARLY EXIT //////////////////////////////
+			}
+			else if(! commonUtils.isArray(dirContents) || dirContents.length < 1){
+				logger.warn('Invalid information for contents of directory "'+path+'": '+dirContents);
+				return; ////////////////////// EARLY EXIT //////////////////////////////
+			}
+
+			//check, if there is an implementation file for this helper:
+			var helperIsSpecified = false;
+			for(var i=0, size= dirContents.length; i < size; ++i){
+				if(dirContents[i] === fileName){
+					helperIsSpecified = true;
+					break;
+				}
+			}
+
+			if( ! helperIsSpecified){
+				if(logger.isVerbose()) logger.v("[HELPER] no helper available (not implemented) at '"+ helperPath+"'");
+				return; ////////////////////// EARLY EXIT //////////////////////////////
 			}
 		}
-		
-		if( ! helperIsSpecified){
-			if(logger.isVerbose()) logger.v("[HELPER] no helper available (not implemented) at '"+ helperPath+"'");
-			return; ////////////////////// EARLY EXIT //////////////////////////////
-		}
-		
+
 		//if there is a file: load the helper
-		commonUtils.getLocalScript(helperPath, function(data, textStatus, jqxhr){
-			
+		commonUtils.getLocalScript(helperPath, function(res){
+
 				if(logger.isVerbose()) logger.v("[HELPER] load "+ helperPath);//debug
-				
-				self.helper = new Helper(self, name, ctx);
+
+				var constr = ctx[name];
+
+				//FIXME HACK for handling exported constructor
+				if(typeof res === 'function' && res.name === name){
+					constr = res;
+				}
+
+				self.helper = new Helper(self, name, constr);
 			},
 			function(exception) {
 				// print out an error message
@@ -211,18 +229,18 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * This function performs an action of a controller - which is represented by this instance of the Controller <br>
-	 * class - by calling the method from the corresponding controller, e.g. assets/www/controllers/application.js   
-	 * 
+	 * class - by calling the method from the corresponding controller, e.g. assets/www/controllers/application.js
+	 *
 	 * @function
 	 * @param {String} actionName Name of the method to be executed
 	 * @param {Object} data Data to pass to the method of the controller as argument
-	 * @returns {Object} The return value of the executed method 
+	 * @returns {Object} The return value of the executed method
 	 * @public
 	 */
 	Controller.prototype.perform = function(actionName, data){
-		
+
 		if(logger.isVerbose()) logger.v("should perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
-		
+
 	    if(arguments.length > 2){
 	    	return this.impl[actionName](data, arguments[2]);
 		}
@@ -232,25 +250,25 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	};
 
 	/**
-	 * 
+	 *
 	 * This function performs an action of a controller, but only if an action with this name exists; otherwise nothing is done.
-	 * 
+	 *
 	 * In difference to perform(..), the method does not trigger an ERROR, if the action does not exist / is not implemented.
 	 * As a consequence, this method refers to "optionally" implemented functions, whereas perform(..) refers to mandatory functions.
-	 * 
+	 *
 	 * @function
 	 * @param {String} actionName Name of the method to be executed
 	 * @param {Object} data Data to pass to the method of the controller as argument
-	 * @returns {Object} The return value of the executed method 
+	 * @returns {Object} The return value of the executed method
 	 * @public
 	 */
 	Controller.prototype.performIfPresent = function(actionName, data){
 		if(typeof this.impl[actionName] === 'function'){
-		    
+
 			if(logger.isVerbose()) logger.v("performing '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): ""));//debug
-		    
+
 		    return this.perform.apply(this, arguments);
-		    
+
 		} else if(typeof this.impl[actionName] !== 'undefined'){
 			if(logger.isVerbose()) logger.info("could not perform '" + actionName + "' of '" + this.name + "'"+ ((typeof data !== 'undefined' && data !== null)? " with data: "+JSON.stringify(data): "")+": no function ("+typeof this.impl[actionName]+")");//debug
 		} else {
@@ -262,11 +280,11 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	/**
 	 * This function performs a helper action of a controller by calling the appropriate method<br>
 	 * {@link Helper#perform} of the instance of the helper class associated with the controller.
-	 * 
+	 *
 	 * @function
 	 * @param {String} actionName Name of the helper method to be executed
 	 * @param {Object} data Data to pass to the helper method as argument
-	 * @returns {Object} The return value of the executed method 
+	 * @returns {Object} The return value of the executed method
 	 * @public
 	 */
 	Controller.prototype.performHelper = function(actionName, data){
@@ -281,9 +299,9 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the helper of the controller instance.
-	 * 
+	 *
 	 * @function
-	 * @returns {Object} The helper instance 
+	 * @returns {Object} The helper instance
 	 * @public
 	 */
 	Controller.prototype.getHelper = function(){
@@ -294,42 +312,42 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	/**
 	 * Stores all names of the views of the controller by iterating over the array of the views definition.<br>
 	 * This function is called by the constructor of the {@link mmir.Controller} class.
-	 * 
+	 *
 	 * @function
 	 * @param {Array} viewDefs Array of the json-definition of the controllers views - containing name of the views and their corresponding path to the js-files
 	 * @public
 	 */
 	Controller.prototype.parseViews = function(viewDefs){
-		
+
 		for(var i=0, size = viewDefs.length; i < size; ++i){
 			this.views.push(viewDefs[i].name);
 		}
-		
+
 	};
 
 
 	/**
 	 * Stores all names of the partials of the controller by iterating over the array of the partials definition.<br>
 	 * This function is called by the constructor of the {@link mmir.Controller} class.
-	 * 
+	 *
 	 * @function
 	 * @param {Array} partialDefs Array of the json-definition of the controllers partials - containing name of the partials and their corresponding path to the js-files
 	 * @public
 	 */
 	Controller.prototype.parsePartials = function(partialDefs){
-	    
+
 	    for(var i=0, size = partialDefs.length; i < size; ++i){
 			this.partials.push(partialDefs[i].name);
 		}
-	    
+
 	};
 
 
 	/**
 	 * Returns the view names for the controller instance.
-	 * 
+	 *
 	 * @function
-	 * @returns {Array<String>} An array of the controllers views 
+	 * @returns {Array<String>} An array of the controllers views
 	 * @public
 	 */
 	Controller.prototype.getViewNames = function(){
@@ -338,15 +356,15 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the view names for the controller instance.
-	 * 
+	 *
 	 * TODO should this be private/hidden? -> provides "internal" JSON-details object (used in PresentationManager)
-	 * 
+	 *
 	 * Each info object has properties:
 	 * {String} name
 	 * {String} path
-	 * 
+	 *
 	 * @function
-	 * @returns {Array<Object>} An array of the controllers views 
+	 * @returns {Array<Object>} An array of the controllers views
 	 * @public
 	 */
 	Controller.prototype.getViews = function(){
@@ -355,9 +373,9 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the partial names for the controller instance.
-	 * 
+	 *
 	 * @function
-	 * @returns {Array<String>} An array of the controllers partials 
+	 * @returns {Array<String>} An array of the controllers partials
 	 * @public
 	 */
 	Controller.prototype.getPartialNames = function(){
@@ -366,15 +384,15 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the partial info object for the controller instance.
-	 * 
+	 *
 	 * TODO should this be private/hidden? -> provides "internal" JSON-details object (used in PresentationManager)
-	 * 
+	 *
 	 * Each info object has properties:
 	 * {String} name
 	 * {String} path
-	 * 
+	 *
 	 * @function
-	 * @returns {Array<Object>} An array of the controllers partials 
+	 * @returns {Array<Object>} An array of the controllers partials
 	 * @public
 	 */
 	Controller.prototype.getPartials = function(){
@@ -383,18 +401,18 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the layout of the controller instance.
-	 * 
+	 *
 	 * If undefined, the default layout should be used.
-	 * 
+	 *
 	 * TODO should this be private/hidden? -> provides "internal" JSON-details object (used in PresentationManager)
-	 * 
+	 *
 	 * The info object has properties:
 	 * {String} name
 	 * {String} path
 	 * {String} fileName
-	 * 
+	 *
 	 * @function
-	 * @returns {Object} The controller's layout (may be undefined) 
+	 * @returns {Object} The controller's layout (may be undefined)
 	 * @public
 	 */
 	Controller.prototype.getLayout = function(){
@@ -403,13 +421,13 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the layout name for the controller instance.
-	 * 
+	 *
 	 * This is equal to the controller name.
-	 * 
+	 *
 	 * If undefined, the default layout should be used.
-	 * 
+	 *
 	 * @function
-	 * @returns {String} The controller's layout name (may be undefined) 
+	 * @returns {String} The controller's layout name (may be undefined)
 	 * @public
 	 */
 	Controller.prototype.getLayoutName = function(){
@@ -418,9 +436,9 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 
 	/**
 	 * Returns the name of the controller instance.
-	 * 
+	 *
 	 * @function
-	 * @returns {String} The name of the controller 
+	 * @returns {String} The name of the controller
 	 * @public
 	 */
 	Controller.prototype.getName = function(){
@@ -428,5 +446,5 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 	};
 
 	return Controller;
-	
+
 });

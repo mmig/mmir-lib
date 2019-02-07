@@ -220,7 +220,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 							name = removeFileExt(!removeNamePrefix? entry : entry.replace(removeNamePrefix, ''));
 							infoList.push(addGenPath(genDirPath, {
 							  name: wpBuild? name.replace(/^.*\//, '') : name,													//<- in webpack build: remove everything from ID (i.e. the name) except for the last segement
-							  path: isSourceList? dirPath + '/' + entry : null,
+							  path: isSourceList? (wpBuild? entry : dirPath + '/' + entry) : null,
 							  genPath: isSourceList? null : (wpBuild? entry : genDirPath + '/' + name)	//<- in webpack build the genPath is the module ID, otherwise it's the path to the generated file
 							}, removeNamePrefix));
 						}
@@ -331,7 +331,8 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 
 			 var helpersPath = constants.getHelperPath().replace(/\/$/, '');//<- remove trailing slash;
 			 var helperSuffix = constants.getHelperSuffix();
-			 var reHelpersFileName = new RegExp('^'+controllerName+helperSuffix+'\.js$', 'i');
+			 var reStartPattern = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? '^mmirf/helper/' : '^';
+			 var reHelpersFileName = new RegExp(reStartPattern+controllerName+helperSuffix+'\.js$', 'i');
 			 var helpersList = processFileList(helpersPath, helpersPath, {nameStart: '', ext: 'js'}, reHelpersFileName);
 			 var helperInfo = getFirstInfo(helpersList, 'helper');
 
@@ -365,6 +366,40 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 				return ctrlInfo;
 		};
 
+		/**
+		 * HELPER create the controller instance after its implementation was loaded/is available in ctx or via argument res
+		 *
+		 * After the controller instance was initialized, it is added to ctrlList (with its name as key)
+		 *
+		 * @param  {[type]} fileName the name of the controller's file: application.js -> Controller<Appliction>
+		 * @param  {any|Function} res the result of loading the controller implementation, i.e. its constructor function; if undefined, the constructor must be available in ctx in ctx[<controller name>]
+		 *
+		 * @memberOf mmir.ControllerManager#
+		 */
+		function createCtrlInstance(fileName, res){
+
+			var ctrlInfo = getControllerResources(fileName, constants.getControllerPath());
+
+			var constr = ctx[ctrlInfo.name];
+
+			//FIXME HACK for handling exported constructor
+			if(typeof res === 'function' && res.name === ctrlInfo.name){
+				constr = res;
+			}
+
+			var controller = new Controller(ctrlInfo.name, ctrlInfo, constr);
+
+			if(ctrlInfo.helper){
+				var helperPath = ctrlInfo.helper.path;
+				var helperName = ctrlInfo.helper.name;
+				controller.loadHelper(helperName,helperPath, ctx);
+			}
+
+			ctrlList.put(controller.getName(), controller);
+
+			logger.info('[loadController] "'+fileName+'" loaded.');
+		};
+
 		commonUtils.loadImpl(
 
 
@@ -380,25 +415,21 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 				},
 
 				function isAlreadyLoaded (name) {
+
+					if(typeof ctx[name] === 'function' && ctx[name].name === firstToUpperCase(name)){
+						//controller implementation was already loaded -> immediately create controller instance
+						if(logger.isVerbose()) logger.v("already loaded implementation for "+name+", creating instance...");//debug
+						createCtrlInstance(name, ctx[name]);
+						return true;
+					}
 					return false;
+
 				},
 
-				function callbackStatus(status, fileName, msg) {
+				function callbackStatus(status, fileName, msg, res) {
 					if(status==='info'){
 
-						var ctrlInfo = getControllerResources(fileName, constants.getControllerPath());
-
-						var controller = new Controller(ctrlInfo.name, ctrlInfo, ctx);
-
-						if(ctrlInfo.helper){
-							var helperPath = ctrlInfo.helper.path;
-							var helperName = ctrlInfo.helper.name;
-							controller.loadHelper(helperName,helperPath, ctx);
-						}
-
-						ctrlList.put(controller.getName(), controller);
-
-						logger.info('[loadController] "'+fileName+'" loaded.');
+						createCtrlInstance(fileName, res);
 					}
 					else if(status==='warning'){
 						logger.warn('[loadController] "'+fileName+'": '+msg);
