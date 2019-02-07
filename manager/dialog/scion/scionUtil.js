@@ -1,21 +1,23 @@
 
 /**
  * Module for Extended SCION impl.
- * 
+ *
  * @class mmir.env.statemachine.engine.extended
- */	
+ */
 define(['mmirf/dictionary'], function(Dictionary) {
 
 	/**
 	 * @param {Engine} _scion
 	 * 			the SCION engine instance
-	 * 
+ 	 * @param {Boolean} isNewApi
+ 	 * 			if _scion conforms to the >= v3 SCION API
+	 *
 	 * @return {ExtendedEngine}
 	 * 			the extended SCION engine instance
-	 * 
+	 *
 	 * @memberOf mmir.env.statemachine.engine.extended
 	 */
-	var extend = function (_scion) {
+	var extend = function (_scion, isNewApi) {
 
 		/*
 		 * if (testbed._util) return testbed._util;
@@ -27,21 +29,21 @@ define(['mmirf/dictionary'], function(Dictionary) {
 		var _transitions = new Dictionary();
 		/** @memberOf mmir.env.statemachine.engine.extended.private  */
 		var _events = new Dictionary();
-		
+
 
 		(function() {
-			
+
 			/** @memberOf mmir.env.statemachine.engine.extended.private  */
 			var events = [];
 			/** @memberOf mmir.env.statemachine.engine.extended.private  */
 			var transitions = {};
 			/** @memberOf mmir.env.statemachine.engine.extended.private  */
-			var states = _scion.model.states;
-			
-			
+			var states = (isNewApi? _scion._model : _scion.model).states;
+
+
 			//temporary variables:
 			/** @memberOf mmir.env.statemachine.engine.extended.private  */
-			var n; 
+			var n;
 			/** @memberOf mmir.env.statemachine.engine.extended.private  */
 			var stateObj;
 			/** @memberOf mmir.env.statemachine.engine.extended.private  */
@@ -69,21 +71,21 @@ define(['mmirf/dictionary'], function(Dictionary) {
 
 				transitionObjects = stateObj.transitions;
 				for (m = 0; m < transitionObjects.length; m++) {
-					
+
 					targets = transitionObjects[m].targets;
 					ev = transitionObjects[m].events;
 					events = events.concat(ev);
-					
+
 					if (targets) {
 						for (t = 0; t < targets.length; t++) {
-							
+
 							targetObject = targets[t];
 							if (typeof transitions[ev] === 'undefined') {
 								transitions[ev] = targetObject.id;
 							}
 							else {
 								var tmp = transitions[ev];
-								
+
 								if (typeof tmp === 'string') {
 									var a = new Array();
 									a.push(targetObject.id);
@@ -111,7 +113,7 @@ define(['mmirf/dictionary'], function(Dictionary) {
 		/** @class ExtendedEngineImpl  */
 		return {
 			/** @scope ExtendedEngineImpl  */
-			
+
 			/** @memberOf ExtendedEngineImpl  */
 			_scion : _scion,
 
@@ -154,52 +156,52 @@ define(['mmirf/dictionary'], function(Dictionary) {
 			},
 
 			getActiveEvents : function() {
-				
+
 				var i, events = [], states = this._scion.getFullConfiguration();
-				
+
 				for (i = 0; i < states.length; i++) {
 					events = events.concat(this._events.get(states[i]));
 				}
-				
+
 				return events;
 			},
 
 			getTransitions : function() {
-				
+
 				var i, t, e, transitions = {}, states = this._scion.getConfiguration();
 
 				for (i = 0; i < states.length; i++) {
-					
+
 					t = this._transitions.get(states[i]);
-					
+
 					for (e in t) {
 						transitions[e] = t[e];
 					}
 				}
-				
+
 				return transitions;
 			},
 
 			getActiveTransitions : function() {
-				
+
 				var i, t, e, transitions = {}, states = this._scion.getFullConfiguration();
 
 				for (i = 0; i < states.length; i++) {
-					
+
 					t = this._transitions.get(states[i]);
-					
+
 					for (e in t) {
 						transitions[e] = t[e];
 					}
 				}
-				
+
 				return transitions;
 			}
 
 		};//END: return {...
-		
+
 	};//END: extend = function(_scion) {...
-	
+
 	return extend;
-		
+
 });//END: define(...

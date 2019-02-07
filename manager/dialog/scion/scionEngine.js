@@ -162,8 +162,7 @@ define(['mmirf/scion', 'mmirf/scionUtil', 'mmirf/util/deferred'], function( scio
                   _interpreter.registerListener(listener);
 
                   if (self.onload) {
-                    //FIXME impl. scionUtil for new scion-version!!!!
-                  	var _scion = isNewScionImpl? _interpreter : scionUtil( _interpreter );
+                  	var _scion = scionUtil(_interpreter, isNewScionImpl);
                   	if(!self.evalScript) self.scion.ignoreScript();
                   	self.onload( _scion, _defer );
                   } else {
