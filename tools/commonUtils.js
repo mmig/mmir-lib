@@ -366,10 +366,11 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 			 * 				If provided, this function is invoked, when a library was loaded loaded (INFO) or an
 			 * 				error occurs.
 			 * 				The signature for the callback is
-			 * 				<code>statusCallback(String statusLevel, String fileName, String message)</code>
+			 * 				<code>statusCallback(String statusLevel, String fileName, String message, [result])</code>
 			 * 				where <tt>statusLevel</tt> is one of <tt>info, warning, error</tt>,
 			 * 				      <tt>fileName</tt> is the file-name for the library that this status message concerns, and
-			 * 				      <tt>message</tt> is a message text with details concerning the status
+			 * 				      <tt>message</tt> is a message text with details concerning the status, and OPTIONALLY
+			 * 				      <tt>result</tt> is the result (may be undefined if no result is returned; the actual value may depend on the execution environment)
 			 *
 			 * @returns {Promise} a deferred promise that will be fulfilled when loadImpl() has finished.
 			 *
@@ -442,10 +443,15 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 						_defer.resolve();
 					};
 
-					if ( checkIsAlreadyLoadedFunc && checkIsAlreadyLoadedFunc(fileName) ){
+					var displayFileName = fileName;
+					if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
+						displayFileName = fileName.replace(/^.+\//, '');
+					}
+
+					if ( checkIsAlreadyLoadedFunc && checkIsAlreadyLoadedFunc(displayFileName) ){
 
 						if(statusCallback){
-							statusCallback('warning', fileName, 'already loaded ' + librariesPath+fileName);
+							statusCallback('warning', displayFileName, 'already loaded ' + librariesPath+displayFileName);
 						}
 
 						handleScriptDone();
@@ -455,30 +461,22 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 						/// ATTENTION: $.getScript --> mmir.CommonUtils.getLocalScript
 						/// under Android 4.0 getScript is not wokring properly
 						instance.getLocalScript(librariesPath+fileName,
-							function(){
-
-								if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
-									fileName = fileName.replace(/^.+\//, '');
-								}
+							function(result){
 
 								if(statusCallback){
-									statusCallback('info', fileName, 'done loading ' + librariesPath+fileName);
+									statusCallback('info', displayFileName, 'done loading ' + librariesPath+displayFileName, result);
 								}
 
 								handleScriptDone();
 							},
 							function(exception) {
 
-								if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
-									fileName = fileName.replace(/^.+\//, '');
-								}
-
 								if(statusCallback){
-									statusCallback('error', fileName, 'could not load "' + librariesPath+fileName + '": ' + exception);
+									statusCallback('error', displayFileName, 'could not load "' + librariesPath+displayFileName + '": ' + exception);
 								}
 								else {
 									// print out an error message
-									logger.error('[loadImpl] Could not load "' + librariesPath+fileName + '": ', exception);
+									logger.error('[loadImpl] Could not load "' + librariesPath+displayFileName + '": ', exception);
 								}
 
 								//NOTE: in case of an error, will still try to load the other files from the list:
@@ -589,16 +587,16 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 
 				if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD && /^require:\/\//.test(scriptUrl)){
 					try {
-						__webpack_require__(scriptUrl.substring('require://'.length));
+						var expModule = __webpack_require__(scriptUrl.substring('require://'.length));
 						if(success){
-							setTimeout(function(){success.apply(this, arguments)}, 10);
+							setTimeout(function(){success.call(this, expModule)}, 0);
 						}
 						else {
 							logger.debug('CommonUtils', 'getLocalScript', 'Successfully loaded script from ' + this.src)
 						}
 					} catch(e) {
 						if(fail){
-							setTimeout(function(){fail.apply(this, arguments)}, 10);
+							setTimeout(function(){fail.apply(this, arguments)}, 0);
 						}
 						else {
 							logger.error('CommonUtils', 'getLocalScript', 'Loading Script Failed from "' + scriptUrl + '"', e);
