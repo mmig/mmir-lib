@@ -596,7 +596,7 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 						}
 					} catch(e) {
 						if(fail){
-							setTimeout(function(){fail.apply(this, arguments)}, 0);
+							setTimeout(function(){fail.call(this, e)}, 0);
 						}
 						else {
 							logger.error('CommonUtils', 'getLocalScript', 'Loading Script Failed from "' + scriptUrl + '"', e);
