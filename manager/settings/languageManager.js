@@ -478,7 +478,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 
 				        // get all the languages/dictionaries by name
-				        languages = commonUtils.listDir(constants.getLanguagePath());
+				        languages = commonUtils.listDir(constants.getLanguagePath()) || [];
 
 				        if (logger.isDebug()) logger.debug("init() Found dictionaries for: " + JSON.stringify(languages));
 
