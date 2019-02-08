@@ -181,6 +181,12 @@ define(['mmirf/scion', 'mmirf/scionUtil', 'mmirf/util/deferred'], function( scio
                         listener.onError = function(error) {
                         	if (instanceContext._logger.isError()){
                         		var stackInfo = error.stack? ', ' + (error.stack.replace? error.stack.replace(error.reason, '') : error.stack) : '';
+														if(error.data && error.data.tagname){
+															if(!stackInfo){
+																stackInfo = ' ['+error.type+': '+error.name+']';
+															}
+															error = error.data;
+														}
                         		instanceContext._logger.error('SCXML ERROR: in <'+error.tagname+'> ('+error.line+':'+error.column+'): ' + error.reason + stackInfo);
                         	}
                         }
