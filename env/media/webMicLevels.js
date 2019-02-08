@@ -110,9 +110,8 @@ newMediaPlugin = {
 			/**  @memberOf MicLevelsAnalysis.navigator# */
 			html5Navigator.__getUserMedia = html5Navigator.getUserMedia || html5Navigator.webkitGetUserMedia || html5Navigator.mozGetUserMedia;
 			//window.URL = window.URL || window.webkitURL;
-	//    	_audioContext = new webkitAudioContext;
-
-			createAudioContext();
+			// _audioContext = new webkitAudioContext;
+			// createAudioContext();
 		}
 		catch (e) {
 			console.error('No web audio support in this browser! Error: '+(e.stack? e.stack : e));
