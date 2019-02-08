@@ -219,18 +219,21 @@ return {
 			var id = evt.data.id;
 			if(id){
 
-				if(this._activeTaskIds[id]){
+				var handler = this._activeTaskIds[id];
 
-					this._activeTaskIds[id](evt.data);
+				//this was the final message for this ID -> remove callback-function from "active tasks" dictionary:
+				if(evt.data.done){
+					delete this._activeTaskIds[id];
+				}
+
+				if(handler){
+
+					handler.call(this, evt.data);
 
 				} else {
 					console.warn('no callback registered for ID "'+id+'" -> ' + JSON.stringify(evt.data));
 				}
 
-				//this was the final message for this ID -> remove callback-function from "active tasks" dictionary:
-				if(evt.data.done){
-					this._activeTaskIds[id] = void(0);
-				}
 			}
 			else if(evt.data.error){
 
@@ -245,6 +248,23 @@ return {
 				this._onerror('ERROR unknown message -> ' + JSON.stringify(evt.data), evt.data);
 			}
 
+			if(this._onidle && !this.hasPendingCallback()){
+				this._onidle();
+			}
+
+		};
+
+		/**
+		 * check if the worker has "pending callbacks"
+		 *
+		 * @memberOf CompileWebWorker#
+		 */
+		asyncCompiler.hasPendingCallback = function(){
+			for(var n in asyncCompiler._activeTaskIds){
+				if(asyncCompiler._activeTaskIds[n]){
+					return true;
+				}
+			}
 		};
 
 		return asyncCompiler;

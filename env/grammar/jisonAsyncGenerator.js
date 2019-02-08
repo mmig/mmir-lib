@@ -37,7 +37,7 @@ var _taskId = 1;
  * @private
  * @memberOf JisonAsyncGenerator#
  */
-var asyncCompiler = asyncGen.createWorker(jisonGen.engineId);
+var asyncCompiler;
 
 /**
  * printError function reference for compile-errors
@@ -47,15 +47,30 @@ var asyncCompiler = asyncGen.createWorker(jisonGen.engineId);
  */
 var printError = jisonGen.printError;
 
+/**
+ * create & initialize the async compiler:
+ *
+ * creates the asyncCompiler and initDef,
+ * and sends init-message to asyncCompiler.
+ *
+ * @private
+ * @memberOf JisonAsyncGenerator#
+ */
+function initAsyncCompiler(){
+	asyncCompiler = asyncGen.createWorker(jisonGen.engineId);
+	initDef = deferred();
+	var initMsg = asyncCompiler.prepareOnInit(jisonGen, initDef);
+	asyncCompiler.postMessage(initMsg);
+	asyncCompiler._onerror = printError;
+}
 
 ////////////////////init async compiler/thread /////////////////////////
 
-asyncCompiler._onerror = printError;
+//for async init-signaling:
+var initDef;
 
-//setup async init-signaling:
-var initDef = deferred();
-var initMsg = asyncCompiler.prepareOnInit(jisonGen, initDef);
-asyncCompiler.postMessage(initMsg);
+//immedately start initialization for async compiler:
+initAsyncCompiler();
 
 /**
  * Exported (public) functions for the jison grammar-engine.
@@ -71,6 +86,10 @@ var jisonAsyncGen = {
 	 * @memberOf JisonAsyncGenerator.prototype
 	 */
 	init: function(callback){
+		if(!asyncCompiler){
+			//in case the compiler was destroyed -> re-init:
+			initAsyncCompiler();
+		}
 		//overwrite with own async "init signal"
 		if(callback){
 			initDef.then(callback, callback);
@@ -79,12 +98,30 @@ var jisonAsyncGen = {
 	},
 	/**
 	 * frees up the resources of the async compiler
-	 * (cannot be used afterwards!)
+	 * ({@link #init} will re-initialize the resources)
+	 *
+	 * @param {Boolean} [force] OPTIONAL
+	 * 										if TRUE, immediately terminates the async worker, otherwise
+	 * 										will wait until no pending queries are registered any more
+	 *
+	 * @see CompileWebWorker#hasPendingCallback
+	 * @see CompileWebWorker#addCallback
 	 *
 	 * @memberOf JisonAsyncGenerator.prototype
 	 */
-	destroy: function(){
+	destroy: function(force){
 		if(asyncCompiler && asyncCompiler.terminate){
+
+			if(!force){
+				if(asyncCompiler.hasPendingCallback()){
+					var tis = this;
+					asyncCompiler._onidle = function(){
+						tis.destroy();
+					}
+					return;
+				}
+			}
+
 			asyncCompiler.terminate();
 			asyncCompiler = null;
 		}
