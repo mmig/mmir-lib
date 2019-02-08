@@ -162,8 +162,6 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 			self.helper = new Helper(self, name, ctx[name]);
 		}
 
-		self.helper = new Helper(self, name, constr);
-
 		var self = this;
 
 		if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
