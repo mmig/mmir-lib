@@ -315,7 +315,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            currentLanguage = lang;
 		        }
 
-						if(_conf && _conf.speech[lang]){
+						if(_conf && _conf.speech && _conf.speech[lang]){
 							if(logger.isVerbose()) logger.verbose("loadSpeechConfig(): loaded configuration from module.config().speech["+lang+"] -> ", _conf.speech[lang]);
 							currentSpeechConfig = _conf.speech[lang];
 							return;/////////// EARLY EXIT ///////////////
@@ -358,7 +358,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            currentLanguage = lang;
 		        }
 
-						if(_conf && _conf.dictionary[lang]){
+						if(_conf && _conf.dictionary && _conf.dictionary[lang]){
 							if(logger.isVerbose()) logger.verbose("loadDictionary(): loaded configuration from module.config().dictionary["+lang+"] -> ", _conf.dictionary[lang]);
 							dictionary = _conf.dictionary[lang];
 							return;/////////// EARLY EXIT ///////////////
