@@ -42,7 +42,10 @@ var coreModule = {
 	mmir: mmirCore,
 	requirejs: void(0),
 	config: config,
-	init: function(){
+	init: function(preinitFunc){
+		if(preinitFunc){
+			preinitFunc(mmirCore);
+		}
 		var requirejs = require('requirejs');
 		global.requirejs = requirejs;
 		coreModule.requirejs = requirejs;
