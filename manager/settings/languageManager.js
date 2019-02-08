@@ -69,6 +69,13 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		    var logger = Logger.create(module);
 
 		    /**
+		     * @private
+		     * @type LanguageManagerModuleConfig
+		     * @memberOf LanguageManager#
+		     */
+		    var _conf = module.config(module);
+
+		    /**
 		     * JSON object containing the contents of a dictionary file - which are
 		     * found in 'config/languages/&lt;language&gt;/dictionary.json'.
 		     *
@@ -307,6 +314,13 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        if (lang && currentLanguage != lang) {
 		            currentLanguage = lang;
 		        }
+
+						if(_conf && _conf.speech[lang]){
+							if(logger.isVerbose()) logger.verbose("loadSpeechConfig(): loaded configuration from module.config().speech["+lang+"] -> ", _conf.speech[lang]);
+							currentSpeechConfig = _conf.speech[lang];
+							return;/////////// EARLY EXIT ///////////////
+						}
+
 		        var path = getResourceUri('speechConfig', lang);
 		        loadFile({
 		            async : false,
@@ -314,14 +328,12 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            url : path,
 		            success : function(data) {
 
-		            	if(logger.isVerbose()) logger.v("[LanguageManager] Success. " + data);
+		            	if(logger.isVerbose()) logger.v("loadSpeechConfig("+lang+"): success -> ", data);
 
 		            	currentSpeechConfig = data;
-
-		                if(logger.isVerbose()) logger.v("[LanguageManager] " + JSON.stringify(dictionary));
 		            },
 		            error : function(xhr, statusStr, error) {
-		                logger.error("[LanguageManager] Error loading speech configuration from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
+		                logger.error("loadSpeechConfig("+lang+"): Error loading speech configuration from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
 		            }
 		        });
 		        return currentLanguage;
@@ -345,16 +357,24 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        if (lang && currentLanguage != lang) {
 		            currentLanguage = lang;
 		        }
+
+						if(_conf && _conf.dictionary[lang]){
+							if(logger.isVerbose()) logger.verbose("loadDictionary(): loaded configuration from module.config().dictionary["+lang+"] -> ", _conf.dictionary[lang]);
+							dictionary = _conf.dictionary[lang];
+							return;/////////// EARLY EXIT ///////////////
+						}
+
 		        var path = getResourceUri('dictionary', lang);
 		        loadFile({
 		            async : false,
 		            dataType : "json",
 		            url : path,
 		            success : function(data) {
-		                dictionary = data;
+            				if(logger.isVerbose()) logger.v("loadDictionary("+lang+"): success -> ", data);
+										dictionary = data;
 		            },
 		            error : function(xhr, statusStr, error) {
-		                logger.error("[LanguageManager] Error loading language dictionary from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
+		                logger.error("loadDictionary("+lang+"): Error loading language dictionary from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
 		            }
 		        });
 		        return currentLanguage;
@@ -421,7 +441,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				            if (appLang) {
 
 				                lang = appLang;
-				                logger.info("[LanguageManager] No language argument specified: using language from configuration '" + appLang + "'.");
+				                logger.info("init(): No language argument specified: using language from configuration '" + appLang + "'.");
 
 				            }
 				            else {
@@ -431,7 +451,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				            	if (appLang) {
 
 					                lang = appLang;
-					                logger.info("[LanguageManager] No language argument specified: using language from mmir.constants '" + appLang + "'.");
+					                logger.info("init(): No language argument specified: using language from mmir.constants '" + appLang + "'.");
 					            }
 				            	else {
 
@@ -442,7 +462,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 					                		lang = appLang;
 
-					                		logger.info("[LanguageManager] No language argument specified: used determinLanguage() for selecting language '" + appLang + "'.");
+					                		logger.info("init() No language argument specified: used determinLanguage() for selecting language '" + appLang + "'.");
 					                	}
 					                }
 
@@ -451,7 +471,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				            }//END: else(config::lang)
 
 			        		if(!lang){
-			        			logger.warn("[LanguageManager.init] No language specified. And no language could be read from directory '" + constants.getLanguagePath() + "'.");
+			        			logger.warn("init(): No language specified. And no language could be read from directory '" + constants.getLanguagePath() + "'.");
 			        		}
 
 				        }//END: if(!lang && !currentLanguage)
@@ -460,20 +480,20 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				        // get all the languages/dictionaries by name
 				        languages = commonUtils.listDir(constants.getLanguagePath());
 
-				        if (logger.isDebug()) logger.debug("[LanguageManager] Found dictionaries for: " + JSON.stringify(languages));// debug
+				        if (logger.isDebug()) logger.debug("init() Found dictionaries for: " + JSON.stringify(languages));
 
 				        var defer = deferred();
 
 				        if(this.existsDictionary(lang)){
 				        	loadDictionary(lang);
 				        } else if(logger.isDebug()){
-				        	logger.debug("[LanguageManager] init: no dictionary for language " + lang);// debug
+				        	logger.debug("init(): no dictionary for language " + lang);
 				        }
 
 				        if(this.existsSpeechConfig(lang)){
 				        	loadSpeechConfig(lang);
 				        } else if(logger.isDebug()){//TODO set/generate default speech-config?
-				        	logger.debug("[LanguageManager] init: no speech-config (asr/tts) for language " + lang);// debug
+				        	logger.debug("init(): no speech-config (asr/tts) for language " + lang);
 				        }
 
 				        requestGrammar(lang, true);//2nd argument TRUE: if no grammar is available for lang, try to find/set any available grammar

@@ -66,6 +66,13 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 	 */
 	var logger = Logger.create(module);
 
+	/**
+	 * @private
+	 * @type Logger
+     * @memberOf mmir.CommonUtils#
+	 */
+	var _conf = module.config(module);
+
     /**
      * JSON-Object containing the directory Structure of the application. Only
      * directories defined by the Property
@@ -962,6 +969,16 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 					_defer.then(success, errorFunc);
 				}
 
+				if(_conf && _conf.directories){
+					setTimeout(function(){
+						if(logger.isVerbose()) logger.verbose("DirectoryListing.getDirectoryStructure: loaded from module.config().directories");
+						self.directoryStructure = _conf.directories;
+						if(logger.isVerbose()) logger.verbose("[getDirectoryStructure] finished.");
+						_defer.resolve(self);
+					}, 0);
+					return _defer;/////////////////// EARLY EXIT //////////////////////
+				}
+
 				var directoryFileUrl = constants.getDirectoriesFileUrl();
 
 				//load configuration file asynchronously:
@@ -977,7 +994,7 @@ define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 
 							self.directoryStructure = data;
 
-							if(logger.isVerbose()) logger.verbose("[getDirectoryStructure] finished.");//debug
+							if(logger.isVerbose()) logger.verbose("[getDirectoryStructure] finished.");
 
 							_defer.resolve(self);
 						}
