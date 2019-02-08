@@ -43,6 +43,6 @@
     "build": "webpack"
   },
   "optionalDependencies": {
-    "webworker-threads": "^0.7.17"
+    "webworker-threads": "git+https://github.com/audreyt/node-webworker-threads.git"
   }
 }
