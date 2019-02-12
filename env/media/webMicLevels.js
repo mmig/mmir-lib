@@ -78,9 +78,12 @@
  * @requires HTML5 getUserMedia (audio)
  */
 
-newMediaPlugin = {
+ define(['mmirf/mediaManager'], function(mediaManager){
+
+/**  @class MicLevelsAnalysis */
+return {
 	/**  @memberOf MicLevelsAnalysis.module# */
-	initialize: function(callBack, mediaManager){//, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
+	initialize: function(callBack, __mediaManager){//, ctxId, moduleConfig){//DISABLED this argument is currently un-used -> disabled
 
 		/**
 		 * @type navigator
@@ -603,6 +606,4 @@ newMediaPlugin = {
 
 };
 
-if(typeof module === 'object' && module.exports){
-	module.exports = newMediaPlugin;
-}
+});//END define

@@ -1,100 +1,20 @@
-/*
- * 	Copyright (C) 2012-2013 DFKI GmbH
- * 	Deutsches Forschungszentrum fuer Kuenstliche Intelligenz
- * 	German Research Center for Artificial Intelligence
- * 	http://www.dfki.de
- *
- * 	Permission is hereby granted, free of charge, to any person obtaining a
- * 	copy of this software and associated documentation files (the
- * 	"Software"), to deal in the Software without restriction, including
- * 	without limitation the rights to use, copy, modify, merge, publish,
- * 	distribute, sublicense, and/or sell copies of the Software, and to
- * 	permit persons to whom the Software is furnished to do so, subject to
- * 	the following conditions:
- *
- * 	The above copyright notice and this permission notice shall be included
- * 	in all copies or substantial portions of the Software.
- *
- * 	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
- * 	OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
- * 	MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
- * 	IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
- * 	CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
- * 	TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
- * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
 
-newMediaPlugin = {
+define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManager', 'mmirf/logger'], function(mediaManager, config, lang, Logger){
+
+/**  @class WebspeechAudioInput */
+return {
 
 	/**  @memberOf WebspeechAudioInput# */
-	initialize: function(callBack, mediaManager, ctxId, moduleConfig){
+	initialize: function(callBack, __mediaManager, ctxId, moduleConfig){
 
 		/** @memberOf WebspeechAudioInput# */
 		var _pluginName = 'webspeechAudioInput';
 
 		/**
-		 * legacy mode: use pre-v4 API of mmir-lib
-		 * @memberOf WebspeechAudioInput#
-		 */
-		var _isLegacyMode = true;
-		/**
-		 * Reference to the mmir-lib core (only available in non-legacy mode)
-		 * @type mmir
-		 * @memberOf WebspeechAudioInput#
-		 */
-		var _mmir = null;
-		if(mediaManager._get_mmir){
-			//_get_mmir() is only available for >= v4
-			_mmir = mediaManager._get_mmir();
-			//just to make sure: set legacy-mode if version is < v4
-			_isLegacyMode = _mmir? _mmir.isVersion(4, '<') : true;
-		}
-		/**
-		 * HELPER for require():
-		 * 		use module IDs (and require instance) depending on legacy mode
-		 *
-		 * @param {String} id
-		 * 			the require() module ID
-		 *
-		 * @returns {any} the require()'ed module
-		 *
-		 * @memberOf WebspeechAudioInput#
-		 */
-		var _req = function(id){
-			var name = (_isLegacyMode? '' : 'mmirf/') + id;
-			return _mmir? _mmir.require(name) : require(name);
-		};
-		/**
-		 * HELPER for cofigurationManager.get() backwards compatibility (i.e. legacy mode)
-		 *
-		 * @param {String|Array<String>} path
-		 * 			the path to the configuration value
-		 * @param {any} [defaultValue]
-		 * 			the default value, if there is no configuration value for <code>path</code>
-		 *
-		 * @returns {any} the configuration value
-		 *
-		 * @memberOf WebspeechAudioInput#
-		 */
-		var _conf = function(path, defaultValue){
-			return _isLegacyMode? config.get(path, true, defaultValue) : config.get(path, defaultValue);
-		};
-
-		/**
-		 * @type mmir.LanguageManager
-		 * @memberOf WebspeechAudioInput#
-		 */
-		var languageManager = _req('languageManager');
-		/**
-		 * @type mmir.ConfigurationManager
-		 * @memberOf WebspeechAudioInput#
-		 */
-		var config = _req('configurationManager');
-		/**
 		 * @type mmir.Logger
 		 * @memberOf WebspeechAudioInput#
 		 */
-		var logger = _req('logger').create(_pluginName);
+		var logger = Logger.create(_pluginName);
 
 		/** @type SpeechRecognition
 		 * @memberOf WebspeechAudioInput# */
@@ -244,7 +164,7 @@ newMediaPlugin = {
 		/** @memberOf WebspeechAudioInput# */
 		var intermediate_results = false;
 
-		var loglevel = _conf([_pluginName, 'logLevel']);
+		var loglevel = config.get([_pluginName, 'logLevel']);
 		if(typeof loglevel !== 'undefined'){
 			logger.setLevel(loglevel);
 		}
@@ -677,7 +597,7 @@ newMediaPlugin = {
 					options.success = statusCallback? statusCallback : options.success;
 					options.error = failureCallback? failureCallback : options.error;
 					options.intermediate = typeof intermediateResults === 'boolean'? intermediateResults : !!options.intermediate;
-					options.language = options.language? options.language : languageManager.getLanguageConfig(_pluginName) || DEFAULT_LANGUAGE;
+					options.language = options.language? options.language : lang.getLanguageConfig(_pluginName) || DEFAULT_LANGUAGE;
 					options.results = options.results? options.results : DEFAULT_ALTERNATIVE_RESULTS;
 					//TODO
 //					options.disableImprovedFeedback =
@@ -926,7 +846,7 @@ newMediaPlugin = {
 					options.success = statusCallback? statusCallback : options.success;
 					options.error = failureCallback? failureCallback : options.error;
 					options.intermediate = typeof intermediateResults === 'boolean'? intermediateResults : !!options.intermediate;
-					options.language = options.language? options.language : languageManager.getLanguageConfig(_pluginName) || DEFAULT_LANGUAGE;
+					options.language = options.language? options.language : lang.getLanguageConfig(_pluginName) || DEFAULT_LANGUAGE;
 					options.results = options.results? options.results : DEFAULT_ALTERNATIVE_RESULTS;
 					//TODO
 //					options.disableImprovedFeedback =
@@ -1120,6 +1040,4 @@ newMediaPlugin = {
 
 };
 
-if(typeof module === 'object' && module.exports){
-	module.exports = newMediaPlugin;
-}
+});//END define

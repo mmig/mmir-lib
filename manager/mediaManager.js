@@ -58,6 +58,16 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 */
     var instance = null;
 
+	/**
+	 * The logger for the MediaManager.
+	 *
+	 * Exported as <code>_log</code> by the MediaManager instance.
+	 *
+	 * @private
+	 * @memberOf MediaManager#
+	 */
+	var logger = Logger.create(module);//initialize with requirejs-module information
+
     /**
      * default configuration for env-settings "browser" and "cordova":
      *
@@ -192,11 +202,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     		}
     		var ctx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
 
-    		var processLoaded = function(){
+    		var processLoaded = function(newMediaPlugin){
 
-	    		if (ctx.newMediaPlugin){
-
-	    			ctx.newMediaPlugin.initialize(function(exportedFunctions){
+	    			newMediaPlugin.initialize(function(exportedFunctions){
 
 	    				if(execId){
 
@@ -277,114 +285,27 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 								instance['tts'] = exportedFunctions['textToSpeech'];
 							}
-	    					ctx.newMediaPlugin = null;
 	    				}
 
-						if (successCallback) successCallback();
+						if (successCallback) successCallback(filePath, exportedFunctions);
 
 	    			}, instance, execId, config);
 
-	    			//"delete" global var for media plugin after loading
-	    			// TODO remove when/if other loading mechanism is established
-	    			ctx.newMediaPlugin = void(0);
 
-	    		}
-	    		else {
-	        		console.error('Error loading MediaPlugin '+filePath + ' - no newMediaPlugin set!');
-	    			if (failureCallback) failureCallback();
-	    		}
 			};
 
 			if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
-				ctx.newMediaPlugin = require('../env/media/'+filePath);
-				processLoaded();
+				processLoaded(require('../env/media/'+filePath));
 			} else {
-				commonUtils.loadScript(constants.getMediaPluginPath() + filePath, processLoaded);
+				require([constants.getMediaPluginPath() + filePath], processLoaded, failureCallback);
 			}
 
-
-    		//DISABLED @russa: currently disabled, since debugging eval'ed code is problematic
-    		//                 NOTE support for code-naming feature (see below) is currently somewhat broken in FireFox (e.g. location in error-stack is not done correctly)
-//        	//NOTE: this new loading-mechanism avoids global VARIABLES by
-//    		//	* loading the script as text
-//    		//	* evaluating the script-text (i.e. executing the JavaScript) within an local context
-//    		//  * uses code-naming feature for eval'ed code: //@ sourceURL=...
-//    		//i.e. eval(..) is used ...
-//    		var targetPath = constants.getMediaPluginPath()+filePath;
-//    		ajax({
-//                async: true,
-//                dataType: "text",
-//                url: targetPath,
-//                success: function(data){
-//
-//                	//add "dummy-export-code" to script-text
-//                	// -> for "retrieving" the media-plugin implementation as return value from eval(..)
-//            		var LOAD_MODULE_TEMPLATE_POSTFIX = 'var dummy = newMediaPlugin; dummy';
-//            		//use eval code naming feature...
-//            		var codeId = ' sourceURL=' + constants.getMediaPluginPath()+filePath + '\n';
-//            		//... for WebKit:
-//            		var CODE_ID_EXPR1 = '//@';
-//            		// ... and for FireFox:
-//            		var CODE_ID_EXPR2 = '//#';
-//
-//                	var newMediaPlugin = eval(data
-//                			+ CODE_ID_EXPR1 + codeId
-//                			+ CODE_ID_EXPR2 + codeId
-//                			+ LOAD_MODULE_TEMPLATE_POSTFIX
-//                	);
-//
-//                	if (typeof newMediaPlugin !== 'undefined' && newMediaPlugin){
-//    	    			newMediaPlugin.initialize(function(exportedFunctions){
-//    	    					extend(instance,exportedFunctions);
-//    	    					newMediaPlugin = null;
-//    							if (successCallback) successCallback();
-//    	    			}, instance);
-//    	    		}
-//    	    		else {
-//    	        		console.error('Error loading MediaPlugin '+filePath + ' - no newMediaPlugin set!');
-//    	    			if (failureCallback) failureCallback();
-//    	    		}
-//                }
-//            }).fail(function(jqxhr, settings, err){
-//                // print out an error message
-//				var errMsg = err && err.stack? err.stack : err;
-//                console.error("[" + settings + "] " + JSON.stringify(jqxhr) + " -- " + partial.path + ": "+errMsg); //failure
-//            });
     	}catch (e){
     		console.error('Error loading MediaPlugin '+filePath+': '+e);
     		if (failureCallback) failureCallback();
     	}
 
     };
-
-//    /**
-//     * "Register" a media-module implementation to the MediaManager.
-//     *
-//     * @param {MediaPlugin} newMediaPlugin
-//     * 				The new media-plugin which must have the
-//     * 				function <code>initialize</code>:
-//     * 				The initializer function will be called with 3 arguments:
-//     * 				(callbackFuntion(mediaPlugin: Object), instance: MediaManager, execId: String)
-//     *
-//     * 				the first argument (this callback-function from the MediaManager)
-//     * 				should be invoked by the media-plugin when it has it finished
-//     * 				initializing in its <code>initializeFunc</code>.
-//     * 				The callback must be invoked with on argument:
-//     * 				(mediaPlugin: Object)
-//     * 				where mediaPlugin is an object with all the functions and properties,
-//     * 				that the media-plugin exports to the MediaManager.
-//     *
-//     * @private
-//	 * @function
-//	 *
-//	 * @memberOf MediaManager#
-//	 */
-//    function registerMediaPlugin(newMediaPlugin, successCallback, failureCallback, execId){
-//    	TODO move code from loadPlugin here:
-//    	* export this as MediaManager.registerPlugin
-//    	* media-plugins should call registerPlugin on MediaManager (instead of creating object newMediaPlugin)
-//    	* open problem: how can success-callback for MediaManager-initialization be handled this way? (should be called after all plugins have themselves initialized)
-//    }
 
     /**
      * @constructs MediaManager
@@ -462,18 +383,6 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 			}
 			return isRemoved;
 		};
-
-
-		/**
-		 * The logger for the MediaManager.
-		 *
-		 * Exported as <code>_log</code> by the MediaManager instance.
-		 *
-		 * @private
-		 * @memberOf MediaManager.prototype
-		 */
-		var logger = Logger.create(module);//initialize with requirejs-module information
-
 
 		/**
 		 * Default execution context for functions:
@@ -639,7 +548,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Input: Speech Recognition is not supported.");
     				}
     				else {
-    					console.error("Audio Input: Speech Recognition is not supported.");
+    					logger.error("Audio Input: Speech Recognition is not supported.");
     				}
     			},
     			/**
@@ -715,7 +624,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     				else {
-    					console.error("Audio Input: Speech Recognition (recording) is not supported.");
+    					logger.error("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     			},
     			/**
@@ -786,7 +695,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     				else {
-    					console.error("Audio Input: Speech Recognition (recording) is not supported.");
+    					logger.error("Audio Input: Speech Recognition (recording) is not supported.");
     				}
     	   		},
 
@@ -807,7 +716,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: canceling Recognize Speech is not supported.");
     				}
     				else {
-    					console.error("Audio Output: canceling Recognize Speech is not supported.");
+    					logger.error("Audio Output: canceling Recognize Speech is not supported.");
     				}
     			},
 ///////////////////////////// audio output API: /////////////////////////////
@@ -827,7 +736,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: play WAV audio is not supported.");
     				}
     				else {
-    					console.error("Audio Output: play WAV audio is not supported.");
+    					logger.error("Audio Output: play WAV audio is not supported.");
     				}
     			},
     			/**
@@ -845,7 +754,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: play audio from URL is not supported.");
     				}
     				else {
-    					console.error("Audio Output: play audio from URL is not supported.");
+    					logger.error("Audio Output: play audio from URL is not supported.");
     				}
     			},
     			/**
@@ -905,7 +814,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: create audio from URL is not supported.");
     				}
     				else {
-    					console.error("Audio Output: create audio from URL is not supported.");
+    					logger.error("Audio Output: create audio from URL is not supported.");
     				}
     			},
     			/**
@@ -1041,7 +950,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: Text To Speech is not supported.");
     				}
     				else {
-    					console.error("Audio Output: Text To Speech is not supported.");
+    					logger.error("Audio Output: Text To Speech is not supported.");
     				}
     			},
 
@@ -1059,7 +968,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: Text To Speech is not supported.");
     				}
     				else {
-    					console.error("Audio Output: Text To Speech is not supported.");
+    					logger.error("Audio Output: Text To Speech is not supported.");
     				}
     			},
     			/**
@@ -1077,7 +986,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     					failureCallback("Audio Output: canceling Text To Speech is not supported.");
     				}
     				else {
-    					console.error("Audio Output: canceling Text To Speech is not supported.");
+    					logger.error("Audio Output: canceling Text To Speech is not supported.");
     				}
     			},
 
@@ -1097,7 +1006,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
     				else {
-    					console.error("Audio Output: set volume for Text To Speech is not supported.");
+    					logger.error("Audio Output: set volume for Text To Speech is not supported.");
     				}
 				}
 
@@ -1671,42 +1580,60 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
      */
     function loadAllPlugins(pluginArray, successCallback,failureCallback){
 
-    	if (pluginArray == null || pluginArray.length<1){
-    		if (successCallback) {
-    			successCallback();
-    		}
-    		return;
-    	}
+			console.log('loading media plugins: ', pluginArray)
 
-    	var ctxId, config;
-    	var newPluginName = pluginArray.pop();
-    	if(newPluginName.mod){
+			var count = (pluginArray && pluginArray.length) || 0;
 
-    		if(newPluginName.ctx){
-        		ctxId = newPluginName.ctx;
-    		}
-    		if(newPluginName.config){
-        		config = newPluginName.config;
-    		}
-    		newPluginName = newPluginName.mod;
-    	}
+			function checkCompleted(){
+	    	if (!pluginArray || count === 0){
+	    		if (successCallback) {
+	    			successCallback();
+	    		} else {
+						logger.debug('loadAllPlugins completed.');
+					}
+	    		return;
+	    	}
+			}
 
-    	//check if there is a "replacement" / default configuration for the requested module
-    	var legacyModule = newPluginName? _pluginsConfig[newPluginName.toLowerCase()] : null;
-    	if(legacyModule){
-    		ctxId  = ctxId  || legacyModule.ctxId;
-    		config = config || legacyModule.config;
-    		newPluginName = legacyModule.mod;
-    	}
+			function onLoaded(pluginName, pluginInstance){
+				logger.verbose(pluginName + ' loaded!');
+				--count;
+				checkCompleted();
+			};
 
-    	loadPlugin(newPluginName, function onloaded(){
-	    		console.log(newPluginName+' loaded!');
-	    		loadAllPlugins(pluginArray,successCallback, failureCallback);
-    		},
-    		failureCallback,
-    		ctxId,
-    		config
-    	);
+			function onError(err){
+				logger.error('Error loading ' + pluginName + ': '+err, err);
+				--count;
+				checkCompleted();
+				failureCallback && failureCallback;
+			};
+
+    	var ctxId, config, newPluginName;
+			for(var i = 0, size = count; i < size; ++i){
+				newPluginName = pluginArray[i];
+
+	    	if(newPluginName.mod){
+	    		ctxId = newPluginName.ctx? newPluginName.ctx : void(0);
+      		config = newPluginName.config? newPluginName.config : void(0);
+	    		newPluginName = newPluginName.mod;
+	    	} else {
+					ctxId = config = void(0);
+				}
+
+	    	//check if there is a "replacement" / default configuration for the requested module
+	    	var legacyModule = newPluginName? _pluginsConfig[newPluginName.toLowerCase()] : null;
+	    	if(legacyModule){
+	    		ctxId  = ctxId  || legacyModule.ctxId;
+	    		config = config || legacyModule.config;
+	    		newPluginName = legacyModule.mod;
+	    	}
+
+	    	loadPlugin(newPluginName,
+					onLoaded, onError,
+	    		ctxId,
+	    		config
+	    	);
+			}
     }
 
 
