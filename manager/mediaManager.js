@@ -200,7 +200,6 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 
     			filePath += '.js';
     		}
-    		var ctx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
 
     		var processLoaded = function(newMediaPlugin){
 
@@ -295,7 +294,15 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 			};
 
 			if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
-				processLoaded(require('../env/media/'+filePath));
+				var modResult;
+				try {
+					//TODO convert file-URLs to alias/module IDs and only use __webpack_require__ (& create include list when building from configuration.json)
+					modResult = require('../env/media/'+filePath);
+				} catch(err){
+					//load filePath "raw" as module ID:
+					modResult = __webpack_require__(filePath.replace(/\.js$/i, ''));
+				}
+				processLoaded(modResult);
 			} else {
 				require([constants.getMediaPluginPath() + filePath], processLoaded, failureCallback);
 			}
