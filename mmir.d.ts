@@ -314,6 +314,7 @@ export interface LanguageManager {
     setLanguage: (lang: string) => any;
 }
 export type MediaEventHandler = Function;
+export type MediaEventType = string;
 export interface MediaManager {
     ctx: {[ctxId: string]: any};
     waitReadyImpl: IWaitReadyImpl;
@@ -321,12 +322,12 @@ export interface MediaManager {
     init: (successCallback?: Function, failureCallback?: Function, listenerList?: Array<{name: string, listener: Function}>) => any;
     loadFile: (filePath: string, successCallback?: Function, failureCallback?: Function, execId?: string) => void;
 
-    addListener: (eventName: string, eventHandler: MediaEventHandler) => void;
-    hasListeners: (eventName: string) => boolean;
-    getListeners: (eventName: string) => MediaEventHandler | void;
-    removeListener: (eventName: string, eventHandler: MediaEventHandler) => boolean;
-    off: (eventName: string, eventHandler: MediaEventHandler) => boolean;
-    on: (eventName: string, eventHandler: MediaEventHandler) => void;
+    addListener: (eventName: MediaEventType, eventHandler: MediaEventHandler) => void;
+    hasListeners: (eventName: MediaEventType) => boolean;
+    getListeners: (eventName: MediaEventType) => MediaEventHandler | void;
+    removeListener: (eventName: MediaEventType, eventHandler: MediaEventHandler) => boolean;
+    off: (eventName: MediaEventType, eventHandler: MediaEventHandler) => boolean;
+    on: (eventName: MediaEventType, eventHandler: MediaEventHandler) => void;
 
     createEmptyAudio: () => IAudio;
     getURLAsAudio: (url: string, onEnd: any, failureCallback: any, successCallback: any, audioObj: IAudio, ...args: any[]) => IAudio;
@@ -349,35 +350,50 @@ export interface MediaManager {
     cancelSpeech: (successCallBack?: Function, failureCallBack?: Function) => void;
 
     // internal / "half public" functions (for use in plugin implementations)
-    _fireEvent: (eventName: string, args: any[]) => void;
+    _fireEvent: (eventName: MediaEventType, args: any[]) => void;
 
-    _addListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
-    _removeListenerObserver: (eventName: string, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
-    _notifyObservers: (eventName: string, actionType: "added" | "removed", eventHandler: MediaEventHandler) => void;
+    _addListenerObserver: (eventName: MediaEventType, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
+    _removeListenerObserver: (eventName: MediaEventType, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
+    _notifyObservers: (eventName: MediaEventType, actionType: "added" | "removed", eventHandler: MediaEventHandler) => void;
 
     _preparing: (moduleName: string) => void;
     _ready: (moduleName: string) => void;
 }
 
 export interface TTSOptions {
-    text: string | string[];//<- text that should be read aloud
-    pauseDuration?: number;//<- the length of the pauses between sentences (i.e. for String Arrays) in milliseconds
-    language?: string;//<- the language for synthesis (if omitted, the current language setting is used)
-    voice?: string;//<- the voice (language specific) for synthesis; NOTE that the specific available voices depend on the TTS engine
-    success?: TTSOnComplete;//<- the on-playing-completed callback (see arg onPlayedCallback)
-    error?: TTSOnError;//<- the error callback (see arg failureCallback)
-    ready?: TTSOnReady;//<- the audio-ready callback (see arg onReadyCallback)
+		/** text that should be read aloud */
+    text: string | string[];
+		/** the length of the pauses between sentences (i.e. for String Arrays) in milliseconds */
+    pauseDuration?: number;
+		/** the language for synthesis (if omitted, the current language setting is used) */
+    language?: string;
+		/** the voice (language specific) for synthesis; NOTE that the specific available voices depend on the TTS engine */
+    voice?: string;
+		/** the on-playing-completed callback (see arg onPlayedCallback) */
+    success?: TTSOnComplete;
+		/** the error callback (see arg failureCallback) */
+    error?: TTSOnError;
+		/** the audio-ready callback (see arg onReadyCallback) */
+    ready?: TTSOnReady;
 }
 
 export interface ASROptions {
-    success?: ASROnStatus;//<- the status-callback (see arg statusCallback)
-    error?: ASROnError;//<- the error callback (see arg failureCallback)
-    language?: string;//<- the language for recognition (if omitted, the current language setting is used)
-    intermediate?: boolean;//<- set true for receiving intermediate results (NOTE not all ASR engines may support intermediate results)
-    results?: number;//<- set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
-    mode?: "search" | "dictation";//<- set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
-    eosPause?: "short" | "long";//<- length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option)
-    disableImprovedFeedback?: boolean;//<- disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option)
+		/** the status-callback (see arg statusCallback) */
+    success?: ASROnStatus;
+		/** the error callback (see arg failureCallback) */
+    error?: ASROnError;
+		/** the language for recognition (if omitted, the current language setting is used) */
+    language?: string;
+		/** set true for receiving intermediate results (NOTE not all ASR engines may support intermediate results) */
+    intermediate?: boolean;
+		/** set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option) */
+    results?: number;
+		/** set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option) */
+    mode?: ASRMode;
+		/** length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option) */
+    eosPause?: EOSPause;
+		/** disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option) */
+    disableImprovedFeedback?: boolean;
 }
 
 export type TTSOnComplete = () => void;
@@ -387,6 +403,9 @@ export type TTSOnReady = (isReady?: Boolean, audio?: IAudio) => void;
 export type ASROnStatus = (text: string | "", confidence: number | undefined, status: ASRStatus, alternatives?: Array<{result: string, score: number}>, unstable?: string) => void;
 export type ASRStatus = "FINAL" | "INTERIM" | "INTERMEDIATE" | "RECORDING_BEGIN" | "RECORDING_DONE";
 export type ASROnError = (error: string | Error) => void;
+
+export type ASRMode = "search" | "dictation";
+export type EOSPause = "short" | "long";
 
 export interface IAudio {
 	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
