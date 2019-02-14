@@ -24,17 +24,17 @@ define(['mmirf/util/isArray'], function(isArray){
 	};
 
 	var core_toString = class2type.toString,
-	core_hasOwn = class2type.hasOwnProperty;
+			core_hasOwn = class2type.hasOwnProperty;
 
-	isFunction = function(obj) {
+	var isFunction = function(obj) {
 		return type(obj) === "function";
 	};
 
-	isWindow = function(obj) {
+	var isWindow = function(obj) {
 		return obj != null && obj === obj.window;
 	};
 
-	type = function(obj) {
+	var type = function(obj) {
 		if (obj == null) {
 			return String(obj);
 		}
@@ -43,7 +43,7 @@ define(['mmirf/util/isArray'], function(isArray){
 					typeof obj;
 	};
 
-	isPlainObject = function(obj) {
+	var isPlainObject = function(obj) {
 		if (type(obj) !== "object" || obj.nodeType || isWindow(obj)) {
 			return false;
 		}
@@ -59,7 +59,7 @@ define(['mmirf/util/isArray'], function(isArray){
 		return true;
 	};
 
-	extend = function() {
+	var extend = function() {
 		var options,
 		name,
 		src,
