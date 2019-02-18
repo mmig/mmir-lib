@@ -689,7 +689,8 @@ return {
 			implFile += '.js';
 		}
 
-		var implPath = consts.getMediaPluginPath() + implFile;
+		var rePluginId = /^mmir-plugin-[^/]+$/;
+		var implPath = (rePluginId.test(implFile)? '' : consts.getMediaPluginPath()) + implFile;
 
 		var processLoaded = function success(theNewWebAudioTtsImpl){
 
@@ -712,7 +713,8 @@ return {
 
 		if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
 			try{
-				processLoaded(require('./'+implFile));
+				var dep = rePluginId.test(implFile)? __webpack_require__(implFile.replace(/\.js$/i, '')) : require('./'+implFile);
+				processLoaded(dep);
 			} catch(err){
 				handleError(err);
 			}
