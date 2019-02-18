@@ -407,6 +407,15 @@ export type ASROnError = (error: string | Error) => void;
 export type ASRMode = "search" | "dictation";
 export type EOSPause = "short" | "long";
 
+
+export type MediaPluginEnvType = 'browser' | 'cordova' | 'android' | 'ios';
+
+export interface MediaManagerPluginEntry {
+  env?: Array<MediaPluginEnvType | string >;
+  ctx?: string;
+}
+
+
 export interface IAudio {
 	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
 	play:  () => void;
