@@ -415,6 +415,33 @@ export interface MediaManagerPluginEntry {
   ctx?: string;
 }
 
+export interface SimpleSpeechConfig {
+	/** local with 2-letter language- and country-code, separated with "-", e.g. "de-DE" or "en-US" */
+	language?: string;
+	/** local with 3-letter language- and country-code, separated with "-", e.g. "deu-DEU" or "eng-USA" */
+	long?: string;
+	/** voice name or feature (may not be supported by selected TTS plugin) */
+	voice?: 'male' | 'female' | string;
+}
+
+export interface SpeechConfig extends SimpleSpeechConfig {
+	language: string;
+	/**
+	 * voice  feature (may not be supported by selected TTS plugin)
+	 *
+	 * NOTE the root SpeechConfig should not have a specific voice-name, but
+	 *      only a feature specified (since it is very unlikely that all plugins
+	 *      support the same voice-name)
+	 */
+	voice?: 'male' | 'female';
+	/**
+	 * specific plugin speech-configurations that override the general
+	 * configuration settings
+	 */
+	plugins: {[pluginId: string]: PluginSpeechConfig};
+}
+
+export interface PluginSpeechConfig extends SimpleSpeechConfig {}
 
 export interface IAudio {
 	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
