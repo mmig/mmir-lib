@@ -438,10 +438,10 @@ export interface SpeechConfig extends SimpleSpeechConfig {
 	 * specific plugin speech-configurations that override the general
 	 * configuration settings
 	 */
-	plugins: {[pluginId: string]: PluginSpeechConfig};
+	plugins: {[pluginId: string]: SpeechConfigPluginEntry};
 }
 
-export interface PluginSpeechConfig extends SimpleSpeechConfig {}
+export interface SpeechConfigPluginEntry extends SimpleSpeechConfig {}
 
 export interface IAudio {
 	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
