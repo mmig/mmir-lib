@@ -218,8 +218,8 @@ return {
 		};
 
 		/**  @memberOf WebAudioTextToSpeech# */
-		var getLangParam = function(options, langSeparator){
-			return options && options.language? options.language : lang.getLanguageConfig(_pluginName, 'language', langSeparator);
+		var getLangParam = function(options, langSeparator, useLongLangCode){
+			return options && options.language? options.language : lang.getLanguageConfig(_pluginName, useLongLangCode? 'long' : 'language', langSeparator);
 		};
 
 		/**  @memberOf WebAudioTextToSpeech# */

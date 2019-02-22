@@ -785,7 +785,7 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 									if(!currentSpeechConfig){
 										logger.warn('no speech configuration ('+constants.getSpeechConfigFileUrl()+') available for '+currentLanguage);
-										if(!feature || feature === 'language'){
+										if(!feature || feature === 'language' || feature === 'long'){
 											return currentLanguage;
 										}
 										return void(0);
@@ -813,6 +813,11 @@ define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                	//otherwise take the default setting (NOTE: the name "plugins" is not allowed for features!)
 		                	value = currentSpeechConfig[feature];
 		                }
+
+										//fallback: if long language code was requested but neither plugin nor global long feature is available -> try to return language
+										if(typeof value === 'undefined' && feature === 'long'){
+											return this.getLanguageConfig(pluginId, feature, separator);
+										}
 
 		                //if there is a separator specified: replace default separator '-' with this one
 		                if(value && typeof separator !== 'undefined'){
