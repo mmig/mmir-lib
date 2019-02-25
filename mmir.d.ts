@@ -411,7 +411,8 @@ export type EOSPause = "short" | "long";
 export type MediaPluginEnvType = 'browser' | 'cordova' | 'android' | 'ios';
 
 export interface MediaManagerPluginEntry {
-  env?: Array<MediaPluginEnvType | string >;
+  mod?: string;
+  env?: Array< MediaPluginEnvType | string > | MediaPluginEnvType | string;
   ctx?: string;
 }
 
