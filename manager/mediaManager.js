@@ -26,7 +26,7 @@
 
 
 
-define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/configurationManager', 'mmirf/dictionary', 'mmirf/logger', 'module'],
+define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/configurationManager', 'mmirf/dictionary', 'mmirf/logger', 'module'],
 	/**
 	 * The MediaManager gives access to audio in- and output functionality.
 	 *
@@ -45,7 +45,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * TODO remove / change dependency on forBrowser: constants.isBrowserEnv()!!!
 	 */
 	function(
-		deferred, extend, constants, commonUtils, configurationManager, Dictionary, Logger, module
+		deferred, extend, constants, configurationManager, Dictionary, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.MediaManager.prototype */
@@ -98,13 +98,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
 	 */
     var _defaultPlugins = {
-		'browser': ['waitReadyIndicator',
-		            'html5AudioOutput',
+		'browser': ['html5AudioOutput',
 		            'webspeechAudioInput',
 		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		],
-		'cordova': ['waitReadyIndicator',
-		            'cordovaAudioOutput',
+		'cordova': ['cordovaAudioOutput',
 		            'androidAudioInput',
 		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		]
@@ -720,10 +718,28 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 						return this.ctx[defaultExecId][funcName].apply(this, arguments);
 					}
     				else if(failureCallback){
-    					failureCallback("Audio Output: canceling Recognize Speech is not supported.");
+    					failureCallback("Audio Input: canceling Recognize Speech is not supported.");
     				}
     				else {
-    					logger.error("Audio Output: canceling Recognize Speech is not supported.");
+    					logger.error("Audio Input: canceling Recognize Speech is not supported.");
+    				}
+    			},
+					/**
+    			 * get list of supported languages for ASR (may not be supported by all plugins).
+    			 *
+				 * @memberOf mmir.MediaManager#
+    			 */
+    			getRecognitionLanguages: function(successCallback,failureCallback){
+
+    				var funcName = 'getRecognitionLanguages';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallback){
+    					failureCallback("Audio Input: retrieving list of available languages not supported.");
+    				}
+    				else {
+    					logger.error("Audio Input: retrieving list of available languages not supported.");
     				}
     			},
 ///////////////////////////// audio output API: /////////////////////////////
@@ -994,6 +1010,59 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     				}
     				else {
     					logger.error("Audio Output: canceling Text To Speech is not supported.");
+    				}
+    			},
+
+					/**
+    			 * get list of supported languages for TTS (may not be supported by all plugins).
+    			 *
+				 * @memberOf mmir.MediaManager#
+    			 */
+    			getSpeechLanguages: function(successCallback,failureCallback){
+
+    				var funcName = 'getSpeechLanguages';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallback){
+    					failureCallback("Audio Output: retrieving list of available languages not supported.");
+    				}
+    				else {
+    					logger.error("Audio Output: retrieving list of available languages not supported.");
+    				}
+    			},
+
+					/**
+    			 * get list of supported voices for TTS (may not be supported by all plugins).
+    			 *
+    			 *
+    			 */
+    			/**
+    			 * get list of supported voices for TTS (may not be supported by all plugins).
+    			 *
+    			 * @param  {String | VoiceOptions} [options] OPTIONAL if String, the language code (optionally with country code)
+    			 * 																					for which the voices should be listed.
+    			 * 																				 if VoiceOptions:
+    			 * 																				   options.language: {String} OPTIONAL the language code
+    			 * 																				   options.details: {Boolean} OPTIONAL if TRUE the returned list contains
+    			 * 																				                    VoiceDetail objects with
+    			 * 																				                    {name: STRING, language: STRING, gender: "female" | "male" | "unknown"}
+    			 * @param  {Function} successCallback the success callback: successCallback(Array<String | VoiceDetail>)
+    			 * @param  {Function} failureCallback the error callback: failureCallback(err)
+    			 *
+    			 * @memberOf mmir.MediaManager#
+    			 */
+    			getVoices: function(options,successCallback,failureCallback){
+
+    				var funcName = 'getVoices';
+    				if(defaultExecId && typeof this.ctx[defaultExecId][funcName] !== 'undefined'){
+						return this.ctx[defaultExecId][funcName].apply(this, arguments);
+					}
+    				else if(failureCallback){
+    					failureCallback("Audio Output: retrieving list of available voices not supported.");
+    				}
+    				else {
+    					logger.error("Audio Output: retrieving list of available voices not supported.");
     				}
     			},
 

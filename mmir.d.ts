@@ -342,12 +342,15 @@ export interface MediaManager {
     recognize: (options?: ASROptions, statusCallback?: ASROnStatus, failureCallback?: ASROnError, isIntermediateResults?: boolean) => void;
     startRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError, intermediateResults?: boolean) => void;
     stopRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError) => void;
+    cancelRecognition: (successCallback?: Function, failureCallback?: Function) => void;
+    getRecognitionLanguages: (successCallBack?: Function, failureCallBack?: Function) => void;
 
     tts: (options: string | string[] | TTSOptions, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, ...args: any[]) => void;
     setTextToSpeechVolume: (newValue: number) => void;
-
-    cancelRecognition: (successCallback?: Function, failureCallback?: Function) => void;
     cancelSpeech: (successCallBack?: Function, failureCallBack?: Function) => void;
+    getSpeechLanguages: (successCallBack?: Function, failureCallBack?: Function) => void;
+    getVoices: (options?: VoiceListOptions, successCallBack?: (voices: Array<string | VoiceDetails>) => void, failureCallBack?: Function) => void;
+
 
     // internal / "half public" functions (for use in plugin implementations)
     _fireEvent: (eventName: MediaEventType, args: any[]) => void;
@@ -394,6 +397,22 @@ export interface ASROptions {
     eosPause?: EOSPause;
 		/** disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option) */
     disableImprovedFeedback?: boolean;
+}
+
+export interface VoiceListOptions {
+	/** if set, the returned voice list will be filtered by the specified language (may also include country-code) */
+	language?: string;
+	/** if TRUE, the returned list will be comprised of VoiceDetails objects instead of strings  */
+	details?: boolean;
+}
+
+export interface VoiceDetails {
+	/** the name of the voice */
+	name: string;
+	/** the language (code) of the voice */
+	languange: string;
+	/** the gender of the voice */
+	gender: "female" | "male" | "unknown";
 }
 
 export type TTSOnComplete = () => void;
