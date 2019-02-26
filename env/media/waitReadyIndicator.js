@@ -21,7 +21,7 @@
  *    "plugins": {
  *      "browser": ["waitReadyIndicator",
  *                  // OR: {"mod": "waitReadyIndicator", "config": "url to css styles"},
- *                  "html5AudioOutput",
+ *                  "webAudioOutput",
  *                  ...
  *      ],
  *      "cordova": ["waitReadyIndicator",

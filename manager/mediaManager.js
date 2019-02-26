@@ -76,8 +76,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
      * <pre>
 	 *     "mediaManager": {
 	 *     	"plugins": {
-	 *     		"browser": ["html5AudioOutput",
-	 *     		            "html5AudioInput",
+	 *     		"browser": ["webAudioOutput",
+	 *     		            "webspeechAudioInput",
 	 *     		            {"mod": "webAudioTextToSpeech", "config": "webttsMaryImpl"},
 	 *     		            {"mod": "webspeechAudioInput",     "ctx": "chrome"}
 	 *     		],
@@ -98,7 +98,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
 	 */
     var _defaultPlugins = {
-		'browser': ['html5AudioOutput',
+		'browser': ['webAudioOutput',
 		            'webspeechAudioInput',
 		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		],
@@ -126,7 +126,9 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     var _pluginsConfig = {
     	'marytexttospeech.js': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
     	'html5audioinput.js':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'},
-    	'webkitaudioinput.js':  {mod: 'webspeechAudioInput'}
+    	'webkitaudioinput.js':  {mod: 'webspeechAudioInput'},
+    	'html5audiooutput.js':  {mod: 'webAudioOutput'},
+    	'html5audiooutput':  {mod: 'webAudioOutput'}
     };
 
     /**
