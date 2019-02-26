@@ -124,12 +124,10 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
      */
     var _pluginsConfig = {
-    	'marytexttospeech.js': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
-    	'html5audioinput.js':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'},
-    	'webkitaudioinput.js':  {mod: 'webspeechAudioInput'},
-    	'html5audiooutput.js':  {mod: 'webAudio'},
+    	'marytexttospeech': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
+    	'html5audioinput':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'},
+    	'webkitaudioinput':  {mod: 'webspeechAudioInput'},
     	'html5audiooutput':  {mod: 'webAudio'},
-    	'cordovaaudiooutput.js':  {mod: 'cordovaAudio'},
     	'cordovaaudiooutput':  {mod: 'cordovaAudio'}
     };
 
@@ -1701,7 +1699,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 				}
 
 	    	//check if there is a "replacement" / default configuration for the requested module
-	    	var legacyModule = newPluginName? _pluginsConfig[newPluginName.toLowerCase()] : null;
+	    	var legacyModule = newPluginName? _pluginsConfig[newPluginName.toLowerCase().replace(/\.js$/, '')] : null;
 	    	if(legacyModule){
 	    		ctxId  = ctxId  || legacyModule.ctxId;
 	    		config = config || legacyModule.config;
