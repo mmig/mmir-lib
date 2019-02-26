@@ -10,7 +10,7 @@ return {
 	initialize: function(callBack, __mediaManager){
 
 		/**  @memberOf Html5AudioOutput# */
-		var _pluginName = 'webAudioOutput';
+		var _pluginName = 'webAudio';
 
 		/**
 		 * Media error (codes):
@@ -115,7 +115,7 @@ return {
 					errorCallback.call(ctx, err, evt);
 				}
 				else {
-					console.error(err.message + ' (code '+err.code + '): '+err.description, evt);
+					mediaManager._log.error('['+_pluginName+'] '+ err.message + ' (code '+err.code + '): '+err.description, evt);
 				}
 			};
 		}
@@ -225,7 +225,7 @@ return {
 						failureCallback.call(null, err, e);
 					}
 					else {
-						console.error(err.message + ': ' + err.description, e);
+						mediaManager._log.error('['+_pluginName+'] '+ err.message + ': ' + err.description, e);
 					}
 				}
 			},
@@ -262,7 +262,7 @@ return {
 						failureCallback.call(null, err, e);
 					}
 					else {
-						console.error(err.message + ': ' + err.description, e);
+						mediaManager._log.error('['+_pluginName+'] '+ err.message + ': ' + err.description, e);
 					}
 				}
 
@@ -322,7 +322,7 @@ return {
 						failureCallback.call(emptyAudioObj, err, e);
 					}
 					else {
-						console.error(err.message + ': ' + err.description, e);
+						mediaManager._log.error('['+_pluginName+'] '+ err.message + ': ' + err.description, e);
 					}
 				}
 
@@ -613,7 +613,7 @@ return {
 						failureCallback.call(mediaImpl, err, e);
 					}
 					else {
-						console.error(err.message + ': ' + err.description, e);
+						mediaManager._log.error('['+_pluginName+'] '+ err.message + ': ' + err.description, e);
 					}
 				}
 			},//END getURLAsAudio

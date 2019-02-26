@@ -76,12 +76,12 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
      * <pre>
 	 *     "mediaManager": {
 	 *     	"plugins": {
-	 *     		"browser": ["webAudioOutput",
+	 *     		"browser": ["webAudio",
 	 *     		            "webspeechAudioInput",
 	 *     		            {"mod": "webAudioTextToSpeech", "config": "webttsMaryImpl"},
 	 *     		            {"mod": "webspeechAudioInput",     "ctx": "chrome"}
 	 *     		],
-	 *     		"cordova": ["cordovaAudioOutput",
+	 *     		"cordova": ["cordovaAudio",
 	 *     		            "nuanceAudioInput",
 	 *     		            "nuanceTextToSpeech",
 	 *     		            {"mod": "androidAudioInput",    "ctx": "native"},
@@ -98,11 +98,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
 	 */
     var _defaultPlugins = {
-		'browser': ['webAudioOutput',
+		'browser': ['webAudio',
 		            'webspeechAudioInput',
 		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		],
-		'cordova': ['cordovaAudioOutput',
+		'cordova': ['cordovaAudio',
 		            'androidAudioInput',
 		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
 		]
@@ -127,8 +127,10 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     	'marytexttospeech.js': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
     	'html5audioinput.js':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'},
     	'webkitaudioinput.js':  {mod: 'webspeechAudioInput'},
-    	'html5audiooutput.js':  {mod: 'webAudioOutput'},
-    	'html5audiooutput':  {mod: 'webAudioOutput'}
+    	'html5audiooutput.js':  {mod: 'webAudio'},
+    	'html5audiooutput':  {mod: 'webAudio'},
+    	'cordovaaudiooutput.js':  {mod: 'cordovaAudio'},
+    	'cordovaaudiooutput':  {mod: 'cordovaAudio'}
     };
 
     /**
