@@ -78,7 +78,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 *     	"plugins": {
 	 *     		"browser": ["webAudio",
 	 *     		            "webspeechAudioInput",
-	 *     		            {"mod": "webAudioTextToSpeech", "config": "webttsMaryImpl"},
+	 *     		            {"mod": "audiotts", "config": "ttsMary"},
 	 *     		            {"mod": "webspeechAudioInput",     "ctx": "chrome"}
 	 *     		],
 	 *     		"cordova": ["cordovaAudio",
@@ -86,7 +86,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 *     		            "nuanceTextToSpeech",
 	 *     		            {"mod": "androidAudioInput",    "ctx": "native"},
 	 *     		            {"mod": "androidTextToSpeech",  "ctx": "native"},
-	 *     		            {"mod": "webAudioTextToSpeech", "ctx": "web", "config": "webttsMaryImpl"}
+	 *     		            {"mod": "audiotts", "ctx": "web", "config": "ttsMary"}
 	 *     		]
 	 *     	}
 	 *     }
@@ -100,23 +100,25 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     var _defaultPlugins = {
 		'browser': ['webAudio',
 		            'webspeechAudioInput',
-		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
+		            {mod: 'audiotts', config: 'ttsMary'}
 		],
 		'cordova': ['cordovaAudio',
 		            'androidAudioInput',
-		            {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'}
+		            {mod: 'audiotts', config: 'ttsMary'}
 		]
     };
 
     /**
      * Mapping for modules to default module configurations.
      *
-     * This mainly used for backwards compatibility, to map deprecated modules to their
+     * This is mainly used for backwards compatibility, to map deprecated modules to their
      * new/corresponding configuration.
      *
      * Maps a module name/file to the corresponding (new) module configuration.
      *
      * NOTE: The module's name/file are in lower case.
+     *
+     * TODO extract to loadable migration module
      *
      * @private
      * @type PlainObject
@@ -124,11 +126,36 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
      */
     var _pluginsConfig = {
-    	'marytexttospeech': {mod: 'webAudioTextToSpeech', config: 'webttsMaryImpl'},
-    	'html5audioinput':  {mod: 'webAudioInput', config: 'webasrGooglev1Impl'},
+    	'marytexttospeech': {mod: 'audiotts', config: 'ttsMary'},
+    	'html5audioinput':  {mod: 'webAudioInput', config: 'asrGoogleXhr'},
     	'webkitaudioinput':  {mod: 'webspeechAudioInput'},
     	'html5audiooutput':  {mod: 'webAudio'},
-    	'cordovaaudiooutput':  {mod: 'cordovaAudio'}
+    	'cordovaaudiooutput':  {mod: 'cordovaAudio'},
+    	'webaudiotexttospeech':  {mod: 'audiotts'}
+    };
+
+		/**
+     * Mapping for modules' config:
+     *
+     * This is used for backwards compatibility, to map deprecated module config fields to their
+     * new/corresponding configuration.
+     *
+     * NOTE: The config name/file are in lower case.
+     *
+     * TODO extract to loadable migration module
+     *
+     * @private
+     * @type PlainObject
+     *
+	 * @memberOf MediaManager#
+     */
+    var _pluginsConfigConfig = {
+    	'webttsmaryimpl': 'ttsMary',
+    	// 'webttsnuanceimpl': 'ttsNuanceXhr',
+    	// 'ttsspeakJsimpl': 'ttsSpeakjs',
+    	// 'webasrgoogleimpl': 'asrGoogleXhr',
+    	// 'webasrnuanceimpl': 'asrNuanceXhr',
+    	// 'webasrnuancewsimpl': 'asrNuanceWs',
     };
 
     /**
@@ -1705,6 +1732,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    		config = config || legacyModule.config;
 	    		newPluginName = legacyModule.mod;
 	    	}
+
+				//check if there is a "replacement" for a requested string config-value
+				config = typeof config === 'string' && config?
+										_pluginsConfigConfig[config.toLowerCase().replace(/\.js$/, '')] || config
+										: config;
 
 	    	loadPlugin(newPluginName,
 					onLoaded, onError,
