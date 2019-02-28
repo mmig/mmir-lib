@@ -427,12 +427,15 @@ export type ASRMode = "search" | "dictation";
 export type EOSPause = "short" | "long";
 
 
+export type MediaPluginType = 'audio' | 'asr' | 'tts' | 'prep' | string;
+
 export type MediaPluginEnvType = 'browser' | 'cordova' | 'android' | 'ios';
 
 export interface MediaManagerPluginEntry {
   mod?: string;
   env?: Array< MediaPluginEnvType | string > | MediaPluginEnvType | string;
   ctx?: string;
+	type?: MediaPluginType;
 }
 
 export interface SimpleSpeechConfig {
