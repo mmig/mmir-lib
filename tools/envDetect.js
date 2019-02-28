@@ -15,7 +15,7 @@
  *  		<pre>{
  *  			isBrowserEnv: [true|false],
  *  			isCordovaEnv: [true|false],
- *  			platform: ["browser" | "android" | "ios" | "default"],
+ *  			platform: ["browser" | "android" | "ios" | "node" | "default"],
  *  		}</pre>
  */
 define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
