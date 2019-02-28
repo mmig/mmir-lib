@@ -68,6 +68,23 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 */
 	var logger = Logger.create(module);//initialize with requirejs-module information
 
+	/**
+	* HELPER get list of require plugins for an environment
+	*
+	* supported environments: <default> | 'cordova'
+	*
+	* TODO do we need to differentiate between more environments?
+	*
+	* @param  {Boolean} isCordovaEnv TRUE for cordova-environments, otherwise FALSE
+	* @return {Array<PluginEntry>} the list of required PluginEntry object for the env
+	*
+	* @private
+	* @memberOf mmir.MediaManager#
+	*/
+	function getRequiredPlugins(isCordovaEnv){
+		return isCordovaEnv? [{mod: 'cordovaAudio', type: 'audio'}] : [{mod: 'webAudio', type: 'audio'}];
+	}
+
     /**
      * default configuration for env-settings "browser" and "cordova":
      *
@@ -78,15 +95,15 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 *     	"plugins": {
 	 *     		"browser": ["webAudio",
 	 *     		            "webspeechAudioInput",
-	 *     		            {"mod": "audiotts", "config": "ttsMary"},
-	 *     		            {"mod": "webspeechAudioInput",     "ctx": "chrome"}
+	 *     		            {"mod": "audiotts", "config": "ttsMary", "type": "tts"},
+	 *     		            {"mod": "webspeechAudioInput", "type": "asr",                    "ctx": "chrome"}
 	 *     		],
 	 *     		"cordova": ["cordovaAudio",
-	 *     		            "nuanceAudioInput",
-	 *     		            "nuanceTextToSpeech",
-	 *     		            {"mod": "androidAudioInput",    "ctx": "native"},
-	 *     		            {"mod": "androidTextToSpeech",  "ctx": "native"},
-	 *     		            {"mod": "audiotts", "ctx": "web", "config": "ttsMary"}
+	 *     		            "mmir-plugin-speech-nuance",
+	 *     		            "mmir-plugin-speech-nuance/ttsAndroid",
+	 *     		            {"mod": "mmir-plugin-speech-android", "type": "asr",             "ctx": "native"},
+	 *     		            {"mod": "mmir-plugin-speech-android/ttsAndroid", "type": "tts",  "ctx": "native"},
+	 *     		            {"mod": "audiotts", "config": "ttsMary", "type": "tts",          "ctx": "web"}
 	 *     		]
 	 *     	}
 	 *     }
@@ -98,15 +115,18 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
 	 */
     var _defaultPlugins = {
-		'browser': ['webAudio',
-		            'webspeechAudioInput',
-		            {mod: 'audiotts', config: 'ttsMary'}
-		],
-		'cordova': ['cordovaAudio',
-		            'androidAudioInput',
-		            {mod: 'audiotts', config: 'ttsMary'}
-		]
+		'browser': getRequiredPlugins(false).concat([
+		            {mod: 'webspeechAudioInput', type: 'asr'},
+		            {mod: 'audiotts', config: 'ttsMary', type: 'tts'}
+		]),
+		'cordova': getRequiredPlugins(true).concat([
+		            {mod: 'androidAudioInput', type: 'asr'},
+		            {mod: 'audiotts', config: 'ttsMary', type: 'tts'}
+		])
     };
+
+
+
 
     /**
      * Mapping for modules to default module configurations.
@@ -126,12 +146,12 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * @memberOf MediaManager#
      */
     var _pluginsConfig = {
-    	'marytexttospeech': {mod: 'audiotts', config: 'ttsMary'},
-    	'html5audioinput':  {mod: 'webAudioInput', config: 'asrGoogleXhr'},
-    	'webkitaudioinput':  {mod: 'webspeechAudioInput'},
-    	'html5audiooutput':  {mod: 'webAudio'},
-    	'cordovaaudiooutput':  {mod: 'cordovaAudio'},
-    	'webaudiotexttospeech':  {mod: 'audiotts'}
+    	'marytexttospeech': {mod: 'audiotts', config: 'ttsMary', type: 'tts'},
+    	'html5audioinput':  {mod: 'webAudioInput', config: 'asrGoogleXhr', type: 'asr'},
+    	'webkitaudioinput':  {mod: 'webspeechAudioInput', type: 'asr'},
+    	'html5audiooutput':  {mod: 'webAudio', type: 'audio'},
+    	'cordovaaudiooutput':  {mod: 'cordovaAudio', type: 'audio'},
+    	'webaudiotexttospeech':  {mod: 'audiotts', config: 'ttsMary', type: 'tts'}
     };
 
 		/**
@@ -259,13 +279,13 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 		    								(function(mediaManagerInstance, originalFunc, name, context, ttsFieldExists){
 		    									//NOTE need closure to "preserve" values of for-iteration
 		    									mediaManagerInstance.ctx[context][name] = function(){
-//					    								console.log('executing '+context+'.'+name+', in context '+mediaManagerInstance,mediaManagerInstance);//DEBUG
+//					    								logger.log('executing '+context+'.'+name+', in context '+mediaManagerInstance,mediaManagerInstance);//DEBUG
 				    								return originalFunc.apply(mediaManagerInstance, arguments);
 				    							};
 
 				    							//add alias 'tts' for 'textToSpeech'
 				    							if(!ttsFieldExists && name === 'textToSpeech'){
-				    								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
+				    								logger.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 				    								mediaManagerInstance.ctx[context]['tts'] = mediaManagerInstance.ctx[context]['textToSpeech'];
 				    							}
 
@@ -279,7 +299,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 
 			    							//add alias 'tts' for 'textToSpeech'
 			    							if(p === 'textToSpeech' && !exportedFunctions['tts']){
-			    								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
+			    								logger.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 			    								mediaManagerInstance.ctx[execId]['tts'] = func;
 			    							}
 		    							}
@@ -308,7 +328,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    					extend(instance,exportedFunctions);
 	    					//add alias 'tts' for 'textToSpeech'
 							if(typeof exportedFunctions['textToSpeech'] === 'function' && !exportedFunctions['tts']){
-								console.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
+								logger.error('outdated TTS plugin '+filePath+': plugin implementation should replace textToSpeech() with tts()!');
 								instance['tts'] = exportedFunctions['textToSpeech'];
 							}
 	    				}
@@ -335,7 +355,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 			}
 
     	}catch (e){
-    		console.error('Error loading MediaPlugin '+filePath+': '+e);
+    		logger.error('Error loading MediaPlugin '+filePath+': '+e);
     		if (failureCallback) failureCallback();
     	}
 
@@ -1628,7 +1648,6 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     function getPluginsToLoad(configurationName){//if configurationName is omitted, then it is automatically detected
 
     	var env = configurationName;
-    	var pluginArray = [];
 
     	var dataFromConfig = configurationManager.get('mediaManager.plugins');
 
@@ -1658,9 +1677,8 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 
     		//if there is no env value yet, use default criteria browser vs. cordova env:
     		if(!env){
-
-	    		var isCordovaEnvironment = constants.isCordovaEnv();
-	        	if (isCordovaEnvironment) {
+	        	var isCordova = constants.isCordovaEnv();
+	        	if (isCordova) {
 	        		env = 'cordova';
 	        	} else {
 	        		env = 'browser';
@@ -1670,31 +1688,109 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     		//ASSERT env is non-empty String
     	}
 
+			var pluginArray;
     	if (dataFromConfig && dataFromConfig[env]){
-    		pluginArray = pluginArray.concat(dataFromConfig[env]);
+    		pluginArray = dataFromConfig[env].slice();
     	} else{
-    		pluginArray = pluginArray.concat(_defaultPlugins[env]);
+    		pluginArray = _defaultPlugins[env].slice();
     	}
+
 
     	return pluginArray;
     }
+
+		/**
+		 * HELPER remove a plugin by its mod-field from a list of plugin-entries
+		 *
+		 * @param  {String} pluginModule the normalized plugin "mod" field (may end with ".js")
+		 * @param  {Array<PluginEntry>} pluginList a list of plugin entries, i.e. {mod: "..." ...}
+		 *
+		 * @private
+		 * @memberOf mmir.MediaManager#
+		 */
+		function removePlugin(pluginModule, pluginList){
+			var size = pluginList? pluginList.length : 0;
+			if(size === 0){
+				return;
+			}
+			pluginModule = pluginModule.replace(/\.js/i, '');
+			for(var i=size - 1; i >= 0; --i){
+				if(pluginList[i].mod === pluginModule){
+					pluginList.splice(i, 1);
+					break;
+				}
+			}
+		}
+
+
+		/**
+		 * HELPER verify that plugin list contains at least one entry of each required plugin or plugin-type
+		 *        and if not, adds required plugin entry/type(s).
+		 *
+		 * 				If there is at least 1 entry in plugins that has not type-field, the HELPER returns FALSE,
+		 * 				indicating that required plugins need to be added separately; however requiredPlugins may have been modified
+		 * 				that is, entries removed, if the corresponding "mod"-field did match a required plugin.
+		 *
+		 * 				Otherwise, if TRUE is returned, plugins will contain all required plugins (that is: plugin-types).
+		 * 				Any required plugin that was added from requiredPlugins, or was found in plugins, will be removed from requiredPlugins
+		 *
+		 * @param  {Array<PluginEntry>} plugins the list of specified plugin entries to load (NOTE "mod" name may not be normalized!); may get modified by adding required plugins
+		 * @param  {Array<PluginEntry>} requiredPlugins the list of required plugins (that is plugin-types); may get modified by removing plugins that are already in plugins list
+		 * @returns {Boolean} TRUE if plugins already contains all required plugin-types, or if the required plugins could be successfully added
+		 *
+		 * @private
+		 * @memberOf mmir.MediaManager#
+		 */
+		function verifyRequiredPlugins(plugins, requiredPlugins){
+			var isVerified = true;
+			var entry, mod, rq;
+			for(var i=plugins.length-1; i >= 0; --i){
+				entry = plugins[i];
+				mod = typeof entry === 'string'? mod : entry.mod;
+				if(!entry.type){
+					isVerified = false;
+				}
+				for(var j=requiredPlugins.length-1; j >= 0; --j){
+					rq = requiredPlugins[j];
+					if(mod === rq.mod || rq.type === entry.type){
+						plugins.splice(i, 1);
+					}
+				}
+				if(requiredPlugins.length === 0){
+					break;
+				}
+			}
+			var len = requiredPlugins.length;
+			if(isVerified && len > 0){
+				for(var i=0; i < len; ++i){
+					plugins.unshift(requiredPlugins[i]);
+				}
+			}
+			return isVerified || len === 0;
+		}
+
     /**
      *
 	 * @private
 	 * @memberOf mmir.MediaManager#
      */
-    function loadAllPlugins(pluginArray, successCallback,failureCallback){
+    function loadAllPlugins(pluginArray, successCallback, failureCallback){
 
-			console.log('loading media plugins: ', pluginArray)
+			logger.verbose('loading media plugins: ', pluginArray);
 
 			var count = (pluginArray && pluginArray.length) || 0;
+			if(count === 0){
+				logger.warn('empty plugin list');
+				checkCompleted();
+				return;////////////////// EARLY EXIT //////////////////////
+			}
 
 			function checkCompleted(){
 	    	if (!pluginArray || count === 0){
 	    		if (successCallback) {
 	    			successCallback();
 	    		} else {
-						logger.debug('loadAllPlugins completed.');
+						logger.debug('loadAllPlugins completed');
 					}
 	    		return;
 	    	}
@@ -1712,6 +1808,15 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 				checkCompleted();
 				failureCallback && failureCallback;
 			};
+
+			var isCordova = constants.isCordovaEnv();
+			var requiredPlugins = getRequiredPlugins(isCordova);
+
+			if(verifyRequiredPlugins(pluginArray, requiredPlugins)){
+				requiredPlugins = null;
+			}
+			// pluginArray may have been modified by verifyRequiredPlugins() -> update count:
+			count = pluginArray.length;
 
     	var ctxId, config, newPluginName;
 			for(var i = 0, size = count; i < size; ++i){
@@ -1738,11 +1843,25 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 										_pluginsConfigConfig[config.toLowerCase().replace(/\.js$/, '')] || config
 										: config;
 
+				removePlugin(newPluginName, requiredPlugins);
+
 	    	loadPlugin(newPluginName,
 					onLoaded, onError,
 	    		ctxId,
 	    		config
 	    	);
+
+				if(i === size -1 && requiredPlugins && requiredPlugins.length > 0){
+
+					if(logger.isi()) logger.info('required plugins for '+(isCordova? 'cordova' : 'default')+' environment were not explicitly specified, now loading required plugins: '+JSON.stringify(requiredPlugins));
+
+					for(var j=0, rlen=requiredPlugins.length; j < rlen; ++j){
+						++count;
+						++size;
+						pluginArray.push(requiredPlugins[j]);
+					}
+					requiredPlugins = null;
+				}
 			}
     }
 
