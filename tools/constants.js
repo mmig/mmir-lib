@@ -517,7 +517,7 @@ function(
 			 */
 			getBeepUrl: function(){
 				return typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
-								require('../vendor/sounds/beep-notification.mp3') :
+								basePath + require('../vendor/sounds/beep-notification.mp3') :
 								frameworkBasePath + beepURL;
 			},
 			/**
