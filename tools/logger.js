@@ -26,7 +26,7 @@
 
 
 
-define(['mmirf/dictionary', 'mmirf/stacktrace', 'module'],
+define(['mmirf/stacktrace', 'module'],
 /**
  * A Logger factory.<br>
  *
@@ -60,11 +60,11 @@ define(['mmirf/dictionary', 'mmirf/stacktrace', 'module'],
  * @see Logger
  *
  */
-function(Dictionary, stacktrace, module){
+function(stacktrace, module){
 
 
-var _loggers = new Dictionary();
-//var logLevels = new Dictionary();
+var _loggers = new Map();
+//var logLevels = new Map();
 
 /**
  * the (global) logging level
@@ -961,7 +961,7 @@ var instance =
         if(typeof theLogger === 'undefined'){
         	//create, if not existing
         	var theNewLogger = new Logger(loggerName, logLevel);
-        	_loggers.put(loggerName, theNewLogger);
+        	_loggers.set(loggerName, theNewLogger);
 
         	return theNewLogger;
         }

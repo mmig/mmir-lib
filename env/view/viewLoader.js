@@ -25,36 +25,36 @@ define([
 	 * If raw views are loaded, the parsing-module will loaded for compiling the
 	 * views (i.e. if only compiled views are loaded, the dependency for the template
 	 * parser and renderer is not required).
-	 * 
-	 * 
+	 *
+	 *
 	 * <br>
 	 * <strong>Configuration (configuration.json)</strong>
 	 * <br>
-	 * 
+	 *
 	 * The configuration value <code>"usePrecompiledViews"</code> (Boolean) allows
 	 * the determine, if views should always be compiled from the eHTML files (even
 	 * if up-to-date compiled views are present).
-	 * 
+	 *
 	 * For example, configuration <code>"usePrecompiledViews": true</code> will use
 	 * compiled views, while <code>"usePrecompiledViews": false</code> will always
 	 * compile the eHTML files.
-	 * 
-	 * 
+	 *
+	 *
 	 * If the configuration value for {@link mmir.PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME} is
 	 * set to <code>NULL</code> no default layout will be loaded.
-	 * 
+	 *
 	 * If {@link mmir.PresentationManager.CONFIG_DEFAULT_LAYOUT_NAME} is a non-empty string, then
 	 * the corresponding layout will be used as default layout, instead of
 	 * {@link mmir.PresentationManager.DEFAULT_LAYOUT_NAME}.
-	 * 
+	 *
 	 *
 	 * @param  {PresentationManager} _instance
 	 *          the instance of the PresentationManager
-	 * @param  {Dictionary<Layout>} _layouts
+	 * @param  {Map<string, Layout>} _layouts
 	 *          the layout collection of the PresentationManager for adding loaded layouts
-	 * @param  {Dictionary<View>} _views
+	 * @param  {Map<string, View>} _views
 	 *          the view collection of the PresentationManager for adding loaded views
-	 * @param  {Dictionary<Partial>} _partials
+	 * @param  {Map<string, Partial>} _partials
 	 *          the partials collection of the PresentationManager for adding loaded partials
 	 * @param  {Function} createViewKey
 	 *          the PresentationManager's helper function for creating keys to be used when
@@ -66,7 +66,7 @@ define([
 	 *          <code>createPartialKey(partial: {Partial|String}, view: {View|String}) : {String}</code>
 	 * @return {Promise}
 	 *          a deferred promise that gets resolved when the views (layouts, and partials) are loaded
-	 *          
+	 *
 	 * @memberOf ViewLoader
 	 */
 	function loadViews (
@@ -76,7 +76,7 @@ define([
 		/**
 		 * The name of the configuration field that holds
 		 * the name for the default layout.
-		 * 
+		 *
 		 * @private
 		 * @type String
 		 * @constant
@@ -86,10 +86,10 @@ define([
 
 		/**
 		 * Name for the default layout, that will be loaded.
-		 * 
+		 *
 		 * If NULL, no default layout will be loaded
 		 * (see below configurationManager.get(CONFIG_DEFAULT_LAYOUT_NAME...))
-		 * 
+		 *
 		 * @private
 		 * @type String
 		 * @memberOf ViewLoader.init
@@ -99,7 +99,7 @@ define([
 
 		/**
 		 * The logger for the PresentationManager.
-		 * 
+		 *
 		 * @private
 		 * @type Logger
 		 * @memberOf ViewLoader.init
@@ -236,7 +236,7 @@ define([
 					isCompiledViewUpToDate = checksumUtils.isSame(viewContent, data);
 
 				},
-				error: function onError(jqxhr, status, err){
+				error: function onError(_jqxhr, status, err){
 
 					// print out an error message
 					var errMsg = err && err.stack? err.stack : err;
@@ -340,7 +340,7 @@ define([
 			 * @private
 			 * @memberOf ViewLoader.init.loadLayouts
 			 */
-			var doLoadLayout = function(ctrlName, index, theDefaultLayoutName){
+			var doLoadLayout = function(ctrlName, _index, theDefaultLayoutName){
 
 				var layoutInfo;
 				if(typeof theDefaultLayoutName === 'string'){
@@ -556,7 +556,7 @@ define([
 		 *                    IF controller IS null:     <code>(templateName, templateContent)</code>
 		 *                    							 (e.g. Layout)
 		 *
-		 * 		<code>createConfig.collection</code>: the Dictionary to which the created
+		 * 		<code>createConfig.collection</code>: the Map to which the created
 		 * 											 template-object will be added
 		 * 		<code>createConfig.keyGen</code>: a generator function for creating the lookup-key when adding
 		 * 										the template-object to the collection.
@@ -581,7 +581,7 @@ define([
 				if(controller){
 					//"normal" view constructor: (Controller, nameAsString, templateAsString)
 					templateObj = new config.constructor(controller, templateName , templateContent);
-					config.collection.put( config.keyGen(controller.getName(), templateName), templateObj );
+					config.collection.set( config.keyGen(controller.getName(), templateName), templateObj );
 				}
 				else {
 					//in case of Layout: omit controller argument
@@ -590,7 +590,7 @@ define([
 					//    and Layout.name === Controller.name
 					//    => no need to create a lookup-key
 					templateObj = new config.constructor(templateName , templateContent);
-					config.collection.put( templateObj.getName(), templateObj );
+					config.collection.set( templateObj.getName(), templateObj );
 				}
 
 				updateLoadStatus(status);
@@ -662,11 +662,11 @@ define([
 					currentLoadCount: 0
 			};
 
-			forEach(ctrlNameList, function(controllerName, ctrlIndex){
+			forEach(ctrlNameList, function(controllerName){
 
 				var controller = controllerManager.get(controllerName);
 
-				forEach(controller[createConfig.accessorName](), function(templateInfo, index){
+				forEach(controller[createConfig.accessorName](), function(templateInfo){
 
 					doLoadTemplateFile(controller, templateInfo, createConfig, loadStatus);
 
@@ -729,7 +729,7 @@ define([
 		 * 		configuration that is used to create a corresponding template-object
 		 * 		for the loaded template-contents.
 		 * 		The created object will be added to <code>createConfig.collection</code>
-		 * 		(Dictionary; with controller's name as key).
+		 * 		(Map; with controller's name as key).
 		 *
 		 * @param {PlainObject} loadStatus
 		 * 		Object for managing the loading-status. The status is updated and used to
@@ -776,7 +776,7 @@ define([
 					}
 
 				},
-				error: function onError(jqxhr, status, err){
+				error: function onError(_jqxhr, status, err){
 
 					// print out an error message
 					var errMsg = err && err.stack? err.stack : err;
@@ -850,6 +850,6 @@ define([
 		return defer;
 
 	};//END: loadViews(){
-	
+
 	return loadViews;
 });

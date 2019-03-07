@@ -28,7 +28,7 @@
 
 
 
-define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/util/deferred', 'mmirf/logger', 'module' ],
+define(['mmirf/controller', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/util/deferred', 'mmirf/logger', 'module' ],
 
 	/**
 	 * A class for managing the controllers of the application. <br>
@@ -44,7 +44,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	 *
 	 */
 	function(
-		Dictionary, Controller, constants, commonUtils, deferred, Logger, module
+		Controller, constants, commonUtils, deferred, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ControllerManager.prototype */
@@ -395,7 +395,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 				controller.loadHelper(helperName,helperPath, ctx);
 			}
 
-			ctrlList.put(controller.getName(), controller);
+			ctrlList.set(controller.getName(), controller);
 
 			logger.info('[loadController] "'+fileName+'" loaded.');
 		};
@@ -449,9 +449,9 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 	};
 
 	/**
-	 * Array of controller-instances
+	 * create ControllerManager instance
 	 *
-	 * @type Dictionary
+	 * @type controllerManagerFactory
 	 * @private
 	 *
 	 * @memberOf mmir.ControllerManager#
@@ -462,12 +462,12 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 		/**
 		 * Array of controller-instances
 		 *
-		 * @type Dictionary
+		 * @type Map
 		 * @private
 		 *
 		 * @memberOf mmir.ControllerManager#
 		 */
-		var controllers = new Dictionary();
+		var controllers = new Map();
 
 		/**
 	     * Object containing the instance of the class {@link mmir.ControllerManager}
@@ -510,7 +510,7 @@ define(['mmirf/dictionary', 'mmirf/controller', 'mmirf/constants', 'mmirf/common
 			 */
 			getNames: function(){
 
-				return controllers.getKeys();
+				return Array.from(controllers.keys());
 			},
 
 

@@ -17,7 +17,7 @@
  *  @depends HTMLElement.removeChild
  *
  */
-define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Logger, Deferred, module, require){
+define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferred, module){
 
 	var log = Logger.create(module);
 
@@ -30,7 +30,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 	var FIELD_NAME_CONTROLLER 	 = '__ctrl';
 
 	//function for removing "old" content from DOM (-> remove old, un-used page content)
-	var doRemoveElementsAfterViewLoad = function(event, data){
+	var doRemoveElementsAfterViewLoad = function(_event, data){
 
 		var ctrl = data[FIELD_NAME_CONTROLLER];
 		var view = data[FIELD_NAME_VIEW];
@@ -80,7 +80,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 	 * @function doRenderView
 	 *
 	 * @param {String}
-	 *            ctrlName Name of the controller
+	 *            _ctrlName Name of the controller
 	 * @param {String}
 	 *            viewName Name of the view to render
 	 * @param {Object}
@@ -92,7 +92,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 	 * @returns {Promise}
 	 * 	        	a Promise that gets resolved when rendering is finished
 	 */
-	var doRenderView = function(ctrlName, viewName, view, ctrl, data){
+	var doRenderView = function(_ctrlName, viewName, view, ctrl, data){
 
 		//if set to FALSE by one of the hooks (ie. before_page_prepare / before_page_load)
 		//   will prevent rendering of the view!
@@ -111,10 +111,10 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 			return;/////////////////////// EARLY EXIT ////////////////////////
 		}
 
-		var layout = this.getLayout(ctrlName, true);
+		// var layout = this.getLayout(ctrlName, true);
 
 		var renderResolve = new Deferred();
-		var presentMgr = this;
+		// var presentMgr = this;
 		var renderFunc = function(){
 
 			//provide "change" data for before_page_load calls:
@@ -167,17 +167,17 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
            *
            * @function showDialog
            * @param {String}
-           *            ctrlName Name of the controller
+           *            _ctrlName Name of the controller
            * @param {String}
-           *            dialogId Id of the dialog
+           *            _dialogId Id of the dialog
            * @param {Object}
-           *            data Optionally data - not used
+           *            _data Optionally data - not used
            *
            * @returns {Object} the instance of the current dialog that was opened
            *
            * @public
            */
-          showDialog : function(ctrlName, dialogId, data) {
+          showDialog : function(_ctrlName, _dialogId, _data) {
 						//stub: do nothing
 						log.i('showDialog');
 		},
@@ -187,11 +187,11 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 		 *
 		 * @function showWaitDialog
 		 *
-		 * @param {String} [text] OPTIONAL
+		 * @param {String} [_text] OPTIONAL
 		 * 				the text that should be displayed.
 		 * 				If omitted the language setting for <code>loadingText</code>
 		 * 				will be used instead (from dictionary.json)
-		 * @param {String} [theme] OPTIONAL
+		 * @param {String} [_theme] OPTIONAL
 		 * 				set the jQuery Mobile theme to be used for the wait-dialog
 		 * 				(e.g. "a" or "b").
 		 * 				NOTE: if this argument is used, then the <code>text</code>
@@ -201,7 +201,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module', 'require'],function(Log
 		 *
 		 * @see #hideWaitDialog
 		 */
-		showWaitDialog : function(text, theme) {
+		showWaitDialog : function(_text, _theme) {
 			//stub: do nothing
 			log.i('showWaitDialog');
 		},

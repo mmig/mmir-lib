@@ -101,7 +101,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 		var lastLayout = null;
 
 		//function for removing "old" content from DOM (-> remove old, un-used page content)
-		var doRemoveElementsAfterViewLoad = function(event, data){
+		var doRemoveElementsAfterViewLoad = function(_event, data){
 
 			var ctrl = data[FIELD_NAME_CONTROLLER];
 			var view = data[FIELD_NAME_VIEW];
@@ -459,15 +459,15 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
              * @param {String}
              *            ctrlName Name of the controller
              * @param {String}
-             *            dialogId Id of the dialog
+             *            _dialogId Id of the dialog
              * @param {Object}
-             *            data Optionally data - not used
+             *            _data Optionally data - not used
              *
              * @returns {Object} the instance of the current dialog that was opened
              *
              * @public
              */
-            showDialog : function(ctrlName, dialogId, data) {
+            showDialog : function(ctrlName, _dialogId, _data) {
 
 				this.hideCurrentDialog();
 

@@ -4,7 +4,7 @@
  *
  * @class mmir.env.statemachine.engine.extended
  */
-define(['mmirf/dictionary'], function(Dictionary) {
+define(function() {
 
 	/**
 	 * @param {Engine} _scion
@@ -26,9 +26,9 @@ define(['mmirf/dictionary'], function(Dictionary) {
 		/** @memberOf mmir.env.statemachine.engine.extended.private  */
 		var _states = [];
 		/** @memberOf mmir.env.statemachine.engine.extended.private  */
-		var _transitions = new Dictionary();
+		var _transitions = new Map();
 		/** @memberOf mmir.env.statemachine.engine.extended.private  */
-		var _events = new Dictionary();
+		var _events = new Map();
 
 
 		(function() {
@@ -101,10 +101,10 @@ define(['mmirf/dictionary'], function(Dictionary) {
 					}
 				}
 
-				_transitions.put(stateObj.id, transitions);
+				_transitions.set(stateObj.id, transitions);
 				transitions = {};
 
-				_events.put(stateObj.id, events);
+				_events.set(stateObj.id, events);
 				events = [];
 			}
 

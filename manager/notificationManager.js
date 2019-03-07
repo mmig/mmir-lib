@@ -25,7 +25,7 @@
  */
 
 
-define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logger', 'module'],
+define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
 	/**
 	 *
 	 * @name NotificationManager
@@ -33,11 +33,10 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
 	 * @static
 	 * @class
 	 *
-	 * @requires Dictionary
 	 * @requires mmir.MediaManager
 	 */
 	function(
-		constants, mediaManager, Dictionary, Logger, module
+		constants, mediaManager, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.NotificationManager.prototype *///for jsdoc2
@@ -195,7 +194,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     		}
     		else if(typeof window !== 'undefined' && window && window.confirm) {
     			/** @ignore */
-    			doConfirm = function confirmWindow(message, confirmCallback, title, buttonLabels){
+    			doConfirm = function confirmWindow(message, confirmCallback, _title, _buttonLabels){
     				//TODO use setTimeout here to "simulate" async execution?
     				var result = window.confirm(message);
     				if(confirmCallback){
@@ -214,7 +213,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     		}
     		else if(typeof window !== 'undefined' && window && window.alert){
     			/** @ignore */
-    			doAlert = function confirmWindow(message, alertCallback, title, buttonLabels){
+    			doAlert = function confirmWindow(message, alertCallback, _title, _buttonLabels){
     				//TODO use setTimeout here to "simulate" async execution?
     				window.alert(message);
     				if(alertCallback){
@@ -246,15 +245,15 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     	var beepAudio = null;
 
     	/**
-    	 * Dictionary that manages the currently loaded sounds
+    	 * Map for managing the currently loaded sounds
     	 *
     	 * @private
-    	 * @type Dictionary
+    	 * @type Map
     	 *
     	 * @memberOf NotificationManager.prototype
     	 */
     	//TODO add option for limiting size of soundMap (-> e.g. how many resources are max. cached/occupied for Android)
-    	var soundMap = new Dictionary();
+    	var soundMap = new Map();
 
     	/**
     	 * Factory function for creating "sounds objects",
@@ -396,7 +395,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     		if(isKeepOnPause){
     			config.isKeepOnPause = true;
     		}
-    		soundMap.put(name, config);
+    		soundMap.set(name, config);
     	}
 
     	/**
@@ -491,7 +490,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     		if(audioObj === null){
 
     			if(name){
-    				soundMap.put(name, INIT);
+    				soundMap.set(name, INIT);
     			}
 
     			audioObj = createAudio(
@@ -503,7 +502,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     					},
     					function onError(e){
     						if(name) {
-    							soundMap.remove(name);
+    							soundMap.delete(name);
     						};
 
     						if(audioObj && audioObj.fireError){
@@ -537,7 +536,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     	    					if(isKeepOnPause){
     	    						theEntry.isKeepOnPause = true;
     	    					}
-    	    					soundMap.put(name, theEntry);
+    	    					soundMap.set(name, theEntry);
     	    				}
 
     						audioObj.playNotification(times);
@@ -610,14 +609,14 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     	//on Android: release resources on pause/exit, since they are limited
     	if(isCordovaEnv){
 
-    		document.addEventListener("resume", function(event){
+    		document.addEventListener("resume", function(_event){
     			//initialize beep sound:
         		playAudioSound(null, 0);
     		});
 
     		document.addEventListener(
     				"pause",
-    				function(event){
+    				function(_event){
 
     					//use temporal variable for minimizing concurrency problems
     					var temp;
@@ -631,10 +630,8 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
     						logger.debug('released media resources for beep.');
     					}
 
-    					var keys = soundMap.getKeys();
-    					for(var i = keys.length - 1; i >= 0; --i){
+    					soundMap.forEach(function(entry){
 
-    						var entry = soundMap.get(keys[i]);
 	    					if(entry !== null && entry != INIT && ! entry.isKeepOnPause){
 
 	    						temp = entry.audio;
@@ -647,7 +644,7 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
 
 	    						if(logger.isd()) logger.debug('released media resources for '+entry.url);
 	    					}
-    					}
+    					});
     				},
     				false
     		);
@@ -835,14 +832,11 @@ define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logg
 	            	}
 
 	            	//set volume for notification sounds
-	            	var keys = soundMap.getKeys();
-	            	var entry = null;
-	            	for(var i = 0, size = keys.length; i < size; ++i){
-	            		entry = soundMap.get(keys[i]);
+								soundMap.forEach(function(entry){
 	            		if(entry.audio !== null){
 	            			entry.audio.setVolume(vol);
 	            		}
-	            	}
+	            	});
 
             	}
             }

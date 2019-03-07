@@ -26,7 +26,7 @@
 
 
 
-define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/deferred', 'module' ],
+define( [ 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/deferred', 'module' ],
 	/**
 	 *
 	 * A class for managing the models of the application (MVC-Component). <br>
@@ -44,7 +44,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 	 *
 	 */
 	function(
-    		Dictionary,  constants, commonUtils, Logger, deferred, module
+    		constants, commonUtils, Logger, deferred, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ModelManager.prototype */
@@ -59,14 +59,14 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 
 	// private members
     /**
-     * Array of models
+     * Map of models
      *
-     * @type Dictionary
+     * @type Map
      * @private
      *
 	 * @memberOf mmir.ModelManager#
      */
-	var models = new Dictionary();
+	var models = new Map();
 
 	/**
      * Name of the default namespace
@@ -123,7 +123,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 	 * @memberOf mmir.ModelManager#
 	 */
     function getModelNames(){//TODO export this function on _instance?
-    	return models.getKeys();
+    	return Array.from(models.keys());
     }
 
 	/**
@@ -282,7 +282,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 					_defer.resolve(_instance);
 				},
 
-				function isAlreadyLoaded(name) {
+				function isAlreadyLoaded(_name) {
 					return false; // ( _instance && _instance.getModel(name) ); TODO
 				},
 
@@ -305,7 +305,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 							logger.error('ModelManager.load: Could not find implementation for Model "' + modelName + '" (' + fullName + ') for file ' + fileName);
 							modelInstance = modelName;
 						}
-						models.put(fullName, modelInstance);
+						models.set(fullName, modelInstance);
 
 					}
 					else if (status === 'warning') {
@@ -330,7 +330,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 //						logger.error('ModelManager.load: Could not find implementation for Model "' + modelName + '" (' + fullName + ') for file ' + jsfile);
 //						modelInstance = modelName;
 //					}
-//					models.put(fullName, modelInstance);
+//					models.set(fullName, modelInstance);
 //				}
 		);
 
@@ -382,9 +382,7 @@ define( [ 'mmirf/dictionary', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/log
 			 * @returns {Array<string>} All loaded model names
 			 * @public
 			 */
-			getNames: function() {
-				return models.getKeys();
-			},
+			getNames: getModelNames,
 
 			/**
 			 * This function must be called before using the {@link mmir.ModelManager}. The Initialization process is asynchronous,

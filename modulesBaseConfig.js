@@ -89,7 +89,6 @@ return {
 		// globals and AMDs
 		, 'mmirf/constants': 'tools/constants'
 		, 'mmirf/commonUtils': 'tools/commonUtils'
-		, 'mmirf/dictionary': 'tools/dictionary'
 		, 'mmirf/paramsParseFunc': 'tools/paramsParseFunc'
 		, 'mmirf/env': 'tools/envDetect'
 
@@ -214,6 +213,7 @@ return {
 		, 'mmirf/core3Compatibility' : 'tools/extensions/Core3Compatibility'
 		, 'mmirf/semanticInterpreterCompatibility' : 'tools/extensions/SemanticInterpreterV3Compatibility'
 		, 'mmirf/core3ModuleIdCompatibility' : 'tools/extensions/Core3ModuleIdCompatibility'
+		, 'mmirf/dictionary': 'tools/extensions/dictionary'
 
 
 		//optional or "dynamically" loaded modules
@@ -222,6 +222,14 @@ return {
 		// #####         OPTIONAL / DYNAMICALLY LOADED MODULES          ########
 		// ##### (depending on configuration in core.js or global vars) ########
 		// #####################################################################
+
+		//add missing functionality by applying polyfill (if impl. is missing), for:
+		// * Map
+		// * Set
+		// * Symbol
+		// * Array.from
+		// * Array[@iterator]
+		, 'mmirf/polyfill': 'vendor/libs/es6-map-set-polyfill.min'
 
 		// (console) logging related modules (either 'mmirf/loggerEnabled' or 'mmirf/loggerDisabled' will be mapped to 'mmirf/logger', depending on configuration
 		, 'mmirf/loggerEnabled': 'tools/logger'

@@ -26,8 +26,7 @@
 
 
 
-define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
-         , 'mmirf/dictionary', 'mmirf/logger'
+define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader', 'mmirf/logger'
          , 'mmirf/util/deferredWithState', 'mmirf/core', 'module', 'require'
     ],
 
@@ -39,8 +38,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
      * @requires dialogManager if reRenderView() or renderPreviousView() are used
      *
      */
-    function ( controllerManager, commonUtils, viewLoader
-    		, Dictionary, Logger
+    function ( controllerManager, commonUtils, viewLoader, Logger
             , deferred, core, module, require
 ) {
 
@@ -114,29 +112,29 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
 	 /**
 	  * Array of layouts of the application
 	  *
-	  * @type Dictionary
+	  * @type Map
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  */
-	 var _layouts = new Dictionary();
+	 var _layouts = new Map();
 
 	 /**
 	  * Array of all the views of the application
 	  *
-	  * @type Dictionary
+	  * @type Map
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  */
-	 var _views = new Dictionary();
+	 var _views = new Map();
 
 	 /**
 	  * Array of all the partials of the application
 	  *
-	  * @type Dictionary
+	  * @type Map
 	  * @private
 	  * @memberOf mmir.PresentationManager#
 	  */
-	 var _partials = new Dictionary();
+	 var _partials = new Map();
 
 	 /**
 	  * The currently displayed dialog object, if a dialog is displayed. Used
@@ -293,7 +291,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
 			 * @memberOf mmir.PresentationManager.prototype
 			 */
             addLayout : function(layout) {
-                _layouts.put(layout.getName(), layout);
+                _layouts.set(layout.getName(), layout);
             },
             /**
              * This function returns a layout object by name.<br>
@@ -333,7 +331,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
 			 * @memberOf mmir.PresentationManager.prototype
              */
             addView : function(ctrlName, view) {
-                _views.put(createViewKey(ctrlName, view), view);
+                _views.set(createViewKey(ctrlName, view), view);
             },
             /**
              * This function returns a view object by name.<br>
@@ -368,7 +366,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader'
 			 * @memberOf mmir.PresentationManager.prototype
              */
             addPartial: function(ctrlName, partial){
-            	_partials.put(createPartialKey(ctrlName, partial), partial);
+            	_partials.set(createPartialKey(ctrlName, partial), partial);
             },
 
             /**

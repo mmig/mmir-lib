@@ -26,7 +26,7 @@
 
 
 
-define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/configurationManager', 'mmirf/dictionary', 'mmirf/logger', 'module'],
+define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/configurationManager', 'mmirf/logger', 'module'],
 	/**
 	 * The MediaManager gives access to audio in- and output functionality.
 	 *
@@ -45,7 +45,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	 * TODO remove / change dependency on forBrowser: constants.isBrowserEnv()!!!
 	 */
 	function(
-		deferred, extend, constants, configurationManager, Dictionary, Logger, module
+		deferred, extend, constants, configurationManager, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.MediaManager.prototype */
@@ -376,7 +376,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 		 * @private
     	 * @memberOf MediaManager.prototype
     	 */
-    	var listener = new Dictionary();
+    	var listener = new Map();
 
     	/**
     	 * map of listener-observers:
@@ -385,7 +385,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 		 * @private
     	 * @memberOf MediaManager.prototype
     	 */
-    	var listenerObserver = new Dictionary();
+    	var listenerObserver = new Map();
 
 		/**
 		 * exported as addListener() and on()
@@ -397,7 +397,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 			var list = listener.get(eventName);
 			if(!list){
 				list = [eventHandler];
-				listener.put(eventName, list);
+				listener.set(eventName, list);
 			}
 			else {
 				list.push(eventHandler);
@@ -1313,7 +1313,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
     				var list = listenerObserver.get(eventName);
     				if(!list){
     					list = [observerCallback];
-    					listenerObserver.put(eventName, list);
+    					listenerObserver.set(eventName, list);
     				}
     				else {
     					list.push(observerCallback);
@@ -1796,7 +1796,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/co
 	    	}
 			}
 
-			function onLoaded(pluginName, pluginInstance){
+			function onLoaded(pluginName, _pluginInstance){
 				logger.verbose(pluginName + ' loaded!');
 				--count;
 				checkCompleted();
