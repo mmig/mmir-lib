@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/configurationManager', 'mmirf/languageManager'
+define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/configurationManager', 'mmirf/languageManager'
      , 'mmirf/controllerManager', 'mmirf/modelManager'
      , 'mmirf/presentationManager', 'mmirf/inputManager', 'mmirf/dialogManager', 'module'
      , 'mmirf/semanticInterpreter', 'mmirf/mediaManager', 'mmirf/notificationManager'

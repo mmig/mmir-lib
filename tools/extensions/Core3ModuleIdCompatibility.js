@@ -27,7 +27,7 @@ define(['mmirf/util/isArray'],
 		  'core': 'mmirf/core'
  	    , 'main': 'mmirf/main'
  	    , 'scion': 'mmirf/scion'
- 	    , 'constants': 'mmirf/constants'
+ 	    , 'constants': 'mmirf/resources'
  	    , 'commonUtils': 'mmirf/commonUtils'
 	    , 'stringExtension': 'mmirf/stringExtensions'
 	    , 'dictionary': 'mmirf/dictionary'

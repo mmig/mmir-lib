@@ -1,6 +1,6 @@
 
 
-define(['mmirf/constants', 'require'],
+define(['mmirf/resources', 'require'],
 /**
  * Module that provides a generator for parser-compiler WebWorker instances:
  *

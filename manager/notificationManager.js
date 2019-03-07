@@ -25,7 +25,7 @@
  */
 
 
-define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
+define(['mmirf/resources', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
 	/**
 	 *
 	 * @name NotificationManager

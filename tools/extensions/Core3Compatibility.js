@@ -1,7 +1,7 @@
 define(['require', 'mmirf/semanticInterpreterCompatibility',
     'mmirf/configurationManager','mmirf/controllerManager','mmirf/dialogManager','mmirf/dialogEngine',
     'mmirf/inputManager','mmirf/inputEngine','mmirf/commonUtils','mmirf/languageManager','mmirf/mediaManager','mmirf/presentationManager',
-    'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/constants','mmirf/notificationManager','mmirf/grammarConverter', 'mmirf/util/deferred',
+    'mmirf/semanticInterpreter','mmirf/modelManager','mmirf/resources','mmirf/notificationManager','mmirf/grammarConverter', 'mmirf/util/deferred',
     'mmirf/parseUtils', 'mmirf/renderUtils', 'mmirf/scionEngine',
     //only loaded, not used as argument:
     'mmirf/stringExtension'

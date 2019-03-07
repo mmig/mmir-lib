@@ -1,7 +1,7 @@
 define([
     'mmirf/layout', 'mmirf/view', 'mmirf/partial'
     , 'mmirf/util/deferredWithState', 'mmirf/util/loadFile', 'mmirf/util/forEach'
-	, 'mmirf/configurationManager', 'mmirf/checksumUtils', 'mmirf/controllerManager', 'mmirf/constants', 'mmirf/core', 'mmirf/commonUtils'
+	, 'mmirf/configurationManager', 'mmirf/checksumUtils', 'mmirf/controllerManager', 'mmirf/resources', 'mmirf/core', 'mmirf/commonUtils'
 	, 'mmirf/logger', 'module'
 	, 'mmirf/parserModule'//<- loaded, but not directly used
 	//,'mmirf/renderUtils' DISABLED: loaded on-demand (see loadViews())

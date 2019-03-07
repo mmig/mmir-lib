@@ -25,7 +25,7 @@
  */
 
 
-define(['mmirf/constants', 'mmirf/configurationManager', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred', 'mmirf/util/loadFile', 'mmirf/logger', 'module'],
+define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred', 'mmirf/util/loadFile', 'mmirf/logger', 'module'],
 
 	/**
 	 * A class for managing the language of the application. <br>

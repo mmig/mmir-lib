@@ -1,6 +1,6 @@
 
 
-define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManager', 'mmirf/constants', 'mmirf/util/isArray', 'mmirf/logger'], function(mediaManager, config, lang, consts, isArray, Logger){
+define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManager', 'mmirf/resources', 'mmirf/util/isArray', 'mmirf/logger'], function(mediaManager, config, lang, consts, isArray, Logger){
 
 /**  @class WebAudioTextToSpeech */
 return {

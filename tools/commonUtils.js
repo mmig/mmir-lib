@@ -25,7 +25,7 @@
  */
 
 
-define(['mmirf/constants','mmirf/util/deferred','mmirf/util/loadFile','mmirf/util/isArray','mmirf/paramsParseFunc','mmirf/logger', 'module', 'require'],
+define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/util/isArray','mmirf/paramsParseFunc','mmirf/logger', 'module', 'require'],
 	/**
 	 * A Utility class to support various functions.<br>
 	 *

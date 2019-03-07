@@ -26,7 +26,7 @@
 
 
 
-define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/constants', 'mmirf/configurationManager', 'mmirf/logger', 'module'],
+define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/configurationManager', 'mmirf/logger', 'module'],
 	/**
 	 * The MediaManager gives access to audio in- and output functionality.
 	 *

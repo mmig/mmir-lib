@@ -1,5 +1,5 @@
 
-define(['mmirf/constants', 'mmirf/logger', 'mmirf/util/loadFile', 'mmirf/util/isArray', 'module'],
+define(['mmirf/resources', 'mmirf/logger', 'mmirf/util/loadFile', 'mmirf/util/isArray', 'module'],
 	/**
 	 * A class for managing the configuration. <br>
 	 * It's purpose is to load the configuration and settings automatically.

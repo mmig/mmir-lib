@@ -19,7 +19,7 @@
  */
 
 //(function(module){
-define(['mmirf/constants', 'module'], function(consts, module){
+define(['mmirf/resources', 'module'], function(consts, module){
 
 var _modConf = module.config(module);
 

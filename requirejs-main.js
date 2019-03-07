@@ -29,7 +29,7 @@ for(var i = packages.length - 1; i >= 0; --i){
 	packages[i].location = path.resolve(mmirRoot, packages[i].location);
 }
 
-config.config['mmirf/constants'] = {
+config.config['mmirf/resources'] = {
 	mmirBasePath: mmirRoot + path.sep
 };
 

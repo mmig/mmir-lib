@@ -1,6 +1,6 @@
 
 
-define(['mmirf/jison','mmirf/constants','mmirf/configurationManager','mmirf/grammarConverter','mmirf/util/deferred','mmirf/util/extend','mmirf/util/toArray','mmirf/logger', 'module'],
+define(['mmirf/jison','mmirf/resources','mmirf/configurationManager','mmirf/grammarConverter','mmirf/util/deferred','mmirf/util/extend','mmirf/util/toArray','mmirf/logger', 'module'],
 /**
  * Generator for executable language-grammars (i.e. converted JSON grammars).
  * 

@@ -33,7 +33,7 @@ requirejs(['./modulesBaseConfig', './mainConfigInit'], /** @memberOf mmir.mainCo
 		packages[i].location = mmirRoot + packages[i].location;
 	}
 
-	mmirf_config.config['mmirf/constants'] = {
+	mmirf_config.config['mmirf/resources'] = {
 		mmirBasePath: mmirRoot
 	};
 

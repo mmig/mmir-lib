@@ -26,7 +26,7 @@
 
 
 
-define( [ 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/deferred', 'module' ],
+define( [ 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/deferred', 'module' ],
 	/**
 	 *
 	 * A class for managing the models of the application (MVC-Component). <br>

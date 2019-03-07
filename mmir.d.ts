@@ -26,7 +26,7 @@ export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT
 // interface MmirModule:
 export const util: CommonUtils;
 export const conf: ConfigurationManager;
-declare const __const: Constants; export {__const as const};//WORKAROUND for exporting namespace propery with reserved name "const"
+export const res: Resources;
 export const ctrl: ControllerManager;
 export const dialogEngine: DialogEngine;
 export const dialog: DialogManager;
@@ -59,7 +59,7 @@ export interface MmirCore {
 export interface MmirModule extends MmirCore {
   readonly util: CommonUtils;
   readonly conf: ConfigurationManager;
-  readonly const: Constants;
+  readonly res: Resources;
   readonly ctrl: ControllerManager;
   readonly dialogEngine: DialogEngine;
   readonly dialog: DialogManager;
@@ -215,7 +215,7 @@ export interface ConfigurationManager {
     getString: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => string;
     set: (propertyName: string, value: any) => void;
 }
-export interface Constants {
+export interface Resources {
     getBasePath: () => string;
     getBeepUrl: () => string;
     getCompiledLayoutPath: () => string;

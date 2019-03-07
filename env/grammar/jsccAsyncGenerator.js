@@ -1,6 +1,6 @@
 
 
-define(['mmirf/constants','mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
+define(['mmirf/resources','mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  *

@@ -28,7 +28,7 @@
 
 
 
-define(['mmirf/controller', 'mmirf/constants', 'mmirf/commonUtils', 'mmirf/util/deferred', 'mmirf/logger', 'module' ],
+define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/deferred', 'mmirf/logger', 'module' ],
 
 	/**
 	 * A class for managing the controllers of the application. <br>

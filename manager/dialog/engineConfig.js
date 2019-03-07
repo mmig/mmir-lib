@@ -21,7 +21,7 @@
  * or
  * @requires setTimeout (fallback/stub implementation)
  */
-define(['mmirf/constants', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'], function(constants, createScionEngine, extend, require) {
+define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'], function(constants, createScionEngine, extend, require) {
 
 	/**
 	 * HELPER logging for state-changes

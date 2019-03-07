@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['mmirf/constants', 'mmirf/grammarConverter', 'mmirf/logger', 'module', 'require'
+define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', 'require'
         ],
 	/**
 	 * @name SemanticInterpreter
