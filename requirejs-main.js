@@ -51,6 +51,12 @@ var coreModule = {
 		coreModule.requirejs = requirejs;
 		var req = requirejs.config(config);
 		var core = mmirInitFunc(mmirCore, config, req, requirejs.define);
+
+		if(mmirCore.startModules){
+			for(var i=0,size=mmirCore.startModules.length; i < size; ++i){
+				mmirCore.require(mmirCore.startModules[i]);
+			}
+		}
 		return mmirCore.require(mmirCore.startModule);
 	}
 };

@@ -51,7 +51,9 @@ requirejs(['./modulesBaseConfig', './mainConfigInit'], /** @memberOf mmir.mainCo
 		mmirConfigInit(core, mmirf_config, reqInstance, defInstance);
 
 		//load main module
-		core.require(['mmirf/logger', mmirCore.startModule]);
+		var initList = core.startModules? core.startModules : [];
+		initList.push('mmirf/logger', mmirCore.startModule);
+		core.require(initList);
 	});
 
 });//END requirejs(['...
