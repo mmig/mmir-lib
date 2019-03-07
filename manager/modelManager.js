@@ -44,7 +44,7 @@ define( [ 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/de
 	 *
 	 */
 	function(
-    		constants, commonUtils, Logger, deferred, module
+    		resources, commonUtils, Logger, deferred, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ModelManager.prototype */
@@ -271,7 +271,7 @@ define( [ 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/logger', 'mmirf/util/de
 
 		commonUtils.loadImpl(
 
-				constants.getModelPath(),
+				resources.getModelPath(),
 
 				false,
 

@@ -36,7 +36,7 @@ define(['mmirf/resources', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
 	 * @requires mmir.MediaManager
 	 */
 	function(
-		constants, mediaManager, Logger, module
+		res, mediaManager, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.NotificationManager.prototype *///for jsdoc2
@@ -50,7 +50,7 @@ define(['mmirf/resources', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
 	 * @private
 	 * @memberOf NotificationManager#
 	 */
-	var isCordovaEnv = constants.isCordovaEnv();
+	var isCordovaEnv = res.isCordovaEnv();
 
 	/**
 	 * @private
@@ -330,7 +330,7 @@ define(['mmirf/resources', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
 					id = '"' + this.name + '" -> ' + (entry? '"'+entry.url+'"' : 'UNDEF');
 				}
 				else {
-					id = '"BEEP" -> "'+constants.getBeepUrl()+'"';
+					id = '"BEEP" -> "'+res.getBeepUrl()+'"';
 				}
 				var msg = 'Notification: Error playing the sound for notification '+id;
 
@@ -420,7 +420,7 @@ define(['mmirf/resources', 'mmirf/mediaManager', 'mmirf/logger', 'module'],
     		//if no name: use default beep
     		if(!name){
     			audioObj = beepAudio;
-    			audioUrl = constants.getBeepUrl();
+    			audioUrl = res.getBeepUrl();
     		}
     		else {
     			//retrieve information for sound

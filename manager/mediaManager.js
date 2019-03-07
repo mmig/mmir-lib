@@ -42,10 +42,10 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/co
 	 * @memberOf mmir
 	 * @static
 	 *
-	 * TODO remove / change dependency on forBrowser: constants.isBrowserEnv()!!!
+	 * TODO remove / change dependency on forBrowser: res.isBrowserEnv()!!!
 	 */
 	function(
-		deferred, extend, constants, configurationManager, Logger, module
+		deferred, extend, res, configurationManager, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.MediaManager.prototype */
@@ -224,7 +224,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/co
      *
      * @param {String} fileName
      * 			the file-name of the media-module that will be loaded.
-     * 			The file needs to be located in {@link mmir.Constants#getMediaPluginPath}.
+     * 			The file needs to be located in {@link mmir.Resources#getMediaPluginPath}.
      * 			If fileName does not end with suffix ".js", it will be added, before
      * 			loading the file.
      * @param {Function} successCallback
@@ -351,7 +351,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/co
 				}
 				processLoaded(modResult);
 			} else {
-				require([constants.getMediaPluginPath() + filePath], processLoaded, failureCallback);
+				require([res.getMediaPluginPath() + filePath], processLoaded, failureCallback);
 			}
 
     	}catch (e){
@@ -1653,11 +1653,11 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/co
 
     	if(!env){
 
-    		var envSetting = constants.getEnv();
+    		var envSetting = res.getEnv();
     		if(envSetting === 'cordova'){
 
     			//try to find config for specific cordova-env
-    			envSetting = constants.getEnvPlatform();
+    			envSetting = res.getEnvPlatform();
     			if(envSetting !== 'default'){
 
     				//if there is a config present for the specific envSetting, then use it:
@@ -1677,7 +1677,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/co
 
     		//if there is no env value yet, use default criteria browser vs. cordova env:
     		if(!env){
-	        	var isCordova = constants.isCordovaEnv();
+	        	var isCordova = res.isCordovaEnv();
 	        	if (isCordova) {
 	        		env = 'cordova';
 	        	} else {
@@ -1809,7 +1809,7 @@ define(['mmirf/util/deferred', 'mmirf/util/extend', 'mmirf/resources', 'mmirf/co
 				failureCallback && failureCallback;
 			};
 
-			var isCordova = constants.isCordovaEnv();
+			var isCordova = res.isCordovaEnv();
 			var requiredPlugins = getRequiredPlugins(isCordova);
 
 			if(verifyRequiredPlugins(pluginArray, requiredPlugins)){

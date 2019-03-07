@@ -8,7 +8,7 @@ define([
 ],function(
 	Layout, View, Partial,
 	deferred, loadFile, forEach,
-	configurationManager, checksumUtils, controllerManager, constants, core, commonUtils,
+	configurationManager, checksumUtils, controllerManager, resources, core, commonUtils,
 	Logger, module
 	//renderUtils
 ){
@@ -124,7 +124,7 @@ define([
 		 * @constant
 		 * @memberOf ViewLoader.init
 		 *
-		 * @example var isUsePrecompiledViews = mmir.const.getBoolean("usePrecompiledViews");
+		 * @example var isUsePrecompiledViews = mmir.conf.getBoolean("usePrecompiledViews");
 		 *
 		 */
 		var CONFIG_PRECOMPILED_VIEWS_MODE = 'usePrecompiledViews';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...
@@ -301,7 +301,7 @@ define([
 
 							//there must be at least on layout-file for the default-controller:
 							status.loader.reject( 'Could not load any layout! At least one layout must be present at '
-									+ constants.getLayoutPath()
+									+ resources.getLayoutPath()
 									+ defaultLayoutName[0].toLowerCase() + defaultLayoutName.substring(1)
 									+ '.ehtml'
 							);
@@ -353,9 +353,9 @@ define([
 					layoutInfo = {
 						name: theDefaultLayoutName,
 						fileName: layoutFileName,
-						genPath: constants.getCompiledLayoutPath()//TODO add compiled-path to view-info object (and read it from file-structure/JSON)
+						genPath: resources.getCompiledLayoutPath()//TODO add compiled-path to view-info object (and read it from file-structure/JSON)
 									+ layoutFileName + '.js',
-						path: constants.getLayoutPath() + layoutFileName + '.ehtml'
+						path: resources.getLayoutPath() + layoutFileName + '.ehtml'
 					};
 
 				}

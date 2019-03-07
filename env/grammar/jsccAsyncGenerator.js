@@ -1,6 +1,6 @@
 
 
-define(['mmirf/resources','mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
+define(['mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  *
@@ -20,7 +20,7 @@ define(['mmirf/resources','mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred'
  *
  * @requires JsccGenerator
  */
-function(constants, jsccGen, asyncGen, deferred, extend){
+function(jsccGen, asyncGen, deferred, extend){
 
 /**
  * Counter for generating IDs for compile-jobs that

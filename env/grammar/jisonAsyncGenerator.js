@@ -1,6 +1,6 @@
 
 
-define(['mmirf/resources','mmirf/jisonGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
+define(['mmirf/jisonGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  *
@@ -20,7 +20,7 @@ define(['mmirf/resources','mmirf/jisonGen','mmirf/asyncGen','mmirf/util/deferred
  *
  * @requires JisonGenerator
  */
-function(constants, jisonGen, asyncGen, deferred, extend){
+function(jisonGen, asyncGen, deferred, extend){
 
 /**
  * Counter for generating IDs for compile-jobs that

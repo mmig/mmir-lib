@@ -5,10 +5,10 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
     'mmirf/parseUtils', 'mmirf/renderUtils', 'mmirf/scionEngine',
     //only loaded, not used as argument:
     'mmirf/stringExtension'
-], 
+],
 	/**
      * Set to "backwards compatibility mode v3" (for pre version 4.0) for module names and method names.
-     * 
+     *
 	 * This function adds old names/synonyms for modules names (on <code>mmir</code> object/namespace):
      * <ul>
      * 	<li> {@link mmir.CommonUtils} as
@@ -17,7 +17,7 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      *          <b><u>mmir.conf</u></b>
      *  </li><li> {@link mmir.ControllerManager} as
      *          <b><u>mmir.ctrl</u></b>
-     *  </li><li> {@link mmir.Constants } as
+     *  </li><li> {@link mmir.Resources } as
      *          <b><u>mmir.const</u></b>
      *  </li><li> {@link mmir.DialogManager} as
      *          <b><u>mmir.dialog</u></b>
@@ -37,16 +37,16 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      *          <b><u>mmir.semantic</u></b>
      *  </li>
      * </ul>
-     * 
+     *
      * In addition, old method names will be added as synonyms:
      * <ul>
      * 	 <li> {@link mmir.ConfigurationManager}
      * 		<ul>
      * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.ConfigurationManager}</li>
      * 		</ul>
-     *  </li><li> {@link mmir.Constants}
+     *  </li><li> {@link mmir.Resources}
      * 		<ul>
-     * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.Constants}</li>
+     * 			<li><b><u>getInstance</u></b> <em>(removed)</em> for {@link mmir.Resources}</li>
      * 		</ul>
      *  </li><li> {@link mmir.ControllerManager}
      * 		<ul>
@@ -104,7 +104,7 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      * 		</ul>
      *  </li>
      * </ul>
-     * 
+     *
      * Methods with changed signature will be re-mapped to match their old signature
      * <ul>
      * 	 <li> {@link mmir.ConfigurationManager}
@@ -124,10 +124,10 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      * 		</ul>
      *   </li>
      * </ul>
-     * 
+     *
      * Lastly, removed methods will be added:
      * <ul>
-     * 	<li> {@link mmir.Constants}
+     * 	<li> {@link mmir.Resources}
      * 		<ul>
      * 			<li><b><u>getPluginsPath</u></b> <em>(removed)</em> to {@link mmir.CommonUtils}</li>
      * 		</ul>
@@ -144,28 +144,28 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
      * 		</ul>
      *   </li>
      * </ul>
-     * 
+     *
      * @param {mmir} mmir
      * 			the (core) instance/namespace for MMIR
-     * 
-	 * 
+     *
+	 *
 	 * @class
 	 * @name mmir.Core.setToCompatibilityMode3Extension
 	 * @static
-	 * 
+	 *
 	 * @requires SemanticInterpreterCompatibility
-	 * 
+	 *
 	 * @example
 	 * mmir.require(['mmirf/core3Compatibility', 'mmirf/core'], function(setCompatibility, mmir){
 	 * 		setCompatibility(mmir);
 	 * });
-	 * 
+	 *
 	 * //OR: if mmir-lib modules were require'd in application code, add v3 module-ID aliases first:
 	 * mmir.require(['mmirf/core3ModuleIdCompatibility', 'mmirf/core3Compatibility', 'mmirf/core'], function(core3ModuleIdCompatibility, setCompatibility, mmir){
 	 * 		core3ModuleIdCompatibility(mmir.require, window);
 	 * 		setCompatibility(mmir);
 	 * });
-	 * 
+	 *
 	 * @public
 	 */
 	function(require, semanticInterpreterCompatibility,
@@ -177,21 +177,21 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 
 	/**
      * Set to "backwards compatibility mode" (for pre version 4.0).
-     * 
+     *
      * This function re-adds deprecated and removed functions and
      * properties to the (core) mmir namespace.
-     * 
+     *
      * NOTE that once set to compatibility mode, it cannot be reset to
      * non-compatibility mode.
-     * 
-     * 
+     *
+     *
      * @param {mmir} mmir
      * 			the (core) instance/namespace for MMIR
-     * 
+     *
      * @constructs mmir.Core.setToCompatibilityMode3Extension
      */
     return setToCompatibilityMode = function(mmir) {
-    	
+
     	mmir.ConfigurationManager = configurationManager;
     	mmir.ControllerManager = controllerManager;
     	mmir.PresentationManager = presentationManager;
@@ -206,22 +206,22 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
     	mmir.ModelManager = modelManager;
     	mmir.Constants = constants;
     	mmir.NotificationManager = notificationManager;
-    	
+
 //    	mediaManager.textToSpech = mediaManager.tts;
 //    	mediaManager.setTextToSpeechVolume = mediaManager.ttsVolume;
-    	
+
     	presentationManager.renderView = presentationManager.render;
     	controllerManager.getController = controllerManager.get;
     	controllerManager.getControllerNames = controllerManager.getNames;
     	modelManager.getModel = modelManager.get;
     	modelManager.getModels = modelManager.getNames;
-    	
+
     	//set backwards-compatibility mode for semanticInterpreter and GrammarConverter
         semanticInterpreterCompatibility(semanticInterpreter, GrammarConverter);
-    	
+
     	var getInstance = function(){return this;};
     	var getInstanceAsInit = function(){return this.init.apply(this, arguments);};
-    	
+
     	constants.getInstance = getInstanceAsInit;
     	controllerManager.getInstance = getInstance;
     	dialogManager.getInstance = getInstance;
@@ -230,7 +230,7 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
     		if(lang) {
     			setLanguage(lang);
     		}
-    		
+
     		return this;
     	};
     	mediaManager.getInstance = function(){
@@ -239,9 +239,9 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
         modelManager.getInstance = getInstanceAsInit;
         notificationManager.getInstance = getInstance;
         presentationManager.getInstance = getInstance;
-        
+
         parseUtils.getInstance = getInstance;
-        
+
         //DISABLED would not effect scionEngine instances, that were already created
         //         ... and scionEninge (and created instance) are only internally used, so application code should be not effected...
 //        requirejs.undef('mmirf/scionEngine');
@@ -253,12 +253,12 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 //            };
 //        });
 //        require(['mmirf/scionEngine']);
-        
+
         renderUtils.getInstance = getInstance;
-        
+
         configurationManager.getLanguage = function(){ return languageManager.getLanguage(); };
         configurationManager.setLanguage = function(lang){ languageManager.setLanguage(lang); };
-        
+
         configurationManager._get = configurationManager.get;
         configurationManager.get = function(propertyName, useSafeAccess, defaultValue){
         	return this._get(propertyName, defaultValue, useSafeAccess);
@@ -271,25 +271,25 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
         configurationManager.getString = function(propertyName, useSafeAccess, defaultValue){
         	return this._getString(propertyName, defaultValue, useSafeAccess);
         };
-        
-        
+
+
         /**
 	     * Set to "backwards compatibility mode" (for pre version 2.0).
-	     * 
+	     *
 	     * This function re-adds deprecated and removed functions and
 	     * properties to the CommonUtils instance.
-	     * 
+	     *
 	     * NOTE that once set to compatibility mode, it cannot be reset to
 	     * non-compatibility mode.
-	     * 
+	     *
          * NOTE: Requires jQuery to be present.
-         * 
+         *
 	     * @deprecated use only for backwards compatibility
-	     * 
+	     *
 	     * @async
 	     * @requires jQuery
 	     * @requires mmir.CommonUtils.setToCompatibilityModeExtension
-	     * 
+	     *
 	     * @param {Function} [success]
 	     * 				a callback function that is invoked, after compatibility mode
 	     * 				was set (alternatively the returned promise can be used).
@@ -302,11 +302,11 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 	     * @returns {Promise}
 	     * 				a deferred promise that is resolved, after compatibility mode
 	     * 				was set
-	     * 
+	     *
     	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
 	     */
 	    commonUtils.setToCompatibilityMode = function(success, requireFunction) {
-	    	
+
 	    	var defer = deferred();
 	    	if(success){
 	    		defer.then(success, success);
@@ -314,33 +314,33 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 
 	    	requireFunction = requireFunction || require;
 	    	requireFunction(['mmirf/commonUtilsCompatibility'],function(setCompatibility){
-	    		
+
 	    		setCompatibility(commonUtils);
-	    		
+
 	    		defer.resolve();
 	    	});
-	    	
+
 	    	return defer;
 	    };
-	    
+
 	    /**
          * Set to "backwards compatibility mode" (for pre version 2.0).
-         * 
+         *
          * This function re-adds deprecated and removed functions and
          * properties to the CommonUtils instance.
-         * 
+         *
          * NOTE that once set to compatibility mode, it cannot be reset to
          * non-compatibility mode.
-         * 
+         *
          * NOTE: Requires jQuery to be present.
-         * 
+         *
          * @deprecated use only for backwards compatibility
-         * 
+         *
          * @public
          * @async
 	     * @requires jQuery
 	     * @requires mmir.LanguageManager.setToCompatibilityModeExtension
-	     * 
+	     *
 	     * @param {Function} [success]
 	     * 				a callback function that is invoked, after compatibility mode
 	     * 				was set (alternatively the returned promise can be used).
@@ -353,36 +353,36 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 	     * @returns {Promise}
 	     * 				a deferred promise that is resolved, after compatibility mode
 	     * 				was set
-	     * 
+	     *
     	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
          */
         languageManager.setToCompatibilityMode = function(success, requireFunction) {
-        	
+
         	var defer = deferred();
 	    	if(success){
 	    		defer.then(success, success);
 	    	}
 	    	requireFunction = requireFunction || require;
 	    	requireFunction(['mmirf/languageManagerCompatibility'],function(setCompatibility){
-	    		
+
 	    		setCompatibility(languageManager);
-	    		
+
 	    		defer.resolve();
 	    	});
-	    	
+
 	    	return defer;
-            
+
         };
-        
+
 
 
         /**
          * Cycles through the available languages.
-         * 
+         *
          * @function
          * @returns {String} The (new) current language
          * @public
-         * 
+         *
     	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
          */
         languageManager.setNextLanguage = function() {
@@ -400,46 +400,46 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
                 currentLanguage = languages[indexCurrentLanguage];
 
 //                if (logger.isVerbose()) logger.v("[LanguageManager] Next language is " + currentLanguage);
-                
+
                 return languageManager.setLanguage(currentLanguage);
             }
             return currentLanguage;
         };
-        
+
         /**
 		 * Returns a string with the path to the (Cordova v2.x) plugins directory.
 		 * @function
 		 * @public
 		 * @returns {String} plugins directory path
-		 * 
+		 *
     	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
 		 */
         constants.getPluginsPath = function(){
 			return constants.getBasePath()+'mmirf/plugins/';
 		};
-        
+
 
 	    /**
 	     * Load all plugins (i.e. JavaScript interfaces for
 	     * Cordova v2 / JavaScript-impl. plugins).
-	     * 
+	     *
 	     * @function
-	     * @param {String} [pluginsPath] OPTIONAL 
+	     * @param {String} [pluginsPath] OPTIONAL
 	     *            Path of the plugins which should be
 	     *            loaded, e.g.
 	     *            <b>mmirf/plugins/</b>
-	     *            
+	     *
 	     *            If omitted: the default plugin-path is used
 	     *            (see {@link mmir.Core.setToCompatibilityMode3Extension#getPluginsPath})
-	     *            
-	     * @param {Function} [cbFunction] OPTIONAL 
+	     *
+	     * @param {Function} [cbFunction] OPTIONAL
 	     *            The function that should be executed after
 	     *            the plugins are loaded. If the execution of following
 	     *            functions is dependent on the present of plugins, they
 	     *            should be triggered from inside the callback-function
-	     *            
+	     *
 	     * @returns {Promise} a Deferred.promise (see loadImpl())
-	     * 
+	     *
 	     * @async
 	     * @public
     	 * @memberOf mmir.Core.setToCompatibilityMode3Extension
@@ -450,25 +450,25 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 	    		cbFunction = pluginsPath;
 	    		pluginsPath = null;
 	    	}
-	    	
+
 	    	if(typeof pluginsPath !== 'string'){
 	    		pluginsPath = constants.getPluginsPath();
 	    	}
-	    	
+
 	    	// reads all *.js files in www/mmirf/plugins/
         	// and loads them dynamically
         	// IMPORTANT: /assets/www/config/directories.json must be up-to-date!
         	//				(it contains the list of JS-files for the plugins)
         	//				-> use "cordova prepare" for updating
-        	
-	    	
+
+
 	    	//FIXME: Cordova 2.x mechanism!!! (remove when switching to 3.x ?)
 	    	window.plugins = window.plugins || {};
-	    	
-	    	
+
+
 			return commonUtils.loadImpl(
-            	  pluginsPath, 
-            	  false, 
+            	  pluginsPath,
+            	  false,
             	  cbFunction,
 				  function isPluginAlreadyLoaded(pluginFileName) {
 				      if (window.plugins[pluginFileName.replace(/\.[^.]+$/g, "")]) {//<- regexpr for removing file extension
@@ -495,5 +495,5 @@ define(['require', 'mmirf/semanticInterpreterCompatibility',
 			);
 	    }
     };
-    
+
 });

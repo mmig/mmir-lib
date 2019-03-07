@@ -39,13 +39,13 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 	 * @class
 	 *
 	 *
-	 * @requires mmir.Constants
+	 * @requires mmir.Resources
 	 * @requires mmir.CommonUtils
 	 * @requires mmir.SemanticInterpreter
 	 *
 	 */
 	function(
-			constants, configurationManager, commonUtils, semanticInterpreter, deferred, loadFile, Logger, module
+			res, configurationManager, commonUtils, semanticInterpreter, deferred, loadFile, Logger, module
 ){
 			//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 			/** @scope mmir.LanguageManager.prototype */
@@ -172,9 +172,9 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 								//check for existence of JSON grammar
 								if(!grammarType || grammarType === 'source'){
-			            langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
+			            langFiles = commonUtils.listDir(res.getLanguagePath() + lang);
 			            if (langFiles) {
-			                if (langFiles.indexOf(constants.getGrammarFileUrl()) > -1) {
+			                if (langFiles.indexOf(res.getGrammarFileUrl()) > -1) {
 			                    retValue = true;
 			                }
 			            }
@@ -183,12 +183,12 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 								//check for existence of compiled grammar
 								if(!langFiles || !retValue && (!grammarType || grammarType === 'bin')){
 
-									langFiles =	commonUtils.listDir(constants.getGeneratedGrammarsPath().replace(/\/$/, ''));
+									langFiles =	commonUtils.listDir(res.getGeneratedGrammarsPath().replace(/\/$/, ''));
 									if(langFiles){
 										var re = new RegExp(
 															typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
 																	'^mmirf/grammar/'+lang+'.js$' :
-																	'^'+lang+'_'+constants.getGrammarFileUrl().replace(/\.json/i, '.js')+'$',
+																	'^'+lang+'_'+res.getGrammarFileUrl().replace(/\.json/i, '.js')+'$',
 															'i'
 										);
 										for(var i=langFiles.length - 1; i >= 0; --i){
@@ -293,7 +293,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 						}
 					}
 					var funcName = 'get' + type[0].toUpperCase() + type.substring(1) + 'FileUrl';
-					return constants[funcName](lang);
+					return res[funcName](lang);
 				}
 
 		    /**
@@ -332,7 +332,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		            	currentSpeechConfig = data;
 		            },
-		            error : function(xhr, statusStr, error) {
+		            error : function(_xhr, _statusStr, error) {
 		                logger.error("loadSpeechConfig("+lang+"): Error loading speech configuration from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
 		            }
 		        });
@@ -373,7 +373,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
             				if(logger.isVerbose()) logger.v("loadDictionary("+lang+"): success -> ", data);
 										dictionary = data;
 		            },
-		            error : function(xhr, statusStr, error) {
+		            error : function(_xhr, _statusStr, error) {
 		                logger.error("loadDictionary("+lang+"): Error loading language dictionary from \""+path+"\": " + error? error.stack? error.stack : error : ''); // error
 		            }
 		        });
@@ -446,12 +446,12 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				            }
 				            else {
 
-					            appLang = constants.getLanguage();
+					            appLang = res.getLanguage();
 
 				            	if (appLang) {
 
 					                lang = appLang;
-					                logger.info("init(): No language argument specified: using language from mmir.constants '" + appLang + "'.");
+					                logger.info("init(): No language argument specified: using language from mmir.res '" + appLang + "'.");
 					            }
 				            	else {
 
@@ -471,14 +471,14 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				            }//END: else(config::lang)
 
 			        		if(!lang){
-			        			logger.warn("init(): No language specified. And no language could be read from directory '" + constants.getLanguagePath() + "'.");
+			        			logger.warn("init(): No language specified. And no language could be read from directory '" + res.getLanguagePath() + "'.");
 			        		}
 
 				        }//END: if(!lang && !currentLanguage)
 
 
 				        // get all the languages/dictionaries by name
-				        languages = commonUtils.listDir(constants.getLanguagePath()) || [];
+				        languages = commonUtils.listDir(res.getLanguagePath()) || [];
 
 				        if (logger.isDebug()) logger.debug("init() Found dictionaries for: " + JSON.stringify(languages));
 
@@ -536,9 +536,9 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                var retValue = false;
 
 		                if (lang != null) {
-		                    langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
+		                    langFiles = commonUtils.listDir(res.getLanguagePath() + lang);
 		                    if (langFiles != null) {
-		                        if (langFiles.indexOf(constants.getDictionaryFileUrl()) > -1) {
+		                        if (langFiles.indexOf(res.getDictionaryFileUrl()) > -1) {
 		                            retValue = true;
 		                        }
 		                    }
@@ -566,9 +566,9 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                var retValue = false;
 
 		                if (lang != null) {
-		                    langFiles = commonUtils.listDir(constants.getLanguagePath() + lang);
+		                    langFiles = commonUtils.listDir(res.getLanguagePath() + lang);
 		                    if (langFiles != null) {
-		                        if (langFiles.indexOf(constants.getSpeechConfigFileUrl()) > -1) {
+		                        if (langFiles.indexOf(res.getSpeechConfigFileUrl()) > -1) {
 		                            retValue = true;
 		                        }
 		                    }
@@ -640,7 +640,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                    }
 		                }
 
-		                tempLanguage = constants.getLanguage();
+		                tempLanguage = res.getLanguage();
 		                // then check, if default language exists
 		                if (tempLanguage != null) {
 		                    // check if both grammar and dictionary exist for default
@@ -670,7 +670,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 
 		                // still no language found - take the default language and test
 		                // if a grammar exists
-		                tempLanguage = constants.getLanguage();
+		                tempLanguage = res.getLanguage();
 		                if (tempLanguage != null) {
 		                    // check if both grammar and dictionary exist for default
 		                    // language
@@ -689,7 +689,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		                    return tempLanguage;
 		                }
 
-		                return constants.getLanguage();
+		                return res.getLanguage();
 		            },
 
 		            /**
@@ -729,7 +729,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        	 * @memberOf mmir.LanguageManager.prototype
 		             */
 		            getDefaultLanguage : function() {
-		                return constants.getLanguage();
+		                return res.getLanguage();
 		            },
 
 		            /**
@@ -784,7 +784,7 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		            getLanguageConfig : function(pluginId, feature, separator) {
 
 									if(!currentSpeechConfig){
-										logger.warn('no speech configuration ('+constants.getSpeechConfigFileUrl()+') available for '+currentLanguage);
+										logger.warn('no speech configuration ('+res.getSpeechConfigFileUrl()+') available for '+currentLanguage);
 										if(!feature || feature === 'language' || feature === 'long'){
 											return currentLanguage;
 										}

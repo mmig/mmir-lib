@@ -17,7 +17,7 @@ define(['mmirf/resources', 'require'],
  *
  * @example
  *
- * //initializes a WebWorker at MMIR's worker path, i.e. at constants.getWorkerPath() + "file.name":
+ * //initializes a WebWorker at MMIR's worker path, i.e. at resources.getWorkerPath() + "file.name":
  * var asyncCompiler = asyncGen.createWorker("jisonCompiler.js");
  *
  * //create job ID (must be unique for each job):
@@ -46,7 +46,7 @@ define(['mmirf/resources', 'require'],
  * });
  *
  */
-function(constants, require){
+function(resources, require){
 
 var COMPILER_WORKER_POSTFIX = 'Compiler.js';
 
@@ -80,7 +80,7 @@ return {
 	 *
 	 * @param {String} parserEngineId
 	 * 			the name of the file that holds the WebWorker implementation.
-	 * 			The file must be located in MMIR's {@link Constants#getWorkerPath}
+	 * 			The file must be located in MMIR's {@link Resources#getWorkerPath}
 	 * 			directory.
 	 *
 	 * @returns {CompileWebWorker}
@@ -93,7 +93,7 @@ return {
 
 
 		/**  @memberOf CompileWebWorker# */
-		var workerPath = constants.getWorkerPath() + parserEngineId + COMPILER_WORKER_POSTFIX;
+		var workerPath = resources.getWorkerPath() + parserEngineId + COMPILER_WORKER_POSTFIX;
 
 		//webpack web worker wrapper:
 		var WpWorker = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? require('../../workers/' + parserEngineId + COMPILER_WORKER_POSTFIX) : null;

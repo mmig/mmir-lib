@@ -119,7 +119,7 @@ define([
 		//  * @constant
 		//  * @memberOf ViewLoader.init
 		//  *
-		//  * @example var isUsePrecompiledViews = mmir.const.getBoolean("usePrecompiledViews");
+		//  * @example var isUsePrecompiledViews = mmir.conf.getBoolean("usePrecompiledViews");
 		//  *
 		//  */
 		// var CONFIG_PRECOMPILED_VIEWS_MODE = 'usePrecompiledViews';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...

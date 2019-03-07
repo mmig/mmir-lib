@@ -36,7 +36,7 @@ define(['mmirf/jscc','mmirf/resources','mmirf/configurationManager','mmirf/gramm
  *
  * @requires JS/CC
  */
-function(jscc, constants, configManager, GrammarConverter, deferred, extend, toArray, loadFile, Logger, module){
+function(jscc, resources, configManager, GrammarConverter, deferred, extend, toArray, loadFile, Logger, module){
 
 //////////////////////////////////////  template loading / setup for JS/CC generator ////////////////////////////////
 
@@ -91,7 +91,7 @@ function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name
  * @type String
  * @memberOf JsccGenerator#
  */
-var templatePath = constants.getGrammarPluginPath() + 'grammarTemplate_reduced.tpl';
+var templatePath = resources.getGrammarPluginPath() + 'grammarTemplate_reduced.tpl';
 
 /**
  * The argument name when generating the grammar function:

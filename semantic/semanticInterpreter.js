@@ -35,7 +35,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 	 * @requires require
 	 */
 	function (
-		constants, GrammarConverter, Logger, module, require
+		res, GrammarConverter, Logger, module, require
 ){
 
 	/**
@@ -281,7 +281,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
     			throw new Error('Grammar file has wrong format: need grammar file with format version '
     					+GRAMMAR_FILE_FORMAT_VERSION+', but got: '+fileFormatNo
     					+ '. Please update generated grammar (delete '
-    					+ constants.getGeneratedGrammarsPath() +' and re-build grammars).'
+    					+ res.getGeneratedGrammarsPath() +' and re-build grammars).'
     			);
     		}
 
@@ -381,7 +381,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 						//
 						// if(instance.exists_gen_grammar(id)){
 						//
-						// 	require('mmirf/commonUtils').loadCompiledGrammars(constants.getGeneratedGrammarsPath(), function(){
+						// 	require('mmirf/commonUtils').loadCompiledGrammars(res.getGeneratedGrammarsPath(), function(){
 						//
 						// 		if(!isDefaultCallback) callback();
 						// 		else if(logger.isInfo()) logger.info('initialized executable grammar for "'+id+'".');
@@ -864,7 +864,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 
 	        //FIXME rename/move functions
 	        get_json_grammar_url: function(id){
-	        	return constants.getGrammarFileUrl(id);
+	        	return res.getGrammarFileUrl(id);
 	        }//,
 	        // exists_gen_grammar: function(id){
 	        // 	var lang = require('mmirf/languageManager');

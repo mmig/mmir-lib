@@ -44,7 +44,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 	 *
 	 */
 	function(
-		Controller, constants, commonUtils, deferred, Logger, module
+		Controller, res, commonUtils, deferred, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.ControllerManager.prototype */
@@ -308,7 +308,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 		 * //NOTE: layout and helper may be NULL
 		 *
 		 * @requires mmir.CommonUtils
-		 * @requires mmir.Constants
+		 * @requires mmir.Resources
 		 *
 		 * @memberOf mmir.ControllerManager#
 		 */
@@ -320,8 +320,8 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 			 var rawControllerName= removeFileExt(controllerName);
 			 controllerName = rawControllerName;
 
-			 var viewsPath = constants.getViewPath() + controllerName;
-			 var genViewsPath = constants.getCompiledViewPath() + controllerName;
+			 var viewsPath = res.getViewPath() + controllerName;
+			 var genViewsPath = res.getCompiledViewPath() + controllerName;
 
 			 controllerName = firstToUpperCase(controllerName);
 
@@ -329,15 +329,15 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 
 			 var partialsInfoList = processFileList(viewsPath, genViewsPath, {nameStart: partialsPrefix, ext: 'ehtml'}, partialsPrefix);
 
-			 var helpersPath = constants.getHelperPath().replace(/\/$/, '');//<- remove trailing slash;
-			 var helperSuffix = constants.getHelperSuffix();
+			 var helpersPath = res.getHelperPath().replace(/\/$/, '');//<- remove trailing slash;
+			 var helperSuffix = res.getHelperSuffix();
 			 var reStartPattern = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? '^mmirf/helper/' : '^';
 			 var reHelpersFileName = new RegExp(reStartPattern+controllerName+helperSuffix+'\.js$', 'i');
 			 var helpersList = processFileList(helpersPath, helpersPath, {nameStart: '', ext: 'js'}, reHelpersFileName);
 			 var helperInfo = getFirstInfo(helpersList, 'helper');
 
-			 var layoutsPath = constants.getLayoutPath().replace(/\/$/, '');//<- remove trailing slash
-			 var layoutGenPath = constants.getCompiledLayoutPath().replace(/\/$/, '');//<- remove trailing slash
+			 var layoutsPath = res.getLayoutPath().replace(/\/$/, '');//<- remove trailing slash
+			 var layoutGenPath = res.getCompiledLayoutPath().replace(/\/$/, '');//<- remove trailing slash
  			 var reStartsWithCtrl = new RegExp('^'+controllerName, 'i');
 			 var layoutsList = processFileList(layoutsPath, layoutGenPath, {nameStart: '(?!'+partialsPrefix+')', ext: 'ehtml'}, reStartsWithCtrl);
 			 var layoutInfo = getFirstInfo(layoutsList, 'layout');
@@ -378,7 +378,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 		 */
 		function createCtrlInstance(fileName, res){
 
-			var ctrlInfo = getControllerResources(fileName, constants.getControllerPath());
+			var ctrlInfo = getControllerResources(fileName, res.getControllerPath());
 
 			var constr = ctx[ctrlInfo.name];
 
@@ -403,7 +403,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 		commonUtils.loadImpl(
 
 
-				constants.getControllerPath(),
+				res.getControllerPath(),
 
 				false,
 

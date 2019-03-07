@@ -6,7 +6,7 @@
  *      calls on interpret(text, callback) are re-directed to the WebWorker
  *
  */
-define(['mmirf/resources', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred', 'require'], function(constants, utils, semanticInterpreter, deferred, require){
+define(['mmirf/resources', 'mmirf/commonUtils', 'mmirf/semanticInterpreter', 'mmirf/util/deferred', 'require'], function(res, utils, semanticInterpreter, deferred, require){
 
 //
 var _pendingCmds = {};
@@ -20,7 +20,7 @@ var WpWorker = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? require('.
 //web-worker instance:
 var _asyncGrammarLoader = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
 			new WpWorker() :
-			new Worker(constants.getWorkerPath()+'asyncGrammarWorker.js');
+			new Worker(res.getWorkerPath()+'asyncGrammarWorker.js');
 
 //process messages from worker thread:
 _asyncGrammarLoader.onmessage = function(msg){
@@ -134,7 +134,7 @@ return {
 
 		utils.init().then(function onSuccess(){
 
-				var compiledGrammarPath = utils.getCompiledGrammarPath(constants.getGeneratedGrammarsPath(), langCode);
+				var compiledGrammarPath = utils.getCompiledGrammarPath(res.getGeneratedGrammarsPath(), langCode);
 				if(!compiledGrammarPath){
 					console.error('No compiled grammar available for ID: "'+langCode+'"');
 					return;//////////////////// EARLY EXIT////////////////////////

@@ -42,7 +42,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
    * @requires util/deferred
    *
    */
-  function(mmir, env, deferred, constants, commonUtils, configurationManager, languageManager
+  function(mmir, env, deferred, resources, commonUtils, configurationManager, languageManager
 	 , controllerManager, modelManager
      , presentationManager, inputManager, dialogManager, module
      , semanticInterpreter, mediaManager, notificationManager
@@ -51,7 +51,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 	//export framework functions/objects:
 
 	/** @memberOf mmir */
-	mmir.const = constants;
+	mmir.res = resources;
 	/** @memberOf mmir */
 	mmir.util = commonUtils;
 	/** @memberOf mmir */
@@ -209,7 +209,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 				 */
 				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', void(0));
 
-				commonUtils.loadCompiledGrammars(constants.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
+				commonUtils.loadCompiledGrammars(resources.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
 
 					isSemanticsLoaded = true;
 					checkInitCompleted();

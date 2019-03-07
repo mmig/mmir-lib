@@ -36,7 +36,7 @@ define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 	 *
 	 * @public
 	 *
-	 * @requires Constants (optionally: jQuery)
+	 * @requires Resources (optionally: jQuery)
 	 * @requires mmir.SemanticInterpreter (in {@link mmir.CommonUtils#loadCompiledGrammars})
 	 *
      * @requires util/isArray
@@ -48,7 +48,7 @@ define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 	 *
 	 */
 	function(
-		constants, deferred, loadFile, _isArray, paramsParseFunc, Logger, module, require
+		resources, deferred, loadFile, _isArray, paramsParseFunc, Logger, module, require
 ) {
 	/** @scope mmir.CommonUtils.prototype *///for jsdoc2
 
@@ -88,15 +88,15 @@ define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
     /**
      * Constructor-Method of Class {@link mmir.CommonUtils}
      *
-     * @param {Constants} constants
-     *            the constants-provider (e.g. URL for base directory etc)
+     * @param {Resources} res
+     *            the resources-provider (e.g. URL for base directory etc)
      *
      * @constructs mmir.CommonUtils
      * @memberOf mmir.CommonUtils#
      * @function
      * @private
      */
-    function constructor(constants) {
+    function constructor(res) {
 		// private members.
 
 		/**
@@ -149,7 +149,7 @@ define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 		    stripPathName: function(pathname) {
 
 				// FIXME this is a HACK; TODO handle this in a general way!
-				var basePath = constants.getBasePath();
+				var basePath = res.getBasePath();
 
 				if(basePath){
 			    	//helper: check if string starts with basePath (case-sensitive)
@@ -979,7 +979,7 @@ define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
 					return _defer;/////////////////// EARLY EXIT //////////////////////
 				}
 
-				var directoryFileUrl = constants.getDirectoriesFileUrl();
+				var directoryFileUrl = res.getDirectoriesFileUrl();
 
 				//load configuration file asynchronously:
 				loadFile({
@@ -1038,7 +1038,7 @@ define(['mmirf/resources','mmirf/util/deferred','mmirf/util/loadFile','mmirf/uti
     }// END: constructor()
 
 
-	instance = new constructor(constants);
+	instance = new constructor(resources);
 
 	return instance;
 

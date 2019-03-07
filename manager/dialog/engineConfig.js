@@ -21,7 +21,7 @@
  * or
  * @requires setTimeout (fallback/stub implementation)
  */
-define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'], function(constants, createScionEngine, extend, require) {
+define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'], function(resources, createScionEngine, extend, require) {
 
 	/**
 	 * HELPER logging for state-changes
@@ -138,7 +138,7 @@ define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'],
 			var scionQueueWorker = new this.workerConstructor(
 				typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
 						void(0) :
-						constants.getWorkerPath()+ 'ScionQueueWorker.js'
+						resources.getWorkerPath()+ 'ScionQueueWorker.js'
 			);
 
 			scionQueueWorker._engineInstance = _instance;
@@ -332,7 +332,7 @@ define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'],
     		return _browserFactory; //_browser;
     	}
     	else {
-    		var isCordovaEnv = constants.isCordovaEnv();
+    		var isCordovaEnv = resources.isCordovaEnv();
     		//if queue-plugin is available:
         	if(isCordovaEnv && cordova.plugins && cordova.plugins.queuePlugin){
         		return _queuePluginFactory;//_cordova;

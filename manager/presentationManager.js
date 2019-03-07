@@ -78,7 +78,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader', 'mm
 	  * @constant
 	  * @memberOf mmir.PresentationManager#
 	  *
-	  * @example var defaultLayoutName = mmir.const.get(mmir.presentation.CONFIG_DEFAULT_LAYOUT);
+	  * @example var defaultLayoutName = mmir.conf.get(mmir.presentation.CONFIG_DEFAULT_LAYOUT);
 	  */
 	 var DEFAULT_LAYOUT_NAME = 'Default';
 
@@ -94,7 +94,7 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader', 'mm
 	  * @constant
 	  * @memberOf mmir.PresentationManager#
 	  *
-	  * @example var defaultLayout = mmir.const.get(mmir.presentation.CONFIG_DEFAULT_LAYOUT_NAME);
+	  * @example var defaultLayout = mmir.conf.get(mmir.presentation.CONFIG_DEFAULT_LAYOUT_NAME);
 	  *
 	  */
 	 var CONFIG_DEFAULT_LAYOUT_NAME = 'defaultLayoutName';//TODO move this to somewhere else (collected config-vars?)? this should be a public CONSTANT...

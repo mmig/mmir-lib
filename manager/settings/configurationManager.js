@@ -15,7 +15,7 @@ define(['mmirf/resources', 'mmirf/logger', 'mmirf/util/loadFile', 'mmirf/util/is
 	 *
 	 */
 	function (
-		constants, Logger, loadFile, isArray, module
+		res, Logger, loadFile, isArray, module
 ){
 
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
@@ -120,17 +120,17 @@ define(['mmirf/resources', 'mmirf/logger', 'mmirf/util/loadFile', 'mmirf/util/is
 	        loadFile({
 	    		async: false,
 	    		dataType: "json",
-	    		url: constants.getConfigurationFileUrl(),
+	    		url: res.getConfigurationFileUrl(),
 	    		success: function(data){
 
-    			logger.verbose("loadConfigFile(): loaded configuration from "+constants.getConfigurationFileUrl());
+    			logger.verbose("loadConfigFile(): loaded configuration from "+res.getConfigurationFileUrl());
 
 					if(data){
 	    				configData = data;
 	    			}
 	    		},
 	    		error: function(data){
-	    			var errStr = "loadConfigFile(): failed to load configuration from '"+constants.getConfigurationFileUrl()+"'! ERROR: ";
+	    			var errStr = "loadConfigFile(): failed to load configuration from '"+res.getConfigurationFileUrl()+"'! ERROR: ";
 	    			try{
 	    				errStr += JSON.stringify(data);
 		    			logger.error(errStr);
