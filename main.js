@@ -244,17 +244,17 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });
 				//TODO handle reject/fail of the presentationManager's init-Promise!
 
-				dialogManager.init().then(function(res){//_dlgMng, _dialogEngine){
+				dialogManager.init().then(function(result){//_dlgMng, _dialogEngine){
 					isDialogManagerLoaded = true;
-					mmir.dialog = res.manager;
-					mmir.dialogEngine = res.engine;
+					mmir.dialog = result.manager;
+					mmir.dialogEngine = result.engine;
 					checkInitCompleted();
 				});
 
-				inputManager.init().then(function(res){//_inputMng, _inputEngine){
+				inputManager.init().then(function(result){//_inputMng, _inputEngine){
 					isInputManagerLoaded = true;
-					mmir.input = res.manager;
-					mmir.inputEngine  = res.engine;
+					mmir.input = result.manager;
+					mmir.inputEngine  = result.engine;
 					checkInitCompleted();
 				});
 

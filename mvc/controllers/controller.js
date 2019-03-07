@@ -204,15 +204,15 @@ define ( [ 'mmirf/commonUtils', 'mmirf/helper', 'mmirf/logger', 'module' ],
 		}
 
 		//if there is a file: load the helper
-		commonUtils.getLocalScript(helperPath, function(res){
+		commonUtils.getLocalScript(helperPath, function(result){
 
 				if(logger.isVerbose()) logger.v("[HELPER] load "+ helperPath);//debug
 
 				var constr = ctx[name];
 
 				//FIXME HACK for handling exported constructor
-				if(typeof res === 'function' && res.name === name){
-					constr = res;
+				if(typeof result === 'function' && result.name === name){
+					constr = result;
 				}
 
 				self.helper = new Helper(self, name, constr);

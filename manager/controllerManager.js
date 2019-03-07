@@ -367,24 +367,24 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 		};
 
 		/**
-		 * HELPER create the controller instance after its implementation was loaded/is available in ctx or via argument res
+		 * HELPER create the controller instance after its implementation was loaded/is available in ctx or via argument result
 		 *
 		 * After the controller instance was initialized, it is added to ctrlList (with its name as key)
 		 *
 		 * @param  {[type]} fileName the name of the controller's file: application.js -> Controller<Appliction>
-		 * @param  {any|Function} res the result of loading the controller implementation, i.e. its constructor function; if undefined, the constructor must be available in ctx in ctx[<controller name>]
+		 * @param  {any|Function} result the result of loading the controller implementation, i.e. its constructor function; if undefined, the constructor must be available in ctx in ctx[<controller name>]
 		 *
 		 * @memberOf mmir.ControllerManager#
 		 */
-		function createCtrlInstance(fileName, res){
+		function createCtrlInstance(fileName, result){
 
 			var ctrlInfo = getControllerResources(fileName, res.getControllerPath());
 
 			var constr = ctx[ctrlInfo.name];
 
 			//FIXME HACK for handling exported constructor
-			if(typeof res === 'function' && res.name === ctrlInfo.name){
-				constr = res;
+			if(typeof result === 'function' && result.name === ctrlInfo.name){
+				constr = result;
 			}
 
 			var controller = new Controller(ctrlInfo.name, ctrlInfo, constr);
@@ -426,10 +426,10 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 
 				},
 
-				function callbackStatus(status, fileName, msg, _result) {
+				function callbackStatus(status, fileName, msg, result) {
 					if(status==='info'){
 
-						createCtrlInstance(fileName, res);
+						createCtrlInstance(fileName, result);
 					}
 					else if(status==='warning'){
 						logger.warn('[loadController] "'+fileName+'": '+msg);
