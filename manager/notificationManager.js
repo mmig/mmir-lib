@@ -25,7 +25,7 @@
  */
 
 
-define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logger', 'module'],
+define(['mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', 'mmirf/logger', 'module'],
 	/**
 	 *
 	 * @name NotificationManager
@@ -37,7 +37,7 @@ define(['module', 'mmirf/constants', 'mmirf/mediaManager', 'mmirf/dictionary', '
 	 * @requires mmir.MediaManager
 	 */
 	function(
-		module, constants, mediaManager, Dictionary, Logger, module
+		constants, mediaManager, Dictionary, Logger, module
 ){
 	//the next comment enables JSDoc2 to map all functions etc. to the correct class description
 	/** @scope mmir.NotificationManager.prototype *///for jsdoc2
