@@ -203,7 +203,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 				} else if(elem.isLink()){
 
 					isLinkLoading = true;
-					loadCss({'href': elem.href, 'class': layoutMarker});
+					loadCss({'href': elem.href, 'class': layoutMarker, 'type': elem.type || 'text/css'});
 
 				} else if(elem.isStyle()){
 
