@@ -426,7 +426,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 
 				},
 
-				function callbackStatus(status, fileName, msg, res) {
+				function callbackStatus(status, fileName, msg, _result) {
 					if(status==='info'){
 
 						createCtrlInstance(fileName, res);
