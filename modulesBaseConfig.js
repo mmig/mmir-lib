@@ -87,7 +87,7 @@ return {
 		, 'mmirf/scion': 'vendor/libs/scion-amd-mod.min'
 
 		// globals and AMDs
-		, 'mmirf/resources': 'tools/constants'
+		, 'mmirf/resources': 'tools/resources'
 		, 'mmirf/commonUtils': 'tools/commonUtils'
 		, 'mmirf/paramsParseFunc': 'tools/paramsParseFunc'
 		, 'mmirf/env': 'tools/envDetect'
