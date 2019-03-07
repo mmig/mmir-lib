@@ -161,7 +161,9 @@ function initMmir(window) {
 						continue;
 					}
 					if(mainConfig[p] && typeof mainConfig[p] === 'object'){
-						Object.assign(mainConfig[p], conf[p]);
+						for(var n in conf[p]){
+							mainConfig[p][n] = conf[p][n];
+						}
 					} else {
 						mainConfig[p] = conf[p];
 					}
@@ -601,6 +603,18 @@ function initMmir(window) {
 			 * @public
 			 */
 			startModule: 'mmirf/main',
+
+			/**
+			 * A list of names / RequireJS module IDs, that will be loaded
+			 * immediately before loading/initializing the mmir library.
+			 *
+			 * @memberOf mmir
+			 * @name startModules
+			 * @type Array<String>
+			 * @default {Void}
+			 * @public
+			 */
+			startModules: void(0),
 
 			/**
 			 * The jQuery instance that will be used by the MMIR library.

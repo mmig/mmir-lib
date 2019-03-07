@@ -22,9 +22,6 @@
 		core.require = reqInstance;
 		core._define = defInstance;
 
-		//get the "entry-point", i.e. module-name/-id that will be loaded (default: "mmirf/main")
-		var startModule = core.startModule;
-
 		//setup the logger implementation:
 		// map 'mmirf/logger' to one of  ['mmirf/loggerEnabled' | 'mmirf/loggerDisabled']
 		var isEnableLogger = core.debug !== false;//NOTE: only explicitly setting debug to boolean false will disable logging
@@ -75,14 +72,20 @@
 
 			jq = core.jquery;
 
-			var utilsConfig = mmirf_config.packages.find(function(entry){ return entry.name === 'mmirf/util'; });
-			utilsConfig.location = utilsConfig.location.replace(/util_purejs$/, 'util_jquery');
-			core.config({
-				//make jQuery available in requirejs
-				paths: {'jquery': void(0)},
-				//configure tools to use jQuery implementation:
-				packages: [utilsConfig]
-			});
+			var entry;
+			for(var i=mmirf_config.packages.length - 1; i >= 0; --i){
+				entry = mmirf_config.packages[i];
+				if(entry.name === 'mmirf/util'){
+					entry.location = entry.location.replace(/util_purejs$/, 'util_jquery');
+					core.config({
+						//make jQuery available in requirejs
+						paths: {'jquery': void(0)},
+						//configure tools to use jQuery implementation:
+						packages: [entry]
+					});
+				}
+			}
+
 		}
 
 		//apply all configs / modifications that were made on the core-module
