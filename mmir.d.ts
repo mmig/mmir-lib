@@ -13,14 +13,14 @@ export as namespace mmir;
 // export function setInitialized: () : void;//DISABLED: "officially" this function has visibility protected
 export function config(requirejsConfig: {}): void;
 export function ready(onFrameworkReady: (...args: any[]) => any): any;
-export function isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
+export function isVersion(verion: string, comparator: Comparator): boolean;
 export const require: RequireJs;
 export const version: string;
 //NOTE changing exported var_s only has effect, if done before initialization
 export var startModule: string;//DEFAULT: 'main';
 export var viewEngine: string;//DEFAULT: "jqViewEngine";
 export var debug: boolean;//DEFAULT: true;
-export var logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
+export var logLevel: LogLevelNum | LogLevel;//DEFAULT: 'debug';
 export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
 
 // interface MmirModule:
@@ -46,13 +46,13 @@ export interface MmirCore {
   // setInitialized: () => void;//DISABLED: "officially" this function has visibility protected
   config: (requirejsConfig: {}) => void;
   ready: (onFrameworkReady: (...args: any[]) => any) => any;
-  isVersion(verion: string, comparator: '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '==='): boolean;
+  isVersion(verion: string, comparator: Comparator): boolean;
   readonly require: RequireJs;
   readonly version: string;
   startModule: string;//DEFAULT: 'main';
   viewEngine: string;//DEFAULT: "jqViewEngine";
   debug: boolean;//DEFAULT: true;
-  logLevel: number | 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';//DEFAULT: 'debug';
+  logLevel: LogLevelNum | LogLevel;//DEFAULT: 'debug';
   logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
 }
 
@@ -72,6 +72,11 @@ export interface MmirModule extends MmirCore {
   readonly present: PresentationManager;
   readonly semantic: SemanticInterpreter;
 }
+
+export type LogLevel = 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';
+export type LogLevelNum =   0    |    1    |   2    |   3    |   4     |      5     |     6;
+
+export type Comparator = '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '===';
 
 /**
  * interface definition for JSON grammar
