@@ -125,7 +125,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 
 			//trigger "after page loading" hooks on controller:
 			// the hook for all views of the controller MUST be present/implemented:
-			ctrl.perform('on_page_load', renderData, viewName);
+			ctrl.performIfPresent('on_page_load', renderData, viewName);
 			//... the hook for single/specific view MAY be present/implemented:
 			if(view){
 				ctrl.performIfPresent('on_page_load_'+viewName, renderData);
