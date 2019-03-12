@@ -91,7 +91,7 @@
 			var p;
 			for(var n in mmirf_config.paths){
 				p = mmirf_config.paths[n];
-				if(/(^|\/)vendor\//.test(p) && !/\.min$/.test(p)){
+				if(/(^|\/)(vendor|gen\/parser)\//.test(p) && !/\.min$/.test(p)){
 					mmirf_config.paths[n] = p + '.min';
 				}
 			}
