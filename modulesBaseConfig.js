@@ -85,6 +85,7 @@ return {
 
 		// lib
 		, 'mmirf/scion': 'vendor/libs/scion-amd-mod.min'
+		, 'mmirf/scionRuntimeLib': 'vendor/libs/scion-core-lib.min'
 
 		// globals and AMDs
 		, 'mmirf/resources': 'tools/resources'
@@ -99,6 +100,7 @@ return {
 
 		, 'mmirf/scionEngine': 'manager/dialog/scion/scionEngine'
 		, 'mmirf/scionUtil': 'manager/dialog/scion/scionUtil'
+		, 'mmirf/scionRuntime': 'manager/dialog/scion/scionRuntime'
 
 		// controllers/models
 		//FIXME replace controller manager:
