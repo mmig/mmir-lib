@@ -286,9 +286,18 @@ var pegjsGen = {
 //        	    }
 //        	  ],
 //        	  "found": "_",
-//        	  "offset": 4104,
-//        	  "line": 40,
-//        	  "column": 6,
+//        	  "location": {
+//        	  	"start": {
+//        	  		"offset": 1233,
+//        	  		"line": 26,
+//        	  		"column": 5
+//        	  	},
+//        	  	"end": {
+//        	  		"offset": 1234,
+//        	  		"line": 26,
+//        	  		"column": 6
+//        	  	}
+//        	  },
 //        	  "name": "SyntaxError"
 //        	}"
         	hasError = true;
@@ -300,16 +309,17 @@ var pegjsGen = {
         		msg = 'Error' + msg + (error && error.stack? error.stack : error);
         	}
 
-        	if(typeof error.line !== 'undefined'){
-        		msg += ' at line '+error.line;
+        	var loc = (error.location && (error.location.start || error.location.end)) || error;
+        	if(typeof loc.line !== 'undefined'){
+        		msg += ' at line '+loc.line;
         	}
 
-        	if(typeof error.column !== 'undefined'){
-        		msg += ':'+error.column;
+        	if(typeof loc.column !== 'undefined'){
+        		msg += ':'+loc.column;
         	}
 
-        	if(typeof error.offset !== 'undefined'){
-        		msg += ' (offset '+error.offset+')';
+        	if(typeof loc.offset !== 'undefined'){
+        		msg += ' (offset '+loc.offset+')';
         	}
 
         	if(pegjs.printError){

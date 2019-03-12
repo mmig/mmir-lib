@@ -185,7 +185,7 @@ return {
 		, 'mmirf/stemmer': 'semantic/stemmer'
 		, 'mmirf/jscc': 'vendor/libs/jscc-amd'
 		, 'mmirf/jison': 'vendor/libs/jison'
-		, 'mmirf/pegjs': 'vendor/libs/peg-0.9.0_amd'
+		, 'mmirf/pegjs': 'vendor/libs/peg-0.10.0'
 		, 'mmirf/asyncGen': 'env/grammar/asyncGenerator'
 		, 'mmirf/jsccGen': 'env/grammar/jsccGenerator'
 		, 'mmirf/jsccAsyncGen': 'env/grammar/jsccAsyncGenerator'

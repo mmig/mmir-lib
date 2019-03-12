@@ -11,7 +11,25 @@ var _modules = {
 	}
 };
 
-self.define = function(moduleCreateFunc){
+self.define = function(deps, moduleCreateFunc){
+	if(typeof deps === 'function'){
+		moduleCreateFunc = deps;
+		deps = null;
+	} else {
+		var err;
+		if(typeof deps === 'string'){
+			err = 'invalid define: must be anonymous, but tried to set module ID '+deps;
+		} if(deps && deps.length > 0) {
+			err = 'invalid define: must not request dependencies, but requested '+JSON.stringify(deps);
+		}
+		if(err){
+			self.postMessage({
+			  init: false,
+			  error: err + ' - ' + (new Error().stack)
+		  });
+		}
+	}
+
 	var modId;
 	if(_modules._customid){
 		modId = _modules._customid;
@@ -21,6 +39,7 @@ self.define = function(moduleCreateFunc){
 	}
 	_modules._defined[modId] =  moduleCreateFunc();
 };
+self.define.amd = true;
 
 self.require = function(id, cb){
 	if(cb){
