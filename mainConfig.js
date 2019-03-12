@@ -25,8 +25,12 @@ requirejs(['./modulesBaseConfig', './mainConfigInit'], /** @memberOf mmir.mainCo
 	paths['mmirf/simpleViewEngine'] = 'env/view/simpleViewEngine';
 
 	//adjust paths to mmir root path:
-	for(var p in paths){
-		paths[p] = mmirRoot + paths[p];
+	var p;
+	for(var n in paths){
+		p = paths[n];
+		if(p !== 'empty:'){
+			paths[n] = mmirRoot + p;
+		}
 	}
 	var packages = mmirf_config.packages;
 	for(var i = packages.length - 1; i >= 0; --i){
