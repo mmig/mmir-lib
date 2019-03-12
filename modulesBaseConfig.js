@@ -196,7 +196,7 @@ return {
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)
-		, 'mmirf/md5': 'vendor/libs/md5_amd'
+		, 'mmirf/md5': 'vendor/libs/md5'
 		, 'mmirf/checksumUtils': 'tools/checksumUtils'
 
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
