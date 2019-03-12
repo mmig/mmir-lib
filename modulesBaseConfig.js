@@ -85,7 +85,7 @@ return {
 
 		// lib
 		, 'mmirf/scion': 'vendor/libs/scion-amd-mod.min'
-		, 'mmirf/scionRuntimeLib': 'vendor/libs/scion-core-lib.min'
+		, 'mmirf/scionRuntimeLib': 'vendor/libs/scion-core-lib'
 
 		// globals and AMDs
 		, 'mmirf/resources': 'tools/resources'
@@ -231,7 +231,7 @@ return {
 		// * Symbol
 		// * Array.from
 		// * Array[@iterator]
-		, 'mmirf/polyfill': 'vendor/libs/es6-map-set-polyfill.min'
+		, 'mmirf/polyfill': 'vendor/libs/es6-map-set-polyfill'
 
 		// (console) logging related modules (either 'mmirf/loggerEnabled' or 'mmirf/loggerDisabled' will be mapped to 'mmirf/logger', depending on configuration
 		, 'mmirf/loggerEnabled': 'tools/logger'
