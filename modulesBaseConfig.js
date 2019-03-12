@@ -196,7 +196,7 @@ return {
 
 		//MD5 checksum computation: for checking pre-compiled resources, e.g.
 		//    grammars (JSON->JS), and templates (eHTML->JS)
-		, 'mmirf/md5': 'vendor/libs/md5_umd'
+		, 'mmirf/md5': 'vendor/libs/md5_amd'
 		, 'mmirf/checksumUtils': 'tools/checksumUtils'
 
 		//utility function for loading LINK tags (i.e. CSS files) into the current document
@@ -236,7 +236,7 @@ return {
 		// (console) logging related modules (either 'mmirf/loggerEnabled' or 'mmirf/loggerDisabled' will be mapped to 'mmirf/logger', depending on configuration
 		, 'mmirf/loggerEnabled': 'tools/logger'
 		, 'mmirf/loggerDisabled': 'tools/loggerDisabled'
-		, 'mmirf/stacktrace': 'vendor/libs/stacktrace-v0.6.4-mod'
+		, 'mmirf/stacktrace': 'vendor/libs/stacktrace'
 
 		//FIXME "hardlink" mmirf/logger:
 		, 'mmirf/logger': 'tools/logger'

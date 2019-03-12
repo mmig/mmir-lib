@@ -401,7 +401,7 @@ if(tmpTraceConfig !== false || (tmpTraceConfig !== null && typeof tmpTraceConfig
 			}
 			//if isErrInvoked is TRUE: this function was invoked via additional printe()-call
 			// => need to take 1 more step down the stack
-			msg += '\n  ' + stacktrace(pnTraceOptions).slice(isErrInvoked? 6 : 5).join('\n  ');
+			msg += '\n  ' + stacktrace.getSync(pnTraceOptions).slice(isErrInvoked? 3 : 2).join('\n  ');
 			pnOriginal.call(this, loggerName, logLevel, msg);
 		};
 	}
@@ -427,7 +427,7 @@ if(tmpTraceConfig !== false || (tmpTraceConfig !== null && typeof tmpTraceConfig
 			}
 			//if isErrInvoked is TRUE: this function was invoked via additional printe()-call
 			// => need to take 1 more step down the stack
-			msg += '\n  ' + stacktrace(pnTraceOptions)[isErrInvoked? 6 : 5];
+			msg += '\n  ' + stacktrace.getSync(pnTraceOptions)[isErrInvoked? 3 : 2];
 			pnOriginal.call(this, loggerName, logLevel, msg);
 		};
 	}
