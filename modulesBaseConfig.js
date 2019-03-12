@@ -102,6 +102,8 @@ return {
 		, 'mmirf/scionUtil': 'manager/dialog/scion/scionUtil'
 		, 'mmirf/scionRuntime': 'manager/dialog/scion/scionRuntime'
 
+		, 'mmirf/emma': 'tools/emma'
+
 		// controllers/models
 		//FIXME replace controller manager:
 		, 'mmirf/controllerManager': 'manager/controllerManager'
