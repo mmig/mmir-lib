@@ -85,7 +85,16 @@
 					});
 				}
 			}
+		}
 
+		if(core.libMode === 'min'){
+			var p;
+			for(var n in mmirf_config.paths){
+				p = mmirf_config.paths[n];
+				if(/(^|\/)vendor\//.test(p) && !/\.min$/.test(p)){
+					mmirf_config.paths[n] = p + '.min';
+				}
+			}
 		}
 
 		//apply all configs / modifications that were made on the core-module

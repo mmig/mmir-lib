@@ -617,6 +617,19 @@ function initMmir(window) {
 			startModules: void(0),
 
 			/**
+			 * Mode for vendor libraries:
+			 * if "min" the minified/optimized variants (if available) for vendor libraries
+			 * are used.
+			 *
+			 * @memberOf mmir
+			 * @name libMode
+			 * @type undefined | "min"
+			 * @default {Void}
+			 * @public
+			 */
+			libMode: void(0),
+
+			/**
 			 * The jQuery instance that will be used by the MMIR library.
 			 *
 			 * Will be automatically set, if jQuery is loaded before the MMIR library initializes
@@ -648,7 +661,6 @@ function initMmir(window) {
 			 * @public
 			 */
 			viewEngine: 'mmirf/simpleViewEngine',
-
 
 			/**
 			 * Property for enabling / disabling logging:
@@ -743,6 +755,7 @@ function initMmir(window) {
 			 * @see https://requirejs.org/
 			 */
 			require: null,//is intialized in mainConfig.js
+
 			/**
 			 * Attached define-function for "declaring" modules that is used by the framework.
 			 *
