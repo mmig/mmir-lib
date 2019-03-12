@@ -2,7 +2,7 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("scionCoreLib", [], factory);
+		define([], factory);
 	else if(typeof exports === 'object')
 		exports["scionCoreLib"] = factory();
 	else
@@ -91,10 +91,21 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./scion-core-lib.js");
+/******/ 	return __webpack_require__(__webpack_require__.s = "./index.js");
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ "./index.js":
+/*!******************!*\
+  !*** ./index.js ***!
+  \******************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(/*! @scion-scxml/core */ "./node_modules/@scion-scxml/core/lib/Statechart.js");
+
+/***/ }),
 
 /***/ "./node_modules/@scion-scxml/core-base/lib/ArraySet.js":
 /*!*************************************************************!*\
@@ -103,7 +114,126 @@ return /******/ (function(modules) { // webpackBootstrap
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("/* begin ArraySet */\n\n/** @constructor */\nfunction ArraySet(l) {\n  l = l || [];\n  this.o = new Set(l);\n}\n\nArraySet.prototype = {\n  add: function add(x) {\n    this.o.add(x);\n  },\n  remove: function remove(x) {\n    return this.o.delete(x);\n  },\n  union: function union(l) {\n    var _iteratorNormalCompletion = true;\n    var _didIteratorError = false;\n    var _iteratorError = undefined;\n\n    try {\n      for (var _iterator = l.o[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {\n        var v = _step.value;\n        this.o.add(v);\n      }\n    } catch (err) {\n      _didIteratorError = true;\n      _iteratorError = err;\n    } finally {\n      try {\n        if (!_iteratorNormalCompletion && _iterator.return != null) {\n          _iterator.return();\n        }\n      } finally {\n        if (_didIteratorError) {\n          throw _iteratorError;\n        }\n      }\n    }\n\n    return this;\n  },\n  difference: function difference(l) {\n    var _iteratorNormalCompletion2 = true;\n    var _didIteratorError2 = false;\n    var _iteratorError2 = undefined;\n\n    try {\n      for (var _iterator2 = l.o[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {\n        var v = _step2.value;\n        this.o.delete(v);\n      }\n    } catch (err) {\n      _didIteratorError2 = true;\n      _iteratorError2 = err;\n    } finally {\n      try {\n        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {\n          _iterator2.return();\n        }\n      } finally {\n        if (_didIteratorError2) {\n          throw _iteratorError2;\n        }\n      }\n    }\n\n    return this;\n  },\n  contains: function contains(x) {\n    return this.o.has(x);\n  },\n  iter: function iter() {\n    return Array.from(this.o);\n  },\n  isEmpty: function isEmpty() {\n    return !this.o.size;\n  },\n  size: function size() {\n    return this.o.size;\n  },\n  equals: function equals(s2) {\n    if (this.o.size !== s2.size()) {\n      return false;\n    }\n\n    var _iteratorNormalCompletion3 = true;\n    var _didIteratorError3 = false;\n    var _iteratorError3 = undefined;\n\n    try {\n      for (var _iterator3 = this.o[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {\n        var v = _step3.value;\n\n        if (!s2.contains(v)) {\n          return false;\n        }\n      }\n    } catch (err) {\n      _didIteratorError3 = true;\n      _iteratorError3 = err;\n    } finally {\n      try {\n        if (!_iteratorNormalCompletion3 && _iterator3.return != null) {\n          _iterator3.return();\n        }\n      } finally {\n        if (_didIteratorError3) {\n          throw _iteratorError3;\n        }\n      }\n    }\n\n    return true;\n  },\n  toString: function toString() {\n    return this.o.size === 0 ? '<empty>' : Array.from(this.o).join(',\\n');\n  }\n};\nmodule.exports = ArraySet;\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/@scion-scxml/core-base/lib/ArraySet.js?");
+/* begin ArraySet */
+
+/** @constructor */
+function ArraySet(l) {
+  l = l || [];
+  this.o = new Set(l);
+}
+
+ArraySet.prototype = {
+  add: function add(x) {
+    this.o.add(x);
+  },
+  remove: function remove(x) {
+    return this.o.delete(x);
+  },
+  union: function union(l) {
+    var _iteratorNormalCompletion = true;
+    var _didIteratorError = false;
+    var _iteratorError = undefined;
+
+    try {
+      for (var _iterator = l.o[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+        var v = _step.value;
+        this.o.add(v);
+      }
+    } catch (err) {
+      _didIteratorError = true;
+      _iteratorError = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion && _iterator.return != null) {
+          _iterator.return();
+        }
+      } finally {
+        if (_didIteratorError) {
+          throw _iteratorError;
+        }
+      }
+    }
+
+    return this;
+  },
+  difference: function difference(l) {
+    var _iteratorNormalCompletion2 = true;
+    var _didIteratorError2 = false;
+    var _iteratorError2 = undefined;
+
+    try {
+      for (var _iterator2 = l.o[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+        var v = _step2.value;
+        this.o.delete(v);
+      }
+    } catch (err) {
+      _didIteratorError2 = true;
+      _iteratorError2 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+          _iterator2.return();
+        }
+      } finally {
+        if (_didIteratorError2) {
+          throw _iteratorError2;
+        }
+      }
+    }
+
+    return this;
+  },
+  contains: function contains(x) {
+    return this.o.has(x);
+  },
+  iter: function iter() {
+    return Array.from(this.o);
+  },
+  isEmpty: function isEmpty() {
+    return !this.o.size;
+  },
+  size: function size() {
+    return this.o.size;
+  },
+  equals: function equals(s2) {
+    if (this.o.size !== s2.size()) {
+      return false;
+    }
+
+    var _iteratorNormalCompletion3 = true;
+    var _didIteratorError3 = false;
+    var _iteratorError3 = undefined;
+
+    try {
+      for (var _iterator3 = this.o[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+        var v = _step3.value;
+
+        if (!s2.contains(v)) {
+          return false;
+        }
+      }
+    } catch (err) {
+      _didIteratorError3 = true;
+      _iteratorError3 = err;
+    } finally {
+      try {
+        if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+          _iterator3.return();
+        }
+      } finally {
+        if (_didIteratorError3) {
+          throw _iteratorError3;
+        }
+      }
+    }
+
+    return true;
+  },
+  toString: function toString() {
+    return this.o.size === 0 ? '<empty>' : Array.from(this.o).join(',\n');
+  }
+};
+module.exports = ArraySet;
 
 /***/ }),
 
@@ -114,7 +244,23 @@ eval("/* begin ArraySet */\n\n/** @constructor */\nfunction ArraySet(l) {\n  l =
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("var STATE_TYPES = {\n  BASIC: 0,\n  COMPOSITE: 1,\n  PARALLEL: 2,\n  HISTORY: 3,\n  INITIAL: 4,\n  FINAL: 5\n};\nvar SCXML_IOPROCESSOR_TYPE = 'http://www.w3.org/TR/scxml/#SCXMLEventProcessor';\nvar HTTP_IOPROCESSOR_TYPE = 'http://www.w3.org/TR/scxml/#BasicHTTPEventProcessor';\nvar RX_TRAILING_WILDCARD = /\\.\\*$/;\nmodule.exports = {\n  STATE_TYPES: STATE_TYPES,\n  SCXML_IOPROCESSOR_TYPE: SCXML_IOPROCESSOR_TYPE,\n  HTTP_IOPROCESSOR_TYPE: HTTP_IOPROCESSOR_TYPE,\n  RX_TRAILING_WILDCARD: RX_TRAILING_WILDCARD\n};\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/@scion-scxml/core-base/lib/constants.js?");
+var STATE_TYPES = {
+  BASIC: 0,
+  COMPOSITE: 1,
+  PARALLEL: 2,
+  HISTORY: 3,
+  INITIAL: 4,
+  FINAL: 5
+};
+var SCXML_IOPROCESSOR_TYPE = 'http://www.w3.org/TR/scxml/#SCXMLEventProcessor';
+var HTTP_IOPROCESSOR_TYPE = 'http://www.w3.org/TR/scxml/#BasicHTTPEventProcessor';
+var RX_TRAILING_WILDCARD = /\.\*$/;
+module.exports = {
+  STATE_TYPES: STATE_TYPES,
+  SCXML_IOPROCESSOR_TYPE: SCXML_IOPROCESSOR_TYPE,
+  HTTP_IOPROCESSOR_TYPE: HTTP_IOPROCESSOR_TYPE,
+  RX_TRAILING_WILDCARD: RX_TRAILING_WILDCARD
+};
 
 /***/ }),
 
@@ -125,7 +271,465 @@ eval("var STATE_TYPES = {\n  BASIC: 0,\n  COMPOSITE: 1,\n  PARALLEL: 2,\n  HISTO
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nvar constants = __webpack_require__(/*! ./constants */ \"./node_modules/@scion-scxml/core-base/lib/constants.js\"),\n    STATE_TYPES = constants.STATE_TYPES,\n    RX_TRAILING_WILDCARD = constants.RX_TRAILING_WILDCARD;\n\nvar printTrace = false;\nmodule.exports = {\n  extend: extend,\n  transitionWithTargets: transitionWithTargets,\n  transitionComparator: transitionComparator,\n  initializeModel: initializeModel,\n  isEventPrefixMatch: isEventPrefixMatch,\n  isTransitionMatch: isTransitionMatch,\n  scxmlPrefixTransitionSelector: scxmlPrefixTransitionSelector,\n  eventlessTransitionSelector: eventlessTransitionSelector,\n  getTransitionWithHigherSourceChildPriority: getTransitionWithHigherSourceChildPriority,\n  sortInEntryOrder: sortInEntryOrder,\n  getStateWithHigherSourceChildPriority: getStateWithHigherSourceChildPriority,\n  initializeModelGeneratorFn: initializeModelGeneratorFn,\n  deserializeSerializedConfiguration: deserializeSerializedConfiguration,\n  deserializeHistory: deserializeHistory\n};\n\nfunction extend(to, from) {\n  Object.keys(from).forEach(function (k) {\n    to[k] = from[k];\n  });\n  return to;\n}\n\n;\n\nfunction transitionWithTargets(t) {\n  return t.targets;\n}\n\nfunction transitionComparator(t1, t2) {\n  return t1.documentOrder - t2.documentOrder;\n}\n\nfunction initializeModel(rootState, opts) {\n  var transitions = [],\n      idToStateMap = new Map(),\n      documentOrder = 0; //TODO: need to add fake ids to anyone that doesn't have them\n  //FIXME: make this safer - break into multiple passes\n\n  var idCount = {};\n\n  function generateId(type) {\n    if (idCount[type] === undefined) idCount[type] = 0;\n\n    do {\n      var count = idCount[type]++;\n      var id = '$generated-' + type + '-' + count;\n    } while (idToStateMap.has(id));\n\n    return id;\n  }\n\n  function wrapInFakeRootState(state) {\n    return {\n      $deserializeDatamodel: state.$deserializeDatamodel || function () {},\n      $serializeDatamodel: state.$serializeDatamodel || function () {\n        return null;\n      },\n      $idToStateMap: idToStateMap,\n      //keep this for handy deserialization of serialized configuration\n      docUrl: state.docUrl,\n      name: state.name,\n      states: [{\n        $type: 'initial',\n        transitions: [{\n          target: state\n        }]\n      }, state]\n    };\n  }\n\n  var statesWithInitialAttributes = [];\n  /**\n    @this {SCTransition}\n  */\n\n  function transitionToString(sourceState) {\n    return \"\".concat(sourceState, \" -- \").concat(this.events ? '(' + this.events.join(',') + ')' : null).concat(this.cond ? '[' + this.cond.name + ']' : '', \" --> \").concat(this.targets ? this.targets.join(',') : null);\n  }\n  /**\n    @this {SCState}\n  */\n\n\n  function stateToString() {\n    return this.id;\n  }\n\n  function populateStateIdMap(state) {\n    //populate state id map\n    if (state.id) {\n      idToStateMap.set(state.id, state);\n    }\n\n    if (state.states) {\n      for (var j = 0, len = state.states.length; j < len; j++) {\n        populateStateIdMap(state.states[j]);\n      }\n    }\n  }\n\n  function traverse(ancestors, state) {\n    if (printTrace) state.toString = stateToString; //add to global transition and state id caches\n\n    if (state.transitions) transitions.push.apply(transitions, state.transitions); //create a default type, just to normalize things\n    //this way we can check for unsupported types below\n\n    state.$type = state.$type || 'state'; //add ancestors and depth properties\n\n    state.ancestors = ancestors;\n    state.depth = ancestors.length;\n    state.parent = ancestors[0];\n    state.documentOrder = documentOrder++; //add some information to transitions\n\n    state.transitions = state.transitions || [];\n\n    for (var j = 0, len = state.transitions.length; j < len; j++) {\n      var transition = state.transitions[j];\n      transition.documentOrder = documentOrder++;\n      transition.source = state;\n      if (printTrace) transition.toString = transitionToString.bind(transition, state);\n    }\n\n    ; //recursive step\n\n    if (state.states) {\n      var ancs = [state].concat(ancestors);\n\n      for (var j = 0, len = state.states.length; j < len; j++) {\n        traverse(ancs, state.states[j]);\n      }\n    } //setup fast state type\n\n\n    switch (state.$type) {\n      case 'parallel':\n        state.typeEnum = STATE_TYPES.PARALLEL;\n        state.isAtomic = false;\n        break;\n\n      case 'initial':\n        state.typeEnum = STATE_TYPES.INITIAL;\n        state.isAtomic = true;\n        break;\n\n      case 'history':\n        state.typeEnum = STATE_TYPES.HISTORY;\n        state.isAtomic = true;\n        break;\n\n      case 'final':\n        state.typeEnum = STATE_TYPES.FINAL;\n        state.isAtomic = true;\n        break;\n\n      case 'state':\n      case 'scxml':\n        if (state.states && state.states.length) {\n          state.typeEnum = STATE_TYPES.COMPOSITE;\n          state.isAtomic = false;\n        } else {\n          state.typeEnum = STATE_TYPES.BASIC;\n          state.isAtomic = true;\n        }\n\n        break;\n\n      default:\n        throw new Error('Unknown state type: ' + state.$type);\n    } //descendants property on states will now be populated. add descendants to this state\n\n\n    if (state.states) {\n      state.descendants = state.states.concat(state.states.map(function (s) {\n        return s.descendants;\n      }).reduce(function (a, b) {\n        return a.concat(b);\n      }, []));\n    } else {\n      state.descendants = [];\n    }\n\n    var initialChildren;\n\n    if (state.typeEnum === STATE_TYPES.COMPOSITE) {\n      //set up initial state\n      if (Array.isArray(state.initial) || typeof state.initial === 'string') {\n        statesWithInitialAttributes.push(state);\n      } else {\n        //take the first child that has initial type, or first child\n        initialChildren = state.states.filter(function (child) {\n          return child.$type === 'initial';\n        });\n        state.initialRef = [initialChildren.length ? initialChildren[0] : state.states[0]];\n        checkInitialRef(state);\n      }\n    } //hook up history\n\n\n    if (state.typeEnum === STATE_TYPES.COMPOSITE || state.typeEnum === STATE_TYPES.PARALLEL) {\n      var historyChildren = state.states.filter(function (s) {\n        return s.$type === 'history';\n      });\n      state.historyRef = historyChildren;\n    } //now it's safe to fill in fake state ids\n\n\n    if (!state.id) {\n      state.id = generateId(state.$type);\n      idToStateMap.set(state.id, state);\n    } //normalize onEntry/onExit, which can be single fn or array, or array of arrays (blocks)\n\n\n    ['onEntry', 'onExit'].forEach(function (prop) {\n      if (state[prop]) {\n        if (!Array.isArray(state[prop])) {\n          state[prop] = [state[prop]];\n        }\n\n        if (!state[prop].every(function (handler) {\n          return Array.isArray(handler);\n        })) {\n          state[prop] = [state[prop]];\n        }\n      }\n    });\n\n    if (state.invokes && !Array.isArray(state.invokes)) {\n      state.invokes = [state.invokes];\n      state.invokes.forEach(function (invoke) {\n        if (invoke.finalize && !Array.isArray(invoke.finalize)) {\n          invoke.finalize = [invoke.finalize];\n        }\n      });\n    }\n  } //TODO: convert events to regular expressions in advance\n\n\n  function checkInitialRef(state) {\n    if (!state.initialRef) throw new Error('Unable to locate initial state for composite state: ' + state.id);\n  }\n\n  function connectIntialAttributes() {\n    for (var j = 0, len = statesWithInitialAttributes.length; j < len; j++) {\n      var s = statesWithInitialAttributes[j];\n      var initialStates = Array.isArray(s.initial) ? s.initial : [s.initial];\n      s.initialRef = initialStates.map(function (initialState) {\n        return idToStateMap.get(initialState);\n      });\n      checkInitialRef(s);\n    }\n  }\n\n  var RX_WHITESPACE = /\\s+/;\n\n  function connectTransitionGraph() {\n    //normalize as with onEntry/onExit\n    for (var i = 0, len = transitions.length; i < len; i++) {\n      var t = transitions[i];\n\n      if (t.onTransition && !Array.isArray(t.onTransition)) {\n        t.onTransition = [t.onTransition];\n      } //normalize \"event\" attribute into \"events\" attribute\n\n\n      if (typeof t.event === 'string') {\n        t.events = t.event.trim().split(RX_WHITESPACE);\n      }\n\n      delete t.event;\n\n      if (t.targets || typeof t.target === 'undefined') {\n        //targets have already been set up\n        continue;\n      }\n\n      if (typeof t.target === 'string') {\n        var target = idToStateMap.get(t.target);\n        if (!target) throw new Error('Unable to find target state with id ' + t.target);\n        t.target = target;\n        t.targets = [t.target];\n      } else if (Array.isArray(t.target)) {\n        t.targets = t.target.map(function (target) {\n          if (typeof target === 'string') {\n            target = idToStateMap.get(target);\n            if (!target) throw new Error('Unable to find target state with id ' + t.target);\n            return target;\n          } else {\n            return target;\n          }\n        });\n      } else if (_typeof(t.target) === 'object') {\n        t.targets = [t.target];\n      } else {\n        throw new Error('Transition target has unknown type: ' + t.target);\n      }\n    } //hook up LCA - optimization\n\n\n    for (var i = 0, len = transitions.length; i < len; i++) {\n      var t = transitions[i];\n      if (t.targets) t.lcca = getLCCA(t.source, t.targets[0]); //FIXME: we technically do not need to hang onto the lcca. only the scope is used by the algorithm\n\n      t.scope = getScope(t);\n    }\n  }\n\n  function getScope(transition) {\n    //Transition scope is normally the least common compound ancestor (lcca).\n    //Internal transitions have a scope equal to the source state.\n    var transitionIsReallyInternal = transition.type === 'internal' && transition.source.typeEnum === STATE_TYPES.COMPOSITE && //is transition source a composite state\n    transition.source.parent && //root state won't have parent\n    transition.targets && //does it target its descendants\n    transition.targets.every(function (target) {\n      return transition.source.descendants.indexOf(target) > -1;\n    });\n\n    if (!transition.targets) {\n      return null;\n    } else if (transitionIsReallyInternal) {\n      return transition.source;\n    } else {\n      return transition.lcca;\n    }\n  }\n\n  function getLCCA(s1, s2) {\n    var commonAncestors = [];\n\n    for (var j = 0, len = s1.ancestors.length; j < len; j++) {\n      var anc = s1.ancestors[j];\n\n      if ((opts && opts.legacySemantics ? anc.typeEnum === STATE_TYPES.COMPOSITE : anc.typeEnum === STATE_TYPES.COMPOSITE || anc.typeEnum === STATE_TYPES.PARALLEL) && anc.descendants.indexOf(s2) > -1) {\n        commonAncestors.push(anc);\n      }\n    }\n\n    ;\n    if (!commonAncestors.length) throw new Error(\"Could not find LCA for states.\");\n    return commonAncestors[0];\n  } //main execution starts here\n  //FIXME: only wrap in root state if it's not a compound state\n\n\n  populateStateIdMap(rootState);\n  var fakeRootState = wrapInFakeRootState(rootState); //I wish we had pointer semantics and could make this a C-style \"out argument\". Instead we return him\n\n  traverse([], fakeRootState);\n  connectTransitionGraph();\n  connectIntialAttributes();\n  return fakeRootState;\n}\n\nfunction isEventPrefixMatch(prefix, fullName) {\n  prefix = prefix.replace(RX_TRAILING_WILDCARD, '');\n\n  if (prefix === fullName) {\n    return true;\n  }\n\n  if (prefix.length > fullName.length) {\n    return false;\n  }\n\n  if (fullName.charAt(prefix.length) !== '.') {\n    return false;\n  }\n\n  return fullName.indexOf(prefix) === 0;\n}\n\nfunction isTransitionMatch(t, eventName) {\n  return t.events.some(function (tEvent) {\n    return tEvent === '*' || isEventPrefixMatch(tEvent, eventName);\n  });\n}\n\nfunction scxmlPrefixTransitionSelector(t, event, evaluator, selectEventlessTransitions) {\n  return (selectEventlessTransitions ? !t.events : t.events && event && event.name && isTransitionMatch(t, event.name)) && (!t.cond || evaluator(t.cond));\n}\n\nfunction eventlessTransitionSelector(state) {\n  return state.transitions.filter(function (transition) {\n    return !transition.events || transition.events && transition.events.length === 0;\n  });\n} //priority comparison functions\n\n\nfunction getTransitionWithHigherSourceChildPriority(_args) {\n  var t1 = _args[0],\n      t2 = _args[1];\n  var r = getStateWithHigherSourceChildPriority(t1.source, t2.source); //compare transitions based first on depth, then based on document order\n\n  if (t1.source.depth < t2.source.depth) {\n    return t2;\n  } else if (t2.source.depth < t1.source.depth) {\n    return t1;\n  } else {\n    if (t1.documentOrder < t2.documentOrder) {\n      return t1;\n    } else {\n      return t2;\n    }\n  }\n}\n\nfunction sortInEntryOrder(s1, s2) {\n  return getStateWithHigherSourceChildPriority(s1, s2) * -1;\n}\n\nfunction getStateWithHigherSourceChildPriority(s1, s2) {\n  //compare states based first on depth, then based on document order\n  if (s1.depth > s2.depth) {\n    return -1;\n  } else if (s1.depth < s2.depth) {\n    return 1;\n  } else {\n    //Equality\n    if (s1.documentOrder < s2.documentOrder) {\n      return 1;\n    } else if (s1.documentOrder > s2.documentOrder) {\n      return -1;\n    } else {\n      return 0;\n    }\n  }\n}\n\nfunction initializeModelGeneratorFn(modelFn, opts, interpreter) {\n  return modelFn.call(interpreter, opts._x, opts._x._sessionid, opts._x._ioprocessors, interpreter.isIn.bind(interpreter));\n}\n\nfunction deserializeSerializedConfiguration(serializedConfiguration, idToStateMap) {\n  return serializedConfiguration.map(function (id) {\n    var state = idToStateMap.get(id);\n    if (!state) throw new Error('Error loading serialized configuration. Unable to locate state with id ' + id);\n    return state;\n  });\n}\n\nfunction deserializeHistory(serializedHistory, idToStateMap) {\n  var o = {};\n  Object.keys(serializedHistory).forEach(function (sid) {\n    o[sid] = serializedHistory[sid].map(function (id) {\n      var state = idToStateMap.get(id);\n      if (!state) throw new Error('Error loading serialized history. Unable to locate state with id ' + id);\n      return state;\n    });\n  });\n  return o;\n}\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/@scion-scxml/core-base/lib/helpers.js?");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var constants = __webpack_require__(/*! ./constants */ "./node_modules/@scion-scxml/core-base/lib/constants.js"),
+    STATE_TYPES = constants.STATE_TYPES,
+    RX_TRAILING_WILDCARD = constants.RX_TRAILING_WILDCARD;
+
+var printTrace = false;
+module.exports = {
+  extend: extend,
+  transitionWithTargets: transitionWithTargets,
+  transitionComparator: transitionComparator,
+  initializeModel: initializeModel,
+  isEventPrefixMatch: isEventPrefixMatch,
+  isTransitionMatch: isTransitionMatch,
+  scxmlPrefixTransitionSelector: scxmlPrefixTransitionSelector,
+  eventlessTransitionSelector: eventlessTransitionSelector,
+  getTransitionWithHigherSourceChildPriority: getTransitionWithHigherSourceChildPriority,
+  sortInEntryOrder: sortInEntryOrder,
+  getStateWithHigherSourceChildPriority: getStateWithHigherSourceChildPriority,
+  initializeModelGeneratorFn: initializeModelGeneratorFn,
+  deserializeSerializedConfiguration: deserializeSerializedConfiguration,
+  deserializeHistory: deserializeHistory
+};
+
+function extend(to, from) {
+  Object.keys(from).forEach(function (k) {
+    to[k] = from[k];
+  });
+  return to;
+}
+
+;
+
+function transitionWithTargets(t) {
+  return t.targets;
+}
+
+function transitionComparator(t1, t2) {
+  return t1.documentOrder - t2.documentOrder;
+}
+
+function initializeModel(rootState, opts) {
+  var transitions = [],
+      idToStateMap = new Map(),
+      documentOrder = 0; //TODO: need to add fake ids to anyone that doesn't have them
+  //FIXME: make this safer - break into multiple passes
+
+  var idCount = {};
+
+  function generateId(type) {
+    if (idCount[type] === undefined) idCount[type] = 0;
+
+    do {
+      var count = idCount[type]++;
+      var id = '$generated-' + type + '-' + count;
+    } while (idToStateMap.has(id));
+
+    return id;
+  }
+
+  function wrapInFakeRootState(state) {
+    return {
+      $deserializeDatamodel: state.$deserializeDatamodel || function () {},
+      $serializeDatamodel: state.$serializeDatamodel || function () {
+        return null;
+      },
+      $idToStateMap: idToStateMap,
+      //keep this for handy deserialization of serialized configuration
+      docUrl: state.docUrl,
+      name: state.name,
+      states: [{
+        $type: 'initial',
+        transitions: [{
+          target: state
+        }]
+      }, state]
+    };
+  }
+
+  var statesWithInitialAttributes = [];
+  /**
+    @this {SCTransition}
+  */
+
+  function transitionToString(sourceState) {
+    return "".concat(sourceState, " -- ").concat(this.events ? '(' + this.events.join(',') + ')' : null).concat(this.cond ? '[' + this.cond.name + ']' : '', " --> ").concat(this.targets ? this.targets.join(',') : null);
+  }
+  /**
+    @this {SCState}
+  */
+
+
+  function stateToString() {
+    return this.id;
+  }
+
+  function populateStateIdMap(state) {
+    //populate state id map
+    if (state.id) {
+      idToStateMap.set(state.id, state);
+    }
+
+    if (state.states) {
+      for (var j = 0, len = state.states.length; j < len; j++) {
+        populateStateIdMap(state.states[j]);
+      }
+    }
+  }
+
+  function traverse(ancestors, state) {
+    if (printTrace) state.toString = stateToString; //add to global transition and state id caches
+
+    if (state.transitions) transitions.push.apply(transitions, state.transitions); //create a default type, just to normalize things
+    //this way we can check for unsupported types below
+
+    state.$type = state.$type || 'state'; //add ancestors and depth properties
+
+    state.ancestors = ancestors;
+    state.depth = ancestors.length;
+    state.parent = ancestors[0];
+    state.documentOrder = documentOrder++; //add some information to transitions
+
+    state.transitions = state.transitions || [];
+
+    for (var j = 0, len = state.transitions.length; j < len; j++) {
+      var transition = state.transitions[j];
+      transition.documentOrder = documentOrder++;
+      transition.source = state;
+      if (printTrace) transition.toString = transitionToString.bind(transition, state);
+    }
+
+    ; //recursive step
+
+    if (state.states) {
+      var ancs = [state].concat(ancestors);
+
+      for (var j = 0, len = state.states.length; j < len; j++) {
+        traverse(ancs, state.states[j]);
+      }
+    } //setup fast state type
+
+
+    switch (state.$type) {
+      case 'parallel':
+        state.typeEnum = STATE_TYPES.PARALLEL;
+        state.isAtomic = false;
+        break;
+
+      case 'initial':
+        state.typeEnum = STATE_TYPES.INITIAL;
+        state.isAtomic = true;
+        break;
+
+      case 'history':
+        state.typeEnum = STATE_TYPES.HISTORY;
+        state.isAtomic = true;
+        break;
+
+      case 'final':
+        state.typeEnum = STATE_TYPES.FINAL;
+        state.isAtomic = true;
+        break;
+
+      case 'state':
+      case 'scxml':
+        if (state.states && state.states.length) {
+          state.typeEnum = STATE_TYPES.COMPOSITE;
+          state.isAtomic = false;
+        } else {
+          state.typeEnum = STATE_TYPES.BASIC;
+          state.isAtomic = true;
+        }
+
+        break;
+
+      default:
+        throw new Error('Unknown state type: ' + state.$type);
+    } //descendants property on states will now be populated. add descendants to this state
+
+
+    if (state.states) {
+      state.descendants = state.states.concat(state.states.map(function (s) {
+        return s.descendants;
+      }).reduce(function (a, b) {
+        return a.concat(b);
+      }, []));
+    } else {
+      state.descendants = [];
+    }
+
+    var initialChildren;
+
+    if (state.typeEnum === STATE_TYPES.COMPOSITE) {
+      //set up initial state
+      if (Array.isArray(state.initial) || typeof state.initial === 'string') {
+        statesWithInitialAttributes.push(state);
+      } else {
+        //take the first child that has initial type, or first child
+        initialChildren = state.states.filter(function (child) {
+          return child.$type === 'initial';
+        });
+        state.initialRef = [initialChildren.length ? initialChildren[0] : state.states[0]];
+        checkInitialRef(state);
+      }
+    } //hook up history
+
+
+    if (state.typeEnum === STATE_TYPES.COMPOSITE || state.typeEnum === STATE_TYPES.PARALLEL) {
+      var historyChildren = state.states.filter(function (s) {
+        return s.$type === 'history';
+      });
+      state.historyRef = historyChildren;
+    } //now it's safe to fill in fake state ids
+
+
+    if (!state.id) {
+      state.id = generateId(state.$type);
+      idToStateMap.set(state.id, state);
+    } //normalize onEntry/onExit, which can be single fn or array, or array of arrays (blocks)
+
+
+    ['onEntry', 'onExit'].forEach(function (prop) {
+      if (state[prop]) {
+        if (!Array.isArray(state[prop])) {
+          state[prop] = [state[prop]];
+        }
+
+        if (!state[prop].every(function (handler) {
+          return Array.isArray(handler);
+        })) {
+          state[prop] = [state[prop]];
+        }
+      }
+    });
+
+    if (state.invokes && !Array.isArray(state.invokes)) {
+      state.invokes = [state.invokes];
+      state.invokes.forEach(function (invoke) {
+        if (invoke.finalize && !Array.isArray(invoke.finalize)) {
+          invoke.finalize = [invoke.finalize];
+        }
+      });
+    }
+  } //TODO: convert events to regular expressions in advance
+
+
+  function checkInitialRef(state) {
+    if (!state.initialRef) throw new Error('Unable to locate initial state for composite state: ' + state.id);
+  }
+
+  function connectIntialAttributes() {
+    for (var j = 0, len = statesWithInitialAttributes.length; j < len; j++) {
+      var s = statesWithInitialAttributes[j];
+      var initialStates = Array.isArray(s.initial) ? s.initial : [s.initial];
+      s.initialRef = initialStates.map(function (initialState) {
+        return idToStateMap.get(initialState);
+      });
+      checkInitialRef(s);
+    }
+  }
+
+  var RX_WHITESPACE = /\s+/;
+
+  function connectTransitionGraph() {
+    //normalize as with onEntry/onExit
+    for (var i = 0, len = transitions.length; i < len; i++) {
+      var t = transitions[i];
+
+      if (t.onTransition && !Array.isArray(t.onTransition)) {
+        t.onTransition = [t.onTransition];
+      } //normalize "event" attribute into "events" attribute
+
+
+      if (typeof t.event === 'string') {
+        t.events = t.event.trim().split(RX_WHITESPACE);
+      }
+
+      delete t.event;
+
+      if (t.targets || typeof t.target === 'undefined') {
+        //targets have already been set up
+        continue;
+      }
+
+      if (typeof t.target === 'string') {
+        var target = idToStateMap.get(t.target);
+        if (!target) throw new Error('Unable to find target state with id ' + t.target);
+        t.target = target;
+        t.targets = [t.target];
+      } else if (Array.isArray(t.target)) {
+        t.targets = t.target.map(function (target) {
+          if (typeof target === 'string') {
+            target = idToStateMap.get(target);
+            if (!target) throw new Error('Unable to find target state with id ' + t.target);
+            return target;
+          } else {
+            return target;
+          }
+        });
+      } else if (_typeof(t.target) === 'object') {
+        t.targets = [t.target];
+      } else {
+        throw new Error('Transition target has unknown type: ' + t.target);
+      }
+    } //hook up LCA - optimization
+
+
+    for (var i = 0, len = transitions.length; i < len; i++) {
+      var t = transitions[i];
+      if (t.targets) t.lcca = getLCCA(t.source, t.targets[0]); //FIXME: we technically do not need to hang onto the lcca. only the scope is used by the algorithm
+
+      t.scope = getScope(t);
+    }
+  }
+
+  function getScope(transition) {
+    //Transition scope is normally the least common compound ancestor (lcca).
+    //Internal transitions have a scope equal to the source state.
+    var transitionIsReallyInternal = transition.type === 'internal' && transition.source.typeEnum === STATE_TYPES.COMPOSITE && //is transition source a composite state
+    transition.source.parent && //root state won't have parent
+    transition.targets && //does it target its descendants
+    transition.targets.every(function (target) {
+      return transition.source.descendants.indexOf(target) > -1;
+    });
+
+    if (!transition.targets) {
+      return null;
+    } else if (transitionIsReallyInternal) {
+      return transition.source;
+    } else {
+      return transition.lcca;
+    }
+  }
+
+  function getLCCA(s1, s2) {
+    var commonAncestors = [];
+
+    for (var j = 0, len = s1.ancestors.length; j < len; j++) {
+      var anc = s1.ancestors[j];
+
+      if ((opts && opts.legacySemantics ? anc.typeEnum === STATE_TYPES.COMPOSITE : anc.typeEnum === STATE_TYPES.COMPOSITE || anc.typeEnum === STATE_TYPES.PARALLEL) && anc.descendants.indexOf(s2) > -1) {
+        commonAncestors.push(anc);
+      }
+    }
+
+    ;
+    if (!commonAncestors.length) throw new Error("Could not find LCA for states.");
+    return commonAncestors[0];
+  } //main execution starts here
+  //FIXME: only wrap in root state if it's not a compound state
+
+
+  populateStateIdMap(rootState);
+  var fakeRootState = wrapInFakeRootState(rootState); //I wish we had pointer semantics and could make this a C-style "out argument". Instead we return him
+
+  traverse([], fakeRootState);
+  connectTransitionGraph();
+  connectIntialAttributes();
+  return fakeRootState;
+}
+
+function isEventPrefixMatch(prefix, fullName) {
+  prefix = prefix.replace(RX_TRAILING_WILDCARD, '');
+
+  if (prefix === fullName) {
+    return true;
+  }
+
+  if (prefix.length > fullName.length) {
+    return false;
+  }
+
+  if (fullName.charAt(prefix.length) !== '.') {
+    return false;
+  }
+
+  return fullName.indexOf(prefix) === 0;
+}
+
+function isTransitionMatch(t, eventName) {
+  return t.events.some(function (tEvent) {
+    return tEvent === '*' || isEventPrefixMatch(tEvent, eventName);
+  });
+}
+
+function scxmlPrefixTransitionSelector(t, event, evaluator, selectEventlessTransitions) {
+  return (selectEventlessTransitions ? !t.events : t.events && event && event.name && isTransitionMatch(t, event.name)) && (!t.cond || evaluator(t.cond));
+}
+
+function eventlessTransitionSelector(state) {
+  return state.transitions.filter(function (transition) {
+    return !transition.events || transition.events && transition.events.length === 0;
+  });
+} //priority comparison functions
+
+
+function getTransitionWithHigherSourceChildPriority(_args) {
+  var t1 = _args[0],
+      t2 = _args[1];
+  var r = getStateWithHigherSourceChildPriority(t1.source, t2.source); //compare transitions based first on depth, then based on document order
+
+  if (t1.source.depth < t2.source.depth) {
+    return t2;
+  } else if (t2.source.depth < t1.source.depth) {
+    return t1;
+  } else {
+    if (t1.documentOrder < t2.documentOrder) {
+      return t1;
+    } else {
+      return t2;
+    }
+  }
+}
+
+function sortInEntryOrder(s1, s2) {
+  return getStateWithHigherSourceChildPriority(s1, s2) * -1;
+}
+
+function getStateWithHigherSourceChildPriority(s1, s2) {
+  //compare states based first on depth, then based on document order
+  if (s1.depth > s2.depth) {
+    return -1;
+  } else if (s1.depth < s2.depth) {
+    return 1;
+  } else {
+    //Equality
+    if (s1.documentOrder < s2.documentOrder) {
+      return 1;
+    } else if (s1.documentOrder > s2.documentOrder) {
+      return -1;
+    } else {
+      return 0;
+    }
+  }
+}
+
+function initializeModelGeneratorFn(modelFn, opts, interpreter) {
+  return modelFn.call(interpreter, opts._x, opts._x._sessionid, opts._x._ioprocessors, interpreter.isIn.bind(interpreter));
+}
+
+function deserializeSerializedConfiguration(serializedConfiguration, idToStateMap) {
+  return serializedConfiguration.map(function (id) {
+    var state = idToStateMap.get(id);
+    if (!state) throw new Error('Error loading serialized configuration. Unable to locate state with id ' + id);
+    return state;
+  });
+}
+
+function deserializeHistory(serializedHistory, idToStateMap) {
+  var o = {};
+  Object.keys(serializedHistory).forEach(function (sid) {
+    o[sid] = serializedHistory[sid].map(function (id) {
+      var state = idToStateMap.get(id);
+      if (!state) throw new Error('Error loading serialized history. Unable to locate state with id ' + id);
+      return state;
+    });
+  });
+  return o;
+}
 
 /***/ }),
 
@@ -136,7 +740,47 @@ eval("function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbo
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var constants = __webpack_require__(/*! ./constants */ \"./node_modules/@scion-scxml/core-base/lib/constants.js\"); //model accessor functions\n\n\nvar query = {\n  isDescendant: function isDescendant(s1, s2) {\n    //Returns 'true' if state1 is a descendant of state2 (a child, or a child of a child, or a child of a child of a child, etc.) Otherwise returns 'false'.\n    return s2.descendants.indexOf(s1) > -1;\n  },\n  getAncestors: function getAncestors(s, root) {\n    var ancestors, index, state;\n    index = s.ancestors.indexOf(root);\n\n    if (index > -1) {\n      return s.ancestors.slice(0, index);\n    } else {\n      return s.ancestors;\n    }\n  },\n  isOrthogonalTo: function isOrthogonalTo(s1, s2) {\n    //Two control states are orthogonal if they are not ancestrally\n    //related, and their smallest, mutual parent is a Concurrent-state.\n    return !this.isAncestrallyRelatedTo(s1, s2) && this.getLCA(s1, s2).typeEnum === constants.STATE_TYPES.PARALLEL;\n  },\n  isAncestrallyRelatedTo: function isAncestrallyRelatedTo(s1, s2) {\n    //Two control states are ancestrally related if one is child/grandchild of another.\n    return this.getAncestorsOrSelf(s2).indexOf(s1) > -1 || this.getAncestorsOrSelf(s1).indexOf(s2) > -1;\n  },\n  getAncestorsOrSelf: function getAncestorsOrSelf(s, root) {\n    return [s].concat(query.getAncestors(s, root));\n  },\n  getDescendantsOrSelf: function getDescendantsOrSelf(s) {\n    return [s].concat(s.descendants);\n  },\n  getLCA: function getLCA(s1, s2) {\n    var commonAncestors = this.getAncestors(s1).filter(function (a) {\n      return a.descendants.indexOf(s2) > -1;\n    }, this);\n    return commonAncestors[0];\n  }\n};\nmodule.exports = query;\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/@scion-scxml/core-base/lib/query.js?");
+var constants = __webpack_require__(/*! ./constants */ "./node_modules/@scion-scxml/core-base/lib/constants.js"); //model accessor functions
+
+
+var query = {
+  isDescendant: function isDescendant(s1, s2) {
+    //Returns 'true' if state1 is a descendant of state2 (a child, or a child of a child, or a child of a child of a child, etc.) Otherwise returns 'false'.
+    return s2.descendants.indexOf(s1) > -1;
+  },
+  getAncestors: function getAncestors(s, root) {
+    var ancestors, index, state;
+    index = s.ancestors.indexOf(root);
+
+    if (index > -1) {
+      return s.ancestors.slice(0, index);
+    } else {
+      return s.ancestors;
+    }
+  },
+  isOrthogonalTo: function isOrthogonalTo(s1, s2) {
+    //Two control states are orthogonal if they are not ancestrally
+    //related, and their smallest, mutual parent is a Concurrent-state.
+    return !this.isAncestrallyRelatedTo(s1, s2) && this.getLCA(s1, s2).typeEnum === constants.STATE_TYPES.PARALLEL;
+  },
+  isAncestrallyRelatedTo: function isAncestrallyRelatedTo(s1, s2) {
+    //Two control states are ancestrally related if one is child/grandchild of another.
+    return this.getAncestorsOrSelf(s2).indexOf(s1) > -1 || this.getAncestorsOrSelf(s1).indexOf(s2) > -1;
+  },
+  getAncestorsOrSelf: function getAncestorsOrSelf(s, root) {
+    return [s].concat(query.getAncestors(s, root));
+  },
+  getDescendantsOrSelf: function getDescendantsOrSelf(s) {
+    return [s].concat(s.descendants);
+  },
+  getLCA: function getLCA(s1, s2) {
+    var commonAncestors = this.getAncestors(s1).filter(function (a) {
+      return a.descendants.indexOf(s2) > -1;
+    }, this);
+    return commonAncestors[0];
+  }
+};
+module.exports = query;
 
 /***/ }),
 
@@ -148,7 +792,2092 @@ eval("var constants = __webpack_require__(/*! ./constants */ \"./node_modules/@s
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("/* WEBPACK VAR INJECTION */(function(process, setImmediate) {//   Copyright 2012-2012 Jacob Beard, INFICON, and other SCION contributors\n//\n//   Licensed under the Apache License, Version 2.0 (the \"License\");\n//   you may not use this file except in compliance with the License.\n//   You may obtain a copy of the License at\n//\n//       http://www.apache.org/licenses/LICENSE-2.0\n//\n//   Unless required by applicable law or agreed to in writing, software\n//   distributed under the License is distributed on an \"AS IS\" BASIS,\n//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n//   See the License for the specific language governing permissions and\n//   limitations under the License.\n\n/**\n * SCION-CORE global object\n * @namespace scion\n */\n\n/**\n * An Array of strings representing the ids all of the basic states the\n * interpreter is in after a big-step completes.\n * @typedef {Array<string>} Configuration\n */\n\n/**\n * A set of basic and composite state ids.\n * @typedef {Array<string>} FullConfiguration\n */\n\n/**\n * A set of basic and composite state ids.\n * @typedef {Array<string>} FullConfiguration\n */\n\n\nfunction _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }\n\nfunction _nonIterableSpread() { throw new TypeError(\"Invalid attempt to spread non-iterable instance\"); }\n\nfunction _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === \"[object Arguments]\") return Array.from(iter); }\n\nfunction _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }\n\nfunction _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }\n\nfunction _nonIterableRest() { throw new TypeError(\"Invalid attempt to destructure non-iterable instance\"); }\n\nfunction _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i[\"return\"] != null) _i[\"return\"](); } finally { if (_d) throw _e; } } return _arr; }\n\nfunction _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }\n\nfunction _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nvar EventEmitter = __webpack_require__(/*! tiny-events */ \"./node_modules/tiny-events/lib/index.js\").EventEmitter,\n    util = __webpack_require__(/*! util */ \"./node_modules/util/util.js\"),\n    ArraySet = __webpack_require__(/*! ./ArraySet */ \"./node_modules/@scion-scxml/core-base/lib/ArraySet.js\"),\n    constants = __webpack_require__(/*! ./constants */ \"./node_modules/@scion-scxml/core-base/lib/constants.js\"),\n    helpers = __webpack_require__(/*! ./helpers */ \"./node_modules/@scion-scxml/core-base/lib/helpers.js\"),\n    query = __webpack_require__(/*! ./query */ \"./node_modules/@scion-scxml/core-base/lib/query.js\"),\n    extend = helpers.extend,\n    transitionWithTargets = helpers.transitionWithTargets,\n    transitionComparator = helpers.transitionComparator,\n    initializeModel = helpers.initializeModel,\n    isEventPrefixMatch = helpers.isEventPrefixMatch,\n    isTransitionMatch = helpers.isTransitionMatch,\n    scxmlPrefixTransitionSelector = helpers.scxmlPrefixTransitionSelector,\n    eventlessTransitionSelector = helpers.eventlessTransitionSelector,\n    getTransitionWithHigherSourceChildPriority = helpers.getTransitionWithHigherSourceChildPriority,\n    sortInEntryOrder = helpers.sortInEntryOrder,\n    getStateWithHigherSourceChildPriority = helpers.getStateWithHigherSourceChildPriority,\n    initializeModelGeneratorFn = helpers.initializeModelGeneratorFn,\n    deserializeSerializedConfiguration = helpers.deserializeSerializedConfiguration,\n    deserializeHistory = helpers.deserializeHistory,\n    BASIC = constants.STATE_TYPES.BASIC,\n    COMPOSITE = constants.STATE_TYPES.COMPOSITE,\n    PARALLEL = constants.STATE_TYPES.PARALLEL,\n    HISTORY = constants.STATE_TYPES.HISTORY,\n    INITIAL = constants.STATE_TYPES.INITIAL,\n    FINAL = constants.STATE_TYPES.FINAL,\n    SCXML_IOPROCESSOR_TYPE = constants.SCXML_IOPROCESSOR_TYPE;\n\nvar printTrace = typeof process !== 'undefined' && !!process.env.DEBUG;\n/**\n * @interface EventEmitter\n */\n\n/**\n* @event scion.BaseInterpreter#onError\n* @property {string} tagname The name of the element that produced the error. \n* @property {number} line The line in the source file in which the error occurred.\n* @property {number} column The column in the source file in which the error occurred.\n* @property {string} reason An informative error message. The text is platform-specific and subject to change.\n*/\n\n/**\n * @function\n * @name EventEmitter.prototype#on\n * @param {string} type\n * @param {callback} listener\n */\n\n/**\n * @function\n * @name EventEmitter.prototype#once\n * @param {string} type\n * @param {callback} listener\n */\n\n/**\n * @function\n * @name EventEmitter.prototype#off\n * @param {string} type\n * @param {callback} listener\n */\n\n/**\n * @function\n * @name EventEmitter.prototype#emit\n * @param {string} type\n * @param {any} args\n */\n\n/** \n * @description The SCXML constructor creates an interpreter instance from a model object.\n * @abstract\n * @class BaseInterpreter\n * @memberof scion\n * @extends EventEmitter\n * @param {SCJSON | scxml.ModelFactory} modelOrModelFactory Either an SCJSON root state; or an scxml.ModelFactory, which is a function which returns an SCJSON object. \n * @param opts\n * @param {string} [opts.sessionid] Used to populate SCXML _sessionid.\n * @param {function} [opts.generateSessionid] Factory used to generate sessionid if sessionid keyword is not specified\n * @param {Map<string, BaseInterpreter>} [opts.sessionRegistry] Map used to map sessionid strings to Statechart instances.\n * @param [opts.Set] Class to use as an ArraySet. Defaults to ES6 Set.\n * @param {object} [opts.params]  Used to pass params from invoke. Sets the datamodel when interpreter is instantiated.\n * @param {Snapshot} [opts.snapshot] State machine snapshot. Used to restore a serialized state machine.\n * @param {Statechart} [opts.parentSession]  Used to pass parent session during invoke.\n * @param {string }[opts.invokeid]  Support for id of invoke element at runtime.\n * @param {boolean} [opts.legacySemantics]\n * @param [opts.console]\n * @param [opts.transitionSelector]\n * @param [opts.customCancel]\n * @param [opts.customSend]\n * @param [opts.sendAsync]\n * @param [opts.doSend]\n * @param [opts.invokers]\n * @param [opts.xmlParser]\n * @param [opts.interpreterScriptingContext]\n * @param [opts.invokerExecutionContext]\n */\n\nvar BaseInterpreter =\n/*#__PURE__*/\nfunction (_EventEmitter) {\n  _inherits(BaseInterpreter, _EventEmitter);\n\n  function BaseInterpreter(modelOrModelFactory, opts) {\n    var _this;\n\n    _classCallCheck(this, BaseInterpreter);\n\n    _this = _possibleConstructorReturn(this, _getPrototypeOf(BaseInterpreter).call(this));\n    _this.opts = opts;\n    _this.opts.InterpreterScriptingContext = _this.opts.InterpreterScriptingContext || InterpreterScriptingContext;\n    _this._isStepping = false;\n    _this._scriptingContext = _this.opts.interpreterScriptingContext || (_this.opts.InterpreterScriptingContext ? new _this.opts.InterpreterScriptingContext(_assertThisInitialized(_this)) : {});\n    _this.opts.generateSessionid = _this.opts.generateSessionid || BaseInterpreter.generateSessionid;\n    _this.opts.sessionid = _this.opts.sessionid || _this.opts.generateSessionid();\n    _this.opts.sessionRegistry = _this.opts.sessionRegistry || BaseInterpreter.sessionRegistry; //TODO: define a better interface. For now, assume a Map<sessionid, session>\n\n    _this.opts.invokerExecutionContext = opts.invokerExecutionContext || modelOrModelFactory._executionContext;\n    var _ioprocessors = {};\n    _ioprocessors[SCXML_IOPROCESSOR_TYPE] = {\n      location: \"#_scxml_\".concat(_this.opts.sessionid)\n    };\n    _ioprocessors.scxml = _ioprocessors[SCXML_IOPROCESSOR_TYPE]; //alias\n    //SCXML system variables:\n\n    _this.opts._x = {\n      _sessionid: _this.opts.sessionid,\n      _ioprocessors: _ioprocessors\n    };\n    var model;\n\n    if (typeof modelOrModelFactory === 'function') {\n      model = initializeModelGeneratorFn(modelOrModelFactory, _this.opts, _assertThisInitialized(_this));\n    } else if (_typeof(modelOrModelFactory) === 'object') {\n      model = JSON.parse(JSON.stringify(modelOrModelFactory)); //assume object\n    } else {\n      throw new Error('Unexpected model type. Expected model factory function, or scjson object.');\n    }\n\n    _this._model = initializeModel(model, _this.opts);\n    _this.opts.console = _this.opts.console || (typeof console === 'undefined' ? {\n      log: function log() {}\n    } : console); //rely on global console if this console is undefined\n\n    _this.opts.Set = _this.opts.Set || ArraySet;\n    _this.opts.priorityComparisonFn = _this.opts.priorityComparisonFn || getTransitionWithHigherSourceChildPriority;\n    _this.opts.transitionSelector = _this.opts.transitionSelector || scxmlPrefixTransitionSelector;\n\n    _this.opts.sessionRegistry.set(String(_this.opts.sessionid), _assertThisInitialized(_this));\n\n    _this._scriptingContext.log = _this._scriptingContext.log || function log() {\n      if (this.opts.console.log.apply) {\n        this.opts.console.log.apply(this.opts.console, arguments);\n      } else {\n        //console.log on older IE does not support Function.apply, so just pass him the first argument. Best we can do for now.\n        this.opts.console.log(Array.prototype.slice.apply(arguments).join(','));\n      }\n    }.bind(_assertThisInitialized(_this)); //set up default scripting context log function\n\n\n    _this._externalEventQueue = [];\n    _this._internalEventQueue = [];\n\n    if (_this.opts.params) {\n      _this._model.$deserializeDatamodel(_this.opts.params); //load up the datamodel\n\n    } //check if we're loading from a previous snapshot\n\n\n    if (_this.opts.snapshot) {\n      _this._configuration = new _this.opts.Set(deserializeSerializedConfiguration(_this.opts.snapshot[0], _this._model.$idToStateMap));\n      _this._historyValue = deserializeHistory(_this.opts.snapshot[1], _this._model.$idToStateMap);\n      _this._isInFinalState = _this.opts.snapshot[2];\n\n      _this._model.$deserializeDatamodel(_this.opts.snapshot[3]); //load up the datamodel\n\n\n      _this._internalEventQueue = _this.opts.snapshot[4];\n    } else {\n      _this._configuration = new _this.opts.Set();\n      _this._historyValue = {};\n      _this._isInFinalState = false;\n    } //add debug logging\n\n\n    BaseInterpreter.EVENTS.forEach(function (event) {\n      this.on(event, this._log.bind(this, event));\n    }, _assertThisInitialized(_this));\n    module.exports.emit('new', _assertThisInitialized(_this));\n    return _this;\n  }\n  /** \n  * Cancels the session. This clears all timers; puts the interpreter in a\n  * final state; and runs all exit actions on current states.\n  * @memberof BaseInterpreter.prototype\n  */\n\n\n  _createClass(BaseInterpreter, [{\n    key: \"cancel\",\n    value: function cancel() {\n      delete this.opts.parentSession;\n      if (this._isInFinalState) return;\n      this._isInFinalState = true;\n\n      this._log(\"session cancelled \".concat(this.opts.invokeid));\n\n      this._exitInterpreter(null);\n    }\n  }, {\n    key: \"_exitInterpreter\",\n    value: function _exitInterpreter(event) {\n      var _this2 = this;\n\n      //TODO: cancel invoked sessions\n      //cancel all delayed sends when we enter into a final state.\n      this._cancelAllDelayedSends();\n\n      var statesToExit = this._getFullConfiguration().sort(getStateWithHigherSourceChildPriority);\n\n      for (var j = 0, len = statesToExit.length; j < len; j++) {\n        var stateExited = statesToExit[j];\n\n        if (stateExited.onExit !== undefined) {\n          for (var exitIdx = 0, exitLen = stateExited.onExit.length; exitIdx < exitLen; exitIdx++) {\n            var block = stateExited.onExit[exitIdx];\n\n            for (var blockIdx = 0, blockLen = block.length; blockIdx < blockLen; blockIdx++) {\n              var actionRef = block[blockIdx];\n\n              try {\n                actionRef.call(this._scriptingContext, null);\n              } catch (e) {\n                this._handleError(e, actionRef);\n\n                break;\n              }\n            }\n          }\n        } //cancel invoked session\n\n\n        if (stateExited.invokes) stateExited.invokes.forEach(function (invoke) {\n          _this2._scriptingContext.cancelInvoke(invoke.id);\n        }); //if he is a top-level <final> state, then return the done event\n\n        if (stateExited.$type === 'final' && stateExited.parent.$type === 'scxml') {\n          if (this.opts.parentSession) {\n            this._scriptingContext.send({\n              target: '#_parent',\n              name: 'done.invoke.' + this.opts.invokeid,\n              data: stateExited.donedata && stateExited.donedata.call(this._scriptingContext, event)\n            });\n          }\n\n          this.opts.sessionRegistry.delete(this.opts.sessionid);\n          this.emit('onExitInterpreter', event);\n        }\n      }\n    }\n    /** \n     * Starts the interpreter. Should only be called once, and should be called\n     * before BaseInterpreter.prototype#gen is called for the first time.  Returns a\n     * Configuration.\n     * @return {Configuration}\n     * @memberof BaseInterpreter.prototype\n     * @emits scion.BaseInterpreter#onEntry\n     * @emits scion.BaseInterpreter#onExit\n     * @emits scion.BaseInterpreter#onTransition\n     * @emits scion.BaseInterpreter#onDefaultEntry\n     * @emits scion.BaseInterpreter#onError\n     * @emits scion.BaseInterpreter#onBigStepBegin\n     * @emits scion.BaseInterpreter#onBigStepEnd\n     * @emits scion.BaseInterpreter#onBigStepSuspend\n     * @emits scion.BaseInterpreter#onBigStepResume\n     * @emits scion.BaseInterpreter#onSmallStepBegin\n     * @emits scion.BaseInterpreter#onSmallStepEnd\n     * @emits scion.BaseInterpreter#onBigStepEnd\n     * @emits scion.BaseInterpreter#onExitInterpreter\n     */\n\n  }, {\n    key: \"start\",\n    value: function start() {\n      this._initStart();\n\n      this._performBigStep();\n\n      return this.getConfiguration();\n    }\n    /**\n     * This callback is displayed as a global member.\n     * @callback genCallback\n     * @param {Error} err\n     * @param {Configuration} configuration\n     */\n\n    /**\n     * Starts the interpreter asynchronously\n     * @param  {genCallback} cb Callback invoked with an error or the interpreter's stable configuration\n     * @memberof BaseInterpreter.prototype \n     * @emits scion.BaseInterpreter#onEntry\n     * @emits scion.BaseInterpreter#onExit\n     * @emits scion.BaseInterpreter#onTransition\n     * @emits scion.BaseInterpreter#onDefaultEntry\n     * @emits scion.BaseInterpreter#onError\n     * @emits scion.BaseInterpreter#onBigStepBegin\n     * @emits scion.BaseInterpreter#onBigStepEnd\n     * @emits scion.BaseInterpreter#onBigStepSuspend\n     * @emits scion.BaseInterpreter#onBigStepResume\n     * @emits scion.BaseInterpreter#onSmallStepBegin\n     * @emits scion.BaseInterpreter#onSmallStepEnd\n     * @emits scion.BaseInterpreter#onBigStepEnd\n     * @emits scion.BaseInterpreter#onExitInterpreter\n     */\n\n  }, {\n    key: \"startAsync\",\n    value: function startAsync(cb) {\n      cb = this._initStart(cb);\n      this.genAsync(null, cb);\n    }\n  }, {\n    key: \"_initStart\",\n    value: function _initStart(cb) {\n      var _this3 = this;\n\n      if (typeof cb !== 'function') {\n        cb = nop;\n      }\n\n      this._log(\"performing initial big step\"); //We effectively need to figure out states to enter here to populate initial config. assuming root is compound state makes this simple.\n      //but if we want it to be parallel, then this becomes more complex. so when initializing the model, we add a 'fake' root state, which\n      //makes the following operation safe.\n\n\n      this._model.initialRef.forEach(function (s) {\n        return _this3._configuration.add(s);\n      });\n\n      return cb;\n    }\n    /** \n    * Returns state machine {@link Configuration}.\n    * @return {Configuration}\n    * @memberof BaseInterpreter.prototype \n    */\n\n  }, {\n    key: \"getConfiguration\",\n    value: function getConfiguration() {\n      return this._configuration.iter().map(function (s) {\n        return s.id;\n      });\n    }\n  }, {\n    key: \"_getFullConfiguration\",\n    value: function _getFullConfiguration() {\n      return this._configuration.iter().map(function (s) {\n        return [s].concat(query.getAncestors(s));\n      }, this).reduce(function (a, b) {\n        return a.concat(b);\n      }, []). //flatten\n      reduce(function (a, b) {\n        return a.indexOf(b) > -1 ? a : a.concat(b);\n      }, []); //uniq\n    }\n    /** \n    * @return {FullConfiguration}\n    * @memberof BaseInterpreter.prototype \n    */\n\n  }, {\n    key: \"getFullConfiguration\",\n    value: function getFullConfiguration() {\n      return this._getFullConfiguration().map(function (s) {\n        return s.id;\n      });\n    }\n    /** \n    * @return {boolean}\n    * @memberof BaseInterpreter.prototype \n    * @param {string} stateName\n    */\n\n  }, {\n    key: \"isIn\",\n    value: function isIn(stateName) {\n      return this.getFullConfiguration().indexOf(stateName) > -1;\n    }\n    /** \n    * Is the state machine in a final state?\n    * @return {boolean}\n    * @memberof BaseInterpreter.prototype \n    */\n\n  }, {\n    key: \"isFinal\",\n    value: function isFinal() {\n      return this._isInFinalState;\n    }\n    /** @private */\n\n  }, {\n    key: \"_performBigStep\",\n    value: function _performBigStep(e) {\n      var currentEvent, keepGoing, allStatesExited, allStatesEntered;\n\n      var _this$_startBigStep = this._startBigStep(e);\n\n      var _this$_startBigStep2 = _slicedToArray(_this$_startBigStep, 4);\n\n      allStatesExited = _this$_startBigStep2[0];\n      allStatesEntered = _this$_startBigStep2[1];\n      keepGoing = _this$_startBigStep2[2];\n      currentEvent = _this$_startBigStep2[3];\n\n      while (keepGoing) {\n        var _this$_selectTransiti = this._selectTransitionsAndPerformSmallStep(currentEvent, allStatesEntered, allStatesExited);\n\n        var _this$_selectTransiti2 = _slicedToArray(_this$_selectTransiti, 2);\n\n        currentEvent = _this$_selectTransiti2[0];\n        keepGoing = _this$_selectTransiti2[1];\n      }\n\n      this._finishBigStep(currentEvent, allStatesEntered, allStatesExited);\n    }\n  }, {\n    key: \"_selectTransitionsAndPerformSmallStep\",\n    value: function _selectTransitionsAndPerformSmallStep(currentEvent, allStatesEntered, allStatesExited) {\n      //first select with null event\n      var selectedTransitions = this._selectTransitions(currentEvent, true);\n\n      if (selectedTransitions.isEmpty()) {\n        var ev = this._internalEventQueue.shift();\n\n        if (ev) {\n          currentEvent = ev;\n          selectedTransitions = this._selectTransitions(currentEvent, false);\n        }\n      }\n\n      if (!selectedTransitions.isEmpty()) {\n        this.emit('onSmallStepBegin', currentEvent);\n        var statesExited, statesEntered;\n\n        var _this$_performSmallSt = this._performSmallStep(currentEvent, selectedTransitions);\n\n        var _this$_performSmallSt2 = _slicedToArray(_this$_performSmallSt, 2);\n\n        statesExited = _this$_performSmallSt2[0];\n        statesEntered = _this$_performSmallSt2[1];\n        if (statesExited) statesExited.forEach(function (s) {\n          return allStatesExited.add(s);\n        });\n        if (statesEntered) statesEntered.forEach(function (s) {\n          return allStatesEntered.add(s);\n        });\n        this.emit('onSmallStepEnd', currentEvent);\n      }\n\n      var keepGoing = !selectedTransitions.isEmpty() || this._internalEventQueue.length;\n      return [currentEvent, keepGoing];\n    }\n  }, {\n    key: \"_startBigStep\",\n    value: function _startBigStep(e) {\n      var _this4 = this;\n\n      this.emit('onBigStepBegin', e); //do applyFinalize and autoforward\n\n      this._configuration.iter().forEach(function (state) {\n        if (state.invokes) state.invokes.forEach(function (invoke) {\n          if (invoke.autoforward) {\n            //autoforward\n            _this4._scriptingContext.send({\n              target: \"#_\".concat(invoke.id),\n              name: e.name,\n              data: e.data\n            });\n          }\n\n          if (invoke.id === e.invokeid) {\n            //applyFinalize\n            if (invoke.finalize) invoke.finalize.forEach(function (action) {\n              return _this4._evaluateAction(e, action);\n            });\n          }\n        });\n      });\n\n      if (e) this._internalEventQueue.push(e);\n      var allStatesExited = new Set(),\n          allStatesEntered = new Set();\n      var keepGoing = true;\n      var currentEvent = e;\n      return [allStatesEntered, allStatesExited, keepGoing, currentEvent];\n    }\n  }, {\n    key: \"_finishBigStep\",\n    value: function _finishBigStep(e, allStatesEntered, allStatesExited, cb) {\n      var _this5 = this;\n\n      var statesToInvoke = Array.from(new Set(_toConsumableArray(allStatesEntered).filter(function (s) {\n        return s.invokes && !allStatesExited.has(s);\n      }))).sort(sortInEntryOrder); // Here we invoke whatever needs to be invoked. The implementation of 'invoke' is platform-specific\n\n      statesToInvoke.forEach(function (s) {\n        s.invokes.forEach(function (f) {\n          return _this5._evaluateAction(e, f);\n        });\n      }); // cancel invoke for allStatesExited\n\n      allStatesExited.forEach(function (s) {\n        if (s.invokes) s.invokes.forEach(function (invoke) {\n          _this5._scriptingContext.cancelInvoke(invoke.id);\n        });\n      }); // TODO: Invoking may have raised internal error events and we iterate to handle them        \n      //if not internalQueue.isEmpty():\n      //    continue\n\n      this._isInFinalState = this._configuration.iter().every(function (s) {\n        return s.typeEnum === FINAL;\n      });\n\n      if (this._isInFinalState) {\n        this._exitInterpreter(e);\n      }\n\n      this.emit('onBigStepEnd', e);\n      if (cb) cb(undefined, this.getConfiguration());\n    }\n  }, {\n    key: \"_cancelAllDelayedSends\",\n    value: function _cancelAllDelayedSends() {\n      var _iteratorNormalCompletion = true;\n      var _didIteratorError = false;\n      var _iteratorError = undefined;\n\n      try {\n        for (var _iterator = this._scriptingContext._timeouts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {\n          var timeoutOptions = _step.value;\n          if (!timeoutOptions.sendOptions.delay) continue;\n\n          this._log('cancelling delayed send', timeoutOptions);\n\n          clearTimeout(timeoutOptions.timeoutHandle);\n\n          this._scriptingContext._timeouts.delete(timeoutOptions);\n        }\n      } catch (err) {\n        _didIteratorError = true;\n        _iteratorError = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion && _iterator.return != null) {\n            _iterator.return();\n          }\n        } finally {\n          if (_didIteratorError) {\n            throw _iteratorError;\n          }\n        }\n      }\n\n      Object.keys(this._scriptingContext._timeoutMap).forEach(function (key) {\n        delete this._scriptingContext._timeoutMap[key];\n      }, this);\n    }\n  }, {\n    key: \"_performBigStepAsync\",\n    value: function _performBigStepAsync(e, cb) {\n      var currentEvent, keepGoing, allStatesExited, allStatesEntered;\n\n      var _this$_startBigStep3 = this._startBigStep(e);\n\n      var _this$_startBigStep4 = _slicedToArray(_this$_startBigStep3, 4);\n\n      allStatesExited = _this$_startBigStep4[0];\n      allStatesEntered = _this$_startBigStep4[1];\n      keepGoing = _this$_startBigStep4[2];\n      currentEvent = _this$_startBigStep4[3];\n\n      function nextStep(emit) {\n        this.emit(emit);\n\n        var _this$_selectTransiti3 = this._selectTransitionsAndPerformSmallStep(currentEvent, allStatesEntered, allStatesExited);\n\n        var _this$_selectTransiti4 = _slicedToArray(_this$_selectTransiti3, 2);\n\n        currentEvent = _this$_selectTransiti4[0];\n        keepGoing = _this$_selectTransiti4[1];\n\n        if (keepGoing) {\n          this.emit('onBigStepSuspend');\n          setImmediate(nextStep.bind(this, 'onBigStepResume'));\n        } else {\n          this._finishBigStep(currentEvent, allStatesEntered, allStatesExited, cb);\n        }\n      }\n\n      nextStep.call(this, 'onBigStepBegin');\n    }\n    /** @private */\n\n  }, {\n    key: \"_performSmallStep\",\n    value: function _performSmallStep(currentEvent, selectedTransitions) {\n      this._log(\"selecting transitions with currentEvent\", currentEvent);\n\n      this._log(\"selected transitions\", selectedTransitions);\n\n      var statesExited, statesEntered;\n\n      if (!selectedTransitions.isEmpty()) {\n        //we only want to enter and exit states from transitions with targets\n        //filter out targetless transitions here - we will only use these to execute transition actions\n        var selectedTransitionsWithTargets = new this.opts.Set(selectedTransitions.iter().filter(transitionWithTargets));\n        statesExited = this._exitStates(currentEvent, selectedTransitionsWithTargets);\n\n        this._executeTransitions(currentEvent, selectedTransitions);\n\n        statesEntered = this._enterStates(currentEvent, selectedTransitionsWithTargets);\n\n        this._log(\"new configuration \", this._configuration);\n      }\n\n      return [statesExited, statesEntered];\n    }\n  }, {\n    key: \"_exitStates\",\n    value: function _exitStates(currentEvent, selectedTransitionsWithTargets) {\n      var basicStatesExited, statesExited;\n\n      var _this$_getStatesExite = this._getStatesExited(selectedTransitionsWithTargets);\n\n      var _this$_getStatesExite2 = _slicedToArray(_this$_getStatesExite, 2);\n\n      basicStatesExited = _this$_getStatesExite2[0];\n      statesExited = _this$_getStatesExite2[1];\n\n      this._log('exiting states');\n\n      for (var j = 0, len = statesExited.length; j < len; j++) {\n        var stateExited = statesExited[j];\n        if (stateExited.isAtomic) this._configuration.remove(stateExited);\n\n        this._log(\"exiting \", stateExited.id); //invoke listeners\n\n\n        this.emit('onExit', stateExited.id);\n\n        if (stateExited.onExit !== undefined) {\n          for (var exitIdx = 0, exitLen = stateExited.onExit.length; exitIdx < exitLen; exitIdx++) {\n            var block = stateExited.onExit[exitIdx];\n\n            for (var blockIdx = 0, blockLen = block.length; blockIdx < blockLen; blockIdx++) {\n              var actionRef = block[blockIdx];\n\n              try {\n                actionRef.call(this._scriptingContext, currentEvent);\n              } catch (e) {\n                this._handleError(e, actionRef);\n\n                break;\n              }\n            }\n          }\n        }\n\n        var f;\n\n        if (stateExited.historyRef) {\n          var _iteratorNormalCompletion2 = true;\n          var _didIteratorError2 = false;\n          var _iteratorError2 = undefined;\n\n          try {\n            for (var _iterator2 = stateExited.historyRef[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {\n              var historyRef = _step2.value;\n\n              if (historyRef.isDeep) {\n                f = function f(s0) {\n                  return s0.typeEnum === BASIC && stateExited.descendants.indexOf(s0) > -1;\n                };\n              } else {\n                f = function f(s0) {\n                  return s0.parent === stateExited;\n                };\n              } //update history\n\n\n              this._historyValue[historyRef.id] = statesExited.filter(f);\n            }\n          } catch (err) {\n            _didIteratorError2 = true;\n            _iteratorError2 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {\n                _iterator2.return();\n              }\n            } finally {\n              if (_didIteratorError2) {\n                throw _iteratorError2;\n              }\n            }\n          }\n        }\n      }\n\n      return statesExited;\n    }\n    /** @private */\n\n  }, {\n    key: \"_getStatesExited\",\n    value: function _getStatesExited(transitions) {\n      var statesExited = new this.opts.Set();\n      var basicStatesExited = new this.opts.Set(); //States exited are defined to be active states that are\n      //descendants of the scope of each priority-enabled transition.\n      //Here, we iterate through the transitions, and collect states\n      //that match this condition. \n\n      var transitionList = transitions.iter();\n\n      for (var txIdx = 0, txLen = transitionList.length; txIdx < txLen; txIdx++) {\n        var transition = transitionList[txIdx];\n        var scope = transition.scope,\n            desc = scope.descendants; //For each state in the configuration\n        //is that state a descendant of the transition scope?\n        //Store ancestors of that state up to but not including the scope.\n\n        var configList = this._configuration.iter();\n\n        for (var cfgIdx = 0, cfgLen = configList.length; cfgIdx < cfgLen; cfgIdx++) {\n          var state = configList[cfgIdx];\n\n          if (desc.indexOf(state) > -1) {\n            basicStatesExited.add(state);\n            statesExited.add(state);\n            var ancestors = query.getAncestors(state, scope);\n\n            for (var ancIdx = 0, ancLen = ancestors.length; ancIdx < ancLen; ancIdx++) {\n              statesExited.add(ancestors[ancIdx]);\n            }\n          }\n        }\n      }\n\n      var sortedStatesExited = statesExited.iter().sort(getStateWithHigherSourceChildPriority);\n      return [basicStatesExited, sortedStatesExited];\n    }\n  }, {\n    key: \"_executeTransitions\",\n    value: function _executeTransitions(currentEvent, selectedTransitions) {\n      var sortedTransitions = selectedTransitions.iter().sort(transitionComparator);\n\n      this._log(\"executing transitition actions\");\n\n      for (var stxIdx = 0, len = sortedTransitions.length; stxIdx < len; stxIdx++) {\n        var transition = sortedTransitions[stxIdx];\n        var targetIds = transition.targets && transition.targets.map(function (target) {\n          return target.id;\n        });\n        this.emit('onTransition', transition.source.id, targetIds, transition.source.transitions.indexOf(transition));\n\n        if (transition.onTransition !== undefined) {\n          for (var txIdx = 0, txLen = transition.onTransition.length; txIdx < txLen; txIdx++) {\n            var actionRef = transition.onTransition[txIdx];\n\n            try {\n              actionRef.call(this._scriptingContext, currentEvent);\n            } catch (e) {\n              this._handleError(e, actionRef);\n\n              break;\n            }\n          }\n        }\n      }\n    }\n  }, {\n    key: \"_enterStates\",\n    value: function _enterStates(currentEvent, selectedTransitionsWithTargets) {\n      var _this6 = this;\n\n      this._log(\"entering states\");\n\n      var statesEntered = new Set();\n      var statesForDefaultEntry = new Set(); // initialize the temporary table for default content in history states\n\n      var defaultHistoryContent = {};\n\n      this._computeEntrySet(selectedTransitionsWithTargets, statesEntered, statesForDefaultEntry, defaultHistoryContent);\n\n      statesEntered = Array.from(statesEntered).sort(sortInEntryOrder);\n\n      this._log(\"statesEntered \", statesEntered);\n\n      for (var enterIdx = 0, enterLen = statesEntered.length; enterIdx < enterLen; enterIdx++) {\n        var stateEntered = statesEntered[enterIdx];\n        if (stateEntered.isAtomic) this._configuration.add(stateEntered);\n\n        this._log(\"entering\", stateEntered.id);\n\n        this.emit('onEntry', stateEntered.id);\n\n        if (stateEntered.onEntry !== undefined) {\n          for (var entryIdx = 0, entryLen = stateEntered.onEntry.length; entryIdx < entryLen; entryIdx++) {\n            var block = stateEntered.onEntry[entryIdx];\n\n            for (var blockIdx = 0, blockLen = block.length; blockIdx < blockLen; blockIdx++) {\n              var actionRef = block[blockIdx];\n\n              try {\n                actionRef.call(this._scriptingContext, currentEvent);\n              } catch (e) {\n                this._handleError(e, actionRef);\n\n                break;\n              }\n            }\n          }\n        }\n\n        if (statesForDefaultEntry.has(stateEntered)) {\n          var _iteratorNormalCompletion3 = true;\n          var _didIteratorError3 = false;\n          var _iteratorError3 = undefined;\n\n          try {\n            for (var _iterator3 = stateEntered.initialRef[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {\n              var initialState = _step3.value;\n              this.emit('onDefaultEntry', initialState.id);\n\n              if (initialState.typeEnum === INITIAL) {\n                var transition = initialState.transitions[0];\n\n                if (transition.onTransition !== undefined) {\n                  this._log('executing initial transition content for initial state of parent state', stateEntered.id);\n\n                  for (var txIdx = 0, txLen = transition.onTransition.length; txIdx < txLen; txIdx++) {\n                    var _actionRef = transition.onTransition[txIdx];\n\n                    try {\n                      _actionRef.call(this._scriptingContext, currentEvent);\n                    } catch (e) {\n                      this._handleError(e, _actionRef);\n\n                      break;\n                    }\n                  }\n                }\n              }\n            }\n          } catch (err) {\n            _didIteratorError3 = true;\n            _iteratorError3 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {\n                _iterator3.return();\n              }\n            } finally {\n              if (_didIteratorError3) {\n                throw _iteratorError3;\n              }\n            }\n          }\n        }\n\n        if (defaultHistoryContent[stateEntered.id]) {\n          var _transition = defaultHistoryContent[stateEntered.id];\n\n          if (_transition.onTransition !== undefined) {\n            this._log('executing history transition content for history state of parent state', stateEntered.id);\n\n            for (var txIdx = 0, txLen = _transition.onTransition.length; txIdx < txLen; txIdx++) {\n              var _actionRef2 = _transition.onTransition[txIdx];\n\n              try {\n                _actionRef2.call(this._scriptingContext, currentEvent);\n              } catch (e) {\n                this._handleError(e, _actionRef2);\n\n                break;\n              }\n            }\n          }\n        }\n      }\n\n      for (var enterIdx = 0, enterLen = statesEntered.length; enterIdx < enterLen; enterIdx++) {\n        var stateEntered = statesEntered[enterIdx];\n\n        if (stateEntered.typeEnum === FINAL) {\n          var parent = stateEntered.parent;\n          var grandparent = parent.parent;\n\n          this._internalEventQueue.push({\n            name: \"done.state.\" + parent.id,\n            data: stateEntered.donedata && stateEntered.donedata.call(this._scriptingContext, currentEvent)\n          });\n\n          if (grandparent && grandparent.typeEnum === PARALLEL) {\n            if (grandparent.states.every(function (s) {\n              return _this6.isInFinalState(s);\n            })) {\n              this._internalEventQueue.push({\n                name: \"done.state.\" + grandparent.id\n              });\n            }\n          }\n        }\n      }\n\n      return statesEntered;\n    }\n  }, {\n    key: \"_getEffectiveTargetStates\",\n    value: function _getEffectiveTargetStates(transition) {\n      var targets = new Set();\n      var _iteratorNormalCompletion4 = true;\n      var _didIteratorError4 = false;\n      var _iteratorError4 = undefined;\n\n      try {\n        for (var _iterator4 = transition.targets[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {\n          var s = _step4.value;\n\n          if (s.typeEnum === HISTORY) {\n            if (s.id in this._historyValue) this._historyValue[s.id].forEach(function (state) {\n              return targets.add(state);\n            });else _toConsumableArray(this._getEffectiveTargetStates(s.transitions[0])).forEach(function (state) {\n              return targets.add(state);\n            });\n          } else {\n            targets.add(s);\n          }\n        }\n      } catch (err) {\n        _didIteratorError4 = true;\n        _iteratorError4 = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {\n            _iterator4.return();\n          }\n        } finally {\n          if (_didIteratorError4) {\n            throw _iteratorError4;\n          }\n        }\n      }\n\n      return targets;\n    }\n  }, {\n    key: \"_computeEntrySet\",\n    value: function _computeEntrySet(transitions, statesToEnter, statesForDefaultEntry, defaultHistoryContent) {\n      var _iteratorNormalCompletion5 = true;\n      var _didIteratorError5 = false;\n      var _iteratorError5 = undefined;\n\n      try {\n        for (var _iterator5 = transitions.iter()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {\n          var t = _step5.value;\n          var _iteratorNormalCompletion6 = true;\n          var _didIteratorError6 = false;\n          var _iteratorError6 = undefined;\n\n          try {\n            for (var _iterator6 = t.targets[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {\n              var s = _step6.value;\n\n              this._addDescendantStatesToEnter(s, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n            }\n          } catch (err) {\n            _didIteratorError6 = true;\n            _iteratorError6 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion6 && _iterator6.return != null) {\n                _iterator6.return();\n              }\n            } finally {\n              if (_didIteratorError6) {\n                throw _iteratorError6;\n              }\n            }\n          }\n\n          var ancestor = t.scope;\n          var _iteratorNormalCompletion7 = true;\n          var _didIteratorError7 = false;\n          var _iteratorError7 = undefined;\n\n          try {\n            for (var _iterator7 = this._getEffectiveTargetStates(t)[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {\n              var _s2 = _step7.value;\n\n              this._addAncestorStatesToEnter(_s2, ancestor, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n            }\n          } catch (err) {\n            _didIteratorError7 = true;\n            _iteratorError7 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion7 && _iterator7.return != null) {\n                _iterator7.return();\n              }\n            } finally {\n              if (_didIteratorError7) {\n                throw _iteratorError7;\n              }\n            }\n          }\n        }\n      } catch (err) {\n        _didIteratorError5 = true;\n        _iteratorError5 = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion5 && _iterator5.return != null) {\n            _iterator5.return();\n          }\n        } finally {\n          if (_didIteratorError5) {\n            throw _iteratorError5;\n          }\n        }\n      }\n    }\n  }, {\n    key: \"_computeExitSet\",\n    value: function _computeExitSet(transitions) {\n      var statesToExit = new Set();\n      var _iteratorNormalCompletion8 = true;\n      var _didIteratorError8 = false;\n      var _iteratorError8 = undefined;\n\n      try {\n        for (var _iterator8 = transitions[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {\n          var t = _step8.value;\n\n          if (t.targets) {\n            var scope = t.scope;\n            var _iteratorNormalCompletion9 = true;\n            var _didIteratorError9 = false;\n            var _iteratorError9 = undefined;\n\n            try {\n              for (var _iterator9 = this._getFullConfiguration()[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {\n                var s = _step9.value;\n                if (query.isDescendant(s, scope)) statesToExit.add(s);\n              }\n            } catch (err) {\n              _didIteratorError9 = true;\n              _iteratorError9 = err;\n            } finally {\n              try {\n                if (!_iteratorNormalCompletion9 && _iterator9.return != null) {\n                  _iterator9.return();\n                }\n              } finally {\n                if (_didIteratorError9) {\n                  throw _iteratorError9;\n                }\n              }\n            }\n          }\n        }\n      } catch (err) {\n        _didIteratorError8 = true;\n        _iteratorError8 = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion8 && _iterator8.return != null) {\n            _iterator8.return();\n          }\n        } finally {\n          if (_didIteratorError8) {\n            throw _iteratorError8;\n          }\n        }\n      }\n\n      return statesToExit;\n    }\n  }, {\n    key: \"_addAncestorStatesToEnter\",\n    value: function _addAncestorStatesToEnter(state, ancestor, statesToEnter, statesForDefaultEntry, defaultHistoryContent) {\n      var _this7 = this;\n\n      var traverse = function traverse(anc) {\n        if (anc.typeEnum === PARALLEL) {\n          var _iteratorNormalCompletion10 = true;\n          var _didIteratorError10 = false;\n          var _iteratorError10 = undefined;\n\n          try {\n            var _loop = function _loop() {\n              var child = _step10.value;\n\n              if (child.typeEnum !== HISTORY && !_toConsumableArray(statesToEnter).some(function (s) {\n                return query.isDescendant(s, child);\n              })) {\n                _this7._addDescendantStatesToEnter(child, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n              }\n            };\n\n            for (var _iterator10 = anc.states[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {\n              _loop();\n            }\n          } catch (err) {\n            _didIteratorError10 = true;\n            _iteratorError10 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion10 && _iterator10.return != null) {\n                _iterator10.return();\n              }\n            } finally {\n              if (_didIteratorError10) {\n                throw _iteratorError10;\n              }\n            }\n          }\n        }\n      };\n\n      var _iteratorNormalCompletion11 = true;\n      var _didIteratorError11 = false;\n      var _iteratorError11 = undefined;\n\n      try {\n        for (var _iterator11 = query.getAncestors(state, ancestor)[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {\n          var anc = _step11.value;\n          statesToEnter.add(anc);\n          traverse(anc);\n        }\n      } catch (err) {\n        _didIteratorError11 = true;\n        _iteratorError11 = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion11 && _iterator11.return != null) {\n            _iterator11.return();\n          }\n        } finally {\n          if (_didIteratorError11) {\n            throw _iteratorError11;\n          }\n        }\n      }\n\n      traverse(ancestor);\n    }\n  }, {\n    key: \"_addDescendantStatesToEnter\",\n    value: function _addDescendantStatesToEnter(state, statesToEnter, statesForDefaultEntry, defaultHistoryContent) {\n      var _this8 = this;\n\n      if (state.typeEnum === HISTORY) {\n        if (this._historyValue[state.id]) {\n          var _iteratorNormalCompletion12 = true;\n          var _didIteratorError12 = false;\n          var _iteratorError12 = undefined;\n\n          try {\n            for (var _iterator12 = this._historyValue[state.id][Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {\n              var s = _step12.value;\n\n              this._addDescendantStatesToEnter(s, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n            }\n          } catch (err) {\n            _didIteratorError12 = true;\n            _iteratorError12 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion12 && _iterator12.return != null) {\n                _iterator12.return();\n              }\n            } finally {\n              if (_didIteratorError12) {\n                throw _iteratorError12;\n              }\n            }\n          }\n\n          var _iteratorNormalCompletion13 = true;\n          var _didIteratorError13 = false;\n          var _iteratorError13 = undefined;\n\n          try {\n            for (var _iterator13 = this._historyValue[state.id][Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {\n              var _s3 = _step13.value;\n\n              this._addAncestorStatesToEnter(_s3, state.parent, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n            }\n          } catch (err) {\n            _didIteratorError13 = true;\n            _iteratorError13 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion13 && _iterator13.return != null) {\n                _iterator13.return();\n              }\n            } finally {\n              if (_didIteratorError13) {\n                throw _iteratorError13;\n              }\n            }\n          }\n        } else {\n          defaultHistoryContent[state.parent.id] = state.transitions[0];\n          var _iteratorNormalCompletion14 = true;\n          var _didIteratorError14 = false;\n          var _iteratorError14 = undefined;\n\n          try {\n            for (var _iterator14 = state.transitions[0].targets[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {\n              var _s4 = _step14.value;\n\n              this._addDescendantStatesToEnter(_s4, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n            }\n          } catch (err) {\n            _didIteratorError14 = true;\n            _iteratorError14 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion14 && _iterator14.return != null) {\n                _iterator14.return();\n              }\n            } finally {\n              if (_didIteratorError14) {\n                throw _iteratorError14;\n              }\n            }\n          }\n\n          var _iteratorNormalCompletion15 = true;\n          var _didIteratorError15 = false;\n          var _iteratorError15 = undefined;\n\n          try {\n            for (var _iterator15 = state.transitions[0].targets[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {\n              var _s5 = _step15.value;\n\n              this._addAncestorStatesToEnter(_s5, state.parent, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n            }\n          } catch (err) {\n            _didIteratorError15 = true;\n            _iteratorError15 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion15 && _iterator15.return != null) {\n                _iterator15.return();\n              }\n            } finally {\n              if (_didIteratorError15) {\n                throw _iteratorError15;\n              }\n            }\n          }\n        }\n      } else {\n        statesToEnter.add(state);\n\n        if (state.typeEnum === COMPOSITE) {\n          statesForDefaultEntry.add(state); //for each state in initialRef, if it is an initial state, then add ancestors and descendants.\n\n          var _iteratorNormalCompletion16 = true;\n          var _didIteratorError16 = false;\n          var _iteratorError16 = undefined;\n\n          try {\n            for (var _iterator16 = state.initialRef[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {\n              var _s6 = _step16.value;\n              var targets = _s6.typeEnum === INITIAL ? _s6.transitions[0].targets : [_s6];\n              var _iteratorNormalCompletion18 = true;\n              var _didIteratorError18 = false;\n              var _iteratorError18 = undefined;\n\n              try {\n                for (var _iterator18 = targets[Symbol.iterator](), _step18; !(_iteratorNormalCompletion18 = (_step18 = _iterator18.next()).done); _iteratorNormalCompletion18 = true) {\n                  var targetState = _step18.value;\n\n                  this._addDescendantStatesToEnter(targetState, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n                }\n              } catch (err) {\n                _didIteratorError18 = true;\n                _iteratorError18 = err;\n              } finally {\n                try {\n                  if (!_iteratorNormalCompletion18 && _iterator18.return != null) {\n                    _iterator18.return();\n                  }\n                } finally {\n                  if (_didIteratorError18) {\n                    throw _iteratorError18;\n                  }\n                }\n              }\n            }\n          } catch (err) {\n            _didIteratorError16 = true;\n            _iteratorError16 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion16 && _iterator16.return != null) {\n                _iterator16.return();\n              }\n            } finally {\n              if (_didIteratorError16) {\n                throw _iteratorError16;\n              }\n            }\n          }\n\n          var _iteratorNormalCompletion17 = true;\n          var _didIteratorError17 = false;\n          var _iteratorError17 = undefined;\n\n          try {\n            for (var _iterator17 = state.initialRef[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {\n              var _s7 = _step17.value;\n\n              var _targets = _s7.typeEnum === INITIAL ? _s7.transitions[0].targets : [_s7];\n\n              var _iteratorNormalCompletion19 = true;\n              var _didIteratorError19 = false;\n              var _iteratorError19 = undefined;\n\n              try {\n                for (var _iterator19 = _targets[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {\n                  var _targetState = _step19.value;\n\n                  this._addAncestorStatesToEnter(_targetState, state, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n                }\n              } catch (err) {\n                _didIteratorError19 = true;\n                _iteratorError19 = err;\n              } finally {\n                try {\n                  if (!_iteratorNormalCompletion19 && _iterator19.return != null) {\n                    _iterator19.return();\n                  }\n                } finally {\n                  if (_didIteratorError19) {\n                    throw _iteratorError19;\n                  }\n                }\n              }\n            }\n          } catch (err) {\n            _didIteratorError17 = true;\n            _iteratorError17 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion17 && _iterator17.return != null) {\n                _iterator17.return();\n              }\n            } finally {\n              if (_didIteratorError17) {\n                throw _iteratorError17;\n              }\n            }\n          }\n        } else {\n          if (state.typeEnum === PARALLEL) {\n            var _iteratorNormalCompletion20 = true;\n            var _didIteratorError20 = false;\n            var _iteratorError20 = undefined;\n\n            try {\n              var _loop2 = function _loop2() {\n                var child = _step20.value;\n\n                if (child.typeEnum !== HISTORY && !_toConsumableArray(statesToEnter).some(function (s) {\n                  return query.isDescendant(s, child);\n                })) {\n                  _this8._addDescendantStatesToEnter(child, statesToEnter, statesForDefaultEntry, defaultHistoryContent);\n                }\n              };\n\n              for (var _iterator20 = state.states[Symbol.iterator](), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {\n                _loop2();\n              }\n            } catch (err) {\n              _didIteratorError20 = true;\n              _iteratorError20 = err;\n            } finally {\n              try {\n                if (!_iteratorNormalCompletion20 && _iterator20.return != null) {\n                  _iterator20.return();\n                }\n              } finally {\n                if (_didIteratorError20) {\n                  throw _iteratorError20;\n                }\n              }\n            }\n          }\n        }\n      }\n    }\n  }, {\n    key: \"isInFinalState\",\n    value: function isInFinalState(s) {\n      var _this9 = this;\n\n      if (s.typeEnum === COMPOSITE) {\n        return s.states.some(function (s) {\n          return s.typeEnum === FINAL && _this9._configuration.contains(s);\n        });\n      } else if (s.typeEnum === PARALLEL) {\n        return s.states.every(this.isInFinalState.bind(this));\n      } else {\n        return false;\n      }\n    }\n    /** @private */\n\n  }, {\n    key: \"_evaluateAction\",\n    value: function _evaluateAction(currentEvent, actionRef) {\n      try {\n        return actionRef.call(this._scriptingContext, currentEvent); //SCXML system variables\n      } catch (e) {\n        this._handleError(e, actionRef);\n      }\n    }\n  }, {\n    key: \"_handleError\",\n    value: function _handleError(e, actionRef) {\n      var event = e instanceof Error || typeof e.__proto__.name === 'string' && e.__proto__.name.match(/^.*Error$/) ? //we can't just do 'e instanceof Error', because the Error object in the sandbox is from a different context, and instanceof will return false\n      {\n        name: 'error.execution',\n        data: {\n          tagname: actionRef.tagname,\n          line: actionRef.line,\n          column: actionRef.column,\n          reason: e.message\n        },\n        type: 'platform'\n      } : e.name ? e : {\n        name: 'error.execution',\n        data: e,\n        type: 'platform'\n      };\n\n      this._internalEventQueue.push(event);\n\n      this.emit('onError', event);\n    }\n  }, {\n    key: \"_log\",\n    value: function _log() {\n      if (printTrace) {\n        var args = Array.from(arguments);\n        this.opts.console.log(\"\".concat(args[0], \": \").concat(args.slice(1).map(function (arg) {\n          return arg === null ? 'null' : arg === undefined ? 'undefined' : typeof arg === 'string' ? arg : arg.toString() === '[object Object]' ? util.inspect(arg) : arg.toString();\n        }).join(', '), \"\\n\"));\n      }\n    }\n    /**\n    * @interface Listener\n    */\n\n    /**\n    * @function\n    * @name Listener#onEntry \n    * @param {string} stateId\n    */\n\n    /**\n    * @function\n    * @name Listener#onExit \n    * @param {string} stateId\n    */\n\n    /**\n    * @function\n    * @name Listener#onTransition \n    * @param {string} sourceStateId Id of the source state\n    * @param {Array<string>} targetStatesIds Ids of the target states\n    * @param {number} transitionIndex Index of the transition relative to other transitions originating from source state.\n    */\n\n    /**\n    * @function\n    * @name Listener#onError\n    * @param {Error} errorInfo\n    */\n\n    /**\n    * @function\n    * @name Listener#onBigStepBegin\n    */\n\n    /**\n    * @function\n    * @name Listener#onBigStepResume\n    */\n\n    /**\n    * @function\n    * @name Listener#onBigStepSuspend\n    */\n\n    /**\n    * @function\n    * @name Listener#onBigStepEnd\n    */\n\n    /**\n    * @function\n    * @name Listener#onSmallStepBegin\n    * @param {string} event\n    */\n\n    /**\n    * @function\n    * @name Listener#onSmallStepEnd\n    */\n\n    /** \n    * Provides a generic mechanism to subscribe to state change and runtime\n    * error notifications.  Can be used for logging and debugging. For example,\n    * can attach a logger that simply logs the state changes.  Or can attach a\n    * network debugging client that sends state change notifications to a\n    * debugging server.\n    * This is an alternative interface to {@link EventEmitter.prototype#on}.\n    * @memberof BaseInterpreter.prototype \n    * @param {Listener} listener\n    */\n\n  }, {\n    key: \"registerListener\",\n    value: function registerListener(listener) {\n      BaseInterpreter.EVENTS.forEach(function (event) {\n        if (listener[event]) this.on(event, listener[event]);\n      }, this);\n    }\n    /** \n    * Unregister a Listener\n    * @memberof BaseInterpreter.prototype \n    * @param {Listener} listener\n    */\n\n  }, {\n    key: \"unregisterListener\",\n    value: function unregisterListener(listener) {\n      BaseInterpreter.EVENTS.forEach(function (event) {\n        if (listener[event]) this.off(event, listener[event]);\n      }, this);\n    }\n    /** \n    * Query the model to get all transition events.\n    * @return {Array<string>} Transition events.\n    * @memberof BaseInterpreter.prototype \n    */\n\n  }, {\n    key: \"getAllTransitionEvents\",\n    value: function getAllTransitionEvents() {\n      var events = {};\n\n      function getEvents(state) {\n        if (state.transitions) {\n          for (var txIdx = 0, txLen = state.transitions.length; txIdx < txLen; txIdx++) {\n            events[state.transitions[txIdx].event] = true;\n          }\n        }\n\n        if (state.states) {\n          for (var stateIdx = 0, stateLen = state.states.length; stateIdx < stateLen; stateIdx++) {\n            getEvents(state.states[stateIdx]);\n          }\n        }\n      }\n\n      getEvents(this._model);\n      return Object.keys(events);\n    }\n    /**\n    * Three things capture the current snapshot of a running SCION interpreter:\n    *\n    *      <ul>\n    *      <li> basic configuration (the set of basic states the state machine is in)</li>\n    *      <li> history state values (the states the state machine was in last time it was in the parent of a history state)</li>\n    *      <li> the datamodel</li>\n    *      </ul>\n    *      \n    * The snapshot object can be serialized as JSON and saved to a database. It can\n    * later be passed to the SCXML constructor to restore the state machine\n    * using the snapshot argument.\n    *\n    * @return {Snapshot} \n    * @memberof BaseInterpreter.prototype \n    */\n\n  }, {\n    key: \"getSnapshot\",\n    value: function getSnapshot() {\n      return [this.getConfiguration(), this._serializeHistory(), this._isInFinalState, this._model.$serializeDatamodel(), this._internalEventQueue.slice()];\n    }\n  }, {\n    key: \"_serializeHistory\",\n    value: function _serializeHistory() {\n      var o = {};\n      Object.keys(this._historyValue).forEach(function (sid) {\n        o[sid] = this._historyValue[sid].map(function (state) {\n          return state.id;\n        });\n      }, this);\n      return o;\n    }\n    /**\n     * @interface Event\n     */\n\n    /** \n    * @member name\n    * @memberof Event.prototype \n    * @type string\n    * @description The name of the event\n    */\n\n    /** \n    * @member data\n    * @memberof Event.prototype \n    * @type any\n    * @description The event data\n    */\n\n    /** \n    * An SCXML interpreter takes SCXML events as input, where an SCXML event is an\n    * object with \"name\" and \"data\" properties. These can be passed to method `gen`\n    * as two positional arguments, or as a single object.\n    * @param {string|Event} evtObjOrName\n    * @param {any=} optionalData\n    * @emits scion.BaseInterpreter#onEntry\n    * @emits scion.BaseInterpreter#onExit\n    * @emits scion.BaseInterpreter#onTransition\n    * @emits scion.BaseInterpreter#onDefaultEntry\n    * @emits scion.BaseInterpreter#onError\n    * @emits scion.BaseInterpreter#onBigStepBegin\n    * @emits scion.BaseInterpreter#onBigStepEnd\n    * @emits scion.BaseInterpreter#onBigStepSuspend\n    * @emits scion.BaseInterpreter#onBigStepResume\n    * @emits scion.BaseInterpreter#onSmallStepBegin\n    * @emits scion.BaseInterpreter#onSmallStepEnd\n    * @emits scion.BaseInterpreter#onBigStepEnd\n    * @emits scion.BaseInterpreter#onExitInterpreter\n    */\n\n  }, {\n    key: \"gen\",\n    value: function gen(evtObjOrName, optionalData) {\n      var currentEvent;\n\n      switch (_typeof(evtObjOrName)) {\n        case 'string':\n          currentEvent = {\n            name: evtObjOrName,\n            data: optionalData\n          };\n          break;\n\n        case 'object':\n          if (typeof evtObjOrName.name === 'string') {\n            currentEvent = evtObjOrName;\n          } else {\n            throw new Error('Event object must have \"name\" property of type string.');\n          }\n\n          break;\n\n        default:\n          throw new Error('First argument to gen must be a string or object.');\n      }\n\n      if (this._isStepping) throw new Error('Cannot call gen during a big-step'); //otherwise, kick him off\n\n      this._isStepping = true;\n\n      this._performBigStep(currentEvent);\n\n      this._isStepping = false;\n      return this.getConfiguration();\n    }\n    /**\n    * Injects an external event into the interpreter asynchronously\n    * @param {Event}  currentEvent The event to inject\n    * @param {genCallback} cb Callback invoked with an error or the interpreter's stable configuration\n    * @emits scion.BaseInterpreter#onEntry\n    * @emits scion.BaseInterpreter#onExit\n    * @emits scion.BaseInterpreter#onTransition\n    * @emits scion.BaseInterpreter#onDefaultEntry\n    * @emits scion.BaseInterpreter#onError\n    * @emits scion.BaseInterpreter#onBigStepBegin\n    * @emits scion.BaseInterpreter#onBigStepEnd\n    * @emits scion.BaseInterpreter#onBigStepSuspend\n    * @emits scion.BaseInterpreter#onBigStepResume\n    * @emits scion.BaseInterpreter#onSmallStepBegin\n    * @emits scion.BaseInterpreter#onSmallStepEnd\n    * @emits scion.BaseInterpreter#onBigStepEnd\n    * @emits scion.BaseInterpreter#onExitInterpreter\n    */\n\n  }, {\n    key: \"genAsync\",\n    value: function genAsync(currentEvent, cb) {\n      if (currentEvent !== null && (_typeof(currentEvent) !== 'object' || !currentEvent || typeof currentEvent.name !== 'string')) {\n        throw new Error('Expected currentEvent to be null or an Object with a name');\n      }\n\n      if (typeof cb !== 'function') {\n        cb = nop;\n      }\n\n      this._externalEventQueue.push([currentEvent, cb]); //the semantics we want are to return to the cb the results of processing that particular event.\n\n\n      function nextStep(e, c) {\n        this._performBigStepAsync(e, function (err, config) {\n          c(err, config);\n\n          if (this._externalEventQueue.length) {\n            nextStep.apply(this, this._externalEventQueue.shift());\n          } else {\n            this._isStepping = false;\n          }\n        }.bind(this));\n      }\n\n      if (!this._isStepping) {\n        this._isStepping = true;\n        nextStep.apply(this, this._externalEventQueue.shift());\n      }\n    }\n  }]);\n\n  return BaseInterpreter;\n}(EventEmitter);\n\nBaseInterpreter.EVENTS = ['onEntry', 'onExit', 'onTransition', 'onDefaultEntry', 'onError', 'onBigStepBegin', 'onBigStepSuspend', 'onBigStepResume', 'onSmallStepBegin', 'onSmallStepEnd', 'onBigStepEnd', 'onExitInterpreter']; //some global singletons to use to generate in-memory session ids, in case the user does not specify these data structures\n\nBaseInterpreter.sessionIdCounter = 1;\n\nBaseInterpreter.generateSessionid = function () {\n  return BaseInterpreter.sessionIdCounter++;\n};\n\nBaseInterpreter.sessionRegistry = new Map(); // Do nothing\n\nfunction nop() {}\n\nvar InterpreterScriptingContext =\n/*#__PURE__*/\nfunction () {\n  function InterpreterScriptingContext(interpreter) {\n    _classCallCheck(this, InterpreterScriptingContext);\n\n    this._interpreter = interpreter;\n    this._timeoutMap = {};\n    this._invokeMap = {};\n    this._timeouts = new Set(); //Regex from:\n    //  http://daringfireball.net/2010/07/improved_regex_for_matching_urls\n    //  http://stackoverflow.com/a/6927878\n\n    this.validateUriRegex = /(#_.*)|\\b((?:[a-z][\\w-]+:(?:\\/{1,3}|[a-z0-9%])|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}\\/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))/i;\n    this.invokeSendTargetRegex = /^#_(.*)$/;\n    this.scxmlSendTargetRegex = /^#_scxml_(.*)$/;\n  }\n\n  _createClass(InterpreterScriptingContext, [{\n    key: \"raise\",\n    value: function raise(event) {\n      this._installDefaultPropsOnEvent(event, true);\n\n      this._interpreter._internalEventQueue.push(event);\n    }\n  }, {\n    key: \"parseXmlStringAsDOM\",\n    value: function parseXmlStringAsDOM(xmlString) {\n      return (this._interpreter.opts.xmlParser || InterpreterScriptingContext.xmlParser).parse(xmlString);\n    }\n  }, {\n    key: \"invoke\",\n    value: function invoke(invokeObj) {\n      var _this10 = this;\n\n      //look up invoker by type. assume invokers are passed in as an option to constructor\n      this._invokeMap[invokeObj.id] = new Promise(function (resolve, reject) {\n        (_this10._interpreter.opts.invokers || InterpreterScriptingContext.invokers)[invokeObj.type](_this10._interpreter, invokeObj, _this10._interpreter.opts.invokerExecutionContext, function (err, session) {\n          if (err) return reject(err);\n\n          _this10._interpreter.emit('onInvokedSessionInitialized', session);\n\n          resolve(session);\n        });\n      });\n    }\n  }, {\n    key: \"cancelInvoke\",\n    value: function cancelInvoke(invokeid) {\n      var _this11 = this;\n\n      //TODO: on cancel invoke clean up this._invokeMap\n      var sessionPromise = this._invokeMap[invokeid];\n\n      this._interpreter._log(\"cancelling session with invokeid \".concat(invokeid));\n\n      if (sessionPromise) {\n        this._interpreter._log(\"sessionPromise found\");\n\n        sessionPromise.then(function (session) {\n          _this11._interpreter._log(\"resolved session \".concat(invokeid, \". cancelling... \"));\n\n          session.cancel(); //clean up\n\n          delete _this11._invokeMap[invokeid];\n        }, function (err) {//TODO: dispatch error back into the state machine as error.communication\n        });\n      }\n    }\n  }, {\n    key: \"_installDefaultPropsOnEvent\",\n    value: function _installDefaultPropsOnEvent(event, isInternal) {\n      if (!isInternal) {\n        event.origin = this._interpreter.opts._x._ioprocessors.scxml.location; //TODO: preserve original origin when we autoforward? \n\n        event.origintype = event.type || SCXML_IOPROCESSOR_TYPE;\n      }\n\n      if (typeof event.type === 'undefined') {\n        event.type = isInternal ? 'internal' : 'external';\n      }\n\n      ['name', 'sendid', 'invokeid', 'data', 'origin', 'origintype'].forEach(function (prop) {\n        if (typeof event[prop] === 'undefined') {\n          event[prop] = undefined;\n        }\n      });\n    }\n  }, {\n    key: \"send\",\n    value: function send(event, options) {\n      this._interpreter._log('send event', event, options);\n\n      options = options || {};\n      var sendType = options.type || SCXML_IOPROCESSOR_TYPE; //TODO: move these out\n\n      function validateSend(event, options, sendAction) {\n        if (event.target) {\n          var targetIsValidUri = this.validateUriRegex.test(event.target);\n\n          if (!targetIsValidUri) {\n            throw {\n              name: \"error.execution\",\n              data: 'Target is not valid URI',\n              sendid: event.sendid,\n              type: 'platform'\n            };\n          }\n        }\n\n        if (sendType !== SCXML_IOPROCESSOR_TYPE) {\n          //TODO: extend this to support HTTP, and other IO processors\n          throw {\n            name: \"error.execution\",\n            data: 'Unsupported event processor type',\n            sendid: event.sendid,\n            type: 'platform'\n          };\n        }\n\n        sendAction.call(this, event, options);\n      }\n\n      function defaultSendAction(event, options) {\n        var _this12 = this;\n\n        if (typeof setTimeout === 'undefined') throw new Error('Default implementation of BaseInterpreter.prototype.send will not work unless setTimeout is defined globally.');\n        var match;\n\n        if (event.target === '#_internal') {\n          this.raise(event);\n        } else {\n          this._installDefaultPropsOnEvent(event, false);\n\n          event.origintype = SCXML_IOPROCESSOR_TYPE; //TODO: extend this to support HTTP, and other IO processors\n          //TODO : paramterize this based on send/@type?\n\n          if (!event.target) {\n            doSend.call(this, this._interpreter);\n          } else if (event.target === '#_parent') {\n            if (this._interpreter.opts.parentSession) {\n              event.invokeid = this._interpreter.opts.invokeid;\n              doSend.call(this, this._interpreter.opts.parentSession);\n            } else {\n              throw {\n                name: \"error.communication\",\n                data: 'Parent session not specified',\n                sendid: event.sendid,\n                type: 'platform'\n              };\n            }\n          } else if (match = event.target.match(this.scxmlSendTargetRegex)) {\n            var targetSessionId = match[1];\n\n            var session = this._interpreter.opts.sessionRegistry.get(targetSessionId);\n\n            if (session) {\n              doSend.call(this, session);\n            } else {\n              throw {\n                name: 'error.communication',\n                sendid: event.sendid,\n                type: 'platform'\n              };\n            }\n          } else if (match = event.target.match(this.invokeSendTargetRegex)) {\n            //TODO: test this code path.\n            var invokeId = match[1];\n\n            this._invokeMap[invokeId].then(function (session) {\n              doSend.call(_this12, session);\n            });\n          } else {\n            throw new Error('Unrecognized send target.'); //TODO: dispatch error back into the state machine\n          }\n        }\n\n        function doSend(session) {\n          //TODO: we probably now need to refactor data structures:\n          //    this._timeouts\n          //    this._timeoutMap\n          var timeoutHandle = setTimeout(function () {\n            if (event.sendid) delete this._timeoutMap[event.sendid];\n\n            this._timeouts.delete(timeoutOptions);\n\n            if (this._interpreter.opts.doSend) {\n              this._interpreter.opts.doSend(session, event);\n            } else {\n              session[this._interpreter.opts.sendAsync ? 'genAsync' : 'gen'](event);\n            }\n          }.bind(this), options.delay || 0);\n          var timeoutOptions = {\n            sendOptions: options,\n            timeoutHandle: timeoutHandle\n          };\n          if (event.sendid) this._timeoutMap[event.sendid] = timeoutHandle;\n\n          this._timeouts.add(timeoutOptions);\n        }\n      }\n\n      function publish() {\n        this._interpreter.emit(event.name, event.data);\n      } //choose send function\n      //TODO: rethink how this custom send works\n\n\n      var sendFn;\n\n      if (event.type === 'https://github.com/jbeard4/SCION#publish') {\n        sendFn = publish;\n      } else if (this._interpreter.opts.customSend) {\n        sendFn = this._interpreter.opts.customSend;\n      } else {\n        sendFn = defaultSendAction;\n      }\n\n      options = options || {};\n\n      this._interpreter._log(\"sending event\", event.name, \"with content\", event.data, \"after delay\", options.delay);\n\n      validateSend.call(this, event, options, sendFn);\n    }\n  }, {\n    key: \"cancel\",\n    value: function cancel(sendid) {\n      if (this._interpreter.opts.customCancel) {\n        return this._interpreter.opts.customCancel.apply(this, [sendid]);\n      }\n\n      if (typeof clearTimeout === 'undefined') throw new Error('Default implementation of BaseInterpreter.prototype.cancel will not work unless setTimeout is defined globally.');\n\n      if (sendid in this._timeoutMap) {\n        this._interpreter._log(\"cancelling \", sendid, \" with timeout id \", this._timeoutMap[sendid]);\n\n        clearTimeout(this._timeoutMap[sendid]);\n      }\n    }\n  }]);\n\n  return InterpreterScriptingContext;\n}();\n\nmodule.exports = extend(new EventEmitter(), {\n  BaseInterpreter: BaseInterpreter,\n  ArraySet: ArraySet,\n  STATE_TYPES: constants.STATE_TYPES,\n  initializeModel: initializeModel,\n  InterpreterScriptingContext: InterpreterScriptingContext,\n  helpers: helpers,\n  query: query\n});\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../process/browser.js */ \"./node_modules/process/browser.js\"), __webpack_require__(/*! ./../../../timers-browserify/main.js */ \"./node_modules/timers-browserify/main.js\").setImmediate))\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/@scion-scxml/core-base/lib/scion-core-base.js?");
+/* WEBPACK VAR INJECTION */(function(process, setImmediate) {//   Copyright 2012-2012 Jacob Beard, INFICON, and other SCION contributors
+//
+//   Licensed under the Apache License, Version 2.0 (the "License");
+//   you may not use this file except in compliance with the License.
+//   You may obtain a copy of the License at
+//
+//       http://www.apache.org/licenses/LICENSE-2.0
+//
+//   Unless required by applicable law or agreed to in writing, software
+//   distributed under the License is distributed on an "AS IS" BASIS,
+//   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//   See the License for the specific language governing permissions and
+//   limitations under the License.
+
+/**
+ * SCION-CORE global object
+ * @namespace scion
+ */
+
+/**
+ * An Array of strings representing the ids all of the basic states the
+ * interpreter is in after a big-step completes.
+ * @typedef {Array<string>} Configuration
+ */
+
+/**
+ * A set of basic and composite state ids.
+ * @typedef {Array<string>} FullConfiguration
+ */
+
+/**
+ * A set of basic and composite state ids.
+ * @typedef {Array<string>} FullConfiguration
+ */
+
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var EventEmitter = __webpack_require__(/*! tiny-events */ "./node_modules/tiny-events/lib/index.js").EventEmitter,
+    util = __webpack_require__(/*! util */ "./node_modules/util/util.js"),
+    ArraySet = __webpack_require__(/*! ./ArraySet */ "./node_modules/@scion-scxml/core-base/lib/ArraySet.js"),
+    constants = __webpack_require__(/*! ./constants */ "./node_modules/@scion-scxml/core-base/lib/constants.js"),
+    helpers = __webpack_require__(/*! ./helpers */ "./node_modules/@scion-scxml/core-base/lib/helpers.js"),
+    query = __webpack_require__(/*! ./query */ "./node_modules/@scion-scxml/core-base/lib/query.js"),
+    extend = helpers.extend,
+    transitionWithTargets = helpers.transitionWithTargets,
+    transitionComparator = helpers.transitionComparator,
+    initializeModel = helpers.initializeModel,
+    isEventPrefixMatch = helpers.isEventPrefixMatch,
+    isTransitionMatch = helpers.isTransitionMatch,
+    scxmlPrefixTransitionSelector = helpers.scxmlPrefixTransitionSelector,
+    eventlessTransitionSelector = helpers.eventlessTransitionSelector,
+    getTransitionWithHigherSourceChildPriority = helpers.getTransitionWithHigherSourceChildPriority,
+    sortInEntryOrder = helpers.sortInEntryOrder,
+    getStateWithHigherSourceChildPriority = helpers.getStateWithHigherSourceChildPriority,
+    initializeModelGeneratorFn = helpers.initializeModelGeneratorFn,
+    deserializeSerializedConfiguration = helpers.deserializeSerializedConfiguration,
+    deserializeHistory = helpers.deserializeHistory,
+    BASIC = constants.STATE_TYPES.BASIC,
+    COMPOSITE = constants.STATE_TYPES.COMPOSITE,
+    PARALLEL = constants.STATE_TYPES.PARALLEL,
+    HISTORY = constants.STATE_TYPES.HISTORY,
+    INITIAL = constants.STATE_TYPES.INITIAL,
+    FINAL = constants.STATE_TYPES.FINAL,
+    SCXML_IOPROCESSOR_TYPE = constants.SCXML_IOPROCESSOR_TYPE;
+
+var printTrace = typeof process !== 'undefined' && !!process.env.DEBUG;
+/**
+ * @interface EventEmitter
+ */
+
+/**
+* @event scion.BaseInterpreter#onError
+* @property {string} tagname The name of the element that produced the error. 
+* @property {number} line The line in the source file in which the error occurred.
+* @property {number} column The column in the source file in which the error occurred.
+* @property {string} reason An informative error message. The text is platform-specific and subject to change.
+*/
+
+/**
+ * @function
+ * @name EventEmitter.prototype#on
+ * @param {string} type
+ * @param {callback} listener
+ */
+
+/**
+ * @function
+ * @name EventEmitter.prototype#once
+ * @param {string} type
+ * @param {callback} listener
+ */
+
+/**
+ * @function
+ * @name EventEmitter.prototype#off
+ * @param {string} type
+ * @param {callback} listener
+ */
+
+/**
+ * @function
+ * @name EventEmitter.prototype#emit
+ * @param {string} type
+ * @param {any} args
+ */
+
+/** 
+ * @description The SCXML constructor creates an interpreter instance from a model object.
+ * @abstract
+ * @class BaseInterpreter
+ * @memberof scion
+ * @extends EventEmitter
+ * @param {SCJSON | scxml.ModelFactory} modelOrModelFactory Either an SCJSON root state; or an scxml.ModelFactory, which is a function which returns an SCJSON object. 
+ * @param opts
+ * @param {string} [opts.sessionid] Used to populate SCXML _sessionid.
+ * @param {function} [opts.generateSessionid] Factory used to generate sessionid if sessionid keyword is not specified
+ * @param {Map<string, BaseInterpreter>} [opts.sessionRegistry] Map used to map sessionid strings to Statechart instances.
+ * @param [opts.Set] Class to use as an ArraySet. Defaults to ES6 Set.
+ * @param {object} [opts.params]  Used to pass params from invoke. Sets the datamodel when interpreter is instantiated.
+ * @param {Snapshot} [opts.snapshot] State machine snapshot. Used to restore a serialized state machine.
+ * @param {Statechart} [opts.parentSession]  Used to pass parent session during invoke.
+ * @param {string }[opts.invokeid]  Support for id of invoke element at runtime.
+ * @param {boolean} [opts.legacySemantics]
+ * @param [opts.console]
+ * @param [opts.transitionSelector]
+ * @param [opts.customCancel]
+ * @param [opts.customSend]
+ * @param [opts.sendAsync]
+ * @param [opts.doSend]
+ * @param [opts.invokers]
+ * @param [opts.xmlParser]
+ * @param [opts.interpreterScriptingContext]
+ * @param [opts.invokerExecutionContext]
+ */
+
+var BaseInterpreter =
+/*#__PURE__*/
+function (_EventEmitter) {
+  _inherits(BaseInterpreter, _EventEmitter);
+
+  function BaseInterpreter(modelOrModelFactory, opts) {
+    var _this;
+
+    _classCallCheck(this, BaseInterpreter);
+
+    _this = _possibleConstructorReturn(this, _getPrototypeOf(BaseInterpreter).call(this));
+    _this.opts = opts;
+    _this.opts.InterpreterScriptingContext = _this.opts.InterpreterScriptingContext || InterpreterScriptingContext;
+    _this._isStepping = false;
+    _this._scriptingContext = _this.opts.interpreterScriptingContext || (_this.opts.InterpreterScriptingContext ? new _this.opts.InterpreterScriptingContext(_assertThisInitialized(_this)) : {});
+    _this.opts.generateSessionid = _this.opts.generateSessionid || BaseInterpreter.generateSessionid;
+    _this.opts.sessionid = _this.opts.sessionid || _this.opts.generateSessionid();
+    _this.opts.sessionRegistry = _this.opts.sessionRegistry || BaseInterpreter.sessionRegistry; //TODO: define a better interface. For now, assume a Map<sessionid, session>
+
+    _this.opts.invokerExecutionContext = opts.invokerExecutionContext || modelOrModelFactory._executionContext;
+    var _ioprocessors = {};
+    _ioprocessors[SCXML_IOPROCESSOR_TYPE] = {
+      location: "#_scxml_".concat(_this.opts.sessionid)
+    };
+    _ioprocessors.scxml = _ioprocessors[SCXML_IOPROCESSOR_TYPE]; //alias
+    //SCXML system variables:
+
+    _this.opts._x = {
+      _sessionid: _this.opts.sessionid,
+      _ioprocessors: _ioprocessors
+    };
+    var model;
+
+    if (typeof modelOrModelFactory === 'function') {
+      model = initializeModelGeneratorFn(modelOrModelFactory, _this.opts, _assertThisInitialized(_this));
+    } else if (_typeof(modelOrModelFactory) === 'object') {
+      model = JSON.parse(JSON.stringify(modelOrModelFactory)); //assume object
+    } else {
+      throw new Error('Unexpected model type. Expected model factory function, or scjson object.');
+    }
+
+    _this._model = initializeModel(model, _this.opts);
+    _this.opts.console = _this.opts.console || (typeof console === 'undefined' ? {
+      log: function log() {}
+    } : console); //rely on global console if this console is undefined
+
+    _this.opts.Set = _this.opts.Set || ArraySet;
+    _this.opts.priorityComparisonFn = _this.opts.priorityComparisonFn || getTransitionWithHigherSourceChildPriority;
+    _this.opts.transitionSelector = _this.opts.transitionSelector || scxmlPrefixTransitionSelector;
+
+    _this.opts.sessionRegistry.set(String(_this.opts.sessionid), _assertThisInitialized(_this));
+
+    _this._scriptingContext.log = _this._scriptingContext.log || function log() {
+      if (this.opts.console.log.apply) {
+        this.opts.console.log.apply(this.opts.console, arguments);
+      } else {
+        //console.log on older IE does not support Function.apply, so just pass him the first argument. Best we can do for now.
+        this.opts.console.log(Array.prototype.slice.apply(arguments).join(','));
+      }
+    }.bind(_assertThisInitialized(_this)); //set up default scripting context log function
+
+
+    _this._externalEventQueue = [];
+    _this._internalEventQueue = [];
+
+    if (_this.opts.params) {
+      _this._model.$deserializeDatamodel(_this.opts.params); //load up the datamodel
+
+    } //check if we're loading from a previous snapshot
+
+
+    if (_this.opts.snapshot) {
+      _this._configuration = new _this.opts.Set(deserializeSerializedConfiguration(_this.opts.snapshot[0], _this._model.$idToStateMap));
+      _this._historyValue = deserializeHistory(_this.opts.snapshot[1], _this._model.$idToStateMap);
+      _this._isInFinalState = _this.opts.snapshot[2];
+
+      _this._model.$deserializeDatamodel(_this.opts.snapshot[3]); //load up the datamodel
+
+
+      _this._internalEventQueue = _this.opts.snapshot[4];
+    } else {
+      _this._configuration = new _this.opts.Set();
+      _this._historyValue = {};
+      _this._isInFinalState = false;
+    } //add debug logging
+
+
+    BaseInterpreter.EVENTS.forEach(function (event) {
+      this.on(event, this._log.bind(this, event));
+    }, _assertThisInitialized(_this));
+    module.exports.emit('new', _assertThisInitialized(_this));
+    return _this;
+  }
+  /** 
+  * Cancels the session. This clears all timers; puts the interpreter in a
+  * final state; and runs all exit actions on current states.
+  * @memberof BaseInterpreter.prototype
+  */
+
+
+  _createClass(BaseInterpreter, [{
+    key: "cancel",
+    value: function cancel() {
+      delete this.opts.parentSession;
+      if (this._isInFinalState) return;
+      this._isInFinalState = true;
+
+      this._log("session cancelled ".concat(this.opts.invokeid));
+
+      this._exitInterpreter(null);
+    }
+  }, {
+    key: "_exitInterpreter",
+    value: function _exitInterpreter(event) {
+      var _this2 = this;
+
+      //TODO: cancel invoked sessions
+      //cancel all delayed sends when we enter into a final state.
+      this._cancelAllDelayedSends();
+
+      var statesToExit = this._getFullConfiguration().sort(getStateWithHigherSourceChildPriority);
+
+      for (var j = 0, len = statesToExit.length; j < len; j++) {
+        var stateExited = statesToExit[j];
+
+        if (stateExited.onExit !== undefined) {
+          for (var exitIdx = 0, exitLen = stateExited.onExit.length; exitIdx < exitLen; exitIdx++) {
+            var block = stateExited.onExit[exitIdx];
+
+            for (var blockIdx = 0, blockLen = block.length; blockIdx < blockLen; blockIdx++) {
+              var actionRef = block[blockIdx];
+
+              try {
+                actionRef.call(this._scriptingContext, null);
+              } catch (e) {
+                this._handleError(e, actionRef);
+
+                break;
+              }
+            }
+          }
+        } //cancel invoked session
+
+
+        if (stateExited.invokes) stateExited.invokes.forEach(function (invoke) {
+          _this2._scriptingContext.cancelInvoke(invoke.id);
+        }); //if he is a top-level <final> state, then return the done event
+
+        if (stateExited.$type === 'final' && stateExited.parent.$type === 'scxml') {
+          if (this.opts.parentSession) {
+            this._scriptingContext.send({
+              target: '#_parent',
+              name: 'done.invoke.' + this.opts.invokeid,
+              data: stateExited.donedata && stateExited.donedata.call(this._scriptingContext, event)
+            });
+          }
+
+          this.opts.sessionRegistry.delete(this.opts.sessionid);
+          this.emit('onExitInterpreter', event);
+        }
+      }
+    }
+    /** 
+     * Starts the interpreter. Should only be called once, and should be called
+     * before BaseInterpreter.prototype#gen is called for the first time.  Returns a
+     * Configuration.
+     * @return {Configuration}
+     * @memberof BaseInterpreter.prototype
+     * @emits scion.BaseInterpreter#onEntry
+     * @emits scion.BaseInterpreter#onExit
+     * @emits scion.BaseInterpreter#onTransition
+     * @emits scion.BaseInterpreter#onDefaultEntry
+     * @emits scion.BaseInterpreter#onError
+     * @emits scion.BaseInterpreter#onBigStepBegin
+     * @emits scion.BaseInterpreter#onBigStepEnd
+     * @emits scion.BaseInterpreter#onBigStepSuspend
+     * @emits scion.BaseInterpreter#onBigStepResume
+     * @emits scion.BaseInterpreter#onSmallStepBegin
+     * @emits scion.BaseInterpreter#onSmallStepEnd
+     * @emits scion.BaseInterpreter#onBigStepEnd
+     * @emits scion.BaseInterpreter#onExitInterpreter
+     */
+
+  }, {
+    key: "start",
+    value: function start() {
+      this._initStart();
+
+      this._performBigStep();
+
+      return this.getConfiguration();
+    }
+    /**
+     * This callback is displayed as a global member.
+     * @callback genCallback
+     * @param {Error} err
+     * @param {Configuration} configuration
+     */
+
+    /**
+     * Starts the interpreter asynchronously
+     * @param  {genCallback} cb Callback invoked with an error or the interpreter's stable configuration
+     * @memberof BaseInterpreter.prototype 
+     * @emits scion.BaseInterpreter#onEntry
+     * @emits scion.BaseInterpreter#onExit
+     * @emits scion.BaseInterpreter#onTransition
+     * @emits scion.BaseInterpreter#onDefaultEntry
+     * @emits scion.BaseInterpreter#onError
+     * @emits scion.BaseInterpreter#onBigStepBegin
+     * @emits scion.BaseInterpreter#onBigStepEnd
+     * @emits scion.BaseInterpreter#onBigStepSuspend
+     * @emits scion.BaseInterpreter#onBigStepResume
+     * @emits scion.BaseInterpreter#onSmallStepBegin
+     * @emits scion.BaseInterpreter#onSmallStepEnd
+     * @emits scion.BaseInterpreter#onBigStepEnd
+     * @emits scion.BaseInterpreter#onExitInterpreter
+     */
+
+  }, {
+    key: "startAsync",
+    value: function startAsync(cb) {
+      cb = this._initStart(cb);
+      this.genAsync(null, cb);
+    }
+  }, {
+    key: "_initStart",
+    value: function _initStart(cb) {
+      var _this3 = this;
+
+      if (typeof cb !== 'function') {
+        cb = nop;
+      }
+
+      this._log("performing initial big step"); //We effectively need to figure out states to enter here to populate initial config. assuming root is compound state makes this simple.
+      //but if we want it to be parallel, then this becomes more complex. so when initializing the model, we add a 'fake' root state, which
+      //makes the following operation safe.
+
+
+      this._model.initialRef.forEach(function (s) {
+        return _this3._configuration.add(s);
+      });
+
+      return cb;
+    }
+    /** 
+    * Returns state machine {@link Configuration}.
+    * @return {Configuration}
+    * @memberof BaseInterpreter.prototype 
+    */
+
+  }, {
+    key: "getConfiguration",
+    value: function getConfiguration() {
+      return this._configuration.iter().map(function (s) {
+        return s.id;
+      });
+    }
+  }, {
+    key: "_getFullConfiguration",
+    value: function _getFullConfiguration() {
+      return this._configuration.iter().map(function (s) {
+        return [s].concat(query.getAncestors(s));
+      }, this).reduce(function (a, b) {
+        return a.concat(b);
+      }, []). //flatten
+      reduce(function (a, b) {
+        return a.indexOf(b) > -1 ? a : a.concat(b);
+      }, []); //uniq
+    }
+    /** 
+    * @return {FullConfiguration}
+    * @memberof BaseInterpreter.prototype 
+    */
+
+  }, {
+    key: "getFullConfiguration",
+    value: function getFullConfiguration() {
+      return this._getFullConfiguration().map(function (s) {
+        return s.id;
+      });
+    }
+    /** 
+    * @return {boolean}
+    * @memberof BaseInterpreter.prototype 
+    * @param {string} stateName
+    */
+
+  }, {
+    key: "isIn",
+    value: function isIn(stateName) {
+      return this.getFullConfiguration().indexOf(stateName) > -1;
+    }
+    /** 
+    * Is the state machine in a final state?
+    * @return {boolean}
+    * @memberof BaseInterpreter.prototype 
+    */
+
+  }, {
+    key: "isFinal",
+    value: function isFinal() {
+      return this._isInFinalState;
+    }
+    /** @private */
+
+  }, {
+    key: "_performBigStep",
+    value: function _performBigStep(e) {
+      var currentEvent, keepGoing, allStatesExited, allStatesEntered;
+
+      var _this$_startBigStep = this._startBigStep(e);
+
+      var _this$_startBigStep2 = _slicedToArray(_this$_startBigStep, 4);
+
+      allStatesExited = _this$_startBigStep2[0];
+      allStatesEntered = _this$_startBigStep2[1];
+      keepGoing = _this$_startBigStep2[2];
+      currentEvent = _this$_startBigStep2[3];
+
+      while (keepGoing) {
+        var _this$_selectTransiti = this._selectTransitionsAndPerformSmallStep(currentEvent, allStatesEntered, allStatesExited);
+
+        var _this$_selectTransiti2 = _slicedToArray(_this$_selectTransiti, 2);
+
+        currentEvent = _this$_selectTransiti2[0];
+        keepGoing = _this$_selectTransiti2[1];
+      }
+
+      this._finishBigStep(currentEvent, allStatesEntered, allStatesExited);
+    }
+  }, {
+    key: "_selectTransitionsAndPerformSmallStep",
+    value: function _selectTransitionsAndPerformSmallStep(currentEvent, allStatesEntered, allStatesExited) {
+      //first select with null event
+      var selectedTransitions = this._selectTransitions(currentEvent, true);
+
+      if (selectedTransitions.isEmpty()) {
+        var ev = this._internalEventQueue.shift();
+
+        if (ev) {
+          currentEvent = ev;
+          selectedTransitions = this._selectTransitions(currentEvent, false);
+        }
+      }
+
+      if (!selectedTransitions.isEmpty()) {
+        this.emit('onSmallStepBegin', currentEvent);
+        var statesExited, statesEntered;
+
+        var _this$_performSmallSt = this._performSmallStep(currentEvent, selectedTransitions);
+
+        var _this$_performSmallSt2 = _slicedToArray(_this$_performSmallSt, 2);
+
+        statesExited = _this$_performSmallSt2[0];
+        statesEntered = _this$_performSmallSt2[1];
+        if (statesExited) statesExited.forEach(function (s) {
+          return allStatesExited.add(s);
+        });
+        if (statesEntered) statesEntered.forEach(function (s) {
+          return allStatesEntered.add(s);
+        });
+        this.emit('onSmallStepEnd', currentEvent);
+      }
+
+      var keepGoing = !selectedTransitions.isEmpty() || this._internalEventQueue.length;
+      return [currentEvent, keepGoing];
+    }
+  }, {
+    key: "_startBigStep",
+    value: function _startBigStep(e) {
+      var _this4 = this;
+
+      this.emit('onBigStepBegin', e); //do applyFinalize and autoforward
+
+      this._configuration.iter().forEach(function (state) {
+        if (state.invokes) state.invokes.forEach(function (invoke) {
+          if (invoke.autoforward) {
+            //autoforward
+            _this4._scriptingContext.send({
+              target: "#_".concat(invoke.id),
+              name: e.name,
+              data: e.data
+            });
+          }
+
+          if (invoke.id === e.invokeid) {
+            //applyFinalize
+            if (invoke.finalize) invoke.finalize.forEach(function (action) {
+              return _this4._evaluateAction(e, action);
+            });
+          }
+        });
+      });
+
+      if (e) this._internalEventQueue.push(e);
+      var allStatesExited = new Set(),
+          allStatesEntered = new Set();
+      var keepGoing = true;
+      var currentEvent = e;
+      return [allStatesEntered, allStatesExited, keepGoing, currentEvent];
+    }
+  }, {
+    key: "_finishBigStep",
+    value: function _finishBigStep(e, allStatesEntered, allStatesExited, cb) {
+      var _this5 = this;
+
+      var statesToInvoke = Array.from(new Set(_toConsumableArray(allStatesEntered).filter(function (s) {
+        return s.invokes && !allStatesExited.has(s);
+      }))).sort(sortInEntryOrder); // Here we invoke whatever needs to be invoked. The implementation of 'invoke' is platform-specific
+
+      statesToInvoke.forEach(function (s) {
+        s.invokes.forEach(function (f) {
+          return _this5._evaluateAction(e, f);
+        });
+      }); // cancel invoke for allStatesExited
+
+      allStatesExited.forEach(function (s) {
+        if (s.invokes) s.invokes.forEach(function (invoke) {
+          _this5._scriptingContext.cancelInvoke(invoke.id);
+        });
+      }); // TODO: Invoking may have raised internal error events and we iterate to handle them        
+      //if not internalQueue.isEmpty():
+      //    continue
+
+      this._isInFinalState = this._configuration.iter().every(function (s) {
+        return s.typeEnum === FINAL;
+      });
+
+      if (this._isInFinalState) {
+        this._exitInterpreter(e);
+      }
+
+      this.emit('onBigStepEnd', e);
+      if (cb) cb(undefined, this.getConfiguration());
+    }
+  }, {
+    key: "_cancelAllDelayedSends",
+    value: function _cancelAllDelayedSends() {
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this._scriptingContext._timeouts[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var timeoutOptions = _step.value;
+          if (!timeoutOptions.sendOptions.delay) continue;
+
+          this._log('cancelling delayed send', timeoutOptions);
+
+          clearTimeout(timeoutOptions.timeoutHandle);
+
+          this._scriptingContext._timeouts.delete(timeoutOptions);
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      Object.keys(this._scriptingContext._timeoutMap).forEach(function (key) {
+        delete this._scriptingContext._timeoutMap[key];
+      }, this);
+    }
+  }, {
+    key: "_performBigStepAsync",
+    value: function _performBigStepAsync(e, cb) {
+      var currentEvent, keepGoing, allStatesExited, allStatesEntered;
+
+      var _this$_startBigStep3 = this._startBigStep(e);
+
+      var _this$_startBigStep4 = _slicedToArray(_this$_startBigStep3, 4);
+
+      allStatesExited = _this$_startBigStep4[0];
+      allStatesEntered = _this$_startBigStep4[1];
+      keepGoing = _this$_startBigStep4[2];
+      currentEvent = _this$_startBigStep4[3];
+
+      function nextStep(emit) {
+        this.emit(emit);
+
+        var _this$_selectTransiti3 = this._selectTransitionsAndPerformSmallStep(currentEvent, allStatesEntered, allStatesExited);
+
+        var _this$_selectTransiti4 = _slicedToArray(_this$_selectTransiti3, 2);
+
+        currentEvent = _this$_selectTransiti4[0];
+        keepGoing = _this$_selectTransiti4[1];
+
+        if (keepGoing) {
+          this.emit('onBigStepSuspend');
+          setImmediate(nextStep.bind(this, 'onBigStepResume'));
+        } else {
+          this._finishBigStep(currentEvent, allStatesEntered, allStatesExited, cb);
+        }
+      }
+
+      nextStep.call(this, 'onBigStepBegin');
+    }
+    /** @private */
+
+  }, {
+    key: "_performSmallStep",
+    value: function _performSmallStep(currentEvent, selectedTransitions) {
+      this._log("selecting transitions with currentEvent", currentEvent);
+
+      this._log("selected transitions", selectedTransitions);
+
+      var statesExited, statesEntered;
+
+      if (!selectedTransitions.isEmpty()) {
+        //we only want to enter and exit states from transitions with targets
+        //filter out targetless transitions here - we will only use these to execute transition actions
+        var selectedTransitionsWithTargets = new this.opts.Set(selectedTransitions.iter().filter(transitionWithTargets));
+        statesExited = this._exitStates(currentEvent, selectedTransitionsWithTargets);
+
+        this._executeTransitions(currentEvent, selectedTransitions);
+
+        statesEntered = this._enterStates(currentEvent, selectedTransitionsWithTargets);
+
+        this._log("new configuration ", this._configuration);
+      }
+
+      return [statesExited, statesEntered];
+    }
+  }, {
+    key: "_exitStates",
+    value: function _exitStates(currentEvent, selectedTransitionsWithTargets) {
+      var basicStatesExited, statesExited;
+
+      var _this$_getStatesExite = this._getStatesExited(selectedTransitionsWithTargets);
+
+      var _this$_getStatesExite2 = _slicedToArray(_this$_getStatesExite, 2);
+
+      basicStatesExited = _this$_getStatesExite2[0];
+      statesExited = _this$_getStatesExite2[1];
+
+      this._log('exiting states');
+
+      for (var j = 0, len = statesExited.length; j < len; j++) {
+        var stateExited = statesExited[j];
+        if (stateExited.isAtomic) this._configuration.remove(stateExited);
+
+        this._log("exiting ", stateExited.id); //invoke listeners
+
+
+        this.emit('onExit', stateExited.id);
+
+        if (stateExited.onExit !== undefined) {
+          for (var exitIdx = 0, exitLen = stateExited.onExit.length; exitIdx < exitLen; exitIdx++) {
+            var block = stateExited.onExit[exitIdx];
+
+            for (var blockIdx = 0, blockLen = block.length; blockIdx < blockLen; blockIdx++) {
+              var actionRef = block[blockIdx];
+
+              try {
+                actionRef.call(this._scriptingContext, currentEvent);
+              } catch (e) {
+                this._handleError(e, actionRef);
+
+                break;
+              }
+            }
+          }
+        }
+
+        var f;
+
+        if (stateExited.historyRef) {
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            for (var _iterator2 = stateExited.historyRef[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var historyRef = _step2.value;
+
+              if (historyRef.isDeep) {
+                f = function f(s0) {
+                  return s0.typeEnum === BASIC && stateExited.descendants.indexOf(s0) > -1;
+                };
+              } else {
+                f = function f(s0) {
+                  return s0.parent === stateExited;
+                };
+              } //update history
+
+
+              this._historyValue[historyRef.id] = statesExited.filter(f);
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      }
+
+      return statesExited;
+    }
+    /** @private */
+
+  }, {
+    key: "_getStatesExited",
+    value: function _getStatesExited(transitions) {
+      var statesExited = new this.opts.Set();
+      var basicStatesExited = new this.opts.Set(); //States exited are defined to be active states that are
+      //descendants of the scope of each priority-enabled transition.
+      //Here, we iterate through the transitions, and collect states
+      //that match this condition. 
+
+      var transitionList = transitions.iter();
+
+      for (var txIdx = 0, txLen = transitionList.length; txIdx < txLen; txIdx++) {
+        var transition = transitionList[txIdx];
+        var scope = transition.scope,
+            desc = scope.descendants; //For each state in the configuration
+        //is that state a descendant of the transition scope?
+        //Store ancestors of that state up to but not including the scope.
+
+        var configList = this._configuration.iter();
+
+        for (var cfgIdx = 0, cfgLen = configList.length; cfgIdx < cfgLen; cfgIdx++) {
+          var state = configList[cfgIdx];
+
+          if (desc.indexOf(state) > -1) {
+            basicStatesExited.add(state);
+            statesExited.add(state);
+            var ancestors = query.getAncestors(state, scope);
+
+            for (var ancIdx = 0, ancLen = ancestors.length; ancIdx < ancLen; ancIdx++) {
+              statesExited.add(ancestors[ancIdx]);
+            }
+          }
+        }
+      }
+
+      var sortedStatesExited = statesExited.iter().sort(getStateWithHigherSourceChildPriority);
+      return [basicStatesExited, sortedStatesExited];
+    }
+  }, {
+    key: "_executeTransitions",
+    value: function _executeTransitions(currentEvent, selectedTransitions) {
+      var sortedTransitions = selectedTransitions.iter().sort(transitionComparator);
+
+      this._log("executing transitition actions");
+
+      for (var stxIdx = 0, len = sortedTransitions.length; stxIdx < len; stxIdx++) {
+        var transition = sortedTransitions[stxIdx];
+        var targetIds = transition.targets && transition.targets.map(function (target) {
+          return target.id;
+        });
+        this.emit('onTransition', transition.source.id, targetIds, transition.source.transitions.indexOf(transition));
+
+        if (transition.onTransition !== undefined) {
+          for (var txIdx = 0, txLen = transition.onTransition.length; txIdx < txLen; txIdx++) {
+            var actionRef = transition.onTransition[txIdx];
+
+            try {
+              actionRef.call(this._scriptingContext, currentEvent);
+            } catch (e) {
+              this._handleError(e, actionRef);
+
+              break;
+            }
+          }
+        }
+      }
+    }
+  }, {
+    key: "_enterStates",
+    value: function _enterStates(currentEvent, selectedTransitionsWithTargets) {
+      var _this6 = this;
+
+      this._log("entering states");
+
+      var statesEntered = new Set();
+      var statesForDefaultEntry = new Set(); // initialize the temporary table for default content in history states
+
+      var defaultHistoryContent = {};
+
+      this._computeEntrySet(selectedTransitionsWithTargets, statesEntered, statesForDefaultEntry, defaultHistoryContent);
+
+      statesEntered = Array.from(statesEntered).sort(sortInEntryOrder);
+
+      this._log("statesEntered ", statesEntered);
+
+      for (var enterIdx = 0, enterLen = statesEntered.length; enterIdx < enterLen; enterIdx++) {
+        var stateEntered = statesEntered[enterIdx];
+        if (stateEntered.isAtomic) this._configuration.add(stateEntered);
+
+        this._log("entering", stateEntered.id);
+
+        this.emit('onEntry', stateEntered.id);
+
+        if (stateEntered.onEntry !== undefined) {
+          for (var entryIdx = 0, entryLen = stateEntered.onEntry.length; entryIdx < entryLen; entryIdx++) {
+            var block = stateEntered.onEntry[entryIdx];
+
+            for (var blockIdx = 0, blockLen = block.length; blockIdx < blockLen; blockIdx++) {
+              var actionRef = block[blockIdx];
+
+              try {
+                actionRef.call(this._scriptingContext, currentEvent);
+              } catch (e) {
+                this._handleError(e, actionRef);
+
+                break;
+              }
+            }
+          }
+        }
+
+        if (statesForDefaultEntry.has(stateEntered)) {
+          var _iteratorNormalCompletion3 = true;
+          var _didIteratorError3 = false;
+          var _iteratorError3 = undefined;
+
+          try {
+            for (var _iterator3 = stateEntered.initialRef[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+              var initialState = _step3.value;
+              this.emit('onDefaultEntry', initialState.id);
+
+              if (initialState.typeEnum === INITIAL) {
+                var transition = initialState.transitions[0];
+
+                if (transition.onTransition !== undefined) {
+                  this._log('executing initial transition content for initial state of parent state', stateEntered.id);
+
+                  for (var txIdx = 0, txLen = transition.onTransition.length; txIdx < txLen; txIdx++) {
+                    var _actionRef = transition.onTransition[txIdx];
+
+                    try {
+                      _actionRef.call(this._scriptingContext, currentEvent);
+                    } catch (e) {
+                      this._handleError(e, _actionRef);
+
+                      break;
+                    }
+                  }
+                }
+              }
+            }
+          } catch (err) {
+            _didIteratorError3 = true;
+            _iteratorError3 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                _iterator3.return();
+              }
+            } finally {
+              if (_didIteratorError3) {
+                throw _iteratorError3;
+              }
+            }
+          }
+        }
+
+        if (defaultHistoryContent[stateEntered.id]) {
+          var _transition = defaultHistoryContent[stateEntered.id];
+
+          if (_transition.onTransition !== undefined) {
+            this._log('executing history transition content for history state of parent state', stateEntered.id);
+
+            for (var txIdx = 0, txLen = _transition.onTransition.length; txIdx < txLen; txIdx++) {
+              var _actionRef2 = _transition.onTransition[txIdx];
+
+              try {
+                _actionRef2.call(this._scriptingContext, currentEvent);
+              } catch (e) {
+                this._handleError(e, _actionRef2);
+
+                break;
+              }
+            }
+          }
+        }
+      }
+
+      for (var enterIdx = 0, enterLen = statesEntered.length; enterIdx < enterLen; enterIdx++) {
+        var stateEntered = statesEntered[enterIdx];
+
+        if (stateEntered.typeEnum === FINAL) {
+          var parent = stateEntered.parent;
+          var grandparent = parent.parent;
+
+          this._internalEventQueue.push({
+            name: "done.state." + parent.id,
+            data: stateEntered.donedata && stateEntered.donedata.call(this._scriptingContext, currentEvent)
+          });
+
+          if (grandparent && grandparent.typeEnum === PARALLEL) {
+            if (grandparent.states.every(function (s) {
+              return _this6.isInFinalState(s);
+            })) {
+              this._internalEventQueue.push({
+                name: "done.state." + grandparent.id
+              });
+            }
+          }
+        }
+      }
+
+      return statesEntered;
+    }
+  }, {
+    key: "_getEffectiveTargetStates",
+    value: function _getEffectiveTargetStates(transition) {
+      var targets = new Set();
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = transition.targets[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var s = _step4.value;
+
+          if (s.typeEnum === HISTORY) {
+            if (s.id in this._historyValue) this._historyValue[s.id].forEach(function (state) {
+              return targets.add(state);
+            });else _toConsumableArray(this._getEffectiveTargetStates(s.transitions[0])).forEach(function (state) {
+              return targets.add(state);
+            });
+          } else {
+            targets.add(s);
+          }
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
+
+      return targets;
+    }
+  }, {
+    key: "_computeEntrySet",
+    value: function _computeEntrySet(transitions, statesToEnter, statesForDefaultEntry, defaultHistoryContent) {
+      var _iteratorNormalCompletion5 = true;
+      var _didIteratorError5 = false;
+      var _iteratorError5 = undefined;
+
+      try {
+        for (var _iterator5 = transitions.iter()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+          var t = _step5.value;
+          var _iteratorNormalCompletion6 = true;
+          var _didIteratorError6 = false;
+          var _iteratorError6 = undefined;
+
+          try {
+            for (var _iterator6 = t.targets[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+              var s = _step6.value;
+
+              this._addDescendantStatesToEnter(s, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+            }
+          } catch (err) {
+            _didIteratorError6 = true;
+            _iteratorError6 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+                _iterator6.return();
+              }
+            } finally {
+              if (_didIteratorError6) {
+                throw _iteratorError6;
+              }
+            }
+          }
+
+          var ancestor = t.scope;
+          var _iteratorNormalCompletion7 = true;
+          var _didIteratorError7 = false;
+          var _iteratorError7 = undefined;
+
+          try {
+            for (var _iterator7 = this._getEffectiveTargetStates(t)[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+              var _s2 = _step7.value;
+
+              this._addAncestorStatesToEnter(_s2, ancestor, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+            }
+          } catch (err) {
+            _didIteratorError7 = true;
+            _iteratorError7 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion7 && _iterator7.return != null) {
+                _iterator7.return();
+              }
+            } finally {
+              if (_didIteratorError7) {
+                throw _iteratorError7;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError5 = true;
+        _iteratorError5 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+            _iterator5.return();
+          }
+        } finally {
+          if (_didIteratorError5) {
+            throw _iteratorError5;
+          }
+        }
+      }
+    }
+  }, {
+    key: "_computeExitSet",
+    value: function _computeExitSet(transitions) {
+      var statesToExit = new Set();
+      var _iteratorNormalCompletion8 = true;
+      var _didIteratorError8 = false;
+      var _iteratorError8 = undefined;
+
+      try {
+        for (var _iterator8 = transitions[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+          var t = _step8.value;
+
+          if (t.targets) {
+            var scope = t.scope;
+            var _iteratorNormalCompletion9 = true;
+            var _didIteratorError9 = false;
+            var _iteratorError9 = undefined;
+
+            try {
+              for (var _iterator9 = this._getFullConfiguration()[Symbol.iterator](), _step9; !(_iteratorNormalCompletion9 = (_step9 = _iterator9.next()).done); _iteratorNormalCompletion9 = true) {
+                var s = _step9.value;
+                if (query.isDescendant(s, scope)) statesToExit.add(s);
+              }
+            } catch (err) {
+              _didIteratorError9 = true;
+              _iteratorError9 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion9 && _iterator9.return != null) {
+                  _iterator9.return();
+                }
+              } finally {
+                if (_didIteratorError9) {
+                  throw _iteratorError9;
+                }
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError8 = true;
+        _iteratorError8 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion8 && _iterator8.return != null) {
+            _iterator8.return();
+          }
+        } finally {
+          if (_didIteratorError8) {
+            throw _iteratorError8;
+          }
+        }
+      }
+
+      return statesToExit;
+    }
+  }, {
+    key: "_addAncestorStatesToEnter",
+    value: function _addAncestorStatesToEnter(state, ancestor, statesToEnter, statesForDefaultEntry, defaultHistoryContent) {
+      var _this7 = this;
+
+      var traverse = function traverse(anc) {
+        if (anc.typeEnum === PARALLEL) {
+          var _iteratorNormalCompletion10 = true;
+          var _didIteratorError10 = false;
+          var _iteratorError10 = undefined;
+
+          try {
+            var _loop = function _loop() {
+              var child = _step10.value;
+
+              if (child.typeEnum !== HISTORY && !_toConsumableArray(statesToEnter).some(function (s) {
+                return query.isDescendant(s, child);
+              })) {
+                _this7._addDescendantStatesToEnter(child, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+              }
+            };
+
+            for (var _iterator10 = anc.states[Symbol.iterator](), _step10; !(_iteratorNormalCompletion10 = (_step10 = _iterator10.next()).done); _iteratorNormalCompletion10 = true) {
+              _loop();
+            }
+          } catch (err) {
+            _didIteratorError10 = true;
+            _iteratorError10 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion10 && _iterator10.return != null) {
+                _iterator10.return();
+              }
+            } finally {
+              if (_didIteratorError10) {
+                throw _iteratorError10;
+              }
+            }
+          }
+        }
+      };
+
+      var _iteratorNormalCompletion11 = true;
+      var _didIteratorError11 = false;
+      var _iteratorError11 = undefined;
+
+      try {
+        for (var _iterator11 = query.getAncestors(state, ancestor)[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+          var anc = _step11.value;
+          statesToEnter.add(anc);
+          traverse(anc);
+        }
+      } catch (err) {
+        _didIteratorError11 = true;
+        _iteratorError11 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion11 && _iterator11.return != null) {
+            _iterator11.return();
+          }
+        } finally {
+          if (_didIteratorError11) {
+            throw _iteratorError11;
+          }
+        }
+      }
+
+      traverse(ancestor);
+    }
+  }, {
+    key: "_addDescendantStatesToEnter",
+    value: function _addDescendantStatesToEnter(state, statesToEnter, statesForDefaultEntry, defaultHistoryContent) {
+      var _this8 = this;
+
+      if (state.typeEnum === HISTORY) {
+        if (this._historyValue[state.id]) {
+          var _iteratorNormalCompletion12 = true;
+          var _didIteratorError12 = false;
+          var _iteratorError12 = undefined;
+
+          try {
+            for (var _iterator12 = this._historyValue[state.id][Symbol.iterator](), _step12; !(_iteratorNormalCompletion12 = (_step12 = _iterator12.next()).done); _iteratorNormalCompletion12 = true) {
+              var s = _step12.value;
+
+              this._addDescendantStatesToEnter(s, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+            }
+          } catch (err) {
+            _didIteratorError12 = true;
+            _iteratorError12 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion12 && _iterator12.return != null) {
+                _iterator12.return();
+              }
+            } finally {
+              if (_didIteratorError12) {
+                throw _iteratorError12;
+              }
+            }
+          }
+
+          var _iteratorNormalCompletion13 = true;
+          var _didIteratorError13 = false;
+          var _iteratorError13 = undefined;
+
+          try {
+            for (var _iterator13 = this._historyValue[state.id][Symbol.iterator](), _step13; !(_iteratorNormalCompletion13 = (_step13 = _iterator13.next()).done); _iteratorNormalCompletion13 = true) {
+              var _s3 = _step13.value;
+
+              this._addAncestorStatesToEnter(_s3, state.parent, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+            }
+          } catch (err) {
+            _didIteratorError13 = true;
+            _iteratorError13 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion13 && _iterator13.return != null) {
+                _iterator13.return();
+              }
+            } finally {
+              if (_didIteratorError13) {
+                throw _iteratorError13;
+              }
+            }
+          }
+        } else {
+          defaultHistoryContent[state.parent.id] = state.transitions[0];
+          var _iteratorNormalCompletion14 = true;
+          var _didIteratorError14 = false;
+          var _iteratorError14 = undefined;
+
+          try {
+            for (var _iterator14 = state.transitions[0].targets[Symbol.iterator](), _step14; !(_iteratorNormalCompletion14 = (_step14 = _iterator14.next()).done); _iteratorNormalCompletion14 = true) {
+              var _s4 = _step14.value;
+
+              this._addDescendantStatesToEnter(_s4, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+            }
+          } catch (err) {
+            _didIteratorError14 = true;
+            _iteratorError14 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion14 && _iterator14.return != null) {
+                _iterator14.return();
+              }
+            } finally {
+              if (_didIteratorError14) {
+                throw _iteratorError14;
+              }
+            }
+          }
+
+          var _iteratorNormalCompletion15 = true;
+          var _didIteratorError15 = false;
+          var _iteratorError15 = undefined;
+
+          try {
+            for (var _iterator15 = state.transitions[0].targets[Symbol.iterator](), _step15; !(_iteratorNormalCompletion15 = (_step15 = _iterator15.next()).done); _iteratorNormalCompletion15 = true) {
+              var _s5 = _step15.value;
+
+              this._addAncestorStatesToEnter(_s5, state.parent, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+            }
+          } catch (err) {
+            _didIteratorError15 = true;
+            _iteratorError15 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion15 && _iterator15.return != null) {
+                _iterator15.return();
+              }
+            } finally {
+              if (_didIteratorError15) {
+                throw _iteratorError15;
+              }
+            }
+          }
+        }
+      } else {
+        statesToEnter.add(state);
+
+        if (state.typeEnum === COMPOSITE) {
+          statesForDefaultEntry.add(state); //for each state in initialRef, if it is an initial state, then add ancestors and descendants.
+
+          var _iteratorNormalCompletion16 = true;
+          var _didIteratorError16 = false;
+          var _iteratorError16 = undefined;
+
+          try {
+            for (var _iterator16 = state.initialRef[Symbol.iterator](), _step16; !(_iteratorNormalCompletion16 = (_step16 = _iterator16.next()).done); _iteratorNormalCompletion16 = true) {
+              var _s6 = _step16.value;
+              var targets = _s6.typeEnum === INITIAL ? _s6.transitions[0].targets : [_s6];
+              var _iteratorNormalCompletion18 = true;
+              var _didIteratorError18 = false;
+              var _iteratorError18 = undefined;
+
+              try {
+                for (var _iterator18 = targets[Symbol.iterator](), _step18; !(_iteratorNormalCompletion18 = (_step18 = _iterator18.next()).done); _iteratorNormalCompletion18 = true) {
+                  var targetState = _step18.value;
+
+                  this._addDescendantStatesToEnter(targetState, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+                }
+              } catch (err) {
+                _didIteratorError18 = true;
+                _iteratorError18 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion18 && _iterator18.return != null) {
+                    _iterator18.return();
+                  }
+                } finally {
+                  if (_didIteratorError18) {
+                    throw _iteratorError18;
+                  }
+                }
+              }
+            }
+          } catch (err) {
+            _didIteratorError16 = true;
+            _iteratorError16 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion16 && _iterator16.return != null) {
+                _iterator16.return();
+              }
+            } finally {
+              if (_didIteratorError16) {
+                throw _iteratorError16;
+              }
+            }
+          }
+
+          var _iteratorNormalCompletion17 = true;
+          var _didIteratorError17 = false;
+          var _iteratorError17 = undefined;
+
+          try {
+            for (var _iterator17 = state.initialRef[Symbol.iterator](), _step17; !(_iteratorNormalCompletion17 = (_step17 = _iterator17.next()).done); _iteratorNormalCompletion17 = true) {
+              var _s7 = _step17.value;
+
+              var _targets = _s7.typeEnum === INITIAL ? _s7.transitions[0].targets : [_s7];
+
+              var _iteratorNormalCompletion19 = true;
+              var _didIteratorError19 = false;
+              var _iteratorError19 = undefined;
+
+              try {
+                for (var _iterator19 = _targets[Symbol.iterator](), _step19; !(_iteratorNormalCompletion19 = (_step19 = _iterator19.next()).done); _iteratorNormalCompletion19 = true) {
+                  var _targetState = _step19.value;
+
+                  this._addAncestorStatesToEnter(_targetState, state, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+                }
+              } catch (err) {
+                _didIteratorError19 = true;
+                _iteratorError19 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion19 && _iterator19.return != null) {
+                    _iterator19.return();
+                  }
+                } finally {
+                  if (_didIteratorError19) {
+                    throw _iteratorError19;
+                  }
+                }
+              }
+            }
+          } catch (err) {
+            _didIteratorError17 = true;
+            _iteratorError17 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion17 && _iterator17.return != null) {
+                _iterator17.return();
+              }
+            } finally {
+              if (_didIteratorError17) {
+                throw _iteratorError17;
+              }
+            }
+          }
+        } else {
+          if (state.typeEnum === PARALLEL) {
+            var _iteratorNormalCompletion20 = true;
+            var _didIteratorError20 = false;
+            var _iteratorError20 = undefined;
+
+            try {
+              var _loop2 = function _loop2() {
+                var child = _step20.value;
+
+                if (child.typeEnum !== HISTORY && !_toConsumableArray(statesToEnter).some(function (s) {
+                  return query.isDescendant(s, child);
+                })) {
+                  _this8._addDescendantStatesToEnter(child, statesToEnter, statesForDefaultEntry, defaultHistoryContent);
+                }
+              };
+
+              for (var _iterator20 = state.states[Symbol.iterator](), _step20; !(_iteratorNormalCompletion20 = (_step20 = _iterator20.next()).done); _iteratorNormalCompletion20 = true) {
+                _loop2();
+              }
+            } catch (err) {
+              _didIteratorError20 = true;
+              _iteratorError20 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion20 && _iterator20.return != null) {
+                  _iterator20.return();
+                }
+              } finally {
+                if (_didIteratorError20) {
+                  throw _iteratorError20;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }, {
+    key: "isInFinalState",
+    value: function isInFinalState(s) {
+      var _this9 = this;
+
+      if (s.typeEnum === COMPOSITE) {
+        return s.states.some(function (s) {
+          return s.typeEnum === FINAL && _this9._configuration.contains(s);
+        });
+      } else if (s.typeEnum === PARALLEL) {
+        return s.states.every(this.isInFinalState.bind(this));
+      } else {
+        return false;
+      }
+    }
+    /** @private */
+
+  }, {
+    key: "_evaluateAction",
+    value: function _evaluateAction(currentEvent, actionRef) {
+      try {
+        return actionRef.call(this._scriptingContext, currentEvent); //SCXML system variables
+      } catch (e) {
+        this._handleError(e, actionRef);
+      }
+    }
+  }, {
+    key: "_handleError",
+    value: function _handleError(e, actionRef) {
+      var event = e instanceof Error || typeof e.__proto__.name === 'string' && e.__proto__.name.match(/^.*Error$/) ? //we can't just do 'e instanceof Error', because the Error object in the sandbox is from a different context, and instanceof will return false
+      {
+        name: 'error.execution',
+        data: {
+          tagname: actionRef.tagname,
+          line: actionRef.line,
+          column: actionRef.column,
+          reason: e.message
+        },
+        type: 'platform'
+      } : e.name ? e : {
+        name: 'error.execution',
+        data: e,
+        type: 'platform'
+      };
+
+      this._internalEventQueue.push(event);
+
+      this.emit('onError', event);
+    }
+  }, {
+    key: "_log",
+    value: function _log() {
+      if (printTrace) {
+        var args = Array.from(arguments);
+        this.opts.console.log("".concat(args[0], ": ").concat(args.slice(1).map(function (arg) {
+          return arg === null ? 'null' : arg === undefined ? 'undefined' : typeof arg === 'string' ? arg : arg.toString() === '[object Object]' ? util.inspect(arg) : arg.toString();
+        }).join(', '), "\n"));
+      }
+    }
+    /**
+    * @interface Listener
+    */
+
+    /**
+    * @function
+    * @name Listener#onEntry 
+    * @param {string} stateId
+    */
+
+    /**
+    * @function
+    * @name Listener#onExit 
+    * @param {string} stateId
+    */
+
+    /**
+    * @function
+    * @name Listener#onTransition 
+    * @param {string} sourceStateId Id of the source state
+    * @param {Array<string>} targetStatesIds Ids of the target states
+    * @param {number} transitionIndex Index of the transition relative to other transitions originating from source state.
+    */
+
+    /**
+    * @function
+    * @name Listener#onError
+    * @param {Error} errorInfo
+    */
+
+    /**
+    * @function
+    * @name Listener#onBigStepBegin
+    */
+
+    /**
+    * @function
+    * @name Listener#onBigStepResume
+    */
+
+    /**
+    * @function
+    * @name Listener#onBigStepSuspend
+    */
+
+    /**
+    * @function
+    * @name Listener#onBigStepEnd
+    */
+
+    /**
+    * @function
+    * @name Listener#onSmallStepBegin
+    * @param {string} event
+    */
+
+    /**
+    * @function
+    * @name Listener#onSmallStepEnd
+    */
+
+    /** 
+    * Provides a generic mechanism to subscribe to state change and runtime
+    * error notifications.  Can be used for logging and debugging. For example,
+    * can attach a logger that simply logs the state changes.  Or can attach a
+    * network debugging client that sends state change notifications to a
+    * debugging server.
+    * This is an alternative interface to {@link EventEmitter.prototype#on}.
+    * @memberof BaseInterpreter.prototype 
+    * @param {Listener} listener
+    */
+
+  }, {
+    key: "registerListener",
+    value: function registerListener(listener) {
+      BaseInterpreter.EVENTS.forEach(function (event) {
+        if (listener[event]) this.on(event, listener[event]);
+      }, this);
+    }
+    /** 
+    * Unregister a Listener
+    * @memberof BaseInterpreter.prototype 
+    * @param {Listener} listener
+    */
+
+  }, {
+    key: "unregisterListener",
+    value: function unregisterListener(listener) {
+      BaseInterpreter.EVENTS.forEach(function (event) {
+        if (listener[event]) this.off(event, listener[event]);
+      }, this);
+    }
+    /** 
+    * Query the model to get all transition events.
+    * @return {Array<string>} Transition events.
+    * @memberof BaseInterpreter.prototype 
+    */
+
+  }, {
+    key: "getAllTransitionEvents",
+    value: function getAllTransitionEvents() {
+      var events = {};
+
+      function getEvents(state) {
+        if (state.transitions) {
+          for (var txIdx = 0, txLen = state.transitions.length; txIdx < txLen; txIdx++) {
+            events[state.transitions[txIdx].event] = true;
+          }
+        }
+
+        if (state.states) {
+          for (var stateIdx = 0, stateLen = state.states.length; stateIdx < stateLen; stateIdx++) {
+            getEvents(state.states[stateIdx]);
+          }
+        }
+      }
+
+      getEvents(this._model);
+      return Object.keys(events);
+    }
+    /**
+    * Three things capture the current snapshot of a running SCION interpreter:
+    *
+    *      <ul>
+    *      <li> basic configuration (the set of basic states the state machine is in)</li>
+    *      <li> history state values (the states the state machine was in last time it was in the parent of a history state)</li>
+    *      <li> the datamodel</li>
+    *      </ul>
+    *      
+    * The snapshot object can be serialized as JSON and saved to a database. It can
+    * later be passed to the SCXML constructor to restore the state machine
+    * using the snapshot argument.
+    *
+    * @return {Snapshot} 
+    * @memberof BaseInterpreter.prototype 
+    */
+
+  }, {
+    key: "getSnapshot",
+    value: function getSnapshot() {
+      return [this.getConfiguration(), this._serializeHistory(), this._isInFinalState, this._model.$serializeDatamodel(), this._internalEventQueue.slice()];
+    }
+  }, {
+    key: "_serializeHistory",
+    value: function _serializeHistory() {
+      var o = {};
+      Object.keys(this._historyValue).forEach(function (sid) {
+        o[sid] = this._historyValue[sid].map(function (state) {
+          return state.id;
+        });
+      }, this);
+      return o;
+    }
+    /**
+     * @interface Event
+     */
+
+    /** 
+    * @member name
+    * @memberof Event.prototype 
+    * @type string
+    * @description The name of the event
+    */
+
+    /** 
+    * @member data
+    * @memberof Event.prototype 
+    * @type any
+    * @description The event data
+    */
+
+    /** 
+    * An SCXML interpreter takes SCXML events as input, where an SCXML event is an
+    * object with "name" and "data" properties. These can be passed to method `gen`
+    * as two positional arguments, or as a single object.
+    * @param {string|Event} evtObjOrName
+    * @param {any=} optionalData
+    * @emits scion.BaseInterpreter#onEntry
+    * @emits scion.BaseInterpreter#onExit
+    * @emits scion.BaseInterpreter#onTransition
+    * @emits scion.BaseInterpreter#onDefaultEntry
+    * @emits scion.BaseInterpreter#onError
+    * @emits scion.BaseInterpreter#onBigStepBegin
+    * @emits scion.BaseInterpreter#onBigStepEnd
+    * @emits scion.BaseInterpreter#onBigStepSuspend
+    * @emits scion.BaseInterpreter#onBigStepResume
+    * @emits scion.BaseInterpreter#onSmallStepBegin
+    * @emits scion.BaseInterpreter#onSmallStepEnd
+    * @emits scion.BaseInterpreter#onBigStepEnd
+    * @emits scion.BaseInterpreter#onExitInterpreter
+    */
+
+  }, {
+    key: "gen",
+    value: function gen(evtObjOrName, optionalData) {
+      var currentEvent;
+
+      switch (_typeof(evtObjOrName)) {
+        case 'string':
+          currentEvent = {
+            name: evtObjOrName,
+            data: optionalData
+          };
+          break;
+
+        case 'object':
+          if (typeof evtObjOrName.name === 'string') {
+            currentEvent = evtObjOrName;
+          } else {
+            throw new Error('Event object must have "name" property of type string.');
+          }
+
+          break;
+
+        default:
+          throw new Error('First argument to gen must be a string or object.');
+      }
+
+      if (this._isStepping) throw new Error('Cannot call gen during a big-step'); //otherwise, kick him off
+
+      this._isStepping = true;
+
+      this._performBigStep(currentEvent);
+
+      this._isStepping = false;
+      return this.getConfiguration();
+    }
+    /**
+    * Injects an external event into the interpreter asynchronously
+    * @param {Event}  currentEvent The event to inject
+    * @param {genCallback} cb Callback invoked with an error or the interpreter's stable configuration
+    * @emits scion.BaseInterpreter#onEntry
+    * @emits scion.BaseInterpreter#onExit
+    * @emits scion.BaseInterpreter#onTransition
+    * @emits scion.BaseInterpreter#onDefaultEntry
+    * @emits scion.BaseInterpreter#onError
+    * @emits scion.BaseInterpreter#onBigStepBegin
+    * @emits scion.BaseInterpreter#onBigStepEnd
+    * @emits scion.BaseInterpreter#onBigStepSuspend
+    * @emits scion.BaseInterpreter#onBigStepResume
+    * @emits scion.BaseInterpreter#onSmallStepBegin
+    * @emits scion.BaseInterpreter#onSmallStepEnd
+    * @emits scion.BaseInterpreter#onBigStepEnd
+    * @emits scion.BaseInterpreter#onExitInterpreter
+    */
+
+  }, {
+    key: "genAsync",
+    value: function genAsync(currentEvent, cb) {
+      if (currentEvent !== null && (_typeof(currentEvent) !== 'object' || !currentEvent || typeof currentEvent.name !== 'string')) {
+        throw new Error('Expected currentEvent to be null or an Object with a name');
+      }
+
+      if (typeof cb !== 'function') {
+        cb = nop;
+      }
+
+      this._externalEventQueue.push([currentEvent, cb]); //the semantics we want are to return to the cb the results of processing that particular event.
+
+
+      function nextStep(e, c) {
+        this._performBigStepAsync(e, function (err, config) {
+          c(err, config);
+
+          if (this._externalEventQueue.length) {
+            nextStep.apply(this, this._externalEventQueue.shift());
+          } else {
+            this._isStepping = false;
+          }
+        }.bind(this));
+      }
+
+      if (!this._isStepping) {
+        this._isStepping = true;
+        nextStep.apply(this, this._externalEventQueue.shift());
+      }
+    }
+  }]);
+
+  return BaseInterpreter;
+}(EventEmitter);
+
+BaseInterpreter.EVENTS = ['onEntry', 'onExit', 'onTransition', 'onDefaultEntry', 'onError', 'onBigStepBegin', 'onBigStepSuspend', 'onBigStepResume', 'onSmallStepBegin', 'onSmallStepEnd', 'onBigStepEnd', 'onExitInterpreter']; //some global singletons to use to generate in-memory session ids, in case the user does not specify these data structures
+
+BaseInterpreter.sessionIdCounter = 1;
+
+BaseInterpreter.generateSessionid = function () {
+  return BaseInterpreter.sessionIdCounter++;
+};
+
+BaseInterpreter.sessionRegistry = new Map(); // Do nothing
+
+function nop() {}
+
+var InterpreterScriptingContext =
+/*#__PURE__*/
+function () {
+  function InterpreterScriptingContext(interpreter) {
+    _classCallCheck(this, InterpreterScriptingContext);
+
+    this._interpreter = interpreter;
+    this._timeoutMap = {};
+    this._invokeMap = {};
+    this._timeouts = new Set(); //Regex from:
+    //  http://daringfireball.net/2010/07/improved_regex_for_matching_urls
+    //  http://stackoverflow.com/a/6927878
+
+    this.validateUriRegex = /(#_.*)|\b((?:[a-z][\w-]+:(?:\/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/i;
+    this.invokeSendTargetRegex = /^#_(.*)$/;
+    this.scxmlSendTargetRegex = /^#_scxml_(.*)$/;
+  }
+
+  _createClass(InterpreterScriptingContext, [{
+    key: "raise",
+    value: function raise(event) {
+      this._installDefaultPropsOnEvent(event, true);
+
+      this._interpreter._internalEventQueue.push(event);
+    }
+  }, {
+    key: "parseXmlStringAsDOM",
+    value: function parseXmlStringAsDOM(xmlString) {
+      return (this._interpreter.opts.xmlParser || InterpreterScriptingContext.xmlParser).parse(xmlString);
+    }
+  }, {
+    key: "invoke",
+    value: function invoke(invokeObj) {
+      var _this10 = this;
+
+      //look up invoker by type. assume invokers are passed in as an option to constructor
+      this._invokeMap[invokeObj.id] = new Promise(function (resolve, reject) {
+        (_this10._interpreter.opts.invokers || InterpreterScriptingContext.invokers)[invokeObj.type](_this10._interpreter, invokeObj, _this10._interpreter.opts.invokerExecutionContext, function (err, session) {
+          if (err) return reject(err);
+
+          _this10._interpreter.emit('onInvokedSessionInitialized', session);
+
+          resolve(session);
+        });
+      });
+    }
+  }, {
+    key: "cancelInvoke",
+    value: function cancelInvoke(invokeid) {
+      var _this11 = this;
+
+      //TODO: on cancel invoke clean up this._invokeMap
+      var sessionPromise = this._invokeMap[invokeid];
+
+      this._interpreter._log("cancelling session with invokeid ".concat(invokeid));
+
+      if (sessionPromise) {
+        this._interpreter._log("sessionPromise found");
+
+        sessionPromise.then(function (session) {
+          _this11._interpreter._log("resolved session ".concat(invokeid, ". cancelling... "));
+
+          session.cancel(); //clean up
+
+          delete _this11._invokeMap[invokeid];
+        }, function (err) {//TODO: dispatch error back into the state machine as error.communication
+        });
+      }
+    }
+  }, {
+    key: "_installDefaultPropsOnEvent",
+    value: function _installDefaultPropsOnEvent(event, isInternal) {
+      if (!isInternal) {
+        event.origin = this._interpreter.opts._x._ioprocessors.scxml.location; //TODO: preserve original origin when we autoforward? 
+
+        event.origintype = event.type || SCXML_IOPROCESSOR_TYPE;
+      }
+
+      if (typeof event.type === 'undefined') {
+        event.type = isInternal ? 'internal' : 'external';
+      }
+
+      ['name', 'sendid', 'invokeid', 'data', 'origin', 'origintype'].forEach(function (prop) {
+        if (typeof event[prop] === 'undefined') {
+          event[prop] = undefined;
+        }
+      });
+    }
+  }, {
+    key: "send",
+    value: function send(event, options) {
+      this._interpreter._log('send event', event, options);
+
+      options = options || {};
+      var sendType = options.type || SCXML_IOPROCESSOR_TYPE; //TODO: move these out
+
+      function validateSend(event, options, sendAction) {
+        if (event.target) {
+          var targetIsValidUri = this.validateUriRegex.test(event.target);
+
+          if (!targetIsValidUri) {
+            throw {
+              name: "error.execution",
+              data: 'Target is not valid URI',
+              sendid: event.sendid,
+              type: 'platform'
+            };
+          }
+        }
+
+        if (sendType !== SCXML_IOPROCESSOR_TYPE) {
+          //TODO: extend this to support HTTP, and other IO processors
+          throw {
+            name: "error.execution",
+            data: 'Unsupported event processor type',
+            sendid: event.sendid,
+            type: 'platform'
+          };
+        }
+
+        sendAction.call(this, event, options);
+      }
+
+      function defaultSendAction(event, options) {
+        var _this12 = this;
+
+        if (typeof setTimeout === 'undefined') throw new Error('Default implementation of BaseInterpreter.prototype.send will not work unless setTimeout is defined globally.');
+        var match;
+
+        if (event.target === '#_internal') {
+          this.raise(event);
+        } else {
+          this._installDefaultPropsOnEvent(event, false);
+
+          event.origintype = SCXML_IOPROCESSOR_TYPE; //TODO: extend this to support HTTP, and other IO processors
+          //TODO : paramterize this based on send/@type?
+
+          if (!event.target) {
+            doSend.call(this, this._interpreter);
+          } else if (event.target === '#_parent') {
+            if (this._interpreter.opts.parentSession) {
+              event.invokeid = this._interpreter.opts.invokeid;
+              doSend.call(this, this._interpreter.opts.parentSession);
+            } else {
+              throw {
+                name: "error.communication",
+                data: 'Parent session not specified',
+                sendid: event.sendid,
+                type: 'platform'
+              };
+            }
+          } else if (match = event.target.match(this.scxmlSendTargetRegex)) {
+            var targetSessionId = match[1];
+
+            var session = this._interpreter.opts.sessionRegistry.get(targetSessionId);
+
+            if (session) {
+              doSend.call(this, session);
+            } else {
+              throw {
+                name: 'error.communication',
+                sendid: event.sendid,
+                type: 'platform'
+              };
+            }
+          } else if (match = event.target.match(this.invokeSendTargetRegex)) {
+            //TODO: test this code path.
+            var invokeId = match[1];
+
+            this._invokeMap[invokeId].then(function (session) {
+              doSend.call(_this12, session);
+            });
+          } else {
+            throw new Error('Unrecognized send target.'); //TODO: dispatch error back into the state machine
+          }
+        }
+
+        function doSend(session) {
+          //TODO: we probably now need to refactor data structures:
+          //    this._timeouts
+          //    this._timeoutMap
+          var timeoutHandle = setTimeout(function () {
+            if (event.sendid) delete this._timeoutMap[event.sendid];
+
+            this._timeouts.delete(timeoutOptions);
+
+            if (this._interpreter.opts.doSend) {
+              this._interpreter.opts.doSend(session, event);
+            } else {
+              session[this._interpreter.opts.sendAsync ? 'genAsync' : 'gen'](event);
+            }
+          }.bind(this), options.delay || 0);
+          var timeoutOptions = {
+            sendOptions: options,
+            timeoutHandle: timeoutHandle
+          };
+          if (event.sendid) this._timeoutMap[event.sendid] = timeoutHandle;
+
+          this._timeouts.add(timeoutOptions);
+        }
+      }
+
+      function publish() {
+        this._interpreter.emit(event.name, event.data);
+      } //choose send function
+      //TODO: rethink how this custom send works
+
+
+      var sendFn;
+
+      if (event.type === 'https://github.com/jbeard4/SCION#publish') {
+        sendFn = publish;
+      } else if (this._interpreter.opts.customSend) {
+        sendFn = this._interpreter.opts.customSend;
+      } else {
+        sendFn = defaultSendAction;
+      }
+
+      options = options || {};
+
+      this._interpreter._log("sending event", event.name, "with content", event.data, "after delay", options.delay);
+
+      validateSend.call(this, event, options, sendFn);
+    }
+  }, {
+    key: "cancel",
+    value: function cancel(sendid) {
+      if (this._interpreter.opts.customCancel) {
+        return this._interpreter.opts.customCancel.apply(this, [sendid]);
+      }
+
+      if (typeof clearTimeout === 'undefined') throw new Error('Default implementation of BaseInterpreter.prototype.cancel will not work unless setTimeout is defined globally.');
+
+      if (sendid in this._timeoutMap) {
+        this._interpreter._log("cancelling ", sendid, " with timeout id ", this._timeoutMap[sendid]);
+
+        clearTimeout(this._timeoutMap[sendid]);
+      }
+    }
+  }]);
+
+  return InterpreterScriptingContext;
+}();
+
+module.exports = extend(new EventEmitter(), {
+  BaseInterpreter: BaseInterpreter,
+  ArraySet: ArraySet,
+  STATE_TYPES: constants.STATE_TYPES,
+  initializeModel: initializeModel,
+  InterpreterScriptingContext: InterpreterScriptingContext,
+  helpers: helpers,
+  query: query
+});
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../process/browser.js */ "./node_modules/process/browser.js"), __webpack_require__(/*! ./../../../timers-browserify/main.js */ "./node_modules/timers-browserify/main.js").setImmediate))
 
 /***/ }),
 
@@ -159,7 +2888,311 @@ eval("/* WEBPACK VAR INJECTION */(function(process, setImmediate) {//   Copyrigh
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function(setImmediate) {function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nfunction _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }\n\nfunction _nonIterableSpread() { throw new TypeError(\"Invalid attempt to spread non-iterable instance\"); }\n\nfunction _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === \"[object Arguments]\") return Array.from(iter); }\n\nfunction _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }\n\nfunction _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError(\"Cannot call a class as a function\"); } }\n\nfunction _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if (\"value\" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }\n\nfunction _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }\n\nfunction _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === \"object\" || typeof call === \"function\")) { return call; } return _assertThisInitialized(self); }\n\nfunction _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError(\"this hasn't been initialised - super() hasn't been called\"); } return self; }\n\nfunction _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }\n\nfunction _inherits(subClass, superClass) { if (typeof superClass !== \"function\" && superClass !== null) { throw new TypeError(\"Super expression must either be null or a function\"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }\n\nfunction _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }\n\nvar base = __webpack_require__(/*! @scion-scxml/core-base */ \"./node_modules/@scion-scxml/core-base/lib/scion-core-base.js\"),\n    helpers = base.helpers,\n    query = base.query,\n    transitionComparator = base.helpers.transitionComparator;\n/** \n * @description Implements semantics described in Algorithm D of the SCXML specification. \n * See {@link scion.BaseInterpreter} for information on the constructor arguments.\n * @class SCInterpreter \n * @extends BaseInterpreter\n */\n\n\nvar Statechart =\n/*#__PURE__*/\nfunction (_base$BaseInterpreter) {\n  _inherits(Statechart, _base$BaseInterpreter);\n\n  function Statechart(modelOrModelFactory, opts) {\n    _classCallCheck(this, Statechart);\n\n    opts = opts || {};\n    opts.legacySemantics = false;\n    return _possibleConstructorReturn(this, _getPrototypeOf(Statechart).call(this, modelOrModelFactory, opts));\n  }\n  /** @private */\n\n\n  _createClass(Statechart, [{\n    key: \"_selectTransitions\",\n    value: function _selectTransitions(currentEvent, selectEventlessTransitions) {\n      var transitionSelector = this.opts.transitionSelector;\n      var enabledTransitions = new this.opts.Set();\n\n      var e = this._evaluateAction.bind(this, currentEvent);\n\n      var atomicStates = this._configuration.iter().sort(transitionComparator);\n\n      var _iteratorNormalCompletion = true;\n      var _didIteratorError = false;\n      var _iteratorError = undefined;\n\n      try {\n        for (var _iterator = atomicStates[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {\n          var state = _step.value;\n          var _iteratorNormalCompletion2 = true;\n          var _didIteratorError2 = false;\n          var _iteratorError2 = undefined;\n\n          try {\n            loop: for (var _iterator2 = [state].concat(query.getAncestors(state))[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {\n              var s = _step2.value;\n              var _iteratorNormalCompletion3 = true;\n              var _didIteratorError3 = false;\n              var _iteratorError3 = undefined;\n\n              try {\n                for (var _iterator3 = s.transitions[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {\n                  var t = _step3.value;\n\n                  if (transitionSelector(t, currentEvent, e, selectEventlessTransitions)) {\n                    enabledTransitions.add(t);\n                    break loop;\n                  }\n                }\n              } catch (err) {\n                _didIteratorError3 = true;\n                _iteratorError3 = err;\n              } finally {\n                try {\n                  if (!_iteratorNormalCompletion3 && _iterator3.return != null) {\n                    _iterator3.return();\n                  }\n                } finally {\n                  if (_didIteratorError3) {\n                    throw _iteratorError3;\n                  }\n                }\n              }\n            }\n          } catch (err) {\n            _didIteratorError2 = true;\n            _iteratorError2 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {\n                _iterator2.return();\n              }\n            } finally {\n              if (_didIteratorError2) {\n                throw _iteratorError2;\n              }\n            }\n          }\n        }\n      } catch (err) {\n        _didIteratorError = true;\n        _iteratorError = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion && _iterator.return != null) {\n            _iterator.return();\n          }\n        } finally {\n          if (_didIteratorError) {\n            throw _iteratorError;\n          }\n        }\n      }\n\n      var priorityEnabledTransitions = this._removeConflictingTransition(enabledTransitions);\n\n      this._log(\"priorityEnabledTransitions\", priorityEnabledTransitions);\n\n      return priorityEnabledTransitions;\n    }\n    /** @private */\n\n  }, {\n    key: \"_removeConflictingTransition\",\n    value: function _removeConflictingTransition(enabledTransitions) {\n      var _this = this;\n\n      var filteredTransitions = new this.opts.Set(); //toList sorts the transitions in the order of the states that selected them\n\n      var _iteratorNormalCompletion4 = true;\n      var _didIteratorError4 = false;\n      var _iteratorError4 = undefined;\n\n      try {\n        for (var _iterator4 = enabledTransitions.iter()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {\n          var t1 = _step4.value;\n          var t1Preempted = false;\n          var transitionsToRemove = new Set();\n          var _iteratorNormalCompletion5 = true;\n          var _didIteratorError5 = false;\n          var _iteratorError5 = undefined;\n\n          try {\n            var _loop = function _loop() {\n              var t2 = _step5.value;\n\n              //TODO: can we compute this statically? for example, by checking if the transition scopes are arena orthogonal?\n              var t1ExitSet = _this._computeExitSet([t1]);\n\n              var t2ExitSet = _this._computeExitSet([t2]);\n\n              var hasIntersection = _toConsumableArray(t1ExitSet).some(function (s) {\n                return t2ExitSet.has(s);\n              }) || _toConsumableArray(t2ExitSet).some(function (s) {\n                return t1ExitSet.has(s);\n              });\n\n              _this._log('t1ExitSet', t1.source.id, _toConsumableArray(t1ExitSet).map(function (s) {\n                return s.id;\n              }));\n\n              _this._log('t2ExitSet', t2.source.id, _toConsumableArray(t2ExitSet).map(function (s) {\n                return s.id;\n              }));\n\n              _this._log('hasIntersection', hasIntersection);\n\n              if (hasIntersection) {\n                if (t2.source.descendants.indexOf(t1.source) > -1) {\n                  //is this the same as being ancestrally related?\n                  transitionsToRemove.add(t2);\n                } else {\n                  t1Preempted = true;\n                  return \"break\";\n                }\n              }\n            };\n\n            for (var _iterator5 = filteredTransitions.iter()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {\n              var _ret = _loop();\n\n              if (_ret === \"break\") break;\n            }\n          } catch (err) {\n            _didIteratorError5 = true;\n            _iteratorError5 = err;\n          } finally {\n            try {\n              if (!_iteratorNormalCompletion5 && _iterator5.return != null) {\n                _iterator5.return();\n              }\n            } finally {\n              if (_didIteratorError5) {\n                throw _iteratorError5;\n              }\n            }\n          }\n\n          if (!t1Preempted) {\n            var _iteratorNormalCompletion6 = true;\n            var _didIteratorError6 = false;\n            var _iteratorError6 = undefined;\n\n            try {\n              for (var _iterator6 = transitionsToRemove[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {\n                var t3 = _step6.value;\n                filteredTransitions.remove(t3);\n              }\n            } catch (err) {\n              _didIteratorError6 = true;\n              _iteratorError6 = err;\n            } finally {\n              try {\n                if (!_iteratorNormalCompletion6 && _iterator6.return != null) {\n                  _iterator6.return();\n                }\n              } finally {\n                if (_didIteratorError6) {\n                  throw _iteratorError6;\n                }\n              }\n            }\n\n            filteredTransitions.add(t1);\n          }\n        }\n      } catch (err) {\n        _didIteratorError4 = true;\n        _iteratorError4 = err;\n      } finally {\n        try {\n          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {\n            _iterator4.return();\n          }\n        } finally {\n          if (_didIteratorError4) {\n            throw _iteratorError4;\n          }\n        }\n      }\n\n      return filteredTransitions;\n    }\n  }]);\n\n  return Statechart;\n}(base.BaseInterpreter);\n\nbase.Statechart = Statechart; //simple default invoker\n\nbase.InterpreterScriptingContext.invokers = {\n  \"http://www.w3.org/TR/scxml/\": function httpWwwW3OrgTRScxml(invokingSession, invokeObj, invokerExecutionContext, cb) {\n    //put invoke logic here: \n    var method, arg;\n\n    if (invokeObj.constructorFunction) {\n      var fnModel = invokeObj.constructorFunction;\n      var options = {\n        invokeid: invokeObj.id,\n        params: invokeObj.params,\n        parentSession: invokingSession,\n        docUrl: invokeObj.docUrl //sessionid : //TODO: construct or generate a sessionid for invoked session\n\n      };\n      var model = invokerExecutionContext;\n      var interpreter;\n\n      if (options.parentSession instanceof Statechart) {\n        interpreter = new Statechart(fnModel, options);\n      }\n\n      cb(null, interpreter, fnModel, model); //we introduce a delay here before starting the interpreter to give clients that are subscribed to onInvokedSessionInitialized event a chance to subscribe to events on the newly instantiated interpreter\n\n      setImmediate(function () {\n        return interpreter.start();\n      });\n    } else {\n      throw new Error('Invoke object needs a constructorFunction property');\n    }\n  }\n};\nbase.InterpreterScriptingContext.invokers[undefined] = base.InterpreterScriptingContext.invokers[null] = base.InterpreterScriptingContext.invokers['scxml'] = base.InterpreterScriptingContext.invokers[\"http://www.w3.org/TR/scxml/\"];\nmodule.exports = base;\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../timers-browserify/main.js */ \"./node_modules/timers-browserify/main.js\").setImmediate))\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/@scion-scxml/core/lib/Statechart.js?");
+/* WEBPACK VAR INJECTION */(function(setImmediate) {function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
+
+function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+var base = __webpack_require__(/*! @scion-scxml/core-base */ "./node_modules/@scion-scxml/core-base/lib/scion-core-base.js"),
+    helpers = base.helpers,
+    query = base.query,
+    transitionComparator = base.helpers.transitionComparator;
+/** 
+ * @description Implements semantics described in Algorithm D of the SCXML specification. 
+ * See {@link scion.BaseInterpreter} for information on the constructor arguments.
+ * @class SCInterpreter 
+ * @extends BaseInterpreter
+ */
+
+
+var Statechart =
+/*#__PURE__*/
+function (_base$BaseInterpreter) {
+  _inherits(Statechart, _base$BaseInterpreter);
+
+  function Statechart(modelOrModelFactory, opts) {
+    _classCallCheck(this, Statechart);
+
+    opts = opts || {};
+    opts.legacySemantics = false;
+    return _possibleConstructorReturn(this, _getPrototypeOf(Statechart).call(this, modelOrModelFactory, opts));
+  }
+  /** @private */
+
+
+  _createClass(Statechart, [{
+    key: "_selectTransitions",
+    value: function _selectTransitions(currentEvent, selectEventlessTransitions) {
+      var transitionSelector = this.opts.transitionSelector;
+      var enabledTransitions = new this.opts.Set();
+
+      var e = this._evaluateAction.bind(this, currentEvent);
+
+      var atomicStates = this._configuration.iter().sort(transitionComparator);
+
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = atomicStates[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var state = _step.value;
+          var _iteratorNormalCompletion2 = true;
+          var _didIteratorError2 = false;
+          var _iteratorError2 = undefined;
+
+          try {
+            loop: for (var _iterator2 = [state].concat(query.getAncestors(state))[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+              var s = _step2.value;
+              var _iteratorNormalCompletion3 = true;
+              var _didIteratorError3 = false;
+              var _iteratorError3 = undefined;
+
+              try {
+                for (var _iterator3 = s.transitions[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                  var t = _step3.value;
+
+                  if (transitionSelector(t, currentEvent, e, selectEventlessTransitions)) {
+                    enabledTransitions.add(t);
+                    break loop;
+                  }
+                }
+              } catch (err) {
+                _didIteratorError3 = true;
+                _iteratorError3 = err;
+              } finally {
+                try {
+                  if (!_iteratorNormalCompletion3 && _iterator3.return != null) {
+                    _iterator3.return();
+                  }
+                } finally {
+                  if (_didIteratorError3) {
+                    throw _iteratorError3;
+                  }
+                }
+              }
+            }
+          } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion2 && _iterator2.return != null) {
+                _iterator2.return();
+              }
+            } finally {
+              if (_didIteratorError2) {
+                throw _iteratorError2;
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return != null) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      var priorityEnabledTransitions = this._removeConflictingTransition(enabledTransitions);
+
+      this._log("priorityEnabledTransitions", priorityEnabledTransitions);
+
+      return priorityEnabledTransitions;
+    }
+    /** @private */
+
+  }, {
+    key: "_removeConflictingTransition",
+    value: function _removeConflictingTransition(enabledTransitions) {
+      var _this = this;
+
+      var filteredTransitions = new this.opts.Set(); //toList sorts the transitions in the order of the states that selected them
+
+      var _iteratorNormalCompletion4 = true;
+      var _didIteratorError4 = false;
+      var _iteratorError4 = undefined;
+
+      try {
+        for (var _iterator4 = enabledTransitions.iter()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+          var t1 = _step4.value;
+          var t1Preempted = false;
+          var transitionsToRemove = new Set();
+          var _iteratorNormalCompletion5 = true;
+          var _didIteratorError5 = false;
+          var _iteratorError5 = undefined;
+
+          try {
+            var _loop = function _loop() {
+              var t2 = _step5.value;
+
+              //TODO: can we compute this statically? for example, by checking if the transition scopes are arena orthogonal?
+              var t1ExitSet = _this._computeExitSet([t1]);
+
+              var t2ExitSet = _this._computeExitSet([t2]);
+
+              var hasIntersection = _toConsumableArray(t1ExitSet).some(function (s) {
+                return t2ExitSet.has(s);
+              }) || _toConsumableArray(t2ExitSet).some(function (s) {
+                return t1ExitSet.has(s);
+              });
+
+              _this._log('t1ExitSet', t1.source.id, _toConsumableArray(t1ExitSet).map(function (s) {
+                return s.id;
+              }));
+
+              _this._log('t2ExitSet', t2.source.id, _toConsumableArray(t2ExitSet).map(function (s) {
+                return s.id;
+              }));
+
+              _this._log('hasIntersection', hasIntersection);
+
+              if (hasIntersection) {
+                if (t2.source.descendants.indexOf(t1.source) > -1) {
+                  //is this the same as being ancestrally related?
+                  transitionsToRemove.add(t2);
+                } else {
+                  t1Preempted = true;
+                  return "break";
+                }
+              }
+            };
+
+            for (var _iterator5 = filteredTransitions.iter()[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
+              var _ret = _loop();
+
+              if (_ret === "break") break;
+            }
+          } catch (err) {
+            _didIteratorError5 = true;
+            _iteratorError5 = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion5 && _iterator5.return != null) {
+                _iterator5.return();
+              }
+            } finally {
+              if (_didIteratorError5) {
+                throw _iteratorError5;
+              }
+            }
+          }
+
+          if (!t1Preempted) {
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+              for (var _iterator6 = transitionsToRemove[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                var t3 = _step6.value;
+                filteredTransitions.remove(t3);
+              }
+            } catch (err) {
+              _didIteratorError6 = true;
+              _iteratorError6 = err;
+            } finally {
+              try {
+                if (!_iteratorNormalCompletion6 && _iterator6.return != null) {
+                  _iterator6.return();
+                }
+              } finally {
+                if (_didIteratorError6) {
+                  throw _iteratorError6;
+                }
+              }
+            }
+
+            filteredTransitions.add(t1);
+          }
+        }
+      } catch (err) {
+        _didIteratorError4 = true;
+        _iteratorError4 = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion4 && _iterator4.return != null) {
+            _iterator4.return();
+          }
+        } finally {
+          if (_didIteratorError4) {
+            throw _iteratorError4;
+          }
+        }
+      }
+
+      return filteredTransitions;
+    }
+  }]);
+
+  return Statechart;
+}(base.BaseInterpreter);
+
+base.Statechart = Statechart; //simple default invoker
+
+base.InterpreterScriptingContext.invokers = {
+  "http://www.w3.org/TR/scxml/": function httpWwwW3OrgTRScxml(invokingSession, invokeObj, invokerExecutionContext, cb) {
+    //put invoke logic here: 
+    var method, arg;
+
+    if (invokeObj.constructorFunction) {
+      var fnModel = invokeObj.constructorFunction;
+      var options = {
+        invokeid: invokeObj.id,
+        params: invokeObj.params,
+        parentSession: invokingSession,
+        docUrl: invokeObj.docUrl //sessionid : //TODO: construct or generate a sessionid for invoked session
+
+      };
+      var model = invokerExecutionContext;
+      var interpreter;
+
+      if (options.parentSession instanceof Statechart) {
+        interpreter = new Statechart(fnModel, options);
+      }
+
+      cb(null, interpreter, fnModel, model); //we introduce a delay here before starting the interpreter to give clients that are subscribed to onInvokedSessionInitialized event a chance to subscribe to events on the newly instantiated interpreter
+
+      setImmediate(function () {
+        return interpreter.start();
+      });
+    } else {
+      throw new Error('Invoke object needs a constructorFunction property');
+    }
+  }
+};
+base.InterpreterScriptingContext.invokers[undefined] = base.InterpreterScriptingContext.invokers[null] = base.InterpreterScriptingContext.invokers['scxml'] = base.InterpreterScriptingContext.invokers["http://www.w3.org/TR/scxml/"];
+module.exports = base;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../../../timers-browserify/main.js */ "./node_modules/timers-browserify/main.js").setImmediate))
 
 /***/ }),
 
@@ -170,7 +3203,31 @@ eval("/* WEBPACK VAR INJECTION */(function(setImmediate) {function _typeof(obj) 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("if (typeof Object.create === 'function') {\n  // implementation from standard node.js 'util' module\n  module.exports = function inherits(ctor, superCtor) {\n    ctor.super_ = superCtor;\n    ctor.prototype = Object.create(superCtor.prototype, {\n      constructor: {\n        value: ctor,\n        enumerable: false,\n        writable: true,\n        configurable: true\n      }\n    });\n  };\n} else {\n  // old school shim for old browsers\n  module.exports = function inherits(ctor, superCtor) {\n    ctor.super_ = superCtor;\n\n    var TempCtor = function TempCtor() {};\n\n    TempCtor.prototype = superCtor.prototype;\n    ctor.prototype = new TempCtor();\n    ctor.prototype.constructor = ctor;\n  };\n}\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/inherits/inherits_browser.js?");
+if (typeof Object.create === 'function') {
+  // implementation from standard node.js 'util' module
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor;
+    ctor.prototype = Object.create(superCtor.prototype, {
+      constructor: {
+        value: ctor,
+        enumerable: false,
+        writable: true,
+        configurable: true
+      }
+    });
+  };
+} else {
+  // old school shim for old browsers
+  module.exports = function inherits(ctor, superCtor) {
+    ctor.super_ = superCtor;
+
+    var TempCtor = function TempCtor() {};
+
+    TempCtor.prototype = superCtor.prototype;
+    ctor.prototype = new TempCtor();
+    ctor.prototype.constructor = ctor;
+  };
+}
 
 /***/ }),
 
@@ -181,7 +3238,214 @@ eval("if (typeof Object.create === 'function') {\n  // implementation from stand
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("// shim for using process in browser\nvar process = module.exports = {}; // cached from whatever global is present so that test runners that stub it\n// don't break things.  But we need to wrap it in a try catch in case it is\n// wrapped in strict mode code which doesn't define any globals.  It's inside a\n// function because try/catches deoptimize in certain engines.\n\nvar cachedSetTimeout;\nvar cachedClearTimeout;\n\nfunction defaultSetTimout() {\n  throw new Error('setTimeout has not been defined');\n}\n\nfunction defaultClearTimeout() {\n  throw new Error('clearTimeout has not been defined');\n}\n\n(function () {\n  try {\n    if (typeof setTimeout === 'function') {\n      cachedSetTimeout = setTimeout;\n    } else {\n      cachedSetTimeout = defaultSetTimout;\n    }\n  } catch (e) {\n    cachedSetTimeout = defaultSetTimout;\n  }\n\n  try {\n    if (typeof clearTimeout === 'function') {\n      cachedClearTimeout = clearTimeout;\n    } else {\n      cachedClearTimeout = defaultClearTimeout;\n    }\n  } catch (e) {\n    cachedClearTimeout = defaultClearTimeout;\n  }\n})();\n\nfunction runTimeout(fun) {\n  if (cachedSetTimeout === setTimeout) {\n    //normal enviroments in sane situations\n    return setTimeout(fun, 0);\n  } // if setTimeout wasn't available but was latter defined\n\n\n  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {\n    cachedSetTimeout = setTimeout;\n    return setTimeout(fun, 0);\n  }\n\n  try {\n    // when when somebody has screwed with setTimeout but no I.E. maddness\n    return cachedSetTimeout(fun, 0);\n  } catch (e) {\n    try {\n      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally\n      return cachedSetTimeout.call(null, fun, 0);\n    } catch (e) {\n      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error\n      return cachedSetTimeout.call(this, fun, 0);\n    }\n  }\n}\n\nfunction runClearTimeout(marker) {\n  if (cachedClearTimeout === clearTimeout) {\n    //normal enviroments in sane situations\n    return clearTimeout(marker);\n  } // if clearTimeout wasn't available but was latter defined\n\n\n  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {\n    cachedClearTimeout = clearTimeout;\n    return clearTimeout(marker);\n  }\n\n  try {\n    // when when somebody has screwed with setTimeout but no I.E. maddness\n    return cachedClearTimeout(marker);\n  } catch (e) {\n    try {\n      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally\n      return cachedClearTimeout.call(null, marker);\n    } catch (e) {\n      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.\n      // Some versions of I.E. have different rules for clearTimeout vs setTimeout\n      return cachedClearTimeout.call(this, marker);\n    }\n  }\n}\n\nvar queue = [];\nvar draining = false;\nvar currentQueue;\nvar queueIndex = -1;\n\nfunction cleanUpNextTick() {\n  if (!draining || !currentQueue) {\n    return;\n  }\n\n  draining = false;\n\n  if (currentQueue.length) {\n    queue = currentQueue.concat(queue);\n  } else {\n    queueIndex = -1;\n  }\n\n  if (queue.length) {\n    drainQueue();\n  }\n}\n\nfunction drainQueue() {\n  if (draining) {\n    return;\n  }\n\n  var timeout = runTimeout(cleanUpNextTick);\n  draining = true;\n  var len = queue.length;\n\n  while (len) {\n    currentQueue = queue;\n    queue = [];\n\n    while (++queueIndex < len) {\n      if (currentQueue) {\n        currentQueue[queueIndex].run();\n      }\n    }\n\n    queueIndex = -1;\n    len = queue.length;\n  }\n\n  currentQueue = null;\n  draining = false;\n  runClearTimeout(timeout);\n}\n\nprocess.nextTick = function (fun) {\n  var args = new Array(arguments.length - 1);\n\n  if (arguments.length > 1) {\n    for (var i = 1; i < arguments.length; i++) {\n      args[i - 1] = arguments[i];\n    }\n  }\n\n  queue.push(new Item(fun, args));\n\n  if (queue.length === 1 && !draining) {\n    runTimeout(drainQueue);\n  }\n}; // v8 likes predictible objects\n\n\nfunction Item(fun, array) {\n  this.fun = fun;\n  this.array = array;\n}\n\nItem.prototype.run = function () {\n  this.fun.apply(null, this.array);\n};\n\nprocess.title = 'browser';\nprocess.browser = true;\nprocess.env = {};\nprocess.argv = [];\nprocess.version = ''; // empty string to avoid regexp issues\n\nprocess.versions = {};\n\nfunction noop() {}\n\nprocess.on = noop;\nprocess.addListener = noop;\nprocess.once = noop;\nprocess.off = noop;\nprocess.removeListener = noop;\nprocess.removeAllListeners = noop;\nprocess.emit = noop;\nprocess.prependListener = noop;\nprocess.prependOnceListener = noop;\n\nprocess.listeners = function (name) {\n  return [];\n};\n\nprocess.binding = function (name) {\n  throw new Error('process.binding is not supported');\n};\n\nprocess.cwd = function () {\n  return '/';\n};\n\nprocess.chdir = function (dir) {\n  throw new Error('process.chdir is not supported');\n};\n\nprocess.umask = function () {\n  return 0;\n};\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/process/browser.js?");
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.browser = true;
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
 
 /***/ }),
 
@@ -192,7 +3456,208 @@ eval("// shim for using process in browser\nvar process = module.exports = {}; /
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {\n  \"use strict\";\n\n  if (global.setImmediate) {\n    return;\n  }\n\n  var nextHandle = 1; // Spec says greater than zero\n\n  var tasksByHandle = {};\n  var currentlyRunningATask = false;\n  var doc = global.document;\n  var registerImmediate;\n\n  function setImmediate(callback) {\n    // Callback can either be a function or a string\n    if (typeof callback !== \"function\") {\n      callback = new Function(\"\" + callback);\n    } // Copy function arguments\n\n\n    var args = new Array(arguments.length - 1);\n\n    for (var i = 0; i < args.length; i++) {\n      args[i] = arguments[i + 1];\n    } // Store and register the task\n\n\n    var task = {\n      callback: callback,\n      args: args\n    };\n    tasksByHandle[nextHandle] = task;\n    registerImmediate(nextHandle);\n    return nextHandle++;\n  }\n\n  function clearImmediate(handle) {\n    delete tasksByHandle[handle];\n  }\n\n  function run(task) {\n    var callback = task.callback;\n    var args = task.args;\n\n    switch (args.length) {\n      case 0:\n        callback();\n        break;\n\n      case 1:\n        callback(args[0]);\n        break;\n\n      case 2:\n        callback(args[0], args[1]);\n        break;\n\n      case 3:\n        callback(args[0], args[1], args[2]);\n        break;\n\n      default:\n        callback.apply(undefined, args);\n        break;\n    }\n  }\n\n  function runIfPresent(handle) {\n    // From the spec: \"Wait until any invocations of this algorithm started before this one have completed.\"\n    // So if we're currently running a task, we'll need to delay this invocation.\n    if (currentlyRunningATask) {\n      // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a\n      // \"too much recursion\" error.\n      setTimeout(runIfPresent, 0, handle);\n    } else {\n      var task = tasksByHandle[handle];\n\n      if (task) {\n        currentlyRunningATask = true;\n\n        try {\n          run(task);\n        } finally {\n          clearImmediate(handle);\n          currentlyRunningATask = false;\n        }\n      }\n    }\n  }\n\n  function installNextTickImplementation() {\n    registerImmediate = function registerImmediate(handle) {\n      process.nextTick(function () {\n        runIfPresent(handle);\n      });\n    };\n  }\n\n  function canUsePostMessage() {\n    // The test against `importScripts` prevents this implementation from being installed inside a web worker,\n    // where `global.postMessage` means something completely different and can't be used for this purpose.\n    if (global.postMessage && !global.importScripts) {\n      var postMessageIsAsynchronous = true;\n      var oldOnMessage = global.onmessage;\n\n      global.onmessage = function () {\n        postMessageIsAsynchronous = false;\n      };\n\n      global.postMessage(\"\", \"*\");\n      global.onmessage = oldOnMessage;\n      return postMessageIsAsynchronous;\n    }\n  }\n\n  function installPostMessageImplementation() {\n    // Installs an event handler on `global` for the `message` event: see\n    // * https://developer.mozilla.org/en/DOM/window.postMessage\n    // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages\n    var messagePrefix = \"setImmediate$\" + Math.random() + \"$\";\n\n    var onGlobalMessage = function onGlobalMessage(event) {\n      if (event.source === global && typeof event.data === \"string\" && event.data.indexOf(messagePrefix) === 0) {\n        runIfPresent(+event.data.slice(messagePrefix.length));\n      }\n    };\n\n    if (global.addEventListener) {\n      global.addEventListener(\"message\", onGlobalMessage, false);\n    } else {\n      global.attachEvent(\"onmessage\", onGlobalMessage);\n    }\n\n    registerImmediate = function registerImmediate(handle) {\n      global.postMessage(messagePrefix + handle, \"*\");\n    };\n  }\n\n  function installMessageChannelImplementation() {\n    var channel = new MessageChannel();\n\n    channel.port1.onmessage = function (event) {\n      var handle = event.data;\n      runIfPresent(handle);\n    };\n\n    registerImmediate = function registerImmediate(handle) {\n      channel.port2.postMessage(handle);\n    };\n  }\n\n  function installReadyStateChangeImplementation() {\n    var html = doc.documentElement;\n\n    registerImmediate = function registerImmediate(handle) {\n      // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted\n      // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.\n      var script = doc.createElement(\"script\");\n\n      script.onreadystatechange = function () {\n        runIfPresent(handle);\n        script.onreadystatechange = null;\n        html.removeChild(script);\n        script = null;\n      };\n\n      html.appendChild(script);\n    };\n  }\n\n  function installSetTimeoutImplementation() {\n    registerImmediate = function registerImmediate(handle) {\n      setTimeout(runIfPresent, 0, handle);\n    };\n  } // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.\n\n\n  var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);\n  attachTo = attachTo && attachTo.setTimeout ? attachTo : global; // Don't get fooled by e.g. browserify environments.\n\n  if ({}.toString.call(global.process) === \"[object process]\") {\n    // For Node.js before 0.9\n    installNextTickImplementation();\n  } else if (canUsePostMessage()) {\n    // For non-IE10 modern browsers\n    installPostMessageImplementation();\n  } else if (global.MessageChannel) {\n    // For web workers, where supported\n    installMessageChannelImplementation();\n  } else if (doc && \"onreadystatechange\" in doc.createElement(\"script\")) {\n    // For IE 6–8\n    installReadyStateChangeImplementation();\n  } else {\n    // For older browsers\n    installSetTimeoutImplementation();\n  }\n\n  attachTo.setImmediate = setImmediate;\n  attachTo.clearImmediate = clearImmediate;\n})(typeof self === \"undefined\" ? typeof global === \"undefined\" ? this : global : self);\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ \"./node_modules/webpack/buildin/global.js\"), __webpack_require__(/*! ./../process/browser.js */ \"./node_modules/process/browser.js\")))\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/setimmediate/setImmediate.js?");
+/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
+  "use strict";
+
+  if (global.setImmediate) {
+    return;
+  }
+
+  var nextHandle = 1; // Spec says greater than zero
+
+  var tasksByHandle = {};
+  var currentlyRunningATask = false;
+  var doc = global.document;
+  var registerImmediate;
+
+  function setImmediate(callback) {
+    // Callback can either be a function or a string
+    if (typeof callback !== "function") {
+      callback = new Function("" + callback);
+    } // Copy function arguments
+
+
+    var args = new Array(arguments.length - 1);
+
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i + 1];
+    } // Store and register the task
+
+
+    var task = {
+      callback: callback,
+      args: args
+    };
+    tasksByHandle[nextHandle] = task;
+    registerImmediate(nextHandle);
+    return nextHandle++;
+  }
+
+  function clearImmediate(handle) {
+    delete tasksByHandle[handle];
+  }
+
+  function run(task) {
+    var callback = task.callback;
+    var args = task.args;
+
+    switch (args.length) {
+      case 0:
+        callback();
+        break;
+
+      case 1:
+        callback(args[0]);
+        break;
+
+      case 2:
+        callback(args[0], args[1]);
+        break;
+
+      case 3:
+        callback(args[0], args[1], args[2]);
+        break;
+
+      default:
+        callback.apply(undefined, args);
+        break;
+    }
+  }
+
+  function runIfPresent(handle) {
+    // From the spec: "Wait until any invocations of this algorithm started before this one have completed."
+    // So if we're currently running a task, we'll need to delay this invocation.
+    if (currentlyRunningATask) {
+      // Delay by doing a setTimeout. setImmediate was tried instead, but in Firefox 7 it generated a
+      // "too much recursion" error.
+      setTimeout(runIfPresent, 0, handle);
+    } else {
+      var task = tasksByHandle[handle];
+
+      if (task) {
+        currentlyRunningATask = true;
+
+        try {
+          run(task);
+        } finally {
+          clearImmediate(handle);
+          currentlyRunningATask = false;
+        }
+      }
+    }
+  }
+
+  function installNextTickImplementation() {
+    registerImmediate = function registerImmediate(handle) {
+      process.nextTick(function () {
+        runIfPresent(handle);
+      });
+    };
+  }
+
+  function canUsePostMessage() {
+    // The test against `importScripts` prevents this implementation from being installed inside a web worker,
+    // where `global.postMessage` means something completely different and can't be used for this purpose.
+    if (global.postMessage && !global.importScripts) {
+      var postMessageIsAsynchronous = true;
+      var oldOnMessage = global.onmessage;
+
+      global.onmessage = function () {
+        postMessageIsAsynchronous = false;
+      };
+
+      global.postMessage("", "*");
+      global.onmessage = oldOnMessage;
+      return postMessageIsAsynchronous;
+    }
+  }
+
+  function installPostMessageImplementation() {
+    // Installs an event handler on `global` for the `message` event: see
+    // * https://developer.mozilla.org/en/DOM/window.postMessage
+    // * http://www.whatwg.org/specs/web-apps/current-work/multipage/comms.html#crossDocumentMessages
+    var messagePrefix = "setImmediate$" + Math.random() + "$";
+
+    var onGlobalMessage = function onGlobalMessage(event) {
+      if (event.source === global && typeof event.data === "string" && event.data.indexOf(messagePrefix) === 0) {
+        runIfPresent(+event.data.slice(messagePrefix.length));
+      }
+    };
+
+    if (global.addEventListener) {
+      global.addEventListener("message", onGlobalMessage, false);
+    } else {
+      global.attachEvent("onmessage", onGlobalMessage);
+    }
+
+    registerImmediate = function registerImmediate(handle) {
+      global.postMessage(messagePrefix + handle, "*");
+    };
+  }
+
+  function installMessageChannelImplementation() {
+    var channel = new MessageChannel();
+
+    channel.port1.onmessage = function (event) {
+      var handle = event.data;
+      runIfPresent(handle);
+    };
+
+    registerImmediate = function registerImmediate(handle) {
+      channel.port2.postMessage(handle);
+    };
+  }
+
+  function installReadyStateChangeImplementation() {
+    var html = doc.documentElement;
+
+    registerImmediate = function registerImmediate(handle) {
+      // Create a <script> element; its readystatechange event will be fired asynchronously once it is inserted
+      // into the document. Do so, thus queuing up the task. Remember to clean up once it's been called.
+      var script = doc.createElement("script");
+
+      script.onreadystatechange = function () {
+        runIfPresent(handle);
+        script.onreadystatechange = null;
+        html.removeChild(script);
+        script = null;
+      };
+
+      html.appendChild(script);
+    };
+  }
+
+  function installSetTimeoutImplementation() {
+    registerImmediate = function registerImmediate(handle) {
+      setTimeout(runIfPresent, 0, handle);
+    };
+  } // If supported, we should attach to the prototype of global, since that is where setTimeout et al. live.
+
+
+  var attachTo = Object.getPrototypeOf && Object.getPrototypeOf(global);
+  attachTo = attachTo && attachTo.setTimeout ? attachTo : global; // Don't get fooled by e.g. browserify environments.
+
+  if ({}.toString.call(global.process) === "[object process]") {
+    // For Node.js before 0.9
+    installNextTickImplementation();
+  } else if (canUsePostMessage()) {
+    // For non-IE10 modern browsers
+    installPostMessageImplementation();
+  } else if (global.MessageChannel) {
+    // For web workers, where supported
+    installMessageChannelImplementation();
+  } else if (doc && "onreadystatechange" in doc.createElement("script")) {
+    // For IE 6–8
+    installReadyStateChangeImplementation();
+  } else {
+    // For older browsers
+    installSetTimeoutImplementation();
+  }
+
+  attachTo.setImmediate = setImmediate;
+  attachTo.clearImmediate = clearImmediate;
+})(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self);
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js"), __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -203,7 +3668,65 @@ eval("/* WEBPACK VAR INJECTION */(function(global, process) {(function (global, 
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function(global) {var scope = typeof global !== \"undefined\" && global || typeof self !== \"undefined\" && self || window;\nvar apply = Function.prototype.apply; // DOM APIs, for completeness\n\nexports.setTimeout = function () {\n  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);\n};\n\nexports.setInterval = function () {\n  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);\n};\n\nexports.clearTimeout = exports.clearInterval = function (timeout) {\n  if (timeout) {\n    timeout.close();\n  }\n};\n\nfunction Timeout(id, clearFn) {\n  this._id = id;\n  this._clearFn = clearFn;\n}\n\nTimeout.prototype.unref = Timeout.prototype.ref = function () {};\n\nTimeout.prototype.close = function () {\n  this._clearFn.call(scope, this._id);\n}; // Does not start the time, just sets up the members needed.\n\n\nexports.enroll = function (item, msecs) {\n  clearTimeout(item._idleTimeoutId);\n  item._idleTimeout = msecs;\n};\n\nexports.unenroll = function (item) {\n  clearTimeout(item._idleTimeoutId);\n  item._idleTimeout = -1;\n};\n\nexports._unrefActive = exports.active = function (item) {\n  clearTimeout(item._idleTimeoutId);\n  var msecs = item._idleTimeout;\n\n  if (msecs >= 0) {\n    item._idleTimeoutId = setTimeout(function onTimeout() {\n      if (item._onTimeout) item._onTimeout();\n    }, msecs);\n  }\n}; // setimmediate attaches itself to the global object\n\n\n__webpack_require__(/*! setimmediate */ \"./node_modules/setimmediate/setImmediate.js\"); // On some exotic environments, it's not clear which object `setimmediate` was\n// able to install onto.  Search each possibility in the same order as the\n// `setimmediate` library.\n\n\nexports.setImmediate = typeof self !== \"undefined\" && self.setImmediate || typeof global !== \"undefined\" && global.setImmediate || this && this.setImmediate;\nexports.clearImmediate = typeof self !== \"undefined\" && self.clearImmediate || typeof global !== \"undefined\" && global.clearImmediate || this && this.clearImmediate;\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ \"./node_modules/webpack/buildin/global.js\")))\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/timers-browserify/main.js?");
+/* WEBPACK VAR INJECTION */(function(global) {var scope = typeof global !== "undefined" && global || typeof self !== "undefined" && self || window;
+var apply = Function.prototype.apply; // DOM APIs, for completeness
+
+exports.setTimeout = function () {
+  return new Timeout(apply.call(setTimeout, scope, arguments), clearTimeout);
+};
+
+exports.setInterval = function () {
+  return new Timeout(apply.call(setInterval, scope, arguments), clearInterval);
+};
+
+exports.clearTimeout = exports.clearInterval = function (timeout) {
+  if (timeout) {
+    timeout.close();
+  }
+};
+
+function Timeout(id, clearFn) {
+  this._id = id;
+  this._clearFn = clearFn;
+}
+
+Timeout.prototype.unref = Timeout.prototype.ref = function () {};
+
+Timeout.prototype.close = function () {
+  this._clearFn.call(scope, this._id);
+}; // Does not start the time, just sets up the members needed.
+
+
+exports.enroll = function (item, msecs) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = msecs;
+};
+
+exports.unenroll = function (item) {
+  clearTimeout(item._idleTimeoutId);
+  item._idleTimeout = -1;
+};
+
+exports._unrefActive = exports.active = function (item) {
+  clearTimeout(item._idleTimeoutId);
+  var msecs = item._idleTimeout;
+
+  if (msecs >= 0) {
+    item._idleTimeoutId = setTimeout(function onTimeout() {
+      if (item._onTimeout) item._onTimeout();
+    }, msecs);
+  }
+}; // setimmediate attaches itself to the global object
+
+
+__webpack_require__(/*! setimmediate */ "./node_modules/setimmediate/setImmediate.js"); // On some exotic environments, it's not clear which object `setimmediate` was
+// able to install onto.  Search each possibility in the same order as the
+// `setimmediate` library.
+
+
+exports.setImmediate = typeof self !== "undefined" && self.setImmediate || typeof global !== "undefined" && global.setImmediate || this && this.setImmediate;
+exports.clearImmediate = typeof self !== "undefined" && self.clearImmediate || typeof global !== "undefined" && global.clearImmediate || this && this.clearImmediate;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../webpack/buildin/global.js */ "./node_modules/webpack/buildin/global.js")))
 
 /***/ }),
 
@@ -214,7 +3737,81 @@ eval("/* WEBPACK VAR INJECTION */(function(global) {var scope = typeof global !=
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("function EventEmitter() {\n  this._listeners = {};\n}\n\nEventEmitter.prototype.on = function _on(type, listener) {\n  if (!Array.isArray(this._listeners[type])) {\n    this._listeners[type] = [];\n  }\n\n  if (this._listeners[type].indexOf(listener) === -1) {\n    this._listeners[type].push(listener);\n  }\n\n  return this;\n};\n\nEventEmitter.prototype.once = function _once(type, listener) {\n  var self = this;\n\n  function __once() {\n    for (var args = [], i = 0; i < arguments.length; i += 1) {\n      args[i] = arguments[i];\n    }\n\n    self.off(type, __once);\n    listener.apply(self, args);\n  }\n\n  __once.listener = listener;\n  return this.on(type, __once);\n};\n\nEventEmitter.prototype.off = function _off(type, listener) {\n  if (!Array.isArray(this._listeners[type])) {\n    return this;\n  }\n\n  if (typeof listener === 'undefined') {\n    this._listeners[type] = [];\n    return this;\n  }\n\n  var index = this._listeners[type].indexOf(listener);\n\n  if (index === -1) {\n    for (var i = 0; i < this._listeners[type].length; i += 1) {\n      if (this._listeners[type][i].listener === listener) {\n        index = i;\n        break;\n      }\n    }\n  }\n\n  this._listeners[type].splice(index, 1);\n\n  return this;\n};\n\nEventEmitter.prototype.emit = function _emit(type) {\n  if (!Array.isArray(this._listeners[type])) {\n    return this;\n  }\n\n  for (var args = [], i = 1; i < arguments.length; i += 1) {\n    args[i - 1] = arguments[i];\n  }\n\n  this._listeners[type].forEach(function __emit(listener) {\n    listener.apply(this, args);\n  }, this);\n\n  return this;\n};\n\nmodule.exports.EventEmitter = EventEmitter;\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/tiny-events/lib/index.js?");
+function EventEmitter() {
+  this._listeners = {};
+}
+
+EventEmitter.prototype.on = function _on(type, listener) {
+  if (!Array.isArray(this._listeners[type])) {
+    this._listeners[type] = [];
+  }
+
+  if (this._listeners[type].indexOf(listener) === -1) {
+    this._listeners[type].push(listener);
+  }
+
+  return this;
+};
+
+EventEmitter.prototype.once = function _once(type, listener) {
+  var self = this;
+
+  function __once() {
+    for (var args = [], i = 0; i < arguments.length; i += 1) {
+      args[i] = arguments[i];
+    }
+
+    self.off(type, __once);
+    listener.apply(self, args);
+  }
+
+  __once.listener = listener;
+  return this.on(type, __once);
+};
+
+EventEmitter.prototype.off = function _off(type, listener) {
+  if (!Array.isArray(this._listeners[type])) {
+    return this;
+  }
+
+  if (typeof listener === 'undefined') {
+    this._listeners[type] = [];
+    return this;
+  }
+
+  var index = this._listeners[type].indexOf(listener);
+
+  if (index === -1) {
+    for (var i = 0; i < this._listeners[type].length; i += 1) {
+      if (this._listeners[type][i].listener === listener) {
+        index = i;
+        break;
+      }
+    }
+  }
+
+  this._listeners[type].splice(index, 1);
+
+  return this;
+};
+
+EventEmitter.prototype.emit = function _emit(type) {
+  if (!Array.isArray(this._listeners[type])) {
+    return this;
+  }
+
+  for (var args = [], i = 1; i < arguments.length; i += 1) {
+    args[i - 1] = arguments[i];
+  }
+
+  this._listeners[type].forEach(function __emit(listener) {
+    listener.apply(this, args);
+  }, this);
+
+  return this;
+};
+
+module.exports.EventEmitter = EventEmitter;
 
 /***/ }),
 
@@ -225,7 +3822,11 @@ eval("function EventEmitter() {\n  this._listeners = {};\n}\n\nEventEmitter.prot
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nmodule.exports = function isBuffer(arg) {\n  return arg && _typeof(arg) === 'object' && typeof arg.copy === 'function' && typeof arg.fill === 'function' && typeof arg.readUInt8 === 'function';\n};\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/util/support/isBufferBrowser.js?");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+module.exports = function isBuffer(arg) {
+  return arg && _typeof(arg) === 'object' && typeof arg.copy === 'function' && typeof arg.fill === 'function' && typeof arg.readUInt8 === 'function';
+};
 
 /***/ }),
 
@@ -236,7 +3837,728 @@ eval("function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbo
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("/* WEBPACK VAR INJECTION */(function(process) {function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\n// Copyright Joyent, Inc. and other Node contributors.\n//\n// Permission is hereby granted, free of charge, to any person obtaining a\n// copy of this software and associated documentation files (the\n// \"Software\"), to deal in the Software without restriction, including\n// without limitation the rights to use, copy, modify, merge, publish,\n// distribute, sublicense, and/or sell copies of the Software, and to permit\n// persons to whom the Software is furnished to do so, subject to the\n// following conditions:\n//\n// The above copyright notice and this permission notice shall be included\n// in all copies or substantial portions of the Software.\n//\n// THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS\n// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\n// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN\n// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,\n// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR\n// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE\n// USE OR OTHER DEALINGS IN THE SOFTWARE.\nvar getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors || function getOwnPropertyDescriptors(obj) {\n  var keys = Object.keys(obj);\n  var descriptors = {};\n\n  for (var i = 0; i < keys.length; i++) {\n    descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);\n  }\n\n  return descriptors;\n};\n\nvar formatRegExp = /%[sdj%]/g;\n\nexports.format = function (f) {\n  if (!isString(f)) {\n    var objects = [];\n\n    for (var i = 0; i < arguments.length; i++) {\n      objects.push(inspect(arguments[i]));\n    }\n\n    return objects.join(' ');\n  }\n\n  var i = 1;\n  var args = arguments;\n  var len = args.length;\n  var str = String(f).replace(formatRegExp, function (x) {\n    if (x === '%%') return '%';\n    if (i >= len) return x;\n\n    switch (x) {\n      case '%s':\n        return String(args[i++]);\n\n      case '%d':\n        return Number(args[i++]);\n\n      case '%j':\n        try {\n          return JSON.stringify(args[i++]);\n        } catch (_) {\n          return '[Circular]';\n        }\n\n      default:\n        return x;\n    }\n  });\n\n  for (var x = args[i]; i < len; x = args[++i]) {\n    if (isNull(x) || !isObject(x)) {\n      str += ' ' + x;\n    } else {\n      str += ' ' + inspect(x);\n    }\n  }\n\n  return str;\n}; // Mark that a method should not be used.\n// Returns a modified function which warns once by default.\n// If --no-deprecation is set, then it is a no-op.\n\n\nexports.deprecate = function (fn, msg) {\n  if (typeof process !== 'undefined' && process.noDeprecation === true) {\n    return fn;\n  } // Allow for deprecating things in the process of starting up.\n\n\n  if (typeof process === 'undefined') {\n    return function () {\n      return exports.deprecate(fn, msg).apply(this, arguments);\n    };\n  }\n\n  var warned = false;\n\n  function deprecated() {\n    if (!warned) {\n      if (process.throwDeprecation) {\n        throw new Error(msg);\n      } else if (process.traceDeprecation) {\n        console.trace(msg);\n      } else {\n        console.error(msg);\n      }\n\n      warned = true;\n    }\n\n    return fn.apply(this, arguments);\n  }\n\n  return deprecated;\n};\n\nvar debugs = {};\nvar debugEnviron;\n\nexports.debuglog = function (set) {\n  if (isUndefined(debugEnviron)) debugEnviron = process.env.NODE_DEBUG || '';\n  set = set.toUpperCase();\n\n  if (!debugs[set]) {\n    if (new RegExp('\\\\b' + set + '\\\\b', 'i').test(debugEnviron)) {\n      var pid = process.pid;\n\n      debugs[set] = function () {\n        var msg = exports.format.apply(exports, arguments);\n        console.error('%s %d: %s', set, pid, msg);\n      };\n    } else {\n      debugs[set] = function () {};\n    }\n  }\n\n  return debugs[set];\n};\n/**\n * Echos the value of a value. Trys to print the value out\n * in the best way possible given the different types.\n *\n * @param {Object} obj The object to print out.\n * @param {Object} opts Optional options object that alters the output.\n */\n\n/* legacy: obj, showHidden, depth, colors*/\n\n\nfunction inspect(obj, opts) {\n  // default options\n  var ctx = {\n    seen: [],\n    stylize: stylizeNoColor\n  }; // legacy...\n\n  if (arguments.length >= 3) ctx.depth = arguments[2];\n  if (arguments.length >= 4) ctx.colors = arguments[3];\n\n  if (isBoolean(opts)) {\n    // legacy...\n    ctx.showHidden = opts;\n  } else if (opts) {\n    // got an \"options\" object\n    exports._extend(ctx, opts);\n  } // set default options\n\n\n  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;\n  if (isUndefined(ctx.depth)) ctx.depth = 2;\n  if (isUndefined(ctx.colors)) ctx.colors = false;\n  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;\n  if (ctx.colors) ctx.stylize = stylizeWithColor;\n  return formatValue(ctx, obj, ctx.depth);\n}\n\nexports.inspect = inspect; // http://en.wikipedia.org/wiki/ANSI_escape_code#graphics\n\ninspect.colors = {\n  'bold': [1, 22],\n  'italic': [3, 23],\n  'underline': [4, 24],\n  'inverse': [7, 27],\n  'white': [37, 39],\n  'grey': [90, 39],\n  'black': [30, 39],\n  'blue': [34, 39],\n  'cyan': [36, 39],\n  'green': [32, 39],\n  'magenta': [35, 39],\n  'red': [31, 39],\n  'yellow': [33, 39]\n}; // Don't use 'blue' not visible on cmd.exe\n\ninspect.styles = {\n  'special': 'cyan',\n  'number': 'yellow',\n  'boolean': 'yellow',\n  'undefined': 'grey',\n  'null': 'bold',\n  'string': 'green',\n  'date': 'magenta',\n  // \"name\": intentionally not styling\n  'regexp': 'red'\n};\n\nfunction stylizeWithColor(str, styleType) {\n  var style = inspect.styles[styleType];\n\n  if (style) {\n    return \"\\x1B[\" + inspect.colors[style][0] + 'm' + str + \"\\x1B[\" + inspect.colors[style][1] + 'm';\n  } else {\n    return str;\n  }\n}\n\nfunction stylizeNoColor(str, styleType) {\n  return str;\n}\n\nfunction arrayToHash(array) {\n  var hash = {};\n  array.forEach(function (val, idx) {\n    hash[val] = true;\n  });\n  return hash;\n}\n\nfunction formatValue(ctx, value, recurseTimes) {\n  // Provide a hook for user-specified inspect functions.\n  // Check that value is an object with an inspect function on it\n  if (ctx.customInspect && value && isFunction(value.inspect) && // Filter out the util module, it's inspect function is special\n  value.inspect !== exports.inspect && // Also filter out any prototype objects using the circular check.\n  !(value.constructor && value.constructor.prototype === value)) {\n    var ret = value.inspect(recurseTimes, ctx);\n\n    if (!isString(ret)) {\n      ret = formatValue(ctx, ret, recurseTimes);\n    }\n\n    return ret;\n  } // Primitive types cannot have properties\n\n\n  var primitive = formatPrimitive(ctx, value);\n\n  if (primitive) {\n    return primitive;\n  } // Look up the keys of the object.\n\n\n  var keys = Object.keys(value);\n  var visibleKeys = arrayToHash(keys);\n\n  if (ctx.showHidden) {\n    keys = Object.getOwnPropertyNames(value);\n  } // IE doesn't make error fields non-enumerable\n  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx\n\n\n  if (isError(value) && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {\n    return formatError(value);\n  } // Some type of object without properties can be shortcutted.\n\n\n  if (keys.length === 0) {\n    if (isFunction(value)) {\n      var name = value.name ? ': ' + value.name : '';\n      return ctx.stylize('[Function' + name + ']', 'special');\n    }\n\n    if (isRegExp(value)) {\n      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');\n    }\n\n    if (isDate(value)) {\n      return ctx.stylize(Date.prototype.toString.call(value), 'date');\n    }\n\n    if (isError(value)) {\n      return formatError(value);\n    }\n  }\n\n  var base = '',\n      array = false,\n      braces = ['{', '}']; // Make Array say that they are Array\n\n  if (isArray(value)) {\n    array = true;\n    braces = ['[', ']'];\n  } // Make functions say that they are functions\n\n\n  if (isFunction(value)) {\n    var n = value.name ? ': ' + value.name : '';\n    base = ' [Function' + n + ']';\n  } // Make RegExps say that they are RegExps\n\n\n  if (isRegExp(value)) {\n    base = ' ' + RegExp.prototype.toString.call(value);\n  } // Make dates with properties first say the date\n\n\n  if (isDate(value)) {\n    base = ' ' + Date.prototype.toUTCString.call(value);\n  } // Make error with message first say the error\n\n\n  if (isError(value)) {\n    base = ' ' + formatError(value);\n  }\n\n  if (keys.length === 0 && (!array || value.length == 0)) {\n    return braces[0] + base + braces[1];\n  }\n\n  if (recurseTimes < 0) {\n    if (isRegExp(value)) {\n      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');\n    } else {\n      return ctx.stylize('[Object]', 'special');\n    }\n  }\n\n  ctx.seen.push(value);\n  var output;\n\n  if (array) {\n    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);\n  } else {\n    output = keys.map(function (key) {\n      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);\n    });\n  }\n\n  ctx.seen.pop();\n  return reduceToSingleString(output, base, braces);\n}\n\nfunction formatPrimitive(ctx, value) {\n  if (isUndefined(value)) return ctx.stylize('undefined', 'undefined');\n\n  if (isString(value)) {\n    var simple = '\\'' + JSON.stringify(value).replace(/^\"|\"$/g, '').replace(/'/g, \"\\\\'\").replace(/\\\\\"/g, '\"') + '\\'';\n    return ctx.stylize(simple, 'string');\n  }\n\n  if (isNumber(value)) return ctx.stylize('' + value, 'number');\n  if (isBoolean(value)) return ctx.stylize('' + value, 'boolean'); // For some reason typeof null is \"object\", so special case here.\n\n  if (isNull(value)) return ctx.stylize('null', 'null');\n}\n\nfunction formatError(value) {\n  return '[' + Error.prototype.toString.call(value) + ']';\n}\n\nfunction formatArray(ctx, value, recurseTimes, visibleKeys, keys) {\n  var output = [];\n\n  for (var i = 0, l = value.length; i < l; ++i) {\n    if (hasOwnProperty(value, String(i))) {\n      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), true));\n    } else {\n      output.push('');\n    }\n  }\n\n  keys.forEach(function (key) {\n    if (!key.match(/^\\d+$/)) {\n      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, key, true));\n    }\n  });\n  return output;\n}\n\nfunction formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {\n  var name, str, desc;\n  desc = Object.getOwnPropertyDescriptor(value, key) || {\n    value: value[key]\n  };\n\n  if (desc.get) {\n    if (desc.set) {\n      str = ctx.stylize('[Getter/Setter]', 'special');\n    } else {\n      str = ctx.stylize('[Getter]', 'special');\n    }\n  } else {\n    if (desc.set) {\n      str = ctx.stylize('[Setter]', 'special');\n    }\n  }\n\n  if (!hasOwnProperty(visibleKeys, key)) {\n    name = '[' + key + ']';\n  }\n\n  if (!str) {\n    if (ctx.seen.indexOf(desc.value) < 0) {\n      if (isNull(recurseTimes)) {\n        str = formatValue(ctx, desc.value, null);\n      } else {\n        str = formatValue(ctx, desc.value, recurseTimes - 1);\n      }\n\n      if (str.indexOf('\\n') > -1) {\n        if (array) {\n          str = str.split('\\n').map(function (line) {\n            return '  ' + line;\n          }).join('\\n').substr(2);\n        } else {\n          str = '\\n' + str.split('\\n').map(function (line) {\n            return '   ' + line;\n          }).join('\\n');\n        }\n      }\n    } else {\n      str = ctx.stylize('[Circular]', 'special');\n    }\n  }\n\n  if (isUndefined(name)) {\n    if (array && key.match(/^\\d+$/)) {\n      return str;\n    }\n\n    name = JSON.stringify('' + key);\n\n    if (name.match(/^\"([a-zA-Z_][a-zA-Z_0-9]*)\"$/)) {\n      name = name.substr(1, name.length - 2);\n      name = ctx.stylize(name, 'name');\n    } else {\n      name = name.replace(/'/g, \"\\\\'\").replace(/\\\\\"/g, '\"').replace(/(^\"|\"$)/g, \"'\");\n      name = ctx.stylize(name, 'string');\n    }\n  }\n\n  return name + ': ' + str;\n}\n\nfunction reduceToSingleString(output, base, braces) {\n  var numLinesEst = 0;\n  var length = output.reduce(function (prev, cur) {\n    numLinesEst++;\n    if (cur.indexOf('\\n') >= 0) numLinesEst++;\n    return prev + cur.replace(/\\u001b\\[\\d\\d?m/g, '').length + 1;\n  }, 0);\n\n  if (length > 60) {\n    return braces[0] + (base === '' ? '' : base + '\\n ') + ' ' + output.join(',\\n  ') + ' ' + braces[1];\n  }\n\n  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];\n} // NOTE: These type checking functions intentionally don't use `instanceof`\n// because it is fragile and can be easily faked with `Object.create()`.\n\n\nfunction isArray(ar) {\n  return Array.isArray(ar);\n}\n\nexports.isArray = isArray;\n\nfunction isBoolean(arg) {\n  return typeof arg === 'boolean';\n}\n\nexports.isBoolean = isBoolean;\n\nfunction isNull(arg) {\n  return arg === null;\n}\n\nexports.isNull = isNull;\n\nfunction isNullOrUndefined(arg) {\n  return arg == null;\n}\n\nexports.isNullOrUndefined = isNullOrUndefined;\n\nfunction isNumber(arg) {\n  return typeof arg === 'number';\n}\n\nexports.isNumber = isNumber;\n\nfunction isString(arg) {\n  return typeof arg === 'string';\n}\n\nexports.isString = isString;\n\nfunction isSymbol(arg) {\n  return _typeof(arg) === 'symbol';\n}\n\nexports.isSymbol = isSymbol;\n\nfunction isUndefined(arg) {\n  return arg === void 0;\n}\n\nexports.isUndefined = isUndefined;\n\nfunction isRegExp(re) {\n  return isObject(re) && objectToString(re) === '[object RegExp]';\n}\n\nexports.isRegExp = isRegExp;\n\nfunction isObject(arg) {\n  return _typeof(arg) === 'object' && arg !== null;\n}\n\nexports.isObject = isObject;\n\nfunction isDate(d) {\n  return isObject(d) && objectToString(d) === '[object Date]';\n}\n\nexports.isDate = isDate;\n\nfunction isError(e) {\n  return isObject(e) && (objectToString(e) === '[object Error]' || e instanceof Error);\n}\n\nexports.isError = isError;\n\nfunction isFunction(arg) {\n  return typeof arg === 'function';\n}\n\nexports.isFunction = isFunction;\n\nfunction isPrimitive(arg) {\n  return arg === null || typeof arg === 'boolean' || typeof arg === 'number' || typeof arg === 'string' || _typeof(arg) === 'symbol' || // ES6 symbol\n  typeof arg === 'undefined';\n}\n\nexports.isPrimitive = isPrimitive;\nexports.isBuffer = __webpack_require__(/*! ./support/isBuffer */ \"./node_modules/util/support/isBufferBrowser.js\");\n\nfunction objectToString(o) {\n  return Object.prototype.toString.call(o);\n}\n\nfunction pad(n) {\n  return n < 10 ? '0' + n.toString(10) : n.toString(10);\n}\n\nvar months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // 26 Feb 16:19:34\n\nfunction timestamp() {\n  var d = new Date();\n  var time = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');\n  return [d.getDate(), months[d.getMonth()], time].join(' ');\n} // log is just a thin wrapper to console.log that prepends a timestamp\n\n\nexports.log = function () {\n  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));\n};\n/**\n * Inherit the prototype methods from one constructor into another.\n *\n * The Function.prototype.inherits from lang.js rewritten as a standalone\n * function (not on Function.prototype). NOTE: If this file is to be loaded\n * during bootstrapping this function needs to be rewritten using some native\n * functions as prototype setup using normal JavaScript does not work as\n * expected during bootstrapping (see mirror.js in r114903).\n *\n * @param {function} ctor Constructor function which needs to inherit the\n *     prototype.\n * @param {function} superCtor Constructor function to inherit prototype from.\n */\n\n\nexports.inherits = __webpack_require__(/*! inherits */ \"./node_modules/inherits/inherits_browser.js\");\n\nexports._extend = function (origin, add) {\n  // Don't do anything if add isn't an object\n  if (!add || !isObject(add)) return origin;\n  var keys = Object.keys(add);\n  var i = keys.length;\n\n  while (i--) {\n    origin[keys[i]] = add[keys[i]];\n  }\n\n  return origin;\n};\n\nfunction hasOwnProperty(obj, prop) {\n  return Object.prototype.hasOwnProperty.call(obj, prop);\n}\n\nvar kCustomPromisifiedSymbol = typeof Symbol !== 'undefined' ? Symbol('util.promisify.custom') : undefined;\n\nexports.promisify = function promisify(original) {\n  if (typeof original !== 'function') throw new TypeError('The \"original\" argument must be of type Function');\n\n  if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {\n    var fn = original[kCustomPromisifiedSymbol];\n\n    if (typeof fn !== 'function') {\n      throw new TypeError('The \"util.promisify.custom\" argument must be of type Function');\n    }\n\n    Object.defineProperty(fn, kCustomPromisifiedSymbol, {\n      value: fn,\n      enumerable: false,\n      writable: false,\n      configurable: true\n    });\n    return fn;\n  }\n\n  function fn() {\n    var promiseResolve, promiseReject;\n    var promise = new Promise(function (resolve, reject) {\n      promiseResolve = resolve;\n      promiseReject = reject;\n    });\n    var args = [];\n\n    for (var i = 0; i < arguments.length; i++) {\n      args.push(arguments[i]);\n    }\n\n    args.push(function (err, value) {\n      if (err) {\n        promiseReject(err);\n      } else {\n        promiseResolve(value);\n      }\n    });\n\n    try {\n      original.apply(this, args);\n    } catch (err) {\n      promiseReject(err);\n    }\n\n    return promise;\n  }\n\n  Object.setPrototypeOf(fn, Object.getPrototypeOf(original));\n  if (kCustomPromisifiedSymbol) Object.defineProperty(fn, kCustomPromisifiedSymbol, {\n    value: fn,\n    enumerable: false,\n    writable: false,\n    configurable: true\n  });\n  return Object.defineProperties(fn, getOwnPropertyDescriptors(original));\n};\n\nexports.promisify.custom = kCustomPromisifiedSymbol;\n\nfunction callbackifyOnRejected(reason, cb) {\n  // `!reason` guard inspired by bluebird (Ref: https://goo.gl/t5IS6M).\n  // Because `null` is a special error value in callbacks which means \"no error\n  // occurred\", we error-wrap so the callback consumer can distinguish between\n  // \"the promise rejected with null\" or \"the promise fulfilled with undefined\".\n  if (!reason) {\n    var newReason = new Error('Promise was rejected with a falsy value');\n    newReason.reason = reason;\n    reason = newReason;\n  }\n\n  return cb(reason);\n}\n\nfunction callbackify(original) {\n  if (typeof original !== 'function') {\n    throw new TypeError('The \"original\" argument must be of type Function');\n  } // We DO NOT return the promise as it gives the user a false sense that\n  // the promise is actually somehow related to the callback's execution\n  // and that the callback throwing will reject the promise.\n\n\n  function callbackified() {\n    var args = [];\n\n    for (var i = 0; i < arguments.length; i++) {\n      args.push(arguments[i]);\n    }\n\n    var maybeCb = args.pop();\n\n    if (typeof maybeCb !== 'function') {\n      throw new TypeError('The last argument must be of type Function');\n    }\n\n    var self = this;\n\n    var cb = function cb() {\n      return maybeCb.apply(self, arguments);\n    }; // In true node style we process the callback on `nextTick` with all the\n    // implications (stack, `uncaughtException`, `async_hooks`)\n\n\n    original.apply(this, args).then(function (ret) {\n      process.nextTick(cb, null, ret);\n    }, function (rej) {\n      process.nextTick(callbackifyOnRejected, rej, cb);\n    });\n  }\n\n  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));\n  Object.defineProperties(callbackified, getOwnPropertyDescriptors(original));\n  return callbackified;\n}\n\nexports.callbackify = callbackify;\n/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../process/browser.js */ \"./node_modules/process/browser.js\")))\n\n//# sourceURL=webpack://scionCoreLib/./node_modules/util/util.js?");
+/* WEBPACK VAR INJECTION */(function(process) {function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+// Copyright Joyent, Inc. and other Node contributors.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a
+// copy of this software and associated documentation files (the
+// "Software"), to deal in the Software without restriction, including
+// without limitation the rights to use, copy, modify, merge, publish,
+// distribute, sublicense, and/or sell copies of the Software, and to permit
+// persons to whom the Software is furnished to do so, subject to the
+// following conditions:
+//
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
+// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
+// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+// USE OR OTHER DEALINGS IN THE SOFTWARE.
+var getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors || function getOwnPropertyDescriptors(obj) {
+  var keys = Object.keys(obj);
+  var descriptors = {};
+
+  for (var i = 0; i < keys.length; i++) {
+    descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
+  }
+
+  return descriptors;
+};
+
+var formatRegExp = /%[sdj%]/g;
+
+exports.format = function (f) {
+  if (!isString(f)) {
+    var objects = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+      objects.push(inspect(arguments[i]));
+    }
+
+    return objects.join(' ');
+  }
+
+  var i = 1;
+  var args = arguments;
+  var len = args.length;
+  var str = String(f).replace(formatRegExp, function (x) {
+    if (x === '%%') return '%';
+    if (i >= len) return x;
+
+    switch (x) {
+      case '%s':
+        return String(args[i++]);
+
+      case '%d':
+        return Number(args[i++]);
+
+      case '%j':
+        try {
+          return JSON.stringify(args[i++]);
+        } catch (_) {
+          return '[Circular]';
+        }
+
+      default:
+        return x;
+    }
+  });
+
+  for (var x = args[i]; i < len; x = args[++i]) {
+    if (isNull(x) || !isObject(x)) {
+      str += ' ' + x;
+    } else {
+      str += ' ' + inspect(x);
+    }
+  }
+
+  return str;
+}; // Mark that a method should not be used.
+// Returns a modified function which warns once by default.
+// If --no-deprecation is set, then it is a no-op.
+
+
+exports.deprecate = function (fn, msg) {
+  if (typeof process !== 'undefined' && process.noDeprecation === true) {
+    return fn;
+  } // Allow for deprecating things in the process of starting up.
+
+
+  if (typeof process === 'undefined') {
+    return function () {
+      return exports.deprecate(fn, msg).apply(this, arguments);
+    };
+  }
+
+  var warned = false;
+
+  function deprecated() {
+    if (!warned) {
+      if (process.throwDeprecation) {
+        throw new Error(msg);
+      } else if (process.traceDeprecation) {
+        console.trace(msg);
+      } else {
+        console.error(msg);
+      }
+
+      warned = true;
+    }
+
+    return fn.apply(this, arguments);
+  }
+
+  return deprecated;
+};
+
+var debugs = {};
+var debugEnviron;
+
+exports.debuglog = function (set) {
+  if (isUndefined(debugEnviron)) debugEnviron = process.env.NODE_DEBUG || '';
+  set = set.toUpperCase();
+
+  if (!debugs[set]) {
+    if (new RegExp('\\b' + set + '\\b', 'i').test(debugEnviron)) {
+      var pid = process.pid;
+
+      debugs[set] = function () {
+        var msg = exports.format.apply(exports, arguments);
+        console.error('%s %d: %s', set, pid, msg);
+      };
+    } else {
+      debugs[set] = function () {};
+    }
+  }
+
+  return debugs[set];
+};
+/**
+ * Echos the value of a value. Trys to print the value out
+ * in the best way possible given the different types.
+ *
+ * @param {Object} obj The object to print out.
+ * @param {Object} opts Optional options object that alters the output.
+ */
+
+/* legacy: obj, showHidden, depth, colors*/
+
+
+function inspect(obj, opts) {
+  // default options
+  var ctx = {
+    seen: [],
+    stylize: stylizeNoColor
+  }; // legacy...
+
+  if (arguments.length >= 3) ctx.depth = arguments[2];
+  if (arguments.length >= 4) ctx.colors = arguments[3];
+
+  if (isBoolean(opts)) {
+    // legacy...
+    ctx.showHidden = opts;
+  } else if (opts) {
+    // got an "options" object
+    exports._extend(ctx, opts);
+  } // set default options
+
+
+  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
+  if (isUndefined(ctx.depth)) ctx.depth = 2;
+  if (isUndefined(ctx.colors)) ctx.colors = false;
+  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
+  if (ctx.colors) ctx.stylize = stylizeWithColor;
+  return formatValue(ctx, obj, ctx.depth);
+}
+
+exports.inspect = inspect; // http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
+
+inspect.colors = {
+  'bold': [1, 22],
+  'italic': [3, 23],
+  'underline': [4, 24],
+  'inverse': [7, 27],
+  'white': [37, 39],
+  'grey': [90, 39],
+  'black': [30, 39],
+  'blue': [34, 39],
+  'cyan': [36, 39],
+  'green': [32, 39],
+  'magenta': [35, 39],
+  'red': [31, 39],
+  'yellow': [33, 39]
+}; // Don't use 'blue' not visible on cmd.exe
+
+inspect.styles = {
+  'special': 'cyan',
+  'number': 'yellow',
+  'boolean': 'yellow',
+  'undefined': 'grey',
+  'null': 'bold',
+  'string': 'green',
+  'date': 'magenta',
+  // "name": intentionally not styling
+  'regexp': 'red'
+};
+
+function stylizeWithColor(str, styleType) {
+  var style = inspect.styles[styleType];
+
+  if (style) {
+    return "\x1B[" + inspect.colors[style][0] + 'm' + str + "\x1B[" + inspect.colors[style][1] + 'm';
+  } else {
+    return str;
+  }
+}
+
+function stylizeNoColor(str, styleType) {
+  return str;
+}
+
+function arrayToHash(array) {
+  var hash = {};
+  array.forEach(function (val, idx) {
+    hash[val] = true;
+  });
+  return hash;
+}
+
+function formatValue(ctx, value, recurseTimes) {
+  // Provide a hook for user-specified inspect functions.
+  // Check that value is an object with an inspect function on it
+  if (ctx.customInspect && value && isFunction(value.inspect) && // Filter out the util module, it's inspect function is special
+  value.inspect !== exports.inspect && // Also filter out any prototype objects using the circular check.
+  !(value.constructor && value.constructor.prototype === value)) {
+    var ret = value.inspect(recurseTimes, ctx);
+
+    if (!isString(ret)) {
+      ret = formatValue(ctx, ret, recurseTimes);
+    }
+
+    return ret;
+  } // Primitive types cannot have properties
+
+
+  var primitive = formatPrimitive(ctx, value);
+
+  if (primitive) {
+    return primitive;
+  } // Look up the keys of the object.
+
+
+  var keys = Object.keys(value);
+  var visibleKeys = arrayToHash(keys);
+
+  if (ctx.showHidden) {
+    keys = Object.getOwnPropertyNames(value);
+  } // IE doesn't make error fields non-enumerable
+  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
+
+
+  if (isError(value) && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
+    return formatError(value);
+  } // Some type of object without properties can be shortcutted.
+
+
+  if (keys.length === 0) {
+    if (isFunction(value)) {
+      var name = value.name ? ': ' + value.name : '';
+      return ctx.stylize('[Function' + name + ']', 'special');
+    }
+
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    }
+
+    if (isDate(value)) {
+      return ctx.stylize(Date.prototype.toString.call(value), 'date');
+    }
+
+    if (isError(value)) {
+      return formatError(value);
+    }
+  }
+
+  var base = '',
+      array = false,
+      braces = ['{', '}']; // Make Array say that they are Array
+
+  if (isArray(value)) {
+    array = true;
+    braces = ['[', ']'];
+  } // Make functions say that they are functions
+
+
+  if (isFunction(value)) {
+    var n = value.name ? ': ' + value.name : '';
+    base = ' [Function' + n + ']';
+  } // Make RegExps say that they are RegExps
+
+
+  if (isRegExp(value)) {
+    base = ' ' + RegExp.prototype.toString.call(value);
+  } // Make dates with properties first say the date
+
+
+  if (isDate(value)) {
+    base = ' ' + Date.prototype.toUTCString.call(value);
+  } // Make error with message first say the error
+
+
+  if (isError(value)) {
+    base = ' ' + formatError(value);
+  }
+
+  if (keys.length === 0 && (!array || value.length == 0)) {
+    return braces[0] + base + braces[1];
+  }
+
+  if (recurseTimes < 0) {
+    if (isRegExp(value)) {
+      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
+    } else {
+      return ctx.stylize('[Object]', 'special');
+    }
+  }
+
+  ctx.seen.push(value);
+  var output;
+
+  if (array) {
+    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
+  } else {
+    output = keys.map(function (key) {
+      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
+    });
+  }
+
+  ctx.seen.pop();
+  return reduceToSingleString(output, base, braces);
+}
+
+function formatPrimitive(ctx, value) {
+  if (isUndefined(value)) return ctx.stylize('undefined', 'undefined');
+
+  if (isString(value)) {
+    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '').replace(/'/g, "\\'").replace(/\\"/g, '"') + '\'';
+    return ctx.stylize(simple, 'string');
+  }
+
+  if (isNumber(value)) return ctx.stylize('' + value, 'number');
+  if (isBoolean(value)) return ctx.stylize('' + value, 'boolean'); // For some reason typeof null is "object", so special case here.
+
+  if (isNull(value)) return ctx.stylize('null', 'null');
+}
+
+function formatError(value) {
+  return '[' + Error.prototype.toString.call(value) + ']';
+}
+
+function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
+  var output = [];
+
+  for (var i = 0, l = value.length; i < l; ++i) {
+    if (hasOwnProperty(value, String(i))) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, String(i), true));
+    } else {
+      output.push('');
+    }
+  }
+
+  keys.forEach(function (key) {
+    if (!key.match(/^\d+$/)) {
+      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys, key, true));
+    }
+  });
+  return output;
+}
+
+function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
+  var name, str, desc;
+  desc = Object.getOwnPropertyDescriptor(value, key) || {
+    value: value[key]
+  };
+
+  if (desc.get) {
+    if (desc.set) {
+      str = ctx.stylize('[Getter/Setter]', 'special');
+    } else {
+      str = ctx.stylize('[Getter]', 'special');
+    }
+  } else {
+    if (desc.set) {
+      str = ctx.stylize('[Setter]', 'special');
+    }
+  }
+
+  if (!hasOwnProperty(visibleKeys, key)) {
+    name = '[' + key + ']';
+  }
+
+  if (!str) {
+    if (ctx.seen.indexOf(desc.value) < 0) {
+      if (isNull(recurseTimes)) {
+        str = formatValue(ctx, desc.value, null);
+      } else {
+        str = formatValue(ctx, desc.value, recurseTimes - 1);
+      }
+
+      if (str.indexOf('\n') > -1) {
+        if (array) {
+          str = str.split('\n').map(function (line) {
+            return '  ' + line;
+          }).join('\n').substr(2);
+        } else {
+          str = '\n' + str.split('\n').map(function (line) {
+            return '   ' + line;
+          }).join('\n');
+        }
+      }
+    } else {
+      str = ctx.stylize('[Circular]', 'special');
+    }
+  }
+
+  if (isUndefined(name)) {
+    if (array && key.match(/^\d+$/)) {
+      return str;
+    }
+
+    name = JSON.stringify('' + key);
+
+    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
+      name = name.substr(1, name.length - 2);
+      name = ctx.stylize(name, 'name');
+    } else {
+      name = name.replace(/'/g, "\\'").replace(/\\"/g, '"').replace(/(^"|"$)/g, "'");
+      name = ctx.stylize(name, 'string');
+    }
+  }
+
+  return name + ': ' + str;
+}
+
+function reduceToSingleString(output, base, braces) {
+  var numLinesEst = 0;
+  var length = output.reduce(function (prev, cur) {
+    numLinesEst++;
+    if (cur.indexOf('\n') >= 0) numLinesEst++;
+    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
+  }, 0);
+
+  if (length > 60) {
+    return braces[0] + (base === '' ? '' : base + '\n ') + ' ' + output.join(',\n  ') + ' ' + braces[1];
+  }
+
+  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
+} // NOTE: These type checking functions intentionally don't use `instanceof`
+// because it is fragile and can be easily faked with `Object.create()`.
+
+
+function isArray(ar) {
+  return Array.isArray(ar);
+}
+
+exports.isArray = isArray;
+
+function isBoolean(arg) {
+  return typeof arg === 'boolean';
+}
+
+exports.isBoolean = isBoolean;
+
+function isNull(arg) {
+  return arg === null;
+}
+
+exports.isNull = isNull;
+
+function isNullOrUndefined(arg) {
+  return arg == null;
+}
+
+exports.isNullOrUndefined = isNullOrUndefined;
+
+function isNumber(arg) {
+  return typeof arg === 'number';
+}
+
+exports.isNumber = isNumber;
+
+function isString(arg) {
+  return typeof arg === 'string';
+}
+
+exports.isString = isString;
+
+function isSymbol(arg) {
+  return _typeof(arg) === 'symbol';
+}
+
+exports.isSymbol = isSymbol;
+
+function isUndefined(arg) {
+  return arg === void 0;
+}
+
+exports.isUndefined = isUndefined;
+
+function isRegExp(re) {
+  return isObject(re) && objectToString(re) === '[object RegExp]';
+}
+
+exports.isRegExp = isRegExp;
+
+function isObject(arg) {
+  return _typeof(arg) === 'object' && arg !== null;
+}
+
+exports.isObject = isObject;
+
+function isDate(d) {
+  return isObject(d) && objectToString(d) === '[object Date]';
+}
+
+exports.isDate = isDate;
+
+function isError(e) {
+  return isObject(e) && (objectToString(e) === '[object Error]' || e instanceof Error);
+}
+
+exports.isError = isError;
+
+function isFunction(arg) {
+  return typeof arg === 'function';
+}
+
+exports.isFunction = isFunction;
+
+function isPrimitive(arg) {
+  return arg === null || typeof arg === 'boolean' || typeof arg === 'number' || typeof arg === 'string' || _typeof(arg) === 'symbol' || // ES6 symbol
+  typeof arg === 'undefined';
+}
+
+exports.isPrimitive = isPrimitive;
+exports.isBuffer = __webpack_require__(/*! ./support/isBuffer */ "./node_modules/util/support/isBufferBrowser.js");
+
+function objectToString(o) {
+  return Object.prototype.toString.call(o);
+}
+
+function pad(n) {
+  return n < 10 ? '0' + n.toString(10) : n.toString(10);
+}
+
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']; // 26 Feb 16:19:34
+
+function timestamp() {
+  var d = new Date();
+  var time = [pad(d.getHours()), pad(d.getMinutes()), pad(d.getSeconds())].join(':');
+  return [d.getDate(), months[d.getMonth()], time].join(' ');
+} // log is just a thin wrapper to console.log that prepends a timestamp
+
+
+exports.log = function () {
+  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
+};
+/**
+ * Inherit the prototype methods from one constructor into another.
+ *
+ * The Function.prototype.inherits from lang.js rewritten as a standalone
+ * function (not on Function.prototype). NOTE: If this file is to be loaded
+ * during bootstrapping this function needs to be rewritten using some native
+ * functions as prototype setup using normal JavaScript does not work as
+ * expected during bootstrapping (see mirror.js in r114903).
+ *
+ * @param {function} ctor Constructor function which needs to inherit the
+ *     prototype.
+ * @param {function} superCtor Constructor function to inherit prototype from.
+ */
+
+
+exports.inherits = __webpack_require__(/*! inherits */ "./node_modules/inherits/inherits_browser.js");
+
+exports._extend = function (origin, add) {
+  // Don't do anything if add isn't an object
+  if (!add || !isObject(add)) return origin;
+  var keys = Object.keys(add);
+  var i = keys.length;
+
+  while (i--) {
+    origin[keys[i]] = add[keys[i]];
+  }
+
+  return origin;
+};
+
+function hasOwnProperty(obj, prop) {
+  return Object.prototype.hasOwnProperty.call(obj, prop);
+}
+
+var kCustomPromisifiedSymbol = typeof Symbol !== 'undefined' ? Symbol('util.promisify.custom') : undefined;
+
+exports.promisify = function promisify(original) {
+  if (typeof original !== 'function') throw new TypeError('The "original" argument must be of type Function');
+
+  if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
+    var fn = original[kCustomPromisifiedSymbol];
+
+    if (typeof fn !== 'function') {
+      throw new TypeError('The "util.promisify.custom" argument must be of type Function');
+    }
+
+    Object.defineProperty(fn, kCustomPromisifiedSymbol, {
+      value: fn,
+      enumerable: false,
+      writable: false,
+      configurable: true
+    });
+    return fn;
+  }
+
+  function fn() {
+    var promiseResolve, promiseReject;
+    var promise = new Promise(function (resolve, reject) {
+      promiseResolve = resolve;
+      promiseReject = reject;
+    });
+    var args = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+
+    args.push(function (err, value) {
+      if (err) {
+        promiseReject(err);
+      } else {
+        promiseResolve(value);
+      }
+    });
+
+    try {
+      original.apply(this, args);
+    } catch (err) {
+      promiseReject(err);
+    }
+
+    return promise;
+  }
+
+  Object.setPrototypeOf(fn, Object.getPrototypeOf(original));
+  if (kCustomPromisifiedSymbol) Object.defineProperty(fn, kCustomPromisifiedSymbol, {
+    value: fn,
+    enumerable: false,
+    writable: false,
+    configurable: true
+  });
+  return Object.defineProperties(fn, getOwnPropertyDescriptors(original));
+};
+
+exports.promisify.custom = kCustomPromisifiedSymbol;
+
+function callbackifyOnRejected(reason, cb) {
+  // `!reason` guard inspired by bluebird (Ref: https://goo.gl/t5IS6M).
+  // Because `null` is a special error value in callbacks which means "no error
+  // occurred", we error-wrap so the callback consumer can distinguish between
+  // "the promise rejected with null" or "the promise fulfilled with undefined".
+  if (!reason) {
+    var newReason = new Error('Promise was rejected with a falsy value');
+    newReason.reason = reason;
+    reason = newReason;
+  }
+
+  return cb(reason);
+}
+
+function callbackify(original) {
+  if (typeof original !== 'function') {
+    throw new TypeError('The "original" argument must be of type Function');
+  } // We DO NOT return the promise as it gives the user a false sense that
+  // the promise is actually somehow related to the callback's execution
+  // and that the callback throwing will reject the promise.
+
+
+  function callbackified() {
+    var args = [];
+
+    for (var i = 0; i < arguments.length; i++) {
+      args.push(arguments[i]);
+    }
+
+    var maybeCb = args.pop();
+
+    if (typeof maybeCb !== 'function') {
+      throw new TypeError('The last argument must be of type Function');
+    }
+
+    var self = this;
+
+    var cb = function cb() {
+      return maybeCb.apply(self, arguments);
+    }; // In true node style we process the callback on `nextTick` with all the
+    // implications (stack, `uncaughtException`, `async_hooks`)
+
+
+    original.apply(this, args).then(function (ret) {
+      process.nextTick(cb, null, ret);
+    }, function (rej) {
+      process.nextTick(callbackifyOnRejected, rej, cb);
+    });
+  }
+
+  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));
+  Object.defineProperties(callbackified, getOwnPropertyDescriptors(original));
+  return callbackified;
+}
+
+exports.callbackify = callbackify;
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(/*! ./../process/browser.js */ "./node_modules/process/browser.js")))
 
 /***/ }),
 
@@ -247,18 +4569,26 @@ eval("/* WEBPACK VAR INJECTION */(function(process) {function _typeof(obj) { if 
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("function _typeof(obj) { if (typeof Symbol === \"function\" && typeof Symbol.iterator === \"symbol\") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === \"function\" && obj.constructor === Symbol && obj !== Symbol.prototype ? \"symbol\" : typeof obj; }; } return _typeof(obj); }\n\nvar g; // This works in non-strict mode\n\ng = function () {\n  return this;\n}();\n\ntry {\n  // This works if eval is allowed (see CSP)\n  g = g || new Function(\"return this\")();\n} catch (e) {\n  // This works if the window reference is available\n  if ((typeof window === \"undefined\" ? \"undefined\" : _typeof(window)) === \"object\") g = window;\n} // g can still be undefined, but nothing to do about it...\n// We return undefined, instead of nothing here, so it's\n// easier to handle this case. if(!global) { ...}\n\n\nmodule.exports = g;\n\n//# sourceURL=webpack://scionCoreLib/(webpack)/buildin/global.js?");
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
-/***/ }),
+var g; // This works in non-strict mode
 
-/***/ "./scion-core-lib.js":
-/*!***************************!*\
-  !*** ./scion-core-lib.js ***!
-  \***************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
+g = function () {
+  return this;
+}();
 
-eval("module.exports = __webpack_require__(/*! @scion-scxml/core */ \"./node_modules/@scion-scxml/core/lib/Statechart.js\");\n\n//# sourceURL=webpack://scionCoreLib/./scion-core-lib.js?");
+try {
+  // This works if eval is allowed (see CSP)
+  g = g || new Function("return this")();
+} catch (e) {
+  // This works if the window reference is available
+  if ((typeof window === "undefined" ? "undefined" : _typeof(window)) === "object") g = window;
+} // g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+
+module.exports = g;
 
 /***/ })
 
