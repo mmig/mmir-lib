@@ -236,7 +236,7 @@ return {
 		// (console) logging related modules (either 'mmirf/loggerEnabled' or 'mmirf/loggerDisabled' will be mapped to 'mmirf/logger', depending on configuration
 		, 'mmirf/loggerEnabled': 'tools/logger'
 		, 'mmirf/loggerDisabled': 'tools/loggerDisabled'
-		, 'mmirf/stacktrace': 'vendor/libs/stacktrace'
+		, 'mmirf/stacktrace': 'vendor/libs/stacktrace-v2.0.0'
 
 		//FIXME "hardlink" mmirf/logger:
 		, 'mmirf/logger': 'tools/logger'
