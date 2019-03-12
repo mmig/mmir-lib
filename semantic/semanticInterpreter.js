@@ -352,7 +352,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 
         	if(!id){
         		if(!currentGrammarId){
-        			throw 'Could not retrieve grammar: required grammar ID is missing';
+        			throw new Error('Could not retrieve grammar: required grammar ID is missing');
         		}
         		else {
         			id = currentGrammarId;
@@ -499,7 +499,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 
         		//FIXME webpack emits a warning, if normal require() is used -> TODO find other way than using mmir.require() for getting rid of the warning (i.e. avoid adding dependency for mmirf/core!)
         		var req = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD? require('mmirf/core').require : require;
-        		req([genName], onModuleLoaded, function(err){
+        		req([genName], onModuleLoaded, function(_err){
 
         			//if async-module could not be loaded, try sync-module
         			if(_isAsyncCompileMode){
@@ -531,7 +531,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
         				}
         			}
 
-        			throw 'Could not find JSON grammar file at "'+doRecompile+'": '+errMsg;
+        			throw new Error('Could not find JSON grammar file at "'+doRecompile+'": '+errMsg);
         		}, doRecompile, true
         		);
         	} else if(typeof doRecompile === 'object'){// arg. is JSONObject (ie. JSON grammar definition)
@@ -619,7 +619,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
         	var grammarConverter = doGetGrammar(langCode, grammarReadyCallback);
 
         	if(!grammarConverter && ! grammarReadyCallback){
-    			throw 'NoGrammar_'+langCode;
+    			throw new Error('no grammar available for '+(langCode || currentGrammarId)+' (and no callback provided for asnyc invocation)');
     		}
 
         	if(!grammarReadyCallback){
