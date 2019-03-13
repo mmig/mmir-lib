@@ -415,7 +415,7 @@ export interface VoiceDetails {
 	/** the name of the voice */
 	name: string;
 	/** the language (code) of the voice */
-	languange: string;
+	language: string;
 	/** the gender of the voice */
 	gender: "female" | "male" | "unknown";
 }
