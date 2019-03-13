@@ -7,7 +7,7 @@
 		exports["CryptoJS"] = factory();
 	else
 		root["CryptoJS"] = factory();
-})(window, function() {
+})(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
