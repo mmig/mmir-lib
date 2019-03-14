@@ -28,15 +28,19 @@
  * @module workers/jison-compiler
  */
 
- typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
- 				require('./asyncCompileUtil.js') :
+if(typeof self === 'undefined' && typeof process !== 'undefined'){
+	require('./nodeWorkerThreadsInit');
+}
+
+typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+				require('./asyncCompileUtil.js') :
 				importScripts('asyncCompileUtil.js');
 
 var jison;
 self._init = function(url){
 
 	if(typeof WEBPACK_BUILD === 'undefined'){
-		var libUrl = getPath(url) +'.js';
+		var libUrl = self.getPath(url) +'.js';
 		try {
 			 importScripts(libUrl);
 		} catch(err){
@@ -51,13 +55,13 @@ self._init = function(url){
 	jison = Jison;
 }
 
-var defaultOptions = {
+self.defaultOptions = {
 	type: 'lalr'//'lr0' | 'slr' | 'lr' | 'll' | default: lalr
 };
 
 // setup jison compiler:
 
-function _preparePrintImpl(id){
+function _preparePrintImpl(_id){
 
 	if(jison.print && jison.print.name === 'mmirPrint'){
 		return;
@@ -81,7 +85,7 @@ self.onmessage = function(e){
 
   switch(e.data.cmd){
     case 'init':
-      init(e.data);
+      self.init(e.data);
       break;
     case 'parse':
       parse(e.data.text, e.data.config, e.data.id);
@@ -92,11 +96,11 @@ self.onmessage = function(e){
 
 function parse(grammarDefinition, config, id){
 
-	if(!verifyInit(jison, 'jison', id)){
+	if(!self.verifyInit(jison, 'jison', id)){
 		return;
 	}
 
-	var options = _getOptions(config);
+	var options = self._getOptions(config);
 
 	_preparePrintImpl(id);
 

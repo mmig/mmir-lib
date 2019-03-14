@@ -37,9 +37,8 @@ self._makeArray = function(obj) {
 	return list;
 };
 
-var defaultOptions = {};
-var _getOptions = function(opt){
-	return opt? opt : defaultOptions;
+self._getOptions = function(opt){
+	return opt? opt : self.defaultOptions || {};
 };
 
 self.verifyInit = function(engine, engineId, taskId){
@@ -63,7 +62,7 @@ self.init = function(config){
 
   if (config.engineUrl || (typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD)){
 
-	  _init(config.engineUrl);
+	  self._init(config.engineUrl);
 	  self.postMessage({init: true});
 
   } else {

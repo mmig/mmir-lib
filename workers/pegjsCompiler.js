@@ -28,9 +28,13 @@
  * @module workers/pegjs-compiler
  */
 
- typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
- 			 require('./asyncCompileUtil.js') :
-			 importScripts('asyncCompileUtil.js');
+if(typeof self === 'undefined' && typeof process !== 'undefined'){
+	require('./nodeWorkerThreadsInit');
+}
+
+typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+			 require('./asyncCompileUtil.js') :
+		 importScripts('asyncCompileUtil.js');
 
 if(typeof WEBPACK_BUILD === 'undefined'){
 	importScripts('requirejsStubUtil.js');
@@ -43,21 +47,25 @@ self._init = function(url){
 
 	if(typeof WEBPACK_BUILD === 'undefined'){
 
-		var libUrl = getPath(url) +'.js';
-		_modules._customid = 'mmirf/pegjs';
+		var libUrl = self.getPath(url) +'.js';
+		self._modules._customid = libUrl;//'mmirf/pegjs';
 		try {
 			importScripts(libUrl);
+			//set global var that holds jison
+			pegjs = require(libUrl);
 		} catch(err){
 			console.log('pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ', err.stack);
 			self.postMessage({error: 'pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") '+ err.stack});
 		}
+	} else {
+
+		//set global var that holds jison
+		pegjs = require('mmirf/pegjs');
 	}
 
-	//set global var that holds jison
-	pegjs = require('mmirf/pegjs');
 }
 
-var defaultOptions = {
+self.defaultOptions = {
 	cache:    false,
 //	allowedStartRules: void(0), FIXME DISABLED: pegjs actually evaluates this value, if it present (even if it is undefined/FALSY)
 	optimize: "speed",
@@ -66,7 +74,7 @@ var defaultOptions = {
 
 // setup PEG.js compiler:
 
-function _preparePrintImpl(id){
+function _preparePrintImpl(_id){
 
 	if(pegjs.print && pegjs.print.name === 'mmirPrint'){
 		return;
@@ -90,7 +98,7 @@ self.onmessage = function(e){
 
   switch(e.data.cmd){
     case 'init':
-      init(e.data);
+      self.init(e.data);
       break;
     case 'parse':
       parse(e.data.text, e.data.config, e.data.id);
@@ -101,13 +109,13 @@ self.onmessage = function(e){
 
 function parse(grammarDefinition, config, id){
 
-	if(!verifyInit(pegjs, 'pegjs', id)){
+	if(!self.verifyInit(pegjs, 'pegjs', id)){
 		return;
 	}
 
 	_preparePrintImpl(id);
 
-	var options = _getOptions(config);
+	var options = self._getOptions(config);
 
 	var hasError = false;
     var grammarParser;

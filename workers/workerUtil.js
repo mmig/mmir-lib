@@ -28,7 +28,7 @@ if(typeof console === 'undefined'){
 
 	//-> if WebWorker implementation does not provide a console
 
-	var consoleStubFunc = function(msg){};
+	var consoleStubFunc = function(_msg){};
 
 	var consoleFunc;
 	if(typeof postError !== 'undefined'){
@@ -61,8 +61,9 @@ if(typeof console === 'undefined'){
 self.getPath = function(scriptUrl){
 
 	//if starts with protocol "*://" -> absolute path
+	//OR if isMainThread === false -> (probably) node's experimental worker_threads (instead of "real" WebWorker)
 	//OR if there is thread object present with a nextTick() function -> (probably) node WebWorker implementation (instead of "real" WebWorker)
-	if(/^[^/]+:\/\//.test(scriptUrl) || (self.thread && typeof self.thread.nextTick === 'function')){
+	if(/^[^/]+:\/\//.test(scriptUrl) || self.isMainThread === false || (self.thread && typeof self.thread.nextTick === 'function')){
 		return scriptUrl;
 	}
 

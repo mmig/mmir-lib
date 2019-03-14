@@ -3,11 +3,29 @@
 
 var path = require('path');
 
+var nodeWorkerErr;
 try {
+
 	global.Worker = require('webworker-threads').Worker;
+	console.log('[INFO] using module "webworker-threads" implementation for WebWorkers...');
+
 } catch(err) {
-	console.log(err)
-	console.log('[INFO] module "webworker-threads" not installed: not using WebWorkers/parallel threads for mmir...');
+
+	try {
+		global.Worker = require('worker_threads').Worker;
+		console.log('[INFO] using module "worker_threads" implementation for WebWorkers...');
+	} catch(err) {
+		nodeWorkerErr = err;
+	}
+}
+if(nodeWorkerErr){
+	// console.log(nodeWorkerErr);
+	console.log('[INFO] could not load implementation for WebWorkers: not using WebWorkers/parallel threads for mmir...');
+	console.log('[INFO]   try enabling WebWorkers for node:');
+	console.log('[INFO]     * install npm package webworker-threads (>= version 8.x)');
+	console.log('[INFO]     * enabling worker_threads via command line argument --experimental-worker:');
+	console.log('[INFO]       node --experimental-worker ...');
+	console.log('[INFO]       npm --node-options --experimental-worker ...');
 	global.Worker = void(0);
 }
 
@@ -49,6 +67,7 @@ var coreModule = {
 		var requirejs = require('requirejs');
 		global.requirejs = requirejs;
 		coreModule.requirejs = requirejs;
+		config.nodeRequire = require;
 		var req = requirejs.config(config);
 		var core = mmirInitFunc(mmirCore, config, req, requirejs.define);
 

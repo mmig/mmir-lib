@@ -214,7 +214,7 @@ return {
 		 *
 		 * @memberOf CompileWebWorker#
 		 */
-		asyncCompiler.onmessage = function(evt){
+		var onmessage = function(evt){
 
 			var id = evt.data.id;
 			if(id){
@@ -253,6 +253,12 @@ return {
 			}
 
 		};
+
+		if(typeof asyncCompiler.on === 'function'){
+			asyncCompiler.on('message', function(data){ onmessage.apply(asyncCompiler, {data: data})});
+		} else {
+			asyncCompiler.onmessage = onmessage;
+		}
 
 		/**
 		 * check if the worker has "pending callbacks"

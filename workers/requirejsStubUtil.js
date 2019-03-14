@@ -10,8 +10,9 @@ var _modules = {
 		return this._defined[id];
 	}
 };
+self._modules = _modules;
 
-self.define = function(deps, moduleCreateFunc){
+var define = function(deps, moduleCreateFunc){
 	if(typeof deps === 'function'){
 		moduleCreateFunc = deps;
 		deps = null;
@@ -39,7 +40,11 @@ self.define = function(deps, moduleCreateFunc){
 	}
 	_modules._defined[modId] =  moduleCreateFunc();
 };
-self.define.amd = true;
+define.amd = true;
+self.define = define;
+if(typeof global !== 'undefined'){
+	global.define = define;
+}
 
 self.require = function(id, cb){
 	if(cb){

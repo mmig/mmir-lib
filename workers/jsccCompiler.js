@@ -28,9 +28,13 @@
  * @module workers/jscc-compiler
  */
 
- typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
- 			 require('./asyncCompileUtil.js') :
-			 importScripts('asyncCompileUtil.js');
+if(typeof self === 'undefined' && typeof process !== 'undefined'){
+	require('./nodeWorkerThreadsInit');
+}
+
+typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
+			 require('./asyncCompileUtil.js') :
+		 importScripts('asyncCompileUtil.js');
 
 if(typeof WEBPACK_BUILD === 'undefined'){
 	importScripts('requirejsStubUtil.js');
@@ -42,22 +46,26 @@ var jscc;
 self._init = function(url){
 
 	if(typeof WEBPACK_BUILD === 'undefined'){
-		var libUrl = getPath(url) + '.js';
-		_modules._customid = 'mmirf/jscc';
+		var libUrl = self.getPath(url) + '.js';
+		self._modules._customid = 'mmirf/jscc';
 		try {
 			importScripts(libUrl);
+			//set global var that holds JS/CC:
+			jscc = self.require('mmirf/jscc');
 		} catch(err){
-			console.log('jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ', err.stack);
-			self.postMessage({error: 'jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") '+ err.stack});
+			var msg = 'jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ';
+			console.log(msg, err);
+			self.postMessage({error: msg + err.stack});
 		}
+	} else {
+		//set global var that holds JS/CC:
+		jscc = require('mmirf/jscc');
 	}
 
-	//set global var that holds JS/CC:
-	jscc = require('mmirf/jscc');
 }
 
 
-var defaultOptions = {
+self.defaultOptions = {
 		//current there are no specific options for JS/CC
 };
 
@@ -131,7 +139,7 @@ self.onmessage = function(e){
 
   switch(e.data.cmd){
     case 'init':
-      init(e.data);
+      self.init(e.data);
       break;
     case 'parse':
       parse(e.data.text, e.data.config, e.data.id);
@@ -143,11 +151,11 @@ self.onmessage = function(e){
 
 function parse(grammarDefinition, config, id){
 
-	if(!verifyInit(jscc, 'jscc', id)){
+	if(!self.verifyInit(jscc, 'jscc', id)){
 		return;
 	}
 
-	var options = _getOptions(config);
+	var options = self._getOptions(config);
 
 	var template = config.template;
 	var inputFieldName = config.inputFieldName;

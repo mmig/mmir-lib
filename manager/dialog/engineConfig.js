@@ -162,6 +162,12 @@ define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'],
 				}
 			};
 
+			// if worker implementation supports unref(), do "declare" that program
+			// should exit even if the worker is still running:
+			if(typeof scionQueueWorker.unref === 'function'){
+				scionQueueWorker.unref();
+			}
+
 			return scionQueueWorker;
 
 		},
@@ -218,9 +224,9 @@ define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'],
 					}
 				}
 
-				function failureFallbackHandler(err){
+				function failureFallbackHandler(_err){
 
-					_instance._logger.error('failed to initialize SCION extension for ANDROID evn');
+					_instance._logger.error('failed to initialize SCION extension for ANDROID env');
 					_instance.worker = (function(gen){
 						return {
 							raiseCordova: function fallback(event, eventData){
@@ -241,7 +247,7 @@ define(['mmirf/resources', 'mmirf/scionEngine', 'mmirf/util/extend', 'require'],
 
 					inst.onraise();
 				});
-				execQueue.newQueue(id, function(args){
+				execQueue.newQueue(id, function(_args){
 						if(_instance._logger.isv()) _instance._logger.debug('QueuePlugin: entry '+id+' created.' + ' at ' + _instance.url);
 					}, failureFallbackHandler
 				);

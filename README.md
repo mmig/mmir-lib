@@ -55,13 +55,14 @@ _Note: these directions assume, that your web application is located in the
 
 (see contents of `/vendor/libs/`)
 
- * RequireJS 2.1.9
- * SCION
+ * RequireJS 2.3.6
+ * SCION v1, @scion-scxml/core v2.6.22 (custom build)
  * JS/CC 0.30
- * PEG.js 0.9.0
+ * PEG.js 0.10.0
  * Jison
  * ANTLR 3
- * CryptoJS MD5 3.1.2
+ * crypto-js MD5 3.1.9-1 (custom build)
+ * stacktrace-js 2.0.0
 
 
 
