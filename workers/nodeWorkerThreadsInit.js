@@ -24,7 +24,7 @@ Object.defineProperty(global.self, 'onmessage', {
 	set: function(func){
 		parentPort.on('message', function(data){
 			// if(!destroyed) log('## [worker_threads::onmessage] ', data);
-			func.apply(global, [{data: data}]);
+			func.call(global, {data: data});
 		});
 	}
 });
