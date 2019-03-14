@@ -260,7 +260,6 @@ var pegjsGen = {
         }
 
         return theConverterInstance;
-        return theConverterInstance;
 	},
 	/**
 	 * @protected
@@ -270,7 +269,7 @@ var pegjsGen = {
 		var hasError = false;
         var grammarParser;
         try{
-        	grammarParser = pegjs.buildParser(grammarDefinition, options);
+        	grammarParser = pegjs.generate(grammarDefinition, options);
         } catch(error) {
 //        	"{
 //        	  "message": "Expected \"=\" or string but \"_\" found.",
