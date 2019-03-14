@@ -150,15 +150,13 @@ return {
 		 * 				the sync parser generator
 		 * @param {Deferred} asyncDef
 		 * 				the deferred that should be resolved when async generator is initialized
-		 * @param {mmir} core
-		 * 				the mmir instance that is used for loading the MMIR framework
 		 *
 		 * @returns {AsyncInitMesssage}
 		 * 				the message object that should be sent to the async generator's WebWorker
 		 *
 		 * @memberOf CompileWebWorker#
 		 */
-		asyncCompiler.prepareOnInit = function(syncGen, asyncDef, core){
+		asyncCompiler.prepareOnInit = function(syncGen, asyncDef){
 
 			//setup async init-signaling:
 			var isSyncGenInit = false;
@@ -255,7 +253,7 @@ return {
 		};
 
 		if(typeof asyncCompiler.on === 'function'){
-			asyncCompiler.on('message', function(data){ onmessage.apply(asyncCompiler, {data: data})});
+			asyncCompiler.on('message', function(data){ onmessage.call(asyncCompiler, {data: data})});
 		} else {
 			asyncCompiler.onmessage = onmessage;
 		}
