@@ -83,7 +83,7 @@ self.defaultOptions = {
  */
 function _createCompileLogFunc(log /*Logger*/, level /*String: log-function-name*/, taskId){
 	return function(){
-		var args = _makeArray(arguments);
+		var args = self._makeArray(arguments);
 		log.postMessage({message: args, level: level, id: taskId});
 	};
 }

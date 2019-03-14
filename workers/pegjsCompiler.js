@@ -89,7 +89,7 @@ function _preparePrintImpl(_id){
 	//	//output log-message:
 	//	logger.error.apply(logger, args);
 
-		var args = _makeArray(arguments);
+		var args = self._makeArray(arguments);
 		self.postMessage({error: args});
 	};
 }
