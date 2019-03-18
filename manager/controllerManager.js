@@ -221,7 +221,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 							infoList.push(addGenPath(genDirPath, {
 							  name: wpBuild? name.replace(/^.*\//, '') : name,													//<- in webpack build: remove everything from ID (i.e. the name) except for the last segement
 							  path: isSourceList? (wpBuild? entry : dirPath + '/' + entry) : null,
-							  genPath: isSourceList? null : (wpBuild? entry : genDirPath + '/' + name)	//<- in webpack build the genPath is the module ID, otherwise it's the path to the generated file
+							  genPath: isSourceList? null : (wpBuild? entry : genDirPath + '/' + entry)	//<- in webpack build the genPath is the module ID, otherwise it's the path to the generated file
 							}, removeNamePrefix));
 						}
 					  }
