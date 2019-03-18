@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtils','mmirf/logger','mmirf/engineConfig','module','require'],
+define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/logger','mmirf/engineConfig','module','require'],
 	/**
 	 * The InputManager handles input events.
 	 *
@@ -52,7 +52,7 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/commonUtil
 	 *
 	 */
 	function(
-		mmir, extend, deferred, commonUtils, Logger, engineConfig, module, require
+		mmir, extend, deferred, Logger, engineConfig, module, require
 ){
 
 

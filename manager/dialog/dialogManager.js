@@ -25,8 +25,7 @@
  */
 
 define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
-        ,'mmirf/commonUtils','mmirf/engineConfig','mmirf/controllerManager','mmirf/presentationManager','mmirf/logger','module','require'
-        ,'mmirf/modelManager'
+        , 'mmirf/engineConfig','mmirf/controllerManager','mmirf/presentationManager','mmirf/logger','module','require'
 	],
 	/**
 	 * The DialogManager gives access to the most commonly used functions of
@@ -52,7 +51,6 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 	 *
 	 * @requires mmir.ControllerManager
 	 * @requires mmir.PresentationManager
-	 * @requires mmir.ModelManager
 	 *
      * @requires mmir.require
      * @requires mmir._define
@@ -60,7 +58,7 @@ define([  'mmirf/core','mmirf/util/extend','mmirf/util/deferred'
 	 */
 	function(
 			mmir, extend, deferred,
-			commonUtils, engineConfig, controllerManager, presentationManager, Logger, module, require
+			engineConfig, controllerManager, presentationManager, Logger, module, require
 ) {
 
 	var _create = function(){
