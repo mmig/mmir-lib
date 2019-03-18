@@ -23,9 +23,11 @@ if(nodeWorkerErr){
 	console.log('[INFO] could not load implementation for WebWorkers: not using WebWorkers/parallel threads for mmir...');
 	console.log('[INFO]   try enabling WebWorkers for node:');
 	console.log('[INFO]     * install npm package webworker-threads (>= version 8.x)');
-	console.log('[INFO]     * enabling worker_threads via command line argument --experimental-worker:');
+	console.log('[INFO]     * enable experimental node worker_threads via command line argument:');
 	console.log('[INFO]       node --experimental-worker ...');
 	console.log('[INFO]       npm --node-options --experimental-worker ...');
+	console.log('[INFO]     * enable experimental node worker_threads for npm via config:');
+	console.log('[INFO]       create file ".npmrc" with line "node-options = --experimental-worker"');
 	global.Worker = void(0);
 }
 
