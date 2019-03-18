@@ -8,17 +8,19 @@
  *  -> this interpreter expects the scion-model at url, not a SCXML file!
  */
 
-define(['mmirf/scionRuntimeLib'], function(scionInterpreter){
+define(['mmirf/scionRuntimeLib', 'require'], function(scionInterpreter, require){
 
 var getModel = function(url, callback){
-	setTimeout(function(){//<- simulate async
-		try {
-			var scxmlModel = __webpack_require__(url);
-			callback(null, scxmlModel);
-		} catch(err){
-			callback(err);
-		}
-	}, 0);
+	if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD) setTimeout(function(){//<- simulate async
+			try {
+				var scxmlModel = __webpack_require__(url);
+				callback(null, scxmlModel);
+			} catch(err){
+				callback(err);
+			}
+		}, 0);
+	else require([url], function(scxmlModel){ callback(null, scxmlModel) }, function(err){ callback(err) })
+
 };
 
 return {
