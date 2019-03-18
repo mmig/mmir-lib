@@ -164,7 +164,7 @@ define([
 			//NOTE: stored template require the renderUtils:
 			core.require(['mmirf/renderUtils'], function(){
 
-				if(! isUpToDate(rawViewData, targetpath)){
+				if(rawViewData && !isUpToDate(rawViewData, targetpath)){
 					if(fail) fail('Precompiled view file is outdated!');
 					else logger.warn('Outdated pre-compiled view at: '+targetpath);
 
@@ -743,6 +743,23 @@ define([
 		 */
 		var doLoadTemplateFile = function(controller, templateInfo, createConfig, loadStatus){
 			++loadStatus.currentLoadCount;
+
+			if(!templateInfo.path){
+				logger.warn('cannot check if pre-compiled view is updated: no template file available for '+templateInfo.name);
+				loadPrecompiledView(null, templateInfo.genPath, function(){
+
+					updateLoadStatus(loadStatus);
+
+				}, function(err){
+
+					logger.error('Could not load precompiled '+createConfig.typeName+' from '
+							+templateInfo.genPath+'", because: '+err
+					);
+					updateLoadStatus(loadStatus);
+
+				});
+				return;///////////// EARLY EXIT //////////////////
+			}
 
 			loadFile({
 				async: true,
