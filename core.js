@@ -501,7 +501,7 @@ function initMmir(window) {
 			 * mmir.config({config: { 'mmirf/dialogManager': {logLevel: 'warn'}, 'mmirf/inputManager': {logLevel: 'warn'}}});
 			 *
 			 * //... or using alternative SCXML definition for dialog-engine:
-			 * mmir.config({config: { 'mmirf/dialogManager': {scxmlDoc: 'config/statedef/example-view_transitions-dialogDescriptionSCXML.xml'});
+			 * mmir.config({config: { 'mmirf/dialogManager': {modelUri: 'config/states/example-view_transitions-dialogDescriptionSCXML.xml'});
 			 *
 			 * //overwrite module location (BEWARE: you should know what you are doing, if you use this)
 			 * mmir.config({paths: {'jquery': 'content/libs/zepto'}};

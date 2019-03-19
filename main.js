@@ -24,9 +24,8 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/configurationManager', 'mmirf/languageManager'
-     , 'mmirf/controllerManager', 'mmirf/modelManager'
-     , 'mmirf/presentationManager', 'mmirf/inputManager', 'mmirf/dialogManager', 'module'
+define(['mmirf/core', 'mmirf/util/deferred', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/configurationManager', 'mmirf/languageManager'
+     , 'mmirf/controllerManager', 'mmirf/modelManager', 'mmirf/presentationManager'
      , 'mmirf/semanticInterpreter', 'mmirf/mediaManager', 'mmirf/notificationManager'
   ],
   /**
@@ -42,10 +41,9 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
    * @requires util/deferred
    *
    */
-  function(mmir, env, deferred, resources, commonUtils, configurationManager, languageManager
-	 , controllerManager, modelManager
-     , presentationManager, inputManager, dialogManager, module
-     , semanticInterpreter, mediaManager, notificationManager
+  function(mmir, deferred, resources, utils, conf, lang
+     , ctrlManager, modelManager, present
+     , semantic, media, notif
 ){
 
 	//export framework functions/objects:
@@ -53,11 +51,11 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 	/** @memberOf mmir */
 	mmir.res = resources;
 	/** @memberOf mmir */
-	mmir.util = commonUtils;
+	mmir.util = utils;
 	/** @memberOf mmir */
-	mmir.conf = configurationManager;
+	mmir.conf = conf;
 	/** @memberOf mmir */
-	mmir.notifier = notificationManager.init();
+	mmir.notifier = notif.init();
 
 	var rootCtx = typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this;
 	/**
@@ -70,7 +68,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 	 */
 	var getContextFor = function(ctxConfigName){
 		var ctx = rootCtx;
-		var ctxName = configurationManager.get(ctxConfigName);
+		var ctxName = conf.get(ctxConfigName);
 		if(ctxName){
 			var namespaces = ctxName.split('.');
 			var name;
@@ -92,6 +90,59 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 	//the context where the model implementations can be found (default: global context, i.e. window)
 	/** @memberOf main */
 	var modelImplCtx = getContextFor('modelContext');
+	/**
+	 * HELPER detect compiled state-models (compiled SCXML files) and set mmirf/scion (i.e. state engine)
+	 *        accordingly, either to runtime-only or leave default compiler&runtime
+	 * @memberOf main
+	 */
+	var selectStateEngine = function(){
+
+		if(!conf.getBoolean('detectCompiledStateModels', true)){
+			return;
+		}
+
+		var genDir = resources.getGeneratedStateModelsPath();
+		var models = utils.listDir(genDir);
+		if(models){
+
+			var statesConfig = {
+				paths: {'mmirf/scion': require.toUrl('mmirf/scionRuntime')},
+				config: {}
+			};
+			var m;
+			for(var i=0, size = models.length; i < size; ++i){
+				m = models[i];
+				// ['mmirf/dialogManager' | 'mmirf/inputManager']: {modelUri: 'gen/states/' + ['dialog' | 'input']}
+				statesConfig.config['mmirf/' + (/dialog/i.test(m)? 'dialog' : 'input')+'Manager'] = {modelUri: genDir + m};
+			}
+			mmir.require = require.config(statesConfig);
+		}
+	};
+
+
+	//load/async-require inputManager & dialogManager:
+	// if pre-compiled SCXML models, use scion-runtime instead of scion-compiler
+	var inputManager, dialogManager;
+
+	/**
+	 * HELPER set state-model runtime/implementation & load inputManager & dialogManager
+	 *
+	 * Side Effects:
+	 *  * sets var dialogManager
+	 *  * sets var inputManager
+	 *
+	 * @param {Deferred} deferredStateMachines promise that will get resolved when input- and dialogManager have been loaded
+	 * @memberOf main
+	 */
+	var initStateEngines = function(deferredStateMachines){
+		selectStateEngine();
+		//after selection the scion-lib (compiler or runtime), do load input- and dialogManager:
+		require(['mmirf/inputManager', 'mmirf/dialogManager'], function(im, dm){
+			inputManager = im;
+			dialogManager = dm;
+			deferredStateMachines.resolve();
+		});
+	};
 
 	/**
 	 * Main Initialization:
@@ -101,15 +152,19 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 	 */
 	var mainInit = function(){
 
-//		console.log('dom ready');
+		//for initializing/loading inputManager & dialogManager:
+		var defStateMachines = new deferred();
 
 		//initialize the common-utils:
-		commonUtils.init()//<- load directory structure
+		utils.init()//<- load directory structure
 
 			//load plugins (if in CORDOVA environment)
 			.then(function() {
 
-				return languageManager.init().then(function(langMng){
+				//need to wait until directories.json is available for checking compiled state-machines:
+				initStateEngines(defStateMachines);
+
+				return lang.init().then(function(langMng){
 					mmir.lang = langMng;
 				});
 
@@ -117,11 +172,11 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 			// start the ControllerManager
 			.then(function() {
 
-				mmir.ctrl = controllerManager;
+				mmir.ctrl = ctrlManager;
 				//NOTE: this also gathers information on which
 				//      views, layouts etc. are available
 				//      -> the presentationManager depends on this information
-				return controllerManager.init(ctrlImplCtx);
+				return ctrlManager.init(ctrlImplCtx).then(function(){return defStateMachines});
 			})
 
 			//TEST parallelized loading of independent modules:
@@ -169,7 +224,7 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 						 * @type PlainObject
 						 * @memberOf main
 						 */
-						var requireConfig = configurationManager.get('config');
+						var requireConfig = conf.get('config');
 						if(requireConfig){
 							mmir.require = require.config(requireConfig);
 						}
@@ -179,50 +234,50 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 					}
 				};
 
-				mmir.semantic = semanticInterpreter;
+				mmir.semantic = semantic;
 				/** ID for the grammar engine/compiler to be used, if/when JSON grammar are (re-) compiled
 				 * @see mmir.SemanticInterpreter#setGrammarEngine
 				 * @type String
 				 * @memberOf main */
-				var grammarEngine = configurationManager.get('grammarCompiler');
+				var grammarEngine = conf.get('grammarCompiler');
 				if(grammarEngine){
-					semanticInterpreter.setGrammarEngine(grammarEngine);
+					semantic.setGrammarEngine(grammarEngine);
 				}
 				/** set synchronous/asynchronous compile-mode for grammar compilation
 				 * @see mmir.SemanticInterpreter#setEngineCompileMode
 				 * @type Boolean
 				 * @memberOf main */
-				var grammarCompileMode = configurationManager.get('grammarAsyncCompileMode');
+				var grammarCompileMode = conf.get('grammarAsyncCompileMode');
 				if(typeof grammarCompileMode !== 'undefined'){
-					semanticInterpreter.setEngineCompileMode(grammarCompileMode);
+					semantic.setEngineCompileMode(grammarCompileMode);
 				}
 
 				//TODO impl. automated sync/async loading&execution for compiled grammars
-//				var grammarExecMode = configurationManager.get('grammarExecMode');
+//				var grammarExecMode = conf.get('grammarExecMode');
 //				if(typeof grammarExecMode !== 'undefined'){
-//					semanticInterpreter.setGrammarExecMode(grammarExecMode);//TODO add async-loaded grammars to ignoreGrammarFiles-list (to prevent loading them in "sync-exec mode")
+//					semantic.setGrammarExecMode(grammarExecMode);//TODO add async-loaded grammars to ignoreGrammarFiles-list (to prevent loading them in "sync-exec mode")
 //				}
 
 				/** list of grammar IDs which should not be loaded, even if there is a compiled grammar available:
 				 * @type String
 				 * @memberOf main
 				 */
-				var ignoreGrammarIds = configurationManager.get('ignoreGrammarFiles', void(0));
+				var ignoreGrammarIds = conf.get('ignoreGrammarFiles', void(0));
 
-				commonUtils.loadCompiledGrammars(resources.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
+				utils.loadCompiledGrammars(resources.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
 
 					isSemanticsLoaded = true;
 					checkInitCompleted();
 				});
 
 				// start the MediaManager
-				mediaManager.init().then(function() {
+				media.init().then(function() {
 					isMediaManagerLoaded = true;
 
 					//initialize BEEP notification (after MediaManager was initialized)
-					notificationManager.initBeep();
+					notif.initBeep();
 
-					mmir.media = mediaManager;
+					mmir.media = media;
 					checkInitCompleted();
 				});
 
@@ -234,11 +289,11 @@ define(['mmirf/core', 'mmirf/env', 'mmirf/util/deferred', 'mmirf/resources', 'mm
 					checkInitCompleted();
 				});
 
-				presentationManager.init().then(function(){
+				present.init().then(function(){
 
 					isVisualsLoaded = true;
 
-					mmir.present = presentationManager;
+					mmir.present = present;
 					checkInitCompleted();
 
 				}, function error(err){ console.error('Failed initializing PresentationManager: '+err); });

@@ -98,15 +98,7 @@
 		}
 
 		//apply all configs / modifications that were made on the core-module
-		var appliedConfig = core.applyConfig(mmirf_config, requirejs);
-
-		if(appliedConfig && appliedConfig.config && appliedConfig.config['mmirf/dialogManager']){
-			var scxmlDoc = appliedConfig.config['mmirf/dialogManager'].scxmlDoc;
-			if(!/\.(sc)?xml$/i.test(scxmlDoc)){
-				var scionLib = {paths: {'mmirf/scion': appliedConfig.paths['mmirf/scionRuntime']}};
-				requirejs.config(scionLib);
-			}
-		}
+		core.applyConfig(mmirf_config, requirejs);
 
 		if(jq){
 			core._define('jquery', function(){

@@ -42,7 +42,7 @@ return {
 
 		/** @memberOf mmir.require.config.moduleConfig */
 		'mmirf/inputManager': {
-			scxmlDoc: 'config/statedef/inputDescriptionSCXML.xml'
+			modelUri: 'config/states/input.xml'
 			// simple | extended
 			, mode: 'extended'
 			//EXAMPLE: set module-specific log-level to 'info'
@@ -50,7 +50,7 @@ return {
 		}
 		/** @memberOf mmir.require.config.moduleConfig */
 		, 'mmirf/dialogManager': {
-			scxmlDoc: 'config/statedef/dialogDescriptionSCXML.xml'
+			modelUri: 'config/states/dialog.xml'
 			// simple | extended
 			, mode: 'extended'
 			//EXAMPLE: set module-specific log-level to 'verbose'

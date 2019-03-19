@@ -173,7 +173,12 @@ function(
 	 * @memberOf Resources#
 	 */
 	var genGrammarsPath = "gen/grammar/";
-
+	/**
+	 * the path to the app's generated (compiled JS) state models
+	 * @private
+	 * @memberOf Resources#
+	 */
+	var genStateModelsPath = "gen/state/";
 
 	///////////////////////////////////////////////////// Resource Names /////////////////////////////////////////////////////
 
@@ -480,6 +485,17 @@ function(
 			 */
 			getGeneratedGrammarsPath: function(){
 				return basePath + genGrammarsPath;
+			},
+			/**
+			 * Returns a string with the path to the directory that contains the generated/executable state models (compiled SCXML).
+			 * @function
+			 * @public
+			 * @returns {String} path for generated state models (JavaScript files)
+			 *
+			 * @memberOf mmir.Resources.prototype
+			 */
+			getGeneratedStateModelsPath: function(){
+				return basePath + genStateModelsPath;
 			},
 			/**
 			 * Returns a string with the path to the configuration file.

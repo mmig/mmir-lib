@@ -108,7 +108,7 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/logger','m
 
 				//"read" settings from requirejs' config (see mainConfig.js):
 				var modConf = module.config(module);
-				var url = modConf.scxmlDoc;
+				var url = modConf.modelUri;
 				var mode = modConf.mode;
 
 				//create a SCION engine:
