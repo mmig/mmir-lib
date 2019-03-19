@@ -97,7 +97,7 @@ define(['mmirf/core', 'mmirf/util/deferred', 'mmirf/resources', 'mmirf/commonUti
 	 */
 	var selectStateEngine = function(){
 
-		if(!conf.getBoolean('detectCompiledStateModels', true)){
+		if((typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD) || !conf.getBoolean('detectCompiledStateModels', true)){
 			return;
 		}
 
