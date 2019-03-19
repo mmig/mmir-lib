@@ -164,14 +164,14 @@ return {
 		, 'mmirf/antlr3': 'vendor/libs/antlr3-all_amd'
 		// @chsc03 parseUtils depends on the following paths
 		, 'mmirf/parseUtils': 'mvc/parser/templateParseUtils'
-		, 'mmirf/ES3Lexer': 'gen/parser/ES3Lexer_amd'
-		, 'mmirf/ES3Parser': 'gen/parser/ES3Parser_amd'
-		, 'mmirf/scriptLexer': 'gen/parser/MmirScriptLexer_amd'
-		, 'mmirf/scriptParser': 'gen/parser/MmirScriptParser_amd'
-		, 'mmirf/contentLexer': 'gen/parser/MmirScriptContentLexer_amd'
-		, 'mmirf/contentParser': 'gen/parser/MmirScriptContentParser_amd'
-		, 'mmirf/templateLexer': 'gen/parser/MmirTemplateLexer_amd'
-		, 'mmirf/templateParser': 'gen/parser/MmirTemplateParser_amd'
+		, 'mmirf/ES3Lexer': 'mvc/parser/gen/ES3Lexer_amd'
+		, 'mmirf/ES3Parser': 'mvc/parser/gen/ES3Parser_amd'
+		, 'mmirf/scriptLexer': 'mvc/parser/gen/MmirScriptLexer_amd'
+		, 'mmirf/scriptParser': 'mvc/parser/gen/MmirScriptParser_amd'
+		, 'mmirf/contentLexer': 'mvc/parser/gen/MmirScriptContentLexer_amd'
+		, 'mmirf/contentParser': 'mvc/parser/gen/MmirScriptContentParser_amd'
+		, 'mmirf/templateLexer': 'mvc/parser/gen/MmirTemplateLexer_amd'
+		, 'mmirf/templateParser': 'mvc/parser/gen/MmirTemplateParser_amd'
 
 		// @chsc03 templateProcessor depends on parsingResult
 		, 'mmirf/templateProcessor': 'mvc/parser/templateProcessor'
