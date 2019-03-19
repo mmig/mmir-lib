@@ -54,7 +54,7 @@ config.config['mmirf/resources'] = {
 };
 
 //scion-lib for node env:
-config.paths['mmirf/scion'] = path.resolve(__dirname, 'env/node/scion.js').replace(/\.js$/, '');
+config.paths['mmirf/scion'] = path.resolve(mmirRoot, 'env/node/scion.js').replace(/\.js$/, '');
 
 var mmirInitFunc = require('./mainConfigInit.js');
 
@@ -71,7 +71,7 @@ var coreModule = {
 		coreModule.requirejs = requirejs;
 		config.nodeRequire = require;
 		var req = requirejs.config(config);
-		var core = mmirInitFunc(mmirCore, config, req, requirejs.define);
+		/*var core = */mmirInitFunc(mmirCore, config, req, requirejs.define);
 
 		if(mmirCore.startModules){
 			for(var i=0,size=mmirCore.startModules.length; i < size; ++i){
