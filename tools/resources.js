@@ -160,13 +160,13 @@ function(
 	 * @private
 	 * @memberOf Resources#
 	 */
-	var genViewPath = "gen/views/";
+	var genViewPath = "gen/view/";
 	/**
 	 * the path to the app's generated (compiled JS) layouts
 	 * @private
 	 * @memberOf Resources#
 	 */
-	var genLayoutPath = "gen/views/layouts/";//before changing this: see also use of 'layouts' sub-dir-name in build/lib/mmir-build/ant/StandaloneTemplateParserExec.js
+	var genLayoutPath = "gen/view/layouts/";
 	/**
 	 * the path to the app's generated (compiled JS) grammars
 	 * @private

@@ -274,24 +274,24 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 		 *     {
 		 *       "name": "login",
 		 *       "path": "views/application/login.ehtml",
-		 *       "genPath": "gen/views/application/login.js"
+		 *       "genPath": "gen/view/application/login.js"
 		 *     },
 		 *     {
 		 *       "name": "registration",
 		 *       "path": "views/application/registration.ehtml",
-		 *       "genPath": "gen/views/application/registration.js"
+		 *       "genPath": "gen/view/application/registration.js"
 		 *     },
 		 *     {
 		 *       "name": "welcome",
 		 *       "path": "views/application/welcome.ehtml",
-		 *       "genPath": "gen/views/application/welcome.js"
+		 *       "genPath": "gen/view/application/welcome.js"
 		 *     }
 		 *   ],
 		 *   "partials": [
 		 *     {
 		 *       "name": "languageMenu",
 		 *       "path": "views/application/~languageMenu.ehtml",
-		 *       "genPath": "gen/views/application/~languageMenu.js"
+		 *       "genPath": "gen/view/application/~languageMenu.js"
 		 *     }
 		 *   ],
 		 *   "helper": {
@@ -302,7 +302,7 @@ define(['mmirf/controller', 'mmirf/resources', 'mmirf/commonUtils', 'mmirf/util/
 		 *   "layout": {
 		 *     "name": "application",
 		 *     "path": "views/layouts/application.ehtml",
-		 *     "genPath": "gen/views/layouts/application.js"
+		 *     "genPath": "gen/view/layouts/application.js"
 		 *   }
 		 * }
 		 * //NOTE: layout and helper may be NULL
