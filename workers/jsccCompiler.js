@@ -51,7 +51,7 @@ self._init = function(url){
 		try {
 			importScripts(libUrl);
 			//set global var that holds JS/CC:
-			jscc = require(libUrl);
+			jscc = self.require(libUrl);
 		} catch(err){
 			var msg = 'jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ';
 			console.log(msg, err);
