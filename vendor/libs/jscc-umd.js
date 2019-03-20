@@ -4716,8 +4716,6 @@ _quit( errors );
 		getWarnings: function(){ return warnings; },
 		resetErrors: function() { errors = 0; errorMessages = []; },
 		resetWarnings: function() { warnings = 0; warningMessages = []; },
-//		getProblems: function(){ TODO return errors AND warings; },//TODO gather error-msg ect. in print-functions... (also: need to reset before new run)
-//		resetProblems: function(){ TODO },
 
 		get_code_head: function(){ return code_head; },
 		print_parse_tables: print_parse_tables,
@@ -4729,14 +4727,14 @@ _quit( errors );
 		get_eof_symbol_id: get_eof_symbol_id,
 		get_whitespace_symbol_id: get_whitespace_symbol_id
 
-    , getErrorMessages: function(){ return errorMessages; }
-    , getWarningMessages: function(){ return warningMessages; }
+		, getErrorMessages: function(){ return errorMessages; }
+		, getWarningMessages: function(){ return warningMessages; }
 
 		, cli: cli
 
 		, set_debug: function(isError, isWarning, isTrace){
-      show_errors = isError;
-      show_warnings = isWarning;
+			show_errors = isError;
+			show_warnings = isWarning;
 			jscc_dbg_withtrace = isTrace;
 		}
 
