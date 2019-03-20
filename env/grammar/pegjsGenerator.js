@@ -59,19 +59,6 @@ deferred.resolve();
 var logger = Logger.create(module);
 
 /**
- * The argument name when generating the grammar function:
- * the argument holds the raw text that will be parsed by the generated grammar.
- *
- * NOTE: this argument/variable name must not collide with any code that is generated for the grammar.
- *
- * @constant
- * @private
- * @function
- * @memberOf PegJsGenerator#
- */
-var INPUT_FIELD_NAME = 'asr_recognized_text';
-
-/**
  * The default options for the PEGjs compiler.
  *
  * To overwrite the default options, configure the following property in <code>www/config/configuration.json</code>:<br>
@@ -186,11 +173,17 @@ var pegjsGen = {
 	        var addGrammarParserExec = theConverterInstance.getCodeWrapPrefix(fileFormatVersion, JSON.stringify(options.execMode))
 	        	+ 'var parser = '
 	        	+ grammarParser
-	        	+ ';\nvar grammarFunc = function(){\n'
+	        	+ ';\n'
+						+ 'function _printLog(){console.log.apply(console, arguments);};\n'
+						+ 'function _noopFunc(){};\n'
+						+ 'var _logDebug = _noopFunc;\n'
+						+ 'var grammarFunc = function(inputStr, options){\n'
+						// + '  options = options || {debug: true, trace: function(msg){window.alert(msg)}};\n' //TEST
+						+ '  _logDebug = options && options.debug? _printLog : _noopFunc;\n'
 	        	+ '  var result;  try {\n'
-	        	+ '    result = parser.parse.apply(this, arguments);\n'
+	        	+ '    result = parser.parse.call(this, inputStr, options);\n'
 	        	+ '  } catch (err){\n'
-	        	+ '    console.error(err.stack?err.stack:err); result = {};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
+	        	+ '    result = {error: err, phrase: inputStr, engine: "pegjs"};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
 	        	+ '  }\n'
 	        	+ '  return result;\n'
 	        	+ '};\n'
@@ -321,13 +314,16 @@ var pegjsGen = {
         		msg += ' (offset '+loc.offset+')';
         	}
 
+					msg += '\n-----------------------------\n  Grammar Definition:\n-----------------------------\n' + grammarDefinition;
+
         	if(pegjs.printError){
         		pegjs.printError(msg);
         	}
         	else {
         		console.error(msg);
         	}
-        	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
+
+        	msg = '[INVALID GRAMMAR] ' + msg + (error && error.name === 'SyntaxError' && error.stack? error.stack : '');
         	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
         }
 
@@ -452,9 +448,7 @@ var PegJsGrammarConverterExt = {
 				+ "}\n\n"
 				+ "\n\n/* --- Grammar specification --- */\n\nutterance\n    = phrases    {  "
 
-				//TODO use LOG LEVEL for activating / deactivating this:
-				+ "console.log("
-				+ this.variable_prefix + "result); "
+				+ "_logDebug(" + this.variable_prefix + "result); "
 
 				+ "semanticAnnotationResult.result = "
 				+ this.variable_prefix + "result; return "+ this.variable_prefix +"result;} ;\n\n" + this.grammar_utterances

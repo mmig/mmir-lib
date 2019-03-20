@@ -4,22 +4,26 @@
  * modified JS/CC code (modularisation)
  * by (C) 2014-2019 DFKI GmbH, russa
  */
- ;(function (root, factory) {
- 		if (typeof define === 'function' && define.amd) {
- 				// AMD. Register as an anonymous module.
- 				define(function () {
- 						return factory();
- 				});
- 		} else if (typeof module === 'object' && module.exports) {
- 				// Node. Does not work with strict CommonJS, but
- 				// only CommonJS-like environments that support module.exports,
- 				// like Node.
- 				module.exports = factory();
- 		} else {
- 				// Browser globals
- 				root.JSCC = factory();
- 		}
- }(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this, function () {
+;(function (root, factory) {
+		if (typeof define === 'function' && define.amd) {
+				// AMD. Register as an anonymous module.
+				define(function () {
+						return factory();
+				});
+		} else if (typeof module === 'object' && module.exports) {
+				// Node. Does not work with strict CommonJS, but
+				// only CommonJS-like environments that support module.exports,
+				// like Node.
+				module.exports = factory();
+		} else {
+				// Browser globals
+				root.JSCC = factory();
+		}
+}(typeof window !== 'undefined' ? window : typeof self !== 'undefined' ? self : typeof global !== 'undefined' ? global : this, function () {
+
+//define additional/helpers
+var errorMessages = [];
+var warningMessages = [];
 
 //define variables/functions in order to avoid errors in jscc.js:
 var DEFAULT_DRIVER = '';
@@ -27,15 +31,19 @@ var _quit = function(errors){
 	//only print errors if > 0 (or STRING)
 	console.log('JS/CC loaded/finished! '+ (errors != null? (typeof errors == 'number'? (errors > 0? 'number of ERRORs ' + errors : ''): 'ERROR ' + errors): ''));
 };
-function __defErrorImpl( msg ){   console.error('JS/CC ERROR: '+msg); };
-function __defWarningImpl( msg ){ console.warn('JS/CC WARNING: '+msg); };
+function __defErrorImpl( msg ){   if(show_errors) console.error('JS/CC ERROR: '+msg); };
+function __defWarningImpl( msg ){ if(show_warnings) console.warn('JS/CC WARNING: '+msg); };
 function __defPrintImpl( msg ){   console.log('JS/CC INFO: '+msg); };
 function __defAlertImpl( msg ){   console.log('JS/CC ALERT: '+msg); };
 
-var _error   = __defErrorImpl;
-var _warning = __defWarningImpl;
 var _print   = __defPrintImpl;
 var _alert   = __defAlertImpl;
+
+//default handlers for warnings & errors
+var _printError   = __defErrorImpl;
+var _printWarning = __defWarningImpl;
+var _error   = function handleError( msg ){   ++errors; errorMessages.push(msg); _printError(msg) };
+var _warning = function handleWarning( msg ){   ++warnings; warningMessages.push(msg); _printWarning(msg) };
 
 //set up cli
 var get_arguments = function(){ return process.argv; };
@@ -4706,8 +4714,8 @@ _quit( errors );
 		lalr1_parse_table: lalr1_parse_table,
 		getErrors: function(){ return errors; },
 		getWarnings: function(){ return warnings; },
-		resetErrors: function() { errors = 0; },
-		resetWarnings: function() { warnings = 0; },
+		resetErrors: function() { errors = 0; errorMessages = []; },
+		resetWarnings: function() { warnings = 0; warningMessages = []; },
 //		getProblems: function(){ TODO return errors AND warings; },//TODO gather error-msg ect. in print-functions... (also: need to reset before new run)
 //		resetProblems: function(){ TODO },
 
@@ -4721,35 +4729,40 @@ _quit( errors );
 		get_eof_symbol_id: get_eof_symbol_id,
 		get_whitespace_symbol_id: get_whitespace_symbol_id
 
+    , getErrorMessages: function(){ return errorMessages; }
+    , getWarningMessages: function(){ return warningMessages; }
+
 		, cli: cli
 
-		, set_debug: function(isTrace){
+		, set_debug: function(isError, isWarning, isTrace){
+      show_errors = isError;
+      show_warnings = isWarning;
 			jscc_dbg_withtrace = isTrace;
 		}
 
 		, set_printError: function(printFunc){
-			_error = printFunc || __defErrorImpl;
+			_printError = printFunc || __defErrorImpl;
 		}
 		, set_printWarning: function(printFunc){
-			_warning = printFunc || __defWarningImpl;
+			_printWarning = printFunc || __defWarningImpl;
 		}
 		, set_printInfo: function(printFunc){
 			_print = printFunc || __defPrintImpl;
 		}
 		, get_printError: function(){
-			return _error;
+			return _printError;
 		}
 		, get_printWarning: function(){
-			return _warning;
+			return _printWarning;
 		}
 		, get_printInfo: function(){
 			return _print;
 		}
 		, is_printError_default: function(){
-			return _error === __defErrorImpl;
+			return _printError === __defErrorImpl;
 		}
 		, is_printWarning_default: function(){
-			return _warning === __defWarningImpl;
+			return _printWarning === __defWarningImpl;
 		}
 		, is_printInfo_default: function(){
 			return _print === __defPrintImpl;

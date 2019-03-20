@@ -1,6 +1,6 @@
 
 
-define(['mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend'],
+define(['mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/extend','mmirf/util/isArray'],
 /**
  * Asynchronous generator for executable language-grammars (i.e. converted JSON grammars).
  *
@@ -20,7 +20,7 @@ define(['mmirf/jsccGen','mmirf/asyncGen','mmirf/util/deferred','mmirf/util/exten
  *
  * @requires JsccGenerator
  */
-function(jsccGen, asyncGen, deferred, extend){
+function(jsccGen, asyncGen, deferred, extend, isArray){
 
 /**
  * Counter for generating IDs for compile-jobs that
@@ -175,26 +175,35 @@ var jsccAsyncGen = {
         //register callback for messages from web-worker:
         asyncCompiler.addCallback(taskId, function(evtData){
 
-        	if(evtData.error){
+        	if(evtData.error || evtData.level === 'error'){
 
         		//handle error message:
-
+						var msg = evtData.error || isArray(evtData.message)? evtData.message.join('\n') : evtData.message;
         		if(printError){
-            		printError(evtData.error);
+            		printError(msg);
             	}
             	else {
-            		console.error(evtData.error);
+            		console.error(msg);
             	}
 
         		//////////////////// EARLY EXIT /////////////////
         		//NOTE this is not the final message from the compiler-thread...
         		return;
-        	}
+
+        	} else if(evtData.level && evtData.message){
+
+        		asyncCompiler._logger[evtData.level](isArray(evtData.message)? evtData.message.join('\n') : evtData.message);
+
+        		//////////////////// EARLY EXIT /////////////////
+        		//NOTE this is not the final message from the compiler-thread...
+						return;
+					}
+
 
         	var hasError = evtData.isError;
         	var grammarParserData = evtData.def;
 
-        	var grammarParser = jsccGen._applyGenerated(grammarParserData, jsccGen.template);
+        	var grammarParser = hasError? grammarParserData : jsccGen._applyGenerated(grammarParserData, jsccGen.template);
 
         	compileParserModuleFunc(grammarParser, hasError);
         });

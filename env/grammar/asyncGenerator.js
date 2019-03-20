@@ -91,11 +91,6 @@ return {
 	 */
 	createWorker: function(parserEngineId){
 
-		var _modConf = module.config(module);
-
-		/**  @memberOf CompileWebWorker# */
-		var logger = Logger.create(parserEngineId+'AsyncWorker', _modConf? _modConf.logLevel : void(0));
-
 		/**  @memberOf CompileWebWorker# */
 		var workerPath = resources.getWorkerPath() + parserEngineId + COMPILER_WORKER_POSTFIX;
 
@@ -111,6 +106,11 @@ return {
 		var asyncCompiler = typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD?
 					new WpWorker() :
 					new Worker(workerPath);
+
+
+		var _modConf = module.config(module);
+		/**  @memberOf CompileWebWorker# */
+		asyncCompiler._logger = Logger.create(parserEngineId+'AsyncWorker', _modConf? _modConf.logLevel : void(0));
 
 		/**
 		 * dictionary for currently active compilations
@@ -138,9 +138,9 @@ return {
 		 */
 		asyncCompiler._oninit = function(evtData){
 			if(evtData.init){
-				logger.log('initialized: '+JSON.stringify(evtData));
+				if(this._logger.isDebug()) this._logger.debug('initialized: '+JSON.stringify(evtData));
 			} else {
-				logger.error('failed to initialize: '+JSON.stringify(evtData));
+				this._logger.error('failed to initialize: '+JSON.stringify(evtData));
 			}
 		};
 
@@ -182,7 +182,7 @@ return {
 
 			this._oninit = function(initEvt){
 				if(initEvt.init === false){
-					logger.error('Failed to initialize '+JSON.stringify(initEvt));
+					this._logger.error('Failed to initialize '+JSON.stringify(initEvt));
 				} else {
 					isAsyncGenInit = true;
 				}
@@ -199,7 +199,7 @@ return {
 		 * @memberOf CompileWebWorker#
 		 */
 		asyncCompiler._onerror = function(errorMsg, error){
-			logger.error(errorMsg, error);
+			this._logger.error(errorMsg, error);
 		};
 
 		/**
@@ -233,7 +233,7 @@ return {
 					handler.call(this, evt.data);
 
 				} else {
-					logger.warn('no callback registered for ID "'+id+'" -> ' + JSON.stringify(evt.data));
+					this._logger.warn('no callback registered for ID "'+id+'" -> ' + JSON.stringify(evt.data));
 				}
 
 			}

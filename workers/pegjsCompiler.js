@@ -172,6 +172,8 @@ function parse(grammarDefinition, config, id){
     		msg += ' (offset '+loc.offset+')';
     	}
 
+			msg += '\n-----------------------------\n  Grammar Definition:\n-----------------------------\n' + grammarDefinition;
+
 //    	if(pegjs.printError){
 //    		pegjs.printError(msg);
 //    	}
@@ -181,7 +183,7 @@ function parse(grammarDefinition, config, id){
 
     	self.postMessage({error: msg, id: id});
 
-    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
+    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.name === 'SyntaxError' && error.stack? error.stack : '');
     	grammarParser = '{ parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
     }
 

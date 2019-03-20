@@ -64,7 +64,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
      *
      * See generator function build_grammar() within createAndAddGrammar().
      *
-     * NOTE: This version number must be increased, when way changes, how
+     * NOTE: This version number must be increased, when the way changes, how
      *       grammars are generated.
      *       Or more precisely: when previously generated grammars cannot
      *       be used anymore, after the generation mechanism has been changed.
@@ -74,7 +74,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
      *
      * @memberOf SemanticInterpreter#
      */
-    var GRAMMAR_FILE_FORMAT_VERSION = 5;
+    var GRAMMAR_FILE_FORMAT_VERSION = 6;
 
 
     /**
@@ -542,7 +542,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
             	build_grammar(gc);
 
             } else {
-            	logger.error('SemanticInterpreter.__createAndAddGrammar: could not build grammar due to missing argumens');
+            	logger.error('__createAndAddGrammar(): could not build grammar due to missing argumens');
             }
         }
 
@@ -553,26 +553,42 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
         var process_asr_semantic = function(phrase, langCode, callback){
 
 			if(!doCheckIsEnabled()){
-				logger.warn('SemanticInterpreter.interpret: currently disabled!');
+				logger.warn('interpret(): currently disabled!');
 				return null;
 			}
 
-			if(typeof langCode === 'function'){
+			if(langCode && (typeof langCode === 'function' || typeof langCode === 'object')){
 				callback = langCode;
 				langCode = void(0);
 			}
 
-			var execGrammar = function(grammarConverter, phrase, langCode, callback){
+			var options;
+			if(callback && typeof callback === 'object'){
+				options = callback;
+				callback = options.callback;
+			} else {
+				options = {};
+			}
+
+			if(typeof options.debug === 'undefined'){
+				options.debug = logger.isDebug();
+			}
+
+			if(typeof options.trace === 'undefined'){
+				options.trace = logger.isVerbose();
+			}
+
+			var execGrammar = function(grammarConverter, phrase, langCode, parseOptions, callback){
 
 	    		//pre-process pharse (e.g. mask umlauts, remove stopwords)
 				var positions = {};//<- for storing modification information during pre-processing
 	            var strPreparedPhrase = grammarConverter.preproc( phrase.toLowerCase(), positions );
 
-	            if(logger.isDebug()) logger.debug('SemanticInterpreter.process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
+	            if(logger.isDebug()) logger.debug('process_asr_semantic('+langCode+'): removed stopwords, now parsing phrase "'+strPreparedPhrase+'"');//debug
 
 	            if(callback){
 
-		    		grammarConverter.executeGrammar( strPreparedPhrase, function(result){
+		    		grammarConverter.executeGrammar( strPreparedPhrase, parseOptions, function(result){
 
 		    			//post-process result (e.g. unmask umlauts etc)
 			    		result = grammarConverter.postproc(
@@ -588,7 +604,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 
 	            } else {
 
-		    		var result = grammarConverter.executeGrammar( strPreparedPhrase );
+		    		var result = grammarConverter.executeGrammar( strPreparedPhrase, parseOptions );
 
 		    		//post-process result (e.g. unmask umlauts etc)
 		    		result = grammarConverter.postproc(
@@ -609,9 +625,9 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
 					var grammarConverter = doGetGrammar(langCode);
 
 					if(grammarConverter.isAsyncExec()){
-						execGrammar(grammarConverter, phrase, langCode, callback);
+						execGrammar(grammarConverter, phrase, langCode, options, callback);
 					} else {
-						callback(execGrammar(grammarConverter, phrase, langCode));
+						callback(execGrammar(grammarConverter, phrase, langCode, options));
 					}
 				};
 			}
@@ -623,7 +639,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
     		}
 
         	if(!grammarReadyCallback){
-        		return execGrammar(grammarConverter, phrase, langCode);
+        		return execGrammar(grammarConverter, phrase, langCode, options);
         	}
         };
 
@@ -633,7 +649,7 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
          */
 		var doRemoveStopWords = function(thePhrase, lang, stopwordFunc){
 			if(!doCheckIsEnabled()){
-				logger.warn('SemanticInterpreter.doProcessStopwords: currently disabled!');
+				logger.warn('doProcessStopwords(): currently disabled!');
 				return null;
 			}
 
@@ -658,8 +674,16 @@ define(['mmirf/resources', 'mmirf/grammarConverter', 'mmirf/logger', 'module', '
              * 					the phrase that will be parsed
              * @param {String} langCode
              * 					the language code (identifier) for the parser/grammar
-             * @param {Function} [callback] OPTIONAL
-             * 					a callback function that receives the return value
+             * @param {Function|ParseOptions} [callback] OPTIONAL
+             * 					parsing-options or a callback:
+             * 					  options.callback: FUNCTION the callback function (see below)
+             * 					  options.debug: BOOLEAN enabling debug output
+             * 					  								(by default the logger's log-level <= 'debug' is used)
+             * 					  options.trace: BOOLEAN enabling verbose/tracing output;
+             * 					  							 may not be supported by all grammar engines
+             * 					  							 (by default the logger's log-level <= 'verbose' is used)
+             * 					  NOTE: some grammar engines may support additional parsing options
+             * 					If a callback function: receives the return value
              * 					(instead of receiving the result as return value from
              * 					 this function directly).
              * 					The signature for the callback is: <code>callback(result: Object)</code>

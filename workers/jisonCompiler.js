@@ -153,6 +153,8 @@ function parse(grammarDefinition, config, id){
     		msg += ' (offset '+error.index+')';
     	}
 
+			msg += '\n-----------------------------\n  Grammar Definition:\n-----------------------------\n' + grammarDefinition;
+
 //    	if(jison.printError){
 //    		jison.printError(msg);
 //    	}
@@ -161,8 +163,8 @@ function parse(grammarDefinition, config, id){
 //    	}
     	self.postMessage({error: msg, id: id});
 
-    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
-    	grammarParser = 'var parser = { parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
+    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.name === 'SyntaxError' && error.stack? error.stack : '');
+    	grammarParser = 'var parser = { parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;}, lexer: {options: {}}}';
     }
 
 	self.postMessage({def: grammarParser, isError: hasError, id: id, done: true});

@@ -61,18 +61,6 @@ deferred.resolve();
 var logger = Logger.create(module);
 
 /**
- * The argument name when generating the grammar function:
- * the argument holds the raw text that will be parsed by the generated grammar.
- *
- * NOTE: this argument/variable name must not collide with any code that is generated for the grammar.
- *
- * @constant
- * @private
- * @memberOf JisonGenerator#
- */
-var INPUT_FIELD_NAME = 'asr_recognized_text';
-
-/**
  * The default options for the jison compiler.
  *
  * To overwrite the default options, configure the following property in <code>www/config/configuration.json</code>:<br>
@@ -187,11 +175,21 @@ var jisonGen = {
 
             var addGrammarParserExec = theConverterInstance.getCodeWrapPrefix(fileFormatVersion, JSON.stringify(options.execMode))
             	+ grammarParser
-            	+ ';\nvar grammarFunc = function(){\n'
+            	+ ';\n'
+							+ 'function _printLog(){console.log.apply(console, arguments);};\n'
+							+ 'function _noopFunc(){};\n'
+							+ 'var _logDebug = _noopFunc;\n'
+							+ 'var lexerOpt = parser.lexer.options;\n'
+							+ 'var grammarFunc = function(inputStr, options){\n'
+							// + '  options = options || {debug: true, trace: function(msg){window.alert(msg)}};\n' //TEST
+							+ '  _logDebug = options && options.debug? _printLog : _noopFunc;\n'
+							+ '  parser.trace = options && options.trace? typeof options.trace === "function"? options.trace : _printLog : _noopFunc;\n'
+							+ '  lexerOpt.flex =  options && !!options.extensive;\n'
+							+ '  lexerOpt.backtrack_lexer = options && !!options.backtrack;\n'
             	+ '  var result;  try {\n'
-            	+ '    result = parser.parse.apply(parser, arguments);\n'
+            	+ '    result = parser.parse.call(parser, inputStr);\n'
             	+ '  } catch (err){\n'
-            	+ '    console.error(err.stack?err.stack:err); result = {};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
+            	+ '    result = {error: err, phrase: inputStr, engine: "jison"};\n'//TODO warning/error messaging? -> need to handle encoded chars, if error message should be meaningful
             	+ '  }\n'
             	+ '  return result;\n'
             	+ '};\n'
@@ -313,14 +311,16 @@ var jisonGen = {
         		msg += ' (offset '+error.index+')';
         	}
 
+					msg += '\n-----------------------------\n  Grammar Definition:\n-----------------------------\n' + grammarDefinition;
+
         	if(jison.printError){
         		jison.printError(msg);
         	}
         	else {
         		console.error(msg);
         	}
-        	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
-        	grammarParser = 'var parser = { parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;} }';
+        	msg = '[INVALID GRAMMAR] ' + msg + (error && error.name === 'SyntaxError' && error.stack? error.stack : '');
+        	grammarParser = 'var parser = { parse: function(){ var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;}, lexer: {options: {}}}';
         	hasError = true;
         }
 
@@ -451,9 +451,7 @@ var JisonGrammarConverterExt = {
 				+ "\n<<EOF>>   %{ return 'EOF'; %};\n\n/lex"
 				+ "\n\n/* --- Grammar specification --- */\n%start utterance\n\n%% /* language grammar */\n\nutterance:\n    phrases EOF %{ "
 
-				//TODO use LOG LEVEL for activating / deactivating this:
-				+ "console.log("
-				+ this.variable_prefix + "result); "
+				+ "_logDebug(" + this.variable_prefix + "result); "
 
 				+ "semanticAnnotationResult.result = "
 				+ this.variable_prefix + "result; return "+ this.variable_prefix +"result; %};\n\n" + this.grammar_utterances

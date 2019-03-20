@@ -158,60 +158,79 @@ function parse(grammarDefinition, config, id){
 
 	var options = self._getOptions(config);
 
-	// var template = config.template;
-	// var inputFieldName = config.inputFieldName;
-
 	//setup print-functions (error, warning, info) for this compile-job:
 	_preparePrintImpl(id);
 
 	//set up the JS/CC compiler:
     var dfa_table = '';
     jscc.reset_all( jscc.EXEC_WEB );
+    jscc.set_debug(/*show errors: */true, /*show warnings: */true, /*hide trace: */false);
 
     var hasError = false;
     var grammarParser;
     try {
-    	jscc.parse_grammar(grammarDefinition);
+    	jscc.parse_grammar(grammarDefinition, 'grammar ' + options.id);
     } catch (err){
     	var msg = 'Error while compiling grammar: ' + (err.stack?err.stack:err);
     	hasError = msg;
 
-    	msg = '[INVALID GRAMMAR] ' + msg + (error && error.stack? error.stack : '');
-    	grammarParser = 'var msg = '+JSON.stringify(msg)+'; console.error(msg); throw msg;';
+			msg = '[INVALID GRAMMAR] ' + msg
+						+ '\n-----------------------------\n  Grammar Definition:\n-----------------------------\n'
+						+ grammarDefinition;
+
+			grammarParser = 'var msg = '+JSON.stringify(msg)+'; console.error(msg); return {error: msg, phrase: nl_input_text, engine: "jscc"};';
     }
 
-    if (jscc.getErrors() == 0) {
-    	jscc.undef();
-    	jscc.unreachable();
+		var errorCount = jscc.getErrors();
+		var warnCount = jscc.getWarnings();
+		if (errorCount == 0) {
+			jscc.undef();
+			jscc.unreachable();
+			errorCount = jscc.getErrors();
 
-        if (jscc.getErrors() == 0) {
-        	jscc.first();
-        	jscc.print_symbols();
-        	dfa_table = jscc.create_subset(jscc.get_nfa_states());
-        	dfa_table = jscc.minimize_dfa(dfa_table);
+				if (errorCount == 0) {
+					jscc.first();
+					jscc.print_symbols();
+					dfa_table = jscc.create_subset(jscc.get_nfa_states());
+					dfa_table = jscc.minimize_dfa(dfa_table);
 
-        	jscc.set_dfa_table(dfa_table);//FIXME: check, if this is really necessary
+					jscc.set_dfa_table(dfa_table);//FIXME: check, if this is really necessary
 
-        	jscc.lalr1_parse_table(false);
-        	jscc.resetErrors();
-        }
-    }
+					jscc.lalr1_parse_table(false);
+				}
+		}
 
-    if (jscc.getErrors() > 0 || jscc.getWarnings() > 0){
+    if (errorCount > 0 || warnCount > 0){
         jscc.get_printError()(//logger.error(
 //        		'JSCC', 'compile',
-        		'there occured'
-        		+ (jscc.getWarnings() > 0? jscc.getWarnings() + ' warning(s)' : '')
-        		+ (jscc.getErrors() > 0? jscc.getErrors() + ' error(s)' : '')
-        		+ ' during compilation.'
+							'there occured'
+							+ (warnCount  > 0? warnCount  + ' warning(s)' : '')
+							+ (errorCount > 0? errorCount + ' error(s)'   : '')
+							+ ' during compilation.'
         );
+				hasError = errorCount > 0;
     }
+
+    if( ! hasError){
+
+        grammarParser = _getGenerated(options.targetType, dfa_table);
+
+    } else {
+
+				var msg = 'Error'+(errorCount === 1? '': 's')+' parsing grammar ('+errorCount+'):\n  ' + jscc.getErrorMessages().join('\n  ');
+				if(warnCount > 0){
+					msg += '\nWarning'+(warnCount === 1? '': 's')+' parsing grammar('+warnCount+'):\n  ' + jscc.getWarningMessages().join('\n  ');
+				}
+				hasError = msg;
+
+				msg = '[INVALID GRAMMAR] ' + msg
+							+ '\n-----------------------------\n  Grammar Definition:\n-----------------------------\n'
+							+ grammarDefinition;
+
+				grammarParser = 'var msg = '+JSON.stringify(msg)+'; console.error(msg); return {error: msg, phrase: nl_input_text, engine: "jscc"};';
+		}
     jscc.resetErrors();
     jscc.resetWarnings();
 
-    if( ! hasError){
-        grammarParser = _getGenerated(options.targetType, dfa_table);
-    }
-
-	self.postMessage({def: grammarParser, isError: hasError, id: id, done: true});
+		self.postMessage({def: grammarParser, isError: hasError, id: id, done: true});
 }

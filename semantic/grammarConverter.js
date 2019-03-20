@@ -345,7 +345,7 @@ GrammarConverter.prototype.setGrammarSource = function(src_code){
  *
  *
  * @param {Function} func
- * 			the executable grammar function: <code>func(string, function(object)) : object</code>
+ * 			the executable grammar function: <code>func(string, object, function(object)) : object</code>
  * @param {Boolean} [isAsnc] OPTIONAL
  * 					set to TRUE, if execution is asynchronously done.
  * 					DEFAULT: FALSE
@@ -669,6 +669,10 @@ GrammarConverter.prototype.removeStopwords_alt = function(thePhrase){
  *
  * @param {String} text
  * 			the text String that should be parse.
+ * @param {Object} [options]
+ * 			additional parsing options (some grammar engines may support further options)
+ * 				options.debug: BOOLEAN enable printing debug information
+ * 				options.trace: BOOLEAN | FUNCTION enable printing verbose/tracing information (may not be supported by the grammar engine)
  * @param {Function} [callback]
  * 			if #isAsyncExec is TRUE, then executeGrammar will have no return value, but instead the result
  * 			of the grammar execution is delivered by the <code>callback</code>:
@@ -676,7 +680,7 @@ GrammarConverter.prototype.removeStopwords_alt = function(thePhrase){
  * 			(see also description of <code>return</code> value below)
  * @returns {Object}
  * 			the result of the grammar execution:
- * 			<code>{phrase: STRING, phrases: OBJECT, semantic: OBJECT}</code>
+ * 			<code>{phrase: STRING, phrases: ARRAY<OBJECT>, semantic: OBJECT}</code>
  *
  * 			The property <code>phrase</code> contains the <code>text</code> which was matched (with removed stopwords).
  *
@@ -690,7 +694,7 @@ GrammarConverter.prototype.removeStopwords_alt = function(thePhrase){
  *                is invoked with the return value.
  *
  */
-GrammarConverter.prototype.executeGrammar = function(text, callback){
+GrammarConverter.prototype.executeGrammar = function(text, options, callback){
 	console.warn('GrammarConverter.executeGrammar: this is only a stub. No grammar implementation set yet...');
 };
 

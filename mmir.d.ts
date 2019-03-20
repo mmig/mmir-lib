@@ -163,7 +163,7 @@ export interface Pos {
 
 export interface SemanticInterpreter {
 
-  interpret: (phrase: string, langCode?: string, callback?: (semanticResult: any) => void) => any;//TODO typ'ing result
+  interpret: (phrase: string, langCode?: string, callback?: (semanticResult: GrammarResult) => void) => GrammarResult | void;
   removeStopwords: (thePhrase: string, lang?: string) => string;
   getGrammarDefinitionText: (id: string) => string;
   getGrammarParserText: (id: string) => string;
@@ -177,12 +177,35 @@ export interface SemanticInterpreter {
   getCurrentGrammar: () => string;
   setEnabled: (isEnabled: boolean) => void;
   isEnabled: () => boolean;
-  getGrammarEngine: () => "jscc" | "jison" | "pegjs";//DEFAULT: "jscc"
-  setGrammarEngine: (engineId: "jscc" | "jison" | "pegjs", asyncCompileMode?: boolean) => void;
+  getGrammarEngine: () => GrammarEngineType;//DEFAULT: "jscc"
+  setGrammarEngine: (engineId: GrammarEngineType, asyncCompileMode?: boolean) => void;
   setEngineCompileMode: (asyncCompileMode: boolean) => void;//DEFAULT: false
   getFileVersion: () => number;
 
   get_json_grammar_url: (id: string) => string;//NOTE may get removed/renamed
+}
+
+export type GrammarEngineType = "jscc" | "jison" | "pegjs";
+
+export interface GrammarResult {
+	engine: GrammarEngineType;
+	phrase: string;
+	preproc: {[preprocName: string]: Array<Pos>};
+
+	phrases?: Array<PhraseInfo>;
+	utterance?: string;
+	semantic?: any;
+
+	error?: any;
+}
+
+export interface PhraseInfo {
+	/** the index with the phrase */
+	i: number;
+	/** the token type or utterance type */
+	type: string;
+	/** the matched token(s) */
+	tok: string;
 }
 
 //////////////////////////////////////////////////////////// TODO //////////////////////////////////////////////////////
