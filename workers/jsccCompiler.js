@@ -47,17 +47,18 @@ self._init = function(url){
 
 	if(typeof WEBPACK_BUILD === 'undefined'){
 		var libUrl = self.getPath(url) + '.js';
-		self._modules._customid = 'mmirf/jscc';
+		self._modules._customid = libUrl;//'mmirf/jscc';
 		try {
 			importScripts(libUrl);
 			//set global var that holds JS/CC:
-			jscc = self.require('mmirf/jscc');
+			jscc = require(libUrl);
 		} catch(err){
 			var msg = 'jscc ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ';
 			console.log(msg, err);
 			self.postMessage({error: msg + err.stack});
 		}
 	} else {
+
 		//set global var that holds JS/CC:
 		jscc = require('mmirf/jscc');
 	}
@@ -157,8 +158,8 @@ function parse(grammarDefinition, config, id){
 
 	var options = self._getOptions(config);
 
-	var template = config.template;
-	var inputFieldName = config.inputFieldName;
+	// var template = config.template;
+	// var inputFieldName = config.inputFieldName;
 
 	//setup print-functions (error, warning, info) for this compile-job:
 	_preparePrintImpl(id);

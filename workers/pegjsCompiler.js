@@ -54,8 +54,9 @@ self._init = function(url){
 			//set global var that holds jison
 			pegjs = require(libUrl);
 		} catch(err){
-			console.log('pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ', err.stack);
-			self.postMessage({error: 'pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") '+ err.stack});
+			var msg = 'pegjs ansync compiler (web worker) _init ERROR: failed importScripts("'+libUrl+'") ';
+			console.log(msg, err.stack);
+			self.postMessage({error: msg + err.stack});
 		}
 	} else {
 

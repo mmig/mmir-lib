@@ -185,7 +185,7 @@ return {
 		, 'mmirf/semanticInterpreter': 'semantic/semanticInterpreter'
 		, 'mmirf/asyncGrammar': 'semantic/asyncGrammar'
 		, 'mmirf/stemmer': 'semantic/stemmer'
-		, 'mmirf/jscc': 'vendor/libs/jscc-amd'
+		, 'mmirf/jscc': 'vendor/libs/jscc-umd'
 		, 'mmirf/jison': 'vendor/libs/jison'
 		, 'mmirf/pegjs': 'vendor/libs/peg-0.10.0'
 		, 'mmirf/asyncGen': 'env/grammar/asyncGenerator'
