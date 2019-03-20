@@ -1,6 +1,6 @@
 
 
-define(['mmirf/resources', 'require'],
+define(['mmirf/resources', 'mmirf/logger', 'require', 'module'],
 /**
  * Module that provides a generator for parser-compiler WebWorker instances:
  *
@@ -46,7 +46,7 @@ define(['mmirf/resources', 'require'],
  * });
  *
  */
-function(resources, require){
+function(resources, Logger, require, module){
 
 var COMPILER_WORKER_POSTFIX = 'Compiler.js';
 
@@ -91,6 +91,10 @@ return {
 	 */
 	createWorker: function(parserEngineId){
 
+		var _modConf = module.config(module);
+
+		/**  @memberOf CompileWebWorker# */
+		var logger = Logger.create(parserEngineId+'AsyncWorker', _modConf? _modConf.logLevel : void(0));
 
 		/**  @memberOf CompileWebWorker# */
 		var workerPath = resources.getWorkerPath() + parserEngineId + COMPILER_WORKER_POSTFIX;
@@ -134,9 +138,9 @@ return {
 		 */
 		asyncCompiler._oninit = function(evtData){
 			if(evtData.init){
-				console.log('initialized: '+JSON.stringify(evtData));
+				logger.log('initialized: '+JSON.stringify(evtData));
 			} else {
-				console.error('failed to initialize: '+JSON.stringify(evtData));
+				logger.error('failed to initialize: '+JSON.stringify(evtData));
 			}
 		};
 
@@ -178,7 +182,7 @@ return {
 
 			this._oninit = function(initEvt){
 				if(initEvt.init === false){
-					console.error('Failed to initialize '+JSON.stringify(initEvt));
+					logger.error('Failed to initialize '+JSON.stringify(initEvt));
 				} else {
 					isAsyncGenInit = true;
 				}
@@ -195,7 +199,7 @@ return {
 		 * @memberOf CompileWebWorker#
 		 */
 		asyncCompiler._onerror = function(errorMsg, error){
-			console.error(errorMsg, error);
+			logger.error(errorMsg, error);
 		};
 
 		/**
@@ -229,7 +233,7 @@ return {
 					handler.call(this, evt.data);
 
 				} else {
-					console.warn('no callback registered for ID "'+id+'" -> ' + JSON.stringify(evt.data));
+					logger.warn('no callback registered for ID "'+id+'" -> ' + JSON.stringify(evt.data));
 				}
 
 			}
