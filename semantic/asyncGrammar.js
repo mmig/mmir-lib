@@ -44,7 +44,7 @@ _asyncGrammarLoader.onmessage = function(msg){
 			//replace the default impl. of the grammar execution:
 			//  re-direct invocations to the worker thread and
 			//  return the results via the callback
-			var execGrammar = function(text, callback){
+			var execGrammar = function(text, parseOptions, callback){
 
 				var cmdid = ''+ _cmdIdCounter++;
 
@@ -52,7 +52,7 @@ _asyncGrammarLoader.onmessage = function(msg){
 
 				var langid = this.executeGrammar._langCode;
 
-				_asyncGrammarLoader.postMessage({cmd: 'parse', id: langid, cmdId: cmdid, text: text});
+				_asyncGrammarLoader.postMessage({cmd: 'parse', id: langid, cmdId: cmdid, text: text, options: parseOptions});
 			};
 
 			execGrammar._pendingCmds = _pendingCmds;
@@ -62,7 +62,7 @@ _asyncGrammarLoader.onmessage = function(msg){
 			if(options.execMode != 'async'){
 				options.execMode = 'async';
 			}
-			semanticInterpreter.addGrammar(data.id,execGrammar,options);
+			semanticInterpreter.addGrammar(data.id, execGrammar, options);
 
 			//check/trigger init-listener
 			if(typeof _loadedGrammars[data.id] === 'object'){

@@ -59,14 +59,14 @@ var semanticInterpreterImpl = {
 		self.postMessage({cmd: 'stopwords', id: langCode, stopwords: stopwordList});
 	},
 
-	execQuery: function(text, langCode, cmdId){
+	execQuery: function(text, langCode, opt, cmdId){
 
 		var grammarData = this._grammars[langCode];
 		if(!grammarData){
 			postError('no grammar available for "'+langCode+'"');
 		}
 
-		var result = grammarData.exec(text);
+		var result = grammarData.exec(text, opt);
 
 		self.postMessage({cmd: 'parseresult', cmdId: cmdId, result: result});
 	}
@@ -80,15 +80,16 @@ self.require = function(name){
 
 self.onmessage = function(e){
 
-  switch(e.data.cmd){
+	var data = e.data;
+  switch(data.cmd){
   	case 'load':
-  	  load(e.data.url, e.data.id);
+  	  load(data.url, data.id);
   	  break;
     case 'init':
-      init(e.data.text, e.data.id);
+      init(data.text, data.id);
       break;
     case 'parse':
-      parse(e.data.text, e.data.id, e.data.cmdId);
+      parse(data.text, data.id, data.options, data.cmdId);
       break;
   }
 
@@ -112,6 +113,6 @@ function init(phrase, id){
 	semanticInterpreterImpl.execQuery(phrase, id, 'init');
 }
 
-function parse(phrase, id, cmdid){
-	semanticInterpreterImpl.execQuery(phrase, id, cmdid);
+function parse(phrase, id, opt, cmdid){
+	semanticInterpreterImpl.execQuery(phrase, id, opt, cmdid);
 };
