@@ -496,7 +496,8 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 				        	logger.debug("init(): no speech-config (asr/tts) for language " + lang);
 				        }
 
-				        requestGrammar(lang, true);//2nd argument TRUE: if no grammar is available for lang, try to find/set any available grammar
+				        //DISABLED semanticInterpreter may not be initialized yet / grammars loaded yet -> do this in main-initialization (see main.js)
+				        // requestGrammar(lang, true);//2nd argument TRUE: if no grammar is available for lang, try to find/set any available grammar
 
 				        _isInitialized = true;
 				        defer.resolve(this);
@@ -590,10 +591,15 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		             * 																			 (and if grammarType was given, when the
 		             * 																			  existing grammar matches the grammar type)
 		             * @public
-		        	 *
-		        	 * @memberOf mmir.LanguageManager.prototype
+		             *
+		             * @memberOf mmir.LanguageManager.prototype
 		             */
 		            existsGrammar : doCheckExistsGrammar,
+		            /**
+		             * @borrows #requestGrammar
+		             * @memberOf mmir.LanguageManager.prototype
+		             */
+		            _requestGrammar : requestGrammar,
 
 		            /**
 		             * Chooses a language for the application.

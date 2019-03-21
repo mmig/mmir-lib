@@ -266,6 +266,9 @@ define(['mmirf/core', 'mmirf/util/deferred', 'mmirf/resources', 'mmirf/commonUti
 
 				utils.loadCompiledGrammars(resources.getGeneratedGrammarsPath(), void(0), ignoreGrammarIds).then(function() {
 
+					if(!semantic.getCurrentGrammar()){
+						lang._requestGrammar(lang.getLanguage(), true);
+					}
 					isSemanticsLoaded = true;
 					checkInitCompleted();
 				});
