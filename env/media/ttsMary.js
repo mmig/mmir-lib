@@ -59,7 +59,6 @@ define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManag
 	 * HELPER create filter-function for voice depending on language and/or gender
 	 * @param {VoiceOptions} options for listing voices:
 	 * 				options.language: the language code (may include country code)
-	 * 				options.details: additional filter (e.g. "female" or "male")
 	 * @memberOf MaryWebAudioTTSImpl#
 	 */
 	var _createVoiceFilter = function(options){
@@ -77,8 +76,7 @@ define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManag
 		}
 
 		return function(voice){
-			var res = reLang? reLang.test(voice.language) : true;
-			return res && (options.details? options.details === voice.gender : true);
+			return reLang.test(voice.language);
 		}
 	};
 
@@ -137,11 +135,13 @@ define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManag
 	 * @see mmir.MediaManager#getVoices
 	 */
 	var getVoiceList = function(options, callback, onerror){
-		console.l
+
 		getList('voice', function(list){
 			var voices = list.map(function(raw){ return _toVoiceDetails(raw);});
-			var isFilter = options && (options.language || options.details)
-			callback && callback(!isFilter? voices : voices.filter(_createVoiceFilter(options)));
+			var isFilter = options && options.language;
+			var filteredList = !isFilter? voices : voices.filter(_createVoiceFilter(options));
+			var isDetails = options && options.details;
+			callback && callback(isDetails? filteredList : filteredList.map(function(v){ return v.name;}));
 		}, onerror);
 	};
 
