@@ -10,7 +10,7 @@
 define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManager'], function(mediaManager, config, lang){
 
 	/**  @memberOf MaryWebAudioTTSImpl# */
-	var _pluginName = 'maryTextToSpeech';
+	var _pluginName = 'ttsMary';
 
 	/**  @memberOf MaryWebAudioTTSImpl# */
 	var _defaultServerPath = 'http://mary.dfki.de:59125/';
@@ -50,7 +50,7 @@ define(['mmirf/mediaManager', 'mmirf/configurationManager', 'mmirf/languageManag
 		var voice = _getVoiceParam(options);
 		var voiceParamStr = voice? '&VOICE='+voice : '';
 
-		return config.get([_pluginName, "serverBasePath"], _defaultServerPath) +'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
+		return config.get([_pluginName, "baseUrl"], _defaultServerPath) +'process?INPUT_TYPE=TEXT&OUTPUT_TYPE=AUDIO&INPUT_TEXT=' + text + '&LOCALE='+lang + voiceParamStr + '&AUDIO=WAVE_FILE';
 	};
 
 	/**  @memberOf MaryWebAudioTTSImpl# */
