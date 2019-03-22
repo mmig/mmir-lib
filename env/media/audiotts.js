@@ -73,6 +73,21 @@ return {
 		 */
 		var createAudio;
 
+		/**
+		 * Will be set/"overwritten" by specific implementation.
+		 *
+		 * @protected
+		 * @memberOf WebAudioTextToSpeech#
+		 */
+		var getLanguages;
+		/**
+		 * Will be set/"overwritten" by specific implementation.
+		 *
+		 * @protected
+		 * @memberOf WebAudioTextToSpeech#
+		 */
+		var getVoices;
+
 		/**  @memberOf WebAudioTextToSpeech# */
 		var volume = 1.0;
 
@@ -489,8 +504,16 @@ return {
 			}
 
 			createAudio = createAudioFunc;
+			getLanguages = impl.getLanguageListFunc? impl.getLanguageListFunc() : _logger.error('initialization error: missing function getLanguageListFunc()!') && void(0);
+			getVoices = impl.getVoiceListFunc? impl.getVoiceListFunc() : _logger.error('initialization error: missing function getVoiceListFunc()!') && void(0);
 
 			//optional: set default implementations, if imp. "requests" it by specifying a setter function
+
+			if(impl.setMediaManager){
+				_logger.warn('initialization problem: plugin uses deprecated hook setMediaManager() - should require "mmirf/mediaManager" directly!');
+				impl.setMediaManager(mediaManager);
+			}
+
 			if(impl.setLangParamFunc){
 				//set default impl
 				impl.setLangParamFunc(getLangParam);
@@ -498,11 +521,6 @@ return {
 			if(impl.setVoiceParamFunc){
 				//set default impl
 				impl.setVoiceParamFunc(getVoiceParam);
-			}
-
-			if(impl.setMediaManager){
-				//set MediaManager reference
-				impl.setMediaManager(mediaManager);
 			}
 
 		};
@@ -657,7 +675,56 @@ return {
 			 */
 			setTextToSpeechVolume: function(newValue){
 				_setVolume(newValue);
+			},
+			/**
+			 * @public
+			 * @memberOf WebAudioTextToSpeech.prototype
+			 * @see mmir.MediaManager#getSpeechLanguages
+			 */
+			getSpeechLanguages: function(successCallback, failureCallback){
+
+				if(getLanguages){
+					getLanguages(successCallback, failureCallback);
+				} else {
+					var msg = 'plugin does not support getSpeechLanguages()';
+					if(failureCallback){
+						failureCallback(msg);
+					} else {
+						_logger.error(msg);
+					}
+				}
+			},
+			/**
+			 * @public
+			 * @memberOf WebAudioTextToSpeech.prototype
+			 * @see mmir.MediaManager#getVoices
+			 */
+			getVoices: function(options, successCallback, failureCallback){
+
+				if(typeof options === 'function'){
+
+					failureCallback = successCallback;
+					successCallback = options;
+					options = void(0);
+
+				} else if(options && typeof options === 'string'){
+
+						options = {language: options};
+				}
+
+				if(getVoices){
+					getVoices(options, successCallback, failureCallback);
+				} else {
+					var msg = 'plugin does not support getVoices()';
+					if(failureCallback){
+						failureCallback(msg);
+					} else {
+						_logger.error(msg);
+					}
+				}
+
 			}
+
 		};//END: _instance = { ...
 
 		//load specific implementation of WebAudio TTS:
