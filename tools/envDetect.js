@@ -50,7 +50,7 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 			isBrowserEnv = false;
 		}
 
-		if(envSetting === 'cordova' || envSetting === 'android' || envSetting === 'ios'){
+		if(envSetting === 'cordova' || envSetting === 'android' || envSetting === 'ios' || envSetting === 'windows'){
 			isCordovaEnv = true;
 //			isBrowserEnv = false;
 		}
@@ -84,6 +84,8 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 				env = 'ios';
 			} else if(/\bandroid\b/i.test(platform)){
 				env = 'android';
+			} else if(/\bwindows\b/i.test(platform)){
+				env = 'windows';
 			} else {//TODO handle other platforms
 				console.warn('Unknown platform "'+platform+'"');
 				env = 'default';
@@ -97,6 +99,8 @@ define(['mmirf/paramsParseFunc'], function(paramsParseFunc) {
 				env = 'ios';
 			} else if(/android/i.test(userAgent)){
 				env = 'android';
+			} else if(/MSAppHost/i.test(userAgent)){
+				env = 'windows';
 			} else {//TODO handle other platforms
 				console.warn('Unknown platform for userAgent "'+userAgent+'"');
 				env = 'default';
