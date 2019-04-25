@@ -28,10 +28,12 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferr
 	var FIELD_NAME_VIEW 		 = '__view';
 	var FIELD_NAME_DATA 		 = '__renderData';
 	var FIELD_NAME_CONTROLLER 	 = '__ctrl';
+	var FIELD_NAME_MANAGER 	 = '__present';
 
 	//function for removing "old" content from DOM (-> remove old, un-used page content)
 	var doRemoveElementsAfterViewLoad = function(_event, data){
 
+		var presentMgr = data[FIELD_NAME_MANAGER];
 		var ctrl = data[FIELD_NAME_CONTROLLER];
 		var view = data[FIELD_NAME_VIEW];
 		var renderData = data[FIELD_NAME_DATA];
@@ -56,10 +58,10 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferr
 
 		//trigger "after page loading" hooks on controller:
 		// the hook for all views of the controller MUST be present/implemented:
-		ctrl.perform('on_page_load', renderData, viewName);
+		presentMgr._fireRenderEvent(ctrl, 'on_page_load', renderData, viewName, renderData);
 		//... the hook for single/specific view MAY be present/implemented:
 		if(view){
-			ctrl.performIfPresent('on_page_load_'+viewName, renderData);
+			presentMgr._fireRenderEvent(ctrl, 'on_page_load_'+viewName, renderData);
 		}
 
 		defer.resolve();
@@ -101,12 +103,12 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferr
 		log.d('before_page_prepare::'+viewName, data);
 
 		//trigger "before page preparing" hooks on controller, if present/implemented:
-		isContinue = ctrl.performIfPresent('before_page_prepare', data, viewName);
+		isContinue = this._fireRenderEvent(ctrl, 'before_page_prepare', data, viewName, data);
 		if(isContinue === false){
 			return;/////////////////////// EARLY EXIT ////////////////////////
 		}
 
-		isContinue = ctrl.performIfPresent('before_page_prepare_'+viewName, data);
+		isContinue = this._fireRenderEvent(ctrl, 'before_page_prepare_'+viewName, data);
 		if(isContinue === false){
 			return;/////////////////////// EARLY EXIT ////////////////////////
 		}
@@ -114,7 +116,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferr
 		// var layout = this.getLayout(ctrlName, true);
 
 		var renderResolve = new Deferred();
-		// var presentMgr = this;
+		var presentMgr = this;
 		var renderFunc = function(){
 
 			//provide "change" data for before_page_load calls:
@@ -125,12 +127,12 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferr
 			log.d('before_page_load::'+viewName, pageEvtData);
 
 			//trigger "before page loading" hooks on controller, if present/implemented:
-			isContinue = ctrl.performIfPresent('before_page_load', data, pageEvtData);//<- this is triggered for every view in the corresponding controller
+			isContinue = presentMgr._fireRenderEvent(ctrl, 'before_page_load', data, pageEvtData);//<- this is triggered for every view in the corresponding controller
 			if(isContinue === false){
 				return;/////////////////////// EARLY EXIT ////////////////////////
 			}
 
-			isContinue = ctrl.performIfPresent('before_page_load_'+viewName, data, pageEvtData);
+			isContinue = presentMgr._fireRenderEvent(ctrl, 'before_page_load_'+viewName, data, pageEvtData);
 			if(isContinue === false){
 				return;/////////////////////// EARLY EXIT ////////////////////////
 			}
@@ -141,6 +143,7 @@ define(['mmirf/logger', 'mmirf/util/deferred', 'module'],function(Logger, Deferr
 			changeOptions[FIELD_NAME_VIEW] = view;
 			changeOptions[FIELD_NAME_DATA] = data;
 			changeOptions[FIELD_NAME_CONTROLLER] = ctrl;
+			changeOptions[FIELD_NAME_MANAGER] = presentMgr;
 
 			doRemoveElementsAfterViewLoad.call(null,{},changeOptions);
 		};

@@ -546,6 +546,16 @@ export interface PresentationManager {
     setRenderEngine: (theRenderEngine: RenderEngine) => void;
     showDialog: (ctrlName: string, dialogId: string, data?: any, ...args: any[]) => any;
     showWaitDialog: (text: string, data: any, ...args: any[]) => void;
+
+		/** NOTE view-dependent events are named: "<event name>_<view name>" */
+		_fireRenderEvent: (ctrl: Controller, eventName: 'before_page_prepare' | 'before_page_load' | 'on_page_load' | string, eventData: any, pageOptions: any) => any | false;
+
+    /** NOTE view-dependent event handler can be set via: on_before_page_prepare_<view name> */
+    on_before_page_prepare?: (ctrlName: string, eventName: 'before_page_prepare', eventData: any, pageOptions: any) => any | false;
+    /** NOTE view-dependent event handler can be set via: on_before_page_load_<view name> */
+    on_before_page_load?: (ctrlName: string, eventName: 'before_page_load', eventData: any, pageOptions: any) => any | false;
+    /** NOTE view-dependent event handler can be set via: on_page_load_<view name> */
+    on_page_load?: (ctrlName: string, eventName: 'on_page_load', eventData: any, pageOptions: any) => any | false;
 }
 export interface RequireJs extends Function {
     isBrowser: boolean;

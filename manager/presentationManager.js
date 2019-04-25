@@ -154,6 +154,12 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader', 'mm
 	  * @memberOf mmir.PresentationManager#
 	  */
 	 var viewSeparator 		= '#';
+
+ 	 /**
+ 	  * @private
+ 	  * @memberOf mmir.PresentationManager#
+ 	  */
+ 	 var reHandlerName 		= /^on_/;
 	 /**
 	  * @type String
 	  * @private
@@ -515,6 +521,40 @@ define([ 'mmirf/controllerManager', 'mmirf/commonUtils', 'mmirf/viewLoader', 'mm
 
                 return renderResult;
             },
+						/**
+						 * Helper for emitting pre-/post-render events on controller instance and/or
+						 * PresentationManager instance.
+						 *
+						 * @function
+						 *
+						 * @param {Controller}
+						 *            ctrl the controller instance for which the render event should be emitted
+						 * @param {String}
+						 *            eventName Name of the event: "page_load", ...
+						 * @param {Object}
+						 *            [eventData] OPTIONAL the rendering data
+						 * @param {Object}
+						 *            [pageData] OPTIONAL the page data/rendering options (may not be present for all events)
+						 * @param {Object}
+						 *            [data] optional data for the view.
+						 * @returns {any | false}
+						 * 	        	if false returned by an event handler, cancalebale rendering actions will stopped
+						 */
+						_fireRenderEvent: function(ctrl, eventName, eventData, pageData){
+
+							var isContinue = ctrl.performIfPresent(eventName, eventData, pageData);
+
+							//if "global" event handler is set:
+							var evtHandlerName = reHandlerName.test(eventName)? eventName : 'on_' + eventName;
+							if(typeof this[evtHandlerName] === 'function'){
+								//if global event handler cancels rendering (note: may not be possible for all type of events)
+								if(this[evtHandlerName](ctrl.getName(), eventName, eventData, pageData) === false){
+									isContinue = false;
+								}
+							}
+
+							return isContinue;
+						},
 
             /**
              * @function

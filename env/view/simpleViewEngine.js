@@ -88,6 +88,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 		var FIELD_NAME_VIEW 		 = '__view';
 		var FIELD_NAME_DATA 		 = '__renderData';
 		var FIELD_NAME_CONTROLLER 	 = '__ctrl';
+		var FIELD_NAME_MANAGER 	 = '__present';
 
 		/**
 		 * Reference to the layout that was rendered last.
@@ -103,6 +104,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 		//function for removing "old" content from DOM (-> remove old, un-used page content)
 		var doRemoveElementsAfterViewLoad = function(_event, data){
 
+			var presentMgr = data[FIELD_NAME_MANAGER];
 			var ctrl = data[FIELD_NAME_CONTROLLER];
 			var view = data[FIELD_NAME_VIEW];
 			var renderData = data[FIELD_NAME_DATA];
@@ -124,11 +126,11 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 			}
 
 			//trigger "after page loading" hooks on controller:
-			// the hook for all views of the controller MUST be present/implemented:
-			ctrl.performIfPresent('on_page_load', renderData, viewName);
+			// the hook for all views of the controller MAY be present/implemented:
+			presentMgr._fireRenderEvent(ctrl, 'on_page_load', renderData, viewName, renderData);
 			//... the hook for single/specific view MAY be present/implemented:
 			if(view){
-				ctrl.performIfPresent('on_page_load_'+viewName, renderData);
+				presentMgr._fireRenderEvent(ctrl, 'on_page_load_'+viewName, renderData);
 			}
 
 			defer.resolve();
@@ -302,12 +304,12 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 			var isContinue;
 
 			//trigger "before page preparing" hooks on controller, if present/implemented:
-			isContinue = ctrl.performIfPresent('before_page_prepare', data, viewName);
+			isContinue = this._fireRenderEvent(ctrl, 'before_page_prepare', data, viewName);
 			if(isContinue === false){
 				return;/////////////////////// EARLY EXIT ////////////////////////
 			}
 
-			isContinue = ctrl.performIfPresent('before_page_prepare_'+viewName, data);
+			isContinue = this._fireRenderEvent(ctrl, 'before_page_prepare_'+viewName, data);
 			if(isContinue === false){
 				return;/////////////////////// EARLY EXIT ////////////////////////
 			}
@@ -378,12 +380,12 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 				};
 
 				//trigger "before page loading" hooks on controller, if present/implemented:
-				isContinue = ctrl.performIfPresent('before_page_load', data, pageEvtData);//<- this is triggered for every view in the corresponding controller
+				isContinue = presentMgr._fireRenderEvent(ctrl, 'before_page_load', data, pageEvtData);//<- this is triggered for every view in the corresponding controller
 				if(isContinue === false){
 					return;/////////////////////// EARLY EXIT ////////////////////////
 				}
 
-				isContinue = ctrl.performIfPresent('before_page_load_'+viewName, data, pageEvtData);
+				isContinue = presentMgr._fireRenderEvent(ctrl, 'before_page_load_'+viewName, data, pageEvtData);
 				if(isContinue === false){
 					return;/////////////////////// EARLY EXIT ////////////////////////
 				}
@@ -394,6 +396,7 @@ define(['mmirf/loadCss', 'mmirf/logger', 'mmirf/util/deferred', 'module', 'requi
 				changeOptions[FIELD_NAME_VIEW] = view;
 				changeOptions[FIELD_NAME_DATA] = data;
 				changeOptions[FIELD_NAME_CONTROLLER] = ctrl;
+				changeOptions[FIELD_NAME_MANAGER] = presentMgr;
 
 
 				//change visible page from old to new one (using simple jQuery replace function)
