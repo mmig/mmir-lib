@@ -96,6 +96,7 @@ return {
 		// dialog/input manager
 		, 'mmirf/inputManager': 'manager/dialog/inputManager'
 		, 'mmirf/dialogManager': 'manager/dialog/dialogManager'
+		, 'mmirf/managerFactory': 'manager/dialog/managerFactory'
 		, 'mmirf/engineConfig': 'manager/dialog/engineConfig'
 
 		, 'mmirf/scionEngine': 'manager/dialog/scion/scionEngine'
@@ -218,6 +219,7 @@ return {
 		, 'mmirf/semanticInterpreterCompatibility' : 'tools/extensions/SemanticInterpreterV3Compatibility'
 		, 'mmirf/core3ModuleIdCompatibility' : 'tools/extensions/Core3ModuleIdCompatibility'
 		, 'mmirf/dictionary': 'tools/extensions/dictionary'
+		, 'mmirf/dialogManager4Compatiblity': 'tools/extensions/DialogManager4Compatiblity'
 
 
 		//optional or "dynamically" loaded modules

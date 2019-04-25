@@ -24,7 +24,7 @@
  * 	SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/logger','mmirf/engineConfig','module','require'],
+define([ 'mmirf/util/extend', 'mmirf/managerFactory', 'module'],
 	/**
 	 * The InputManager handles input events.
 	 *
@@ -38,119 +38,36 @@ define(['mmirf/core','mmirf/util/extend','mmirf/util/deferred','mmirf/logger','m
 	 *
 	 * @example
 	 * //initialization of inputManager
-	 * require('mmirf/inputManager').init().then( function(inputManagerInstance, inputEngineInstance){
-	 * 		//do something
+	 * require('mmirf/inputManager').init().then( function(data){
+	 * 		var inputManagerInstance = data.manager;
+	 * 		var inputEngineInstance  = data.engine;
+	 * 		//do something...
 	 * });
 	 *
 	 *
 	 * @name mmir.InputManager
 	 * @static
 	 * @class
-     *
-     *  @requires mmir.require
-     *  @requires mmir._define
 	 *
 	 */
-	function(
-		mmir, extend, deferred, Logger, engineConfig, module, require
+	function( extend, managerFactory, module
 ){
 
 
 	var _create = function(){
 
-		//the next comment enables JSDoc2 to map all functions etc. to the correct class description
-		/** @scope mmir.InputManager.prototype */
+		var _instance = managerFactory();
 
-		/**
-		 * @memberOf mmir.InputManager#
-		 */
-		var _instance = {
+		var inst = extend(_instance, {
 
-			/** @scope mmir.InputManager.prototype */
-
-			/**
-			 * This function raises an event.
-			 *
-			 * @function
-			 * @param {String} eventName
-			 * 				The name of the event which is to be raised
-			 * @param {Object} [eventData] OPTIONAL
-			 * 				Data belonging to the event
-			 * @throws {Error} if this function is invoked while the internal
-			 * 				   event/state engine (i.e. {@link mmir.InputEngine}
-			 * 				   is not initialized yet
-			 * @public
-			 * @memberOf mmir.InputManager.prototype
-			 */
-			raise : function(eventName, eventData) {
-				//NOTE the functional implementation will be set during initialization (see below #init())
-				throw new Error('InputEngine not initialized yet: '
-						+'call mmir.input.init(callback) and wait for the callback.'
-				);
-			}
-
-		};
-
-		var inst =  extend(_instance, {
-
-			/**
-			 * @function
-			 * @name init
-			 * @returns {Deferred}
-			 *
-			 * @memberOf mmir.InputManager.prototype
-			 */
 			init : function(isRegisterEngine) {
 
-				isRegisterEngine = isRegisterEngine !== false;
+				return _instance._init(module.id, module.config(module), isRegisterEngine);
 
-//				delete this.init;
-
-				//"read" settings from requirejs' config (see mainConfig.js):
-				var modConf = module.config(module);
-				var url = modConf.modelUri;
-				var mode = modConf.mode;
-
-				//create a SCION engine:
-				var engine = engineConfig(url, mode);
-
-				this._log = Logger.create(module);
-				engine._logger = Logger.create(module.id+'Engine', modConf.logLevel);
-
-	//			var _self = this;
-
-				var theDeferredObj = deferred();
-
-				engine.load().then(function(engine) {
-
-					inst.raise = function raise(){
-						engine.raise.apply(engine, arguments);
-					};
-
-//					delete engine.gen;
-
-					if(isRegisterEngine){
-						//register the InputEngine with requirejs as module 'mmirf/inputEngine':
-						define('mmirf/inputEngine', function(){
-							return engine;
-						});
-						//immediately load the module-definition:
-						require(['mmirf/inputEngine'], function(){
-							//signal end of initialization process:
-							theDeferredObj.resolve({manager: inst, engine: engine});
-						});
-					} else {
-						//signal end of initialization process:
-						theDeferredObj.resolve({manager: inst, engine: engine});
-					}
-
-				});
-
-				return theDeferredObj;
-			},
+			},//END: init()
 			_create: _create
 
-		});
+		});//END: var inst = extend(...
 
 		return inst;
 
