@@ -294,16 +294,7 @@ export interface DialogEngine {
     start: () => void;
 }
 export interface DialogManager {
-    getOnPageRenderedHandler: () => Function | undefined;
-    hideCurrentDialog: () => void;
-    hideWaitDialog: () => void;
-    perform: (ctrlName: any, actionName: any, data?: any) => any;
-    performHelper: (ctrlName: any, helper_method_name: any, data?: any) => any;
     raise: (eventName: string, data?: any) => void;
-    render: (ctrlName: any, viewName: any, data?: any) => void;
-    setOnPageRenderedHandler: (onPageRenderedHook: Function) => void;
-    showDialog: (ctrlName: any, dialogId: any, data?: any) => void;
-    showWaitDialog: (text: any, theme: any) => void;
 }
 export interface InputEngine {
     doc: string;
@@ -745,4 +736,16 @@ export declare class Controller {
     parseViews(viewDefs: Array<FileInfo>): void;
     loadHelper(name: string, helperPath: string, ctx: any): void;
 
+}
+
+export interface DialogManager4Compatiblity extends DialogManager {
+    getOnPageRenderedHandler: () => Function | undefined;
+    hideCurrentDialog: () => void;
+    hideWaitDialog: () => void;
+    perform: (ctrlName: any, actionName: any, data?: any) => any;
+    performHelper: (ctrlName: any, helper_method_name: any, data?: any) => any;
+    render: (ctrlName: any, viewName: any, data?: any) => void;
+    setOnPageRenderedHandler: (onPageRenderedHook: Function) => void;
+    showDialog: (ctrlName: any, dialogId: any, data?: any) => void;
+    showWaitDialog: (text: any, theme: any) => void;
 }
