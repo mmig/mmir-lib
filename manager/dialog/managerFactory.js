@@ -1,5 +1,5 @@
 
-define(['mmirf/core','mmirf/util/deferred','mmirf/logger','mmirf/engineConfig','require'],
+define(['mmirf/core','mmirf/util/deferred','mmirf/logger','mmirf/engineConfig'],
 	/**
 	 * Factory for creating state manager, e.g. InputerManger and DialogManager instances.
 	 *
@@ -16,13 +16,13 @@ define(['mmirf/core','mmirf/util/deferred','mmirf/logger','mmirf/engineConfig','
 	 * @name mmir.ManagerFactory
 	 * @static
 	 * @class
-     *
-     *  @requires mmir.require
-     *  @requires mmir._define
+	 *
+	 * @requires mmir.require
+	 * @requires mmir._define
 	 *
 	 */
 	function(
-		mmir, deferred, Logger, engineConfig, require
+		mmir, deferred, Logger, engineConfig
 ){
 
 
@@ -92,11 +92,11 @@ define(['mmirf/core','mmirf/util/deferred','mmirf/logger','mmirf/engineConfig','
 
 					if(isRegisterEngine){
 						//register the InputEngine with requirejs as module 'mmirf/<manager-type>Engine':
-						define(engineId, function(){
+						mmir._define(engineId, function(){
 							return engine;
 						});
 						//immediately load the module-definition:
-						require([engineId], function(){
+						mmir.require([engineId], function(){
 							//signal end of initialization process:
 							theDeferredObj.resolve({manager: _instance, engine: engine});
 						});
