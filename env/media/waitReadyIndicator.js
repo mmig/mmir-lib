@@ -60,11 +60,6 @@
 
 define(['mmirf/languageManager', 'mmirf/waitDialog'], function(lang, dlg){
 
-
-if(typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD){
-	require.resolve('mmirf/waitDialog')
-}
-
 /**  @class WaitReadyIndicatorImpl */
 return {
 	/**  @memberOf WaitReadyIndicatorImpl# */
