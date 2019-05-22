@@ -98,7 +98,7 @@ function initMmir(window) {
 		var req = reqInstance? reqInstance : (mmir && mmir.require? mmir.require : null);
 		if(configuration){
 			if(!req || !req.config){
-				req = typeof requirejs !== 'undefined'? requirejs : typeof require !== 'undefined'? require : req && req('requirejs');
+				req = typeof requirejs !== 'undefined'? requirejs : (typeof WEBPACK_BUILD === 'undefined' || !typeof WEBPACK_BUILD) && typeof require !== 'undefined'? require : req && req('requirejs');
 			}
 			return req.config(configuration) || req;
 		}

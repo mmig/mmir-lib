@@ -97,25 +97,30 @@ define(['mmirf/core', 'mmirf/util/deferred', 'mmirf/resources', 'mmirf/commonUti
 	 */
 	var selectStateEngine = function(){
 
-		if((typeof WEBPACK_BUILD !== 'undefined' && WEBPACK_BUILD) || !conf.getBoolean('detectCompiledStateModels', true)){
-			return;
-		}
+		//NOTE need to wrap all "non-webpack" code by the webpack-build guard, in order
+		//     to avoid webpack warning about critical dependencies (i.e. un-limited require-usage)
+		if(typeof WEBPACK_BUILD === 'undefined' || !WEBPACK_BUILD){
 
-		var genDir = resources.getGeneratedStateModelsPath();
-		var models = utils.listDir(genDir);
-		if(models){
-
-			var statesConfig = {
-				paths: {'mmirf/scion': require.toUrl('mmirf/scionRuntime')},
-				config: {}
-			};
-			var m;
-			for(var i=0, size = models.length; i < size; ++i){
-				m = models[i];
-				// ['mmirf/dialogManager' | 'mmirf/inputManager']: {modelUri: 'gen/states/' + ['dialog' | 'input']}
-				statesConfig.config['mmirf/' + (/dialog/i.test(m)? 'dialog' : 'input')+'Manager'] = {modelUri: genDir + m};
+			if(!conf.getBoolean('detectCompiledStateModels', true)){
+				return;
 			}
-			mmir.require = require.config(statesConfig);
+
+			var genDir = resources.getGeneratedStateModelsPath();
+			var models = utils.listDir(genDir);
+			if(models){
+
+				var statesConfig = {
+					paths: {'mmirf/scion': require.toUrl('mmirf/scionRuntime')},
+					config: {}
+				};
+				var m;
+				for(var i=0, size = models.length; i < size; ++i){
+					m = models[i];
+					// ['mmirf/dialogManager' | 'mmirf/inputManager']: {modelUri: 'gen/states/' + ['dialog' | 'input']}
+					statesConfig.config['mmirf/' + (/dialog/i.test(m)? 'dialog' : 'input')+'Manager'] = {modelUri: genDir + m};
+				}
+				mmir.require = require.config(statesConfig);
+			}
 		}
 	};
 
