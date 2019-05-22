@@ -607,10 +607,10 @@ return {
 					var errMsg;
 					if (active == true){
 
-						errMsg = "[webspeechAudioInput.Warn] Voice recognition already running.";
+						errMsg = "Voice recognition already running.";
 
 						if(options.error){
-							options.error(errMsg);
+							options.error('[WARN] '+_pluginName+': '+errMsg);
 						} else {
 							logger.warn(errMsg);
 						}
@@ -703,12 +703,12 @@ return {
 
 					} catch (exc){
 
-						errMsg = "[webspeechAudioInput.Error] Could not start voice recognition: "+ exc;
+						errMsg = "Could not start voice recognition: ";
 
 						if(options.error){
-							options.error(errMsg,exc);
+							options.error('[ERROR] '+_pluginName+': ' + errMsg + (exc && exc.stack? exc.stack : exc));
 						} else {
-							logger.error(errMsg, exc);
+							logger.error(errMsg + exc, exc);
 						}
 					}
 				},
@@ -802,7 +802,7 @@ return {
 
 					} catch (exc){
 
-						var errMsg = "[webspeechAudioInput.Error] Could not stop voice recognition: "+ exc;
+						var errMsg = "Could not stop voice recognition: "+ exc;
 
 						if(failureCallback){
 
@@ -856,11 +856,11 @@ return {
 					var errMsg;
 					if (active == true){
 
-						errMsg = "[webspeechAudioInput.Warn] Voice recognition already running.";
+						errMsg = "Voice recognition already running.";
 
 						if(failureCallback){
 
-							failureCallback(errMsg);
+							failureCallback('[WARN] '+_pluginName+': '+errMsg);
 
 							logger.warn(errMsg);
 						}
@@ -926,12 +926,12 @@ return {
 
 					} catch (exc){
 
-						errMsg = "[webspeechAudioInput.Error] Could not start voice recognition: "+ exc;
+						errMsg = "Could not start voice recognition: ";
 
 						if(options.error){
-							options.error(errMsg, exc);
+							options.error('[ERROR] '+_pluginName+': ' + errMsg + (exc && exc.stack? exc.stack : exc));
 						} else {
-							logger.error(errMsg, exc);
+							logger.error(errMsg + exc, exc);
 						}
 					}
 				},
