@@ -867,7 +867,14 @@ define(['mmirf/resources', 'mmirf/configurationManager', 'mmirf/commonUtils', 'm
 		        			if(/de.DE/i.test(langCode)){
 		        				langCode = 'de';
 		        			}
-		            	}
+						} else if(providerName === 'google' && langCode && langCode.length === 7){
+
+							//convert 3-letter codes to 2-letter codes for Google services
+							var m = /(\w\w)\w.(\w\w)\w/.exec(langCode);
+							if(m){
+								langCode = m[1] + '-' + m[2];
+							}
+						}
 
 		            	return langCode;
 		            }
