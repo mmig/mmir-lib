@@ -179,17 +179,24 @@ return {
 		 *
 		 * @param {Promise|void} p
 		 * 			The promise returned by calling WebAudio.play() (or FALSY, if no promise was returned)
-		 * @param {IAudio} p
+		 * @param {IAudio} audio
 		 * 			The audio object for which play was invoked
+		 * @param {Function} errorHandler
+		 * 			The error handler/callback for the audio
 		 *
 		 * @returns {mmir.env.media.IAudio} the audio
 		 *
 		 * @memberOf Html5AudioOutput#
 		 */
-		function handlePlayPromise(p, audio) {
+		function handlePlayPromise(p, audio, errorHandler) {
 			if(p && p.catch){
 				p.catch(function(err){
-					mediaManager._fireEvent('errorplay', [audio, err])
+					mediaManager._fireEvent('errorplay', [audio, err]);
+					errorHandler.call(audio, {
+						code: 			err.code,
+						message: 		err.name,
+						description: 	err.message
+					});
 				});
 			}
 		}
@@ -253,7 +260,7 @@ return {
 					}
 
 					var p = audio.play();
-					handlePlayPromise(p, audio);
+					handlePlayPromise(p, audio, failureCallback);
 
 				} catch (e){
 
@@ -404,7 +411,7 @@ return {
 									if (ready){
 
 										var p = my_media.play();
-										handlePlayPromise(p, mediaImpl);
+										handlePlayPromise(p, mediaImpl, failureCallback);
 
 										return true;
 
@@ -418,7 +425,7 @@ return {
 
 											if(enabled){
 												var p = my_media.play();
-												handlePlayPromise(p, mediaImpl);
+												handlePlayPromise(p, mediaImpl, failureCallback);
 											}
 										};
 										my_media.addEventListener('canplay', autoPlay , false);
