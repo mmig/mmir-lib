@@ -940,10 +940,11 @@ return {
 				 * @memberOf WebspeechAudioInput.prototype
 				 * @see mmir.MediaManager#cancelRecognition
 				 */
-				cancelRecognition: function(successCallback,failureCallback){
+				cancelRecognition: function(successCallback, failureCallback){
 					recording = mediaManager.micLevelsAnalysis.active(false);
 					aborted = true;
 					error_counter = 0;
+					currentFailureCallback = failureCallback;
 
 					var self = this;
 					// callback used if an error occurred - includes abort
