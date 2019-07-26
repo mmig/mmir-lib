@@ -261,7 +261,7 @@ return {
 		 * @memberOf MicLevelsAnalysis#
 		 */
 		function _startUserMedia(inputstream, foreignAudioData){
-			console.log('MicLevelsAnalysis: start analysing audio input...');
+			mediaManager._log.info('MicLevelsAnalysis: start analysing audio input...');
 			var buffer = 0;
 			// var prevDb;
 			var prevRms;
@@ -340,9 +340,9 @@ return {
 					var datum = Math.abs(data[i]);
 
 					//FIXM TEST
-					// console.log('data '+(20 * Math.log10(data[i]/MAX)));//+view.getInt16(i));
-					// console.log('data '+view.getInt16(i));
-					// console.log('data '+data[i]);
+					// mediaManager._log.d('data '+(20 * Math.log10(data[i]/MAX)));//+view.getInt16(i));
+					// mediaManager._log.d('data '+view.getInt16(i));
+					// mediaManager._log.d('data '+data[i]);
 					// window.RAW_DATA.push(data[i]);
 					// window.DB_DATA.push(20 * Math.log10(data[i]/MAX));
 					// window.RMS_DATA.push('');
@@ -355,12 +355,12 @@ return {
 					total += datum;
 				}
 				var avg = total / size;
-	//			console.info('audio ['+min+', '+max+'], avg '+avg);
+	//			mediaManager._log.debug('audio ['+min+', '+max+'], avg '+avg);
 
 	//			var rms = getRms(data, size);
 	//			var db = 20 * Math.log(rms);// / 0.0002);
 
-	//			console.info('audio rms '+rms+', db '+db);
+	//			mediaManager._log.debug('audio rms '+rms+', db '+db);
 
 				/* RMS stands for Root Mean Square, basically the root square of the
 				 * average of the square of each value. */
@@ -375,8 +375,8 @@ return {
 				// window.RMS_DATA[window.RMS_DATA.length-1] = rms;//FIXME TEST
 				// var db = 20 * Math.log10(Math.abs(max)/MAX);
 				// var db = rms;
-	//			console.info('audio rms '+rms);
-				// console.info('audio rms changed: '+prevDb+' -> '+db);
+	//			mediaManager._log.debug('audio rms '+rms);
+				// mediaManager._log.debug('audio rms changed: '+prevDb+' -> '+db);
 				//actually fire the change-event on all registered listeners:
 				if(hasChanged(rms, prevRms)){
 					prevRms = rms;
@@ -385,7 +385,7 @@ return {
 					// db *= MIC_NORMALIZATION_FACTOR;
 					db = 20 * Math.log10(Math.abs(max)/MAX);
 
-					//console.info('audio rms changed ('+db+'): '+prevRms+' -> '+rms);
+					//mediaManager._log.debug('audio rms changed ('+db+'): '+prevRms+' -> '+rms);
 
 					mediaManager._fireEvent(MIC_CHANGED_EVT_NAME, [db, rms]);
 				}
@@ -427,7 +427,7 @@ return {
 
 				//start analysis with own audio input stream:
 				html5Navigator.__getUserMedia({audio: true}, _startUserMedia, function(e) {
-					console.error("MicLevelsAnalysis: failed _startAudioAnalysis, error for getUserMedia ", e);
+					mediaManager._log.error("MicLevelsAnalysis: failed _startAudioAnalysis, error for getUserMedia ", e);
 					_isAnalysisActive = false;
 				});
 			}
@@ -456,15 +456,15 @@ return {
 							}
 						}
 					} catch (err){
-						console.log('MicLevelsAnalysis: a problem occured while stopping audio input analysis: '+err);
+						mediaManager._log.error('MicLevelsAnalysis: a problem occured while stopping audio input analysis: '+(e.stack? e.stack : e));
 					}
 					_isAnalysisCanceled = false;
 					_isAnalysisActive = false;
 
-					console.log('MicLevelsAnalysis: stopped analysing audio input!');
+					mediaManager._log.info('MicLevelsAnalysis: stopped analysing audio input!');
 				}
 				else if(_isAnalysisActive === true){
-					console.warn('MicLevelsAnalysis: stopped analysing audio input process, but no valid audio stream present!');
+					mediaManager._log.warn('MicLevelsAnalysis: stopped analysing audio input process, but no valid audio stream present!');
 					_isAnalysisCanceled = true;
 					_isAnalysisActive = false;
 				}
