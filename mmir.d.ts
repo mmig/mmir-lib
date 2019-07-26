@@ -445,6 +445,10 @@ export type ASROnError = (error: string | Error) => void;
 export type ASRMode = "search" | "dictation";
 export type EOSPause = "short" | "long";
 
+export interface PlayError {
+  audio: IAudio | HTMLAudioElement;
+  error: DOMException;
+}
 
 export type MediaPluginType = 'audio' | 'asr' | 'tts' | 'prep' | string;
 
