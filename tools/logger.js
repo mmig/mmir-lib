@@ -978,15 +978,21 @@ var instance =
      * This setting is used by loggers, that do not have
      * a specific log-level set.
      *
-     * @param {Number} theLevel
-     * 			the log level: a number between 0 (verbose) and 6 (disabled)
+     * @param {String|Number} theLevel
+     * 			if NUMBER, the log level as a number between 0 (verbose) and 6 (disabled)
+     * 			if STRING, the logging level as a string (see {@link #getLevel})
      *
 	 * @public
 	 *
 	 * @see #getDefaultLogLevel
 	 * @see Logger#getLevel
-	 */
+     */
     setDefaultLogLevel: function(theLevel){
+
+    	if(typeof theLevel !== 'number'){
+    		theLevel = getAsLevel(theLevel);
+    	}
+
     	_level = theLevel;
     },
     /**
