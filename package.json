@@ -22,9 +22,10 @@
     "url": "https://github.com/mmig/mmir-lib/issues"
   },
   "homepage": "https://github.com/mmig/mmir-lib#readme",
-  "main": "requirejs-main.js",
+  "main": "./src/requirejs-main.js",
   "directories": {
-    "lib": "./dist"
+    "lib": "./src",
+    "dist": "./dist"
   },
   "dependencies": {
     "@scion-scxml/scxml": "^4.3.25",
