@@ -1,7 +1,7 @@
 
-version notes for MMIR framework code (v 4.2.0)
+version notes for MMIR framework code (v 5.0.0-rc1)
 
- * using Cordova 5.x.x - 7.x.x library
+ * using Cordova 5.x.x - 8.x.x library
 
 optional
  * jQuery 2.x - 3.x library (presence is auto-detected, if loaded before mmir-lib)
@@ -12,13 +12,15 @@ additional, required dependencies when running in node environment
  * scxml (tested with version 3.1.5)
  * xmlhttprequest (tested with version 1.8.0)
  * requirejs (tested with version 2.3.3)
- * webworker-threads (OPTIONAL, tested with version 0.7.13)
+ * webworker-threads (OPTIONAL, tested with version 0.8.0);
+    recommended to use node's internal worker_threads module instead (included as experimental feature since node v 10.x)
+    which may need to be enabled in earlier versions of node
 
 
  NOTE: for versions older than MMIR 3.x, the change-information refers to the MMIG StarterKit code.
        Since version 3.x the code is restructured:
 
-       * mmir-lib: the framework code itself (would usually be located at /www/mmirf/)
+       * mmir-lib: the framework code itself (the contents of its /lib directory would usually be located at /www/mmirf/)
        * mmir-tooling: the tools for building resources (would usually be located at /build/)
 
        * mmir-starter-kit: the code for the StarterKit includes mmir-lib and mmir-tooling as well
@@ -30,6 +32,168 @@ additional, required dependencies when running in node environment
  --------------
  Change Log
  --------------
+
+##################
+ Version 5.0.0-rc1
+##################
+
+support for webpack-integration and compatibility for running within Node.js
+(as well as re-implemented build-tools and Cordova-integration)
+
+
+NOTE: changes marked with [breaking change | compatibility mode] can be automatically amended by  
+      loading the backwards compatibility module, so that code may use the old v4 API for mmir-lib.
+
+[BREAKING CHANGE]
+the sources are now located in directory /lib (instead of project's root)
+
+EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
+           mmir.ready(function () {
+             //apply v4 compatibility layer:
+             mmir.require(['mmirf/core4Compatibility'], function(core4Compatibility){
+              
+              core4Compatibility(mmir);
+              
+              //-> ready to use mmir-lib v4 API
+              
+              
+             });//end of compatibility closure
+           });//end of mmir.ready() callback 
+
+
+[breaking change | compatibility mode] MODIFICATION:
+
+ * renamed directory/file for SCXML resources & its config-name:
+   * moved from directory "/config/statedef" -> "/states"
+     * NOTE: SCXML files are now pre-compiled to JS and emitted to "/gen/states"
+   * renamed file "dialogDescriptionSCXML.xml" -> "dialog.xml"
+   * renamed file "inputDescriptionSCXML.xml"  -> "input.xml"
+   * renamed config-field "scxmlDoc" -> "modelUri", e.g. replace
+       mmir.config({config: { 'mmirf/dialogManager': {scxmlDoc: 'all_states/example-view_transitions-dialog-states.xml'});
+     with:
+       mmir.config({config: { 'mmirf/dialogManager': {modelUri: 'all_states/example-view_transitions-dialog-states.xml'});
+
+
+ * env/media: renamed modules for improved consistency; corresponding settings in configuration.json need to be adjusts
+   * renamed "webAudioTextToSpeech" module to "audiotts"
+     * in configuration.json: change entries in {"mediaManager": { "plugins": ...
+       "webAudioTextToSpeech" -> "audiotts"
+   * renamed "maryTextToSpeech" module to "ttsMary" and its (optional) configuration field "serverBasePath" to "baseUrl" 
+     * in configuration.json: change 
+         {"maryTextToSpeech": { "serverBasePath": ...
+       to 
+         {"ttsMary": { "baseUrl": ...
+
+
+ * dialogManager: removed helper/shortcut methods that invoke ControllerManager or PresentationManager methods
+   * methods can be re-attached using dialogManager4Compatiblity module:
+      
+      mmir.require(['mmirf/dialogManager4Compatiblity'], function(dialogCompat){
+        //re-attache helper/shortcut methods:
+      	dialogCompat(mmir.dialog);
+      });
+      
+   * removed methods/functionality (can/should be used via ControllerManager or PresentationManager directly):
+	 * DialogManager.perform(ctrlName, actionName, data)				-> ControllerManager.perform
+	 * DialogManager.performHelper(ctrlName, helperActionName, data)	-> ControllerManager.performHlper
+	 * DialogManager.showDialog(ctrlName, dialogId, data)				-> PresentationManager.showDialog
+	 * DialogManager.hideCurrentDialog()								-> PresentationManager.hideCurrentDialog
+	 * DialogManager.showWaitDialog(text, theme)						-> PresentationManager.showWaitDialog
+	 * DialogManager.hideWaitDialog()									-> PresentationManager.hideWaitDialog
+	 * DialogManager.render(ctrlName, viewName, data)					-> PresentationManager.render
+	 * DialogManager.getOnPageRenderedHandler()							instead use: PresentationManager.on_<render event name>
+	 * DialogManager.setOnPageRenderedHandler(handlerFunction)			instead use: PresentationManager.on_<render event name>
+   * removed semi-private functions (obsolete now, so no direct replacement/alternative in new implementation):
+     * DialogManager._setControllerManager(controllerManager)
+     * DialogManager._setPresentationManager(presentationManager)
+ 
+ 
+ * constants: renamed "mmirf/constants" to "mmirf/resources" & mmir.res instead of mmir.const:
+   * "mmirf/constants" -> "mmirf/resources"
+   * mmir.const -> mmir.res
+   * renamed methods for file-names & added optional argument langCode for getting the file-path, instead of only the file-name
+     * getGrammarFileName() -> getGrammarFileUrl(langCode)
+     * getSpeechConfigFileName() -> getSpeechConfigFileUrl(langCode)
+     * getDictionaryFileName() -> getGrammarFileUrl(langCode)
+
+
+[breaking change] MODIFICATION:
+ * controllerManager: for creating FileInfo (i.e. Controller.def): dropped (unused) field fileName and make genPath non-optional field
+ * controller: constructor argument ctx (context) is now changed to be the instance-constructor (NOTE: usually this is used only internally by the framework)
+               OLD API: 
+               	  var ctx = {Application: <constructor>}
+               	  var ctrl = new Controller('Application', ctrlDefInfo, ctx);
+               NEW API:
+               	  var ctrl = new Controller('Application', ctrlDefInfo, <constructor>);
+               
+               i.e. if the Controller constructor was used directly, change old code to something like:
+               	  var ctrl = new Controller('Application', ctrlDefInfo, ctx['Application']);
+ * helper: constructor argument ctx (context) is now changed to be the instance-constructor (NOTE: usually this is used only internally by the framework)
+               OLD API: 
+               	  var ctx = {ApplicationHelper: <constructor>}
+               	  var helper = new Helper(ctrl, 'ApplicationHelper', ctx);
+               NEW API:
+               	  var helper = new Helper(ctrl, 'ApplicationHelper', <constructor>);
+               
+               i.e. if the Helper constructor was used directly, change old code to something like:
+               	  var helper = new Helper(ctrl, 'ApplicationHelper', ctx['ApplicationHelper']);
+ 
+ * mediaManager plugins: media plugins are now wrapped AMD modules; the new loading mechanism will not handle "old-style" plugins automatically (need to load compatibility layer v4 for using old plugins!)
+ 
+ * mmirf/dictionary: internal usage is replaced with standard Map implementation
+     * still available as module, but needs to be async-required (first time), i.e.:
+          mmir.require(['mmirf/dictionary'], function(Dictionary){...
+     * if browser/execution environment does not support Map by default, a polyfill can be activated using module "mmirf/polyfill" (vendor/lib/es6-map-set-polyfill.min.js):
+     	  //after loading <mmirf>/core.js:
+     	  mmir.startModules = ['mmirf/polyfill'];
+
+ * gen/views: for consistency is now located at gen/view
+    * when compiling (that is, when views will be re-compiled) the necessary changes/files will be automatically be created
+    * ... however, the old directory <www>/gen/views (and its files) will not be automatically be deleted; this needs to be done manually
+    * or, alternatively, the corresponding directory can be renamed manually
+
+----------------------
+
+[non-breaking changes]
+
+MODIFICATION:
+ * env/media: renamed module/files; the original module/file names are deprecated but will be automatically mapped to the new name
+    * "cordovaAudioOutput" -> "cordovaAudio"
+    * "html5AudioOutput" -> "webAudio"
+    * "webAudioTextToSpeech" -> "audiotts"
+    * "webttsMaryImpl" -> "ttsMary"
+
+ADDITION:
+ * commonUtils.loadImpl(): added 4th argument in status-callback holding the (loaded) result
+ * env/asyncGen: added support for re-initializing async grammar generators after they have been destroyed
+    * env/asyncGen.destroy(force): added optional argument force; if omitted or false, will wait until a pending jobs have been finished
+ * languageManager: for fixLang(...), added language code fix for 'google' -> convert 3-letter codes to 2-letter codes
+ * presentationManager: added helper function PresentationManager._fireRenderEvent() for use in view-engine implementations for emitting rendering events
+
+  
+
+BUGFIX:
+ * logger: do allow setDefaultLogLevel() be set with string (in addition to number), e.g. 'debug', 'info', 'warn', 'error'
+ * env/webspeechAudioInput: do set error-callback correctly in cancelRecognition()
+ * env/webAudio: do trigger audio's error-callback if play-promise failed
+
+
+
+##################
+ Version 4.2.1
+##################
+
+ADDITION:
+ * languageManager.existsGrammar(): added optional argument grammarType for checking specifically json or js grammar
+
+MODIFICATION:
+
+BUGFIX:
+
+ * commonUtils.getCompiledGrammarPath: fix accessing undefined variable librariesPath
+ * asyncGrammarWorker.addGrammer: must check options for stopwords field
+ * semantic/grammarGenerator: for executing grammars in WebWorker -> added test for >self< (WebWorker), before setting >global< (Node) as global context in the generated grammar script
+
 
 ##################
  Version 4.2.0
