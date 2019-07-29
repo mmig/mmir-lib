@@ -6,49 +6,67 @@ https://github.com/mmig/mmir-lib
 
 Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library
 
-This is the mere source code of the bare library (i.e. without any tooling etc.)
+The MMIR framework provides means to created _minimal_ (client-based)
+_dialog systems_ for multimodal interactions:
 
-Usually, the content of this repository (of the root directory)
-would be placed within the directory `mmirf/` of the web application:
+ * state-based interaction handling using SCXML (e.g. for touch/click, speech, gesture interactions)
+ * support and plugins for several speech input (Automatic Speech Recognition, ASR) engines
+ * support and plugins for several speech output/synthesis (Text To Speech, TTS) engines
+ * support for client- or sever-based NLU processing
+   * built-in support for grammars (similar BNF grammars that parse input as _tokens_ and _utterances_)
 
-    ...
-    /controllers/
-    /mmirf/
-    /models/
-    /views/
-    /index.html
-    ...
 
-For examples, see the [StarterKit][1] or the [minimal Cordova example][2].
+For examples, see the [mmir-starter-simple][1] or [mmir-starter-ionic][2].
 
 --
-#### Including mmir-lib as subtree
+# Usage
 
-This repository can be included as GIT _subtree_ so that updates can be easily fetched.
-E.g. for including the repository as subtree in the directory `www/mmirf` the
-following command can be used:
+## Building Resources (Grammars etc)
 
-    git subtree add --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
+ * Prerequesites: Node.js
 
-later updates from this repository can be fetched from within the referencing project using
+Some resources (e.g. grammars) need to be build/compiled, before they can be used.
 
-    git subtree pull --prefix www/mmirf https://github.com/mmig/mmir-lib master --squash
+This is supported e.g. via the [mmir-tooling][3] project.
 
---
-#### Updating mmir-lib in your project
+In addition, the [mmir-wepack][4] integration, provides a further automated way
+for including `mmir` in webpack-based apps / build applications.
 
-In order to update `mmir-lib` in your project, you should follow these steps
+## Web Page
 
-_Note: these directions assume, that your web application is located in the
-       sub-directory `/www` of your project directory._  
+ * include `/lib` as directory `/mmirf` in your web resources directory (e.g. `/www/mmirf`)
 
- 1. replace the contents of `/www/mmirf` with the new contents of this repository
-    (e.g. the using `git subtree pull` command)
- 1. update the _tooling_ in `/build` from the [mmir-tooling][3] repository, by
-   1. replacing `/build` with the new contents of the _mmir-tooling_ repository
-   1. executing the `ANT` build script from within `/build`
- 1. _delete contents of `/www/gen`_
- 1. re-build your web application, if necessary (e.g. run `cordova build`)
+ * load/include `mmir` in HTML page
+   ```html
+   <!-- OPTIONAL helper script: auto-detect Cordova-environment and load its library if necessary: -->
+   <script type="text/javascript" src="mmirf/tools/initCordova.js"></script>
+
+   <!-- load the framework's core/base object -->
+   <script type="text/javascript" src="mmirf/core.js"></script>
+
+   <!-- OPTIONAL configure mmir framework before loading-->
+   <script type="text/javascript" src="appjs/preinit.js"></script>
+
+	 <!-- load mmir library -->
+   <script type="text/javascript" src="mmirf/vendor/libs/require.min.js" data-main="mmirf/mainConfig" ></script>
+   ```
+ * use `mmir` after it's been initialized
+   ```javascript
+	 mmir.ready(function(){
+		 ...
+	 })
+	 ```
+
+## Node
+
+```javascript
+var mmir = require('mmir-lib');
+mmir.ready(function(){
+  ...
+})
+```
+
+
 
 --
 #### Used Libraries
@@ -80,12 +98,9 @@ NOTE: Integration with / loading of Cordova is now designed to work with the _bu
 If not stated otherwise, all files and resources are provided under the MIT license
 
 
---
-##### Version Information
-
- MMIR Version 4.2.0
-
-
-[1]: https://github.com/mmig/mmir-starter-kit
-[2]: https://github.com/mmig/mmir-cordova
+[1]: https://github.com/mmig/mmir-starter-simple
+[2]: https://github.com/mmig/mmir-starter-ionic
 [3]: https://github.com/mmig/mmir-tooling
+[4]: https://github.com/mmig/mmir-webpack
+[5]: https://github.com/mmig
+[6]: https://github.com/mmig/TODO
