@@ -21,5 +21,21 @@
   "bugs": {
     "url": "https://github.com/mmig/mmir-lib/issues"
   },
-  "homepage": "https://github.com/mmig/mmir-lib#readme"
+  "homepage": "https://github.com/mmig/mmir-lib#readme",
+  "main": "./lib/requirejs-main.js",
+  "directories": {
+    "lib": "./lib",
+    "dist": "./dist"
+  },
+  "dependencies": {
+    "@scion-scxml/scxml": "^4.3.25",
+    "requirejs": "^2.3.6",
+    "xmlhttprequest": "^1.8.0"
+  },
+  "devDependencies": {
+    "@types/requirejs": "^2.1.31"
+  },
+  "peerDependencies": {
+    "webworker-threads": "git+https://github.com/audreyt/node-webworker-threads.git"
+  }
 }
