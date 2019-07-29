@@ -22,9 +22,9 @@
     "url": "https://github.com/mmig/mmir-lib/issues"
   },
   "homepage": "https://github.com/mmig/mmir-lib#readme",
-  "main": "./src/requirejs-main.js",
+  "main": "./lib/requirejs-main.js",
   "directories": {
-    "lib": "./src",
+    "lib": "./lib",
     "dist": "./dist"
   },
   "dependencies": {
