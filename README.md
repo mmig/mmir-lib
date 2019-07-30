@@ -77,7 +77,7 @@ mmir.ready(function(){
  * SCION v1, @scion-scxml/core v2.6.22 (custom build)
  * JS/CC 0.30
  * PEG.js 0.10.0
- * Jison
+ * Jison 0.4.15
  * ANTLR 3
  * crypto-js MD5 3.1.9-1 (custom build)
  * stacktrace-js 2.0.0
