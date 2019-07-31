@@ -1,3 +1,15 @@
+/**
+ * the `mmir-lib` package provides the mmir core library
+ * for lightweight, client-centric, multimodal interaction development.
+ *
+ * __NOTE__ the API documentation for `mmir-lib` has not been fully migrated to
+ *          TypeScript yet.
+ *          For more detailed descriptions see generated JSDoc-based API at
+ *          [mmig.github.io/mmir-lib](https://mmig.github.io/mmir-lib/)
+ *
+ * @see [[MmirModule]]
+ * @module mmir-lib
+ */
 
 /**
  * export global variable mmir
