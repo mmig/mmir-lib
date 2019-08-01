@@ -5,7 +5,7 @@
  * __NOTE__ the API documentation for `mmir-lib` has not been fully migrated to
  *          TypeScript yet.
  *          For more detailed descriptions see generated JSDoc-based API at
- *          [mmig.github.io/mmir-lib](https://mmig.github.io/mmir-lib/)
+ *          [mmig.github.io/mmir/api](https://mmig.github.io/mmir/api/)
  *
  * @see [[MmirModule]]
  * @module mmir-lib
