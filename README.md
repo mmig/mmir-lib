@@ -110,6 +110,6 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 [3]: https://github.com/mmig/mmir-tooling
 [4]: https://github.com/mmig/mmir-webpack
 [5]: https://github.com/mmig/mmir
-[5]: https://github.com/mmig/mmir-lib/tree/master/docs/
+[6]: https://github.com/mmig/mmir-lib/tree/master/docs/
 [7]: https://mmig.github.io/mmir/api/
 [8]: https://github.com/mmig/mmir-starter-cordova
