@@ -1,0 +1,11 @@
+{
+  "includeDeclarations": true,
+  "excludeExternals": false,
+  "exclude": ["node_modules/!(mmir-)*/**"],
+  "excludePrivate": true,
+  "readme": "none",
+	"mode": "modules",
+  "theme": "markdown",
+  "out": "docs",
+	"sourcefile-url-prefix": "../../"
+}
