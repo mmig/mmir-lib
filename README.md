@@ -76,7 +76,7 @@ mmir.ready(function(){
 
  * RequireJS 2.3.6  
 	 (BSD or MIT; Copyright jQuery Foundation and other contributors)
- * SCION v1, @scion-scxml/core v2.6.22 (custom build)
+ * SCION v1, @scion-scxml/core v2.6.22 (custom build)  
 	 (LGPLv3, Apache License v2.0; Copyright 2018 Jacobean Research and Development, LLC)
  * JS/CC 0.30  
 	 (BSD; Copyright © 2007-2016 by Phorward Software Technologies; Jan Max Meyer; Brobston Development, Inc.; and other contributors)
