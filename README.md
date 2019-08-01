@@ -15,6 +15,8 @@ _dialog systems_ for multimodal interactions:
  * support for client- or sever-based NLU processing
    * built-in support for grammars (similar BNF grammars that parse input as _tokens_ and _utterances_)
 
+A reduced API _MarkDown_ documentation is available at [/docs][6]
+([HTML API documentation][7], and further details at [github.com/mmig/mmir][5]).
 
 For examples, see the [mmir-starter-simple][1] or [mmir-starter-ionic][2].
 
@@ -67,21 +69,27 @@ mmir.ready(function(){
 ```
 
 
-
 --
 #### Used Libraries
 
 (see contents of `/vendor/libs/`)
 
- * RequireJS 2.3.6
+ * RequireJS 2.3.6  
+	 (BSD or MIT; Copyright jQuery Foundation and other contributors)
  * SCION v1, @scion-scxml/core v2.6.22 (custom build)
- * JS/CC 0.30
- * PEG.js 0.10.0
- * Jison 0.4.15
- * ANTLR 3
- * crypto-js MD5 3.1.9-1 (custom build)
- * stacktrace-js 2.0.0
-
+	 (LGPLv3, Apache License v2.0; Copyright 2018 Jacobean Research and Development, LLC)
+ * JS/CC 0.30  
+	 (BSD; Copyright © 2007-2016 by Phorward Software Technologies; Jan Max Meyer; Brobston Development, Inc.; and other contributors)
+ * PEG.js 0.10.0  
+	 (MIT; Copyright (c) 2010-2016 David Majda, Copyright (c) 2017+ Futago-za Ryuu)
+ * Jison 0.4.15  
+	 (MIT; Copyright (c) 2009-2014 Zachary Carter)
+ * ANTLR 3  
+	 (BSD; Copyright (c) 2013 Terence Parr)
+ * crypto-js MD5 3.1.9-1 (custom build)  
+	 (MIT; Copyright (c) 2009-2013 Jeff Mott, Copyright (c) 2013-2016 Evan Vosberg)
+ * stacktrace-js 2.0.0  
+	 (MIT; Copyright (c) 2017 Eric Wendelin and other contributors)
 
 
 See also the [tools project][3] for scripts, resources etc. for compiling and generating resources
@@ -97,10 +105,11 @@ NOTE: Integration with / loading of Cordova is now designed to work with the _bu
 
 If not stated otherwise, all files and resources are provided under the MIT license
 
-
 [1]: https://github.com/mmig/mmir-starter-simple
 [2]: https://github.com/mmig/mmir-starter-ionic
 [3]: https://github.com/mmig/mmir-tooling
 [4]: https://github.com/mmig/mmir-webpack
-[5]: https://github.com/mmig
-[6]: https://github.com/mmig/TODO
+[5]: https://github.com/mmig/mmir
+[5]: https://github.com/mmig/mmir-lib/tree/master/docs/
+[7]: https://mmig.github.io/mmir/api/
+[8]: https://github.com/mmig/mmir-starter-cordova

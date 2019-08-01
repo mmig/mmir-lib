@@ -27,13 +27,25 @@
     "lib": "./lib",
     "dist": "./dist"
   },
+  "scripts": {
+    "test": "node test.js",
+    "doc": "npm run clean-doc && npm run gen-doc",
+    "clean-doc": "node -e require('fs-extra').emptyDirSync('docs')",
+    "gen-doc": "cross-var typedoc --name \"$npm_package_name $npm_package_version\" mmir.d.ts"
+  },
   "dependencies": {
     "@scion-scxml/scxml": "^4.3.25",
     "requirejs": "^2.3.6",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@types/requirejs": "^2.1.31"
+    "@types/requirejs": "^2.1.31",
+    "cross-var": "^1.1.0",
+    "fs-extra": "^8.1.0",
+    "typedoc": "^0.15.0",
+    "typedoc-plugin-external-module-name": "^2.1.0",
+    "typedoc-plugin-markdown": "^2.1.0",
+    "typedoc-plugin-sourcefile-url": "^1.0.4"
   },
   "peerDependencies": {
     "webworker-threads": "git+https://github.com/audreyt/node-webworker-threads.git"
