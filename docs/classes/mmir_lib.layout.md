@@ -29,8 +29,6 @@
 
 \+ **new Layout**(`name`: string, `definition`: string, `remote?`: boolean, `ignoreMissingBody?`: boolean): *[Layout](mmir_lib.layout.md)*
 
-*Defined in [mmir.d.ts:595](../../mmir.d.ts#L595)*
-
 **Parameters:**
 
 Name | Type |
@@ -48,8 +46,6 @@ Name | Type |
 
 ▸ **getBodyContents**(): *string*
 
-*Defined in [mmir.d.ts:598](../../mmir.d.ts#L598)*
-
 **Returns:** *string*
 
 ___
@@ -57,8 +53,6 @@ ___
 ###  getDialogsContents
 
 ▸ **getDialogsContents**(): *string*
-
-*Defined in [mmir.d.ts:599](../../mmir.d.ts#L599)*
 
 **Returns:** *string*
 
@@ -68,8 +62,6 @@ ___
 
 ▸ **getHeaderContents**(): *string*
 
-*Defined in [mmir.d.ts:600](../../mmir.d.ts#L600)*
-
 **Returns:** *string*
 
 ___
@@ -77,8 +69,6 @@ ___
 ###  getName
 
 ▸ **getName**(): *string*
-
-*Defined in [mmir.d.ts:602](../../mmir.d.ts#L602)*
 
 **Returns:** *string*
 
@@ -88,8 +78,6 @@ ___
 
 ▸ **getYields**(): *`Array<YieldDeclaration>`*
 
-*Defined in [mmir.d.ts:603](../../mmir.d.ts#L603)*
-
 **Returns:** *`Array<YieldDeclaration>`*
 
 ___
@@ -97,7 +85,5 @@ ___
 ###  stringify
 
 ▸ **stringify**(): *string*
-
-*Defined in [mmir.d.ts:604](../../mmir.d.ts#L604)*
 
 **Returns:** *string*

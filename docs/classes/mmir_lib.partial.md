@@ -28,8 +28,6 @@
 
 \+ **new Partial**(`ctrl`: [Controller](mmir_lib.controller.md), `name`: string, `definition`: string): *[Partial](mmir_lib.partial.md)*
 
-*Defined in [mmir.d.ts:634](../../mmir.d.ts#L634)*
-
 **Parameters:**
 
 Name | Type |
@@ -46,8 +44,6 @@ Name | Type |
 
 ▸ **getContentElement**(): *[ContentElement](mmir_lib.contentelement.md)*
 
-*Defined in [mmir.d.ts:637](../../mmir.d.ts#L637)*
-
 **Returns:** *[ContentElement](mmir_lib.contentelement.md)*
 
 ___
@@ -55,8 +51,6 @@ ___
 ###  getController
 
 ▸ **getController**(): *[Controller](mmir_lib.controller.md)*
-
-*Defined in [mmir.d.ts:638](../../mmir.d.ts#L638)*
 
 **Returns:** *[Controller](mmir_lib.controller.md)*
 
@@ -66,8 +60,6 @@ ___
 
 ▸ **getDefinition**(): *string*
 
-*Defined in [mmir.d.ts:639](../../mmir.d.ts#L639)*
-
 **Returns:** *string*
 
 ___
@@ -76,8 +68,6 @@ ___
 
 ▸ **getName**(): *string*
 
-*Defined in [mmir.d.ts:640](../../mmir.d.ts#L640)*
-
 **Returns:** *string*
 
 ___
@@ -85,7 +75,5 @@ ___
 ###  stringify
 
 ▸ **stringify**(): *string*
-
-*Defined in [mmir.d.ts:641](../../mmir.d.ts#L641)*
 
 **Returns:** *string*

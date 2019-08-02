@@ -24,8 +24,6 @@
 
 \+ **new Helper**(`ctrl`: string, `name`: string, `instanceConstr`: `Function`): *[Helper](mmir_lib.helper.md)*
 
-*Defined in [mmir.d.ts:738](../../mmir.d.ts#L738)*
-
 **Parameters:**
 
 Name | Type |
@@ -41,8 +39,6 @@ Name | Type |
 ###  perform
 
 ▸ **perform**(`actionName`: string, `data?`: any, ...`args`: any[]): *any*
-
-*Defined in [mmir.d.ts:740](../../mmir.d.ts#L740)*
 
 **Parameters:**
 

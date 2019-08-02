@@ -37,8 +37,6 @@
 
 \+ **new Controller**(`name`: any, `jsonDef`: any, `instanceConstr`: `Function`): *[Controller](mmir_lib.controller.md)*
 
-*Defined in [mmir.d.ts:743](../../mmir.d.ts#L743)*
-
 **Parameters:**
 
 Name | Type |
@@ -55,8 +53,6 @@ Name | Type |
 
 ▸ **getHelper**(): *[Helper](mmir_lib.helper.md)*
 
-*Defined in [mmir.d.ts:748](../../mmir.d.ts#L748)*
-
 **Returns:** *[Helper](mmir_lib.helper.md)*
 
 ___
@@ -64,8 +60,6 @@ ___
 ###  getLayout
 
 ▸ **getLayout**(): *[FileInfo](../modules/mmir_lib.md#fileinfo)*
-
-*Defined in [mmir.d.ts:760](../../mmir.d.ts#L760)*
 
 **Returns:** *[FileInfo](../modules/mmir_lib.md#fileinfo)*
 
@@ -75,8 +69,6 @@ ___
 
 ▸ **getLayoutName**(): *string*
 
-*Defined in [mmir.d.ts:750](../../mmir.d.ts#L750)*
-
 **Returns:** *string*
 
 ___
@@ -84,8 +76,6 @@ ___
 ###  getName
 
 ▸ **getName**(): *string*
-
-*Defined in [mmir.d.ts:746](../../mmir.d.ts#L746)*
 
 **Returns:** *string*
 
@@ -95,8 +85,6 @@ ___
 
 ▸ **getPartialNames**(): *`Array<string>`*
 
-*Defined in [mmir.d.ts:751](../../mmir.d.ts#L751)*
-
 **Returns:** *`Array<string>`*
 
 ___
@@ -104,8 +92,6 @@ ___
 ###  getPartials
 
 ▸ **getPartials**(): *`Array<FileInfo>`*
-
-*Defined in [mmir.d.ts:758](../../mmir.d.ts#L758)*
 
 **Returns:** *`Array<FileInfo>`*
 
@@ -115,8 +101,6 @@ ___
 
 ▸ **getViewNames**(): *`Array<string>`*
 
-*Defined in [mmir.d.ts:752](../../mmir.d.ts#L752)*
-
 **Returns:** *`Array<string>`*
 
 ___
@@ -125,8 +109,6 @@ ___
 
 ▸ **getViews**(): *`Array<FileInfo>`*
 
-*Defined in [mmir.d.ts:759](../../mmir.d.ts#L759)*
-
 **Returns:** *`Array<FileInfo>`*
 
 ___
@@ -134,8 +116,6 @@ ___
 ###  loadHelper
 
 ▸ **loadHelper**(`name`: string, `helperPath`: string, `ctx`: any): *void*
-
-*Defined in [mmir.d.ts:763](../../mmir.d.ts#L763)*
 
 **Parameters:**
 
@@ -153,8 +133,6 @@ ___
 
 ▸ **parsePartials**(`partialDefs`: `Array<FileInfo>`): *void*
 
-*Defined in [mmir.d.ts:761](../../mmir.d.ts#L761)*
-
 **Parameters:**
 
 Name | Type |
@@ -169,8 +147,6 @@ ___
 
 ▸ **parseViews**(`viewDefs`: `Array<FileInfo>`): *void*
 
-*Defined in [mmir.d.ts:762](../../mmir.d.ts#L762)*
-
 **Parameters:**
 
 Name | Type |
@@ -184,8 +160,6 @@ ___
 ###  perform
 
 ▸ **perform**(`actionName`: string, `data`: any, ...`args`: any[]): *any*
-
-*Defined in [mmir.d.ts:754](../../mmir.d.ts#L754)*
 
 **Parameters:**
 
@@ -203,8 +177,6 @@ ___
 
 ▸ **performHelper**(`actionName`: string, `data`: any, ...`args`: any[]): *any*
 
-*Defined in [mmir.d.ts:755](../../mmir.d.ts#L755)*
-
 **Parameters:**
 
 Name | Type |
@@ -220,8 +192,6 @@ ___
 ###  performIfPresent
 
 ▸ **performIfPresent**(`actionName`: string, `data`: any, ...`args`: any[]): *any*
-
-*Defined in [mmir.d.ts:756](../../mmir.d.ts#L756)*
 
 **Parameters:**
 

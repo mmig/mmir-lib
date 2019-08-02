@@ -7,5 +7,5 @@
 	"mode": "modules",
   "theme": "markdown",
   "out": "docs",
-	"sourcefile-url-prefix": "../../"
+	"hideSources": true
 }

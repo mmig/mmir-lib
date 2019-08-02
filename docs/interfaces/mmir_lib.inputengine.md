@@ -34,15 +34,11 @@
 
 • **doc**: *string*
 
-*Defined in [mmir.d.ts:312](../../mmir.d.ts#L312)*
-
 ___
 
 ###  getActiveEvents
 
 • **getActiveEvents**: *function*
-
-*Defined in [mmir.d.ts:315](../../mmir.d.ts#L315)*
 
 #### Type declaration:
 
@@ -54,8 +50,6 @@ ___
 
 • **getActiveStates**: *function*
 
-*Defined in [mmir.d.ts:316](../../mmir.d.ts#L316)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -65,8 +59,6 @@ ___
 ###  getActiveTransitions
 
 • **getActiveTransitions**: *function*
-
-*Defined in [mmir.d.ts:317](../../mmir.d.ts#L317)*
 
 #### Type declaration:
 
@@ -78,8 +70,6 @@ ___
 
 • **getEvents**: *function*
 
-*Defined in [mmir.d.ts:318](../../mmir.d.ts#L318)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -89,8 +79,6 @@ ___
 ###  getStates
 
 • **getStates**: *function*
-
-*Defined in [mmir.d.ts:319](../../mmir.d.ts#L319)*
 
 #### Type declaration:
 
@@ -102,8 +90,6 @@ ___
 
 • **getTransitions**: *function*
 
-*Defined in [mmir.d.ts:320](../../mmir.d.ts#L320)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -114,8 +100,6 @@ ___
 
 • **ignoreScript**: *function*
 
-*Defined in [mmir.d.ts:321](../../mmir.d.ts#L321)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -125,8 +109,6 @@ ___
 ###  load
 
 • **load**: *function*
-
-*Defined in [mmir.d.ts:322](../../mmir.d.ts#L322)*
 
 #### Type declaration:
 
@@ -144,15 +126,11 @@ ___
 
 • **name**: *string*
 
-*Defined in [mmir.d.ts:313](../../mmir.d.ts#L313)*
-
 ___
 
 ###  onload
 
 • **onload**: *function*
-
-*Defined in [mmir.d.ts:323](../../mmir.d.ts#L323)*
 
 #### Type declaration:
 
@@ -171,8 +149,6 @@ ___
 
 • **onraise**: *function*
 
-*Defined in [mmir.d.ts:324](../../mmir.d.ts#L324)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -182,8 +158,6 @@ ___
 ###  raise
 
 • **raise**: *function*
-
-*Defined in [mmir.d.ts:325](../../mmir.d.ts#L325)*
 
 #### Type declaration:
 
@@ -202,8 +176,6 @@ ___
 
 • **start**: *function*
 
-*Defined in [mmir.d.ts:326](../../mmir.d.ts#L326)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -213,5 +185,3 @@ ___
 ###  url
 
 • **url**: *string*
-
-*Defined in [mmir.d.ts:314](../../mmir.d.ts#L314)*

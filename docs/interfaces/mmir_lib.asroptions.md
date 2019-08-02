@@ -27,8 +27,6 @@
 
 • **disableImprovedFeedback**? : *boolean*
 
-*Defined in [mmir.d.ts:430](../../mmir.d.ts#L430)*
-
 disable improved feedback when using intermediate results (NOTE not all ASR engines may support this option)
 
 ___
@@ -36,8 +34,6 @@ ___
 ### `Optional` eosPause
 
 • **eosPause**? : *[EOSPause](../modules/mmir_lib.md#eospause)*
-
-*Defined in [mmir.d.ts:428](../../mmir.d.ts#L428)*
 
 length of pause after speech for end-of-speech detection (NOTE not all ASR engines may support this option)
 
@@ -47,8 +43,6 @@ ___
 
 • **error**? : *[ASROnError](../modules/mmir_lib.md#asronerror)*
 
-*Defined in [mmir.d.ts:418](../../mmir.d.ts#L418)*
-
 the error callback (see arg failureCallback)
 
 ___
@@ -56,8 +50,6 @@ ___
 ### `Optional` intermediate
 
 • **intermediate**? : *boolean*
-
-*Defined in [mmir.d.ts:422](../../mmir.d.ts#L422)*
 
 set true for receiving intermediate results (NOTE not all ASR engines may support intermediate results)
 
@@ -67,8 +59,6 @@ ___
 
 • **language**? : *string*
 
-*Defined in [mmir.d.ts:420](../../mmir.d.ts#L420)*
-
 the language for recognition (if omitted, the current language setting is used)
 
 ___
@@ -76,8 +66,6 @@ ___
 ### `Optional` mode
 
 • **mode**? : *[ASRMode](../modules/mmir_lib.md#asrmode)*
-
-*Defined in [mmir.d.ts:426](../../mmir.d.ts#L426)*
 
 set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
 
@@ -87,8 +75,6 @@ ___
 
 • **results**? : *number*
 
-*Defined in [mmir.d.ts:424](../../mmir.d.ts#L424)*
-
 set how many recognition alternatives should be returned at most (NOTE not all ASR engines may support this option)
 
 ___
@@ -96,7 +82,5 @@ ___
 ### `Optional` success
 
 • **success**? : *[ASROnStatus](../modules/mmir_lib.md#asronstatus)*
-
-*Defined in [mmir.d.ts:416](../../mmir.d.ts#L416)*
 
 the status-callback (see arg statusCallback)

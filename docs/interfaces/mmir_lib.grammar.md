@@ -25,23 +25,17 @@ interface definition for JSON grammar
 
 • **example_phrase**? : *string*
 
-*Defined in [mmir.d.ts:98](../../mmir.d.ts#L98)*
-
 ___
 
 ###  stop_word
 
 • **stop_word**: *`Array<string>`*
 
-*Defined in [mmir.d.ts:100](../../mmir.d.ts#L100)*
-
 ___
 
 ###  tokens
 
 • **tokens**: *object*
-
-*Defined in [mmir.d.ts:102](../../mmir.d.ts#L102)*
 
 #### Type declaration:
 
@@ -52,8 +46,6 @@ ___
 ###  utterances
 
 • **utterances**: *object*
-
-*Defined in [mmir.d.ts:104](../../mmir.d.ts#L104)*
 
 #### Type declaration:
 

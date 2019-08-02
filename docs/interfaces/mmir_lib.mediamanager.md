@@ -53,8 +53,6 @@
 
 • **_addListenerObserver**: *function*
 
-*Defined in [mmir.d.ts:389](../../mmir.d.ts#L389)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `observerCallback`: function): *void*
@@ -80,8 +78,6 @@ ___
 
 • **_fireEvent**: *function*
 
-*Defined in [mmir.d.ts:387](../../mmir.d.ts#L387)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `args`: any[]): *void*
@@ -98,8 +94,6 @@ ___
 ###  _notifyObservers
 
 • **_notifyObservers**: *function*
-
-*Defined in [mmir.d.ts:391](../../mmir.d.ts#L391)*
 
 #### Type declaration:
 
@@ -119,8 +113,6 @@ ___
 
 • **_preparing**: *function*
 
-*Defined in [mmir.d.ts:393](../../mmir.d.ts#L393)*
-
 #### Type declaration:
 
 ▸ (`moduleName`: string): *void*
@@ -137,8 +129,6 @@ ___
 
 • **_ready**: *function*
 
-*Defined in [mmir.d.ts:394](../../mmir.d.ts#L394)*
-
 #### Type declaration:
 
 ▸ (`moduleName`: string): *void*
@@ -154,8 +144,6 @@ ___
 ###  _removeListenerObserver
 
 • **_removeListenerObserver**: *function*
-
-*Defined in [mmir.d.ts:390](../../mmir.d.ts#L390)*
 
 #### Type declaration:
 
@@ -182,8 +170,6 @@ ___
 
 • **addListener**: *function*
 
-*Defined in [mmir.d.ts:356](../../mmir.d.ts#L356)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *void*
@@ -200,8 +186,6 @@ ___
 ###  cancelRecognition
 
 • **cancelRecognition**: *function*
-
-*Defined in [mmir.d.ts:376](../../mmir.d.ts#L376)*
 
 #### Type declaration:
 
@@ -220,8 +204,6 @@ ___
 
 • **cancelSpeech**: *function*
 
-*Defined in [mmir.d.ts:381](../../mmir.d.ts#L381)*
-
 #### Type declaration:
 
 ▸ (`successCallBack?`: `Function`, `failureCallBack?`: `Function`): *void*
@@ -239,8 +221,6 @@ ___
 
 • **createEmptyAudio**: *function*
 
-*Defined in [mmir.d.ts:363](../../mmir.d.ts#L363)*
-
 #### Type declaration:
 
 ▸ (): *[IAudio](mmir_lib.iaudio.md)*
@@ -251,8 +231,6 @@ ___
 
 • **ctx**: *object*
 
-*Defined in [mmir.d.ts:350](../../mmir.d.ts#L350)*
-
 #### Type declaration:
 
 ● \[▪ **ctxId**: *string*\]: any
@@ -262,8 +240,6 @@ ___
 ###  getFunc
 
 • **getFunc**: *function*
-
-*Defined in [mmir.d.ts:369](../../mmir.d.ts#L369)*
 
 #### Type declaration:
 
@@ -282,8 +258,6 @@ ___
 
 • **getListeners**: *function*
 
-*Defined in [mmir.d.ts:358](../../mmir.d.ts#L358)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype)): *[MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) | void*
@@ -299,8 +273,6 @@ ___
 ###  getRecognitionLanguages
 
 • **getRecognitionLanguages**: *function*
-
-*Defined in [mmir.d.ts:377](../../mmir.d.ts#L377)*
 
 #### Type declaration:
 
@@ -319,8 +291,6 @@ ___
 
 • **getSpeechLanguages**: *function*
 
-*Defined in [mmir.d.ts:382](../../mmir.d.ts#L382)*
-
 #### Type declaration:
 
 ▸ (`successCallBack?`: `Function`, `failureCallBack?`: `Function`): *void*
@@ -337,8 +307,6 @@ ___
 ###  getURLAsAudio
 
 • **getURLAsAudio**: *function*
-
-*Defined in [mmir.d.ts:364](../../mmir.d.ts#L364)*
 
 #### Type declaration:
 
@@ -360,8 +328,6 @@ ___
 ###  getVoices
 
 • **getVoices**: *function*
-
-*Defined in [mmir.d.ts:383](../../mmir.d.ts#L383)*
 
 #### Type declaration:
 
@@ -389,8 +355,6 @@ ___
 
 • **getWAVAsAudio**: *function*
 
-*Defined in [mmir.d.ts:365](../../mmir.d.ts#L365)*
-
 #### Type declaration:
 
 ▸ (`blob`: any, `callback`: any, `onEnd`: any, `failureCallback`: any, `onInit`: any, `emptyAudioObj`: [IAudio](mmir_lib.iaudio.md)): *[IAudio](mmir_lib.iaudio.md)*
@@ -412,8 +376,6 @@ ___
 
 • **hasListeners**: *function*
 
-*Defined in [mmir.d.ts:357](../../mmir.d.ts#L357)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype)): *boolean*
@@ -429,8 +391,6 @@ ___
 ###  init
 
 • **init**: *function*
-
-*Defined in [mmir.d.ts:353](../../mmir.d.ts#L353)*
 
 #### Type declaration:
 
@@ -449,8 +409,6 @@ ___
 ###  loadFile
 
 • **loadFile**: *function*
-
-*Defined in [mmir.d.ts:354](../../mmir.d.ts#L354)*
 
 #### Type declaration:
 
@@ -471,8 +429,6 @@ ___
 
 • **off**: *function*
 
-*Defined in [mmir.d.ts:360](../../mmir.d.ts#L360)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *boolean*
@@ -489,8 +445,6 @@ ___
 ###  on
 
 • **on**: *function*
-
-*Defined in [mmir.d.ts:361](../../mmir.d.ts#L361)*
 
 #### Type declaration:
 
@@ -509,8 +463,6 @@ ___
 
 • **perform**: *function*
 
-*Defined in [mmir.d.ts:370](../../mmir.d.ts#L370)*
-
 #### Type declaration:
 
 ▸ (`ctx`: string, `funcName`: string, `args?`: `Array<any>`): *any*
@@ -528,8 +480,6 @@ ___
 ###  playURL
 
 • **playURL**: *function*
-
-*Defined in [mmir.d.ts:366](../../mmir.d.ts#L366)*
 
 #### Type declaration:
 
@@ -550,8 +500,6 @@ ___
 
 • **playWAV**: *function*
 
-*Defined in [mmir.d.ts:367](../../mmir.d.ts#L367)*
-
 #### Type declaration:
 
 ▸ (`blob`: any, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: `Function`): *void*
@@ -570,8 +518,6 @@ ___
 ###  recognize
 
 • **recognize**: *function*
-
-*Defined in [mmir.d.ts:373](../../mmir.d.ts#L373)*
 
 #### Type declaration:
 
@@ -592,8 +538,6 @@ ___
 
 • **removeListener**: *function*
 
-*Defined in [mmir.d.ts:359](../../mmir.d.ts#L359)*
-
 #### Type declaration:
 
 ▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *boolean*
@@ -611,8 +555,6 @@ ___
 
 • **setDefaultCtx**: *function*
 
-*Defined in [mmir.d.ts:371](../../mmir.d.ts#L371)*
-
 #### Type declaration:
 
 ▸ (`ctxId`: string): *void*
@@ -629,8 +571,6 @@ ___
 
 • **setTextToSpeechVolume**: *function*
 
-*Defined in [mmir.d.ts:380](../../mmir.d.ts#L380)*
-
 #### Type declaration:
 
 ▸ (`newValue`: number): *void*
@@ -646,8 +586,6 @@ ___
 ###  startRecord
 
 • **startRecord**: *function*
-
-*Defined in [mmir.d.ts:374](../../mmir.d.ts#L374)*
 
 #### Type declaration:
 
@@ -668,8 +606,6 @@ ___
 
 • **stopRecord**: *function*
 
-*Defined in [mmir.d.ts:375](../../mmir.d.ts#L375)*
-
 #### Type declaration:
 
 ▸ (`options?`: [ASROptions](mmir_lib.asroptions.md), `successCallback?`: [ASROnStatus](../modules/mmir_lib.md#asronstatus), `failureCallback?`: [ASROnError](../modules/mmir_lib.md#asronerror)): *void*
@@ -687,8 +623,6 @@ ___
 ###  tts
 
 • **tts**: *function*
-
-*Defined in [mmir.d.ts:379](../../mmir.d.ts#L379)*
 
 #### Type declaration:
 
@@ -709,5 +643,3 @@ ___
 ###  waitReadyImpl
 
 • **waitReadyImpl**: *[IWaitReadyImpl](mmir_lib.iwaitreadyimpl.md)*
-
-*Defined in [mmir.d.ts:351](../../mmir.d.ts#L351)*

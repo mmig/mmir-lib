@@ -22,8 +22,6 @@
 
 • **get**: *function*
 
-*Defined in [mmir.d.ts:529](../../mmir.d.ts#L529)*
-
 #### Type declaration:
 
 ▸ (`modelName`: string): *any*
@@ -40,8 +38,6 @@ ___
 
 • **getNames**: *function*
 
-*Defined in [mmir.d.ts:530](../../mmir.d.ts#L530)*
-
 #### Type declaration:
 
 ▸ (): *`Array<string>`*
@@ -51,8 +47,6 @@ ___
 ###  init
 
 • **init**: *function*
-
-*Defined in [mmir.d.ts:531](../../mmir.d.ts#L531)*
 
 #### Type declaration:
 

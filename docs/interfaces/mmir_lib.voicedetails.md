@@ -22,8 +22,6 @@
 
 • **gender**: *"female" | "male" | "unknown"*
 
-*Defined in [mmir.d.ts:446](../../mmir.d.ts#L446)*
-
 the gender of the voice
 
 ___
@@ -32,8 +30,6 @@ ___
 
 • **language**: *string*
 
-*Defined in [mmir.d.ts:444](../../mmir.d.ts#L444)*
-
 the language (code) of the voice
 
 ___
@@ -41,7 +37,5 @@ ___
 ###  name
 
 • **name**: *string*
-
-*Defined in [mmir.d.ts:442](../../mmir.d.ts#L442)*
 
 the name of the voice

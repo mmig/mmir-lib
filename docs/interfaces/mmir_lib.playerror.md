@@ -21,12 +21,8 @@
 
 • **audio**: *[IAudio](mmir_lib.iaudio.md) | `HTMLAudioElement`*
 
-*Defined in [mmir.d.ts:461](../../mmir.d.ts#L461)*
-
 ___
 
 ###  error
 
 • **error**: *`DOMException`*
-
-*Defined in [mmir.d.ts:462](../../mmir.d.ts#L462)*

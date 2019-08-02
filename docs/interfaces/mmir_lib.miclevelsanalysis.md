@@ -23,8 +23,6 @@
 
 • **active**: *function*
 
-*Defined in [mmir.d.ts:523](../../mmir.d.ts#L523)*
-
 #### Type declaration:
 
 ▸ (`active`: any): *any*
@@ -40,8 +38,6 @@ ___
 ###  enabled
 
 • **enabled**: *function*
-
-*Defined in [mmir.d.ts:524](../../mmir.d.ts#L524)*
 
 #### Type declaration:
 
@@ -59,8 +55,6 @@ ___
 
 • **start**: *function*
 
-*Defined in [mmir.d.ts:525](../../mmir.d.ts#L525)*
-
 #### Type declaration:
 
 ▸ (`audioInputData`: any): *void*
@@ -76,8 +70,6 @@ ___
 ###  stop
 
 • **stop**: *function*
-
-*Defined in [mmir.d.ts:526](../../mmir.d.ts#L526)*
 
 #### Type declaration:
 

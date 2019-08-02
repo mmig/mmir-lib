@@ -28,8 +28,6 @@
 
 \+ **new View**(`ctrl`: any, `name`: string, `definition`: string): *[View](mmir_lib.view.md)*
 
-*Defined in [mmir.d.ts:624](../../mmir.d.ts#L624)*
-
 **Parameters:**
 
 Name | Type |
@@ -46,8 +44,6 @@ Name | Type |
 
 ▸ **getContentElement**(`name`: string): *[ContentElement](mmir_lib.contentelement.md)*
 
-*Defined in [mmir.d.ts:627](../../mmir.d.ts#L627)*
-
 **Parameters:**
 
 Name | Type |
@@ -62,8 +58,6 @@ ___
 
 ▸ **getController**(): *[Controller](mmir_lib.controller.md)*
 
-*Defined in [mmir.d.ts:628](../../mmir.d.ts#L628)*
-
 **Returns:** *[Controller](mmir_lib.controller.md)*
 
 ___
@@ -71,8 +65,6 @@ ___
 ###  getDefinition
 
 ▸ **getDefinition**(): *string*
-
-*Defined in [mmir.d.ts:629](../../mmir.d.ts#L629)*
 
 **Returns:** *string*
 
@@ -82,8 +74,6 @@ ___
 
 ▸ **getName**(): *string*
 
-*Defined in [mmir.d.ts:630](../../mmir.d.ts#L630)*
-
 **Returns:** *string*
 
 ___
@@ -91,7 +81,5 @@ ___
 ###  stringify
 
 ▸ **stringify**(): *string*
-
-*Defined in [mmir.d.ts:631](../../mmir.d.ts#L631)*
 
 **Returns:** *string*

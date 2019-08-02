@@ -29,8 +29,6 @@
 
 • **_constructor**: *function*
 
-*Defined in [mmir.d.ts:505](../../mmir.d.ts#L505)*
-
 #### Type declaration:
 
 ▸ (`url`: string, `onPlayedCallback`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallBack`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onLoadedCallBack`: [TTSOnReady](../modules/mmir_lib.md#ttsonready)): *[IAudio](mmir_lib.iaudio.md)*
@@ -50,8 +48,6 @@ ___
 
 • **disable**: *function*
 
-*Defined in [mmir.d.ts:509](../../mmir.d.ts#L509)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -61,8 +57,6 @@ ___
 ###  enable
 
 • **enable**: *function*
-
-*Defined in [mmir.d.ts:508](../../mmir.d.ts#L508)*
 
 #### Type declaration:
 
@@ -74,8 +68,6 @@ ___
 
 • **getDuration**: *function*
 
-*Defined in [mmir.d.ts:512](../../mmir.d.ts#L512)*
-
 #### Type declaration:
 
 ▸ (): *number*
@@ -85,8 +77,6 @@ ___
 ###  isEnabled
 
 • **isEnabled**: *function*
-
-*Defined in [mmir.d.ts:514](../../mmir.d.ts#L514)*
 
 #### Type declaration:
 
@@ -98,8 +88,6 @@ ___
 
 • **isPaused**: *function*
 
-*Defined in [mmir.d.ts:513](../../mmir.d.ts#L513)*
-
 #### Type declaration:
 
 ▸ (): *boolean*
@@ -109,8 +97,6 @@ ___
 ###  play
 
 • **play**: *function*
-
-*Defined in [mmir.d.ts:506](../../mmir.d.ts#L506)*
 
 #### Type declaration:
 
@@ -122,8 +108,6 @@ ___
 
 • **release**: *function*
 
-*Defined in [mmir.d.ts:510](../../mmir.d.ts#L510)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -133,8 +117,6 @@ ___
 ###  setVolume
 
 • **setVolume**: *function*
-
-*Defined in [mmir.d.ts:511](../../mmir.d.ts#L511)*
 
 #### Type declaration:
 
@@ -151,8 +133,6 @@ ___
 ###  stop
 
 • **stop**: *function*
-
-*Defined in [mmir.d.ts:507](../../mmir.d.ts#L507)*
 
 #### Type declaration:
 

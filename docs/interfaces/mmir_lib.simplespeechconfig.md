@@ -26,8 +26,6 @@
 
 • **language**? : *string*
 
-*Defined in [mmir.d.ts:478](../../mmir.d.ts#L478)*
-
 local with 2-letter language- and country-code, separated with "-", e.g. "de-DE" or "en-US"
 
 ___
@@ -36,8 +34,6 @@ ___
 
 • **long**? : *string*
 
-*Defined in [mmir.d.ts:480](../../mmir.d.ts#L480)*
-
 local with 3-letter language- and country-code, separated with "-", e.g. "deu-DEU" or "eng-USA"
 
 ___
@@ -45,7 +41,5 @@ ___
 ### `Optional` voice
 
 • **voice**? : *"male" | "female" | string*
-
-*Defined in [mmir.d.ts:482](../../mmir.d.ts#L482)*
 
 voice name or feature (may not be supported by selected TTS plugin)

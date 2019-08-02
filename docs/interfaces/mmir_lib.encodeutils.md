@@ -21,8 +21,6 @@
 
 • **decodeUmlauts**: *function*
 
-*Defined in [mmir.d.ts:164](../../mmir.d.ts#L164)*
-
 #### Type declaration:
 
 ▸ (`target`: string | `__type`, `doAlsoEncodeUpperCase?`: boolean): *string | `__type`*
@@ -39,8 +37,6 @@ ___
 ###  encodeUmlauts
 
 • **encodeUmlauts**: *function*
-
-*Defined in [mmir.d.ts:163](../../mmir.d.ts#L163)*
 
 #### Type declaration:
 

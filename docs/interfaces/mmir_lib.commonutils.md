@@ -39,8 +39,6 @@
 
 • **checkNetworkConnection**: *function*
 
-*Defined in [mmir.d.ts:227](../../mmir.d.ts#L227)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -50,8 +48,6 @@ ___
 ###  concatArray
 
 • **concatArray**: *function*
-
-*Defined in [mmir.d.ts:228](../../mmir.d.ts#L228)*
 
 #### Type declaration:
 
@@ -68,8 +64,6 @@ ___
 ###  getCompiledGrammarPath
 
 • **getCompiledGrammarPath**: *function*
-
-*Defined in [mmir.d.ts:229](../../mmir.d.ts#L229)*
 
 #### Type declaration:
 
@@ -89,8 +83,6 @@ ___
 
 • **getDirectoryContents**: *function*
 
-*Defined in [mmir.d.ts:230](../../mmir.d.ts#L230)*
-
 #### Type declaration:
 
 ▸ (`pathname`: any): *any*
@@ -106,8 +98,6 @@ ___
 ###  getDirectoryContentsWithFilter
 
 • **getDirectoryContentsWithFilter**: *function*
-
-*Defined in [mmir.d.ts:231](../../mmir.d.ts#L231)*
 
 #### Type declaration:
 
@@ -126,8 +116,6 @@ ___
 
 • **getDirectoryStructure**: *function*
 
-*Defined in [mmir.d.ts:232](../../mmir.d.ts#L232)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -137,8 +125,6 @@ ___
 ###  getLocalScript
 
 • **getLocalScript**: *function*
-
-*Defined in [mmir.d.ts:233](../../mmir.d.ts#L233)*
 
 #### Type declaration:
 
@@ -159,8 +145,6 @@ ___
 
 • **getPartialsPrefix**: *function*
 
-*Defined in [mmir.d.ts:234](../../mmir.d.ts#L234)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -170,8 +154,6 @@ ___
 ###  init
 
 • **init**: *function*
-
-*Defined in [mmir.d.ts:235](../../mmir.d.ts#L235)*
 
 #### Type declaration:
 
@@ -190,8 +172,6 @@ ___
 
 • **isArray**: *function*
 
-*Defined in [mmir.d.ts:236](../../mmir.d.ts#L236)*
-
 #### Type declaration:
 
 ▸ (`object`: any): *any*
@@ -208,8 +188,6 @@ ___
 
 • **isRunningOnAndroid**: *function*
 
-*Defined in [mmir.d.ts:237](../../mmir.d.ts#L237)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -220,8 +198,6 @@ ___
 
 • **isRunningOnSmartphone**: *function*
 
-*Defined in [mmir.d.ts:238](../../mmir.d.ts#L238)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -231,8 +207,6 @@ ___
 ###  loadCompiledGrammars
 
 • **loadCompiledGrammars**: *function*
-
-*Defined in [mmir.d.ts:239](../../mmir.d.ts#L239)*
 
 #### Type declaration:
 
@@ -252,8 +226,6 @@ ___
 
 • **loadDirectoryStructure**: *function*
 
-*Defined in [mmir.d.ts:240](../../mmir.d.ts#L240)*
-
 #### Type declaration:
 
 ▸ (`success`: any, `errorFunc`: any): *any*
@@ -270,8 +242,6 @@ ___
 ###  loadImpl
 
 • **loadImpl**: *function*
-
-*Defined in [mmir.d.ts:241](../../mmir.d.ts#L241)*
 
 #### Type declaration:
 
@@ -293,8 +263,6 @@ ___
 
 • **loadScript**: *function*
 
-*Defined in [mmir.d.ts:242](../../mmir.d.ts#L242)*
-
 #### Type declaration:
 
 ▸ (`url`: any, `successCallback`: any, `errorCallback`: any, ...`args`: any[]): *any*
@@ -314,8 +282,6 @@ ___
 
 • **parseParamsToDictionary**: *function*
 
-*Defined in [mmir.d.ts:243](../../mmir.d.ts#L243)*
-
 #### Type declaration:
 
 ▸ (`urlParamsPartStrings`: any): *any*
@@ -332,15 +298,11 @@ ___
 
 • **regexHTMLComment**: *`RegExp`*
 
-*Defined in [mmir.d.ts:226](../../mmir.d.ts#L226)*
-
 ___
 
 ###  resizeFitToSourroundingBox
 
 • **resizeFitToSourroundingBox**: *function*
-
-*Defined in [mmir.d.ts:244](../../mmir.d.ts#L244)*
 
 #### Type declaration:
 
@@ -357,8 +319,6 @@ ___
 ###  stripPathName
 
 • **stripPathName**: *function*
-
-*Defined in [mmir.d.ts:245](../../mmir.d.ts#L245)*
 
 #### Type declaration:
 

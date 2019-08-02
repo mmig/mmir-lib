@@ -56,15 +56,11 @@
 
 • **convertOldFormat**: *boolean*
 
-*Defined in [mmir.d.ts:159](../../mmir.d.ts#L159)*
-
 ___
 
 ###  enc_regexp_str
 
 • **enc_regexp_str**: *string*
-
-*Defined in [mmir.d.ts:150](../../mmir.d.ts#L150)*
 
 ___
 
@@ -72,23 +68,17 @@ ___
 
 • **entry_index_field**: *string*
 
-*Defined in [mmir.d.ts:149](../../mmir.d.ts#L149)*
-
 ___
 
 ###  entry_token_field
 
 • **entry_token_field**: *string*
 
-*Defined in [mmir.d.ts:148](../../mmir.d.ts#L148)*
-
 ___
 
 ###  executeGrammar
 
 • **executeGrammar**: *function*
-
-*Defined in [mmir.d.ts:135](../../mmir.d.ts#L135)*
 
 #### Type declaration:
 
@@ -114,8 +104,6 @@ ___
 
 • **getEncodedStopwords**: *function*
 
-*Defined in [mmir.d.ts:119](../../mmir.d.ts#L119)*
-
 #### Type declaration:
 
 ▸ (): *`Array<string>`*
@@ -125,8 +113,6 @@ ___
 ###  getGrammarDef
 
 • **getGrammarDef**: *function*
-
-*Defined in [mmir.d.ts:123](../../mmir.d.ts#L123)*
 
 #### Type declaration:
 
@@ -138,8 +124,6 @@ ___
 
 • **getGrammarSource**: *function*
 
-*Defined in [mmir.d.ts:125](../../mmir.d.ts#L125)*
-
 #### Type declaration:
 
 ▸ (): *string*
@@ -149,8 +133,6 @@ ___
 ###  getStopWords
 
 • **getStopWords**: *function*
-
-*Defined in [mmir.d.ts:118](../../mmir.d.ts#L118)*
 
 #### Type declaration:
 
@@ -162,8 +144,6 @@ ___
 
 • **getStopWordsEncRegExpr**: *function*
 
-*Defined in [mmir.d.ts:122](../../mmir.d.ts#L122)*
-
 #### Type declaration:
 
 ▸ (): *`RegExp`*
@@ -173,8 +153,6 @@ ___
 ###  getStopWordsRegExpr
 
 • **getStopWordsRegExpr**: *function*
-
-*Defined in [mmir.d.ts:121](../../mmir.d.ts#L121)*
 
 #### Type declaration:
 
@@ -186,8 +164,6 @@ ___
 
 • **isAsyncExec**: *function*
 
-*Defined in [mmir.d.ts:130](../../mmir.d.ts#L130)*
-
 #### Type declaration:
 
 ▸ (): *boolean*
@@ -198,15 +174,11 @@ ___
 
 • **js_grammar_definition**: *string*
 
-*Defined in [mmir.d.ts:153](../../mmir.d.ts#L153)*
-
 ___
 
 ###  jscc_grammar_definition
 
 • **jscc_grammar_definition**: *string*
-
-*Defined in [mmir.d.ts:152](../../mmir.d.ts#L152)*
 
 ___
 
@@ -214,15 +186,11 @@ ___
 
 • **json_grammar_definition**: *[Grammar](mmir_lib.grammar.md)*
 
-*Defined in [mmir.d.ts:154](../../mmir.d.ts#L154)*
-
 ___
 
 ###  loadGrammar
 
 • **loadGrammar**: *function*
-
-*Defined in [mmir.d.ts:115](../../mmir.d.ts#L115)*
 
 #### Type declaration:
 
@@ -248,8 +216,6 @@ ___
 
 • **loadResource**: *function*
 
-*Defined in [mmir.d.ts:116](../../mmir.d.ts#L116)*
-
 #### Type declaration:
 
 ▸ (`successCallback`: function, `errorCallback`: function, `resourceUrl`: string, `doLoadSynchronously?`: boolean): *void*
@@ -274,8 +240,6 @@ ___
 
 • **maskAsUnicode**: *function*
 
-*Defined in [mmir.d.ts:138](../../mmir.d.ts#L138)*
-
 #### Type declaration:
 
 ▸ (`str`: string): *string*
@@ -292,15 +256,11 @@ ___
 
 • **maskNames**: *boolean*
 
-*Defined in [mmir.d.ts:158](../../mmir.d.ts#L158)*
-
 ___
 
 ###  maskString
 
 • **maskString**: *function*
-
-*Defined in [mmir.d.ts:137](../../mmir.d.ts#L137)*
 
 #### Type declaration:
 
@@ -321,15 +281,11 @@ ___
 
 • **maskValues**: *boolean*
 
-*Defined in [mmir.d.ts:157](../../mmir.d.ts#L157)*
-
 ___
 
 ###  parseStopWords
 
 • **parseStopWords**: *function*
-
-*Defined in [mmir.d.ts:120](../../mmir.d.ts#L120)*
 
 #### Type declaration:
 
@@ -340,8 +296,6 @@ ___
 ###  recodeJSON
 
 • **recodeJSON**: *function*
-
-*Defined in [mmir.d.ts:142](../../mmir.d.ts#L142)*
 
 #### Type declaration:
 
@@ -371,8 +325,6 @@ ___
 
 • **setGrammarDef**: *function*
 
-*Defined in [mmir.d.ts:124](../../mmir.d.ts#L124)*
-
 #### Type declaration:
 
 ▸ (`rawGrammarSyntax`: string): *void*
@@ -388,8 +340,6 @@ ___
 ###  setGrammarFunction
 
 • **setGrammarFunction**: *function*
-
-*Defined in [mmir.d.ts:128](../../mmir.d.ts#L128)*
 
 #### Type declaration:
 
@@ -423,8 +373,6 @@ ___
 
 • **setGrammarSource**: *function*
 
-*Defined in [mmir.d.ts:126](../../mmir.d.ts#L126)*
-
 #### Type declaration:
 
 ▸ (`src_code`: string): *void*
@@ -440,8 +388,6 @@ ___
 ###  setStopWords
 
 • **setStopWords**: *function*
-
-*Defined in [mmir.d.ts:117](../../mmir.d.ts#L117)*
 
 #### Type declaration:
 
@@ -459,15 +405,11 @@ ___
 
 • **stop_words_regexp**: *`RegExp`*
 
-*Defined in [mmir.d.ts:155](../../mmir.d.ts#L155)*
-
 ___
 
 ###  unmaskJSON
 
 • **unmaskJSON**: *function*
-
-*Defined in [mmir.d.ts:141](../../mmir.d.ts#L141)*
 
 #### Type declaration:
 
@@ -487,8 +429,6 @@ ___
 
 • **unmaskString**: *function*
 
-*Defined in [mmir.d.ts:139](../../mmir.d.ts#L139)*
-
 #### Type declaration:
 
 ▸ (`str`: string, `computePositions?`: boolean, `detector?`: `RegExp`): *string | [Positions](mmir_lib.positions.md)*
@@ -507,23 +447,17 @@ ___
 
 • **variable_prefix**: *string*
 
-*Defined in [mmir.d.ts:145](../../mmir.d.ts#L145)*
-
 ___
 
 ###  variable_regexp
 
 • **variable_regexp**: *`RegExp`*
 
-*Defined in [mmir.d.ts:146](../../mmir.d.ts#L146)*
-
 ## Methods
 
 ###  postproc
 
 ▸ **postproc**(`procResult`: any, `recodeFunc?`: function): *any*
-
-*Defined in [mmir.d.ts:133](../../mmir.d.ts#L133)*
 
 **Parameters:**
 
@@ -547,8 +481,6 @@ ___
 ###  preproc
 
 ▸ **preproc**(`thePhrase`: string, `pos?`: object, `maskFunc?`: function, `stopwordFunc?`: function): *string*
-
-*Defined in [mmir.d.ts:132](../../mmir.d.ts#L132)*
 
 **Parameters:**
 

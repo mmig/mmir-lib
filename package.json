@@ -44,8 +44,7 @@
     "fs-extra": "^8.1.0",
     "typedoc": "^0.15.0",
     "typedoc-plugin-external-module-name": "^2.1.0",
-    "typedoc-plugin-markdown": "^2.1.0",
-    "typedoc-plugin-sourcefile-url": "^1.0.4"
+    "typedoc-plugin-markdown": "^2.1.0"
   },
   "peerDependencies": {
     "webworker-threads": "git+https://github.com/audreyt/node-webworker-threads.git"

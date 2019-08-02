@@ -22,8 +22,6 @@
 
 • **raise**: *function*
 
-*Defined in [mmir.d.ts:309](../../mmir.d.ts#L309)*
-
 #### Type declaration:
 
 ▸ (`eventName`: string, `data?`: any): *void*

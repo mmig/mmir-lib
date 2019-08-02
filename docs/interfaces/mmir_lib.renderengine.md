@@ -24,8 +24,6 @@
 
 ▸ **hideCurrentDialog**(): *void*
 
-*Defined in [mmir.d.ts:588](../../mmir.d.ts#L588)*
-
 **Returns:** *void*
 
 ___
@@ -34,8 +32,6 @@ ___
 
 ▸ **hideWaitDialog**(): *void*
 
-*Defined in [mmir.d.ts:589](../../mmir.d.ts#L589)*
-
 **Returns:** *void*
 
 ___
@@ -43,8 +39,6 @@ ___
 ###  render
 
 ▸ **render**(`ctrlName`: string, `viewName`: string, `view`: [View](../classes/mmir_lib.view.md), `ctrl`: [Controller](../classes/mmir_lib.controller.md), `data?`: any): *void*
-
-*Defined in [mmir.d.ts:590](../../mmir.d.ts#L590)*
 
 **Parameters:**
 
@@ -64,8 +58,6 @@ ___
 
 ▸ **showDialog**(`ctrlName`: string, `dialogId?`: string, `data?`: any): *void*
 
-*Defined in [mmir.d.ts:591](../../mmir.d.ts#L591)*
-
 **Parameters:**
 
 Name | Type |
@@ -81,8 +73,6 @@ ___
 ###  showWaitDialog
 
 ▸ **showWaitDialog**(`text?`: string, `theme?`: string): *void*
-
-*Defined in [mmir.d.ts:592](../../mmir.d.ts#L592)*
 
 **Parameters:**
 

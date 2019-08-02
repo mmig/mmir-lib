@@ -23,15 +23,11 @@
 
 • **ctx**? : *string*
 
-*Defined in [mmir.d.ts:472](../../mmir.d.ts#L472)*
-
 ___
 
 ### `Optional` env
 
 • **env**? : *`Array<MediaPluginEnvType | string>` | [MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) | string*
-
-*Defined in [mmir.d.ts:471](../../mmir.d.ts#L471)*
 
 ___
 
@@ -39,12 +35,8 @@ ___
 
 • **mod**? : *string*
 
-*Defined in [mmir.d.ts:470](../../mmir.d.ts#L470)*
-
 ___
 
 ### `Optional` type
 
 • **type**? : *[MediaPluginType](../modules/mmir_lib.md#mediaplugintype)*
-
-*Defined in [mmir.d.ts:473](../../mmir.d.ts#L473)*

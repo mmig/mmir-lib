@@ -21,12 +21,8 @@
 
 • **pos**: *`Array<Pos>`*
 
-*Defined in [mmir.d.ts:110](../../mmir.d.ts#L110)*
-
 ___
 
 ###  str
 
 • **str**: *string*
-
-*Defined in [mmir.d.ts:109](../../mmir.d.ts#L109)*

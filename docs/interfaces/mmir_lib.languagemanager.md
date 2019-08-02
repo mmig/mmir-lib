@@ -32,8 +32,6 @@
 
 • **determineLanguage**: *function*
 
-*Defined in [mmir.d.ts:333](../../mmir.d.ts#L333)*
-
 #### Type declaration:
 
 ▸ (`lang`: string): *string*
@@ -50,8 +48,6 @@ ___
 
 • **existsDictionary**: *function*
 
-*Defined in [mmir.d.ts:334](../../mmir.d.ts#L334)*
-
 #### Type declaration:
 
 ▸ (`lang`: string): *boolean*
@@ -67,8 +63,6 @@ ___
 ###  existsGrammar
 
 • **existsGrammar**: *function*
-
-*Defined in [mmir.d.ts:335](../../mmir.d.ts#L335)*
 
 #### Type declaration:
 
@@ -87,8 +81,6 @@ ___
 
 • **existsSpeechConfig**: *function*
 
-*Defined in [mmir.d.ts:336](../../mmir.d.ts#L336)*
-
 #### Type declaration:
 
 ▸ (`lang`: string): *boolean*
@@ -104,8 +96,6 @@ ___
 ###  fixLang
 
 • **fixLang**: *function*
-
-*Defined in [mmir.d.ts:337](../../mmir.d.ts#L337)*
 
 #### Type declaration:
 
@@ -124,8 +114,6 @@ ___
 
 • **getDefaultLanguage**: *function*
 
-*Defined in [mmir.d.ts:338](../../mmir.d.ts#L338)*
-
 #### Type declaration:
 
 ▸ (): *string*
@@ -135,8 +123,6 @@ ___
 ###  getDictionary
 
 • **getDictionary**: *function*
-
-*Defined in [mmir.d.ts:339](../../mmir.d.ts#L339)*
 
 #### Type declaration:
 
@@ -150,8 +136,6 @@ ___
 
 • **getLanguage**: *function*
 
-*Defined in [mmir.d.ts:340](../../mmir.d.ts#L340)*
-
 #### Type declaration:
 
 ▸ (): *string*
@@ -161,8 +145,6 @@ ___
 ###  getLanguageConfig
 
 • **getLanguageConfig**: *function*
-
-*Defined in [mmir.d.ts:341](../../mmir.d.ts#L341)*
 
 #### Type declaration:
 
@@ -182,8 +164,6 @@ ___
 
 • **getLanguages**: *function*
 
-*Defined in [mmir.d.ts:342](../../mmir.d.ts#L342)*
-
 #### Type declaration:
 
 ▸ (): *`Array<string>`*
@@ -193,8 +173,6 @@ ___
 ###  getText
 
 • **getText**: *function*
-
-*Defined in [mmir.d.ts:343](../../mmir.d.ts#L343)*
 
 #### Type declaration:
 
@@ -212,8 +190,6 @@ ___
 
 • **init**: *function*
 
-*Defined in [mmir.d.ts:344](../../mmir.d.ts#L344)*
-
 #### Type declaration:
 
 ▸ (`lang`: string): *any*
@@ -229,8 +205,6 @@ ___
 ###  setLanguage
 
 • **setLanguage**: *function*
-
-*Defined in [mmir.d.ts:345](../../mmir.d.ts#L345)*
 
 #### Type declaration:
 

@@ -52,8 +52,6 @@
 
 \+ **new ParsingResult**(`thetokens`: any): *[ParsingResult](mmir_lib.parsingresult.md)*
 
-*Defined in [mmir.d.ts:673](../../mmir.d.ts#L673)*
-
 **Parameters:**
 
 Name | Type |
@@ -68,8 +66,6 @@ Name | Type |
 
 ▸ **getCallDataEnd**(): *number*
 
-*Defined in [mmir.d.ts:676](../../mmir.d.ts#L676)*
-
 **Returns:** *number*
 
 ___
@@ -77,8 +73,6 @@ ___
 ###  getCallDataStart
 
 ▸ **getCallDataStart**(): *number*
-
-*Defined in [mmir.d.ts:678](../../mmir.d.ts#L678)*
 
 **Returns:** *number*
 
@@ -88,8 +82,6 @@ ___
 
 ▸ **getCallDataType**(): *string*
 
-*Defined in [mmir.d.ts:680](../../mmir.d.ts#L680)*
-
 **Returns:** *string*
 
 ___
@@ -97,8 +89,6 @@ ___
 ###  getEnd
 
 ▸ **getEnd**(): *number*
-
-*Defined in [mmir.d.ts:682](../../mmir.d.ts#L682)*
 
 **Returns:** *number*
 
@@ -108,8 +98,6 @@ ___
 
 ▸ **getStart**(): *number*
 
-*Defined in [mmir.d.ts:684](../../mmir.d.ts#L684)*
-
 **Returns:** *number*
 
 ___
@@ -117,8 +105,6 @@ ___
 ###  getType
 
 ▸ **getType**(): *number*
-
-*Defined in [mmir.d.ts:686](../../mmir.d.ts#L686)*
 
 **Returns:** *number*
 
@@ -128,8 +114,6 @@ ___
 
 ▸ **getTypeName**(): *string*
 
-*Defined in [mmir.d.ts:688](../../mmir.d.ts#L688)*
-
 **Returns:** *string*
 
 ___
@@ -137,8 +121,6 @@ ___
 ###  getValue
 
 ▸ **getValue**(`rawPropertyValue`: any, `proptertyType`: any, `data`: any): *any*
-
-*Defined in [mmir.d.ts:690](../../mmir.d.ts#L690)*
 
 **Parameters:**
 
@@ -156,8 +138,6 @@ ___
 
 ▸ **hasCallData**(): *boolean*
 
-*Defined in [mmir.d.ts:692](../../mmir.d.ts#L692)*
-
 **Returns:** *boolean*
 
 ___
@@ -165,8 +145,6 @@ ___
 ###  hasElse
 
 ▸ **hasElse**(): *boolean*
-
-*Defined in [mmir.d.ts:694](../../mmir.d.ts#L694)*
 
 **Returns:** *boolean*
 
@@ -176,8 +154,6 @@ ___
 
 ▸ **hasVarReferences**(): *boolean*
 
-*Defined in [mmir.d.ts:696](../../mmir.d.ts#L696)*
-
 **Returns:** *boolean*
 
 ___
@@ -185,8 +161,6 @@ ___
 ###  isElse
 
 ▸ **isElse**(): *boolean*
-
-*Defined in [mmir.d.ts:698](../../mmir.d.ts#L698)*
 
 **Returns:** *boolean*
 
@@ -196,8 +170,6 @@ ___
 
 ▸ **isEscape**(): *boolean*
 
-*Defined in [mmir.d.ts:700](../../mmir.d.ts#L700)*
-
 **Returns:** *boolean*
 
 ___
@@ -205,8 +177,6 @@ ___
 ###  isEscapeEnter
 
 ▸ **isEscapeEnter**(): *boolean*
-
-*Defined in [mmir.d.ts:702](../../mmir.d.ts#L702)*
 
 **Returns:** *boolean*
 
@@ -216,8 +186,6 @@ ___
 
 ▸ **isEscapeExit**(): *boolean*
 
-*Defined in [mmir.d.ts:704](../../mmir.d.ts#L704)*
-
 **Returns:** *boolean*
 
 ___
@@ -225,8 +193,6 @@ ___
 ###  isFor
 
 ▸ **isFor**(): *boolean*
-
-*Defined in [mmir.d.ts:706](../../mmir.d.ts#L706)*
 
 **Returns:** *boolean*
 
@@ -236,8 +202,6 @@ ___
 
 ▸ **isHelper**(): *boolean*
 
-*Defined in [mmir.d.ts:708](../../mmir.d.ts#L708)*
-
 **Returns:** *boolean*
 
 ___
@@ -245,8 +209,6 @@ ___
 ###  isIf
 
 ▸ **isIf**(): *boolean*
-
-*Defined in [mmir.d.ts:710](../../mmir.d.ts#L710)*
 
 **Returns:** *boolean*
 
@@ -256,8 +218,6 @@ ___
 
 ▸ **isLocalize**(): *boolean*
 
-*Defined in [mmir.d.ts:712](../../mmir.d.ts#L712)*
-
 **Returns:** *boolean*
 
 ___
@@ -265,8 +225,6 @@ ___
 ###  isRender
 
 ▸ **isRender**(): *boolean*
-
-*Defined in [mmir.d.ts:714](../../mmir.d.ts#L714)*
 
 **Returns:** *boolean*
 
@@ -276,8 +234,6 @@ ___
 
 ▸ **isScriptBlock**(): *boolean*
 
-*Defined in [mmir.d.ts:716](../../mmir.d.ts#L716)*
-
 **Returns:** *boolean*
 
 ___
@@ -285,8 +241,6 @@ ___
 ###  isScriptStatement
 
 ▸ **isScriptStatement**(): *boolean*
-
-*Defined in [mmir.d.ts:718](../../mmir.d.ts#L718)*
 
 **Returns:** *boolean*
 
@@ -296,8 +250,6 @@ ___
 
 ▸ **isScriptTag**(): *boolean*
 
-*Defined in [mmir.d.ts:720](../../mmir.d.ts#L720)*
-
 **Returns:** *boolean*
 
 ___
@@ -305,8 +257,6 @@ ___
 ###  isStyleTag
 
 ▸ **isStyleTag**(): *boolean*
-
-*Defined in [mmir.d.ts:722](../../mmir.d.ts#L722)*
 
 **Returns:** *boolean*
 
@@ -316,8 +266,6 @@ ___
 
 ▸ **isYield**(): *boolean*
 
-*Defined in [mmir.d.ts:724](../../mmir.d.ts#L724)*
-
 **Returns:** *boolean*
 
 ___
@@ -326,8 +274,6 @@ ___
 
 ▸ **isYieldContent**(): *boolean*
 
-*Defined in [mmir.d.ts:726](../../mmir.d.ts#L726)*
-
 **Returns:** *boolean*
 
 ___
@@ -335,8 +281,6 @@ ___
 ###  setEndFrom
 
 ▸ **setEndFrom**(`thetokens`: any): *void*
-
-*Defined in [mmir.d.ts:728](../../mmir.d.ts#L728)*
 
 **Parameters:**
 
@@ -352,8 +296,6 @@ ___
 
 ▸ **setStartFrom**(`thetokens`: any): *void*
 
-*Defined in [mmir.d.ts:730](../../mmir.d.ts#L730)*
-
 **Parameters:**
 
 Name | Type |
@@ -367,7 +309,5 @@ ___
 ###  stringify
 
 ▸ **stringify**(): *string*
-
-*Defined in [mmir.d.ts:732](../../mmir.d.ts#L732)*
 
 **Returns:** *string*

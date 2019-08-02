@@ -35,8 +35,6 @@
 
 \+ **new ContentElement**(`group`: [ParsingResult](mmir_lib.parsingresult.md) | `Array<string>` | object, `view`: [View](mmir_lib.view.md), `parser`: any, `renderer`: any, ...`args`: any[]): *[ContentElement](mmir_lib.contentelement.md)*
 
-*Defined in [mmir.d.ts:644](../../mmir.d.ts#L644)*
-
 **Parameters:**
 
 Name | Type |
@@ -55,8 +53,6 @@ Name | Type |
 
 ▸ **getController**(): *[Controller](mmir_lib.controller.md)*
 
-*Defined in [mmir.d.ts:647](../../mmir.d.ts#L647)*
-
 **Returns:** *[Controller](mmir_lib.controller.md)*
 
 ___
@@ -64,8 +60,6 @@ ___
 ###  getDefinition
 
 ▸ **getDefinition**(): *string*
-
-*Defined in [mmir.d.ts:649](../../mmir.d.ts#L649)*
 
 **Returns:** *string*
 
@@ -75,8 +69,6 @@ ___
 
 ▸ **getEnd**(): *number*
 
-*Defined in [mmir.d.ts:651](../../mmir.d.ts#L651)*
-
 **Returns:** *number*
 
 ___
@@ -84,8 +76,6 @@ ___
 ###  getName
 
 ▸ **getName**(): *string*
-
-*Defined in [mmir.d.ts:653](../../mmir.d.ts#L653)*
 
 **Returns:** *string*
 
@@ -95,8 +85,6 @@ ___
 
 ▸ **getOffset**(): *number*
 
-*Defined in [mmir.d.ts:655](../../mmir.d.ts#L655)*
-
 **Returns:** *number*
 
 ___
@@ -104,8 +92,6 @@ ___
 ###  getRawText
 
 ▸ **getRawText**(): *string*
-
-*Defined in [mmir.d.ts:657](../../mmir.d.ts#L657)*
 
 **Returns:** *string*
 
@@ -115,8 +101,6 @@ ___
 
 ▸ **getStart**(): *number*
 
-*Defined in [mmir.d.ts:659](../../mmir.d.ts#L659)*
-
 **Returns:** *number*
 
 ___
@@ -124,8 +108,6 @@ ___
 ###  getView
 
 ▸ **getView**(): *[View](mmir_lib.view.md)*
-
-*Defined in [mmir.d.ts:661](../../mmir.d.ts#L661)*
 
 **Returns:** *[View](mmir_lib.view.md)*
 
@@ -135,8 +117,6 @@ ___
 
 ▸ **hasDynamicContent**(): *boolean*
 
-*Defined in [mmir.d.ts:663](../../mmir.d.ts#L663)*
-
 **Returns:** *boolean*
 
 ___
@@ -144,8 +124,6 @@ ___
 ###  stringify
 
 ▸ **stringify**(): *string*
-
-*Defined in [mmir.d.ts:665](../../mmir.d.ts#L665)*
 
 **Returns:** *string*
 
@@ -155,8 +133,6 @@ ___
 
 ▸ **toHtml**(): *string*
 
-*Defined in [mmir.d.ts:667](../../mmir.d.ts#L667)*
-
 **Returns:** *string*
 
 ___
@@ -164,8 +140,6 @@ ___
 ###  toStrings
 
 ▸ **toStrings**(`renderingBuffer?`: `Array<string>`, `data?`: any): *any*
-
-*Defined in [mmir.d.ts:669](../../mmir.d.ts#L669)*
 
 **Parameters:**
 

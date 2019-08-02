@@ -21,8 +21,6 @@
 
 • **preparing**: *function*
 
-*Defined in [mmir.d.ts:518](../../mmir.d.ts#L518)*
-
 #### Type declaration:
 
 ▸ (`moduleName`: string): *void*
@@ -38,8 +36,6 @@ ___
 ###  ready
 
 • **ready**: *function*
-
-*Defined in [mmir.d.ts:519](../../mmir.d.ts#L519)*
 
 #### Type declaration:
 

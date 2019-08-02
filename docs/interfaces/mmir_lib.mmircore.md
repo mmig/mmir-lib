@@ -34,8 +34,6 @@
 
 • **config**: *function*
 
-*Defined in [mmir.d.ts:59](../../mmir.d.ts#L59)*
-
 #### Type declaration:
 
 ▸ (`requirejsConfig`: `__type`): *void*
@@ -52,15 +50,11 @@ ___
 
 • **debug**: *boolean*
 
-*Defined in [mmir.d.ts:66](../../mmir.d.ts#L66)*
-
 ___
 
 ###  logLevel
 
 • **logLevel**: *[LogLevelNum](../modules/mmir_lib.md#loglevelnum) | [LogLevel](../modules/mmir_lib.md#loglevel)*
-
-*Defined in [mmir.d.ts:67](../../mmir.d.ts#L67)*
 
 ___
 
@@ -68,15 +62,11 @@ ___
 
 • **logTrace**: *boolean | object*
 
-*Defined in [mmir.d.ts:68](../../mmir.d.ts#L68)*
-
 ___
 
 ###  ready
 
 • **ready**: *function*
-
-*Defined in [mmir.d.ts:60](../../mmir.d.ts#L60)*
 
 #### Type declaration:
 
@@ -100,15 +90,11 @@ ___
 
 • **require**: *[RequireJs](mmir_lib.requirejs.md)*
 
-*Defined in [mmir.d.ts:62](../../mmir.d.ts#L62)*
-
 ___
 
 ###  startModule
 
 • **startModule**: *string*
-
-*Defined in [mmir.d.ts:64](../../mmir.d.ts#L64)*
 
 ___
 
@@ -116,23 +102,17 @@ ___
 
 • **version**: *string*
 
-*Defined in [mmir.d.ts:63](../../mmir.d.ts#L63)*
-
 ___
 
 ###  viewEngine
 
 • **viewEngine**: *string*
 
-*Defined in [mmir.d.ts:65](../../mmir.d.ts#L65)*
-
 ## Methods
 
 ###  isVersion
 
 ▸ **isVersion**(`verion`: string, `comparator`: [Comparator](../modules/mmir_lib.md#comparator)): *boolean*
-
-*Defined in [mmir.d.ts:61](../../mmir.d.ts#L61)*
 
 **Parameters:**
 

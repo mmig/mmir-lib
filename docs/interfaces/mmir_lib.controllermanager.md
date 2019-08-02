@@ -25,8 +25,6 @@
 
 • **create**: *function*
 
-*Defined in [mmir.d.ts:284](../../mmir.d.ts#L284)*
-
 #### Type declaration:
 
 ▸ (): *any*
@@ -36,8 +34,6 @@ ___
 ###  get
 
 • **get**: *function*
-
-*Defined in [mmir.d.ts:285](../../mmir.d.ts#L285)*
 
 #### Type declaration:
 
@@ -55,8 +51,6 @@ ___
 
 • **getNames**: *function*
 
-*Defined in [mmir.d.ts:286](../../mmir.d.ts#L286)*
-
 #### Type declaration:
 
 ▸ (): *`Array<string>`*
@@ -66,8 +60,6 @@ ___
 ###  init
 
 • **init**: *function*
-
-*Defined in [mmir.d.ts:287](../../mmir.d.ts#L287)*
 
 #### Type declaration:
 
@@ -86,8 +78,6 @@ ___
 
 • **perform**: *function*
 
-*Defined in [mmir.d.ts:288](../../mmir.d.ts#L288)*
-
 #### Type declaration:
 
 ▸ (`ctrlName`: string, `actionName`: string, `data?`: any): *any*
@@ -105,8 +95,6 @@ ___
 ###  performHelper
 
 • **performHelper**: *function*
-
-*Defined in [mmir.d.ts:289](../../mmir.d.ts#L289)*
 
 #### Type declaration:
 

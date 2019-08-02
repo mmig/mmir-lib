@@ -30,8 +30,6 @@
 
 \+ **new YieldDeclaration**(`parsingElement`: [ParsingResult](mmir_lib.parsingresult.md), `contentAreaType`: any): *[YieldDeclaration](mmir_lib.yielddeclaration.md)*
 
-*Defined in [mmir.d.ts:610](../../mmir.d.ts#L610)*
-
 **Parameters:**
 
 Name | Type |
@@ -47,8 +45,6 @@ Name | Type |
 
 ▸ **getAreaType**(): *number*
 
-*Defined in [mmir.d.ts:616](../../mmir.d.ts#L616)*
-
 **Returns:** *number*
 
 ___
@@ -56,8 +52,6 @@ ___
 ###  getEnd
 
 ▸ **getEnd**(): *number*
-
-*Defined in [mmir.d.ts:617](../../mmir.d.ts#L617)*
 
 **Returns:** *number*
 
@@ -67,8 +61,6 @@ ___
 
 ▸ **getName**(): *string*
 
-*Defined in [mmir.d.ts:613](../../mmir.d.ts#L613)*
-
 **Returns:** *string*
 
 ___
@@ -76,8 +68,6 @@ ___
 ###  getNameType
 
 ▸ **getNameType**(): *number*
-
-*Defined in [mmir.d.ts:614](../../mmir.d.ts#L614)*
 
 **Returns:** *number*
 
@@ -87,8 +77,6 @@ ___
 
 ▸ **getStart**(): *number*
 
-*Defined in [mmir.d.ts:618](../../mmir.d.ts#L618)*
-
 **Returns:** *number*
 
 ___
@@ -96,8 +84,6 @@ ___
 ###  getValue
 
 ▸ **getValue**(`rawPropertyValue`: any, `proptertyType`: any, `data`: any): *any*
-
-*Defined in [mmir.d.ts:620](../../mmir.d.ts#L620)*
 
 **Parameters:**
 
@@ -114,7 +100,5 @@ ___
 ###  stringify
 
 ▸ **stringify**(): *string*
-
-*Defined in [mmir.d.ts:621](../../mmir.d.ts#L621)*
 
 **Returns:** *string*

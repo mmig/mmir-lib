@@ -48,8 +48,6 @@
 
 • **conf**: *[ConfigurationManager](mmir_lib.configurationmanager.md)*
 
-*Defined in [mmir.d.ts:73](../../mmir.d.ts#L73)*
-
 ___
 
 ###  config
@@ -57,8 +55,6 @@ ___
 • **config**: *function*
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[config](mmir_lib.mmircore.md#config)*
-
-*Defined in [mmir.d.ts:59](../../mmir.d.ts#L59)*
 
 #### Type declaration:
 
@@ -76,8 +72,6 @@ ___
 
 • **ctrl**: *[ControllerManager](mmir_lib.controllermanager.md)*
 
-*Defined in [mmir.d.ts:75](../../mmir.d.ts#L75)*
-
 ___
 
 ###  debug
@@ -86,15 +80,11 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[debug](mmir_lib.mmircore.md#debug)*
 
-*Defined in [mmir.d.ts:66](../../mmir.d.ts#L66)*
-
 ___
 
 ###  dialog
 
 • **dialog**: *[DialogManager](mmir_lib.dialogmanager.md)*
-
-*Defined in [mmir.d.ts:77](../../mmir.d.ts#L77)*
 
 ___
 
@@ -102,15 +92,11 @@ ___
 
 • **dialogEngine**: *[DialogEngine](mmir_lib.dialogengine.md)*
 
-*Defined in [mmir.d.ts:76](../../mmir.d.ts#L76)*
-
 ___
 
 ###  input
 
 • **input**: *[InputManager](mmir_lib.inputmanager.md)*
-
-*Defined in [mmir.d.ts:79](../../mmir.d.ts#L79)*
 
 ___
 
@@ -118,15 +104,11 @@ ___
 
 • **inputEngine**: *[InputEngine](mmir_lib.inputengine.md)*
 
-*Defined in [mmir.d.ts:78](../../mmir.d.ts#L78)*
-
 ___
 
 ###  lang
 
 • **lang**: *[LanguageManager](mmir_lib.languagemanager.md)*
-
-*Defined in [mmir.d.ts:80](../../mmir.d.ts#L80)*
 
 ___
 
@@ -136,8 +118,6 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[logLevel](mmir_lib.mmircore.md#loglevel)*
 
-*Defined in [mmir.d.ts:67](../../mmir.d.ts#L67)*
-
 ___
 
 ###  logTrace
@@ -146,15 +126,11 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[logTrace](mmir_lib.mmircore.md#logtrace)*
 
-*Defined in [mmir.d.ts:68](../../mmir.d.ts#L68)*
-
 ___
 
 ###  media
 
 • **media**: *[MediaManager](mmir_lib.mediamanager.md)*
-
-*Defined in [mmir.d.ts:81](../../mmir.d.ts#L81)*
 
 ___
 
@@ -162,23 +138,17 @@ ___
 
 • **model**: *[ModelManager](mmir_lib.modelmanager.md)*
 
-*Defined in [mmir.d.ts:82](../../mmir.d.ts#L82)*
-
 ___
 
 ###  notifier
 
 • **notifier**: *[NotificationManager](mmir_lib.notificationmanager.md)*
 
-*Defined in [mmir.d.ts:83](../../mmir.d.ts#L83)*
-
 ___
 
 ###  present
 
 • **present**: *[PresentationManager](mmir_lib.presentationmanager.md)*
-
-*Defined in [mmir.d.ts:84](../../mmir.d.ts#L84)*
 
 ___
 
@@ -187,8 +157,6 @@ ___
 • **ready**: *function*
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[ready](mmir_lib.mmircore.md#ready)*
-
-*Defined in [mmir.d.ts:60](../../mmir.d.ts#L60)*
 
 #### Type declaration:
 
@@ -214,23 +182,17 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[require](mmir_lib.mmircore.md#require)*
 
-*Defined in [mmir.d.ts:62](../../mmir.d.ts#L62)*
-
 ___
 
 ###  res
 
 • **res**: *[Resources](mmir_lib.resources.md)*
 
-*Defined in [mmir.d.ts:74](../../mmir.d.ts#L74)*
-
 ___
 
 ###  semantic
 
 • **semantic**: *[SemanticInterpreter](mmir_lib.semanticinterpreter.md)*
-
-*Defined in [mmir.d.ts:85](../../mmir.d.ts#L85)*
 
 ___
 
@@ -240,15 +202,11 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[startModule](mmir_lib.mmircore.md#startmodule)*
 
-*Defined in [mmir.d.ts:64](../../mmir.d.ts#L64)*
-
 ___
 
 ###  util
 
 • **util**: *[CommonUtils](mmir_lib.commonutils.md)*
-
-*Defined in [mmir.d.ts:72](../../mmir.d.ts#L72)*
 
 ___
 
@@ -258,8 +216,6 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[version](mmir_lib.mmircore.md#version)*
 
-*Defined in [mmir.d.ts:63](../../mmir.d.ts#L63)*
-
 ___
 
 ###  viewEngine
@@ -268,8 +224,6 @@ ___
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[viewEngine](mmir_lib.mmircore.md#viewengine)*
 
-*Defined in [mmir.d.ts:65](../../mmir.d.ts#L65)*
-
 ## Methods
 
 ###  isVersion
@@ -277,8 +231,6 @@ ___
 ▸ **isVersion**(`verion`: string, `comparator`: [Comparator](../modules/mmir_lib.md#comparator)): *boolean*
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[isVersion](mmir_lib.mmircore.md#isversion)*
-
-*Defined in [mmir.d.ts:61](../../mmir.d.ts#L61)*
 
 **Parameters:**
 

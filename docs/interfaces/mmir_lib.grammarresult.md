@@ -26,15 +26,11 @@
 
 • **engine**: *[GrammarEngineType](../modules/mmir_lib.md#grammarenginetype)*
 
-*Defined in [mmir.d.ts:203](../../mmir.d.ts#L203)*
-
 ___
 
 ### `Optional` error
 
 • **error**? : *any*
-
-*Defined in [mmir.d.ts:211](../../mmir.d.ts#L211)*
 
 ___
 
@@ -42,23 +38,17 @@ ___
 
 • **phrase**: *string*
 
-*Defined in [mmir.d.ts:204](../../mmir.d.ts#L204)*
-
 ___
 
 ### `Optional` phrases
 
 • **phrases**? : *`Array<PhraseInfo>`*
 
-*Defined in [mmir.d.ts:207](../../mmir.d.ts#L207)*
-
 ___
 
 ###  preproc
 
 • **preproc**: *object*
-
-*Defined in [mmir.d.ts:205](../../mmir.d.ts#L205)*
 
 #### Type declaration:
 
@@ -70,12 +60,8 @@ ___
 
 • **semantic**? : *any*
 
-*Defined in [mmir.d.ts:209](../../mmir.d.ts#L209)*
-
 ___
 
 ### `Optional` utterance
 
 • **utterance**? : *string*
-
-*Defined in [mmir.d.ts:208](../../mmir.d.ts#L208)*

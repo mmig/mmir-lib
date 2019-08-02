@@ -37,8 +37,6 @@
 
 • **_fireRenderEvent**: *function*
 
-*Defined in [mmir.d.ts:567](../../mmir.d.ts#L567)*
-
 NOTE view-dependent events are named: "<event name>_<view name>"
 
 #### Type declaration:
@@ -60,8 +58,6 @@ ___
 
 • **addLayout**: *function*
 
-*Defined in [mmir.d.ts:552](../../mmir.d.ts#L552)*
-
 #### Type declaration:
 
 ▸ (`layout`: [Layout](../classes/mmir_lib.layout.md)): *void*
@@ -77,8 +73,6 @@ ___
 ###  addPartial
 
 • **addPartial**: *function*
-
-*Defined in [mmir.d.ts:553](../../mmir.d.ts#L553)*
 
 #### Type declaration:
 
@@ -97,8 +91,6 @@ ___
 
 • **addView**: *function*
 
-*Defined in [mmir.d.ts:554](../../mmir.d.ts#L554)*
-
 #### Type declaration:
 
 ▸ (`ctrlName`: string, `view`: [View](../classes/mmir_lib.view.md)): *void*
@@ -115,8 +107,6 @@ ___
 ###  callRenderEngine
 
 • **callRenderEngine**: *function*
-
-*Defined in [mmir.d.ts:555](../../mmir.d.ts#L555)*
 
 #### Type declaration:
 
@@ -135,8 +125,6 @@ ___
 
 • **getLayout**: *function*
 
-*Defined in [mmir.d.ts:556](../../mmir.d.ts#L556)*
-
 #### Type declaration:
 
 ▸ (`layoutName`: string, `doUseDefaultIfMissing`: boolean): *any*
@@ -153,8 +141,6 @@ ___
 ###  getPartial
 
 • **getPartial**: *function*
-
-*Defined in [mmir.d.ts:557](../../mmir.d.ts#L557)*
 
 #### Type declaration:
 
@@ -173,8 +159,6 @@ ___
 
 • **getView**: *function*
 
-*Defined in [mmir.d.ts:558](../../mmir.d.ts#L558)*
-
 #### Type declaration:
 
 ▸ (`controllerName`: string, `viewName`: string): *any*
@@ -192,8 +176,6 @@ ___
 
 • **hideCurrentDialog**: *function*
 
-*Defined in [mmir.d.ts:559](../../mmir.d.ts#L559)*
-
 #### Type declaration:
 
 ▸ (...`args`: any[]): *void*
@@ -210,8 +192,6 @@ ___
 
 • **hideWaitDialog**: *function*
 
-*Defined in [mmir.d.ts:560](../../mmir.d.ts#L560)*
-
 #### Type declaration:
 
 ▸ (...`args`: any[]): *void*
@@ -227,8 +207,6 @@ ___
 ### `Optional` on_before_page_load
 
 • **on_before_page_load**? : *function*
-
-*Defined in [mmir.d.ts:572](../../mmir.d.ts#L572)*
 
 NOTE view-dependent event handler can be set via: on_before_page_load_<view name>
 
@@ -251,8 +229,6 @@ ___
 
 • **on_before_page_prepare**? : *function*
 
-*Defined in [mmir.d.ts:570](../../mmir.d.ts#L570)*
-
 NOTE view-dependent event handler can be set via: on_before_page_prepare_<view name>
 
 #### Type declaration:
@@ -273,8 +249,6 @@ ___
 ### `Optional` on_page_load
 
 • **on_page_load**? : *function*
-
-*Defined in [mmir.d.ts:574](../../mmir.d.ts#L574)*
 
 NOTE view-dependent event handler can be set via: on_page_load_<view name>
 
@@ -297,15 +271,11 @@ ___
 
 • **pageIndex**: *number*
 
-*Defined in [mmir.d.ts:551](../../mmir.d.ts#L551)*
-
 ___
 
 ###  render
 
 • **render**: *function*
-
-*Defined in [mmir.d.ts:561](../../mmir.d.ts#L561)*
 
 #### Type declaration:
 
@@ -325,8 +295,6 @@ ___
 
 • **setRenderEngine**: *function*
 
-*Defined in [mmir.d.ts:562](../../mmir.d.ts#L562)*
-
 #### Type declaration:
 
 ▸ (`theRenderEngine`: [RenderEngine](mmir_lib.renderengine.md)): *void*
@@ -342,8 +310,6 @@ ___
 ###  showDialog
 
 • **showDialog**: *function*
-
-*Defined in [mmir.d.ts:563](../../mmir.d.ts#L563)*
 
 #### Type declaration:
 
@@ -363,8 +329,6 @@ ___
 ###  showWaitDialog
 
 • **showWaitDialog**: *function*
-
-*Defined in [mmir.d.ts:564](../../mmir.d.ts#L564)*
 
 #### Type declaration:
 

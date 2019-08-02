@@ -39,8 +39,6 @@
 
 • **Function**: *`FunctionConstructor`*
 
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:316](../../node_modules/typescript/lib/lib.es5.d.ts#L316)*
-
 ___
 
 ###  arguments
@@ -48,8 +46,6 @@ ___
 • **arguments**: *any*
 
 *Inherited from void*
-
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:302](../../node_modules/typescript/lib/lib.es5.d.ts#L302)*
 
 ___
 
@@ -59,15 +55,11 @@ ___
 
 *Inherited from void*
 
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:303](../../node_modules/typescript/lib/lib.es5.d.ts#L303)*
-
 ___
 
 ###  config
 
 • **config**: *function*
-
-*Defined in [mmir.d.ts:582](../../mmir.d.ts#L582)*
 
 #### Type declaration:
 
@@ -85,8 +77,6 @@ ___
 
 • **defined**: *function*
 
-*Defined in [mmir.d.ts:578](../../mmir.d.ts#L578)*
-
 #### Type declaration:
 
 ▸ (`id`: any): *any*
@@ -103,8 +93,6 @@ ___
 
 • **isBrowser**: *boolean*
 
-*Defined in [mmir.d.ts:577](../../mmir.d.ts#L577)*
-
 ___
 
 ###  length
@@ -112,8 +100,6 @@ ___
 • **length**: *number*
 
 *Inherited from void*
-
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:299](../../node_modules/typescript/lib/lib.es5.d.ts#L299)*
 
 ___
 
@@ -123,15 +109,11 @@ ___
 
 *Inherited from void*
 
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:298](../../node_modules/typescript/lib/lib.es5.d.ts#L298)*
-
 ___
 
 ###  specified
 
 • **specified**: *function*
-
-*Defined in [mmir.d.ts:579](../../mmir.d.ts#L579)*
 
 #### Type declaration:
 
@@ -149,8 +131,6 @@ ___
 
 • **toUrl**: *function*
 
-*Defined in [mmir.d.ts:580](../../mmir.d.ts#L580)*
-
 #### Type declaration:
 
 ▸ (`moduleNamePlusExt`: any): *any*
@@ -166,8 +146,6 @@ ___
 ###  undef
 
 • **undef**: *function*
-
-*Defined in [mmir.d.ts:581](../../mmir.d.ts#L581)*
 
 #### Type declaration:
 
@@ -186,8 +164,6 @@ Name | Type |
 ▸ **apply**(`this`: `Function`, `thisArg`: any, `argArray?`: any): *any*
 
 *Inherited from void*
-
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:278](../../node_modules/typescript/lib/lib.es5.d.ts#L278)*
 
 Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function.
 
@@ -208,8 +184,6 @@ ___
 ▸ **bind**(`this`: `Function`, `thisArg`: any, ...`argArray`: any[]): *any*
 
 *Inherited from void*
-
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:293](../../node_modules/typescript/lib/lib.es5.d.ts#L293)*
 
 For a given function, creates a bound function that has the same body as the original function.
 The this object of the bound function is associated with the specified object, and has the specified initial parameters.
@@ -232,8 +206,6 @@ ___
 
 *Inherited from void*
 
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:285](../../node_modules/typescript/lib/lib.es5.d.ts#L285)*
-
 Calls a method of an object, substituting another object for the current object.
 
 **Parameters:**
@@ -253,8 +225,6 @@ ___
 ▸ **toString**(): *string*
 
 *Inherited from void*
-
-*Defined in [node_modules/typescript/lib/lib.es5.d.ts:296](../../node_modules/typescript/lib/lib.es5.d.ts#L296)*
 
 Returns a string representation of a function.
 

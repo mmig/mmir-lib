@@ -7,7 +7,9 @@
 the `mmir-lib` package provides the mmir core library
 for lightweight, client-centric, multimodal interaction development.
 
-__NOTE__ the API documentation for `mmir-lib` has not been fully migrated to
+See also the [HTML API docs](https://mmig.github.io/mmir/api-ts/).
+
+__NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
          TypeScript yet.
          For more detailed descriptions see generated JSDoc-based API at
          [mmig.github.io/mmir/api](https://mmig.github.io/mmir/api/)
@@ -125,15 +127,11 @@ __NOTE__ the API documentation for `mmir-lib` has not been fully migrated to
 
 Ƭ **ASRMode**: *"search" | "dictation"*
 
-*Defined in [mmir.d.ts:457](../../mmir.d.ts#L457)*
-
 ___
 
 ###  ASROnError
 
 Ƭ **ASROnError**: *function*
-
-*Defined in [mmir.d.ts:455](../../mmir.d.ts#L455)*
 
 #### Type declaration:
 
@@ -150,8 +148,6 @@ ___
 ###  ASROnStatus
 
 Ƭ **ASROnStatus**: *function*
-
-*Defined in [mmir.d.ts:453](../../mmir.d.ts#L453)*
 
 #### Type declaration:
 
@@ -173,15 +169,11 @@ ___
 
 Ƭ **ASRStatus**: *"FINAL" | "INTERIM" | "INTERMEDIATE" | "RECORDING_BEGIN" | "RECORDING_DONE"*
 
-*Defined in [mmir.d.ts:454](../../mmir.d.ts#L454)*
-
 ___
 
 ###  Comparator
 
 Ƭ **Comparator**: *">=" | "<=" | ">" | "<" | "!=" | "!==" | "=" | "==" | "==="*
-
-*Defined in [mmir.d.ts:91](../../mmir.d.ts#L91)*
 
 ___
 
@@ -189,15 +181,11 @@ ___
 
 Ƭ **EOSPause**: *"short" | "long"*
 
-*Defined in [mmir.d.ts:458](../../mmir.d.ts#L458)*
-
 ___
 
 ###  FileInfo
 
 Ƭ **FileInfo**: *object*
-
-*Defined in [mmir.d.ts:736](../../mmir.d.ts#L736)*
 
 #### Type declaration:
 
@@ -213,15 +201,11 @@ ___
 
 Ƭ **GrammarEngineType**: *"jscc" | "jison" | "pegjs"*
 
-*Defined in [mmir.d.ts:200](../../mmir.d.ts#L200)*
-
 ___
 
 ###  GrammarType
 
 Ƭ **GrammarType**: *"source" | "bin"*
-
-*Defined in [mmir.d.ts:331](../../mmir.d.ts#L331)*
 
 ___
 
@@ -229,15 +213,11 @@ ___
 
 Ƭ **LogLevel**: *"verbose" | "debug" | "info" | "warn" | "error" | "critical" | "disabled"*
 
-*Defined in [mmir.d.ts:88](../../mmir.d.ts#L88)*
-
 ___
 
 ###  LogLevelNum
 
 Ƭ **LogLevelNum**: *`0` | `1` | `2` | `3` | `4` | `5` | `6`*
-
-*Defined in [mmir.d.ts:89](../../mmir.d.ts#L89)*
 
 ___
 
@@ -245,15 +225,11 @@ ___
 
 Ƭ **MediaEventHandler**: *`Function`*
 
-*Defined in [mmir.d.ts:347](../../mmir.d.ts#L347)*
-
 ___
 
 ###  MediaEventType
 
 Ƭ **MediaEventType**: *string*
-
-*Defined in [mmir.d.ts:348](../../mmir.d.ts#L348)*
 
 ___
 
@@ -261,23 +237,17 @@ ___
 
 Ƭ **MediaPluginEnvType**: *"browser" | "cordova" | "android" | "ios"*
 
-*Defined in [mmir.d.ts:467](../../mmir.d.ts#L467)*
-
 ___
 
 ###  MediaPluginType
 
 Ƭ **MediaPluginType**: *"audio" | "asr" | "tts" | "prep" | string*
 
-*Defined in [mmir.d.ts:465](../../mmir.d.ts#L465)*
-
 ___
 
 ###  TTSOnComplete
 
 Ƭ **TTSOnComplete**: *function*
-
-*Defined in [mmir.d.ts:449](../../mmir.d.ts#L449)*
 
 #### Type declaration:
 
@@ -288,8 +258,6 @@ ___
 ###  TTSOnError
 
 Ƭ **TTSOnError**: *function*
-
-*Defined in [mmir.d.ts:450](../../mmir.d.ts#L450)*
 
 #### Type declaration:
 
@@ -306,8 +274,6 @@ ___
 ###  TTSOnReady
 
 Ƭ **TTSOnReady**: *function*
-
-*Defined in [mmir.d.ts:451](../../mmir.d.ts#L451)*
 
 #### Type declaration:
 
@@ -326,15 +292,11 @@ Name | Type |
 
 • **conf**: *[ConfigurationManager](../interfaces/mmir_lib.configurationmanager.md)*
 
-*Defined in [mmir.d.ts:40](../../mmir.d.ts#L40)*
-
 ___
 
 ### `Const` ctrl
 
 • **ctrl**: *[ControllerManager](../interfaces/mmir_lib.controllermanager.md)*
-
-*Defined in [mmir.d.ts:42](../../mmir.d.ts#L42)*
 
 ___
 
@@ -342,15 +304,11 @@ ___
 
 • **debug**: *boolean*
 
-*Defined in [mmir.d.ts:34](../../mmir.d.ts#L34)*
-
 ___
 
 ### `Const` dialog
 
 • **dialog**: *[DialogManager](../interfaces/mmir_lib.dialogmanager.md)*
-
-*Defined in [mmir.d.ts:44](../../mmir.d.ts#L44)*
 
 ___
 
@@ -358,15 +316,11 @@ ___
 
 • **dialogEngine**: *[DialogEngine](../interfaces/mmir_lib.dialogengine.md)*
 
-*Defined in [mmir.d.ts:43](../../mmir.d.ts#L43)*
-
 ___
 
 ### `Const` input
 
 • **input**: *[InputManager](../interfaces/mmir_lib.inputmanager.md)*
-
-*Defined in [mmir.d.ts:46](../../mmir.d.ts#L46)*
 
 ___
 
@@ -374,15 +328,11 @@ ___
 
 • **inputEngine**: *[InputEngine](../interfaces/mmir_lib.inputengine.md)*
 
-*Defined in [mmir.d.ts:45](../../mmir.d.ts#L45)*
-
 ___
 
 ### `Const` lang
 
 • **lang**: *[LanguageManager](../interfaces/mmir_lib.languagemanager.md)*
-
-*Defined in [mmir.d.ts:47](../../mmir.d.ts#L47)*
 
 ___
 
@@ -390,15 +340,11 @@ ___
 
 • **logLevel**: *[LogLevelNum](mmir_lib.md#loglevelnum) | [LogLevel](mmir_lib.md#loglevel)*
 
-*Defined in [mmir.d.ts:35](../../mmir.d.ts#L35)*
-
 ___
 
 ###  logTrace
 
 • **logTrace**: *boolean | object*
-
-*Defined in [mmir.d.ts:36](../../mmir.d.ts#L36)*
 
 ___
 
@@ -406,15 +352,11 @@ ___
 
 • **media**: *[MediaManager](../interfaces/mmir_lib.mediamanager.md)*
 
-*Defined in [mmir.d.ts:48](../../mmir.d.ts#L48)*
-
 ___
 
 ### `Const` model
 
 • **model**: *[ModelManager](../interfaces/mmir_lib.modelmanager.md)*
-
-*Defined in [mmir.d.ts:49](../../mmir.d.ts#L49)*
 
 ___
 
@@ -422,15 +364,11 @@ ___
 
 • **notifier**: *[NotificationManager](../interfaces/mmir_lib.notificationmanager.md)*
 
-*Defined in [mmir.d.ts:50](../../mmir.d.ts#L50)*
-
 ___
 
 ### `Const` present
 
 • **present**: *[PresentationManager](../interfaces/mmir_lib.presentationmanager.md)*
-
-*Defined in [mmir.d.ts:51](../../mmir.d.ts#L51)*
 
 ___
 
@@ -438,15 +376,11 @@ ___
 
 • **require**: *[RequireJs](../interfaces/mmir_lib.requirejs.md)*
 
-*Defined in [mmir.d.ts:29](../../mmir.d.ts#L29)*
-
 ___
 
 ### `Const` res
 
 • **res**: *[Resources](../interfaces/mmir_lib.resources.md)*
-
-*Defined in [mmir.d.ts:41](../../mmir.d.ts#L41)*
 
 ___
 
@@ -454,15 +388,11 @@ ___
 
 • **semantic**: *[SemanticInterpreter](../interfaces/mmir_lib.semanticinterpreter.md)*
 
-*Defined in [mmir.d.ts:52](../../mmir.d.ts#L52)*
-
 ___
 
 ###  startModule
 
 • **startModule**: *string*
-
-*Defined in [mmir.d.ts:32](../../mmir.d.ts#L32)*
 
 ___
 
@@ -470,15 +400,11 @@ ___
 
 • **util**: *[CommonUtils](../interfaces/mmir_lib.commonutils.md)*
 
-*Defined in [mmir.d.ts:39](../../mmir.d.ts#L39)*
-
 ___
 
 ### `Const` version
 
 • **version**: *string*
-
-*Defined in [mmir.d.ts:30](../../mmir.d.ts#L30)*
 
 ___
 
@@ -486,15 +412,11 @@ ___
 
 • **viewEngine**: *string*
 
-*Defined in [mmir.d.ts:33](../../mmir.d.ts#L33)*
-
 ## Functions
 
 ###  config
 
 ▸ **config**(`requirejsConfig`: `__type`): *void*
-
-*Defined in [mmir.d.ts:26](../../mmir.d.ts#L26)*
 
 **Parameters:**
 
@@ -510,8 +432,6 @@ ___
 
 ▸ **isVersion**(`verion`: string, `comparator`: [Comparator](mmir_lib.md#comparator)): *boolean*
 
-*Defined in [mmir.d.ts:28](../../mmir.d.ts#L28)*
-
 **Parameters:**
 
 Name | Type |
@@ -526,8 +446,6 @@ ___
 ###  ready
 
 ▸ **ready**(`onFrameworkReady`: function): *any*
-
-*Defined in [mmir.d.ts:27](../../mmir.d.ts#L27)*
 
 **Parameters:**
 

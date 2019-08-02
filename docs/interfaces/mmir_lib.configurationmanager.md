@@ -23,8 +23,6 @@
 
 • **get**: *function*
 
-*Defined in [mmir.d.ts:248](../../mmir.d.ts#L248)*
-
 #### Type declaration:
 
 ▸ (`propertyName`: string, `defaultValue?`: any, `useSafeAccess?`: boolean): *any*
@@ -42,8 +40,6 @@ ___
 ###  getBoolean
 
 • **getBoolean**: *function*
-
-*Defined in [mmir.d.ts:249](../../mmir.d.ts#L249)*
 
 #### Type declaration:
 
@@ -63,8 +59,6 @@ ___
 
 • **getString**: *function*
 
-*Defined in [mmir.d.ts:250](../../mmir.d.ts#L250)*
-
 #### Type declaration:
 
 ▸ (`propertyName`: string, `defaultValue?`: any, `useSafeAccess?`: boolean): *string*
@@ -82,8 +76,6 @@ ___
 ###  set
 
 • **set**: *function*
-
-*Defined in [mmir.d.ts:251](../../mmir.d.ts#L251)*
 
 #### Type declaration:
 

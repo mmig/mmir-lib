@@ -34,8 +34,6 @@
 
 • **alert**: *function*
 
-*Defined in [mmir.d.ts:534](../../mmir.d.ts#L534)*
-
 #### Type declaration:
 
 ▸ (`message`: string, `alertCallback`: `Function`, `title`: string, `buttonName`: string): *void*
@@ -55,8 +53,6 @@ ___
 
 • **beep**: *function*
 
-*Defined in [mmir.d.ts:536](../../mmir.d.ts#L536)*
-
 #### Type declaration:
 
 ▸ (`times`: number): *void*
@@ -72,8 +68,6 @@ ___
 ###  confirm
 
 • **confirm**: *function*
-
-*Defined in [mmir.d.ts:535](../../mmir.d.ts#L535)*
 
 #### Type declaration:
 
@@ -94,8 +88,6 @@ ___
 
 • **createSound**: *function*
 
-*Defined in [mmir.d.ts:537](../../mmir.d.ts#L537)*
-
 #### Type declaration:
 
 ▸ (`name`: string, `url`: string, `isKeepOnPause`: boolean): *void*
@@ -114,8 +106,6 @@ ___
 
 • **getVolume**: *function*
 
-*Defined in [mmir.d.ts:538](../../mmir.d.ts#L538)*
-
 #### Type declaration:
 
 ▸ (): *number*
@@ -125,8 +115,6 @@ ___
 ###  init
 
 • **init**: *function*
-
-*Defined in [mmir.d.ts:539](../../mmir.d.ts#L539)*
 
 #### Type declaration:
 
@@ -138,8 +126,6 @@ ___
 
 • **initBeep**: *function*
 
-*Defined in [mmir.d.ts:540](../../mmir.d.ts#L540)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -149,8 +135,6 @@ ___
 ###  initSound
 
 • **initSound**: *function*
-
-*Defined in [mmir.d.ts:541](../../mmir.d.ts#L541)*
 
 #### Type declaration:
 
@@ -168,8 +152,6 @@ ___
 
 • **isVibrateAvailable**: *function*
 
-*Defined in [mmir.d.ts:542](../../mmir.d.ts#L542)*
-
 #### Type declaration:
 
 ▸ (): *boolean*
@@ -180,8 +162,6 @@ ___
 
 • **isVibrateEnabled**: *function*
 
-*Defined in [mmir.d.ts:543](../../mmir.d.ts#L543)*
-
 #### Type declaration:
 
 ▸ (): *boolean*
@@ -191,8 +171,6 @@ ___
 ###  playSound
 
 • **playSound**: *function*
-
-*Defined in [mmir.d.ts:544](../../mmir.d.ts#L544)*
 
 #### Type declaration:
 
@@ -213,8 +191,6 @@ ___
 
 • **setVibrateEnabled**: *function*
 
-*Defined in [mmir.d.ts:545](../../mmir.d.ts#L545)*
-
 #### Type declaration:
 
 ▸ (`enabled`: boolean): *void*
@@ -230,8 +206,6 @@ ___
 ###  setVolume
 
 • **setVolume**: *function*
-
-*Defined in [mmir.d.ts:546](../../mmir.d.ts#L546)*
 
 #### Type declaration:
 
@@ -249,8 +223,6 @@ ___
 
 • **stopSound**: *function*
 
-*Defined in [mmir.d.ts:547](../../mmir.d.ts#L547)*
-
 #### Type declaration:
 
 ▸ (`name`: string): *void*
@@ -266,8 +238,6 @@ ___
 ###  vibrate
 
 • **vibrate**: *function*
-
-*Defined in [mmir.d.ts:548](../../mmir.d.ts#L548)*
 
 #### Type declaration:
 

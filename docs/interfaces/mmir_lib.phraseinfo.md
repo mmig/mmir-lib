@@ -22,8 +22,6 @@
 
 • **i**: *number*
 
-*Defined in [mmir.d.ts:216](../../mmir.d.ts#L216)*
-
 the index with the phrase
 
 ___
@@ -32,8 +30,6 @@ ___
 
 • **tok**: *string*
 
-*Defined in [mmir.d.ts:220](../../mmir.d.ts#L220)*
-
 the matched token(s)
 
 ___
@@ -41,7 +37,5 @@ ___
 ###  type
 
 • **type**: *string*
-
-*Defined in [mmir.d.ts:218](../../mmir.d.ts#L218)*
 
 the token type or utterance type

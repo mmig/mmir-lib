@@ -31,8 +31,6 @@
 
 • **getOnPageRenderedHandler**: *function*
 
-*Defined in [mmir.d.ts:768](../../mmir.d.ts#L768)*
-
 #### Type declaration:
 
 ▸ (): *`Function` | undefined*
@@ -42,8 +40,6 @@ ___
 ###  hideCurrentDialog
 
 • **hideCurrentDialog**: *function*
-
-*Defined in [mmir.d.ts:769](../../mmir.d.ts#L769)*
 
 #### Type declaration:
 
@@ -55,8 +51,6 @@ ___
 
 • **hideWaitDialog**: *function*
 
-*Defined in [mmir.d.ts:770](../../mmir.d.ts#L770)*
-
 #### Type declaration:
 
 ▸ (): *void*
@@ -66,8 +60,6 @@ ___
 ###  perform
 
 • **perform**: *function*
-
-*Defined in [mmir.d.ts:771](../../mmir.d.ts#L771)*
 
 #### Type declaration:
 
@@ -86,8 +78,6 @@ ___
 ###  performHelper
 
 • **performHelper**: *function*
-
-*Defined in [mmir.d.ts:772](../../mmir.d.ts#L772)*
 
 #### Type declaration:
 
@@ -109,8 +99,6 @@ ___
 
 *Inherited from [DialogManager](mmir_lib.dialogmanager.md).[raise](mmir_lib.dialogmanager.md#raise)*
 
-*Defined in [mmir.d.ts:309](../../mmir.d.ts#L309)*
-
 #### Type declaration:
 
 ▸ (`eventName`: string, `data?`: any): *void*
@@ -127,8 +115,6 @@ ___
 ###  render
 
 • **render**: *function*
-
-*Defined in [mmir.d.ts:773](../../mmir.d.ts#L773)*
 
 #### Type declaration:
 
@@ -148,8 +134,6 @@ ___
 
 • **setOnPageRenderedHandler**: *function*
 
-*Defined in [mmir.d.ts:774](../../mmir.d.ts#L774)*
-
 #### Type declaration:
 
 ▸ (`onPageRenderedHook`: `Function`): *void*
@@ -165,8 +149,6 @@ ___
 ###  showDialog
 
 • **showDialog**: *function*
-
-*Defined in [mmir.d.ts:775](../../mmir.d.ts#L775)*
 
 #### Type declaration:
 
@@ -185,8 +167,6 @@ ___
 ###  showWaitDialog
 
 • **showWaitDialog**: *function*
-
-*Defined in [mmir.d.ts:776](../../mmir.d.ts#L776)*
 
 #### Type declaration:
 
