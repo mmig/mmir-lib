@@ -1,10 +1,10 @@
 /*
  * Standalone Wait Dialog (extracted from jQuery Mobile 1.4.3)
- * 
+ *
  * stdlne-wait-dlg
  *
  * <div class="stdlne-wait-dlg stdlne-style-b stdlne-wait-dlg-verbose"><span class="stdlne-icon"></span><h1>title</h1></div>
- * 
+ *
  * version 0.1
  * Copyright (C) 2015 russa, DFKI GmbH
  * MIT license
@@ -22,10 +22,10 @@
 	text-align: center;
 }
 .stdlne-wait-dlg-small h1 {
-    font-size: 0;
-    width: 0;
-    height: 0;
-    overflow: hidden
+	font-size: 0;
+	width: 0;
+	height: 0;
+	overflow: hidden
 }
 
 /*icon*/
@@ -64,13 +64,13 @@
 	padding: .625em;
 }
 .stdlne-wait-dlg-small {
-    background: 0;
-    filter: Alpha(Opacity=18);
-    opacity: .18;
-    width: 2.875em;
-    height: 2.875em;
-    margin-left: -1.4375em;
-    margin-top: -1.4375em
+	background: 0;
+	filter: Alpha(Opacity=18);
+	opacity: .18;
+	width: 2.875em;
+	height: 2.875em;
+	margin-left: -1.4375em;
+	margin-top: -1.4375em
 }
 
 .stdlne-wait-dlg {
@@ -80,25 +80,25 @@
 	top: 50%;
 	left: 50%;
 	border: 0;
-	
+
 	/*.ui-body-b | .ui-body-a*/
 	border-width: 1px;
 	border-style: solid;
-	
+
 	/*.ui-btn-corner-all, .ui-corner-all*/
 	-webkit-background-clip: padding;
 	background-clip: padding-box;
-	
+
 	/*.ui-corner-all*/
 	-webkit-border-radius: .3125em;
 	border-radius: .3125em;
-	
+
 	/*inherited from body*/
 	/*background-color: #f9f9f9;
 	border-color: #bbb;*/
 	color: #333;
 	text-shadow: 0 1px 0 #f3f3f3;
-	
+
 	font-size: 1em;
 	line-height: 1.3;
 	font-family: sans-serif;
