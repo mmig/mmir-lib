@@ -21,6 +21,7 @@ block_comment_end = */
 
 [*.md]
 trim_trailing_whitespace = false
+indent_style = space
 
 [package*.json]
 insert_final_newline = false
