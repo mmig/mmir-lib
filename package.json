@@ -51,8 +51,5 @@
     "typedoc": "^0.15.0",
     "typedoc-plugin-external-module-name": "^2.1.0",
     "typedoc-plugin-markdown": "^2.1.0"
-  },
-  "peerDependencies": {
-    "webworker-threads": "git+https://github.com/audreyt/node-webworker-threads.git"
   }
 }
