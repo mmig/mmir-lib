@@ -30,12 +30,20 @@ export function ready(onFrameworkReady: (...args: any[]) => any): any;
 export function isVersion(verion: string, comparator: Comparator): boolean;
 export const require: RequireJs;
 export const version: string;
+export const mmirName: "mmir" | string;//DEFAULT: "mmir"
 //NOTE changing exported var_s only has effect, if done before initialization
-export var startModule: string;//DEFAULT: 'main';
-export var viewEngine: string;//DEFAULT: "jqViewEngine";
+export var startModule: string;//DEFAULT: 'mmirf/main';
+export var startModules: undefined | Array<string>;//DEFAULT: undefined
+export var viewEngine: string;//DEFAULT: "mmirf/simpleViewEngine";
 export var debug: boolean;//DEFAULT: true;
 export var logLevel: LogLevelNum | LogLevel;//DEFAULT: 'debug';
 export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+export var libMode: undefined | "min";//DEFAULT: undefined
+export var jquery: undefined | any;//DEFAULT: undefined
+
+//semi-public members: use with caution
+export const _define: null | RequireJsDefine;
+export var _mmirLibPath: string;//DEFAULT: "mmirf/"
 
 // interface MmirModule:
 export const util: CommonUtils;
@@ -63,11 +71,19 @@ export interface MmirCore {
 	isVersion(verion: string, comparator: Comparator): boolean;
 	readonly require: RequireJs;
 	readonly version: string;
-	startModule: string;//DEFAULT: 'main';
-	viewEngine: string;//DEFAULT: "jqViewEngine";
+	readonly mmirName: "mmir" | string;//DEFAULT: "mmir"
+	startModule: string;//DEFAULT: 'mmirf/main';
+	startModules: undefined | Array<string>;//DEFAULT: undefined
+	viewEngine: string;//DEFAULT: "mmirf/simpleViewEngine";
 	debug: boolean;//DEFAULT: true;
 	logLevel: LogLevelNum | LogLevel;//DEFAULT: 'debug';
 	logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
+	libMode: undefined | "min";//DEFAULT: undefined
+	jquery: undefined | any;//DEFAULT: undefined
+
+	//semi-public members: use with caution
+	readonly _define: null | RequireJsDefine;
+	_mmirLibPath: string;//DEFAULT: "mmirf/"
 }
 
 export interface MmirModule extends MmirCore {
@@ -583,6 +599,7 @@ export interface RequireJs extends Function {
 	undef: (id: any) => void;
 	config: (configuration: any) => void;
 }
+export interface RequireJsDefine extends Function {}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
