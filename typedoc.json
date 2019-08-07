@@ -7,5 +7,5 @@
 	"mode": "modules",
   "theme": "markdown",
   "out": "docs",
-	"hideSources": true
+  "hideSources": true
 }
