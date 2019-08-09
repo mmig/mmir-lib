@@ -1,7 +1,8 @@
-mmir-lib
+[mmir-lib][0]
 ========
 
-https://github.com/mmig/mmir-lib
+[![MIT license](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/mmig/mmir-lib)
 
 
 Source Code for the [mmir][5] (Mobile Multimodal Interaction and Rendering) library
@@ -160,6 +161,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
 
 If not stated otherwise, all files and resources are provided under the MIT license
 
+[0]: https://github.com/mmig/mmir-lib
 [1]: https://github.com/mmig/mmir-starter-kit
 [2]: https://github.com/mmig/mmir-starter-ionic
 [3]: https://github.com/mmig/mmir-tooling
