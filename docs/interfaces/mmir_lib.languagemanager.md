@@ -128,7 +128,7 @@ ___
 
 ▸ (): *object*
 
-● \[▪ **id**: *string*\]: string
+* \[ **id**: *string*\]: string
 
 ___
 

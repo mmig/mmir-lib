@@ -52,7 +52,7 @@ ___
 
 #### Type declaration:
 
-● \[▪ **preprocName**: *string*\]: `Array<Pos>`
+* \[ **preprocName**: *string*\]: `Array<Pos>`
 
 ___
 

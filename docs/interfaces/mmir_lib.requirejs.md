@@ -21,6 +21,7 @@
 * [defined](mmir_lib.requirejs.md#defined)
 * [isBrowser](mmir_lib.requirejs.md#isbrowser)
 * [length](mmir_lib.requirejs.md#length)
+* [name](mmir_lib.requirejs.md#name)
 * [prototype](mmir_lib.requirejs.md#prototype)
 * [specified](mmir_lib.requirejs.md#specified)
 * [toUrl](mmir_lib.requirejs.md#tourl)
@@ -28,6 +29,7 @@
 
 ### Methods
 
+* [__@hasInstance](mmir_lib.requirejs.md#__@hasinstance)
 * [apply](mmir_lib.requirejs.md#apply)
 * [bind](mmir_lib.requirejs.md#bind)
 * [call](mmir_lib.requirejs.md#call)
@@ -103,6 +105,16 @@ ___
 
 ___
 
+###  name
+
+• **name**: *string*
+
+*Inherited from void*
+
+Returns the name of the function. Function names are read-only and can not be changed.
+
+___
+
 ###  prototype
 
 • **prototype**: *any*
@@ -158,6 +170,28 @@ Name | Type |
 `id` | any |
 
 ## Methods
+
+###  __@hasInstance
+
+▸ **__@hasInstance**(`value`: any): *boolean*
+
+*Inherited from void*
+
+Determines whether the given value inherits from this function if this function was used
+as a constructor function.
+
+A constructor function can control which objects are recognized as its instances by
+'instanceof' by overriding this method.
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`value` | any |
+
+**Returns:** *boolean*
+
+___
 
 ###  apply
 

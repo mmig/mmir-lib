@@ -48,7 +48,7 @@ configuration settings
 
 #### Type declaration:
 
-● \[▪ **pluginId**: *string*\]: [SpeechConfigPluginEntry](mmir_lib.speechconfigpluginentry.md)
+* \[ **pluginId**: *string*\]: [SpeechConfigPluginEntry](mmir_lib.speechconfigpluginentry.md)
 
 ___
 

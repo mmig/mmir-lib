@@ -22,14 +22,20 @@
 
 • **i**: *number*
 
+index
+
 ___
 
 ###  len
 
 • **len**: *number*
 
+original word length (i.e. before modification)
+
 ___
 
 ### `Optional` mlen
 
 • **mlen**? : *number*
+
+modified word legnth (i.e. after modification)

@@ -233,7 +233,7 @@ ___
 
 #### Type declaration:
 
-● \[▪ **ctxId**: *string*\]: any
+* \[ **ctxId**: *string*\]: any
 
 ___
 

@@ -14,13 +14,19 @@
 
 ### Properties
 
+* [_define](mmir_lib.mmircore.md#_define)
+* [_mmirLibPath](mmir_lib.mmircore.md#_mmirlibpath)
 * [config](mmir_lib.mmircore.md#config)
 * [debug](mmir_lib.mmircore.md#debug)
+* [jquery](mmir_lib.mmircore.md#jquery)
+* [libMode](mmir_lib.mmircore.md#libmode)
 * [logLevel](mmir_lib.mmircore.md#loglevel)
 * [logTrace](mmir_lib.mmircore.md#logtrace)
+* [mmirName](mmir_lib.mmircore.md#mmirname)
 * [ready](mmir_lib.mmircore.md#ready)
 * [require](mmir_lib.mmircore.md#require)
 * [startModule](mmir_lib.mmircore.md#startmodule)
+* [startModules](mmir_lib.mmircore.md#startmodules)
 * [version](mmir_lib.mmircore.md#version)
 * [viewEngine](mmir_lib.mmircore.md#viewengine)
 
@@ -29,6 +35,18 @@
 * [isVersion](mmir_lib.mmircore.md#isversion)
 
 ## Properties
+
+###  _define
+
+• **_define**: *null | [RequireJsDefine](mmir_lib.requirejsdefine.md)*
+
+___
+
+###  _mmirLibPath
+
+• **_mmirLibPath**: *string*
+
+___
 
 ###  config
 
@@ -52,6 +70,18 @@ ___
 
 ___
 
+###  jquery
+
+• **jquery**: *undefined | any*
+
+___
+
+###  libMode
+
+• **libMode**: *undefined | "min"*
+
+___
+
 ###  logLevel
 
 • **logLevel**: *[LogLevelNum](../modules/mmir_lib.md#loglevelnum) | [LogLevel](../modules/mmir_lib.md#loglevel)*
@@ -61,6 +91,12 @@ ___
 ###  logTrace
 
 • **logTrace**: *boolean | object*
+
+___
+
+###  mmirName
+
+• **mmirName**: *"mmir" | string*
 
 ___
 
@@ -95,6 +131,12 @@ ___
 ###  startModule
 
 • **startModule**: *string*
+
+___
+
+###  startModules
+
+• **startModules**: *undefined | `Array<string>`*
 
 ___
 

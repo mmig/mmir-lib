@@ -61,6 +61,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [PresentationManager](../interfaces/mmir_lib.presentationmanager.md)
 * [RenderEngine](../interfaces/mmir_lib.renderengine.md)
 * [RequireJs](../interfaces/mmir_lib.requirejs.md)
+* [RequireJsDefine](../interfaces/mmir_lib.requirejsdefine.md)
 * [Resources](../interfaces/mmir_lib.resources.md)
 * [SemanticInterpreter](../interfaces/mmir_lib.semanticinterpreter.md)
 * [SimpleSpeechConfig](../interfaces/mmir_lib.simplespeechconfig.md)
@@ -93,6 +94,8 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 
 ### Variables
 
+* [_define](mmir_lib.md#const-_define)
+* [_mmirLibPath](mmir_lib.md#_mmirlibpath)
 * [conf](mmir_lib.md#const-conf)
 * [ctrl](mmir_lib.md#const-ctrl)
 * [debug](mmir_lib.md#debug)
@@ -100,10 +103,13 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [dialogEngine](mmir_lib.md#const-dialogengine)
 * [input](mmir_lib.md#const-input)
 * [inputEngine](mmir_lib.md#const-inputengine)
+* [jquery](mmir_lib.md#jquery)
 * [lang](mmir_lib.md#const-lang)
+* [libMode](mmir_lib.md#libmode)
 * [logLevel](mmir_lib.md#loglevel)
 * [logTrace](mmir_lib.md#logtrace)
 * [media](mmir_lib.md#const-media)
+* [mmirName](mmir_lib.md#const-mmirname)
 * [model](mmir_lib.md#const-model)
 * [notifier](mmir_lib.md#const-notifier)
 * [present](mmir_lib.md#const-present)
@@ -111,6 +117,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [res](mmir_lib.md#const-res)
 * [semantic](mmir_lib.md#const-semantic)
 * [startModule](mmir_lib.md#startmodule)
+* [startModules](mmir_lib.md#startmodules)
 * [util](mmir_lib.md#const-util)
 * [version](mmir_lib.md#const-version)
 * [viewEngine](mmir_lib.md#viewengine)
@@ -288,6 +295,18 @@ Name | Type |
 
 ## Variables
 
+### `Const` _define
+
+• **_define**: *null | [RequireJsDefine](../interfaces/mmir_lib.requirejsdefine.md)*
+
+___
+
+###  _mmirLibPath
+
+• **_mmirLibPath**: *string*
+
+___
+
 ### `Const` conf
 
 • **conf**: *[ConfigurationManager](../interfaces/mmir_lib.configurationmanager.md)*
@@ -330,9 +349,21 @@ ___
 
 ___
 
+###  jquery
+
+• **jquery**: *undefined | any*
+
+___
+
 ### `Const` lang
 
 • **lang**: *[LanguageManager](../interfaces/mmir_lib.languagemanager.md)*
+
+___
+
+###  libMode
+
+• **libMode**: *undefined | "min"*
 
 ___
 
@@ -351,6 +382,12 @@ ___
 ### `Const` media
 
 • **media**: *[MediaManager](../interfaces/mmir_lib.mediamanager.md)*
+
+___
+
+### `Const` mmirName
+
+• **mmirName**: *"mmir" | string*
 
 ___
 
@@ -393,6 +430,12 @@ ___
 ###  startModule
 
 • **startModule**: *string*
+
+___
+
+###  startModules
+
+• **startModules**: *undefined | `Array<string>`*
 
 ___
 

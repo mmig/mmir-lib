@@ -39,7 +39,7 @@ ___
 
 #### Type declaration:
 
-● \[▪ **id**: *string*\]: `Array<string>`
+* \[ **id**: *string*\]: `Array<string>`
 
 ___
 
@@ -49,7 +49,7 @@ ___
 
 #### Type declaration:
 
-● \[▪ **id**: *string*\]: object
+* \[ **id**: *string*\]: object
 
 * **phrases**: *`Array<string>`*
 

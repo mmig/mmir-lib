@@ -14,6 +14,8 @@
 
 ### Properties
 
+* [_define](mmir_lib.mmirmodule.md#_define)
+* [_mmirLibPath](mmir_lib.mmirmodule.md#_mmirlibpath)
 * [conf](mmir_lib.mmirmodule.md#conf)
 * [config](mmir_lib.mmirmodule.md#config)
 * [ctrl](mmir_lib.mmirmodule.md#ctrl)
@@ -22,10 +24,13 @@
 * [dialogEngine](mmir_lib.mmirmodule.md#dialogengine)
 * [input](mmir_lib.mmirmodule.md#input)
 * [inputEngine](mmir_lib.mmirmodule.md#inputengine)
+* [jquery](mmir_lib.mmirmodule.md#jquery)
 * [lang](mmir_lib.mmirmodule.md#lang)
+* [libMode](mmir_lib.mmirmodule.md#libmode)
 * [logLevel](mmir_lib.mmirmodule.md#loglevel)
 * [logTrace](mmir_lib.mmirmodule.md#logtrace)
 * [media](mmir_lib.mmirmodule.md#media)
+* [mmirName](mmir_lib.mmirmodule.md#mmirname)
 * [model](mmir_lib.mmirmodule.md#model)
 * [notifier](mmir_lib.mmirmodule.md#notifier)
 * [present](mmir_lib.mmirmodule.md#present)
@@ -34,6 +39,7 @@
 * [res](mmir_lib.mmirmodule.md#res)
 * [semantic](mmir_lib.mmirmodule.md#semantic)
 * [startModule](mmir_lib.mmirmodule.md#startmodule)
+* [startModules](mmir_lib.mmirmodule.md#startmodules)
 * [util](mmir_lib.mmirmodule.md#util)
 * [version](mmir_lib.mmirmodule.md#version)
 * [viewEngine](mmir_lib.mmirmodule.md#viewengine)
@@ -43,6 +49,22 @@
 * [isVersion](mmir_lib.mmirmodule.md#isversion)
 
 ## Properties
+
+###  _define
+
+• **_define**: *null | [RequireJsDefine](mmir_lib.requirejsdefine.md)*
+
+*Inherited from [MmirCore](mmir_lib.mmircore.md).[_define](mmir_lib.mmircore.md#_define)*
+
+___
+
+###  _mmirLibPath
+
+• **_mmirLibPath**: *string*
+
+*Inherited from [MmirCore](mmir_lib.mmircore.md).[_mmirLibPath](mmir_lib.mmircore.md#_mmirlibpath)*
+
+___
 
 ###  conf
 
@@ -106,9 +128,25 @@ ___
 
 ___
 
+###  jquery
+
+• **jquery**: *undefined | any*
+
+*Inherited from [MmirCore](mmir_lib.mmircore.md).[jquery](mmir_lib.mmircore.md#jquery)*
+
+___
+
 ###  lang
 
 • **lang**: *[LanguageManager](mmir_lib.languagemanager.md)*
+
+___
+
+###  libMode
+
+• **libMode**: *undefined | "min"*
+
+*Inherited from [MmirCore](mmir_lib.mmircore.md).[libMode](mmir_lib.mmircore.md#libmode)*
 
 ___
 
@@ -131,6 +169,14 @@ ___
 ###  media
 
 • **media**: *[MediaManager](mmir_lib.mediamanager.md)*
+
+___
+
+###  mmirName
+
+• **mmirName**: *"mmir" | string*
+
+*Inherited from [MmirCore](mmir_lib.mmircore.md).[mmirName](mmir_lib.mmircore.md#mmirname)*
 
 ___
 
@@ -201,6 +247,14 @@ ___
 • **startModule**: *string*
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[startModule](mmir_lib.mmircore.md#startmodule)*
+
+___
+
+###  startModules
+
+• **startModules**: *undefined | `Array<string>`*
+
+*Inherited from [MmirCore](mmir_lib.mmircore.md).[startModules](mmir_lib.mmircore.md#startmodules)*
 
 ___
 
