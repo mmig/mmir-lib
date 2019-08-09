@@ -1,5 +1,5 @@
 
-version notes for MMIR framework code (v 5.0.0-rc1)
+version notes for MMIR framework code (v 5.1.0)
 
  * using Cordova 5.x.x - 8.x.x library
 
@@ -32,6 +32,25 @@ additional, required dependencies when running in node environment
  --------------
  Change Log
  --------------
+##################
+Version 5.1.0
+##################
+
+MODIFICATION:
+ * directories.json: moved generated resource directories.json from /config/directories.json to /gen/directories.json
+ * mmirf/renderUtils: now renders paths in @style() "as-is" instead of adding path-prefix "content/stylesheets/"
+   * backwards compatiblity: set field stylesRoot on mmirf/parserModule to "content/stylesheets/":
+	   mmir.require(['mmirf/parserModule'], function(parserModule){
+		 	parserModule.stylesRoot = 'content/stylesheets/';
+		 	// -> @style(file-path) will now get prefixed with 'content/stylesheets/'
+		 	...
+		 })
+ * NOOP: re-formatted source files in accordance to .editorconfig (whitespace & line-break normalization)
+
+ADDITION:
+ * extended support for custom state models (SCXML definitions):
+   * in non-WEBPACK build: do add module configuration for compiled state-models (/gen/states/); module-ID is the state model's file name (without extension)
+   * in WEBPACK build: use mmir's WEBPACK build configuration for setting/overriding the module-ID
 
 ##################
  Version 5.0.0-rc1
@@ -41,7 +60,7 @@ support for webpack-integration and compatibility for running within Node.js
 (as well as re-implemented build-tools and Cordova-integration)
 
 
-NOTE: changes marked with [breaking change | compatibility mode] can be automatically amended by  
+NOTE: changes marked with [breaking change | compatibility mode] can be automatically amended by
       loading the backwards compatibility module, so that code may use the old v4 API for mmir-lib.
 
 [BREAKING CHANGE]
@@ -51,14 +70,14 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
            mmir.ready(function () {
              //apply v4 compatibility layer:
              mmir.require(['mmirf/core4Compatibility'], function(core4Compatibility){
-              
+
               core4Compatibility(mmir);
-              
+
               //-> ready to use mmir-lib v4 API
-              
-              
+
+
              });//end of compatibility closure
-           });//end of mmir.ready() callback 
+           });//end of mmir.ready() callback
 
 
 [breaking change | compatibility mode] MODIFICATION:
@@ -78,21 +97,21 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
    * renamed "webAudioTextToSpeech" module to "audiotts"
      * in configuration.json: change entries in {"mediaManager": { "plugins": ...
        "webAudioTextToSpeech" -> "audiotts"
-   * renamed "maryTextToSpeech" module to "ttsMary" and its (optional) configuration field "serverBasePath" to "baseUrl" 
-     * in configuration.json: change 
+   * renamed "maryTextToSpeech" module to "ttsMary" and its (optional) configuration field "serverBasePath" to "baseUrl"
+     * in configuration.json: change
          {"maryTextToSpeech": { "serverBasePath": ...
-       to 
+       to
          {"ttsMary": { "baseUrl": ...
 
 
  * dialogManager: removed helper/shortcut methods that invoke ControllerManager or PresentationManager methods
    * methods can be re-attached using dialogManager4Compatiblity module:
-      
+
       mmir.require(['mmirf/dialogManager4Compatiblity'], function(dialogCompat){
         //re-attache helper/shortcut methods:
       	dialogCompat(mmir.dialog);
       });
-      
+
    * removed methods/functionality (can/should be used via ControllerManager or PresentationManager directly):
 	 * DialogManager.perform(ctrlName, actionName, data)				-> ControllerManager.perform
 	 * DialogManager.performHelper(ctrlName, helperActionName, data)	-> ControllerManager.performHlper
@@ -106,8 +125,8 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
    * removed semi-private functions (obsolete now, so no direct replacement/alternative in new implementation):
      * DialogManager._setControllerManager(controllerManager)
      * DialogManager._setPresentationManager(presentationManager)
- 
- 
+
+
  * constants: renamed "mmirf/constants" to "mmirf/resources" & mmir.res instead of mmir.const:
    * "mmirf/constants" -> "mmirf/resources"
    * mmir.const -> mmir.res
@@ -120,26 +139,26 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
 [breaking change] MODIFICATION:
  * controllerManager: for creating FileInfo (i.e. Controller.def): dropped (unused) field fileName and make genPath non-optional field
  * controller: constructor argument ctx (context) is now changed to be the instance-constructor (NOTE: usually this is used only internally by the framework)
-               OLD API: 
+               OLD API:
                	  var ctx = {Application: <constructor>}
                	  var ctrl = new Controller('Application', ctrlDefInfo, ctx);
                NEW API:
                	  var ctrl = new Controller('Application', ctrlDefInfo, <constructor>);
-               
+
                i.e. if the Controller constructor was used directly, change old code to something like:
                	  var ctrl = new Controller('Application', ctrlDefInfo, ctx['Application']);
  * helper: constructor argument ctx (context) is now changed to be the instance-constructor (NOTE: usually this is used only internally by the framework)
-               OLD API: 
+               OLD API:
                	  var ctx = {ApplicationHelper: <constructor>}
                	  var helper = new Helper(ctrl, 'ApplicationHelper', ctx);
                NEW API:
                	  var helper = new Helper(ctrl, 'ApplicationHelper', <constructor>);
-               
+
                i.e. if the Helper constructor was used directly, change old code to something like:
                	  var helper = new Helper(ctrl, 'ApplicationHelper', ctx['ApplicationHelper']);
- 
+
  * mediaManager plugins: media plugins are now wrapped AMD modules; the new loading mechanism will not handle "old-style" plugins automatically (need to load compatibility layer v4 for using old plugins!)
- 
+
  * mmirf/dictionary: internal usage is replaced with standard Map implementation
      * still available as module, but needs to be async-required (first time), i.e.:
           mmir.require(['mmirf/dictionary'], function(Dictionary){...
@@ -170,7 +189,7 @@ ADDITION:
  * languageManager: for fixLang(...), added language code fix for 'google' -> convert 3-letter codes to 2-letter codes
  * presentationManager: added helper function PresentationManager._fireRenderEvent() for use in view-engine implementations for emitting rendering events
 
-  
+
 
 BUGFIX:
  * logger: do allow setDefaultLogLevel() be set with string (in addition to number), e.g. 'debug', 'info', 'warn', 'error'
@@ -205,7 +224,7 @@ FIX:
    * cf. https://developers.google.com/web/updates/2017/09/autoplay-policy-changes
    * now event 'errorplay' will be triggered on mediaManager, if play() causes a rejected promise
    * basic example for handling:
-   		
+
           mmir.media.on('errorplay', function(audio, domException){
 
             const btn = document.createElement('button');
@@ -238,28 +257,28 @@ MODFIFICATIONS:
 
  * manager: added multi-client capability
     * added support for creating multiple instance of controllerManager, dialogManager, and inputManager
-    * usage example: 
-    
+    * usage example:
+
 		function createClientSession(mmir, globalCtx, options){
-		
+
 		  var isDebug = options.isDebug;
-		
+
 		  //create shallow copy of mmir namespace:
 		  var _mmir = mmir.require('mmirf/util/extend')({}, mmir);
-		
+
 		  return new Promise(function(resolve, reject){
-		
+
 		    var ctrl = _mmir.ctrl._create();
-		
+
 		    ctrl.init(globalCtx).then(function(ctrl){
-		
+
 		      if(isDebug) console.log('**************************** initialized ctrl instance...');
-		
+
 		      _mmir.ctrl = ctrl;
-		
+
 		      var dialog = _mmir.dialog._create();
 		      var input  = _mmir.input._create();
-		
+
 		      Promise.all([
 		        dialog.init(false).then(function(dlg){
 		          if(isDebug) console.log('**************************** initialized dialog instance...');
@@ -276,22 +295,22 @@ MODFIFICATIONS:
 		        if(isDebug) console.log('**************************** creating controller instances using separate instances for ctrl, dialog, input ...');
 		        resolve(_mmir);
 		      })
-		
+
 		    });
-		
+
 		  });
 		}
 
 
 
  * improved error output for SCION engine
- 
+
 
 BUGFIX:
 
  * manager/notificationManager: updated implementation for changed cordova vibrate() implementation
 
- 
+
 ##################
  Version 4.1.0
 ##################
@@ -302,7 +321,7 @@ MODFIFICATIONS:
    * dialogManager/inputManager: renamed internal logger to _logger (for compatibility with newer SCION libraries)
    * scionEngine: added compatibility code for newer SCION lib versions
    * grammerEngine/pegjs: use AMD library variant, instead of node-incompatible requirejs shim
- 
+
 
 BUGFIX:
 
@@ -315,7 +334,7 @@ BUGFIX:
    * save access window/global object
    * consistently access Worker (through window/global object)
    * stub-factory impl.: invoke gen in context of engine-instance
- 
+
 ##################
  Version 4.0.1
 ##################
@@ -336,13 +355,13 @@ BUGFIX:
    * FIX evaluate options object (if present
  * mmir.util: fixed checkNetworkConnection(): check all necessary fields/classes before assuming that Cordova network-information plugin can be used for checking the network status
  * webAudioTextToSpeech: do release audio resources in single-sentence mode (not only in multiple-sentence mode)
-   
+
 
 ##################
  Version 4.0.0
 ##################
 
- ----------------- [starter-kit backward compat settting]  ----------------- 
+ ----------------- [starter-kit backward compat settting]  -----------------
 
 index.html: add jQuery, e.g. v2 or v3
 <script type="text/javascript" src="jquery-2.2.3.js"></script>
@@ -354,13 +373,13 @@ app.js:
 mmir.ready(function () {mmir.require(['core3Compatibility'], function(core3Compatibility){
 ...
 });
- ----------------- [starter-kit backward compat settting]  ----------------- 
+ ----------------- [starter-kit backward compat settting]  -----------------
 
 
 ----------------- < Migration Guide > -----------------
 
 
-> see also migration resources at (T.B.D.)  
+> see also migration resources at (T.B.D.)
 > https://github.com/mmig/mmir-migration/
 
 
@@ -379,44 +398,44 @@ update web-resources:
                                            instead of require('../appjs/some-script') [OLD]
                                            use        require('./appjs/some-script')  [NEW]
                                            or         require('appjs/some-script')    [NEW]
-                                           
+
 
  * if the app uses jQuery:
    jQuery does not ship with mmir-lib anymore, i.e. needs to added separately, if it is required
    (e.g. insert <script> for jQuery in index.html)
-   
+
  * if the app uses jQuery Mobile:
    jQuery Mobile does not ship with mmir-lib anymore, i.e. needs to added separately, if it is required
    (e.g. insert <script> and <link> for jQuery Mobile and its styles in index.html)
- 
+
  * dealing with changed API:
- 
+
    1) use compatibility module(s):
       (a) if the app does NOT require() mmir-lib modules, simply extend mmir.ready() callback (e.g. in app.js):
            mmir.ready(function () {
              //add compatibility closure:
              mmir.require(['mmirf/core3Compatibility'], function(core3Compatibility){
-              
+
               core3Compatibility(mmir);
-              
+
               ...<old code>
-              
+
              });//end of compatibility closure
            });//end of mmir.ready() callback
-           
+
       (b) if the app DOES require() mmir-lib modules, extend mmir.ready() callback, and first add old module-ID compatibility (e.g. in app.js):
            mmir.ready(function () {
              //add compatibility closure:
              mmir.require(['mmirf/core3ModuleIdCompatibility', 'mmirf/core3Compatibility'], function(core3ModuleIdCompatibility, core3Compatibility){
-              
+
               core3ModuleIdCompatibility(mmir.require, window);
               core3Compatibility(mmir);
-              
+
               ...<old code>
-              
+
              });//end of compatibility closure
            });//end of mmir.ready() callback
-           
+
    2) change app code according to [breaking change] comments (see below)
 
 -------------------------------------------------------
@@ -429,12 +448,12 @@ MODFIFICATIONS:
    * added util-implementations that either use jQuery (if present) or use an alternative implementation, see tools/util_purejs/ and tools/util_jquery
    * replaced jQuery dependencies with specific function-dependencies (of utility functions), e.g. util/deferred, util/extend etc
    * detect jQuery presence and use its implementation when present (see mainConfig and core)
-  
+
  * REFACTOR [breaking change] removed dependency on jQuery Mobile
    * removed jQuery Mobile library and its styles (i.e. does not "ship" with mmir-lib anymore)
    * set default view-engine to mmirf/simpleViewEngine (that has no additional dependencies)
    * extracted jqmViewEngine (jQuery Mobile-based) to separate component, that can be used instead of the new default view-engine
-    
+
  * REFACTOR [breaking change] mainConfig: set baseUrl to './' for requirejs (instead of './mmirf')
     * if requirejs was not used in application code, nothing changed
     * NOTE for external use of requirejs (in application code):
@@ -452,7 +471,7 @@ MODFIFICATIONS:
                                           example 2:
                                            instead of require('grammarConverter')           [OLD]
                                            use:       require('mmirf/grammarConverter')     [NEW]
-                                           
+
  * MODIFY  [breaking change] changed core modules in mmir namespace to shorter names
    * removed deprecated getInstance() from
      * mmirf/constants
@@ -507,10 +526,10 @@ MODFIFICATIONS:
 	 * REMOVE: loadAllCordovaPlugins()
    * MODIFY LanguageManager: removed compatibility-mode function (use separate module mmirf/core2Compatibility instead)
 	 * REMOVE: setToCompatibilityMode()
-	 
+
   * REMOVE [breaking change] of internal module scionEngine: created SCION engines do not have a getInstance method anymore
                              (since this module is only used internally, as well as the created instances, the change have no effect on application code)
-  
+
   * MODIFY [breaking change] semanticInterpreter / grammarConverter:
     * MODIFY increased GRAMMAR_FILE_FORMAT_VERSION to 5 (new file format for compiled grammars)
     * MODIFY when registering compiled grammars, add stopwords via options (instead of separate function call)
@@ -541,12 +560,12 @@ MODFIFICATIONS:
      * moved functions from grammarConverter to encodeUtils:
        * encodeUmlauts
        * decodeUmlauts
-     
+
   * REMOVE [breaking change] deprecated methods from presentationManager (not restored with core3Compatibility module):
     * reRenderView(): use renderView() with corresponding arguments instead
     * renderPreviousView(): use renderView() with corresponding arguments instead
-    
-    
+
+
   * REMOVE [breaking change] legacy directory plugins/ and its auto-load function were removed (not automatically restored with core3Compatibility module):
            the plugin-directory was used for auto-loading Cordova 2 plugins. Since Cordova 3, the
            Cordova framework has its own loading mechanism.
@@ -560,54 +579,54 @@ MODFIFICATIONS:
                directoriesToParse=<...>,gen/grammar,gen/views,mmirf/plugins
              * (re-) generate the file list, e.g. by invoking "cordova prepare"
              * load the 'mmirf/core3Compatibility' module, and invoke mmir.CommonUtils.loadAllCordovaPlugins(pluginDir, completionCallback)
-               where pluginDir is the same (relative) directory path, that was added to directoriesToParse, and 
+               where pluginDir is the same (relative) directory path, that was added to directoriesToParse, and
                completionCallback is (an optional) callback, that is invoked after the plugins were loaded.
-   
+
   * ADDITION added function/module 'mmirf/core3Compatibility' for restoring backward-compatibility to mmir-lib v3 (except for changed module IDs, see below), e.g.:
-   
+
    	    mmir.ready(function () {
    		  require(['mmirf/core3Compatibility'], function(setCore3Compatibility){
 		    setCore3Compatibility(mmir);
 		    //... -> restored compatibility with pre v4
-    
+
   * ADDITION added function/module 'mmirf/core2Compatibility' for restoring backward-compatibility to mmir-lib v2 (except for changed module IDs, see below), e.g.:
-   
+
    	    mmir.ready(function () {
    		  require(['mmirf/core2Compatibility'], function(setCore2Compatibility){
 		    setCore2Compatibility(mmir);
 		    //... -> restored compatibility with pre v3
-		    
+
   * ADDITION added function/module 'mmirf/core1Compatibility' for restoring backward-compatibility to mmir-lib v1 (except for changed module IDs, see below), e.g.:
-   
+
    	    mmir.ready(function () {
    		  require(['mmirf/core1Compatibility'], function(setCore1Compatibility){
 		    setCore1Compatibility(mmir);
 		    //... -> restored compatibility with pre v2
-    
+
   * ADDITION added function/module 'mmirf/core3ModuleIdCompatibility' for restoring backward-compatibility w.r.t. changed module IDs, e.g.:
     (NOTE if used in combination with mmirf/core1Compatibility, or mmirf/core2Compatibility, or mmirf/core3Compatibility, then the mmirf/core3ModuleIdCompatibility module should be used first)
-   
+
    	    mmir.ready(function () {
    		  require(['mmirf/core3ModuleIdCompatibility'], function(core3ModuleIdCompatibility){
 		    core3ModuleIdCompatibility(core.require, window);
 		    //... -> can use old module IDs as aliases for new ones, e.g. require('languageManager') instead of / in addition of require('mmirf/languageManager')
-     
+
   * MODIFICATION grammarConverter: recodeJSON() now re-calculates token indices in semantic results (if position information is present for them)
   * MODIFICATION jsccGenerator / jisonGenerator / pegjsGenerator: error messages contain error-stack (if available)
   * MODIFICATION workers/jsccCompiler / workers/jsccCompiler / workers/jsccCompiler: error messages contain error-stack (if available)
-  
+
   * MODIFICATION mediaManager / ASR plugins: added options parameter to recognize(), startRecord(), and stopRecord() as optional first parameter
   * MODIFICATION mediaManager / TTS plugins: normalized options parameter (or text/text-array parameter) for tts() as first parameter
-  
-                                           
+
+
   * REFACTOR removed deprecated tools/envInit (not needed anymore)
-  
+
   * REFACTOR presentationManager: extracted view-loading and -compilation from presentationManager into separate module env/view/viewLoader
-  
+
   * ADDITION mmir/core:
     * added field version that holds version number (as String) of the mmir-lib
     * added method isVersion(ver: String, comparator: ">=" | "<=" | ...)
-  
+
   * ADDITION tools/constants: added function isCordovaEnv()
 
   * IMPROVE tools/loadCss: enable setting 'class' and 'data-' attributes, if provided in options
