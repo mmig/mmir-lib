@@ -1,4 +1,4 @@
-> **[mmir-lib 5.0.0](../README.md)**
+> **[mmir-lib 5.1.0](../README.md)**
 
 [Globals](../README.md) / [mmir-lib](mmir_lib.md) /
 
