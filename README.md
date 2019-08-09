@@ -4,83 +4,103 @@ mmir-lib
 https://github.com/mmig/mmir-lib
 
 
-Source Code for the MMIR (Mobile Multimodal Interaction and Rendering) library
+Source Code for the [mmir][5] (Mobile Multimodal Interaction and Rendering) library
 
-The MMIR framework provides means to created _minimal_ (client-based)
+The `mmir` framework provides means for creating _minimal_ (client-based)
 _dialog systems_ for multimodal interactions:
 
  * state-based interaction handling using SCXML (e.g. for touch/click, speech, gesture interactions)
  * support and plugins for several speech input (Automatic Speech Recognition, ASR) engines
  * support and plugins for several speech output/synthesis (Text To Speech, TTS) engines
  * support for client- or sever-based NLU processing
-  * built-in support for grammars (similar BNF grammars that parse input as _tokens_ and _utterances_)
+  * built-in support for grammars (similar to BNF grammars that parse input as _tokens_ and _utterances_)
 
-See API documentation is available at [/docs][6] (`md` format) or in [HTML format][7].
+See API documentation is available at [/docs][6] (`md` format) or in [HTML format][7]
 (more details are available in [jsdoc-generated API documentation][8], and further details at [github.com/mmig/mmir][5]).
 
-For examples, see the [mmir-starter-simple][1] or [mmir-starter-ionic][2].
+For examples, see the [mmir-starter-kit][1] or [mmir-starter-ionic][2].
 
---
+----
 # Usage
 
-## Building Resources (Grammars etc)
+## Building Grammars, State Machines etc.
 
  * Prerequesites: Node.js
 
-Some resources (e.g. grammars) need to be build/compiled, before they can be used.
+Some resources (e.g. grammars, state machines) can be built/compiled before they
+are used in the application at runtime.  
+Note that most of these resources can be compiled during runtime too (as in case
+of grammars and state machines).
 
-This is supported e.g. via the [mmir-tooling][3] project.
+Pre-building these resources is supported e.g. via the [mmir-tooling][3] project.
 
-In addition, the [mmir-wepack][4] integration, provides a further automated way
-for including `mmir` in webpack-based apps / build applications.
+In addition, the [mmir-wepack][4] integration provides special support
+for including `mmir` in webpack-based/-built applications.
 
-## Basic Web Page Integration
+## Include in Web Page
 
- * include `/lib` as directory `/mmirf` in your web resources directory (e.g. `/www/mmirf`)
+The following shows an example of including `mmir-lib` in a web page "as-is", i.e. without
+any build-system (like `webpack`).
+
+`mmir-lib` includes `requirejs` for (async) lazy-loading its sub-modules.
+
+ * include `/lib` as directory `/mmirf` in your web resources directory, e.g. `/www/mmirf`  
+   _(e.g. use [`mmirinstall`][12] script of `mmir-tooling`: `mmirinstall www/mmirf`)_
 
  * load/include `mmir` in HTML page
-  ```html
-  <!-- OPTIONAL helper script: auto-detect Cordova-environment and load its library if necessary: -->
-  <script type="text/javascript" src="mmirf/tools/initCordova.js"></script>
+   ```html
+   <!-- OPTIONAL helper script: auto-detect Cordova-environment and load its library if necessary: -->
+   <script type="text/javascript" src="mmirf/tools/initCordova.js"></script>
 
-  <!-- load the framework's core/base object -->
-  <script type="text/javascript" src="mmirf/core.js"></script>
+   <!-- load the framework's core/base object -->
+   <script type="text/javascript" src="mmirf/core.js"></script>
 
-  <!-- OPTIONAL: configure mmir framework before it starts loading/initializing
-                  using some custom script (in this example at appjs/preinit.js)
-                  for more details see the documentation at github.com/mmig/mmir
-  -->
-  <script type="text/javascript" src="appjs/preinit.js"></script>
+   <!-- OPTIONAL: configure mmir framework before it starts loading/initializing
+                   using some custom script (in this example at appjs/preinit.js)
+                   for more details see the documentation at github.com/mmig/mmir
+   -->
+   <script type="text/javascript" src="appjs/preinit.js"></script>
 
-  <!-- load mmir library -->
-  <script type="text/javascript" src="mmirf/vendor/libs/require.min.js" data-main="mmirf/mainConfig" ></script>
-  ```
- * use `mmir` after it's been initialized
-  ```javascript
-  mmir.ready(function(){
-    ...
-  })
-  ```
+   <!-- load mmir library -->
+   <script type="text/javascript" src="mmirf/vendor/libs/require.min.js" data-main="mmirf/mainConfig" ></script>
+   ```
+ * use `mmir` in JavaScript code (after it's been initialized)
+   ```javascript
+   mmir.ready(function(){
+     ...
+   })
+   ```
 
 ## Node.js
 
 ```javascript
-var mmir = require('mmir-lib');
+var mmirLib = require('mmir-lib');
+
+//optional: run some configuration before starting to initialize mmir
+var preInitFunc = function(mmir){
+  //... some custom configuration for mmir before loading the library
+};
+
+//init should only be called once:
+var mmir = mmirLib.init(preInitFunc);
+
 mmir.ready(function(){
   ...
-})
+});
 ```
 
 ### Node.js and WebWorker
 
-For some functionality (e.g. async-compiling grammars, state-manager event processing), `mmir` uses `WebWorker`.
-While most of the these functionalities do have fallback implementation, they may not always provide the same functionality.
+For some functionality (e.g. async-compiling grammars, state-manager event processing), `mmir` uses `WebWorker`s.
+While most of the these functionalities do have fallback implementations, they
+may not always provide the same functionality, and run less efficiently.
 
-However, `mmir` can use the following `WebWorker` implementations as drop-ins when running in `node`:
+`mmir` can use the following `WebWorker` implementations as drop-ins for
+HTML5 `WebWorker`s when running in `node`:
 
- * built-in `node` module `worker_threads`:
+ * built-in `node` module `worker_threads` (recommended):
    * since version 10.5.0 available as _experimental_ feature:  
-     usage by running `node` with command-line argument `--experimental-worker`, e.g.
+     use/enable by running `node` with command-line argument `--experimental-worker`, e.g.
      ```bash
      # when using node directly
      node --experimental-worker ...
@@ -96,19 +116,22 @@ However, `mmir` can use the following `WebWorker` implementations as drop-ins wh
    * since `node` version 11.x `worker_threads` is enabled by default
 
  * alternative module `webworker-threads` with version >= 0.8.x
-   * NOTE not everything may work using this package
-   * current [npm][10] version is 0.7.x
-   * current version on [github][11] is 0.8.x
+   * NOTE not everything may work using this package (if possible use `worker_threads`)
+   * [worker_threads at npm][10]: current version is 0.7.x
+   * [worker_threads on github][11]: current version is 0.8.x
 
 ## Additional Notes
 
-See also the [tools project][3] for scripts, resources etc. for compiling and generating resources
-(e.g. for compiling JSON grammar files from the application's `config/languages/[language code]/`
-directories into JavaScript files).
+More details, further documentation etc. are available on the [mmir][5] project page.
 
-NOTE: Integration with / loading of Cordova is designed to work with the _build process_
-      of **Cordova 5** or later (see [cordova example project][9] for integration / tooling of the MMIR framework
-      in combination with Cordova 5 and later versions).
+See also the [tools project][3] for scripts, resources etc. for compiling and
+generating resources (e.g. for compiling JSON grammar files from the application's
+`config/languages/[language code]/` directories into JavaScript files).
+
+NOTE: Integration with / loading of Cordova is designed to work with the
+      _build process_ of **Cordova 5 or later** (see [mmir-tooling][3] and
+      [cordova example project][9] for integration / tooling of the `mmir`
+      framework in combination with Cordova 5 and later versions).
 
 --
 #### Used Libraries
@@ -148,3 +171,4 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 [9]: https://github.com/mmig/mmir-cordova
 [10]: https://www.npmjs.com/package/webworker-threads
 [11]: https://github.com/audreyt/node-webworker-threads
+[12]: https://github.com/mmig/mmir-tooling#bare-bones-mmir-lib-integration
