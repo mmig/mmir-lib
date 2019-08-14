@@ -781,7 +781,7 @@ export declare class Controller {
 
 }
 
-export interface DialogManager4Compatiblity extends DialogManager {
+export interface DialogManager4Compatibility extends DialogManager {
 	getOnPageRenderedHandler: () => Function | undefined;
 	hideCurrentDialog: () => void;
 	hideWaitDialog: () => void;
