@@ -241,12 +241,11 @@ export interface PhraseInfo {
 //////////////////////////////////////////////////////////// TODO //////////////////////////////////////////////////////
 
 export interface CommonUtils {
-	regexHTMLComment: RegExp;
+	readonly regexHTMLComment: RegExp;
+	readonly requireProtocol: string;
 	checkNetworkConnection: () => any;
 	concatArray: (array: any) => any;
 	getCompiledGrammarPath: (generatedGrammarsPath: any, grammarId: any, isFileNameOnly: any) => any;
-	getDirectoryContents: (pathname: any) => any;
-	getDirectoryContentsWithFilter: (pathname: any, filter: any) => any;
 	getDirectoryStructure: () => any;
 	getLocalScript: (scriptUrl: any, success: any, fail: any, ...args: any[]) => void;
 	getPartialsPrefix: () => any;
@@ -259,7 +258,6 @@ export interface CommonUtils {
 	loadImpl: (librariesPath: any, isSerial: any, completedCallback: any, checkIsAlreadyLoadedFunc: any, statusCallback: any) => any;
 	loadScript: (url: any, successCallback: any, errorCallback: any, ...args: any[]) => any;
 	parseParamsToDictionary: (urlParamsPartStrings: any) => any;
-	resizeFitToSourroundingBox: (class_name: any) => void;
 	stripPathName: (pathname: any) => any;
 }
 export interface ConfigurationManager {
