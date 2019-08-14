@@ -1,4 +1,4 @@
-> **[mmir-lib 5.1.0](../README.md)**
+> **[mmir-lib 5.2.0](../README.md)**
 
 [Globals](../README.md) / [mmir-lib](mmir_lib.md) /
 
@@ -37,7 +37,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [ControllerManager](../interfaces/mmir_lib.controllermanager.md)
 * [DialogEngine](../interfaces/mmir_lib.dialogengine.md)
 * [DialogManager](../interfaces/mmir_lib.dialogmanager.md)
-* [DialogManager4Compatiblity](../interfaces/mmir_lib.dialogmanager4compatiblity.md)
+* [DialogManager4Compatibility](../interfaces/mmir_lib.dialogmanager4compatibility.md)
 * [EncodeUtils](../interfaces/mmir_lib.encodeutils.md)
 * [Grammar](../interfaces/mmir_lib.grammar.md)
 * [GrammarConverter](../interfaces/mmir_lib.grammarconverter.md)

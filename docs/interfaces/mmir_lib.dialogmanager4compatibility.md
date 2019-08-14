@@ -1,29 +1,29 @@
-> **[mmir-lib 5.1.0](../README.md)**
+> **[mmir-lib 5.2.0](../README.md)**
 
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [DialogManager4Compatiblity](mmir_lib.dialogmanager4compatiblity.md) /
+[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md) /
 
-# Interface: DialogManager4Compatiblity
+# Interface: DialogManager4Compatibility
 
 ## Hierarchy
 
 * [DialogManager](mmir_lib.dialogmanager.md)
 
-  * **DialogManager4Compatiblity**
+  * **DialogManager4Compatibility**
 
 ## Index
 
 ### Properties
 
-* [getOnPageRenderedHandler](mmir_lib.dialogmanager4compatiblity.md#getonpagerenderedhandler)
-* [hideCurrentDialog](mmir_lib.dialogmanager4compatiblity.md#hidecurrentdialog)
-* [hideWaitDialog](mmir_lib.dialogmanager4compatiblity.md#hidewaitdialog)
-* [perform](mmir_lib.dialogmanager4compatiblity.md#perform)
-* [performHelper](mmir_lib.dialogmanager4compatiblity.md#performhelper)
-* [raise](mmir_lib.dialogmanager4compatiblity.md#raise)
-* [render](mmir_lib.dialogmanager4compatiblity.md#render)
-* [setOnPageRenderedHandler](mmir_lib.dialogmanager4compatiblity.md#setonpagerenderedhandler)
-* [showDialog](mmir_lib.dialogmanager4compatiblity.md#showdialog)
-* [showWaitDialog](mmir_lib.dialogmanager4compatiblity.md#showwaitdialog)
+* [getOnPageRenderedHandler](mmir_lib.dialogmanager4compatibility.md#getonpagerenderedhandler)
+* [hideCurrentDialog](mmir_lib.dialogmanager4compatibility.md#hidecurrentdialog)
+* [hideWaitDialog](mmir_lib.dialogmanager4compatibility.md#hidewaitdialog)
+* [perform](mmir_lib.dialogmanager4compatibility.md#perform)
+* [performHelper](mmir_lib.dialogmanager4compatibility.md#performhelper)
+* [raise](mmir_lib.dialogmanager4compatibility.md#raise)
+* [render](mmir_lib.dialogmanager4compatibility.md#render)
+* [setOnPageRenderedHandler](mmir_lib.dialogmanager4compatibility.md#setonpagerenderedhandler)
+* [showDialog](mmir_lib.dialogmanager4compatibility.md#showdialog)
+* [showWaitDialog](mmir_lib.dialogmanager4compatibility.md#showwaitdialog)
 
 ## Properties
 

@@ -1,4 +1,4 @@
-> **[mmir-lib 5.1.0](../README.md)**
+> **[mmir-lib 5.2.0](../README.md)**
 
 [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [CommonUtils](mmir_lib.commonutils.md) /
 
@@ -15,8 +15,6 @@
 * [checkNetworkConnection](mmir_lib.commonutils.md#checknetworkconnection)
 * [concatArray](mmir_lib.commonutils.md#concatarray)
 * [getCompiledGrammarPath](mmir_lib.commonutils.md#getcompiledgrammarpath)
-* [getDirectoryContents](mmir_lib.commonutils.md#getdirectorycontents)
-* [getDirectoryContentsWithFilter](mmir_lib.commonutils.md#getdirectorycontentswithfilter)
 * [getDirectoryStructure](mmir_lib.commonutils.md#getdirectorystructure)
 * [getLocalScript](mmir_lib.commonutils.md#getlocalscript)
 * [getPartialsPrefix](mmir_lib.commonutils.md#getpartialsprefix)
@@ -30,7 +28,7 @@
 * [loadScript](mmir_lib.commonutils.md#loadscript)
 * [parseParamsToDictionary](mmir_lib.commonutils.md#parseparamstodictionary)
 * [regexHTMLComment](mmir_lib.commonutils.md#regexhtmlcomment)
-* [resizeFitToSourroundingBox](mmir_lib.commonutils.md#resizefittosourroundingbox)
+* [requireProtocol](mmir_lib.commonutils.md#requireprotocol)
 * [stripPathName](mmir_lib.commonutils.md#strippathname)
 
 ## Properties
@@ -76,39 +74,6 @@ Name | Type |
 `generatedGrammarsPath` | any |
 `grammarId` | any |
 `isFileNameOnly` | any |
-
-___
-
-###  getDirectoryContents
-
-• **getDirectoryContents**: *function*
-
-#### Type declaration:
-
-▸ (`pathname`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`pathname` | any |
-
-___
-
-###  getDirectoryContentsWithFilter
-
-• **getDirectoryContentsWithFilter**: *function*
-
-#### Type declaration:
-
-▸ (`pathname`: any, `filter`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`pathname` | any |
-`filter` | any |
 
 ___
 
@@ -300,19 +265,9 @@ ___
 
 ___
 
-###  resizeFitToSourroundingBox
+###  requireProtocol
 
-• **resizeFitToSourroundingBox**: *function*
-
-#### Type declaration:
-
-▸ (`class_name`: any): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`class_name` | any |
+• **requireProtocol**: *string*
 
 ___
 

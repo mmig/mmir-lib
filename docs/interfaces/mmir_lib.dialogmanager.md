@@ -1,4 +1,4 @@
-> **[mmir-lib 5.1.0](../README.md)**
+> **[mmir-lib 5.2.0](../README.md)**
 
 [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [DialogManager](mmir_lib.dialogmanager.md) /
 
@@ -8,7 +8,7 @@
 
 * **DialogManager**
 
-  * [DialogManager4Compatiblity](mmir_lib.dialogmanager4compatiblity.md)
+  * [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md)
 
 ## Index
 
