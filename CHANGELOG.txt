@@ -1,5 +1,5 @@
 
-version notes for MMIR framework code (v 5.1.0)
+version notes for MMIR framework code (v 5.2.0)
 
  * using Cordova 5.x.x - 8.x.x library
 
@@ -33,7 +33,28 @@ additional, required dependencies when running in node environment
  Change Log
  --------------
 ##################
-Version 5.1.0
+Version 5.2.0
+##################
+
+ADDITION:
+
+ * commonUtils: loadScript() now parses for (internal) "require://" protocol and loads require:// resources via require() call instead of using getLocalScript() (which uses <script> tags)
+
+MODIFICATION:
+
+ * commonUtils: moved deprecated methods into compatibility module mmirf/core4Compatibility
+   * getDirectoryContents()
+	 * getDirectoryContentsWithFilter()
+	 * for listDir(pathname: string, filter: RegExp | Function | string):
+	   dropped wild-card support for filter-string, i.e. without core4Compatibility, if (optional second) filter-parameter has type string it is matched against the file-name "as-is", without evaluating wildcards
+
+BUGFIX:
+ * mediaManager: FIX undeclared var in error-handler when loading plugins
+ * do include backwards-compatibility module mmirf/core4Compatibility
+ * FIX typo in module name DialogManager4Compatiblity -> DialogManager4Compatibility
+
+##################
+Version 5.2.0
 ##################
 
 MODIFICATION:
@@ -82,17 +103,6 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
 
 [breaking change | compatibility mode] MODIFICATION:
 
- * renamed directory/file for SCXML resources & its config-name:
-   * moved from directory "/config/statedef" -> "/states"
-     * NOTE: SCXML files are now pre-compiled to JS and emitted to "/gen/states"
-   * renamed file "dialogDescriptionSCXML.xml" -> "dialog.xml"
-   * renamed file "inputDescriptionSCXML.xml"  -> "input.xml"
-   * renamed config-field "scxmlDoc" -> "modelUri", e.g. replace
-       mmir.config({config: { 'mmirf/dialogManager': {scxmlDoc: 'all_states/example-view_transitions-dialog-states.xml'});
-     with:
-       mmir.config({config: { 'mmirf/dialogManager': {modelUri: 'all_states/example-view_transitions-dialog-states.xml'});
-
-
  * env/media: renamed modules for improved consistency; corresponding settings in configuration.json need to be adjusts
    * renamed "webAudioTextToSpeech" module to "audiotts"
      * in configuration.json: change entries in {"mediaManager": { "plugins": ...
@@ -105,9 +115,9 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
 
 
  * dialogManager: removed helper/shortcut methods that invoke ControllerManager or PresentationManager methods
-   * methods can be re-attached using dialogManager4Compatiblity module:
+   * methods can be re-attached using dialogManager4Compatibility module (or via core4Compatibility):
 
-      mmir.require(['mmirf/dialogManager4Compatiblity'], function(dialogCompat){
+      mmir.require(['mmirf/dialogManager4Compatibility'], function(dialogCompat){
         //re-attache helper/shortcut methods:
       	dialogCompat(mmir.dialog);
       });
@@ -136,7 +146,23 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
      * getDictionaryFileName() -> getGrammarFileUrl(langCode)
 
 
+[breaking change | mmir-tooling compatibility] MODIFICATION:
+
+ * renamed directory/file for SCXML resources & its config-name:
+   * NOTE: SCXML files are now pre-compiled to JS and emitted to "/gen/states"
+     * changes described here are backwards compatible when using mmir-tooling & using pre-compiled SCXML models, that is they are automatically handled by mmir-tooling in a backwards compatible way
+     * for runtime parsing of SCXML files (i.e. directly loading *.xml during runtime), the files need to be renamed & moved as described below
+   * moved from directory "/config/statedef" -> "/states"
+   * renamed file "dialogDescriptionSCXML.xml" -> "dialog.xml"
+   * renamed file "inputDescriptionSCXML.xml"  -> "input.xml"
+   * renamed config-field "scxmlDoc" -> "modelUri", e.g. replace
+        mmir.config({config: { 'mmirf/dialogManager': {scxmlDoc: 'all_states/example-view_transitions-dialog-states.xml'});
+      with:
+        mmir.config({config: { 'mmirf/dialogManager': {modelUri: 'all_states/example-view_transitions-dialog-states.xml'});
+     if custom configuration for setting the XML file for inputManager or dialogManager had been used
+
 [breaking change] MODIFICATION:
+
  * controllerManager: for creating FileInfo (i.e. Controller.def): dropped (unused) field fileName and make genPath non-optional field
  * controller: constructor argument ctx (context) is now changed to be the instance-constructor (NOTE: usually this is used only internally by the framework)
                OLD API:
