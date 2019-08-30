@@ -124,7 +124,7 @@ export interface Grammar {
 }
 
 export interface Positions {
-	str: string;
+	text: string;
 	pos: Array<Pos>;
 }
 
@@ -147,13 +147,15 @@ export interface GrammarConverter {
 
 	isAsyncExec: () => boolean;
 
-	preproc(thePhrase: string, pos?: {stopwords: Array<Pos>}, maskFunc?: (inputStr : string, isCalcPosition?: boolean) => string | Positions, stopwordFunc?: (inputStr : string, pos?: Array<Pos>) => string | Positions): string;
+	preproc(thePhrase: string, pos?: {stopwords: Array<Pos>}, maskFunc?: (inputStr : string, isCalcPosition?: boolean) => string | Positions, stopwordFunc?: (inputStr : string, isCalcPosition?: boolean) => string | Positions): string;
 	postproc(procResult: any, recodeFunc?: (inputStr : string, ...args: any[]) => string): any;
+
+	removeStopwords: (inputStr : string, isCalcPosition?: boolean) => string | Positions;
 
 	executeGrammar: (text: string, callback?: (semanticResult: {}) => void) => void;
 
 	maskString:  (str: string, computePositions?: boolean, prefix?: string, postfix?: string) => string | Positions;
-	maskAsUnicode:  (str: string) => string;
+	maskAsUnicode:  (str: string, computePositions?: boolean) => string;
 	unmaskString:  (str: string, computePositions?: boolean, detector?: RegExp) => string | Positions;
 
 	unmaskJSON:  (json: any, isMaskValues?: boolean, isMaskNames?: boolean) => any;
