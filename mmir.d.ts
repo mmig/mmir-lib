@@ -169,7 +169,7 @@ export interface GrammarConverter {
 	entry_index_field: string;
 	enc_regexp_str: string;
 
-	jscc_grammar_definition: string;
+	grammar_definition: string;
 	js_grammar_definition: string;
 	json_grammar_definition: Grammar;
 	stop_words_regexp: RegExp;
