@@ -161,14 +161,7 @@ export interface GrammarConverter {
 	unmaskJSON:  (json: any, isMaskValues?: boolean, isMaskNames?: boolean) => any;
 	recodeJSON: (json: any, recodeFunc:(str:string)=>string, isMaskValues?: boolean, isMaskNames?: boolean) => any;
 
-	//semi-private fileds
-	variable_prefix: string;
-	variable_regexp: RegExp;
-
-	entry_token_field: string;
-	entry_index_field: string;
-	enc_regexp_str: string;
-
+	//semi-private fields
 	grammar_definition: string;
 	js_grammar_definition: string;
 	json_grammar_definition: Grammar;
