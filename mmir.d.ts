@@ -128,7 +128,19 @@ export interface Positions {
 	pos: Array<Pos>;
 }
 
+export interface ProcessingOrderInfo {
+	_order?: Array<string>;
+}
+
+export interface PositionsInfo {
+	[processingName: string]: Array<Pos>;
+}
+
+export type ProcessingPositionsInfo = ProcessingOrderInfo & PositionsInfo;
+
 export interface GrammarConverter {
+
+	procList: Array<ProcessingStep>;
 
 	loadGrammar: (successCallback: ()=> any, errorCallback: ()=> any, grammarUrl: string, doLoadSynchronously?: boolean) => void;
 	loadResource: (successCallback: ()=> any, errorCallback: ()=> any, resourceUrl: string, doLoadSynchronously?: boolean) => void;
@@ -147,8 +159,12 @@ export interface GrammarConverter {
 
 	isAsyncExec: () => boolean;
 
-	preproc(thePhrase: string, pos?: {stopwords: Array<Pos>}, maskFunc?: (inputStr : string, isCalcPosition?: boolean) => string | Positions, stopwordFunc?: (inputStr : string, isCalcPosition?: boolean) => string | Positions): string;
-	postproc(procResult: any, recodeFunc?: (inputStr : string, ...args: any[]) => string): any;
+	preproc(thePhrase: string, pos?: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>): string;
+	postproc(procResult: any, pos: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>): any;
+
+	addProc: (proc: ProcessingStep, indexOrIsPrepend?: number|boolean) => void;
+	removeProc: (proc: number|string) => ProcessingStep | undefined;
+	getProcIndex: (procName: string, startIndex?: number) => number;
 
 	removeStopwords: (inputStr : string, isCalcPosition?: boolean) => string | Positions;
 
@@ -198,6 +214,7 @@ export interface SemanticInterpreter {
 	setStopwords: (id: string, stopwordArray: Array<string>) => void;
 	hasGrammar: (id: string) => boolean;
 	removeGrammar: (id: string) => void;
+	addProcessing: (id: string, processingStep: ProcessingStep, indexOrIsPrepend?: number|boolean, callback?: Function) => void;
 	setCurrentGrammar: (id: string) => void;
 	getCurrentGrammar: () => string;
 	setEnabled: (isEnabled: boolean) => void;
@@ -232,6 +249,14 @@ export interface PhraseInfo {
 	/** the matched token(s) */
 	tok: string;
 }
+
+export interface ProcessingStep {
+	name: string;
+	pre?: ProcessingFunction;
+	post?: ProcessingFunction;
+}
+
+export type ProcessingFunction = (input: string | Positions, isProcessPositions?: boolean) => string | Positions;
 
 //////////////////////////////////////////////////////////// TODO //////////////////////////////////////////////////////
 
