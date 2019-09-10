@@ -223,6 +223,8 @@ export interface SemanticInterpreter {
 	setGrammarEngine: (engineId: GrammarEngineType, asyncCompileMode?: boolean) => void;
 	setEngineCompileMode: (asyncCompileMode: boolean) => void;//DEFAULT: false
 	getFileVersion: () => number;
+	isPreProcessPositionsEnabled: () => boolean;
+	setPreProcessPositionsEnabled: (enabled: boolean) => void;
 
 	get_json_grammar_url: (id: string) => string;//NOTE may get removed/renamed
 }
