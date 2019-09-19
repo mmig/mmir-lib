@@ -267,7 +267,8 @@ export interface CommonUtils {
 	readonly requireProtocol: string;
 	checkNetworkConnection: () => any;
 	concatArray: (array: any) => any;
-	getCompiledGrammarPath: (generatedGrammarsPath: any, grammarId: any, isFileNameOnly: any) => any;
+	getCompiledGrammarPath: (generatedGrammarsPath: string, grammarId: string, isFileNameOnly?: boolean) => string;
+	getCompiledResourcesIds: (compiledResourcesPath: string) => Array<string>;
 	getDirectoryStructure: () => any;
 	getLocalScript: (scriptUrl: any, success: any, fail: any, ...args: any[]) => void;
 	getPartialsPrefix: () => any;
