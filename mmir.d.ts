@@ -278,6 +278,7 @@ export interface CommonUtils {
 	isRunningOnSmartphone: () => any;
 	loadCompiledGrammars: (generatedGrammarsPath: string, cbFunction: Function, ignoreGrammarIds?: Array<string>) => any;
 	loadDirectoryStructure: (success: any, errorFunc: any) => any;
+	listDir: (pathname: string, filter: RegExp|((entry: string)=>boolean)) => Array<string>;
 	loadImpl: (librariesPath: any, isSerial: any, completedCallback: any, checkIsAlreadyLoadedFunc: any, statusCallback: any) => any;
 	loadScript: (url: any, successCallback: any, errorCallback: any, ...args: any[]) => any;
 	parseParamsToDictionary: (urlParamsPartStrings: any) => any;
@@ -304,6 +305,7 @@ export interface Resources {
 	getGeneratedGrammarsPath: () => string;
 	getGrammarFileUrl: (langCode?: string) => string;
 	getGrammarPluginPath: () => string;
+	getGeneratedStateModelsPath: () => string;
 	getHelperPath: () => string;
 	getHelperSuffix: () => string;
 	getLanguage: () => string;
