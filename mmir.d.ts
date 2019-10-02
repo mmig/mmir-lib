@@ -385,12 +385,13 @@ export interface LanguageManager {
 	fixLang: (providerName: string, langCode: string) => string;
 	getDefaultLanguage: () => string;
 	getDictionary: () => {[id:string]: string};
+	getSpeechConfig: () => {[config:string]: any};
 	getLanguage: () => string;
 	getLanguageConfig: (pluginId: string, feature: string, separator?: string) => any;
 	getLanguages: () => Array<string>;
 	getText: (textVarName: string) => string;
 	init: (lang: string) => any;
-	setLanguage: (lang: string) => any;
+	setLanguage: (lang: string, doNotLoadResources?: boolean) => string;
 }
 export type MediaEventHandler = Function;
 export type MediaEventType = string;
