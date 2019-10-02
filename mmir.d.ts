@@ -103,6 +103,13 @@ export interface MmirModule extends MmirCore {
 	readonly semantic: SemanticInterpreter;
 }
 
+//exported main module in node environment:
+export interface NodeMmirModule extends MmirModule {
+	_config: {[field: string]: any};
+	readonly _requirejs: RequireJs;
+	init: (preConfigure?: (mmirCore: MmirCore) => &MmirModule) => &NodeMmirModule;
+}
+
 export type LogLevel = 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';
 export type LogLevelNum =   0    |    1    |   2    |   3    |   4     |      5     |     6;
 
