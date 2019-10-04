@@ -120,8 +120,12 @@ export type Comparator = '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '
  */
 export interface Grammar {
 
+	/** @deprecated use field [[example_phrases]] instead */
 	example_phrase?: string;
+	example_phrases?: string | Array<string>;
 
+	stopwords: Array<string>;
+	/** @deprecated use field [[stopwords]] instead */
 	stop_word: Array<string>;
 
 	tokens: { [id: string]: Array<string> };
@@ -166,8 +170,8 @@ export interface GrammarConverter {
 
 	isAsyncExec: () => boolean;
 
-	preproc(thePhrase: string, pos?: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>): string;
-	postproc(procResult: any, pos: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>): any;
+	preproc: (thePhrase: string, pos?: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>) => string;
+	postproc: (procResult: any, pos: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>) => any;
 
 	addProc: (proc: ProcessingStep, indexOrIsPrepend?: number|boolean) => void;
 	removeProc: (proc: number|string) => ProcessingStep | undefined;
@@ -212,7 +216,9 @@ export interface Pos {
 export interface SemanticInterpreter {
 
 	interpret: (phrase: string, langCode?: string, callback?: (semanticResult: GrammarResult) => void) => GrammarResult | void;
+	/** @deprecated use [[applyPreProcessing]] instead */
 	removeStopwords: (thePhrase: string, lang?: string) => string;
+	applyPreProcessing: (thePhrase: string, lang?: string, processingSteps?: Array<ProcessingStep>) => string;
 	getGrammarDefinitionText: (id: string) => string;
 	getGrammarParserText: (id: string) => string;
 	getGrammarConverter: (id: string) => GrammarConverter;
