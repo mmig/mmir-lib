@@ -262,7 +262,7 @@ export interface PhraseInfo {
 	/** the token type or utterance type */
 	type: string;
 	/** the matched token(s) */
-	tok: string;
+	tok: string | Array<PhraseInfo>;
 }
 
 export interface ProcessingStep {
