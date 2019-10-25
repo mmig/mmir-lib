@@ -298,10 +298,10 @@ export interface CommonUtils {
 	stripPathName: (pathname: any) => any;
 }
 export interface ConfigurationManager {
-	get: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => any;
-	getBoolean: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => boolean;
-	getString: (propertyName: string, defaultValue?: any, useSafeAccess?: boolean) => string;
-	set: (propertyName: string, value: any) => void;
+	get: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => any;
+	getBoolean: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => boolean;
+	getString: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => string;
+	set: (propertyName: string | string[], value: any) => void;
 }
 export interface Resources {
 	getBasePath: () => string;
