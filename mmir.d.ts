@@ -517,6 +517,7 @@ export interface PlayError {
 	error: DOMException;
 }
 
+export type PluginType = 'custom' | MediaPluginType | string;
 export type MediaPluginType = 'audio' | 'asr' | 'tts' | 'prep' | string;
 
 export type MediaPluginEnvType = 'browser' | 'cordova' | 'android' | 'ios';
