@@ -36,7 +36,7 @@ export var startModule: string;//DEFAULT: 'mmirf/main';
 export var startModules: undefined | Array<string>;//DEFAULT: undefined
 export var viewEngine: string;//DEFAULT: "mmirf/simpleViewEngine";
 export var debug: boolean;//DEFAULT: true;
-export var logLevel: LogLevelNum | LogLevel;//DEFAULT: 'debug';
+export var logLevel: LogLevelNum | LogLevel | LogLevelOptions;//DEFAULT: 'debug';
 export var logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
 export var libMode: undefined | "min";//DEFAULT: undefined
 export var jquery: undefined | any;//DEFAULT: undefined
@@ -76,7 +76,7 @@ export interface MmirCore {
 	startModules: undefined | Array<string>;//DEFAULT: undefined
 	viewEngine: string;//DEFAULT: "mmirf/simpleViewEngine";
 	debug: boolean;//DEFAULT: true;
-	logLevel: LogLevelNum | LogLevel;//DEFAULT: 'debug';
+	logLevel: LogLevelNum | LogLevel | LogLevelOptions;//DEFAULT: 'debug';
 	logTrace: boolean | { trace: boolean, depth: 'full' | any };//DEFAULT: true
 	libMode: undefined | "min";//DEFAULT: undefined
 	jquery: undefined | any;//DEFAULT: undefined
@@ -112,6 +112,12 @@ export interface NodeMmirModule extends MmirModule {
 
 export type LogLevel = 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';
 export type LogLevelNum =   0    |    1    |   2    |   3    |   4     |      5     |     6;
+
+export interface LogLevelOptions {
+	level?: LogLevel | LogLevelNum;
+	levels?: {[logLevel in LogLevel]?: Array<string>} & {[logLevelNum in LogLevelNum]?: Array<string>};
+	modules?: {[moduleId: string]: LogLevel | LogLevelNum};
+}
 
 export type Comparator = '>=' | '<=' | '>' | '<' | '!=' | '!==' | '=' | '==' | '===';
 
