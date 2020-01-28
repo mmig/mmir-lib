@@ -302,7 +302,12 @@ export interface ConfigurationManager {
 	getBoolean: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => boolean;
 	getString: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => string;
 	set: (propertyName: string | string[], value: any) => void;
+	on: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
+	addListener: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
+	off: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
+	removeListener: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
 }
+export type ConfigurationChangeListener = (newValue: any, oldValue?: any, propertyName?: string) => void;
 export interface Resources {
 	getBasePath: () => string;
 	getBeepUrl: () => string;
