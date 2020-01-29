@@ -450,6 +450,8 @@ export interface MediaManager {
 
 
 	// internal / "half public" functions (for use in plugin implementations)
+	_emitEvent: (eventName: MediaEventType, ...args: any[]) => void;
+	/** @deprecated use [[_emitEvent]] instead */
 	_fireEvent: (eventName: MediaEventType, args: any[]) => void;
 
 	_addListenerObserver: (eventName: MediaEventType, observerCallback: (actionType: "added" | "removed", eventHandler: MediaEventHandler) => void) => void;
