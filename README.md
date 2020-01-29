@@ -8,7 +8,7 @@
 [![Guides](https://img.shields.io/badge/docs-guides-orange.svg?style=flat)](https://github.com/mmig/mmir/wiki)
 
 
-Source Code for the [mmir][5] (Mobile Multimodal Interaction and Rendering) library
+Source Code for the [mmir][5] (Mobile Multimodal Interaction and Relay)* library
 
 The `mmir` framework provides means for creating _minimal_ (client-based)
 _dialog systems_ for multimodal interactions:
@@ -184,6 +184,11 @@ NOTE: Integration with / loading of Cordova is designed to work with the
 #### License
 
 If not stated otherwise, all files and resources are provided under the MIT license
+
+----
+_*: since version 6 the last letter of the acronym MMIR has been reasigned from
+    _Rendering_ to _Relay_ in order to account for the fact, that (graphical) 
+    _rendering_ is not a major focus of the the framework anymore.
 
 [0]: https://github.com/mmig/mmir-lib
 [1]: https://github.com/mmig/mmir-starter-kit
