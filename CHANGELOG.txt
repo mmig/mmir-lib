@@ -183,7 +183,7 @@ BUGFIX:
  * FIX typo in module name DialogManager4Compatiblity -> DialogManager4Compatibility
 
 ##################
-Version 5.2.0-rc.1
+Version 5.1.0
 ##################
 
 MODIFICATION:
