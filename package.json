@@ -48,8 +48,8 @@
     "eclint": "^2.8.1",
     "fs-extra": "^8.1.0",
     "gulp": "^4.0.2",
-    "typedoc": "^0.15.0",
-    "typedoc-plugin-external-module-name": "^2.1.0",
-    "typedoc-plugin-markdown": "^2.2.7"
+    "typedoc": "^0.16.9",
+    "typedoc-plugin-external-module-name": "^3.0.0",
+    "typedoc-plugin-markdown": "^2.2.16"
   }
 }
