@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [ControllerManager](mmir_lib.controllermanager.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ControllerManager](mmir_lib.controllermanager.md)
 
 # Interface: ControllerManager
 
@@ -53,7 +51,7 @@ ___
 
 #### Type declaration:
 
-▸ (): *`Array<string>`*
+▸ (): *Array‹string›*
 
 ___
 

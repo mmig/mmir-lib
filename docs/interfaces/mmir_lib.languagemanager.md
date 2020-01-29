@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [LanguageManager](mmir_lib.languagemanager.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [LanguageManager](mmir_lib.languagemanager.md)
 
 # Interface: LanguageManager
 
@@ -22,6 +20,7 @@
 * [getLanguage](mmir_lib.languagemanager.md#getlanguage)
 * [getLanguageConfig](mmir_lib.languagemanager.md#getlanguageconfig)
 * [getLanguages](mmir_lib.languagemanager.md#getlanguages)
+* [getSpeechConfig](mmir_lib.languagemanager.md#getspeechconfig)
 * [getText](mmir_lib.languagemanager.md#gettext)
 * [init](mmir_lib.languagemanager.md#init)
 * [setLanguage](mmir_lib.languagemanager.md#setlanguage)
@@ -166,7 +165,19 @@ ___
 
 #### Type declaration:
 
-▸ (): *`Array<string>`*
+▸ (): *Array‹string›*
+
+___
+
+###  getSpeechConfig
+
+• **getSpeechConfig**: *function*
+
+#### Type declaration:
+
+▸ (): *object*
+
+* \[ **config**: *string*\]: any
 
 ___
 
@@ -208,10 +219,11 @@ ___
 
 #### Type declaration:
 
-▸ (`lang`: string): *any*
+▸ (`lang`: string, `doNotLoadResources?`: boolean): *string*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `lang` | string |
+`doNotLoadResources?` | boolean |

@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [MmirCore](mmir_lib.mmircore.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MmirCore](mmir_lib.mmircore.md)
 
 # Interface: MmirCore
 
@@ -8,7 +6,7 @@
 
 * **MmirCore**
 
-  * [MmirModule](mmir_lib.mmirmodule.md)
+  ↳ [MmirModule](mmir_lib.mmirmodule.md)
 
 ## Index
 
@@ -54,13 +52,13 @@ ___
 
 #### Type declaration:
 
-▸ (`requirejsConfig`: `__type`): *void*
+▸ (`requirejsConfig`: object): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`requirejsConfig` | `__type` |
+`requirejsConfig` | object |
 
 ___
 
@@ -84,7 +82,7 @@ ___
 
 ###  logLevel
 
-• **logLevel**: *[LogLevelNum](../modules/mmir_lib.md#loglevelnum) | [LogLevel](../modules/mmir_lib.md#loglevel)*
+• **logLevel**: *[LogLevelNum](../modules/mmir_lib.md#loglevelnum) | [LogLevel](../modules/mmir_lib.md#loglevel) | [LogLevelOptions](mmir_lib.logleveloptions.md)*
 
 ___
 
@@ -136,7 +134,7 @@ ___
 
 ###  startModules
 
-• **startModules**: *undefined | `Array<string>`*
+• **startModules**: *undefined | Array‹string›*
 
 ___
 

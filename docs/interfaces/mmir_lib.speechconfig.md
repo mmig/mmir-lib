@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [SpeechConfig](mmir_lib.speechconfig.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [SpeechConfig](mmir_lib.speechconfig.md)
 
 # Interface: SpeechConfig
 
@@ -8,7 +6,7 @@
 
 * [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md)
 
-  * **SpeechConfig**
+  ↳ **SpeechConfig**
 
 ## Index
 

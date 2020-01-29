@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [PlayError](mmir_lib.playerror.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [PlayError](mmir_lib.playerror.md)
 
 # Interface: PlayError
 
@@ -19,10 +17,10 @@
 
 ###  audio
 
-• **audio**: *[IAudio](mmir_lib.iaudio.md) | `HTMLAudioElement`*
+• **audio**: *[IAudio](mmir_lib.iaudio.md) | HTMLAudioElement*
 
 ___
 
 ###  error
 
-• **error**: *`DOMException`*
+• **error**: *DOMException*

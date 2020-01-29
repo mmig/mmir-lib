@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [GrammarResult](mmir_lib.grammarresult.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [GrammarResult](mmir_lib.grammarresult.md)
 
 # Interface: GrammarResult
 
@@ -42,7 +40,7 @@ ___
 
 ### `Optional` phrases
 
-• **phrases**? : *`Array<PhraseInfo>`*
+• **phrases**? : *Array‹[PhraseInfo](mmir_lib.phraseinfo.md)›*
 
 ___
 
@@ -52,7 +50,7 @@ ___
 
 #### Type declaration:
 
-* \[ **preprocName**: *string*\]: `Array<Pos>`
+* \[ **preprocName**: *string*\]: Array‹[Pos](mmir_lib.pos.md)›
 
 ___
 

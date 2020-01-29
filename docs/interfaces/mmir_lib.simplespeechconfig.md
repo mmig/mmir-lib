@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md)
 
 # Interface: SimpleSpeechConfig
 
@@ -8,9 +6,9 @@
 
 * **SimpleSpeechConfig**
 
-  * [SpeechConfig](mmir_lib.speechconfig.md)
+  ↳ [SpeechConfig](mmir_lib.speechconfig.md)
 
-  * [SpeechConfigPluginEntry](mmir_lib.speechconfigpluginentry.md)
+  ↳ [SpeechConfigPluginEntry](mmir_lib.speechconfigpluginentry.md)
 
 ## Index
 

@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [NotificationManager](mmir_lib.notificationmanager.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [NotificationManager](mmir_lib.notificationmanager.md)
 
 # Interface: NotificationManager
 
@@ -36,14 +34,14 @@
 
 #### Type declaration:
 
-▸ (`message`: string, `alertCallback`: `Function`, `title`: string, `buttonName`: string): *void*
+▸ (`message`: string, `alertCallback`: [Function](mmir_lib.requirejs.md#function), `title`: string, `buttonName`: string): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `message` | string |
-`alertCallback` | `Function` |
+`alertCallback` | [Function](mmir_lib.requirejs.md#function) |
 `title` | string |
 `buttonName` | string |
 
@@ -71,14 +69,14 @@ ___
 
 #### Type declaration:
 
-▸ (`message`: string, `confirmCallback`: `Function`, `title`: string, `buttonLabels`: string[]): *void*
+▸ (`message`: string, `confirmCallback`: [Function](mmir_lib.requirejs.md#function), `title`: string, `buttonLabels`: string[]): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `message` | string |
-`confirmCallback` | `Function` |
+`confirmCallback` | [Function](mmir_lib.requirejs.md#function) |
 `title` | string |
 `buttonLabels` | string[] |
 
@@ -174,7 +172,7 @@ ___
 
 #### Type declaration:
 
-▸ (`name`: string, `times`: number, `onFinished`: `Function`, `onError`: `Function`): *void*
+▸ (`name`: string, `times`: number, `onFinished`: [Function](mmir_lib.requirejs.md#function), `onError`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
@@ -182,8 +180,8 @@ Name | Type |
 ------ | ------ |
 `name` | string |
 `times` | number |
-`onFinished` | `Function` |
-`onError` | `Function` |
+`onFinished` | [Function](mmir_lib.requirejs.md#function) |
+`onError` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 

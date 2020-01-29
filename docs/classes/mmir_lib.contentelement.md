@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [ContentElement](mmir_lib.contentelement.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ContentElement](mmir_lib.contentelement.md)
 
 # Class: ContentElement
 
@@ -33,13 +31,13 @@
 
 ###  constructor
 
-\+ **new ContentElement**(`group`: [ParsingResult](mmir_lib.parsingresult.md) | `Array<string>` | object, `view`: [View](mmir_lib.view.md), `parser`: any, `renderer`: any, ...`args`: any[]): *[ContentElement](mmir_lib.contentelement.md)*
+\+ **new ContentElement**(`group`: [ParsingResult](mmir_lib.parsingresult.md) | Array‹string› | object, `view`: [View](mmir_lib.view.md), `parser`: any, `renderer`: any, ...`args`: any[]): *[ContentElement](mmir_lib.contentelement.md)*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`group` | [ParsingResult](mmir_lib.parsingresult.md) \| `Array<string>` \| object |
+`group` | [ParsingResult](mmir_lib.parsingresult.md) &#124; Array‹string› &#124; object |
 `view` | [View](mmir_lib.view.md) |
 `parser` | any |
 `renderer` | any |
@@ -139,13 +137,13 @@ ___
 
 ###  toStrings
 
-▸ **toStrings**(`renderingBuffer?`: `Array<string>`, `data?`: any): *any*
+▸ **toStrings**(`renderingBuffer?`: Array‹string›, `data?`: any): *any*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`renderingBuffer?` | `Array<string>` |
+`renderingBuffer?` | Array‹string› |
 `data?` | any |
 
 **Returns:** *any*

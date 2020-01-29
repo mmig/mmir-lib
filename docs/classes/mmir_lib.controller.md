@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [Controller](mmir_lib.controller.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Controller](mmir_lib.controller.md)
 
 # Class: Controller
 
@@ -35,7 +33,7 @@
 
 ###  constructor
 
-\+ **new Controller**(`name`: any, `jsonDef`: any, `instanceConstr`: `Function`): *[Controller](mmir_lib.controller.md)*
+\+ **new Controller**(`name`: any, `jsonDef`: any, `instanceConstr`: [Function](../interfaces/mmir_lib.requirejs.md#function)): *[Controller](mmir_lib.controller.md)*
 
 **Parameters:**
 
@@ -43,7 +41,7 @@ Name | Type |
 ------ | ------ |
 `name` | any |
 `jsonDef` | any |
-`instanceConstr` | `Function` |
+`instanceConstr` | [Function](../interfaces/mmir_lib.requirejs.md#function) |
 
 **Returns:** *[Controller](mmir_lib.controller.md)*
 
@@ -83,33 +81,33 @@ ___
 
 ###  getPartialNames
 
-▸ **getPartialNames**(): *`Array<string>`*
+▸ **getPartialNames**(): *Array‹string›*
 
-**Returns:** *`Array<string>`*
+**Returns:** *Array‹string›*
 
 ___
 
 ###  getPartials
 
-▸ **getPartials**(): *`Array<FileInfo>`*
+▸ **getPartials**(): *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
 
-**Returns:** *`Array<FileInfo>`*
+**Returns:** *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
 
 ___
 
 ###  getViewNames
 
-▸ **getViewNames**(): *`Array<string>`*
+▸ **getViewNames**(): *Array‹string›*
 
-**Returns:** *`Array<string>`*
+**Returns:** *Array‹string›*
 
 ___
 
 ###  getViews
 
-▸ **getViews**(): *`Array<FileInfo>`*
+▸ **getViews**(): *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
 
-**Returns:** *`Array<FileInfo>`*
+**Returns:** *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
 
 ___
 
@@ -131,13 +129,13 @@ ___
 
 ###  parsePartials
 
-▸ **parsePartials**(`partialDefs`: `Array<FileInfo>`): *void*
+▸ **parsePartials**(`partialDefs`: Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`partialDefs` | `Array<FileInfo>` |
+`partialDefs` | Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)› |
 
 **Returns:** *void*
 
@@ -145,13 +143,13 @@ ___
 
 ###  parseViews
 
-▸ **parseViews**(`viewDefs`: `Array<FileInfo>`): *void*
+▸ **parseViews**(`viewDefs`: Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`viewDefs` | `Array<FileInfo>` |
+`viewDefs` | Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)› |
 
 **Returns:** *void*
 

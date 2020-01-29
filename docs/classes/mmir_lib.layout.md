@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [Layout](mmir_lib.layout.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Layout](mmir_lib.layout.md)
 
 # Class: Layout
 
@@ -76,9 +74,9 @@ ___
 
 ###  getYields
 
-▸ **getYields**(): *`Array<YieldDeclaration>`*
+▸ **getYields**(): *Array‹[YieldDeclaration](mmir_lib.yielddeclaration.md)›*
 
-**Returns:** *`Array<YieldDeclaration>`*
+**Returns:** *Array‹[YieldDeclaration](mmir_lib.yielddeclaration.md)›*
 
 ___
 

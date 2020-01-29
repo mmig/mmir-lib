@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](mmir_lib.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](mmir_lib.md)
 
 # External module: mmir-lib
 
@@ -47,18 +45,23 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [InputEngine](../interfaces/mmir_lib.inputengine.md)
 * [InputManager](../interfaces/mmir_lib.inputmanager.md)
 * [LanguageManager](../interfaces/mmir_lib.languagemanager.md)
+* [LogLevelOptions](../interfaces/mmir_lib.logleveloptions.md)
 * [MediaManager](../interfaces/mmir_lib.mediamanager.md)
 * [MediaManagerPluginEntry](../interfaces/mmir_lib.mediamanagerpluginentry.md)
 * [MicLevelsAnalysis](../interfaces/mmir_lib.miclevelsanalysis.md)
 * [MmirCore](../interfaces/mmir_lib.mmircore.md)
 * [MmirModule](../interfaces/mmir_lib.mmirmodule.md)
 * [ModelManager](../interfaces/mmir_lib.modelmanager.md)
+* [NodeMmirModule](../interfaces/mmir_lib.nodemmirmodule.md)
 * [NotificationManager](../interfaces/mmir_lib.notificationmanager.md)
 * [PhraseInfo](../interfaces/mmir_lib.phraseinfo.md)
 * [PlayError](../interfaces/mmir_lib.playerror.md)
 * [Pos](../interfaces/mmir_lib.pos.md)
 * [Positions](../interfaces/mmir_lib.positions.md)
+* [PositionsInfo](../interfaces/mmir_lib.positionsinfo.md)
 * [PresentationManager](../interfaces/mmir_lib.presentationmanager.md)
+* [ProcessingOrderInfo](../interfaces/mmir_lib.processingorderinfo.md)
+* [ProcessingStep](../interfaces/mmir_lib.processingstep.md)
 * [RenderEngine](../interfaces/mmir_lib.renderengine.md)
 * [RequireJs](../interfaces/mmir_lib.requirejs.md)
 * [RequireJsDefine](../interfaces/mmir_lib.requirejsdefine.md)
@@ -78,6 +81,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [ASROnStatus](mmir_lib.md#asronstatus)
 * [ASRStatus](mmir_lib.md#asrstatus)
 * [Comparator](mmir_lib.md#comparator)
+* [ConfigurationChangeListener](mmir_lib.md#configurationchangelistener)
 * [EOSPause](mmir_lib.md#eospause)
 * [FileInfo](mmir_lib.md#fileinfo)
 * [GrammarEngineType](mmir_lib.md#grammarenginetype)
@@ -88,6 +92,9 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [MediaEventType](mmir_lib.md#mediaeventtype)
 * [MediaPluginEnvType](mmir_lib.md#mediapluginenvtype)
 * [MediaPluginType](mmir_lib.md#mediaplugintype)
+* [PluginType](mmir_lib.md#plugintype)
+* [ProcessingFunction](mmir_lib.md#processingfunction)
+* [ProcessingPositionsInfo](mmir_lib.md#processingpositionsinfo)
 * [TTSOnComplete](mmir_lib.md#ttsoncomplete)
 * [TTSOnError](mmir_lib.md#ttsonerror)
 * [TTSOnReady](mmir_lib.md#ttsonready)
@@ -142,13 +149,13 @@ ___
 
 #### Type declaration:
 
-▸ (`error`: string | `Error`): *void*
+▸ (`error`: string | Error): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`error` | string \| `Error` |
+`error` | string &#124; Error |
 
 ___
 
@@ -158,16 +165,16 @@ ___
 
 #### Type declaration:
 
-▸ (`text`: string | `""`, `confidence`: number | undefined, `status`: [ASRStatus](mmir_lib.md#asrstatus), `alternatives?`: `Array<object>`, `unstable?`: string): *void*
+▸ (`text`: string | "", `confidence`: number | undefined, `status`: [ASRStatus](mmir_lib.md#asrstatus), `alternatives?`: Array‹object›, `unstable?`: string): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`text` | string \| `""` |
-`confidence` | number \| undefined |
+`text` | string &#124; "" |
+`confidence` | number &#124; undefined |
 `status` | [ASRStatus](mmir_lib.md#asrstatus) |
-`alternatives?` | `Array<object>` |
+`alternatives?` | Array‹object› |
 `unstable?` | string |
 
 ___
@@ -181,6 +188,24 @@ ___
 ###  Comparator
 
 Ƭ **Comparator**: *">=" | "<=" | ">" | "<" | "!=" | "!==" | "=" | "==" | "==="*
+
+___
+
+###  ConfigurationChangeListener
+
+Ƭ **ConfigurationChangeListener**: *function*
+
+#### Type declaration:
+
+▸ (`newValue`: any, `oldValue?`: any, `propertyName?`: string): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`newValue` | any |
+`oldValue?` | any |
+`propertyName?` | string |
 
 ___
 
@@ -224,13 +249,13 @@ ___
 
 ###  LogLevelNum
 
-Ƭ **LogLevelNum**: *`0` | `1` | `2` | `3` | `4` | `5` | `6`*
+Ƭ **LogLevelNum**: *0 | 1 | 2 | 3 | 4 | 5 | 6*
 
 ___
 
 ###  MediaEventHandler
 
-Ƭ **MediaEventHandler**: *`Function`*
+Ƭ **MediaEventHandler**: *[Function](../interfaces/mmir_lib.requirejs.md#function)*
 
 ___
 
@@ -252,6 +277,35 @@ ___
 
 ___
 
+###  PluginType
+
+Ƭ **PluginType**: *"custom" | [MediaPluginType](mmir_lib.md#mediaplugintype) | string*
+
+___
+
+###  ProcessingFunction
+
+Ƭ **ProcessingFunction**: *function*
+
+#### Type declaration:
+
+▸ (`input`: string | [Positions](../interfaces/mmir_lib.positions.md), `isProcessPositions?`: boolean): *string | [Positions](../interfaces/mmir_lib.positions.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`input` | string &#124; [Positions](../interfaces/mmir_lib.positions.md) |
+`isProcessPositions?` | boolean |
+
+___
+
+###  ProcessingPositionsInfo
+
+Ƭ **ProcessingPositionsInfo**: *[ProcessingOrderInfo](../interfaces/mmir_lib.processingorderinfo.md) & [PositionsInfo](../interfaces/mmir_lib.positionsinfo.md)*
+
+___
+
 ###  TTSOnComplete
 
 Ƭ **TTSOnComplete**: *function*
@@ -268,13 +322,13 @@ ___
 
 #### Type declaration:
 
-▸ (`error`: string | `Error`): *void*
+▸ (`error`: string | Error): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`error` | string \| `Error` |
+`error` | string &#124; Error |
 
 ___
 
@@ -284,13 +338,13 @@ ___
 
 #### Type declaration:
 
-▸ (`isReady?`: `Boolean`, `audio?`: [IAudio](../interfaces/mmir_lib.iaudio.md)): *void*
+▸ (`isReady?`: Boolean, `audio?`: [IAudio](../interfaces/mmir_lib.iaudio.md)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`isReady?` | `Boolean` |
+`isReady?` | Boolean |
 `audio?` | [IAudio](../interfaces/mmir_lib.iaudio.md) |
 
 ## Variables
@@ -369,7 +423,7 @@ ___
 
 ###  logLevel
 
-• **logLevel**: *[LogLevelNum](mmir_lib.md#loglevelnum) | [LogLevel](mmir_lib.md#loglevel)*
+• **logLevel**: *[LogLevelNum](mmir_lib.md#loglevelnum) | [LogLevel](mmir_lib.md#loglevel) | [LogLevelOptions](../interfaces/mmir_lib.logleveloptions.md)*
 
 ___
 
@@ -435,7 +489,7 @@ ___
 
 ###  startModules
 
-• **startModules**: *undefined | `Array<string>`*
+• **startModules**: *undefined | Array‹string›*
 
 ___
 
@@ -459,13 +513,13 @@ ___
 
 ###  config
 
-▸ **config**(`requirejsConfig`: `__type`): *void*
+▸ **config**(`requirejsConfig`: object): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`requirejsConfig` | `__type` |
+`requirejsConfig` | object |
 
 **Returns:** *void*
 

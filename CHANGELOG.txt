@@ -1,5 +1,5 @@
 
-version notes for MMIR framework code (v 5.2.0)
+version notes for MMIR framework code (v 6.0.0)
 
  * using Cordova 5.x.x - 8.x.x library
 
@@ -33,6 +33,135 @@ additional, required dependencies when running in node environment
  Change Log
  --------------
 ##################
+Version 6.0.0
+##################
+
+The resolution for the acronym MMIR has been changed to _Mobile Multimodal Interaction and Relay_ framework,
+to account for the changed focus of the framework:
+more precisely, that _Rendering_ is not considered an important part of the framework anymore.
+
+GENERAL NOTE:
+Switched mmir-related GitHub dependencies to npm depedencies for mmir packages, e.g.
+
+    "mmir-lib":     "git+https://github.com/mmig/mmir-lib.git"     -> "^6.0.0"
+    "mmir-tooling": "git+https://github.com/mmig/mmir-tooling.git" -> "^6.0.0"
+    ...
+
+
+ADDITION:
+ * semanticInterpreter:
+   * added applyPreProcessing(..): convenience method for function GrammarConverter.preproc(..)
+     * replacement for deprecated function removeStopwords(..)
+   * added function addProcessing(..): convenience method for new function GrammarConverter.addProc(..)
+     addProcessing(langCode, processingStep, indexOrIsPrepend, callback)
+   * added isPreProcessPositionsEnabled() and setPreProcessPositionsEnabled(enabled):
+     for enabling/disabling calculation for position-modifications during pre-processing
+     DEFAULT setting: enabled
+ * semantic/stemmer: added option allowUmlauts to allow preventing "normalizing" umlauts
+ * grammar.json: additional (optional) field "example_phrases" (string | Array<string>) for including example phrases that should be recognized by the grammar
+ * added commonUtils.getCompiledResourcesIds(..): helper for extracting the ID from compiled resources
+ * automated support for async grammar execution (in WebWorker):
+   * fix support for async grammar execution & added support for webpack built
+   * added configuration setting "grammarAsyncExecMode":
+     * true: will initialize all compiled grammars for async execution
+     * Array<string | {id: string, phrase: string}>:
+       list of grammar IDs (for compiled grammars) that will be initialized for async execution, or
+       list with entries that MUST have field id (i.e. the grammar ID) and optionally a phrase
+       that will be executed immediately after initalizing the async-exec grammar
+ * added optional argument grammarCode for asyncGrammar.init(..): support initializing async-exec grammar by specifying
+   (JavaScript) grammar-code that will be evaluated withing the async-exec WebWorker (instead of loading compiled grammar)
+ * added "destroy" functionality to asyncGrammar for terminating its WebWorker (can be restarted by initialing again)
+ * languageManager.setLanguage(): added optional 2nd parameter doNotLoadResources:
+   if omitted or TRUTHY will only change current language code, but will not try to load language resources (e.g. dictionary, speech configuration, and grammar), if false will force (re-) loading the language resources
+ * env/media/audiotts: added support / API function for implementation to supply destroy function via implementing getDestroyFunc(): function(callbackFunc(err|null))
+ * configurationManager: added on()/addListener() and off()/removeListener() for listening to configuration-value changes
+ * core.logLevel: additionally allow log-level options object for configuring log-levels
+       LogLevelOptions: {level?: LogLevel, levels?: {[logLevel: LogLevel]: Array<moduleId>}, modules?: {[moduleId: string]: LogLevel}}
+       usage example (all fields are optional);
+			   mmir.logLevel = {
+			    level: 'info',   //default: "debug"
+			    levels: {        // LogLevel -> list of module IDs
+			      3: ['mmirf/notificationManager', 'mmirf/commonUtils'],
+			      verbose: ['mmirf/semanticInterpreter']
+			    },
+			    modules: {      // moduleId -> LogLevel
+			      'mmirf/controller': 'verbose',
+			      'webspeechAudioInput': 2
+			    }
+			  };
+
+
+REFACTOR:
+ * configurationManager: improved implementation for get(..) and set(..)
+ * env/grammar/*Generator: extracted common parsing-/generator-functionality into new module mmirf/baseGen
+
+MODIFICATION:
+ * semanticInterpreter (backwards compatible via module 'mmirf/core4Compatibility'):
+   * removeStopwords(..): removed un-documented/internal third argument for using custom stopword removal function
+     * deprecated function removeStopwords(..): should use (new) function applyPreProcessing(..) instead
+     * use of this function will cause warning message
+ * grammarConverter (backwards compatible via module 'mmirf/core4Compatibility'):
+   * modified Positions object: renamed field "str" -> "text", ie.
+     {text: string, pos: Array<Pos>}
+   * normalized return values for to return string if computePositions is false, otherwise return Positions object:
+     removeStopwords(), maskString(), unmaskString(), maskAsUnicode() (and internally: recodeJSON())
+   * grammarConverter.removeStopwords:
+     * changed signature: second (optional) in/out argument from positions (Array<Pos>) to computePositions (boolean)
+     * changed return value: if computePositions is false, return string, otherwise Position
+   * renamed (internal) field jscc_grammar_definition -> grammar_definition
+     NOTE: getter-method getGrammarDef() is unchanged
+   * removed fields from grammerConverter (moved to env/grammar/baseGenerator):
+     variable_prefix, variable_regexp, entry_token_field, entry_index_field, enc_regexp_str
+   * removed methods from grammerConverter (moved to env/grammar/baseGenerator):
+     getCodeWrapPrefix(..), getCodeWrapSuffix(..)
+   * generalized preproc(..) and postproc(..) for allowing custom pre-/post-processing steps/chains
+     * added addProc(..), removeProc(..), getProcIndex(..) and field procList for handeling default pre-/post-processing steps as well as custom steps
+     * added positionUtils with factory methods for wraping functions, e.g. handeling position-modification in pre-/post-processing steps
+     * preproc(): modified signature preproc(thePhrase, pos, maskFunc, stopwordFunc) -> preproc(thePhrase, pos)
+       * use addProc(..), removeProc(..) instead of additional/optional arguments maskFunc, stopwordFunc, OR use compatibility mode
+     * postproc(): modified signature postproc(procResult, recodeFunc) -> preproc(procResult, pos)
+       * use addProc(..), removeProc(..) instead of additional/optional argument recodeFunc OR use compatibility mode
+ * grammar.json: deprecated field "stop_word" and "example_phrase"
+   * deprecated field "stop_word" in JSON grammar format: use field "stopwords" instead
+     * use of this field will cause warning message
+   * deprecated field "example_phrase" in JSON grammar format: use field "example_phrases" instead
+ * mediaManager._fireEvent: deprecated _fireEvent(eventName, argList), should use new method _emitEvent(eventName, ...args) instead
+ * util_purejs/toArray: using Array.from implementation now instead of custom code (if needed, shim for Array.from is included in vendor libraries)
+ * REMOVED un-used script env/node/nodeLoadScript.js
+ * improved compatibility for node environment:
+   * [BREAKING CHANGE] export extended core module of mmir, instead of a wrapper object
+     * renamed field mmirLib.config -> mmirLib._config
+     * renamed field mmirLib.requirejs -> mmirLib._requirejs
+     * NOTE mmirLib.init() will extend the mmirLib instance itself (which is the extended core instance, see typing of NodeMmirModule)
+ * [BREAKING CHANGE] removed internal & unused module tools/emma: now included in mmir-plugin-speech-io
+
+BUGFIX:
+ * mediaManager.stopRecord: FIX default implementation, incorrect parameter-name successCallback -> statusCallback
+ * grammarConverter.maskAsUnicode:
+   * added optional argument computePositions (boolean)
+   * FIX call maskString() with correct signature
+ * commonUtils.loadImpl(librariesPath, ...): FIX case that librariesPath (string) has not entry in directories.json
+ * env/grammar/jsccAsyncGenerator: FIX handling of error message from web-worker
+ * env/grammar/asyncGenerator & workers/*Compiler: FIX relative-path-processing for loading scripts by workers when mmir-lib base URL (core._mmirLibPath) is set to custom path
+ * env/grammar/jisonGenerator and env/grammar/pegjsGenerator: FIX handling for semantics-variables for phrases and tokens -> must handle as list NOT as dictionary
+ * env/grammar/jisonGenerator: must manually reset phrase-/token-variables before running grammar/parse
+ * added missing typings for commonUtils.listDir() and resources.getGeneratedStateModelsPath()
+ * worker/scionQueueWorker: added compatibility for invoking postMessage in node environment
+ * env/grammar/asyncCompiler, asyncGrammar, dialog/engineConfig: do correctly register worker.onmessage for browser & node environment (via added tools/asyncUtils)
+ * [BREAKING CHANGE] do not expect file-names for compiled grammars to have suffix "_grammar.js":
+   * commonUtils.getCompiledGrammarPath and languageManager.doCheckExistsGrammar: do interpret complete file-name (without extension) as grammar ID (i.e. no name-suffix parsing using "_")
+   * fix behavior for setting "ignoreGrammarFiles" (Array<string> in configuration.json) and its handling in commonUtils.loadCompiledGrammars(..., ignoreGrammarIds: Array<string>):
+     removed old-style filtering that would expect suffix "_grammar.js" in generated grammars files when comparing ignore-grammar-IDs with file-names
+     -> now expects file-names (minus file-extension) to exactly match the grammar IDs (as this is the new naming scheme for generated grammar files since mmir v5.x)
+   NOTE: this is not backwards compatible for generated grammars files with mmir v4.x
+   RESOLUTION: recompile grammars with mmir (mmir-tooling) v5.x
+ * [BREAKING CHANGE] languageManager:
+    * loadDictionary() and loadSpeechConfig() will not change the current language anymore, used setLanguage() instead
+    * on setLanguage() only load dictionary and speech configuration if they exists (i.e. if there are corresponding entries in directories.json)
+ * [BREAKING CHANGE] worker/scionQueueWorker: for consistency, renamed file workers/ScionQueueWorker.js -> workers/scionQueueWorker.js
+ * [BREAKING CHANGE] core.logTrace: if options object, do treat missing field trace same as default for logTrace, i.e. TRUE (instead of FALSE as before when options object was used)
+
+##################
 Version 5.2.0
 ##################
 
@@ -54,13 +183,13 @@ BUGFIX:
  * FIX typo in module name DialogManager4Compatiblity -> DialogManager4Compatibility
 
 ##################
-Version 5.2.0
+Version 5.2.0-rc.1
 ##################
 
 MODIFICATION:
  * directories.json: moved generated resource directories.json from /config/directories.json to /gen/directories.json
  * mmirf/renderUtils: now renders paths in @style() "as-is" instead of adding path-prefix "content/stylesheets/"
-   * backwards compatiblity: set field stylesRoot on mmirf/parserModule to "content/stylesheets/":
+   * backwards compatibility: set field stylesRoot on mmirf/parserModule to "content/stylesheets/":
 	   mmir.require(['mmirf/parserModule'], function(parserModule){
 		 	parserModule.stylesRoot = 'content/stylesheets/';
 		 	// -> @style(file-path) will now get prefixed with 'content/stylesheets/'
@@ -124,7 +253,7 @@ EXAMPLE for including the v4 backwards compatibility layer (e.g. in app.js):
 
    * removed methods/functionality (can/should be used via ControllerManager or PresentationManager directly):
 	 * DialogManager.perform(ctrlName, actionName, data)				-> ControllerManager.perform
-	 * DialogManager.performHelper(ctrlName, helperActionName, data)	-> ControllerManager.performHlper
+	 * DialogManager.performHelper(ctrlName, helperActionName, data)	-> ControllerManager.performHelper
 	 * DialogManager.showDialog(ctrlName, dialogId, data)				-> PresentationManager.showDialog
 	 * DialogManager.hideCurrentDialog()								-> PresentationManager.hideCurrentDialog
 	 * DialogManager.showWaitDialog(text, theme)						-> PresentationManager.showWaitDialog
@@ -1495,7 +1624,7 @@ API CHANGES:
   * renamed main namespace: mobileDS -> mmir
     * e.g. instead of mobileDS.LanguageManager.getInstance():
        -> now use: mmir.LanguageManager.getInstance()
-       -> or add "backwards compatability" by creating global variable: var mobileDS = mmir;
+       -> or add "backwards compatibility" by creating global variable: var mobileDS = mmir;
   * renamed Notification -> NotificationManager (moved file into mmirf/manager/)
   * manager modules that had a .create() function: functions renamed to .init() [which return now Promise objects]
 

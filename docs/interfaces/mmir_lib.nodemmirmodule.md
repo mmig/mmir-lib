@@ -1,54 +1,65 @@
-[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MmirModule](mmir_lib.mmirmodule.md)
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [NodeMmirModule](mmir_lib.nodemmirmodule.md)
 
-# Interface: MmirModule
+# Interface: NodeMmirModule
 
 ## Hierarchy
 
-* [MmirCore](mmir_lib.mmircore.md)
+  ↳ [MmirModule](mmir_lib.mmirmodule.md)
 
-  ↳ **MmirModule**
-
-  ↳ [NodeMmirModule](mmir_lib.nodemmirmodule.md)
+  ↳ **NodeMmirModule**
 
 ## Index
 
 ### Properties
 
-* [_define](mmir_lib.mmirmodule.md#_define)
-* [_mmirLibPath](mmir_lib.mmirmodule.md#_mmirlibpath)
-* [conf](mmir_lib.mmirmodule.md#conf)
-* [config](mmir_lib.mmirmodule.md#config)
-* [ctrl](mmir_lib.mmirmodule.md#ctrl)
-* [debug](mmir_lib.mmirmodule.md#debug)
-* [dialog](mmir_lib.mmirmodule.md#dialog)
-* [dialogEngine](mmir_lib.mmirmodule.md#dialogengine)
-* [input](mmir_lib.mmirmodule.md#input)
-* [inputEngine](mmir_lib.mmirmodule.md#inputengine)
-* [jquery](mmir_lib.mmirmodule.md#jquery)
-* [lang](mmir_lib.mmirmodule.md#lang)
-* [libMode](mmir_lib.mmirmodule.md#libmode)
-* [logLevel](mmir_lib.mmirmodule.md#loglevel)
-* [logTrace](mmir_lib.mmirmodule.md#logtrace)
-* [media](mmir_lib.mmirmodule.md#media)
-* [mmirName](mmir_lib.mmirmodule.md#mmirname)
-* [model](mmir_lib.mmirmodule.md#model)
-* [notifier](mmir_lib.mmirmodule.md#notifier)
-* [present](mmir_lib.mmirmodule.md#present)
-* [ready](mmir_lib.mmirmodule.md#ready)
-* [require](mmir_lib.mmirmodule.md#require)
-* [res](mmir_lib.mmirmodule.md#res)
-* [semantic](mmir_lib.mmirmodule.md#semantic)
-* [startModule](mmir_lib.mmirmodule.md#startmodule)
-* [startModules](mmir_lib.mmirmodule.md#startmodules)
-* [util](mmir_lib.mmirmodule.md#util)
-* [version](mmir_lib.mmirmodule.md#version)
-* [viewEngine](mmir_lib.mmirmodule.md#viewengine)
+* [_config](mmir_lib.nodemmirmodule.md#_config)
+* [_define](mmir_lib.nodemmirmodule.md#_define)
+* [_mmirLibPath](mmir_lib.nodemmirmodule.md#_mmirlibpath)
+* [_requirejs](mmir_lib.nodemmirmodule.md#_requirejs)
+* [conf](mmir_lib.nodemmirmodule.md#conf)
+* [config](mmir_lib.nodemmirmodule.md#config)
+* [ctrl](mmir_lib.nodemmirmodule.md#ctrl)
+* [debug](mmir_lib.nodemmirmodule.md#debug)
+* [dialog](mmir_lib.nodemmirmodule.md#dialog)
+* [dialogEngine](mmir_lib.nodemmirmodule.md#dialogengine)
+* [init](mmir_lib.nodemmirmodule.md#init)
+* [input](mmir_lib.nodemmirmodule.md#input)
+* [inputEngine](mmir_lib.nodemmirmodule.md#inputengine)
+* [jquery](mmir_lib.nodemmirmodule.md#jquery)
+* [lang](mmir_lib.nodemmirmodule.md#lang)
+* [libMode](mmir_lib.nodemmirmodule.md#libmode)
+* [logLevel](mmir_lib.nodemmirmodule.md#loglevel)
+* [logTrace](mmir_lib.nodemmirmodule.md#logtrace)
+* [media](mmir_lib.nodemmirmodule.md#media)
+* [mmirName](mmir_lib.nodemmirmodule.md#mmirname)
+* [model](mmir_lib.nodemmirmodule.md#model)
+* [notifier](mmir_lib.nodemmirmodule.md#notifier)
+* [present](mmir_lib.nodemmirmodule.md#present)
+* [ready](mmir_lib.nodemmirmodule.md#ready)
+* [require](mmir_lib.nodemmirmodule.md#require)
+* [res](mmir_lib.nodemmirmodule.md#res)
+* [semantic](mmir_lib.nodemmirmodule.md#semantic)
+* [startModule](mmir_lib.nodemmirmodule.md#startmodule)
+* [startModules](mmir_lib.nodemmirmodule.md#startmodules)
+* [util](mmir_lib.nodemmirmodule.md#util)
+* [version](mmir_lib.nodemmirmodule.md#version)
+* [viewEngine](mmir_lib.nodemmirmodule.md#viewengine)
 
 ### Methods
 
-* [isVersion](mmir_lib.mmirmodule.md#isversion)
+* [isVersion](mmir_lib.nodemmirmodule.md#isversion)
 
 ## Properties
+
+###  _config
+
+• **_config**: *object*
+
+#### Type declaration:
+
+* \[ **field**: *string*\]: any
+
+___
 
 ###  _define
 
@@ -66,9 +77,17 @@ ___
 
 ___
 
+###  _requirejs
+
+• **_requirejs**: *[RequireJs](mmir_lib.requirejs.md)*
+
+___
+
 ###  conf
 
 • **conf**: *[ConfigurationManager](mmir_lib.configurationmanager.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[conf](mmir_lib.mmirmodule.md#conf)*
 
 ___
 
@@ -94,6 +113,8 @@ ___
 
 • **ctrl**: *[ControllerManager](mmir_lib.controllermanager.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[ctrl](mmir_lib.mmirmodule.md#ctrl)*
+
 ___
 
 ###  debug
@@ -108,11 +129,37 @@ ___
 
 • **dialog**: *[DialogManager](mmir_lib.dialogmanager.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[dialog](mmir_lib.mmirmodule.md#dialog)*
+
 ___
 
 ###  dialogEngine
 
 • **dialogEngine**: *[DialogEngine](mmir_lib.dialogengine.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[dialogEngine](mmir_lib.mmirmodule.md#dialogengine)*
+
+___
+
+###  init
+
+• **init**: *function*
+
+#### Type declaration:
+
+▸ (`preConfigure?`: function): *[NodeMmirModule](mmir_lib.nodemmirmodule.md)*
+
+**Parameters:**
+
+▪`Optional`  **preConfigure**: *function*
+
+▸ (`mmirCore`: [MmirCore](mmir_lib.mmircore.md)): *[MmirModule](mmir_lib.mmirmodule.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`mmirCore` | [MmirCore](mmir_lib.mmircore.md) |
 
 ___
 
@@ -120,11 +167,15 @@ ___
 
 • **input**: *[InputManager](mmir_lib.inputmanager.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[input](mmir_lib.mmirmodule.md#input)*
+
 ___
 
 ###  inputEngine
 
 • **inputEngine**: *[InputEngine](mmir_lib.inputengine.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[inputEngine](mmir_lib.mmirmodule.md#inputengine)*
 
 ___
 
@@ -139,6 +190,8 @@ ___
 ###  lang
 
 • **lang**: *[LanguageManager](mmir_lib.languagemanager.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[lang](mmir_lib.mmirmodule.md#lang)*
 
 ___
 
@@ -170,6 +223,8 @@ ___
 
 • **media**: *[MediaManager](mmir_lib.mediamanager.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[media](mmir_lib.mmirmodule.md#media)*
+
 ___
 
 ###  mmirName
@@ -184,17 +239,23 @@ ___
 
 • **model**: *[ModelManager](mmir_lib.modelmanager.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[model](mmir_lib.mmirmodule.md#model)*
+
 ___
 
 ###  notifier
 
 • **notifier**: *[NotificationManager](mmir_lib.notificationmanager.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[notifier](mmir_lib.mmirmodule.md#notifier)*
+
 ___
 
 ###  present
 
 • **present**: *[PresentationManager](mmir_lib.presentationmanager.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[present](mmir_lib.mmirmodule.md#present)*
 
 ___
 
@@ -234,11 +295,15 @@ ___
 
 • **res**: *[Resources](mmir_lib.resources.md)*
 
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[res](mmir_lib.mmirmodule.md#res)*
+
 ___
 
 ###  semantic
 
 • **semantic**: *[SemanticInterpreter](mmir_lib.semanticinterpreter.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[semantic](mmir_lib.mmirmodule.md#semantic)*
 
 ___
 
@@ -261,6 +326,8 @@ ___
 ###  util
 
 • **util**: *[CommonUtils](mmir_lib.commonutils.md)*
+
+*Inherited from [MmirModule](mmir_lib.mmirmodule.md).[util](mmir_lib.mmirmodule.md#util)*
 
 ___
 

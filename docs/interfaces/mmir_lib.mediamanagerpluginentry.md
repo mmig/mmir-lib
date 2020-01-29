@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [MediaManagerPluginEntry](mmir_lib.mediamanagerpluginentry.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MediaManagerPluginEntry](mmir_lib.mediamanagerpluginentry.md)
 
 # Interface: MediaManagerPluginEntry
 
@@ -27,7 +25,7 @@ ___
 
 ### `Optional` env
 
-• **env**? : *`Array<MediaPluginEnvType | string>` | [MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) | string*
+• **env**? : *Array‹[MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) | string› | [MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) | string*
 
 ___
 

@@ -1,6 +1,6 @@
-> **[mmir-lib 5.2.0](README.md)**
+[mmir-lib 6.0.0](README.md)
 
-[Globals](README.md) /
+# mmir-lib 6.0.0
 
 ## Index
 

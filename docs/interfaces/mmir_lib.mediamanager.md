@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [MediaManager](mmir_lib.mediamanager.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MediaManager](mmir_lib.mediamanager.md)
 
 # Interface: MediaManager
 
@@ -13,6 +11,7 @@
 ### Properties
 
 * [_addListenerObserver](mmir_lib.mediamanager.md#_addlistenerobserver)
+* [_emitEvent](mmir_lib.mediamanager.md#_emitevent)
 * [_fireEvent](mmir_lib.mediamanager.md#_fireevent)
 * [_notifyObservers](mmir_lib.mediamanager.md#_notifyobservers)
 * [_preparing](mmir_lib.mediamanager.md#_preparing)
@@ -69,14 +68,33 @@
 
 Name | Type |
 ------ | ------ |
-`actionType` | "added" \| "removed" |
+`actionType` | "added" &#124; "removed" |
 `eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+
+___
+
+###  _emitEvent
+
+• **_emitEvent**: *function*
+
+#### Type declaration:
+
+▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), ...`args`: any[]): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
+`...args` | any[] |
 
 ___
 
 ###  _fireEvent
 
 • **_fireEvent**: *function*
+
+**`deprecated`** use [_emitEvent](mmir_lib.mediamanager.md#_emitevent) instead
 
 #### Type declaration:
 
@@ -104,7 +122,7 @@ ___
 Name | Type |
 ------ | ------ |
 `eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`actionType` | "added" \| "removed" |
+`actionType` | "added" &#124; "removed" |
 `eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
 
 ___
@@ -161,7 +179,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`actionType` | "added" \| "removed" |
+`actionType` | "added" &#124; "removed" |
 `eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
 
 ___
@@ -189,14 +207,14 @@ ___
 
 #### Type declaration:
 
-▸ (`successCallback?`: `Function`, `failureCallback?`: `Function`): *void*
+▸ (`successCallback?`: [Function](mmir_lib.requirejs.md#function), `failureCallback?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`successCallback?` | `Function` |
-`failureCallback?` | `Function` |
+`successCallback?` | [Function](mmir_lib.requirejs.md#function) |
+`failureCallback?` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 
@@ -206,14 +224,14 @@ ___
 
 #### Type declaration:
 
-▸ (`successCallBack?`: `Function`, `failureCallBack?`: `Function`): *void*
+▸ (`successCallBack?`: [Function](mmir_lib.requirejs.md#function), `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`successCallBack?` | `Function` |
-`failureCallBack?` | `Function` |
+`successCallBack?` | [Function](mmir_lib.requirejs.md#function) |
+`failureCallBack?` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 
@@ -276,14 +294,14 @@ ___
 
 #### Type declaration:
 
-▸ (`successCallBack?`: `Function`, `failureCallBack?`: `Function`): *void*
+▸ (`successCallBack?`: [Function](mmir_lib.requirejs.md#function), `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`successCallBack?` | `Function` |
-`failureCallBack?` | `Function` |
+`successCallBack?` | [Function](mmir_lib.requirejs.md#function) |
+`failureCallBack?` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 
@@ -293,14 +311,14 @@ ___
 
 #### Type declaration:
 
-▸ (`successCallBack?`: `Function`, `failureCallBack?`: `Function`): *void*
+▸ (`successCallBack?`: [Function](mmir_lib.requirejs.md#function), `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`successCallBack?` | `Function` |
-`failureCallBack?` | `Function` |
+`successCallBack?` | [Function](mmir_lib.requirejs.md#function) |
+`failureCallBack?` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 
@@ -331,7 +349,7 @@ ___
 
 #### Type declaration:
 
-▸ (`options?`: [VoiceListOptions](mmir_lib.voicelistoptions.md), `successCallBack?`: function, `failureCallBack?`: `Function`): *void*
+▸ (`options?`: [VoiceListOptions](mmir_lib.voicelistoptions.md), `successCallBack?`: function, `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
@@ -339,15 +357,15 @@ ___
 
 ▪`Optional`  **successCallBack**: *function*
 
-▸ (`voices`: `Array<string | VoiceDetails>`): *void*
+▸ (`voices`: Array‹string | [VoiceDetails](mmir_lib.voicedetails.md)›): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`voices` | `Array<string \| VoiceDetails>` |
+`voices` | Array‹string &#124; [VoiceDetails](mmir_lib.voicedetails.md)› |
 
-▪`Optional`  **failureCallBack**: *`Function`*
+▪`Optional`  **failureCallBack**: *[Function](mmir_lib.requirejs.md#function)*
 
 ___
 
@@ -394,15 +412,15 @@ ___
 
 #### Type declaration:
 
-▸ (`successCallback?`: `Function`, `failureCallback?`: `Function`, `listenerList?`: `Array<object>`): *any*
+▸ (`successCallback?`: [Function](mmir_lib.requirejs.md#function), `failureCallback?`: [Function](mmir_lib.requirejs.md#function), `listenerList?`: Array‹object›): *any*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`successCallback?` | `Function` |
-`failureCallback?` | `Function` |
-`listenerList?` | `Array<object>` |
+`successCallback?` | [Function](mmir_lib.requirejs.md#function) |
+`failureCallback?` | [Function](mmir_lib.requirejs.md#function) |
+`listenerList?` | Array‹object› |
 
 ___
 
@@ -412,15 +430,15 @@ ___
 
 #### Type declaration:
 
-▸ (`filePath`: string, `successCallback?`: `Function`, `failureCallback?`: `Function`, `execId?`: string): *void*
+▸ (`filePath`: string, `successCallback?`: [Function](mmir_lib.requirejs.md#function), `failureCallback?`: [Function](mmir_lib.requirejs.md#function), `execId?`: string): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `filePath` | string |
-`successCallback?` | `Function` |
-`failureCallback?` | `Function` |
+`successCallback?` | [Function](mmir_lib.requirejs.md#function) |
+`failureCallback?` | [Function](mmir_lib.requirejs.md#function) |
 `execId?` | string |
 
 ___
@@ -465,7 +483,7 @@ ___
 
 #### Type declaration:
 
-▸ (`ctx`: string, `funcName`: string, `args?`: `Array<any>`): *any*
+▸ (`ctx`: string, `funcName`: string, `args?`: Array‹any›): *any*
 
 **Parameters:**
 
@@ -473,7 +491,7 @@ Name | Type |
 ------ | ------ |
 `ctx` | string |
 `funcName` | string |
-`args?` | `Array<any>` |
+`args?` | Array‹any› |
 
 ___
 
@@ -483,7 +501,7 @@ ___
 
 #### Type declaration:
 
-▸ (`url`: string, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: `Function`): *void*
+▸ (`url`: string, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
@@ -492,7 +510,7 @@ Name | Type |
 `url` | string |
 `onEnd?` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
 `failureCallback?` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
-`onReady?` | `Function` |
+`onReady?` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 
@@ -502,7 +520,7 @@ ___
 
 #### Type declaration:
 
-▸ (`blob`: any, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: `Function`): *void*
+▸ (`blob`: any, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
@@ -511,7 +529,7 @@ Name | Type |
 `blob` | any |
 `onEnd?` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
 `failureCallback?` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
-`onReady?` | `Function` |
+`onReady?` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 
@@ -632,7 +650,7 @@ ___
 
 Name | Type |
 ------ | ------ |
-`options` | string \| string[] \| [TTSOptions](mmir_lib.ttsoptions.md) |
+`options` | string &#124; string[] &#124; [TTSOptions](mmir_lib.ttsoptions.md) |
 `successCallback?` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
 `failureCallback?` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
 `onInit?` | [TTSOnReady](../modules/mmir_lib.md#ttsonready) |

@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [CommonUtils](mmir_lib.commonutils.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [CommonUtils](mmir_lib.commonutils.md)
 
 # Interface: CommonUtils
 
@@ -15,6 +13,7 @@
 * [checkNetworkConnection](mmir_lib.commonutils.md#checknetworkconnection)
 * [concatArray](mmir_lib.commonutils.md#concatarray)
 * [getCompiledGrammarPath](mmir_lib.commonutils.md#getcompiledgrammarpath)
+* [getCompiledResourcesIds](mmir_lib.commonutils.md#getcompiledresourcesids)
 * [getDirectoryStructure](mmir_lib.commonutils.md#getdirectorystructure)
 * [getLocalScript](mmir_lib.commonutils.md#getlocalscript)
 * [getPartialsPrefix](mmir_lib.commonutils.md#getpartialsprefix)
@@ -22,6 +21,7 @@
 * [isArray](mmir_lib.commonutils.md#isarray)
 * [isRunningOnAndroid](mmir_lib.commonutils.md#isrunningonandroid)
 * [isRunningOnSmartphone](mmir_lib.commonutils.md#isrunningonsmartphone)
+* [listDir](mmir_lib.commonutils.md#listdir)
 * [loadCompiledGrammars](mmir_lib.commonutils.md#loadcompiledgrammars)
 * [loadDirectoryStructure](mmir_lib.commonutils.md#loaddirectorystructure)
 * [loadImpl](mmir_lib.commonutils.md#loadimpl)
@@ -65,15 +65,31 @@ ___
 
 #### Type declaration:
 
-▸ (`generatedGrammarsPath`: any, `grammarId`: any, `isFileNameOnly`: any): *any*
+▸ (`generatedGrammarsPath`: string, `grammarId`: string, `isFileNameOnly?`: boolean): *string*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`generatedGrammarsPath` | any |
-`grammarId` | any |
-`isFileNameOnly` | any |
+`generatedGrammarsPath` | string |
+`grammarId` | string |
+`isFileNameOnly?` | boolean |
+
+___
+
+###  getCompiledResourcesIds
+
+• **getCompiledResourcesIds**: *function*
+
+#### Type declaration:
+
+▸ (`compiledResourcesPath`: string): *Array‹string›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`compiledResourcesPath` | string |
 
 ___
 
@@ -169,21 +185,38 @@ ___
 
 ___
 
+###  listDir
+
+• **listDir**: *function*
+
+#### Type declaration:
+
+▸ (`pathname`: string, `filter`: RegExp | function): *Array‹string›*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`pathname` | string |
+`filter` | RegExp &#124; function |
+
+___
+
 ###  loadCompiledGrammars
 
 • **loadCompiledGrammars**: *function*
 
 #### Type declaration:
 
-▸ (`generatedGrammarsPath`: string, `cbFunction`: `Function`, `ignoreGrammarIds?`: `Array<string>`): *any*
+▸ (`generatedGrammarsPath`: string, `cbFunction`: [Function](mmir_lib.requirejs.md#function), `ignoreGrammarIds?`: Array‹string›): *any*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `generatedGrammarsPath` | string |
-`cbFunction` | `Function` |
-`ignoreGrammarIds?` | `Array<string>` |
+`cbFunction` | [Function](mmir_lib.requirejs.md#function) |
+`ignoreGrammarIds?` | Array‹string› |
 
 ___
 
@@ -261,7 +294,7 @@ ___
 
 ###  regexHTMLComment
 
-• **regexHTMLComment**: *`RegExp`*
+• **regexHTMLComment**: *RegExp*
 
 ___
 

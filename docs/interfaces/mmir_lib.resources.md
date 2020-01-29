@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [Resources](mmir_lib.resources.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Resources](mmir_lib.resources.md)
 
 # Interface: Resources
 
@@ -24,6 +22,7 @@
 * [getEnvPlatform](mmir_lib.resources.md#getenvplatform)
 * [getExtensionsPath](mmir_lib.resources.md#getextensionspath)
 * [getGeneratedGrammarsPath](mmir_lib.resources.md#getgeneratedgrammarspath)
+* [getGeneratedStateModelsPath](mmir_lib.resources.md#getgeneratedstatemodelspath)
 * [getGrammarFileUrl](mmir_lib.resources.md#getgrammarfileurl)
 * [getGrammarPluginPath](mmir_lib.resources.md#getgrammarpluginpath)
 * [getHelperPath](mmir_lib.resources.md#gethelperpath)
@@ -162,6 +161,16 @@ ___
 ###  getGeneratedGrammarsPath
 
 • **getGeneratedGrammarsPath**: *function*
+
+#### Type declaration:
+
+▸ (): *string*
+
+___
+
+###  getGeneratedStateModelsPath
+
+• **getGeneratedStateModelsPath**: *function*
 
 #### Type declaration:
 

@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [SemanticInterpreter](mmir_lib.semanticinterpreter.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [SemanticInterpreter](mmir_lib.semanticinterpreter.md)
 
 # Interface: SemanticInterpreter
 
@@ -13,6 +11,8 @@
 ### Properties
 
 * [addGrammar](mmir_lib.semanticinterpreter.md#addgrammar)
+* [addProcessing](mmir_lib.semanticinterpreter.md#addprocessing)
+* [applyPreProcessing](mmir_lib.semanticinterpreter.md#applypreprocessing)
 * [createGrammar](mmir_lib.semanticinterpreter.md#creategrammar)
 * [getCurrentGrammar](mmir_lib.semanticinterpreter.md#getcurrentgrammar)
 * [getFileVersion](mmir_lib.semanticinterpreter.md#getfileversion)
@@ -24,12 +24,14 @@
 * [hasGrammar](mmir_lib.semanticinterpreter.md#hasgrammar)
 * [interpret](mmir_lib.semanticinterpreter.md#interpret)
 * [isEnabled](mmir_lib.semanticinterpreter.md#isenabled)
+* [isPreProcessPositionsEnabled](mmir_lib.semanticinterpreter.md#ispreprocesspositionsenabled)
 * [removeGrammar](mmir_lib.semanticinterpreter.md#removegrammar)
 * [removeStopwords](mmir_lib.semanticinterpreter.md#removestopwords)
 * [setCurrentGrammar](mmir_lib.semanticinterpreter.md#setcurrentgrammar)
 * [setEnabled](mmir_lib.semanticinterpreter.md#setenabled)
 * [setEngineCompileMode](mmir_lib.semanticinterpreter.md#setenginecompilemode)
 * [setGrammarEngine](mmir_lib.semanticinterpreter.md#setgrammarengine)
+* [setPreProcessPositionsEnabled](mmir_lib.semanticinterpreter.md#setpreprocesspositionsenabled)
 * [setStopwords](mmir_lib.semanticinterpreter.md#setstopwords)
 
 ## Properties
@@ -56,15 +58,52 @@
 
 ▪`Optional`  **callback**: *function*
 
-▸ (`semanticResult`: `__type`): *void*
+▸ (`semanticResult`: object): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`semanticResult` | `__type` |
+`semanticResult` | object |
 
 ▪`Optional`  **fileFormatNo**: *number*
+
+___
+
+###  addProcessing
+
+• **addProcessing**: *function*
+
+#### Type declaration:
+
+▸ (`id`: string, `processingStep`: [ProcessingStep](mmir_lib.processingstep.md), `indexOrIsPrepend?`: number | boolean, `callback?`: [Function](mmir_lib.requirejs.md#function)): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`id` | string |
+`processingStep` | [ProcessingStep](mmir_lib.processingstep.md) |
+`indexOrIsPrepend?` | number &#124; boolean |
+`callback?` | [Function](mmir_lib.requirejs.md#function) |
+
+___
+
+###  applyPreProcessing
+
+• **applyPreProcessing**: *function*
+
+#### Type declaration:
+
+▸ (`thePhrase`: string, `lang?`: string, `processingSteps?`: Array‹[ProcessingStep](mmir_lib.processingstep.md)›): *string*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`thePhrase` | string |
+`lang?` | string |
+`processingSteps?` | Array‹[ProcessingStep](mmir_lib.processingstep.md)› |
 
 ___
 
@@ -74,11 +113,11 @@ ___
 
 #### Type declaration:
 
-▸ (`rawGrammarSrc`: string | `__type`, `id`: string, `callback?`: function): *[SemanticInterpreter](mmir_lib.semanticinterpreter.md)*
+▸ (`rawGrammarSrc`: string | object, `id`: string, `callback?`: function): *[SemanticInterpreter](mmir_lib.semanticinterpreter.md)*
 
 **Parameters:**
 
-▪ **rawGrammarSrc**: *string | `__type`*
+▪ **rawGrammarSrc**: *string | object*
 
 ▪ **id**: *string*
 
@@ -240,6 +279,16 @@ ___
 
 ___
 
+###  isPreProcessPositionsEnabled
+
+• **isPreProcessPositionsEnabled**: *function*
+
+#### Type declaration:
+
+▸ (): *boolean*
+
+___
+
 ###  removeGrammar
 
 • **removeGrammar**: *function*
@@ -259,6 +308,8 @@ ___
 ###  removeStopwords
 
 • **removeStopwords**: *function*
+
+**`deprecated`** use [applyPreProcessing](mmir_lib.semanticinterpreter.md#applypreprocessing) instead
 
 #### Type declaration:
 
@@ -338,17 +389,33 @@ Name | Type |
 
 ___
 
+###  setPreProcessPositionsEnabled
+
+• **setPreProcessPositionsEnabled**: *function*
+
+#### Type declaration:
+
+▸ (`enabled`: boolean): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`enabled` | boolean |
+
+___
+
 ###  setStopwords
 
 • **setStopwords**: *function*
 
 #### Type declaration:
 
-▸ (`id`: string, `stopwordArray`: `Array<string>`): *void*
+▸ (`id`: string, `stopwordArray`: Array‹string›): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `id` | string |
-`stopwordArray` | `Array<string>` |
+`stopwordArray` | Array‹string› |

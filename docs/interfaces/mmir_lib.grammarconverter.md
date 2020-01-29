@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [GrammarConverter](mmir_lib.grammarconverter.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [GrammarConverter](mmir_lib.grammarconverter.md)
 
 # Interface: GrammarConverter
 
@@ -12,20 +10,19 @@
 
 ### Properties
 
+* [addProc](mmir_lib.grammarconverter.md#addproc)
 * [convertOldFormat](mmir_lib.grammarconverter.md#convertoldformat)
-* [enc_regexp_str](mmir_lib.grammarconverter.md#enc_regexp_str)
-* [entry_index_field](mmir_lib.grammarconverter.md#entry_index_field)
-* [entry_token_field](mmir_lib.grammarconverter.md#entry_token_field)
 * [executeGrammar](mmir_lib.grammarconverter.md#executegrammar)
 * [getEncodedStopwords](mmir_lib.grammarconverter.md#getencodedstopwords)
 * [getGrammarDef](mmir_lib.grammarconverter.md#getgrammardef)
 * [getGrammarSource](mmir_lib.grammarconverter.md#getgrammarsource)
+* [getProcIndex](mmir_lib.grammarconverter.md#getprocindex)
 * [getStopWords](mmir_lib.grammarconverter.md#getstopwords)
 * [getStopWordsEncRegExpr](mmir_lib.grammarconverter.md#getstopwordsencregexpr)
 * [getStopWordsRegExpr](mmir_lib.grammarconverter.md#getstopwordsregexpr)
+* [grammar_definition](mmir_lib.grammarconverter.md#grammar_definition)
 * [isAsyncExec](mmir_lib.grammarconverter.md#isasyncexec)
 * [js_grammar_definition](mmir_lib.grammarconverter.md#js_grammar_definition)
-* [jscc_grammar_definition](mmir_lib.grammarconverter.md#jscc_grammar_definition)
 * [json_grammar_definition](mmir_lib.grammarconverter.md#json_grammar_definition)
 * [loadGrammar](mmir_lib.grammarconverter.md#loadgrammar)
 * [loadResource](mmir_lib.grammarconverter.md#loadresource)
@@ -34,7 +31,12 @@
 * [maskString](mmir_lib.grammarconverter.md#maskstring)
 * [maskValues](mmir_lib.grammarconverter.md#maskvalues)
 * [parseStopWords](mmir_lib.grammarconverter.md#parsestopwords)
+* [postproc](mmir_lib.grammarconverter.md#postproc)
+* [preproc](mmir_lib.grammarconverter.md#preproc)
+* [procList](mmir_lib.grammarconverter.md#proclist)
 * [recodeJSON](mmir_lib.grammarconverter.md#recodejson)
+* [removeProc](mmir_lib.grammarconverter.md#removeproc)
+* [removeStopwords](mmir_lib.grammarconverter.md#removestopwords)
 * [setGrammarDef](mmir_lib.grammarconverter.md#setgrammardef)
 * [setGrammarFunction](mmir_lib.grammarconverter.md#setgrammarfunction)
 * [setGrammarSource](mmir_lib.grammarconverter.md#setgrammarsource)
@@ -42,37 +44,29 @@
 * [stop_words_regexp](mmir_lib.grammarconverter.md#stop_words_regexp)
 * [unmaskJSON](mmir_lib.grammarconverter.md#unmaskjson)
 * [unmaskString](mmir_lib.grammarconverter.md#unmaskstring)
-* [variable_prefix](mmir_lib.grammarconverter.md#variable_prefix)
-* [variable_regexp](mmir_lib.grammarconverter.md#variable_regexp)
-
-### Methods
-
-* [postproc](mmir_lib.grammarconverter.md#postproc)
-* [preproc](mmir_lib.grammarconverter.md#preproc)
 
 ## Properties
+
+###  addProc
+
+• **addProc**: *function*
+
+#### Type declaration:
+
+▸ (`proc`: [ProcessingStep](mmir_lib.processingstep.md), `indexOrIsPrepend?`: number | boolean): *void*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`proc` | [ProcessingStep](mmir_lib.processingstep.md) |
+`indexOrIsPrepend?` | number &#124; boolean |
+
+___
 
 ###  convertOldFormat
 
 • **convertOldFormat**: *boolean*
-
-___
-
-###  enc_regexp_str
-
-• **enc_regexp_str**: *string*
-
-___
-
-###  entry_index_field
-
-• **entry_index_field**: *string*
-
-___
-
-###  entry_token_field
-
-• **entry_token_field**: *string*
 
 ___
 
@@ -90,13 +84,13 @@ ___
 
 ▪`Optional`  **callback**: *function*
 
-▸ (`semanticResult`: `__type`): *void*
+▸ (`semanticResult`: object): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`semanticResult` | `__type` |
+`semanticResult` | object |
 
 ___
 
@@ -106,7 +100,7 @@ ___
 
 #### Type declaration:
 
-▸ (): *`Array<string>`*
+▸ (): *Array‹string›*
 
 ___
 
@@ -130,13 +124,30 @@ ___
 
 ___
 
+###  getProcIndex
+
+• **getProcIndex**: *function*
+
+#### Type declaration:
+
+▸ (`procName`: string, `startIndex?`: number): *number*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`procName` | string |
+`startIndex?` | number |
+
+___
+
 ###  getStopWords
 
 • **getStopWords**: *function*
 
 #### Type declaration:
 
-▸ (): *`Array<string>`*
+▸ (): *Array‹string›*
 
 ___
 
@@ -146,7 +157,7 @@ ___
 
 #### Type declaration:
 
-▸ (): *`RegExp`*
+▸ (): *RegExp*
 
 ___
 
@@ -156,7 +167,13 @@ ___
 
 #### Type declaration:
 
-▸ (): *`RegExp`*
+▸ (): *RegExp*
+
+___
+
+###  grammar_definition
+
+• **grammar_definition**: *string*
 
 ___
 
@@ -173,12 +190,6 @@ ___
 ###  js_grammar_definition
 
 • **js_grammar_definition**: *string*
-
-___
-
-###  jscc_grammar_definition
-
-• **jscc_grammar_definition**: *string*
 
 ___
 
@@ -242,13 +253,14 @@ ___
 
 #### Type declaration:
 
-▸ (`str`: string): *string*
+▸ (`str`: string, `computePositions?`: boolean): *string*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `str` | string |
+`computePositions?` | boolean |
 
 ___
 
@@ -293,6 +305,48 @@ ___
 
 ___
 
+###  postproc
+
+• **postproc**: *function*
+
+#### Type declaration:
+
+▸ (`procResult`: any, `pos`: [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo), `processingSteps?`: Array‹[ProcessingStep](mmir_lib.processingstep.md)›): *any*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`procResult` | any |
+`pos` | [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo) |
+`processingSteps?` | Array‹[ProcessingStep](mmir_lib.processingstep.md)› |
+
+___
+
+###  preproc
+
+• **preproc**: *function*
+
+#### Type declaration:
+
+▸ (`thePhrase`: string, `pos?`: [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo), `processingSteps?`: Array‹[ProcessingStep](mmir_lib.processingstep.md)›): *string*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`thePhrase` | string |
+`pos?` | [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo) |
+`processingSteps?` | Array‹[ProcessingStep](mmir_lib.processingstep.md)› |
+
+___
+
+###  procList
+
+• **procList**: *Array‹[ProcessingStep](mmir_lib.processingstep.md)›*
+
+___
+
 ###  recodeJSON
 
 • **recodeJSON**: *function*
@@ -318,6 +372,39 @@ Name | Type |
 ▪`Optional`  **isMaskValues**: *boolean*
 
 ▪`Optional`  **isMaskNames**: *boolean*
+
+___
+
+###  removeProc
+
+• **removeProc**: *function*
+
+#### Type declaration:
+
+▸ (`proc`: number | string): *[ProcessingStep](mmir_lib.processingstep.md) | undefined*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`proc` | number &#124; string |
+
+___
+
+###  removeStopwords
+
+• **removeStopwords**: *function*
+
+#### Type declaration:
+
+▸ (`inputStr`: string, `isCalcPosition?`: boolean): *string | [Positions](mmir_lib.positions.md)*
+
+**Parameters:**
+
+Name | Type |
+------ | ------ |
+`inputStr` | string |
+`isCalcPosition?` | boolean |
 
 ___
 
@@ -357,13 +444,13 @@ ___
 
 ▪`Optional`  **callback**: *function*
 
-▸ (`semanticResult`: `__type`): *void*
+▸ (`semanticResult`: object): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`semanticResult` | `__type` |
+`semanticResult` | object |
 
 ▪`Optional`  **isAsync**: *boolean*
 
@@ -391,19 +478,19 @@ ___
 
 #### Type declaration:
 
-▸ (`stopWordArray`: `Array<string>`): *void*
+▸ (`stopWordArray`: Array‹string›): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`stopWordArray` | `Array<string>` |
+`stopWordArray` | Array‹string› |
 
 ___
 
 ###  stop_words_regexp
 
-• **stop_words_regexp**: *`RegExp`*
+• **stop_words_regexp**: *RegExp*
 
 ___
 
@@ -431,7 +518,7 @@ ___
 
 #### Type declaration:
 
-▸ (`str`: string, `computePositions?`: boolean, `detector?`: `RegExp`): *string | [Positions](mmir_lib.positions.md)*
+▸ (`str`: string, `computePositions?`: boolean, `detector?`: RegExp): *string | [Positions](mmir_lib.positions.md)*
 
 **Parameters:**
 
@@ -439,79 +526,4 @@ Name | Type |
 ------ | ------ |
 `str` | string |
 `computePositions?` | boolean |
-`detector?` | `RegExp` |
-
-___
-
-###  variable_prefix
-
-• **variable_prefix**: *string*
-
-___
-
-###  variable_regexp
-
-• **variable_regexp**: *`RegExp`*
-
-## Methods
-
-###  postproc
-
-▸ **postproc**(`procResult`: any, `recodeFunc?`: function): *any*
-
-**Parameters:**
-
-▪ **procResult**: *any*
-
-▪`Optional`  **recodeFunc**: *function*
-
-▸ (`inputStr`: string, ...`args`: any[]): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`inputStr` | string |
-`...args` | any[] |
-
-**Returns:** *any*
-
-___
-
-###  preproc
-
-▸ **preproc**(`thePhrase`: string, `pos?`: object, `maskFunc?`: function, `stopwordFunc?`: function): *string*
-
-**Parameters:**
-
-▪ **thePhrase**: *string*
-
-▪`Optional`  **pos**: *object*
-
-Name | Type |
------- | ------ |
-`stopwords` | `Array<Pos>` |
-
-▪`Optional`  **maskFunc**: *function*
-
-▸ (`inputStr`: string, `isCalcPosition?`: boolean): *string | [Positions](mmir_lib.positions.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`inputStr` | string |
-`isCalcPosition?` | boolean |
-
-▪`Optional`  **stopwordFunc**: *function*
-
-▸ (`inputStr`: string, `pos?`: `Array<Pos>`): *string | [Positions](mmir_lib.positions.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`inputStr` | string |
-`pos?` | `Array<Pos>` |
-
-**Returns:** *string*
+`detector?` | RegExp |

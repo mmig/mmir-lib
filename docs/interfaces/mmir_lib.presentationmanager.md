@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [PresentationManager](mmir_lib.presentationmanager.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [PresentationManager](mmir_lib.presentationmanager.md)
 
 # Interface: PresentationManager
 
@@ -48,7 +46,7 @@ NOTE view-dependent events are named: "<event name>_<view name>"
 Name | Type |
 ------ | ------ |
 `ctrl` | [Controller](../classes/mmir_lib.controller.md) |
-`eventName` | "before_page_prepare" \| "before_page_load" \| "on_page_load" \| string |
+`eventName` | "before_page_prepare" &#124; "before_page_load" &#124; "on_page_load" &#124; string |
 `eventData` | any |
 `pageOptions` | any |
 
@@ -110,14 +108,14 @@ ___
 
 #### Type declaration:
 
-▸ (`funcName`: string, `args`: `Array<any>`): *any*
+▸ (`funcName`: string, `args`: Array‹any›): *any*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
 `funcName` | string |
-`args` | `Array<any>` |
+`args` | Array‹any› |
 
 ___
 

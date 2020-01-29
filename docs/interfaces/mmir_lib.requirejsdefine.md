@@ -1,14 +1,12 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [RequireJsDefine](mmir_lib.requirejsdefine.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [RequireJsDefine](mmir_lib.requirejsdefine.md)
 
 # Interface: RequireJsDefine
 
 ## Hierarchy
 
-* `Function`
+* [Function](mmir_lib.requirejs.md#function)
 
-  * **RequireJsDefine**
+  ↳ **RequireJsDefine**
 
 ## Index
 
@@ -23,7 +21,7 @@
 
 ### Methods
 
-* [__@hasInstance](mmir_lib.requirejsdefine.md#__@hasinstance)
+* [[Symbol.hasInstance]](mmir_lib.requirejsdefine.md#[symbol.hasinstance])
 * [apply](mmir_lib.requirejsdefine.md#apply)
 * [bind](mmir_lib.requirejsdefine.md#bind)
 * [call](mmir_lib.requirejsdefine.md#call)
@@ -33,7 +31,7 @@
 
 ###  Function
 
-• **Function**: *`FunctionConstructor`*
+• **Function**: *FunctionConstructor*
 
 ___
 
@@ -41,15 +39,15 @@ ___
 
 • **arguments**: *any*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[arguments](mmir_lib.requirejs.md#arguments)*
 
 ___
 
 ###  caller
 
-• **caller**: *`Function`*
+• **caller**: *[Function](mmir_lib.requirejs.md#function)*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[caller](mmir_lib.requirejs.md#caller)*
 
 ___
 
@@ -57,7 +55,7 @@ ___
 
 • **length**: *number*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[length](mmir_lib.requirejs.md#length)*
 
 ___
 
@@ -65,7 +63,7 @@ ___
 
 • **name**: *string*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[name](mmir_lib.requirejs.md#name)*
 
 Returns the name of the function. Function names are read-only and can not be changed.
 
@@ -75,15 +73,15 @@ ___
 
 • **prototype**: *any*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[prototype](mmir_lib.requirejs.md#prototype)*
 
 ## Methods
 
-###  __@hasInstance
+###  [Symbol.hasInstance]
 
-▸ **__@hasInstance**(`value`: any): *boolean*
+▸ **[Symbol.hasInstance]**(`value`: any): *boolean*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[[Symbol.hasInstance]](mmir_lib.requirejs.md#[symbol.hasinstance])*
 
 Determines whether the given value inherits from this function if this function was used
 as a constructor function.
@@ -103,9 +101,9 @@ ___
 
 ###  apply
 
-▸ **apply**(`this`: `Function`, `thisArg`: any, `argArray?`: any): *any*
+▸ **apply**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, `argArray?`: any): *any*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[apply](mmir_lib.requirejs.md#apply)*
 
 Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function.
 
@@ -113,7 +111,7 @@ Calls the function, substituting the specified object for the this value of the 
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`this` | `Function` | - |
+`this` | [Function](mmir_lib.requirejs.md#function) | - |
 `thisArg` | any | The object to be used as the this object. |
 `argArray?` | any | A set of arguments to be passed to the function.  |
 
@@ -123,9 +121,9 @@ ___
 
 ###  bind
 
-▸ **bind**(`this`: `Function`, `thisArg`: any, ...`argArray`: any[]): *any*
+▸ **bind**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, ...`argArray`: any[]): *any*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[bind](mmir_lib.requirejs.md#bind)*
 
 For a given function, creates a bound function that has the same body as the original function.
 The this object of the bound function is associated with the specified object, and has the specified initial parameters.
@@ -134,7 +132,7 @@ The this object of the bound function is associated with the specified object, a
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`this` | `Function` | - |
+`this` | [Function](mmir_lib.requirejs.md#function) | - |
 `thisArg` | any | An object to which the this keyword can refer inside the new function. |
 `...argArray` | any[] | A list of arguments to be passed to the new function.  |
 
@@ -144,9 +142,9 @@ ___
 
 ###  call
 
-▸ **call**(`this`: `Function`, `thisArg`: any, ...`argArray`: any[]): *any*
+▸ **call**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, ...`argArray`: any[]): *any*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[call](mmir_lib.requirejs.md#call)*
 
 Calls a method of an object, substituting another object for the current object.
 
@@ -154,7 +152,7 @@ Calls a method of an object, substituting another object for the current object.
 
 Name | Type | Description |
 ------ | ------ | ------ |
-`this` | `Function` | - |
+`this` | [Function](mmir_lib.requirejs.md#function) | - |
 `thisArg` | any | The object to be used as the current object. |
 `...argArray` | any[] | A list of arguments to be passed to the method.  |
 
@@ -166,7 +164,7 @@ ___
 
 ▸ **toString**(): *string*
 
-*Inherited from void*
+*Inherited from [RequireJs](mmir_lib.requirejs.md).[toString](mmir_lib.requirejs.md#tostring)*
 
 Returns a string representation of a function.
 

@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [PhraseInfo](mmir_lib.phraseinfo.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [PhraseInfo](mmir_lib.phraseinfo.md)
 
 # Interface: PhraseInfo
 
@@ -28,7 +26,7 @@ ___
 
 ###  tok
 
-• **tok**: *string*
+• **tok**: *string | Array‹[PhraseInfo](mmir_lib.phraseinfo.md)›*
 
 the matched token(s)
 

@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md)
 
 # Interface: DialogManager4Compatibility
 
@@ -8,7 +6,7 @@
 
 * [DialogManager](mmir_lib.dialogmanager.md)
 
-  * **DialogManager4Compatibility**
+  ↳ **DialogManager4Compatibility**
 
 ## Index
 
@@ -33,7 +31,7 @@
 
 #### Type declaration:
 
-▸ (): *`Function` | undefined*
+▸ (): *[Function](mmir_lib.requirejs.md#function) | undefined*
 
 ___
 
@@ -136,13 +134,13 @@ ___
 
 #### Type declaration:
 
-▸ (`onPageRenderedHook`: `Function`): *void*
+▸ (`onPageRenderedHook`: [Function](mmir_lib.requirejs.md#function)): *void*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`onPageRenderedHook` | `Function` |
+`onPageRenderedHook` | [Function](mmir_lib.requirejs.md#function) |
 
 ___
 

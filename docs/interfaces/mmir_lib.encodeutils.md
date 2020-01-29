@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [EncodeUtils](mmir_lib.encodeutils.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [EncodeUtils](mmir_lib.encodeutils.md)
 
 # Interface: EncodeUtils
 
@@ -23,13 +21,13 @@
 
 #### Type declaration:
 
-▸ (`target`: string | `__type`, `doAlsoEncodeUpperCase?`: boolean): *string | `__type`*
+▸ (`target`: string | object, `doAlsoEncodeUpperCase?`: boolean): *string | object*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`target` | string \| `__type` |
+`target` | string &#124; object |
 `doAlsoEncodeUpperCase?` | boolean |
 
 ___
@@ -40,11 +38,11 @@ ___
 
 #### Type declaration:
 
-▸ (`target`: string | `__type`, `doAlsoEncodeUpperCase?`: boolean): *string | `__type`*
+▸ (`target`: string | object, `doAlsoEncodeUpperCase?`: boolean): *string | object*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`target` | string \| `__type` |
+`target` | string &#124; object |
 `doAlsoEncodeUpperCase?` | boolean |

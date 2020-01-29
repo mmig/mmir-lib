@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [Helper](mmir_lib.helper.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Helper](mmir_lib.helper.md)
 
 # Class: Helper
 
@@ -22,7 +20,7 @@
 
 ###  constructor
 
-\+ **new Helper**(`ctrl`: string, `name`: string, `instanceConstr`: `Function`): *[Helper](mmir_lib.helper.md)*
+\+ **new Helper**(`ctrl`: string, `name`: string, `instanceConstr`: [Function](../interfaces/mmir_lib.requirejs.md#function)): *[Helper](mmir_lib.helper.md)*
 
 **Parameters:**
 
@@ -30,7 +28,7 @@ Name | Type |
 ------ | ------ |
 `ctrl` | string |
 `name` | string |
-`instanceConstr` | `Function` |
+`instanceConstr` | [Function](../interfaces/mmir_lib.requirejs.md#function) |
 
 **Returns:** *[Helper](mmir_lib.helper.md)*
 

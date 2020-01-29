@@ -1,6 +1,4 @@
-> **[mmir-lib 5.2.0](../README.md)**
-
-[Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / [Positions](mmir_lib.positions.md) /
+[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Positions](mmir_lib.positions.md)
 
 # Interface: Positions
 
@@ -13,16 +11,16 @@
 ### Properties
 
 * [pos](mmir_lib.positions.md#pos)
-* [str](mmir_lib.positions.md#str)
+* [text](mmir_lib.positions.md#text)
 
 ## Properties
 
 ###  pos
 
-• **pos**: *`Array<Pos>`*
+• **pos**: *Array‹[Pos](mmir_lib.pos.md)›*
 
 ___
 
-###  str
+###  text
 
-• **str**: *string*
+• **text**: *string*
