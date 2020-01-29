@@ -2,7 +2,10 @@
 ========
 
 [![MIT license](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
-![GitHub package.json version](https://img.shields.io/github/package-json/v/mmig/mmir-lib)
+[![GitHub package.json version (branch)](https://img.shields.io/github/package-json/v/mmig/mmir-lib/master)](https://github.com/mmig/mmir-lib)
+[![npm](https://img.shields.io/npm/v/mmir-lib)](https://www.npmjs.com/package/mmir-lib)
+[![API](https://img.shields.io/badge/docs-API%20reference-orange.svg?style=flat)](https://mmig.github.io/mmir/api)
+[![Guides](https://img.shields.io/badge/docs-guides-orange.svg?style=flat)](https://github.com/mmig/mmir/wiki)
 
 
 Source Code for the [mmir][5] (Mobile Multimodal Interaction and Rendering) library
@@ -24,6 +27,21 @@ For examples, see the [mmir-starter-kit][1] or [mmir-starter-ionic][2].
 ----
 # Usage
 
+## Install
+
+ * clone repository / download as ZIP file and include `/lib` directory in your assets
+   _(see below for how to include in JavaScript code)_
+ * with `npm` / `package.json`
+   * install via `npm` registry:
+     ```bash
+     npm install mmir-lib
+     ```
+   * install `master` branch via GitHub repository:
+     ```bash
+     npm install git+https://github.com/mmig/mmir-lib.git
+     ```
+ * see [mmir-tooling][3] and [mmir-wepack][4] for more options
+
 ## Building Grammars, State Machines etc.
 
  * Prerequesites: Node.js
@@ -33,7 +51,7 @@ are used in the application at runtime.
 Note that most of these resources can be compiled during runtime too (as in case
 of grammars and state machines).
 
-Pre-building these resources is supported e.g. via the [mmir-tooling][3] project.
+Compiling/building these resources is supported e.g. via the [mmir-tooling][3] project.
 
 In addition, the [mmir-wepack][4] integration provides special support
 for including `mmir` in webpack-based/-built applications.
@@ -74,6 +92,12 @@ any build-system (like `webpack`).
 
 ## Node.js
 
+install via `npm`
+```bash
+npm instal mmir-lib
+```
+
+initialize and include in JavaScript code:
 ```javascript
 var mmirLib = require('mmir-lib');
 
@@ -118,8 +142,8 @@ HTML5 `WebWorker`s when running in `node`:
 
  * alternative module `webworker-threads` with version >= 0.8.x
    * NOTE not everything may work using this package (if possible use `worker_threads`)
-   * [worker_threads at npm][10]: current version is 0.7.x
-   * [worker_threads on github][11]: current version is 0.8.x
+   * [worker_threads at npm][10]: current version is ![npm](https://img.shields.io/npm/v/webworker-threads?color=lightgrey)
+   * [worker_threads on github][11]: current version is ![GitHub package.json version](https://img.shields.io/github/package-json/v/audreyt/node-webworker-threads?color=lightgrey&label=github)
 
 ## Additional Notes
 
@@ -134,7 +158,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
       [cordova example project][9] for integration / tooling of the `mmir`
       framework in combination with Cordova 5 and later versions).
 
---
+----
 #### Used Libraries
 
 (see contents of `/vendor/libs/`)
@@ -156,7 +180,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
  * stacktrace-js 2.0.0  
   (MIT; Copyright (c) 2017 Eric Wendelin and other contributors)
 
---
+----
 #### License
 
 If not stated otherwise, all files and resources are provided under the MIT license
