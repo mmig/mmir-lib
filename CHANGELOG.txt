@@ -1,5 +1,5 @@
 
-version notes for MMIR framework code (v 6.0.0)
+version notes for MMIR framework code
 
  * using Cordova 5.x.x - 8.x.x library
 
@@ -32,6 +32,39 @@ additional, required dependencies when running in node environment
  --------------
  Change Log
  --------------
+
+##################
+Version 6.0.1-alpha
+##################
+
+ADDITION:
+
+ * tools/events:
+   * extendend method EventEmitter.get() to return list of event types (to which listeners are registered) if no event type argument is given
+   * added EventEmitter.destroy() method
+
+ * env/media/ttsMary: added support for filter options when querying voice list
+
+ * env/media: added TTS module "ttsWebspeech" for audiotts that utilizes the HTML5 API SpeechSynthesis for TTS
+   * usage example in "browser" environment (in configuration.json):
+
+			 ...
+			 "mediaManager": {
+				"plugins": {
+					"browser": [
+						...
+						{"mod": "audiotts", "config": "ttsWebspeech", "type": "tts"}
+						...
+
+MODIFICATION:
+
+ * util_jquery/toArray: switched implementation from jQuery.makeArray to Array.from due to more universal conversion applicability
+                        (if needed, shim for Array.from is included in vendor libraries)
+
+BUGFIX
+
+ * logger: correctly parse and apply core.logLevel setting if options object with {logLevel: STRING | NUMBER} is used
+
 ##################
 Version 6.0.0
 ##################
