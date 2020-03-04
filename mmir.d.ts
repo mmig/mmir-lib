@@ -323,8 +323,8 @@ export interface Resources {
 	getControllerPath: () => string;
 	getDictionaryFileUrl: (langCode?: string) => string;
 	getDirectoriesFileUrl: () => string;
-	getEnv: () => any;
-	getEnvPlatform: () => any;
+	getEnv: () => EnvType | "default" | string;
+	getEnvPlatform: () => PlatfromType | "default";
 	getExtensionsPath: () => string;
 	getGeneratedGrammarsPath: () => string;
 	getGrammarFileUrl: (langCode?: string) => string;
@@ -341,9 +341,18 @@ export interface Resources {
 	getSpeechConfigFileUrl: (langCode?: string) => string;
 	getViewPath: () => string;
 	getWorkerPath: () => string;
-	init: (theForBrowserParameter: any) => any;
+	init: (theForBrowserParameter?: EnvType|EnvInfo&{isAbsolutePath?: true|((path: string)=>boolean)}|string|boolean, isReset?: boolean) => any;
 	isBrowserEnv: () => boolean;
 	isCordovaEnv: () => boolean;
+}
+export type PlatfromType = "browser" | "android" | "ios" | "node" | "electron";
+export type EnvType = PlatfromType | "cordova";
+export interface EnvInfo {
+	isBrowserEnv: boolean,
+	isCordovaEnv: boolean,
+	isNodeEnv: boolean,
+	platform: PlatfromType | "default",
+	envSetting: EnvType | "default" | string
 }
 export interface ControllerManager {
 	create: () => any;
