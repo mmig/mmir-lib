@@ -1,7 +1,7 @@
 
 version notes for MMIR framework code
 
- * using Cordova 5.x.x - 8.x.x library
+ * using Cordova 5.x.x - 9.x.x library
 
 optional
  * jQuery 2.x - 3.x library (presence is auto-detected, if loaded before mmir-lib)
@@ -34,7 +34,7 @@ additional, required dependencies when running in node environment
  --------------
 
 ##################
-Version 6.0.1-alpha
+Version 6.1.0
 ##################
 
 ADDITION:
@@ -55,15 +55,22 @@ ADDITION:
 						...
 						{"mod": "audiotts", "config": "ttsWebspeech", "type": "tts"}
 						...
+ * tools/resources: added 2nd optional argument isReset (boolean) for mmir.res.init(envParam, isReset) for resetting the resources path to their default value, before (re-) initializing the resources
 
 MODIFICATION:
 
  * util_jquery/toArray: switched implementation from jQuery.makeArray to Array.from due to more universal conversion applicability
                         (if needed, shim for Array.from is included in vendor libraries)
+ * tools/parseParamsToDictionary and commonUtils.parseParamsToDictionary():
+   * refactored params dictionary implementation to handle colliding URL parameter names (e.g. colliding with functions defined on the dictionary object)
+   * only add URL parameter value as multiple, if the same value was not already specified, e.g. for "?key1=1&key1=1", "key1" will not be treated as multiple
+   * changed internal (i.e. private) handling for is-mulitiple marker and keys fieldname by adding prefix "_" to the field names
 
 BUGFIX
 
  * logger: correctly parse and apply core.logLevel setting if options object with {logLevel: STRING | NUMBER} is used
+ * tools/eventEmitter: use correct module IDs "mmirf/util/isArray" and "mmirf/util/toArray" (instead of "mmirf/util//...")
+ * tools/resources: fix handling for platform/environment specific, detected base-path w.r.t. adjusting the framework base path
 
 ##################
 Version 6.0.0
