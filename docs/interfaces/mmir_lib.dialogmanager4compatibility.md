@@ -1,4 +1,4 @@
-[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md)
+[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md)
 
 # Interface: DialogManager4Compatibility
 

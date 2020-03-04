@@ -1,4 +1,4 @@
-[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [RequireJs](mmir_lib.requirejs.md)
+[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [RequireJs](mmir_lib.requirejs.md)
 
 # Interface: RequireJs
 

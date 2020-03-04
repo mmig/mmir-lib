@@ -1,4 +1,4 @@
-[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Resources](mmir_lib.resources.md)
+[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Resources](mmir_lib.resources.md)
 
 # Interface: Resources
 
@@ -134,7 +134,7 @@ ___
 
 #### Type declaration:
 
-▸ (): *any*
+▸ (): *[EnvType](../modules/mmir_lib.md#envtype) | "default" | string*
 
 ___
 
@@ -144,7 +144,7 @@ ___
 
 #### Type declaration:
 
-▸ (): *any*
+▸ (): *[PlatfromType](../modules/mmir_lib.md#platfromtype) | "default"*
 
 ___
 
@@ -326,13 +326,14 @@ ___
 
 #### Type declaration:
 
-▸ (`theForBrowserParameter`: any): *any*
+▸ (`theForBrowserParameter?`: [EnvType](../modules/mmir_lib.md#envtype) | [EnvInfo](mmir_lib.envinfo.md) & object | string | boolean, `isReset?`: boolean): *any*
 
 **Parameters:**
 
 Name | Type |
 ------ | ------ |
-`theForBrowserParameter` | any |
+`theForBrowserParameter?` | [EnvType](../modules/mmir_lib.md#envtype) &#124; [EnvInfo](mmir_lib.envinfo.md) & object &#124; string &#124; boolean |
+`isReset?` | boolean |
 
 ___
 

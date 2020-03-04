@@ -1,4 +1,4 @@
-[mmir-lib 6.0.0](../README.md) › [mmir-lib](mmir_lib.md)
+[mmir-lib 6.1.0](../README.md) › [mmir-lib](mmir_lib.md)
 
 # External module: mmir-lib
 
@@ -37,6 +37,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [DialogManager](../interfaces/mmir_lib.dialogmanager.md)
 * [DialogManager4Compatibility](../interfaces/mmir_lib.dialogmanager4compatibility.md)
 * [EncodeUtils](../interfaces/mmir_lib.encodeutils.md)
+* [EnvInfo](../interfaces/mmir_lib.envinfo.md)
 * [Grammar](../interfaces/mmir_lib.grammar.md)
 * [GrammarConverter](../interfaces/mmir_lib.grammarconverter.md)
 * [GrammarResult](../interfaces/mmir_lib.grammarresult.md)
@@ -83,6 +84,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [Comparator](mmir_lib.md#comparator)
 * [ConfigurationChangeListener](mmir_lib.md#configurationchangelistener)
 * [EOSPause](mmir_lib.md#eospause)
+* [EnvType](mmir_lib.md#envtype)
 * [FileInfo](mmir_lib.md#fileinfo)
 * [GrammarEngineType](mmir_lib.md#grammarenginetype)
 * [GrammarType](mmir_lib.md#grammartype)
@@ -92,6 +94,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [MediaEventType](mmir_lib.md#mediaeventtype)
 * [MediaPluginEnvType](mmir_lib.md#mediapluginenvtype)
 * [MediaPluginType](mmir_lib.md#mediaplugintype)
+* [PlatfromType](mmir_lib.md#platfromtype)
 * [PluginType](mmir_lib.md#plugintype)
 * [ProcessingFunction](mmir_lib.md#processingfunction)
 * [ProcessingPositionsInfo](mmir_lib.md#processingpositionsinfo)
@@ -215,6 +218,12 @@ ___
 
 ___
 
+###  EnvType
+
+Ƭ **EnvType**: *[PlatfromType](mmir_lib.md#platfromtype) | "cordova"*
+
+___
+
 ###  FileInfo
 
 Ƭ **FileInfo**: *object*
@@ -274,6 +283,12 @@ ___
 ###  MediaPluginType
 
 Ƭ **MediaPluginType**: *"audio" | "asr" | "tts" | "prep" | string*
+
+___
+
+###  PlatfromType
+
+Ƭ **PlatfromType**: *"browser" | "android" | "ios" | "node" | "electron"*
 
 ___
 

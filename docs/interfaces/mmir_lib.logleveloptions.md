@@ -1,4 +1,4 @@
-[mmir-lib 6.0.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [LogLevelOptions](mmir_lib.logleveloptions.md)
+[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [LogLevelOptions](mmir_lib.logleveloptions.md)
 
 # Interface: LogLevelOptions
 

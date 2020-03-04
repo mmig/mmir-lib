@@ -1,6 +1,6 @@
-[mmir-lib 6.0.0](README.md)
+[mmir-lib 6.1.0](README.md)
 
-# mmir-lib 6.0.0
+# mmir-lib 6.1.0
 
 ## Index
 
