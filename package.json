@@ -29,9 +29,6 @@
   },
   "scripts": {
     "test": "node test.js",
-    "lint-check": "gulp -f scripts/gulp.js check",
-    "lint-test": "gulp -f scripts/gulp.js test",
-    "lint-fix": "gulp -f scripts/gulp.js fix",
     "doc": "npm run clean-doc && npm run gen-doc",
     "clean-doc": "node -e require('fs-extra').emptyDirSync('docs')",
     "gen-doc": "cross-var typedoc --name \"$npm_package_name $npm_package_version\" mmir.d.ts"
@@ -42,12 +39,9 @@
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@types/gulp": "^4.0.6",
     "@types/requirejs": "^2.1.31",
     "cross-var": "^1.1.0",
-    "eclint": "^2.8.1",
     "fs-extra": "^8.1.0",
-    "gulp": "^4.0.2",
     "typedoc": "^0.16.11",
     "typedoc-plugin-external-module-name": "^3.0.0",
     "typedoc-plugin-markdown": "^2.2.17"

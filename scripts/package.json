@@ -1,0 +1,19 @@
+{
+  "name": "mmir-lib-dev-scripts",
+  "version": "0.0.1",
+  "description": "helper scripts for mmir-lib dev",
+  "main": "gulp-lint.js",
+  "scripts": {
+    "lint-check": "gulp -f gulp-lint.js check",
+    "lint-test": "gulp -f gulp-lint.js test",
+    "lint-fix": "gulp -f gulp-lint.js fix"
+  },
+  "author": "russa",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/gulp": "^4.0.6",
+    "@types/requirejs": "^2.1.31",
+    "eclint": "^2.8.1",
+    "gulp": "^4.0.2"
+  }
+}
