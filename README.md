@@ -171,7 +171,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
   (BSD; Copyright © 2007-2016 by Phorward Software Technologies; Jan Max Meyer; Brobston Development, Inc.; and other contributors)
  * PEG.js 0.10.0  
   (MIT; Copyright (c) 2010-2016 David Majda, Copyright (c) 2017+ Futago-za Ryuu)
- * Jison 0.4.15  
+ * Jison 0.4.18 (modified build)  
   (MIT; Copyright (c) 2009-2014 Zachary Carter)
  * ANTLR 3  
   (BSD; Copyright (c) 2013 Terence Parr)
@@ -187,7 +187,7 @@ If not stated otherwise, all files and resources are provided under the MIT lice
 
 ----
 _*: since version 6 the last letter of the acronym MMIR has been reasigned from
-    _Rendering_ to _Relay_ in order to account for the fact, that (graphical) 
+    _Rendering_ to _Relay_ in order to account for the fact, that (graphical)
     _rendering_ is not a major focus of the the framework anymore.
 
 [0]: https://github.com/mmig/mmir-lib
