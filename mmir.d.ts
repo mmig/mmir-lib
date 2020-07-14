@@ -239,8 +239,10 @@ export interface SemanticInterpreter {
 	setEnabled: (isEnabled: boolean) => void;
 	isEnabled: () => boolean;
 	getGrammarEngine: () => GrammarEngineType;//DEFAULT: "jscc"
-	setGrammarEngine: (engineId: GrammarEngineType, asyncCompileMode?: boolean) => void;
-	setEngineCompileMode: (asyncCompileMode: boolean) => void;//DEFAULT: false
+	setGrammarEngine: (engineId: GrammarEngineType, asyncCompileMode?: boolean, disableStrictCompileMode?: boolean) => void;
+	setEngineCompileMode: (asyncCompileMode: boolean, disableStrictCompileMode?: boolean) => void;//DEFAULT: false
+	getEngineCompileMode: () => boolean;
+	getEngineCompileStrictMode: () => boolean;
 	getFileVersion: () => number;
 	isPreProcessPositionsEnabled: () => boolean;
 	setPreProcessPositionsEnabled: (enabled: boolean) => void;
@@ -521,6 +523,10 @@ export interface VoiceDetails {
 	language: string;
 	/** the gender of the voice */
 	gender: "female" | "male" | "unknown";
+	/** if voice is locally available or requires network/internet access
+	 * @default false
+	 */
+	local?: boolean;
 }
 
 export type TTSOnComplete = () => void;
@@ -680,7 +686,7 @@ export declare class Layout {
 
 	getName(): string;
 	getYields(): Array<YieldDeclaration>;
-	stringify(): string;
+	stringify(disableStrictMode?: boolean): string;
 
 	//static TagElement(tag: any, content: any, tagType: any): any;
 	//static getTagAttr(str: any, target: any): any;
@@ -697,7 +703,7 @@ export declare class YieldDeclaration {
 	getStart(): number;
 
 	getValue(rawPropertyValue: any, proptertyType: any, data: any): any;
-	stringify(): string;
+	stringify(disableStrictMode?: boolean): string;
 }
 
 export declare class View {
@@ -707,7 +713,7 @@ export declare class View {
 	getController(): Controller;
 	getDefinition(): string;
 	getName(): string;
-	stringify(): string;
+	stringify(disableStrictMode?: boolean): string;
 }
 
 export declare class Partial {
@@ -717,7 +723,7 @@ export declare class Partial {
 	getController(): Controller;
 	getDefinition(): string;
 	getName(): string;
-	stringify(): string;
+	stringify(disableStrictMode?: boolean): string;
 }
 
 export declare class ContentElement {
@@ -741,7 +747,7 @@ export declare class ContentElement {
 
 	hasDynamicContent(): boolean;
 
-	stringify(): string;
+	stringify(disableStrictMode?: boolean): string;
 
 	toHtml(): string;
 
@@ -808,7 +814,7 @@ export declare class ParsingResult {
 
 	setStartFrom(thetokens: any): void;
 
-	stringify(): string;
+	stringify(disableStrictMode?: boolean): string;
 
 }
 
