@@ -157,6 +157,8 @@ export type ProcessingPositionsInfo = ProcessingOrderInfo & PositionsInfo;
 
 export interface GrammarConverter {
 
+	new();
+
 	procList: Array<ProcessingStep>;
 
 	loadGrammar: (successCallback: ()=> any, errorCallback: ()=> any, grammarUrl: string, doLoadSynchronously?: boolean) => void;
@@ -586,7 +588,7 @@ export interface SpeechConfig extends SimpleSpeechConfig {
 export interface SpeechConfigPluginEntry extends SimpleSpeechConfig {}
 
 export interface IAudio {
-	_constructor: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
+	new: (url: string, onPlayedCallback: TTSOnComplete, failureCallBack: TTSOnError, onLoadedCallBack: TTSOnReady) => IAudio;
 	play:  () => void;
 	stop:  () => void;
 	enable: () => void;
