@@ -872,3 +872,90 @@ export interface DialogManager4Compatibility extends DialogManager {
 	showDialog: (ctrlName: any, dialogId: any, data?: any) => void;
 	showWaitDialog: (text: any, theme: any) => void;
 }
+
+
+export type CryptoImpl = {MD5(str: string): string};
+export type ChecksumInfo = {
+	size: number;
+	hash: string;
+	info?: string;
+};
+
+/**
+ * @example
+ * var checksumUtils = require('mmirf/checksumUtils').init();
+ */
+export interface ChecksumUtils {
+	/**
+	 * Must be called before using checksum-generation:
+	 * sets/initializes the object/function for checksum generation.
+	 *
+	 * After first call, following calls to this function will have no effect.
+	 *
+	 * @param {CryptoImpl} [cryptoImpl] OPTIONAL
+	 * 				if omitted, the (global!) variable <code>CryptoJS</code> is used by default.
+	 * 				This argument should be the CryptoJS object containing the MD5 function/algorithm, i.e. CryptoJS.MD5() must be a function!
+	 */
+	init(cryptoImpl?: CryptoImpl): void;
+	/**
+	 * Creates the content for a checksum file, containing information about
+	 * the size and hash-value for the supplied String argument.
+	 *
+	 * The result can be "written as is" to a file.
+	 *
+	 * @param {String} originalText
+	 * 						the "raw" text for which to generate the checksum information
+	 * @param {String} [additionalInfo] OPTIONAL
+	 * 						additional information to include in the checksum information (must not contain whitespaces)
+	 *
+	 * @returns {String} the checksum information as a String (formatted as content of a checksum file)
+	 */
+	createContent(originalText: string, additionalInfo?: string): string;
+	/**
+	 * Parses the raw text-content of a checksum file and returns an object
+	 * with properties:
+	 *
+	 * @param {String} rawTextContent
+	 * 					the raw conent of a checksum file
+	 *
+	 * @returns {ChecksumInfo} an object with the extracted properties from the checksum-data:
+	 * 												<pre>{ size: INTEGER, hash: STRING, info?: STRING }</pre>
+	 */
+	parseContent(rawTextContent: string): ChecksumInfo;
+	/**
+	 * Check if the length / checksum for a raw text is the same as the checksum-information.
+	 *
+	 * NOTE: The actual checksum for the raw text is only generated & checked, if the size is equal.
+	 *
+	 * @function
+	 * @param {String} rawTextContent
+	 * 					the (raw) text/content which should be checked
+	 * @param {String|ChecksumInfo} referenceHash
+	 * 					the checksum information to check against: either the
+	 * 					raw content (String) of a checksum file, or the parsed
+	 * 					contents of a checksum file, which is a PlainObject with
+	 * 					properties:
+	 * 					<pre>{ size: INTEGER, hash: STRING, info?: STRING }</pre>
+	 * @param {String} [additionalInfo] OPTIONAL
+	 * 					if referenceHash is a PlainObject with info property and
+	 * 					additionalInfo must match the info property, otherwise the
+	 * 					verification return FALSE
+	 *
+	 * @returns {Boolean}
+	 * 					<code>true</code> if the raw content matches the hash
+	 */
+	isSame(rawTextContent: string, referenceHash: string | ChecksumInfo, additionalInfo?: string): boolean;
+	/**
+	 * Returns the file extension for checksum-files.
+	 *
+	 * @returns {String} the default file extension for checksum files
+	 * 						(including the separating dot, eg. ".checksum.txt")
+	 */
+	getFileExt(): string,
+	/**
+	 * The Char used for separating fields within checksum files.
+	 *
+	 * @returns {String} the separator char (TAB)
+	 */
+	getConentSeparator(): string;
+}
