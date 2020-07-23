@@ -307,15 +307,25 @@ export interface CommonUtils {
 	parseParamsToDictionary: (urlParamsPartStrings: any) => any;
 	stripPathName: (pathname: any) => any;
 }
-export interface ConfigurationManager {
-	get: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => any;
-	getBoolean: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => boolean;
-	getString: (propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean) => string;
-	set: (propertyName: string | string[], value: any) => void;
-	on: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
-	addListener: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
-	off: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
-	removeListener: (listener: ConfigurationChangeListener, propertyName?: string | string[]) => void;
+declare class ConfigurationManager {
+	get(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): any;
+	getBoolean(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): boolean;
+	getString(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): string;
+	set(propertyName: string | string[], value: any): void;
+
+	on(propertyName: string, listener: ConfigurationChangeListener): void;
+	on(propertyNamePath:  string[], listener: ConfigurationChangeListener): void;
+	on(allChangesListener: ConfigurationChangeListener): void;
+	addListener(propertyName: string, listener: ConfigurationChangeListener): void;
+	addListener(propertyNamePath:  string[], listener: ConfigurationChangeListener): void;
+	addListener(allChangesListener: ConfigurationChangeListener): void;
+
+	off(propertyName: string, listener: ConfigurationChangeListener): void;
+	off(propertyNamePath: string[], listener: ConfigurationChangeListener): void;
+	off(allChangesListener: ConfigurationChangeListener): void;
+	removeListener(propertyName: string, listener: ConfigurationChangeListener): void;
+	removeListener(propertyNamePath: string[], listener: ConfigurationChangeListener): void;
+	removeListener(allChangesListener: ConfigurationChangeListener): void;
 }
 export type ConfigurationChangeListener = (newValue: any, oldValue?: any, propertyName?: string) => void;
 export interface Resources {
