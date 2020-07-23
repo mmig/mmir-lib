@@ -132,7 +132,7 @@ export interface Grammar {
 
 	stopwords: Array<string>;
 	/** @deprecated use field [[stopwords]] instead */
-	stop_word: Array<string>;
+	stop_word?: Array<string>;
 
 	tokens: { [id: string]: Array<string> };
 
