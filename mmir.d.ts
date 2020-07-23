@@ -107,7 +107,7 @@ export interface MmirModule extends MmirCore {
 export interface NodeMmirModule extends MmirModule {
 	_config: {[field: string]: any};
 	readonly _requirejs: RequireJs;
-	init: (preConfigure?: (mmirCore: MmirCore) => &MmirModule) => &NodeMmirModule;
+	init: (preConfigure?: (mmirCore: MmirCore) => (&MmirModule | void)) => &NodeMmirModule;
 }
 
 export type LogLevel = 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';
