@@ -566,6 +566,7 @@ export interface MediaManagerPluginEntry {
 	mod?: string;
 	env?: Array< MediaPluginEnvType | string > | MediaPluginEnvType | string;
 	ctx?: string;
+	config?: string | {mod: string, config: any} | any;
 	type?: MediaPluginType;
 }
 
