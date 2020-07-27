@@ -307,7 +307,7 @@ export interface CommonUtils {
 	parseParamsToDictionary: (urlParamsPartStrings: any) => any;
 	stripPathName: (pathname: any) => any;
 }
-declare class ConfigurationManager {
+declare interface ConfigurationManager {
 	get(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): any;
 	getBoolean(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): boolean;
 	getString(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): string;
