@@ -376,7 +376,7 @@ export interface ControllerManager {
 	perform: (ctrlName: string, actionName: string, data?: any) => any;
 	performHelper: (ctrlName: string, actionName: string, data?: any) => any;
 }
-export interface DialogEngine {
+export interface StateEngine {
 	doc: string;
 	name: string;
 	url: string;
@@ -390,32 +390,24 @@ export interface DialogEngine {
 	load: (...args: any[]) => any;
 	onload: (scion: any, deferred: any) => void;
 	onraise: () => void;
-	raise: (event: any, eventData: any) => void;
+	raise: (event: string | {name: string, data?: any}, eventData?: any) => void;
 	start: () => void;
 }
-export interface DialogManager {
+export interface StateManager {
 	raise: (eventName: string, data?: any) => void;
+	_init: (moduleId: string, config: StateManagerConfig, isRegisterEngine?: boolean) => Promise<{manager: StateManager, engine: any}>;
+	_log: Logger;
 }
-export interface InputEngine {
-	doc: string;
-	name: string;
-	url: string;
-	getActiveEvents: () => any;
-	getActiveStates: () => any;
-	getActiveTransitions: () => any;
-	getEvents: () => any;
-	getStates: () => any;
-	getTransitions: () => any;
-	ignoreScript: () => void;
-	load: (...args: any[]) => any;
-	onload: (scion: any, deferred: any) => void;
-	onraise: () => void;
-	raise: (event: any, eventData: any) => void;
-	start: () => void;
+export interface StateManagerConfig {
+	modelUri: string;
+	mode?: 'simple' | 'extended';
+	engineId?: string;
+	logLevel?: number | string;
 }
-export interface InputManager {
-	raise: (eventName: string, data?: any) => void;
-}
+export interface DialogEngine extends StateEngine {}
+export interface DialogManager extends StateManager {}
+export interface InputEngine extends StateEngine {}
+export interface InputManager extends StateManager {}
 export type GrammarType = 'source' | 'bin';
 export interface LanguageManager {
 	determineLanguage: (lang: string) => string;
