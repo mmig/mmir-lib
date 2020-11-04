@@ -479,54 +479,73 @@ export interface MediaManager {
 
 export interface Logger {
 
-	verbose(msg: string): void;
-	verbose(className: string, msg?: string): void;
-	verbose(className: string, funcName?: string, msg?: string): void;
-	v(msg: string): void;
-	v(className: string, msg?: string): void;
-	v(className: string, funcName?: string, msg?: string): void;
+	verbose(msg: string, reverseCallStack?: number): void;
+	verbose(className: string, msg: string, reverseCallStack?: number): void;
+	verbose(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	v(msg: string, reverseCallStack?: number): void;
+	v(className: string, msg: string, reverseCallStack?: number): void;
+	v(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	debug(msg: string): void;
-	debug(className: string, msg?: string): void;
-	debug(className: string, funcName?: string, msg?: string): void;
-	d(msg: string): void;
-	d(className: string, msg?: string): void;
-	d(className: string, funcName?: string, msg?: string): void;
+	debug(msg: string, reverseCallStack?: number): void;
+	debug(className: string, msg: string, reverseCallStack?: number): void;
+	debug(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	d(msg: string, reverseCallStack?: number): void;
+	d(className: string, msg: string, reverseCallStack?: number): void;
+	d(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	log(msg: string): void;
-	log(className: string, msg?: string): void;
-	log(className: string, funcName?: string, msg?: string): void;
-	l(msg: string): void;
-	l(className: string, msg?: string): void;
-	l(className: string, funcName?: string, msg?: string): void;
+	log(msg: string, reverseCallStack?: number): void;
+	log(msg: string, reverseCallStack?: number): void;
+	logl(msg: string, error?: any, reverseCallStack?: number): void;
+	log(className: string, msg: string, reverseCallStack?: number): void;
+	log(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	log(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	log(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
+	l(msg: string, reverseCallStack?: number): void;
+	l(msg: string, error?: any, reverseCallStack?: number): void;
+	l(className: string, msg: string, reverseCallStack?: number): void;
+	l(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	l(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	l(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
 
-	info(msg: string): void;
-	info(className: string, msg?: string): void;
-	info(className: string, funcName?: string, msg?: string): void;
-	i(msg: string): void;
-	i(className: string, msg?: string): void;
-	i(className: string, funcName?: string, msg?: string): void;
+	info(msg: string, reverseCallStack?: number): void;
+	info(className: string, msg: string, reverseCallStack?: number): void;
+	info(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	i(msg: string, reverseCallStack?: number): void;
+	i(className: string, msg: string, reverseCallStack?: number): void;
+	i(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	warn(msg: string): void;
-	warn(className: string, msg?: string): void;
-	warn(className: string, funcName?: string, msg?: string): void;
-	w(msg: string): void;
-	w(className: string, msg?: string): void;
-	w(className: string, funcName?: string, msg?: string): void;
+	warn(msg: string, reverseCallStack?: number): void;
+	warn(className: string, msg: string, reverseCallStack?: number): void;
+	warn(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	w(msg: string, reverseCallStack?: number): void;
+	w(className: string, msg: string, reverseCallStack?: number): void;
+	w(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	error(msg: string, error?: any): void;
-	error(className: string, msg?: string, error?: any): void;
-	error(className: string, funcName?: string, msg?: string, error?: any): void;
-	e(msg: string, error?: any): void;
-	e(className: string, msg?: string, error?: any): void;
-	e(className: string, funcName?: string, msg?: string, error?: any): void;
+	error(msg: string, reverseCallStack?: number): void;
+	error(msg: string, error?: any, reverseCallStack?: number): void;
+	error(className: string, msg: string, reverseCallStack?: number): void;
+	error(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	error(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	error(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
+	e(msg: string, reverseCallStack?: number): void;
+	e(msg: string, error?: any, reverseCallStack?: number): void;
+	e(className: string, msg: string, reverseCallStack?: number): void;
+	e(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	e(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	e(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
 
-	critical(msg: string, error?: any): void;
-	critical(className: string, msg?: string, error?: any): void;
-	critical(className: string, funcName?: string, msg?: string, error?: any): void;
-	c(msg: string, error?: any): void;
-	c(className: string, msg?: string, error?: any): void;
-	c(className: string, funcName?: string, msg?: string, error?: any): void;
+	critical(msg: string, reverseCallStack?: number): void;
+	critical(msg: string, error?: any, reverseCallStack?: number): void;
+	critical(className: string, msg: string, reverseCallStack?: number): void;
+	critical(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	critical(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	critical(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
+	c(msg: string, reverseCallStack?: number): void;
+	c(msg: string, error?: any, reverseCallStack?: number): void;
+	c(className: string, msg: string, reverseCallStack?: number): void;
+	c(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	c(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	c(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
 
 	getLevel(): LogLevelNum;
 	setLevel(loggingLevel: LogLevel | LogLevelNum): void;
@@ -559,29 +578,86 @@ export interface LoggerModule {
 	getDefaultLogLevel(): LogLevelNum;
 	setDefaultLogLevel(loggingLevel: LogLevel | LogLevelNum): void;
 
-	verbose(msg: string): void;
-	verbose(className: string, msg?: string): void;
-	verbose(className: string, funcName?: string, msg?: string): void;
+	verbose(msg: string, reverseCallStack?: number): void;
+	verbose(className: string, msg: string, reverseCallStack?: number): void;
+	verbose(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	debug(msg: string): void;
-	debug(className: string, msg?: string): void;
-	debug(className: string, funcName?: string, msg?: string): void;
+	debug(msg: string, reverseCallStack?: number): void;
+	debug(className: string, msg: string, reverseCallStack?: number): void;
+	debug(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	log(msg: string): void;
-	log(className: string, msg?: string): void;
-	log(className: string, funcName?: string, msg?: string): void;
+	log(msg: string, reverseCallStack?: number): void;
+	log(msg: string, reverseCallStack?: number): void;
+	logl(msg: string, error?: any, reverseCallStack?: number): void;
+	log(className: string, msg: string, reverseCallStack?: number): void;
+	log(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	log(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	log(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
 
-	info(msg: string): void;
-	info(className: string, msg?: string): void;
-	info(className: string, funcName?: string, msg?: string): void;
+	info(msg: string, reverseCallStack?: number): void;
+	info(className: string, msg: string, reverseCallStack?: number): void;
+	info(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	warn(msg: string): void;
-	warn(className: string, msg?: string): void;
-	warn(className: string, funcName?: string, msg?: string): void;
+	warn(msg: string, reverseCallStack?: number): void;
+	warn(className: string, msg: string, reverseCallStack?: number): void;
+	warn(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
 
-	error(msg: string, error?: any): void;
-	error(className: string, msg?: string, error?: any): void;
-	error(className: string, funcName?: string, msg?: string, error?: any): void;
+	error(msg: string, reverseCallStack?: number): void;
+	error(msg: string, error?: any, reverseCallStack?: number): void;
+	error(className: string, msg: string, reverseCallStack?: number): void;
+	error(className: string, msg: string, error?: any, reverseCallStack?: number): void;
+	error(className: string, funcName: string, msg: string, reverseCallStack?: number): void;
+	error(className: string, funcName: string, msg: string, error?: any, reverseCallStack?: number): void;
+}
+
+/**
+ * Module configuration for the [[LoggerModule]]
+ *
+ * @example
+ *
+ * var loggerModuleConfig = {
+ * 	level: 'info',
+ * 	levels: {
+ * 		warn: ['mmirf/mediaManager', 'mmirf/inputEngine']
+ * 	},
+ * 	modules: {
+ * 		'mmirf/dialogEngine': 'critical'
+ * 	}
+ * };
+ * // set to global `mmir` before initialing `mmir`:
+ * mmir.logLevel = loggerModuleConfig;
+ *
+ * // or use as mmir application configuration with mmir-tooling configuration:
+ * var mmirAppConfig = {
+ * 	config: {
+ * 		'mmirf/logger': {
+ * 			logLevel: loggerModuleConfig
+ * 		}
+ * 	}
+ * };
+ * //...
+ * require('mmir-webpack')(webpack, webpackConfig, mmirAppConfig);
+ *
+ */
+export interface LoggerModuleConfig {
+	/** OPTIONAL the default log level as integer or string, DEFAULT: "debug" */
+	level?: LogLevel | LogLevelNum;
+	/** OPTIONAL list of modules for per log level (unspecified modules will have default log level) */
+	levels?: {
+		/**
+		 * list of modules for the LogLevel
+		 * NOTE: the field name must be a valid LogLevel (e.g. "warn"), otherwise it will be ignored
+		 */
+		[logLevel: string]: Array<string>
+	},
+	/** OPTIONAL log level per module (unspecified modules will have default log level) */
+	modules?: {
+		/**
+		 * log level for the module
+		 * NOTE: the field name needs to correspond to the module ID
+		 */
+		[moduleId: string]: LogLevel | LogLevelNum
+	}
 }
 
 export interface TTSOptions {
