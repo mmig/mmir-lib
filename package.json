@@ -31,7 +31,8 @@
     "test": "node test.js",
     "doc": "npm run clean-doc && npm run gen-doc",
     "clean-doc": "node -e require('fs-extra').emptyDirSync('docs')",
-    "gen-doc": "cross-var typedoc --name \"$npm_package_name $npm_package_version\" mmir.d.ts"
+    "gen-doc": "cross-var typedoc --name \"$npm_package_name $npm_package_version\" mmir.d.ts",
+    "update:version": "updateversion --enable-package-lock --from-package ./ lib/core.js --version-regexp \"/(var\\s+CORE_VERSION\\s+=\\s+)\"\"\\d[.\\d]*\"\"/m\" --replace-pattern \"$1\"\"$0\""
   },
   "dependencies": {
     "@scion-scxml/scxml": "^4.3.25",
@@ -42,6 +43,7 @@
     "@types/requirejs": "^2.1.32",
     "cross-var": "^1.1.0",
     "fs-extra": "^9.0.1",
+    "mmir-plugin-exports": "^2.1.1",
     "typedoc": "^0.19.2",
     "typedoc-plugin-external-module-name": "^4.0.3",
     "typedoc-plugin-markdown": "^3.1.1"
