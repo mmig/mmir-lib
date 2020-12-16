@@ -33,7 +33,7 @@ export const version: string;
 export const mmirName: "mmir" | string;//DEFAULT: "mmir"
 //NOTE changing exported var_s only has effect, if done before initialization
 export var startModule: string;//DEFAULT: 'mmirf/main';
-export var startModules: undefined | Array<string>;//DEFAULT: undefined
+export var startModules: undefined | string[];//DEFAULT: undefined
 export var viewEngine: string;//DEFAULT: "mmirf/simpleViewEngine";
 export var debug: boolean;//DEFAULT: true;
 export var logLevel: LogLevelNum | LogLevel | LogLevelOptions;//DEFAULT: 'debug';
@@ -73,7 +73,7 @@ export interface MmirCore {
 	readonly version: string;
 	readonly mmirName: "mmir" | string;//DEFAULT: "mmir"
 	startModule: string;//DEFAULT: 'mmirf/main';
-	startModules: undefined | Array<string>;//DEFAULT: undefined
+	startModules: undefined | string[];//DEFAULT: undefined
 	viewEngine: string;//DEFAULT: "mmirf/simpleViewEngine";
 	debug: boolean;//DEFAULT: true;
 	logLevel: LogLevelNum | LogLevel | LogLevelOptions;//DEFAULT: 'debug';
@@ -115,7 +115,7 @@ export type LogLevelNum =   0    |    1    |   2    |   3    |   4     |      5 
 
 export interface LogLevelOptions {
 	level?: LogLevel | LogLevelNum;
-	levels?: {[logLevel in LogLevel]?: Array<string>} & {[logLevelNum in LogLevelNum]?: Array<string>};
+	levels?: {[logLevel in LogLevel]?: string[]} & {[logLevelNum in LogLevelNum]?: string[]};
 	modules?: {[moduleId: string]: LogLevel | LogLevelNum};
 }
 
@@ -128,29 +128,29 @@ export interface Grammar {
 
 	/** @deprecated use field [[example_phrases]] instead */
 	example_phrase?: string;
-	example_phrases?: string | Array<string>;
+	example_phrases?: string | string[];
 
-	stopwords: Array<string>;
+	stopwords: string[];
 	/** @deprecated use field [[stopwords]] instead */
-	stop_word?: Array<string>;
+	stop_word?: string[];
 
-	tokens: { [id: string]: Array<string> };
+	tokens: { [id: string]: string[] };
 
-	utterances: { [id: string]: { 'phrases': Array<string>, 'semantic': any } };
+	utterances: { [id: string]: { 'phrases': string[], 'semantic': any } };
 
 }
 
 export interface Positions {
 	text: string;
-	pos: Array<Pos>;
+	pos: Pos[];
 }
 
 export interface ProcessingOrderInfo {
-	_order?: Array<string>;
+	_order?: string[];
 }
 
 export interface PositionsInfo {
-	[processingName: string]: Array<Pos>;
+	[processingName: string]: Pos[];
 }
 
 export type ProcessingPositionsInfo = ProcessingOrderInfo & PositionsInfo;
@@ -159,13 +159,13 @@ export interface GrammarConverter {
 
 	new();
 
-	procList: Array<ProcessingStep>;
+	procList: ProcessingStep[];
 
 	loadGrammar: (successCallback: ()=> any, errorCallback: ()=> any, grammarUrl: string, doLoadSynchronously?: boolean) => void;
 	loadResource: (successCallback: ()=> any, errorCallback: ()=> any, resourceUrl: string, doLoadSynchronously?: boolean) => void;
-	setStopWords: (stopWordArray: Array<string>) => void;
-	getStopWords: () => Array<string>;
-	getEncodedStopwords: () => Array<string>;
+	setStopWords: (stopWordArray: string[]) => void;
+	getStopWords: () => string[];
+	getEncodedStopwords: () => string[];
 	parseStopWords: () => void;
 	getStopWordsRegExpr: () => RegExp;
 	getStopWordsEncRegExpr: () => RegExp;
@@ -178,8 +178,8 @@ export interface GrammarConverter {
 
 	isAsyncExec: () => boolean;
 
-	preproc: (thePhrase: string, pos?: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>) => string;
-	postproc: (procResult: any, pos: ProcessingPositionsInfo, processingSteps?: Array<ProcessingStep>) => any;
+	preproc: (thePhrase: string, pos?: ProcessingPositionsInfo, processingSteps?: ProcessingStep[]) => string;
+	postproc: (procResult: any, pos: ProcessingPositionsInfo, processingSteps?: ProcessingStep[]) => any;
 
 	addProc: (proc: ProcessingStep, indexOrIsPrepend?: number|boolean) => void;
 	removeProc: (proc: number|string) => ProcessingStep | undefined;
@@ -226,13 +226,13 @@ export interface SemanticInterpreter {
 	interpret: (phrase: string, langCode?: string, callback?: (semanticResult: GrammarResult) => void) => GrammarResult | void;
 	/** @deprecated use [[applyPreProcessing]] instead */
 	removeStopwords: (thePhrase: string, lang?: string) => string;
-	applyPreProcessing: (thePhrase: string, lang?: string, processingSteps?: Array<ProcessingStep>) => string;
+	applyPreProcessing: (thePhrase: string, lang?: string, processingSteps?: ProcessingStep[]) => string;
 	getGrammarDefinitionText: (id: string) => string;
 	getGrammarParserText: (id: string) => string;
 	getGrammarConverter: (id: string) => GrammarConverter;
 	createGrammar: (rawGrammarSrc: string | {}, id: string, callback?: (created?: GrammarConverter) => void) => SemanticInterpreter;
 	addGrammar: (id: string, grammarImpl: (text: string, callback?: (semanticResult: {}) => void) => void | GrammarConverter, fileFormatNo?: number) => void;
-	setStopwords: (id: string, stopwordArray: Array<string>) => void;
+	setStopwords: (id: string, stopwordArray: string[]) => void;
 	hasGrammar: (id: string) => boolean;
 	removeGrammar: (id: string) => void;
 	addProcessing: (id: string, processingStep: ProcessingStep, indexOrIsPrepend?: number|boolean, callback?: Function) => void;
@@ -257,9 +257,9 @@ export type GrammarEngineType = "jscc" | "jison" | "pegjs";
 export interface GrammarResult {
 	engine: GrammarEngineType;
 	phrase: string;
-	preproc: {[preprocName: string]: Array<Pos>};
+	preproc: {[preprocName: string]: Pos[]};
 
-	phrases?: Array<PhraseInfo>;
+	phrases?: PhraseInfo[];
 	utterance?: string;
 	semantic?: any;
 
@@ -272,7 +272,7 @@ export interface PhraseInfo {
 	/** the token type or utterance type */
 	type: string;
 	/** the matched token(s) */
-	tok: string | Array<PhraseInfo>;
+	tok: string | PhraseInfo[];
 }
 
 export interface ProcessingStep {
@@ -291,7 +291,7 @@ export interface CommonUtils {
 	checkNetworkConnection: () => any;
 	concatArray: (array: any) => any;
 	getCompiledGrammarPath: (generatedGrammarsPath: string, grammarId: string, isFileNameOnly?: boolean) => string;
-	getCompiledResourcesIds: (compiledResourcesPath: string) => Array<string>;
+	getCompiledResourcesIds: (compiledResourcesPath: string) => string[];
 	getDirectoryStructure: () => any;
 	getLocalScript: (scriptUrl: any, success: any, fail: any, ...args: any[]) => void;
 	getPartialsPrefix: () => any;
@@ -299,9 +299,9 @@ export interface CommonUtils {
 	isArray: (object: any) => any;
 	isRunningOnAndroid: () => any;
 	isRunningOnSmartphone: () => any;
-	loadCompiledGrammars: (generatedGrammarsPath: string, cbFunction: Function, ignoreGrammarIds?: Array<string>) => any;
+	loadCompiledGrammars: (generatedGrammarsPath: string, cbFunction: Function, ignoreGrammarIds?: string[]) => any;
 	loadDirectoryStructure: (success: any, errorFunc: any) => any;
-	listDir: (pathname: string, filter: RegExp|((entry: string)=>boolean)) => Array<string>;
+	listDir: (pathname: string, filter: RegExp|((entry: string)=>boolean)) => string[];
 	loadImpl: (librariesPath: any, isSerial: any, completedCallback: any, checkIsAlreadyLoadedFunc: any, statusCallback: any) => any;
 	loadScript: (url: any, successCallback: any, errorCallback: any, ...args: any[]) => any;
 	parseParamsToDictionary: (urlParamsPartStrings: any) => any;
@@ -371,7 +371,7 @@ export interface EnvInfo {
 export interface ControllerManager {
 	create: () => any;
 	get: (ctrlName: string) => Controller | undefined;
-	getNames: () => Array<string>;
+	getNames: () => string[];
 	init: (callback: any, ctx: any) => any;
 	perform: (ctrlName: string, actionName: string, data?: any) => any;
 	performHelper: (ctrlName: string, actionName: string, data?: any) => any;
@@ -420,7 +420,7 @@ export interface LanguageManager {
 	getSpeechConfig: () => {[config:string]: any};
 	getLanguage: () => string;
 	getLanguageConfig: (pluginId: string, feature: string, separator?: string) => any;
-	getLanguages: () => Array<string>;
+	getLanguages: () => string[];
 	getText: (textVarName: string) => string;
 	init: (lang: string) => any;
 	setLanguage: (lang: string, doNotLoadResources?: boolean) => string;
@@ -431,7 +431,7 @@ export interface MediaManager {
 	ctx: {[ctxId: string]: any};
 	waitReadyImpl: IWaitReadyImpl;
 
-	init: (successCallback?: Function, failureCallback?: Function, listenerList?: Array<{name: string, listener: Function}>) => any;
+	init: (successCallback?: Function, failureCallback?: Function, listenerList?: {name: string, listener: Function}[]) => any;
 	loadFile: (filePath: string, successCallback?: Function, failureCallback?: Function, execId?: string) => void;
 
 	addListener: (eventName: MediaEventType, eventHandler: MediaEventHandler) => void;
@@ -448,7 +448,7 @@ export interface MediaManager {
 	playWAV: (blob: any, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
 
 	getFunc: (ctx: string, funcName: string) => any;
-	perform: (ctx: string, funcName: string, args?: Array<any>) => any;
+	perform: (ctx: string, funcName: string, args?: any[]) => any;
 	setDefaultCtx: (ctxId: string) => void;
 
 	recognize: (options?: ASROptions, statusCallback?: ASROnStatus, failureCallback?: ASROnError, isIntermediateResults?: boolean) => void;
@@ -461,7 +461,7 @@ export interface MediaManager {
 	setTextToSpeechVolume: (newValue: number) => void;
 	cancelSpeech: (successCallBack?: Function, failureCallBack?: Function) => void;
 	getSpeechLanguages: (successCallBack?: Function, failureCallBack?: Function) => void;
-	getVoices: (options?: VoiceListOptions, successCallBack?: (voices: Array<string | VoiceDetails>) => void, failureCallBack?: Function) => void;
+	getVoices: (options?: VoiceListOptions, successCallBack?: (voices: string | VoiceDetails[]) => void, failureCallBack?: Function) => void;
 
 
 	// internal / "half public" functions (for use in plugin implementations)
@@ -648,7 +648,7 @@ export interface LoggerModuleConfig {
 		 * list of modules for the LogLevel
 		 * NOTE: the field name must be a valid LogLevel (e.g. "warn"), otherwise it will be ignored
 		 */
-		[logLevel: string]: Array<string>
+		[logLevel: string]: string[]
 	},
 	/** OPTIONAL log level per module (unspecified modules will have default log level) */
 	modules?: {
@@ -720,7 +720,7 @@ export type TTSOnComplete = () => void;
 export type TTSOnError = (error: string | Error) => void;
 export type TTSOnReady = (isReady?: Boolean, audio?: IAudio) => void;
 
-export type ASROnStatus = (text: string | "", confidence: number | undefined, status: ASRStatus, alternatives?: Array<{result: string, score: number}>, unstable?: string) => void;
+export type ASROnStatus = (text: string | "", confidence: number | undefined, status: ASRStatus, alternatives?: {result: string, score: number}[], unstable?: string) => void;
 export type ASRStatus = "FINAL" | "INTERIM" | "INTERMEDIATE" | "RECORDING_BEGIN" | "RECORDING_DONE";
 export type ASROnError = (error: string | Error) => void;
 
@@ -739,7 +739,7 @@ export type MediaPluginEnvType = 'browser' | 'cordova' | 'android' | 'ios';
 
 export interface MediaManagerPluginEntry {
 	mod?: string;
-	env?: Array< MediaPluginEnvType | string > | MediaPluginEnvType | string;
+	env?:  MediaPluginEnvType | string [] | MediaPluginEnvType | string;
 	ctx?: string;
 	config?: string | {mod: string, config: any} | any;
 	type?: MediaPluginType;
@@ -799,7 +799,7 @@ export interface MicLevelsAnalysis {
 }
 export interface ModelManager {
 	get: (modelName: string) => any;
-	getNames: () => Array<string>;
+	getNames: () => string[];
 	init: () => any;
 }
 export interface NotificationManager {
@@ -824,7 +824,7 @@ export interface PresentationManager {
 	addLayout: (layout: Layout) => void;
 	addPartial: (ctrlName: string, partial: Partial) => void;
 	addView: (ctrlName: string, view: View) => void;
-	callRenderEngine: (funcName: string, args: Array<any>) => any;
+	callRenderEngine: (funcName: string, args: any[]) => any;
 	getLayout: (layoutName: string, doUseDefaultIfMissing: boolean) => any;
 	getPartial: (controllerName: string, partialName: string) => any;
 	getView: (controllerName: string, viewName: string) => any;
@@ -873,7 +873,7 @@ export declare class Layout {
 	getHeaderContents(): string;
 
 	getName(): string;
-	getYields(): Array<YieldDeclaration>;
+	getYields(): YieldDeclaration[];
 	stringify(disableStrictMode?: boolean): string;
 
 	//static TagElement(tag: any, content: any, tagType: any): any;
@@ -915,7 +915,7 @@ export declare class Partial {
 }
 
 export declare class ContentElement {
-	constructor(group: ParsingResult|Array<string>|{name: string, content: string, offset?: number, parent?: ContentElement}, view: View, parser: any, renderer: any, ...args: any[]);
+	constructor(group: ParsingResult|string[]|{name: string, content: string, offset?: number, parent?: ContentElement}, view: View, parser: any, renderer: any, ...args: any[]);
 
 	getController(): Controller;
 
@@ -939,7 +939,7 @@ export declare class ContentElement {
 
 	toHtml(): string;
 
-	toStrings(renderingBuffer?: Array<string>, data?: any): any;
+	toStrings(renderingBuffer?: string[], data?: any): any;
 
 }
 
@@ -1021,18 +1021,18 @@ export declare class Controller {
 	getHelper(): Helper;
 
 	getLayoutName(): string;
-	getPartialNames(): Array<string>;
-	getViewNames(): Array<string>;
+	getPartialNames(): string[];
+	getViewNames(): string[];
 
 	perform(actionName: string, data: any, ...args: any[]): any;
 	performHelper(actionName: string, data: any, ...args: any[]): any;
 	performIfPresent(actionName: string, data: any, ...args: any[]): any;
 
-	getPartials(): Array<FileInfo>;
-	getViews(): Array<FileInfo>;
+	getPartials(): FileInfo[];
+	getViews(): FileInfo[];
 	getLayout(): FileInfo;
-	parsePartials(partialDefs: Array<FileInfo>): void;
-	parseViews(viewDefs: Array<FileInfo>): void;
+	parsePartials(partialDefs: FileInfo[]): void;
+	parseViews(viewDefs: FileInfo[]): void;
 	loadHelper(name: string, helperPath: string, ctx: any): void;
 
 }
