@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [LogLevelOptions](mmir_lib.logleveloptions.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / LogLevelOptions
 
 # Interface: LogLevelOptions
 
@@ -10,28 +12,24 @@
 
 ### Properties
 
-* [level](mmir_lib.logleveloptions.md#optional-level)
-* [levels](mmir_lib.logleveloptions.md#optional-levels)
-* [modules](mmir_lib.logleveloptions.md#optional-modules)
+* [level](mmir_lib.logleveloptions.md#level)
+* [levels](mmir_lib.logleveloptions.md#levels)
+* [modules](mmir_lib.logleveloptions.md#modules)
 
 ## Properties
 
-### `Optional` level
+### level
 
-• **level**? : *[LogLevel](../modules/mmir_lib.md#loglevel) | [LogLevelNum](../modules/mmir_lib.md#loglevelnum)*
-
-___
-
-### `Optional` levels
-
-• **levels**? : *object & object*
+• `Optional` **level**: [LogLevel](../modules/mmir_lib.md#loglevel) \| [LogLevelNum](../modules/mmir_lib.md#loglevelnum)
 
 ___
 
-### `Optional` modules
+### levels
 
-• **modules**? : *object*
+• `Optional` **levels**: {} & {}
 
-#### Type declaration:
+___
 
-* \[ **moduleId**: *string*\]: [LogLevel](../modules/mmir_lib.md#loglevel) | [LogLevelNum](../modules/mmir_lib.md#loglevelnum)
+### modules
+
+• `Optional` **modules**: { [moduleId:string]: [LogLevel](../modules/mmir_lib.md#loglevel) \| [LogLevelNum](../modules/mmir_lib.md#loglevelnum);  }

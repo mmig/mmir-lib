@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [SemanticInterpreter](mmir_lib.semanticinterpreter.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / SemanticInterpreter
 
 # Interface: SemanticInterpreter
 
@@ -15,12 +17,14 @@
 * [applyPreProcessing](mmir_lib.semanticinterpreter.md#applypreprocessing)
 * [createGrammar](mmir_lib.semanticinterpreter.md#creategrammar)
 * [getCurrentGrammar](mmir_lib.semanticinterpreter.md#getcurrentgrammar)
+* [getEngineCompileMode](mmir_lib.semanticinterpreter.md#getenginecompilemode)
+* [getEngineCompileStrictMode](mmir_lib.semanticinterpreter.md#getenginecompilestrictmode)
 * [getFileVersion](mmir_lib.semanticinterpreter.md#getfileversion)
 * [getGrammarConverter](mmir_lib.semanticinterpreter.md#getgrammarconverter)
 * [getGrammarDefinitionText](mmir_lib.semanticinterpreter.md#getgrammardefinitiontext)
 * [getGrammarEngine](mmir_lib.semanticinterpreter.md#getgrammarengine)
 * [getGrammarParserText](mmir_lib.semanticinterpreter.md#getgrammarparsertext)
-* [get_json_grammar_url](mmir_lib.semanticinterpreter.md#get_json_grammar_url)
+* [get\_json\_grammar\_url](mmir_lib.semanticinterpreter.md#get_json_grammar_url)
 * [hasGrammar](mmir_lib.semanticinterpreter.md#hasgrammar)
 * [interpret](mmir_lib.semanticinterpreter.md#interpret)
 * [isEnabled](mmir_lib.semanticinterpreter.md#isenabled)
@@ -36,386 +40,152 @@
 
 ## Properties
 
-###  addGrammar
+### addGrammar
 
-• **addGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string, `grammarImpl`: function, `fileFormatNo?`: number): *void*
-
-**Parameters:**
-
-▪ **id**: *string*
-
-▪ **grammarImpl**: *function*
-
-▸ (`text`: string, `callback?`: function): *void | [GrammarConverter](mmir_lib.grammarconverter.md)*
-
-**Parameters:**
-
-▪ **text**: *string*
-
-▪`Optional`  **callback**: *function*
-
-▸ (`semanticResult`: object): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`semanticResult` | object |
-
-▪`Optional`  **fileFormatNo**: *number*
+•  **addGrammar**: (id: string, grammarImpl: (text: string, callback?: (semanticResult: {}) => void) => void \| [GrammarConverter](mmir_lib.grammarconverter.md), fileFormatNo?: number) => void
 
 ___
 
-###  addProcessing
+### addProcessing
 
-• **addProcessing**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string, `processingStep`: [ProcessingStep](mmir_lib.processingstep.md), `indexOrIsPrepend?`: number | boolean, `callback?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
-`processingStep` | [ProcessingStep](mmir_lib.processingstep.md) |
-`indexOrIsPrepend?` | number &#124; boolean |
-`callback?` | [Function](mmir_lib.requirejs.md#function) |
+•  **addProcessing**: (id: string, processingStep: [ProcessingStep](mmir_lib.processingstep.md), indexOrIsPrepend?: number \| boolean, callback?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  applyPreProcessing
+### applyPreProcessing
 
-• **applyPreProcessing**: *function*
-
-#### Type declaration:
-
-▸ (`thePhrase`: string, `lang?`: string, `processingSteps?`: Array‹[ProcessingStep](mmir_lib.processingstep.md)›): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`thePhrase` | string |
-`lang?` | string |
-`processingSteps?` | Array‹[ProcessingStep](mmir_lib.processingstep.md)› |
+•  **applyPreProcessing**: (thePhrase: string, lang?: string, processingSteps?: [ProcessingStep](mmir_lib.processingstep.md)[]) => string
 
 ___
 
-###  createGrammar
+### createGrammar
 
-• **createGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`rawGrammarSrc`: string | object, `id`: string, `callback?`: function): *[SemanticInterpreter](mmir_lib.semanticinterpreter.md)*
-
-**Parameters:**
-
-▪ **rawGrammarSrc**: *string | object*
-
-▪ **id**: *string*
-
-▪`Optional`  **callback**: *function*
-
-▸ (`created?`: [GrammarConverter](mmir_lib.grammarconverter.md)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`created?` | [GrammarConverter](mmir_lib.grammarconverter.md) |
+•  **createGrammar**: (rawGrammarSrc: string \| {}, id: string, callback?: (created?: [GrammarConverter](mmir_lib.grammarconverter.md)) => void) => [SemanticInterpreter](mmir_lib.semanticinterpreter.md)
 
 ___
 
-###  getCurrentGrammar
+### getCurrentGrammar
 
-• **getCurrentGrammar**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getCurrentGrammar**: () => string
 
 ___
 
-###  getFileVersion
+### getEngineCompileMode
 
-• **getFileVersion**: *function*
-
-#### Type declaration:
-
-▸ (): *number*
+•  **getEngineCompileMode**: () => boolean
 
 ___
 
-###  getGrammarConverter
+### getEngineCompileStrictMode
 
-• **getGrammarConverter**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *[GrammarConverter](mmir_lib.grammarconverter.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **getEngineCompileStrictMode**: () => boolean
 
 ___
 
-###  getGrammarDefinitionText
+### getFileVersion
 
-• **getGrammarDefinitionText**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **getFileVersion**: () => number
 
 ___
 
-###  getGrammarEngine
+### getGrammarConverter
 
-• **getGrammarEngine**: *function*
-
-#### Type declaration:
-
-▸ (): *[GrammarEngineType](../modules/mmir_lib.md#grammarenginetype)*
+•  **getGrammarConverter**: (id: string) => [GrammarConverter](mmir_lib.grammarconverter.md)
 
 ___
 
-###  getGrammarParserText
+### getGrammarDefinitionText
 
-• **getGrammarParserText**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **getGrammarDefinitionText**: (id: string) => string
 
 ___
 
-###  get_json_grammar_url
+### getGrammarEngine
 
-• **get_json_grammar_url**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **getGrammarEngine**: () => [GrammarEngineType](../modules/mmir_lib.md#grammarenginetype)
 
 ___
 
-###  hasGrammar
+### getGrammarParserText
 
-• **hasGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **getGrammarParserText**: (id: string) => string
 
 ___
 
-###  interpret
+### get\_json\_grammar\_url
 
-• **interpret**: *function*
-
-#### Type declaration:
-
-▸ (`phrase`: string, `langCode?`: string, `callback?`: function): *[GrammarResult](mmir_lib.grammarresult.md) | void*
-
-**Parameters:**
-
-▪ **phrase**: *string*
-
-▪`Optional`  **langCode**: *string*
-
-▪`Optional`  **callback**: *function*
-
-▸ (`semanticResult`: [GrammarResult](mmir_lib.grammarresult.md)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`semanticResult` | [GrammarResult](mmir_lib.grammarresult.md) |
+•  **get\_json\_grammar\_url**: (id: string) => string
 
 ___
 
-###  isEnabled
+### hasGrammar
 
-• **isEnabled**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **hasGrammar**: (id: string) => boolean
 
 ___
 
-###  isPreProcessPositionsEnabled
+### interpret
 
-• **isPreProcessPositionsEnabled**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **interpret**: (phrase: string, langCode?: string, callback?: (semanticResult: [GrammarResult](mmir_lib.grammarresult.md)) => void) => [GrammarResult](mmir_lib.grammarresult.md) \| void
 
 ___
 
-###  removeGrammar
+### isEnabled
 
-• **removeGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **isEnabled**: () => boolean
 
 ___
 
-###  removeStopwords
+### isPreProcessPositionsEnabled
 
-• **removeStopwords**: *function*
+•  **isPreProcessPositionsEnabled**: () => boolean
+
+___
+
+### removeGrammar
+
+•  **removeGrammar**: (id: string) => void
+
+___
+
+### removeStopwords
+
+•  **removeStopwords**: (thePhrase: string, lang?: string) => string
 
 **`deprecated`** use [applyPreProcessing](mmir_lib.semanticinterpreter.md#applypreprocessing) instead
 
-#### Type declaration:
+___
 
-▸ (`thePhrase`: string, `lang?`: string): *string*
+### setCurrentGrammar
 
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`thePhrase` | string |
-`lang?` | string |
+•  **setCurrentGrammar**: (id: string) => void
 
 ___
 
-###  setCurrentGrammar
+### setEnabled
 
-• **setCurrentGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
+•  **setEnabled**: (isEnabled: boolean) => void
 
 ___
 
-###  setEnabled
+### setEngineCompileMode
 
-• **setEnabled**: *function*
-
-#### Type declaration:
-
-▸ (`isEnabled`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`isEnabled` | boolean |
+•  **setEngineCompileMode**: (asyncCompileMode: boolean, disableStrictCompileMode?: boolean) => void
 
 ___
 
-###  setEngineCompileMode
+### setGrammarEngine
 
-• **setEngineCompileMode**: *function*
-
-#### Type declaration:
-
-▸ (`asyncCompileMode`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`asyncCompileMode` | boolean |
+•  **setGrammarEngine**: (engineId: [GrammarEngineType](../modules/mmir_lib.md#grammarenginetype), asyncCompileMode?: boolean, disableStrictCompileMode?: boolean) => void
 
 ___
 
-###  setGrammarEngine
+### setPreProcessPositionsEnabled
 
-• **setGrammarEngine**: *function*
-
-#### Type declaration:
-
-▸ (`engineId`: [GrammarEngineType](../modules/mmir_lib.md#grammarenginetype), `asyncCompileMode?`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`engineId` | [GrammarEngineType](../modules/mmir_lib.md#grammarenginetype) |
-`asyncCompileMode?` | boolean |
+•  **setPreProcessPositionsEnabled**: (enabled: boolean) => void
 
 ___
 
-###  setPreProcessPositionsEnabled
+### setStopwords
 
-• **setPreProcessPositionsEnabled**: *function*
-
-#### Type declaration:
-
-▸ (`enabled`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`enabled` | boolean |
-
-___
-
-###  setStopwords
-
-• **setStopwords**: *function*
-
-#### Type declaration:
-
-▸ (`id`: string, `stopwordArray`: Array‹string›): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | string |
-`stopwordArray` | Array‹string› |
+•  **setStopwords**: (id: string, stopwordArray: string[]) => void

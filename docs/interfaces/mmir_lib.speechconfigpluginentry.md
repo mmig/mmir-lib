@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [SpeechConfigPluginEntry](mmir_lib.speechconfigpluginentry.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / SpeechConfigPluginEntry
 
 # Interface: SpeechConfigPluginEntry
 
@@ -12,36 +14,36 @@
 
 ### Properties
 
-* [language](mmir_lib.speechconfigpluginentry.md#optional-language)
-* [long](mmir_lib.speechconfigpluginentry.md#optional-long)
-* [voice](mmir_lib.speechconfigpluginentry.md#optional-voice)
+* [language](mmir_lib.speechconfigpluginentry.md#language)
+* [long](mmir_lib.speechconfigpluginentry.md#long)
+* [voice](mmir_lib.speechconfigpluginentry.md#voice)
 
 ## Properties
 
-### `Optional` language
+### language
 
-• **language**? : *string*
+• `Optional` **language**: string
 
-*Inherited from [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md).[language](mmir_lib.simplespeechconfig.md#optional-language)*
+*Inherited from [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md).[language](mmir_lib.simplespeechconfig.md#language)*
 
 local with 2-letter language- and country-code, separated with "-", e.g. "de-DE" or "en-US"
 
 ___
 
-### `Optional` long
+### long
 
-• **long**? : *string*
+• `Optional` **long**: string
 
-*Inherited from [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md).[long](mmir_lib.simplespeechconfig.md#optional-long)*
+*Inherited from [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md).[long](mmir_lib.simplespeechconfig.md#long)*
 
 local with 3-letter language- and country-code, separated with "-", e.g. "deu-DEU" or "eng-USA"
 
 ___
 
-### `Optional` voice
+### voice
 
-• **voice**? : *"male" | "female" | string*
+• `Optional` **voice**: \"male\" \| \"female\" \| string
 
-*Inherited from [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md).[voice](mmir_lib.simplespeechconfig.md#optional-voice)*
+*Inherited from [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md).[voice](mmir_lib.simplespeechconfig.md#voice)*
 
 voice name or feature (may not be supported by selected TTS plugin)

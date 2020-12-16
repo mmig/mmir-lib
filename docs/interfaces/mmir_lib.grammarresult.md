@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [GrammarResult](mmir_lib.grammarresult.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / GrammarResult
 
 # Interface: GrammarResult
 
@@ -11,55 +13,51 @@
 ### Properties
 
 * [engine](mmir_lib.grammarresult.md#engine)
-* [error](mmir_lib.grammarresult.md#optional-error)
+* [error](mmir_lib.grammarresult.md#error)
 * [phrase](mmir_lib.grammarresult.md#phrase)
-* [phrases](mmir_lib.grammarresult.md#optional-phrases)
+* [phrases](mmir_lib.grammarresult.md#phrases)
 * [preproc](mmir_lib.grammarresult.md#preproc)
-* [semantic](mmir_lib.grammarresult.md#optional-semantic)
-* [utterance](mmir_lib.grammarresult.md#optional-utterance)
+* [semantic](mmir_lib.grammarresult.md#semantic)
+* [utterance](mmir_lib.grammarresult.md#utterance)
 
 ## Properties
 
-###  engine
+### engine
 
-• **engine**: *[GrammarEngineType](../modules/mmir_lib.md#grammarenginetype)*
-
-___
-
-### `Optional` error
-
-• **error**? : *any*
+•  **engine**: [GrammarEngineType](../modules/mmir_lib.md#grammarenginetype)
 
 ___
 
-###  phrase
+### error
 
-• **phrase**: *string*
-
-___
-
-### `Optional` phrases
-
-• **phrases**? : *Array‹[PhraseInfo](mmir_lib.phraseinfo.md)›*
+• `Optional` **error**: any
 
 ___
 
-###  preproc
+### phrase
 
-• **preproc**: *object*
-
-#### Type declaration:
-
-* \[ **preprocName**: *string*\]: Array‹[Pos](mmir_lib.pos.md)›
+•  **phrase**: string
 
 ___
 
-### `Optional` semantic
+### phrases
 
-• **semantic**? : *any*
+• `Optional` **phrases**: [PhraseInfo](mmir_lib.phraseinfo.md)[]
 
 ___
 
-### `Optional` utterance
+### preproc
 
-• **utterance**? : *string*
+•  **preproc**: { [preprocName:string]: [Pos](mmir_lib.pos.md)[];  }
+
+___
+
+### semantic
+
+• `Optional` **semantic**: any
+
+___
+
+### utterance
+
+• `Optional` **utterance**: string

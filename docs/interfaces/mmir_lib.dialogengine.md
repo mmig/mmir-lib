@@ -1,10 +1,14 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [DialogEngine](mmir_lib.dialogengine.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / DialogEngine
 
 # Interface: DialogEngine
 
 ## Hierarchy
 
-* **DialogEngine**
+* [StateEngine](mmir_lib.stateengine.md)
+
+  ↳ **DialogEngine**
 
 ## Index
 
@@ -28,158 +32,120 @@
 
 ## Properties
 
-###  doc
+### doc
 
-• **doc**: *string*
+•  **doc**: string
 
-___
-
-###  getActiveEvents
-
-• **getActiveEvents**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[doc](mmir_lib.stateengine.md#doc)*
 
 ___
 
-###  getActiveStates
+### getActiveEvents
 
-• **getActiveStates**: *function*
+•  **getActiveEvents**: () => any
 
-#### Type declaration:
-
-▸ (): *any*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[getActiveEvents](mmir_lib.stateengine.md#getactiveevents)*
 
 ___
 
-###  getActiveTransitions
+### getActiveStates
 
-• **getActiveTransitions**: *function*
+•  **getActiveStates**: () => any
 
-#### Type declaration:
-
-▸ (): *any*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[getActiveStates](mmir_lib.stateengine.md#getactivestates)*
 
 ___
 
-###  getEvents
+### getActiveTransitions
 
-• **getEvents**: *function*
+•  **getActiveTransitions**: () => any
 
-#### Type declaration:
-
-▸ (): *any*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[getActiveTransitions](mmir_lib.stateengine.md#getactivetransitions)*
 
 ___
 
-###  getStates
+### getEvents
 
-• **getStates**: *function*
+•  **getEvents**: () => any
 
-#### Type declaration:
-
-▸ (): *any*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[getEvents](mmir_lib.stateengine.md#getevents)*
 
 ___
 
-###  getTransitions
+### getStates
 
-• **getTransitions**: *function*
+•  **getStates**: () => any
 
-#### Type declaration:
-
-▸ (): *any*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[getStates](mmir_lib.stateengine.md#getstates)*
 
 ___
 
-###  ignoreScript
+### getTransitions
 
-• **ignoreScript**: *function*
+•  **getTransitions**: () => any
 
-#### Type declaration:
-
-▸ (): *void*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[getTransitions](mmir_lib.stateengine.md#gettransitions)*
 
 ___
 
-###  load
+### ignoreScript
 
-• **load**: *function*
+•  **ignoreScript**: () => void
 
-#### Type declaration:
-
-▸ (...`args`: any[]): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`...args` | any[] |
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[ignoreScript](mmir_lib.stateengine.md#ignorescript)*
 
 ___
 
-###  name
+### load
 
-• **name**: *string*
+•  **load**: (...args: any[]) => any
 
-___
-
-###  onload
-
-• **onload**: *function*
-
-#### Type declaration:
-
-▸ (`scion`: any, `deferred`: any): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`scion` | any |
-`deferred` | any |
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[load](mmir_lib.stateengine.md#load)*
 
 ___
 
-###  onraise
+### name
 
-• **onraise**: *function*
+•  **name**: string
 
-#### Type declaration:
-
-▸ (): *void*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[name](mmir_lib.stateengine.md#name)*
 
 ___
 
-###  raise
+### onload
 
-• **raise**: *function*
+•  **onload**: (scion: any, deferred: any) => void
 
-#### Type declaration:
-
-▸ (`event`: any, `eventData`: any): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`event` | any |
-`eventData` | any |
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[onload](mmir_lib.stateengine.md#onload)*
 
 ___
 
-###  start
+### onraise
 
-• **start**: *function*
+•  **onraise**: () => void
 
-#### Type declaration:
-
-▸ (): *void*
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[onraise](mmir_lib.stateengine.md#onraise)*
 
 ___
 
-###  url
+### raise
 
-• **url**: *string*
+•  **raise**: (event: string \| { data?: any ; name: string  }, eventData?: any) => void
+
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[raise](mmir_lib.stateengine.md#raise)*
+
+___
+
+### start
+
+•  **start**: () => void
+
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[start](mmir_lib.stateengine.md#start)*
+
+___
+
+### url
+
+•  **url**: string
+
+*Inherited from [StateEngine](mmir_lib.stateengine.md).[url](mmir_lib.stateengine.md#url)*

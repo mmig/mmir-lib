@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Resources](mmir_lib.resources.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Resources
 
 # Interface: Resources
 
@@ -42,315 +44,174 @@
 
 ## Properties
 
-###  getBasePath
+### getBasePath
 
-• **getBasePath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getBasePath**: () => string
 
 ___
 
-###  getBeepUrl
+### getBeepUrl
 
-• **getBeepUrl**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getBeepUrl**: () => string
 
 ___
 
-###  getCompiledLayoutPath
+### getCompiledLayoutPath
 
-• **getCompiledLayoutPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getCompiledLayoutPath**: () => string
 
 ___
 
-###  getCompiledViewPath
+### getCompiledViewPath
 
-• **getCompiledViewPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getCompiledViewPath**: () => string
 
 ___
 
-###  getConfigurationFileUrl
+### getConfigurationFileUrl
 
-• **getConfigurationFileUrl**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getConfigurationFileUrl**: () => string
 
 ___
 
-###  getControllerPath
+### getControllerPath
 
-• **getControllerPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getControllerPath**: () => string
 
 ___
 
-###  getDictionaryFileUrl
+### getDictionaryFileUrl
 
-• **getDictionaryFileUrl**: *function*
-
-#### Type declaration:
-
-▸ (`langCode?`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`langCode?` | string |
+•  **getDictionaryFileUrl**: (langCode?: string) => string
 
 ___
 
-###  getDirectoriesFileUrl
+### getDirectoriesFileUrl
 
-• **getDirectoriesFileUrl**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getDirectoriesFileUrl**: () => string
 
 ___
 
-###  getEnv
+### getEnv
 
-• **getEnv**: *function*
-
-#### Type declaration:
-
-▸ (): *[EnvType](../modules/mmir_lib.md#envtype) | "default" | string*
+•  **getEnv**: () => [EnvType](../modules/mmir_lib.md#envtype) \| \"default\" \| string
 
 ___
 
-###  getEnvPlatform
+### getEnvPlatform
 
-• **getEnvPlatform**: *function*
-
-#### Type declaration:
-
-▸ (): *[PlatfromType](../modules/mmir_lib.md#platfromtype) | "default"*
+•  **getEnvPlatform**: () => [PlatfromType](../modules/mmir_lib.md#platfromtype) \| \"default\"
 
 ___
 
-###  getExtensionsPath
+### getExtensionsPath
 
-• **getExtensionsPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getExtensionsPath**: () => string
 
 ___
 
-###  getGeneratedGrammarsPath
+### getGeneratedGrammarsPath
 
-• **getGeneratedGrammarsPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getGeneratedGrammarsPath**: () => string
 
 ___
 
-###  getGeneratedStateModelsPath
+### getGeneratedStateModelsPath
 
-• **getGeneratedStateModelsPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getGeneratedStateModelsPath**: () => string
 
 ___
 
-###  getGrammarFileUrl
+### getGrammarFileUrl
 
-• **getGrammarFileUrl**: *function*
-
-#### Type declaration:
-
-▸ (`langCode?`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`langCode?` | string |
+•  **getGrammarFileUrl**: (langCode?: string) => string
 
 ___
 
-###  getGrammarPluginPath
+### getGrammarPluginPath
 
-• **getGrammarPluginPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getGrammarPluginPath**: () => string
 
 ___
 
-###  getHelperPath
+### getHelperPath
 
-• **getHelperPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getHelperPath**: () => string
 
 ___
 
-###  getHelperSuffix
+### getHelperSuffix
 
-• **getHelperSuffix**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getHelperSuffix**: () => string
 
 ___
 
-###  getLanguage
+### getLanguage
 
-• **getLanguage**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getLanguage**: () => string
 
 ___
 
-###  getLanguagePath
+### getLanguagePath
 
-• **getLanguagePath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getLanguagePath**: () => string
 
 ___
 
-###  getLayoutPath
+### getLayoutPath
 
-• **getLayoutPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getLayoutPath**: () => string
 
 ___
 
-###  getMediaPluginPath
+### getMediaPluginPath
 
-• **getMediaPluginPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getMediaPluginPath**: () => string
 
 ___
 
-###  getModelPath
+### getModelPath
 
-• **getModelPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getModelPath**: () => string
 
 ___
 
-###  getPartialsPrefix
+### getPartialsPrefix
 
-• **getPartialsPrefix**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getPartialsPrefix**: () => string
 
 ___
 
-###  getSpeechConfigFileUrl
+### getSpeechConfigFileUrl
 
-• **getSpeechConfigFileUrl**: *function*
-
-#### Type declaration:
-
-▸ (`langCode?`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`langCode?` | string |
+•  **getSpeechConfigFileUrl**: (langCode?: string) => string
 
 ___
 
-###  getViewPath
+### getViewPath
 
-• **getViewPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getViewPath**: () => string
 
 ___
 
-###  getWorkerPath
+### getWorkerPath
 
-• **getWorkerPath**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getWorkerPath**: () => string
 
 ___
 
-###  init
+### init
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (`theForBrowserParameter?`: [EnvType](../modules/mmir_lib.md#envtype) | [EnvInfo](mmir_lib.envinfo.md) & object | string | boolean, `isReset?`: boolean): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`theForBrowserParameter?` | [EnvType](../modules/mmir_lib.md#envtype) &#124; [EnvInfo](mmir_lib.envinfo.md) & object &#124; string &#124; boolean |
-`isReset?` | boolean |
+•  **init**: (theForBrowserParameter?: [EnvType](../modules/mmir_lib.md#envtype) \| [EnvInfo](mmir_lib.envinfo.md) & { isAbsolutePath?: true \| (path: string) => boolean  } \| string \| boolean, isReset?: boolean) => any
 
 ___
 
-###  isBrowserEnv
+### isBrowserEnv
 
-• **isBrowserEnv**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **isBrowserEnv**: () => boolean
 
 ___
 
-###  isCordovaEnv
+### isCordovaEnv
 
-• **isCordovaEnv**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **isCordovaEnv**: () => boolean

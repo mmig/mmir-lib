@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ProcessingOrderInfo](mmir_lib.processingorderinfo.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ProcessingOrderInfo
 
 # Interface: ProcessingOrderInfo
 
@@ -10,10 +12,10 @@
 
 ### Properties
 
-* [_order](mmir_lib.processingorderinfo.md#optional-_order)
+* [\_order](mmir_lib.processingorderinfo.md#_order)
 
 ## Properties
 
-### `Optional` _order
+### \_order
 
-• **_order**? : *Array‹string›*
+• `Optional` **\_order**: string[]

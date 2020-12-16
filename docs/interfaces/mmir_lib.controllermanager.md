@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ControllerManager](mmir_lib.controllermanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ControllerManager
 
 # Interface: ControllerManager
 
@@ -19,89 +21,36 @@
 
 ## Properties
 
-###  create
+### create
 
-• **create**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **create**: () => any
 
 ___
 
-###  get
+### get
 
-• **get**: *function*
-
-#### Type declaration:
-
-▸ (`ctrlName`: string): *[Controller](../classes/mmir_lib.controller.md) | undefined*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`ctrlName` | string |
+•  **get**: (ctrlName: string) => [Controller](../classes/mmir_lib.controller.md) \| undefined
 
 ___
 
-###  getNames
+### getNames
 
-• **getNames**: *function*
-
-#### Type declaration:
-
-▸ (): *Array‹string›*
+•  **getNames**: () => string[]
 
 ___
 
-###  init
+### init
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (`callback`: any, `ctx`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`callback` | any |
-`ctx` | any |
+•  **init**: (callback: any, ctx: any) => any
 
 ___
 
-###  perform
+### perform
 
-• **perform**: *function*
-
-#### Type declaration:
-
-▸ (`ctrlName`: string, `actionName`: string, `data?`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`ctrlName` | string |
-`actionName` | string |
-`data?` | any |
+•  **perform**: (ctrlName: string, actionName: string, data?: any) => any
 
 ___
 
-###  performHelper
+### performHelper
 
-• **performHelper**: *function*
-
-#### Type declaration:
-
-▸ (`ctrlName`: string, `actionName`: string, `data?`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`ctrlName` | string |
-`actionName` | string |
-`data?` | any |
+•  **performHelper**: (ctrlName: string, actionName: string, data?: any) => any

@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MediaManagerPluginEntry](mmir_lib.mediamanagerpluginentry.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MediaManagerPluginEntry
 
 # Interface: MediaManagerPluginEntry
 
@@ -10,31 +12,38 @@
 
 ### Properties
 
-* [ctx](mmir_lib.mediamanagerpluginentry.md#optional-ctx)
-* [env](mmir_lib.mediamanagerpluginentry.md#optional-env)
-* [mod](mmir_lib.mediamanagerpluginentry.md#optional-mod)
-* [type](mmir_lib.mediamanagerpluginentry.md#optional-type)
+* [config](mmir_lib.mediamanagerpluginentry.md#config)
+* [ctx](mmir_lib.mediamanagerpluginentry.md#ctx)
+* [env](mmir_lib.mediamanagerpluginentry.md#env)
+* [mod](mmir_lib.mediamanagerpluginentry.md#mod)
+* [type](mmir_lib.mediamanagerpluginentry.md#type)
 
 ## Properties
 
-### `Optional` ctx
+### config
 
-• **ctx**? : *string*
-
-___
-
-### `Optional` env
-
-• **env**? : *Array‹[MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) | string› | [MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) | string*
+• `Optional` **config**: string \| { config: any ; mod: string  } \| any
 
 ___
 
-### `Optional` mod
+### ctx
 
-• **mod**? : *string*
+• `Optional` **ctx**: string
 
 ___
 
-### `Optional` type
+### env
 
-• **type**? : *[MediaPluginType](../modules/mmir_lib.md#mediaplugintype)*
+• `Optional` **env**: [MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) \| string[] \| [MediaPluginEnvType](../modules/mmir_lib.md#mediapluginenvtype) \| string
+
+___
+
+### mod
+
+• `Optional` **mod**: string
+
+___
+
+### type
+
+• `Optional` **type**: [MediaPluginType](../modules/mmir_lib.md#mediaplugintype)

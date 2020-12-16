@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ConfigurationManager](mmir_lib.configurationmanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ConfigurationManager
 
 # Interface: ConfigurationManager
 
@@ -8,7 +10,7 @@
 
 ## Index
 
-### Properties
+### Methods
 
 * [addListener](mmir_lib.configurationmanager.md#addlistener)
 * [get](mmir_lib.configurationmanager.md#get)
@@ -19,141 +21,209 @@
 * [removeListener](mmir_lib.configurationmanager.md#removelistener)
 * [set](mmir_lib.configurationmanager.md#set)
 
-## Properties
+## Methods
 
-###  addListener
+### addListener
 
-• **addListener**: *function*
+▸ **addListener**(`propertyName`: string, `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
 
-#### Type declaration:
-
-▸ (`listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener), `propertyName?`: string | string[]): *void*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
+`propertyName` | string |
 `listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
-`propertyName?` | string &#124; string[] |
+
+**Returns:** void
+
+▸ **addListener**(`propertyNamePath`: string[], `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`propertyNamePath` | string[] |
+`listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+▸ **addListener**(`allChangesListener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`allChangesListener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
 
 ___
 
-###  get
+### get
 
-• **get**: *function*
+▸ **get**(`propertyName`: string \| string[], `defaultValue?`: any, `useSafeAccess?`: boolean): any
 
-#### Type declaration:
-
-▸ (`propertyName`: string | string[], `defaultValue?`: any, `useSafeAccess?`: boolean): *any*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`propertyName` | string &#124; string[] |
+`propertyName` | string \| string[] |
 `defaultValue?` | any |
 `useSafeAccess?` | boolean |
 
+**Returns:** any
+
 ___
 
-###  getBoolean
+### getBoolean
 
-• **getBoolean**: *function*
+▸ **getBoolean**(`propertyName`: string \| string[], `defaultValue?`: any, `useSafeAccess?`: boolean): boolean
 
-#### Type declaration:
-
-▸ (`propertyName`: string | string[], `defaultValue?`: any, `useSafeAccess?`: boolean): *boolean*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`propertyName` | string &#124; string[] |
+`propertyName` | string \| string[] |
 `defaultValue?` | any |
 `useSafeAccess?` | boolean |
 
+**Returns:** boolean
+
 ___
 
-###  getString
+### getString
 
-• **getString**: *function*
+▸ **getString**(`propertyName`: string \| string[], `defaultValue?`: any, `useSafeAccess?`: boolean): string
 
-#### Type declaration:
-
-▸ (`propertyName`: string | string[], `defaultValue?`: any, `useSafeAccess?`: boolean): *string*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`propertyName` | string &#124; string[] |
+`propertyName` | string \| string[] |
 `defaultValue?` | any |
 `useSafeAccess?` | boolean |
 
+**Returns:** string
+
 ___
 
-###  off
+### off
 
-• **off**: *function*
+▸ **off**(`propertyName`: string, `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
 
-#### Type declaration:
-
-▸ (`listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener), `propertyName?`: string | string[]): *void*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
+`propertyName` | string |
 `listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
-`propertyName?` | string &#124; string[] |
 
-___
+**Returns:** void
 
-###  on
+▸ **off**(`propertyNamePath`: string[], `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
 
-• **on**: *function*
-
-#### Type declaration:
-
-▸ (`listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener), `propertyName?`: string | string[]): *void*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
+`propertyNamePath` | string[] |
 `listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
-`propertyName?` | string &#124; string[] |
 
-___
+**Returns:** void
 
-###  removeListener
+▸ **off**(`allChangesListener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
 
-• **removeListener**: *function*
-
-#### Type declaration:
-
-▸ (`listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener), `propertyName?`: string | string[]): *void*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
+`allChangesListener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+___
+
+### on
+
+▸ **on**(`propertyName`: string, `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`propertyName` | string |
 `listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
-`propertyName?` | string &#124; string[] |
 
-___
+**Returns:** void
 
-###  set
+▸ **on**(`propertyNamePath`: string[], `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
 
-• **set**: *function*
-
-#### Type declaration:
-
-▸ (`propertyName`: string | string[], `value`: any): *void*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`propertyName` | string &#124; string[] |
+`propertyNamePath` | string[] |
+`listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+▸ **on**(`allChangesListener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`allChangesListener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+___
+
+### removeListener
+
+▸ **removeListener**(`propertyName`: string, `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`propertyName` | string |
+`listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+▸ **removeListener**(`propertyNamePath`: string[], `listener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`propertyNamePath` | string[] |
+`listener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+▸ **removeListener**(`allChangesListener`: [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener)): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`allChangesListener` | [ConfigurationChangeListener](../modules/mmir_lib.md#configurationchangelistener) |
+
+**Returns:** void
+
+___
+
+### set
+
+▸ **set**(`propertyName`: string \| string[], `value`: any): void
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`propertyName` | string \| string[] |
 `value` | any |
+
+**Returns:** void

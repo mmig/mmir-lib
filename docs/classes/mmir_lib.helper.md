@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Helper](mmir_lib.helper.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Helper
 
 # Class: Helper
 
@@ -18,11 +20,11 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new Helper**(`ctrl`: string, `name`: string, `instanceConstr`: [Function](../interfaces/mmir_lib.requirejs.md#function)): *[Helper](mmir_lib.helper.md)*
+\+ **new Helper**(`ctrl`: string, `name`: string, `instanceConstr`: [Function](../interfaces/mmir_lib.requirejs.md#function)): [Helper](mmir_lib.helper.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -30,15 +32,15 @@ Name | Type |
 `name` | string |
 `instanceConstr` | [Function](../interfaces/mmir_lib.requirejs.md#function) |
 
-**Returns:** *[Helper](mmir_lib.helper.md)*
+**Returns:** [Helper](mmir_lib.helper.md)
 
 ## Methods
 
-###  perform
+### perform
 
-▸ **perform**(`actionName`: string, `data?`: any, ...`args`: any[]): *any*
+▸ **perform**(`actionName`: string, `data?`: any, ...`args`: any[]): any
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -46,4 +48,4 @@ Name | Type |
 `data?` | any |
 `...args` | any[] |
 
-**Returns:** *any*
+**Returns:** any

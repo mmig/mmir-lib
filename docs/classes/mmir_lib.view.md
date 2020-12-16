@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [View](mmir_lib.view.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / View
 
 # Class: View
 
@@ -22,11 +24,11 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new View**(`ctrl`: any, `name`: string, `definition`: string): *[View](mmir_lib.view.md)*
+\+ **new View**(`ctrl`: any, `name`: string, `definition`: string): [View](mmir_lib.view.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -34,50 +36,56 @@ Name | Type |
 `name` | string |
 `definition` | string |
 
-**Returns:** *[View](mmir_lib.view.md)*
+**Returns:** [View](mmir_lib.view.md)
 
 ## Methods
 
-###  getContentElement
+### getContentElement
 
-▸ **getContentElement**(`name`: string): *[ContentElement](mmir_lib.contentelement.md)*
+▸ **getContentElement**(`name`: string): [ContentElement](mmir_lib.contentelement.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `name` | string |
 
-**Returns:** *[ContentElement](mmir_lib.contentelement.md)*
+**Returns:** [ContentElement](mmir_lib.contentelement.md)
 
 ___
 
-###  getController
+### getController
 
-▸ **getController**(): *[Controller](mmir_lib.controller.md)*
+▸ **getController**(): [Controller](mmir_lib.controller.md)
 
-**Returns:** *[Controller](mmir_lib.controller.md)*
-
-___
-
-###  getDefinition
-
-▸ **getDefinition**(): *string*
-
-**Returns:** *string*
+**Returns:** [Controller](mmir_lib.controller.md)
 
 ___
 
-###  getName
+### getDefinition
 
-▸ **getName**(): *string*
+▸ **getDefinition**(): string
 
-**Returns:** *string*
+**Returns:** string
 
 ___
 
-###  stringify
+### getName
 
-▸ **stringify**(): *string*
+▸ **getName**(): string
 
-**Returns:** *string*
+**Returns:** string
+
+___
+
+### stringify
+
+▸ **stringify**(`disableStrictMode?`: boolean): string
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`disableStrictMode?` | boolean |
+
+**Returns:** string

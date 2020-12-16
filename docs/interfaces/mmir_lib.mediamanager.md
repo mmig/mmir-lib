@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MediaManager](mmir_lib.mediamanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MediaManager
 
 # Interface: MediaManager
 
@@ -10,13 +12,13 @@
 
 ### Properties
 
-* [_addListenerObserver](mmir_lib.mediamanager.md#_addlistenerobserver)
-* [_emitEvent](mmir_lib.mediamanager.md#_emitevent)
-* [_fireEvent](mmir_lib.mediamanager.md#_fireevent)
-* [_notifyObservers](mmir_lib.mediamanager.md#_notifyobservers)
-* [_preparing](mmir_lib.mediamanager.md#_preparing)
-* [_ready](mmir_lib.mediamanager.md#_ready)
-* [_removeListenerObserver](mmir_lib.mediamanager.md#_removelistenerobserver)
+* [\_addListenerObserver](mmir_lib.mediamanager.md#_addlistenerobserver)
+* [\_emitEvent](mmir_lib.mediamanager.md#_emitevent)
+* [\_fireEvent](mmir_lib.mediamanager.md#_fireevent)
+* [\_notifyObservers](mmir_lib.mediamanager.md#_notifyobservers)
+* [\_preparing](mmir_lib.mediamanager.md#_preparing)
+* [\_ready](mmir_lib.mediamanager.md#_ready)
+* [\_removeListenerObserver](mmir_lib.mediamanager.md#_removelistenerobserver)
 * [addListener](mmir_lib.mediamanager.md#addlistener)
 * [cancelRecognition](mmir_lib.mediamanager.md#cancelrecognition)
 * [cancelSpeech](mmir_lib.mediamanager.md#cancelspeech)
@@ -48,616 +50,212 @@
 
 ## Properties
 
-###  _addListenerObserver
+### \_addListenerObserver
 
-• **_addListenerObserver**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `observerCallback`: function): *void*
-
-**Parameters:**
-
-▪ **eventName**: *[MediaEventType](../modules/mmir_lib.md#mediaeventtype)*
-
-▪ **observerCallback**: *function*
-
-▸ (`actionType`: "added" | "removed", `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`actionType` | "added" &#124; "removed" |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **\_addListenerObserver**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), observerCallback: (actionType: \"added\" \| \"removed\", eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => void) => void
 
 ___
 
-###  _emitEvent
+### \_emitEvent
 
-• **_emitEvent**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), ...`args`: any[]): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`...args` | any[] |
+•  **\_emitEvent**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), ...args: any[]) => void
 
 ___
 
-###  _fireEvent
+### \_fireEvent
 
-• **_fireEvent**: *function*
+•  **\_fireEvent**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), args: any[]) => void
 
 **`deprecated`** use [_emitEvent](mmir_lib.mediamanager.md#_emitevent) instead
 
-#### Type declaration:
+___
 
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `args`: any[]): *void*
+### \_notifyObservers
 
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`args` | any[] |
+•  **\_notifyObservers**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), actionType: \"added\" \| \"removed\", eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => void
 
 ___
 
-###  _notifyObservers
+### \_preparing
 
-• **_notifyObservers**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `actionType`: "added" | "removed", `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`actionType` | "added" &#124; "removed" |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **\_preparing**: (moduleName: string) => void
 
 ___
 
-###  _preparing
+### \_ready
 
-• **_preparing**: *function*
-
-#### Type declaration:
-
-▸ (`moduleName`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`moduleName` | string |
+•  **\_ready**: (moduleName: string) => void
 
 ___
 
-###  _ready
+### \_removeListenerObserver
 
-• **_ready**: *function*
-
-#### Type declaration:
-
-▸ (`moduleName`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`moduleName` | string |
+•  **\_removeListenerObserver**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), observerCallback: (actionType: \"added\" \| \"removed\", eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => void) => void
 
 ___
 
-###  _removeListenerObserver
+### addListener
 
-• **_removeListenerObserver**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `observerCallback`: function): *void*
-
-**Parameters:**
-
-▪ **eventName**: *[MediaEventType](../modules/mmir_lib.md#mediaeventtype)*
-
-▪ **observerCallback**: *function*
-
-▸ (`actionType`: "added" | "removed", `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`actionType` | "added" &#124; "removed" |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **addListener**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => void
 
 ___
 
-###  addListener
+### cancelRecognition
 
-• **addListener**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **cancelRecognition**: (successCallback?: [Function](mmir_lib.requirejs.md#function), failureCallback?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  cancelRecognition
+### cancelSpeech
 
-• **cancelRecognition**: *function*
-
-#### Type declaration:
-
-▸ (`successCallback?`: [Function](mmir_lib.requirejs.md#function), `failureCallback?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`successCallback?` | [Function](mmir_lib.requirejs.md#function) |
-`failureCallback?` | [Function](mmir_lib.requirejs.md#function) |
+•  **cancelSpeech**: (successCallBack?: [Function](mmir_lib.requirejs.md#function), failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  cancelSpeech
+### createEmptyAudio
 
-• **cancelSpeech**: *function*
-
-#### Type declaration:
-
-▸ (`successCallBack?`: [Function](mmir_lib.requirejs.md#function), `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`successCallBack?` | [Function](mmir_lib.requirejs.md#function) |
-`failureCallBack?` | [Function](mmir_lib.requirejs.md#function) |
+•  **createEmptyAudio**: () => [IAudio](mmir_lib.iaudio.md)
 
 ___
 
-###  createEmptyAudio
+### ctx
 
-• **createEmptyAudio**: *function*
-
-#### Type declaration:
-
-▸ (): *[IAudio](mmir_lib.iaudio.md)*
+•  **ctx**: { [ctxId:string]: any;  }
 
 ___
 
-###  ctx
+### getFunc
 
-• **ctx**: *object*
-
-#### Type declaration:
-
-* \[ **ctxId**: *string*\]: any
+•  **getFunc**: (ctx: string, funcName: string) => any
 
 ___
 
-###  getFunc
+### getListeners
 
-• **getFunc**: *function*
-
-#### Type declaration:
-
-▸ (`ctx`: string, `funcName`: string): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`ctx` | string |
-`funcName` | string |
+•  **getListeners**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype)) => [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) \| void
 
 ___
 
-###  getListeners
+### getRecognitionLanguages
 
-• **getListeners**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype)): *[MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) | void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
+•  **getRecognitionLanguages**: (successCallBack?: [Function](mmir_lib.requirejs.md#function), failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  getRecognitionLanguages
+### getSpeechLanguages
 
-• **getRecognitionLanguages**: *function*
-
-#### Type declaration:
-
-▸ (`successCallBack?`: [Function](mmir_lib.requirejs.md#function), `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`successCallBack?` | [Function](mmir_lib.requirejs.md#function) |
-`failureCallBack?` | [Function](mmir_lib.requirejs.md#function) |
+•  **getSpeechLanguages**: (successCallBack?: [Function](mmir_lib.requirejs.md#function), failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  getSpeechLanguages
+### getURLAsAudio
 
-• **getSpeechLanguages**: *function*
-
-#### Type declaration:
-
-▸ (`successCallBack?`: [Function](mmir_lib.requirejs.md#function), `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`successCallBack?` | [Function](mmir_lib.requirejs.md#function) |
-`failureCallBack?` | [Function](mmir_lib.requirejs.md#function) |
+•  **getURLAsAudio**: (url: string, onEnd: any, failureCallback: any, successCallback: any, audioObj: [IAudio](mmir_lib.iaudio.md), ...args: any[]) => [IAudio](mmir_lib.iaudio.md)
 
 ___
 
-###  getURLAsAudio
+### getVoices
 
-• **getURLAsAudio**: *function*
-
-#### Type declaration:
-
-▸ (`url`: string, `onEnd`: any, `failureCallback`: any, `successCallback`: any, `audioObj`: [IAudio](mmir_lib.iaudio.md), ...`args`: any[]): *[IAudio](mmir_lib.iaudio.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`url` | string |
-`onEnd` | any |
-`failureCallback` | any |
-`successCallback` | any |
-`audioObj` | [IAudio](mmir_lib.iaudio.md) |
-`...args` | any[] |
+•  **getVoices**: (options?: [VoiceListOptions](mmir_lib.voicelistoptions.md), successCallBack?: (voices: string \| [VoiceDetails](mmir_lib.voicedetails.md)[]) => void, failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  getVoices
+### getWAVAsAudio
 
-• **getVoices**: *function*
-
-#### Type declaration:
-
-▸ (`options?`: [VoiceListOptions](mmir_lib.voicelistoptions.md), `successCallBack?`: function, `failureCallBack?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-▪`Optional`  **options**: *[VoiceListOptions](mmir_lib.voicelistoptions.md)*
-
-▪`Optional`  **successCallBack**: *function*
-
-▸ (`voices`: Array‹string | [VoiceDetails](mmir_lib.voicedetails.md)›): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`voices` | Array‹string &#124; [VoiceDetails](mmir_lib.voicedetails.md)› |
-
-▪`Optional`  **failureCallBack**: *[Function](mmir_lib.requirejs.md#function)*
+•  **getWAVAsAudio**: (blob: any, callback: any, onEnd: any, failureCallback: any, onInit: any, emptyAudioObj: [IAudio](mmir_lib.iaudio.md)) => [IAudio](mmir_lib.iaudio.md)
 
 ___
 
-###  getWAVAsAudio
+### hasListeners
 
-• **getWAVAsAudio**: *function*
-
-#### Type declaration:
-
-▸ (`blob`: any, `callback`: any, `onEnd`: any, `failureCallback`: any, `onInit`: any, `emptyAudioObj`: [IAudio](mmir_lib.iaudio.md)): *[IAudio](mmir_lib.iaudio.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`blob` | any |
-`callback` | any |
-`onEnd` | any |
-`failureCallback` | any |
-`onInit` | any |
-`emptyAudioObj` | [IAudio](mmir_lib.iaudio.md) |
+•  **hasListeners**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype)) => boolean
 
 ___
 
-###  hasListeners
+### init
 
-• **hasListeners**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype)): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
+•  **init**: (successCallback?: [Function](mmir_lib.requirejs.md#function), failureCallback?: [Function](mmir_lib.requirejs.md#function), listenerList?: { listener: [Function](mmir_lib.requirejs.md#function) ; name: string  }[]) => any
 
 ___
 
-###  init
+### loadFile
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (`successCallback?`: [Function](mmir_lib.requirejs.md#function), `failureCallback?`: [Function](mmir_lib.requirejs.md#function), `listenerList?`: Array‹object›): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`successCallback?` | [Function](mmir_lib.requirejs.md#function) |
-`failureCallback?` | [Function](mmir_lib.requirejs.md#function) |
-`listenerList?` | Array‹object› |
+•  **loadFile**: (filePath: string, successCallback?: [Function](mmir_lib.requirejs.md#function), failureCallback?: [Function](mmir_lib.requirejs.md#function), execId?: string) => void
 
 ___
 
-###  loadFile
+### off
 
-• **loadFile**: *function*
-
-#### Type declaration:
-
-▸ (`filePath`: string, `successCallback?`: [Function](mmir_lib.requirejs.md#function), `failureCallback?`: [Function](mmir_lib.requirejs.md#function), `execId?`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`filePath` | string |
-`successCallback?` | [Function](mmir_lib.requirejs.md#function) |
-`failureCallback?` | [Function](mmir_lib.requirejs.md#function) |
-`execId?` | string |
+•  **off**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => boolean
 
 ___
 
-###  off
+### on
 
-• **off**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **on**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => void
 
 ___
 
-###  on
+### perform
 
-• **on**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **perform**: (ctx: string, funcName: string, args?: any[]) => any
 
 ___
 
-###  perform
+### playURL
 
-• **perform**: *function*
-
-#### Type declaration:
-
-▸ (`ctx`: string, `funcName`: string, `args?`: Array‹any›): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`ctx` | string |
-`funcName` | string |
-`args?` | Array‹any› |
+•  **playURL**: (url: string, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  playURL
+### playWAV
 
-• **playURL**: *function*
-
-#### Type declaration:
-
-▸ (`url`: string, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`url` | string |
-`onEnd?` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
-`failureCallback?` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
-`onReady?` | [Function](mmir_lib.requirejs.md#function) |
+•  **playWAV**: (blob: any, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  playWAV
+### recognize
 
-• **playWAV**: *function*
-
-#### Type declaration:
-
-▸ (`blob`: any, `onEnd?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onReady?`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`blob` | any |
-`onEnd?` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
-`failureCallback?` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
-`onReady?` | [Function](mmir_lib.requirejs.md#function) |
+•  **recognize**: (options?: [ASROptions](mmir_lib.asroptions.md), statusCallback?: [ASROnStatus](../modules/mmir_lib.md#asronstatus), failureCallback?: [ASROnError](../modules/mmir_lib.md#asronerror), isIntermediateResults?: boolean) => void
 
 ___
 
-###  recognize
+### removeListener
 
-• **recognize**: *function*
-
-#### Type declaration:
-
-▸ (`options?`: [ASROptions](mmir_lib.asroptions.md), `statusCallback?`: [ASROnStatus](../modules/mmir_lib.md#asronstatus), `failureCallback?`: [ASROnError](../modules/mmir_lib.md#asronerror), `isIntermediateResults?`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options?` | [ASROptions](mmir_lib.asroptions.md) |
-`statusCallback?` | [ASROnStatus](../modules/mmir_lib.md#asronstatus) |
-`failureCallback?` | [ASROnError](../modules/mmir_lib.md#asronerror) |
-`isIntermediateResults?` | boolean |
+•  **removeListener**: (eventName: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), eventHandler: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)) => boolean
 
 ___
 
-###  removeListener
+### setDefaultCtx
 
-• **removeListener**: *function*
-
-#### Type declaration:
-
-▸ (`eventName`: [MediaEventType](../modules/mmir_lib.md#mediaeventtype), `eventHandler`: [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler)): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`eventName` | [MediaEventType](../modules/mmir_lib.md#mediaeventtype) |
-`eventHandler` | [MediaEventHandler](../modules/mmir_lib.md#mediaeventhandler) |
+•  **setDefaultCtx**: (ctxId: string) => void
 
 ___
 
-###  setDefaultCtx
+### setTextToSpeechVolume
 
-• **setDefaultCtx**: *function*
-
-#### Type declaration:
-
-▸ (`ctxId`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`ctxId` | string |
+•  **setTextToSpeechVolume**: (newValue: number) => void
 
 ___
 
-###  setTextToSpeechVolume
+### startRecord
 
-• **setTextToSpeechVolume**: *function*
-
-#### Type declaration:
-
-▸ (`newValue`: number): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`newValue` | number |
+•  **startRecord**: (options?: [ASROptions](mmir_lib.asroptions.md), successCallback?: [ASROnStatus](../modules/mmir_lib.md#asronstatus), failureCallback?: [ASROnError](../modules/mmir_lib.md#asronerror), intermediateResults?: boolean) => void
 
 ___
 
-###  startRecord
+### stopRecord
 
-• **startRecord**: *function*
-
-#### Type declaration:
-
-▸ (`options?`: [ASROptions](mmir_lib.asroptions.md), `successCallback?`: [ASROnStatus](../modules/mmir_lib.md#asronstatus), `failureCallback?`: [ASROnError](../modules/mmir_lib.md#asronerror), `intermediateResults?`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options?` | [ASROptions](mmir_lib.asroptions.md) |
-`successCallback?` | [ASROnStatus](../modules/mmir_lib.md#asronstatus) |
-`failureCallback?` | [ASROnError](../modules/mmir_lib.md#asronerror) |
-`intermediateResults?` | boolean |
+•  **stopRecord**: (options?: [ASROptions](mmir_lib.asroptions.md), successCallback?: [ASROnStatus](../modules/mmir_lib.md#asronstatus), failureCallback?: [ASROnError](../modules/mmir_lib.md#asronerror)) => void
 
 ___
 
-###  stopRecord
+### tts
 
-• **stopRecord**: *function*
-
-#### Type declaration:
-
-▸ (`options?`: [ASROptions](mmir_lib.asroptions.md), `successCallback?`: [ASROnStatus](../modules/mmir_lib.md#asronstatus), `failureCallback?`: [ASROnError](../modules/mmir_lib.md#asronerror)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options?` | [ASROptions](mmir_lib.asroptions.md) |
-`successCallback?` | [ASROnStatus](../modules/mmir_lib.md#asronstatus) |
-`failureCallback?` | [ASROnError](../modules/mmir_lib.md#asronerror) |
+•  **tts**: (options: string \| string[] \| [TTSOptions](mmir_lib.ttsoptions.md), successCallback?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onInit?: [TTSOnReady](../modules/mmir_lib.md#ttsonready), ...args: any[]) => void
 
 ___
 
-###  tts
+### waitReadyImpl
 
-• **tts**: *function*
-
-#### Type declaration:
-
-▸ (`options`: string | string[] | [TTSOptions](mmir_lib.ttsoptions.md), `successCallback?`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallback?`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onInit?`: [TTSOnReady](../modules/mmir_lib.md#ttsonready), ...`args`: any[]): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`options` | string &#124; string[] &#124; [TTSOptions](mmir_lib.ttsoptions.md) |
-`successCallback?` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
-`failureCallback?` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
-`onInit?` | [TTSOnReady](../modules/mmir_lib.md#ttsonready) |
-`...args` | any[] |
-
-___
-
-###  waitReadyImpl
-
-• **waitReadyImpl**: *[IWaitReadyImpl](mmir_lib.iwaitreadyimpl.md)*
+•  **waitReadyImpl**: [IWaitReadyImpl](mmir_lib.iwaitreadyimpl.md)

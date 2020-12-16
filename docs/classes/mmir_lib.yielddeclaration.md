@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [YieldDeclaration](mmir_lib.yielddeclaration.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / YieldDeclaration
 
 # Class: YieldDeclaration
 
@@ -24,66 +26,66 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new YieldDeclaration**(`parsingElement`: [ParsingResult](mmir_lib.parsingresult.md), `contentAreaType`: any): *[YieldDeclaration](mmir_lib.yielddeclaration.md)*
+\+ **new YieldDeclaration**(`parsingElement`: [ParsingResult](mmir_lib.parsingresult.md), `contentAreaType`: any): [YieldDeclaration](mmir_lib.yielddeclaration.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `parsingElement` | [ParsingResult](mmir_lib.parsingresult.md) |
 `contentAreaType` | any |
 
-**Returns:** *[YieldDeclaration](mmir_lib.yielddeclaration.md)*
+**Returns:** [YieldDeclaration](mmir_lib.yielddeclaration.md)
 
 ## Methods
 
-###  getAreaType
+### getAreaType
 
-▸ **getAreaType**(): *number*
+▸ **getAreaType**(): number
 
-**Returns:** *number*
-
-___
-
-###  getEnd
-
-▸ **getEnd**(): *number*
-
-**Returns:** *number*
+**Returns:** number
 
 ___
 
-###  getName
+### getEnd
 
-▸ **getName**(): *string*
+▸ **getEnd**(): number
 
-**Returns:** *string*
-
-___
-
-###  getNameType
-
-▸ **getNameType**(): *number*
-
-**Returns:** *number*
+**Returns:** number
 
 ___
 
-###  getStart
+### getName
 
-▸ **getStart**(): *number*
+▸ **getName**(): string
 
-**Returns:** *number*
+**Returns:** string
 
 ___
 
-###  getValue
+### getNameType
 
-▸ **getValue**(`rawPropertyValue`: any, `proptertyType`: any, `data`: any): *any*
+▸ **getNameType**(): number
 
-**Parameters:**
+**Returns:** number
+
+___
+
+### getStart
+
+▸ **getStart**(): number
+
+**Returns:** number
+
+___
+
+### getValue
+
+▸ **getValue**(`rawPropertyValue`: any, `proptertyType`: any, `data`: any): any
+
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -91,12 +93,18 @@ Name | Type |
 `proptertyType` | any |
 `data` | any |
 
-**Returns:** *any*
+**Returns:** any
 
 ___
 
-###  stringify
+### stringify
 
-▸ **stringify**(): *string*
+▸ **stringify**(`disableStrictMode?`: boolean): string
 
-**Returns:** *string*
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`disableStrictMode?` | boolean |
+
+**Returns:** string

@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [RequireJs](mmir_lib.requirejs.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / RequireJs
 
 # Interface: RequireJs
 
@@ -19,7 +21,6 @@
 * [defined](mmir_lib.requirejs.md#defined)
 * [isBrowser](mmir_lib.requirejs.md#isbrowser)
 * [length](mmir_lib.requirejs.md#length)
-* [name](mmir_lib.requirejs.md#name)
 * [prototype](mmir_lib.requirejs.md#prototype)
 * [specified](mmir_lib.requirejs.md#specified)
 * [toUrl](mmir_lib.requirejs.md#tourl)
@@ -27,7 +28,6 @@
 
 ### Methods
 
-* [[Symbol.hasInstance]](mmir_lib.requirejs.md#[symbol.hasinstance])
 * [apply](mmir_lib.requirejs.md#apply)
 * [bind](mmir_lib.requirejs.md#bind)
 * [call](mmir_lib.requirejs.md#call)
@@ -35,171 +35,89 @@
 
 ## Properties
 
-###  Function
+### Function
 
-• **Function**: *FunctionConstructor*
+•  **Function**: FunctionConstructor
 
 ___
 
-###  arguments
+### arguments
 
-• **arguments**: *any*
+•  **arguments**: any
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[arguments](mmir_lib.requirejs.md#arguments)*
 
 ___
 
-###  caller
+### caller
 
-• **caller**: *[Function](mmir_lib.requirejs.md#function)*
+•  **caller**: [Function](mmir_lib.requirejs.md#function)
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[caller](mmir_lib.requirejs.md#caller)*
 
 ___
 
-###  config
+### config
 
-• **config**: *function*
-
-#### Type declaration:
-
-▸ (`configuration`: any): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`configuration` | any |
+•  **config**: (configuration: any) => void
 
 ___
 
-###  defined
+### defined
 
-• **defined**: *function*
-
-#### Type declaration:
-
-▸ (`id`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | any |
+•  **defined**: (id: any) => any
 
 ___
 
-###  isBrowser
+### isBrowser
 
-• **isBrowser**: *boolean*
+•  **isBrowser**: boolean
 
 ___
 
-###  length
+### length
 
-• **length**: *number*
+• `Readonly` **length**: number
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[length](mmir_lib.requirejs.md#length)*
 
 ___
 
-###  name
+### prototype
 
-• **name**: *string*
-
-*Inherited from [RequireJs](mmir_lib.requirejs.md).[name](mmir_lib.requirejs.md#name)*
-
-Returns the name of the function. Function names are read-only and can not be changed.
-
-___
-
-###  prototype
-
-• **prototype**: *any*
+•  **prototype**: any
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[prototype](mmir_lib.requirejs.md#prototype)*
 
 ___
 
-###  specified
+### specified
 
-• **specified**: *function*
-
-#### Type declaration:
-
-▸ (`id`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | any |
+•  **specified**: (id: any) => any
 
 ___
 
-###  toUrl
+### toUrl
 
-• **toUrl**: *function*
-
-#### Type declaration:
-
-▸ (`moduleNamePlusExt`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`moduleNamePlusExt` | any |
+•  **toUrl**: (moduleNamePlusExt: any) => any
 
 ___
 
-###  undef
+### undef
 
-• **undef**: *function*
-
-#### Type declaration:
-
-▸ (`id`: any): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`id` | any |
+•  **undef**: (id: any) => void
 
 ## Methods
 
-###  [Symbol.hasInstance]
+### apply
 
-▸ **[Symbol.hasInstance]**(`value`: any): *boolean*
-
-*Inherited from [RequireJs](mmir_lib.requirejs.md).[[Symbol.hasInstance]](mmir_lib.requirejs.md#[symbol.hasinstance])*
-
-Determines whether the given value inherits from this function if this function was used
-as a constructor function.
-
-A constructor function can control which objects are recognized as its instances by
-'instanceof' by overriding this method.
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`value` | any |
-
-**Returns:** *boolean*
-
-___
-
-###  apply
-
-▸ **apply**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, `argArray?`: any): *any*
+▸ **apply**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, `argArray?`: any): any
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[apply](mmir_lib.requirejs.md#apply)*
 
 Calls the function, substituting the specified object for the this value of the function, and the specified array for the arguments of the function.
 
-**Parameters:**
+#### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -207,20 +125,20 @@ Name | Type | Description |
 `thisArg` | any | The object to be used as the this object. |
 `argArray?` | any | A set of arguments to be passed to the function.  |
 
-**Returns:** *any*
+**Returns:** any
 
 ___
 
-###  bind
+### bind
 
-▸ **bind**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, ...`argArray`: any[]): *any*
+▸ **bind**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, ...`argArray`: any[]): any
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[bind](mmir_lib.requirejs.md#bind)*
 
 For a given function, creates a bound function that has the same body as the original function.
 The this object of the bound function is associated with the specified object, and has the specified initial parameters.
 
-**Parameters:**
+#### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -228,19 +146,19 @@ Name | Type | Description |
 `thisArg` | any | An object to which the this keyword can refer inside the new function. |
 `...argArray` | any[] | A list of arguments to be passed to the new function.  |
 
-**Returns:** *any*
+**Returns:** any
 
 ___
 
-###  call
+### call
 
-▸ **call**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, ...`argArray`: any[]): *any*
+▸ **call**(`this`: [Function](mmir_lib.requirejs.md#function), `thisArg`: any, ...`argArray`: any[]): any
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[call](mmir_lib.requirejs.md#call)*
 
 Calls a method of an object, substituting another object for the current object.
 
-**Parameters:**
+#### Parameters:
 
 Name | Type | Description |
 ------ | ------ | ------ |
@@ -248,16 +166,16 @@ Name | Type | Description |
 `thisArg` | any | The object to be used as the current object. |
 `...argArray` | any[] | A list of arguments to be passed to the method.  |
 
-**Returns:** *any*
+**Returns:** any
 
 ___
 
-###  toString
+### toString
 
-▸ **toString**(): *string*
+▸ **toString**(): string
 
 *Inherited from [RequireJs](mmir_lib.requirejs.md).[toString](mmir_lib.requirejs.md#tostring)*
 
 Returns a string representation of a function.
 
-**Returns:** *string*
+**Returns:** string

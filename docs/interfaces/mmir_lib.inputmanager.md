@@ -1,30 +1,43 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [InputManager](mmir_lib.inputmanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / InputManager
 
 # Interface: InputManager
 
 ## Hierarchy
 
-* **InputManager**
+* [StateManager](mmir_lib.statemanager.md)
+
+  ↳ **InputManager**
 
 ## Index
 
 ### Properties
 
+* [\_init](mmir_lib.inputmanager.md#_init)
+* [\_log](mmir_lib.inputmanager.md#_log)
 * [raise](mmir_lib.inputmanager.md#raise)
 
 ## Properties
 
-###  raise
+### \_init
 
-• **raise**: *function*
+•  **\_init**: (moduleId: string, config: [StateManagerConfig](mmir_lib.statemanagerconfig.md), isRegisterEngine?: boolean) => Promise<{ engine: any ; manager: [StateManager](mmir_lib.statemanager.md)  }\>
 
-#### Type declaration:
+*Inherited from [StateManager](mmir_lib.statemanager.md).[_init](mmir_lib.statemanager.md#_init)*
 
-▸ (`eventName`: string, `data?`: any): *void*
+___
 
-**Parameters:**
+### \_log
 
-Name | Type |
------- | ------ |
-`eventName` | string |
-`data?` | any |
+•  **\_log**: [Logger](mmir_lib.logger.md)
+
+*Inherited from [StateManager](mmir_lib.statemanager.md).[_log](mmir_lib.statemanager.md#_log)*
+
+___
+
+### raise
+
+•  **raise**: (eventName: string, data?: any) => void
+
+*Inherited from [StateManager](mmir_lib.statemanager.md).[raise](mmir_lib.statemanager.md#raise)*

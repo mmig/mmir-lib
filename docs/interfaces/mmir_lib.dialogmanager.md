@@ -1,32 +1,45 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [DialogManager](mmir_lib.dialogmanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / DialogManager
 
 # Interface: DialogManager
 
 ## Hierarchy
 
-* **DialogManager**
+* [StateManager](mmir_lib.statemanager.md)
 
-  ↳ [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md)
+  ↳ **DialogManager**
+
+  ↳↳ [DialogManager4Compatibility](mmir_lib.dialogmanager4compatibility.md)
 
 ## Index
 
 ### Properties
 
+* [\_init](mmir_lib.dialogmanager.md#_init)
+* [\_log](mmir_lib.dialogmanager.md#_log)
 * [raise](mmir_lib.dialogmanager.md#raise)
 
 ## Properties
 
-###  raise
+### \_init
 
-• **raise**: *function*
+•  **\_init**: (moduleId: string, config: [StateManagerConfig](mmir_lib.statemanagerconfig.md), isRegisterEngine?: boolean) => Promise<{ engine: any ; manager: [StateManager](mmir_lib.statemanager.md)  }\>
 
-#### Type declaration:
+*Inherited from [StateManager](mmir_lib.statemanager.md).[_init](mmir_lib.statemanager.md#_init)*
 
-▸ (`eventName`: string, `data?`: any): *void*
+___
 
-**Parameters:**
+### \_log
 
-Name | Type |
------- | ------ |
-`eventName` | string |
-`data?` | any |
+•  **\_log**: [Logger](mmir_lib.logger.md)
+
+*Inherited from [StateManager](mmir_lib.statemanager.md).[_log](mmir_lib.statemanager.md#_log)*
+
+___
+
+### raise
+
+•  **raise**: (eventName: string, data?: any) => void
+
+*Inherited from [StateManager](mmir_lib.statemanager.md).[raise](mmir_lib.statemanager.md#raise)*

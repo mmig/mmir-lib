@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Grammar](mmir_lib.grammar.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Grammar
 
 # Interface: Grammar
 
@@ -12,61 +14,49 @@ interface definition for JSON grammar
 
 ### Properties
 
-* [example_phrase](mmir_lib.grammar.md#optional-example_phrase)
-* [example_phrases](mmir_lib.grammar.md#optional-example_phrases)
-* [stop_word](mmir_lib.grammar.md#stop_word)
+* [example\_phrase](mmir_lib.grammar.md#example_phrase)
+* [example\_phrases](mmir_lib.grammar.md#example_phrases)
+* [stop\_word](mmir_lib.grammar.md#stop_word)
 * [stopwords](mmir_lib.grammar.md#stopwords)
 * [tokens](mmir_lib.grammar.md#tokens)
 * [utterances](mmir_lib.grammar.md#utterances)
 
 ## Properties
 
-### `Optional` example_phrase
+### example\_phrase
 
-• **example_phrase**? : *string*
+• `Optional` **example\_phrase**: string
 
-**`deprecated`** use field [example_phrases](mmir_lib.grammar.md#optional-example_phrases) instead
-
-___
-
-### `Optional` example_phrases
-
-• **example_phrases**? : *string | Array‹string›*
+**`deprecated`** use field [example_phrases](mmir_lib.grammar.md#example_phrases) instead
 
 ___
 
-###  stop_word
+### example\_phrases
 
-• **stop_word**: *Array‹string›*
+• `Optional` **example\_phrases**: string \| string[]
+
+___
+
+### stop\_word
+
+• `Optional` **stop\_word**: string[]
 
 **`deprecated`** use field [stopwords](mmir_lib.grammar.md#stopwords) instead
 
 ___
 
-###  stopwords
+### stopwords
 
-• **stopwords**: *Array‹string›*
-
-___
-
-###  tokens
-
-• **tokens**: *object*
-
-#### Type declaration:
-
-* \[ **id**: *string*\]: Array‹string›
+•  **stopwords**: string[]
 
 ___
 
-###  utterances
+### tokens
 
-• **utterances**: *object*
+•  **tokens**: { [id:string]: string[];  }
 
-#### Type declaration:
+___
 
-* \[ **id**: *string*\]: object
+### utterances
 
-* **phrases**: *Array‹string›*
-
-* **semantic**: *any*
+•  **utterances**: { [id:string]: { phrases: string[] ; semantic: any  };  }

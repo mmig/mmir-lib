@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MicLevelsAnalysis](mmir_lib.miclevelsanalysis.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MicLevelsAnalysis
 
 # Interface: MicLevelsAnalysis
 
@@ -17,58 +19,24 @@
 
 ## Properties
 
-###  active
+### active
 
-• **active**: *function*
-
-#### Type declaration:
-
-▸ (`active`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`active` | any |
+•  **active**: (active: any) => any
 
 ___
 
-###  enabled
+### enabled
 
-• **enabled**: *function*
-
-#### Type declaration:
-
-▸ (`enable`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`enable` | any |
+•  **enabled**: (enable: any) => any
 
 ___
 
-###  start
+### start
 
-• **start**: *function*
-
-#### Type declaration:
-
-▸ (`audioInputData`: any): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`audioInputData` | any |
+•  **start**: (audioInputData: any) => void
 
 ___
 
-###  stop
+### stop
 
-• **stop**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **stop**: () => void

@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [RenderEngine](mmir_lib.renderengine.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / RenderEngine
 
 # Interface: RenderEngine
 
@@ -18,27 +20,27 @@
 
 ## Methods
 
-###  hideCurrentDialog
+### hideCurrentDialog
 
-▸ **hideCurrentDialog**(): *void*
+▸ **hideCurrentDialog**(): void
 
-**Returns:** *void*
-
-___
-
-###  hideWaitDialog
-
-▸ **hideWaitDialog**(): *void*
-
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  render
+### hideWaitDialog
 
-▸ **render**(`ctrlName`: string, `viewName`: string, `view`: [View](../classes/mmir_lib.view.md), `ctrl`: [Controller](../classes/mmir_lib.controller.md), `data?`: any): *void*
+▸ **hideWaitDialog**(): void
 
-**Parameters:**
+**Returns:** void
+
+___
+
+### render
+
+▸ **render**(`ctrlName`: string, `viewName`: string, `view`: [View](../classes/mmir_lib.view.md), `ctrl`: [Controller](../classes/mmir_lib.controller.md), `data?`: any): void
+
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -48,15 +50,15 @@ Name | Type |
 `ctrl` | [Controller](../classes/mmir_lib.controller.md) |
 `data?` | any |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  showDialog
+### showDialog
 
-▸ **showDialog**(`ctrlName`: string, `dialogId?`: string, `data?`: any): *void*
+▸ **showDialog**(`ctrlName`: string, `dialogId?`: string, `data?`: any): void
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -64,19 +66,19 @@ Name | Type |
 `dialogId?` | string |
 `data?` | any |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  showWaitDialog
+### showWaitDialog
 
-▸ **showWaitDialog**(`text?`: string, `theme?`: string): *void*
+▸ **showWaitDialog**(`text?`: string, `theme?`: string): void
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `text?` | string |
 `theme?` | string |
 
-**Returns:** *void*
+**Returns:** void

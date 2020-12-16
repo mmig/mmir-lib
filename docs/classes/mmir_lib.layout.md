@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Layout](mmir_lib.layout.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Layout
 
 # Class: Layout
 
@@ -23,11 +25,11 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new Layout**(`name`: string, `definition`: string, `remote?`: boolean, `ignoreMissingBody?`: boolean): *[Layout](mmir_lib.layout.md)*
+\+ **new Layout**(`name`: string, `definition`: string, `remote?`: boolean, `ignoreMissingBody?`: boolean): [Layout](mmir_lib.layout.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -36,52 +38,58 @@ Name | Type |
 `remote?` | boolean |
 `ignoreMissingBody?` | boolean |
 
-**Returns:** *[Layout](mmir_lib.layout.md)*
+**Returns:** [Layout](mmir_lib.layout.md)
 
 ## Methods
 
-###  getBodyContents
+### getBodyContents
 
-▸ **getBodyContents**(): *string*
+▸ **getBodyContents**(): string
 
-**Returns:** *string*
-
-___
-
-###  getDialogsContents
-
-▸ **getDialogsContents**(): *string*
-
-**Returns:** *string*
+**Returns:** string
 
 ___
 
-###  getHeaderContents
+### getDialogsContents
 
-▸ **getHeaderContents**(): *string*
+▸ **getDialogsContents**(): string
 
-**Returns:** *string*
-
-___
-
-###  getName
-
-▸ **getName**(): *string*
-
-**Returns:** *string*
+**Returns:** string
 
 ___
 
-###  getYields
+### getHeaderContents
 
-▸ **getYields**(): *Array‹[YieldDeclaration](mmir_lib.yielddeclaration.md)›*
+▸ **getHeaderContents**(): string
 
-**Returns:** *Array‹[YieldDeclaration](mmir_lib.yielddeclaration.md)›*
+**Returns:** string
 
 ___
 
-###  stringify
+### getName
 
-▸ **stringify**(): *string*
+▸ **getName**(): string
 
-**Returns:** *string*
+**Returns:** string
+
+___
+
+### getYields
+
+▸ **getYields**(): [YieldDeclaration](mmir_lib.yielddeclaration.md)[]
+
+**Returns:** [YieldDeclaration](mmir_lib.yielddeclaration.md)[]
+
+___
+
+### stringify
+
+▸ **stringify**(`disableStrictMode?`: boolean): string
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`disableStrictMode?` | boolean |
+
+**Returns:** string

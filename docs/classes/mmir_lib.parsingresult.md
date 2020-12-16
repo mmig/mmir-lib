@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ParsingResult](mmir_lib.parsingresult.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ParsingResult
 
 # Class: ParsingResult
 
@@ -46,81 +48,81 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new ParsingResult**(`thetokens`: any): *[ParsingResult](mmir_lib.parsingresult.md)*
+\+ **new ParsingResult**(`thetokens`: any): [ParsingResult](mmir_lib.parsingresult.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `thetokens` | any |
 
-**Returns:** *[ParsingResult](mmir_lib.parsingresult.md)*
+**Returns:** [ParsingResult](mmir_lib.parsingresult.md)
 
 ## Methods
 
-###  getCallDataEnd
+### getCallDataEnd
 
-▸ **getCallDataEnd**(): *number*
+▸ **getCallDataEnd**(): number
 
-**Returns:** *number*
-
-___
-
-###  getCallDataStart
-
-▸ **getCallDataStart**(): *number*
-
-**Returns:** *number*
+**Returns:** number
 
 ___
 
-###  getCallDataType
+### getCallDataStart
 
-▸ **getCallDataType**(): *string*
+▸ **getCallDataStart**(): number
 
-**Returns:** *string*
-
-___
-
-###  getEnd
-
-▸ **getEnd**(): *number*
-
-**Returns:** *number*
+**Returns:** number
 
 ___
 
-###  getStart
+### getCallDataType
 
-▸ **getStart**(): *number*
+▸ **getCallDataType**(): string
 
-**Returns:** *number*
-
-___
-
-###  getType
-
-▸ **getType**(): *number*
-
-**Returns:** *number*
+**Returns:** string
 
 ___
 
-###  getTypeName
+### getEnd
 
-▸ **getTypeName**(): *string*
+▸ **getEnd**(): number
 
-**Returns:** *string*
+**Returns:** number
 
 ___
 
-###  getValue
+### getStart
 
-▸ **getValue**(`rawPropertyValue`: any, `proptertyType`: any, `data`: any): *any*
+▸ **getStart**(): number
 
-**Parameters:**
+**Returns:** number
+
+___
+
+### getType
+
+▸ **getType**(): number
+
+**Returns:** number
+
+___
+
+### getTypeName
+
+▸ **getTypeName**(): string
+
+**Returns:** string
+
+___
+
+### getValue
+
+▸ **getValue**(`rawPropertyValue`: any, `proptertyType`: any, `data`: any): any
+
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -128,184 +130,190 @@ Name | Type |
 `proptertyType` | any |
 `data` | any |
 
-**Returns:** *any*
+**Returns:** any
 
 ___
 
-###  hasCallData
+### hasCallData
 
-▸ **hasCallData**(): *boolean*
+▸ **hasCallData**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  hasElse
-
-▸ **hasElse**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  hasVarReferences
+### hasElse
 
-▸ **hasVarReferences**(): *boolean*
+▸ **hasElse**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isElse
-
-▸ **isElse**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isEscape
+### hasVarReferences
 
-▸ **isEscape**(): *boolean*
+▸ **hasVarReferences**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isEscapeEnter
-
-▸ **isEscapeEnter**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isEscapeExit
+### isElse
 
-▸ **isEscapeExit**(): *boolean*
+▸ **isElse**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isFor
-
-▸ **isFor**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isHelper
+### isEscape
 
-▸ **isHelper**(): *boolean*
+▸ **isEscape**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isIf
-
-▸ **isIf**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isLocalize
+### isEscapeEnter
 
-▸ **isLocalize**(): *boolean*
+▸ **isEscapeEnter**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isRender
-
-▸ **isRender**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isScriptBlock
+### isEscapeExit
 
-▸ **isScriptBlock**(): *boolean*
+▸ **isEscapeExit**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isScriptStatement
-
-▸ **isScriptStatement**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isScriptTag
+### isFor
 
-▸ **isScriptTag**(): *boolean*
+▸ **isFor**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isStyleTag
-
-▸ **isStyleTag**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  isYield
+### isHelper
 
-▸ **isYield**(): *boolean*
+▸ **isHelper**(): boolean
 
-**Returns:** *boolean*
-
-___
-
-###  isYieldContent
-
-▸ **isYieldContent**(): *boolean*
-
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  setEndFrom
+### isIf
 
-▸ **setEndFrom**(`thetokens`: any): *void*
+▸ **isIf**(): boolean
 
-**Parameters:**
+**Returns:** boolean
+
+___
+
+### isLocalize
+
+▸ **isLocalize**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isRender
+
+▸ **isRender**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isScriptBlock
+
+▸ **isScriptBlock**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isScriptStatement
+
+▸ **isScriptStatement**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isScriptTag
+
+▸ **isScriptTag**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isStyleTag
+
+▸ **isStyleTag**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isYield
+
+▸ **isYield**(): boolean
+
+**Returns:** boolean
+
+___
+
+### isYieldContent
+
+▸ **isYieldContent**(): boolean
+
+**Returns:** boolean
+
+___
+
+### setEndFrom
+
+▸ **setEndFrom**(`thetokens`: any): void
+
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `thetokens` | any |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  setStartFrom
+### setStartFrom
 
-▸ **setStartFrom**(`thetokens`: any): *void*
+▸ **setStartFrom**(`thetokens`: any): void
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `thetokens` | any |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  stringify
+### stringify
 
-▸ **stringify**(): *string*
+▸ **stringify**(`disableStrictMode?`: boolean): string
 
-**Returns:** *string*
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`disableStrictMode?` | boolean |
+
+**Returns:** string

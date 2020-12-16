@@ -1,6 +1,8 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](mmir_lib.md)
+**[mmir-lib 6.2.0](../README.md)**
 
-# External module: mmir-lib
+> [Globals](../README.md) / mmir-lib
+
+# Module: mmir-lib
 
 the `mmir-lib` package provides the mmir core library
 for lightweight, client-centric, multimodal interaction development.
@@ -30,6 +32,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 ### Interfaces
 
 * [ASROptions](../interfaces/mmir_lib.asroptions.md)
+* [ChecksumUtils](../interfaces/mmir_lib.checksumutils.md)
 * [CommonUtils](../interfaces/mmir_lib.commonutils.md)
 * [ConfigurationManager](../interfaces/mmir_lib.configurationmanager.md)
 * [ControllerManager](../interfaces/mmir_lib.controllermanager.md)
@@ -47,6 +50,9 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [InputManager](../interfaces/mmir_lib.inputmanager.md)
 * [LanguageManager](../interfaces/mmir_lib.languagemanager.md)
 * [LogLevelOptions](../interfaces/mmir_lib.logleveloptions.md)
+* [Logger](../interfaces/mmir_lib.logger.md)
+* [LoggerModule](../interfaces/mmir_lib.loggermodule.md)
+* [LoggerModuleConfig](../interfaces/mmir_lib.loggermoduleconfig.md)
 * [MediaManager](../interfaces/mmir_lib.mediamanager.md)
 * [MediaManagerPluginEntry](../interfaces/mmir_lib.mediamanagerpluginentry.md)
 * [MicLevelsAnalysis](../interfaces/mmir_lib.miclevelsanalysis.md)
@@ -71,6 +77,9 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [SimpleSpeechConfig](../interfaces/mmir_lib.simplespeechconfig.md)
 * [SpeechConfig](../interfaces/mmir_lib.speechconfig.md)
 * [SpeechConfigPluginEntry](../interfaces/mmir_lib.speechconfigpluginentry.md)
+* [StateEngine](../interfaces/mmir_lib.stateengine.md)
+* [StateManager](../interfaces/mmir_lib.statemanager.md)
+* [StateManagerConfig](../interfaces/mmir_lib.statemanagerconfig.md)
 * [TTSOptions](../interfaces/mmir_lib.ttsoptions.md)
 * [VoiceDetails](../interfaces/mmir_lib.voicedetails.md)
 * [VoiceListOptions](../interfaces/mmir_lib.voicelistoptions.md)
@@ -81,8 +90,10 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [ASROnError](mmir_lib.md#asronerror)
 * [ASROnStatus](mmir_lib.md#asronstatus)
 * [ASRStatus](mmir_lib.md#asrstatus)
+* [ChecksumInfo](mmir_lib.md#checksuminfo)
 * [Comparator](mmir_lib.md#comparator)
 * [ConfigurationChangeListener](mmir_lib.md#configurationchangelistener)
+* [CryptoImpl](mmir_lib.md#cryptoimpl)
 * [EOSPause](mmir_lib.md#eospause)
 * [EnvType](mmir_lib.md#envtype)
 * [FileInfo](mmir_lib.md#fileinfo)
@@ -104,32 +115,32 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 
 ### Variables
 
-* [_define](mmir_lib.md#const-_define)
-* [_mmirLibPath](mmir_lib.md#_mmirlibpath)
-* [conf](mmir_lib.md#const-conf)
-* [ctrl](mmir_lib.md#const-ctrl)
+* [\_define](mmir_lib.md#_define)
+* [\_mmirLibPath](mmir_lib.md#_mmirlibpath)
+* [conf](mmir_lib.md#conf)
+* [ctrl](mmir_lib.md#ctrl)
 * [debug](mmir_lib.md#debug)
-* [dialog](mmir_lib.md#const-dialog)
-* [dialogEngine](mmir_lib.md#const-dialogengine)
-* [input](mmir_lib.md#const-input)
-* [inputEngine](mmir_lib.md#const-inputengine)
+* [dialog](mmir_lib.md#dialog)
+* [dialogEngine](mmir_lib.md#dialogengine)
+* [input](mmir_lib.md#input)
+* [inputEngine](mmir_lib.md#inputengine)
 * [jquery](mmir_lib.md#jquery)
-* [lang](mmir_lib.md#const-lang)
+* [lang](mmir_lib.md#lang)
 * [libMode](mmir_lib.md#libmode)
 * [logLevel](mmir_lib.md#loglevel)
 * [logTrace](mmir_lib.md#logtrace)
-* [media](mmir_lib.md#const-media)
-* [mmirName](mmir_lib.md#const-mmirname)
-* [model](mmir_lib.md#const-model)
-* [notifier](mmir_lib.md#const-notifier)
-* [present](mmir_lib.md#const-present)
-* [require](mmir_lib.md#const-require)
-* [res](mmir_lib.md#const-res)
-* [semantic](mmir_lib.md#const-semantic)
+* [media](mmir_lib.md#media)
+* [mmirName](mmir_lib.md#mmirname)
+* [model](mmir_lib.md#model)
+* [notifier](mmir_lib.md#notifier)
+* [present](mmir_lib.md#present)
+* [require](mmir_lib.md#require)
+* [res](mmir_lib.md#res)
+* [semantic](mmir_lib.md#semantic)
 * [startModule](mmir_lib.md#startmodule)
 * [startModules](mmir_lib.md#startmodules)
-* [util](mmir_lib.md#const-util)
-* [version](mmir_lib.md#const-version)
+* [util](mmir_lib.md#util)
+* [version](mmir_lib.md#version)
 * [viewEngine](mmir_lib.md#viewengine)
 
 ### Functions
@@ -140,435 +151,383 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 
 ## Type aliases
 
-###  ASRMode
+### ASRMode
 
-Ƭ **ASRMode**: *"search" | "dictation"*
+Ƭ  **ASRMode**: \"search\" \| \"dictation\"
 
 ___
 
-###  ASROnError
+### ASROnError
 
-Ƭ **ASROnError**: *function*
+Ƭ  **ASROnError**: (error: string \| Error) => void
+
+___
+
+### ASROnStatus
+
+Ƭ  **ASROnStatus**: (text: string \| "", confidence: number \| undefined, status: [ASRStatus](mmir_lib.md#asrstatus), alternatives?: { result: string ; score: number  }[], unstable?: string) => void
+
+___
+
+### ASRStatus
+
+Ƭ  **ASRStatus**: \"FINAL\" \| \"INTERIM\" \| \"INTERMEDIATE\" \| \"RECORDING\_BEGIN\" \| \"RECORDING\_DONE\"
+
+___
+
+### ChecksumInfo
+
+Ƭ  **ChecksumInfo**: { hash: string ; info?: string ; size: number  }
 
 #### Type declaration:
-
-▸ (`error`: string | Error): *void*
-
-**Parameters:**
 
 Name | Type |
 ------ | ------ |
-`error` | string &#124; Error |
+`hash` | string |
+`info?` | string |
+`size` | number |
 
 ___
 
-###  ASROnStatus
+### Comparator
 
-Ƭ **ASROnStatus**: *function*
+Ƭ  **Comparator**: \"\>=\" \| \"<=\" \| \"\>\" \| \"<\" \| \"!=\" \| \"!==\" \| \"=\" \| \"==\" \| \"===\"
+
+___
+
+### ConfigurationChangeListener
+
+Ƭ  **ConfigurationChangeListener**: (newValue: any, oldValue?: any, propertyName?: string) => void
+
+___
+
+### CryptoImpl
+
+Ƭ  **CryptoImpl**: { MD5: (str: string) => string  }
 
 #### Type declaration:
-
-▸ (`text`: string | "", `confidence`: number | undefined, `status`: [ASRStatus](mmir_lib.md#asrstatus), `alternatives?`: Array‹object›, `unstable?`: string): *void*
-
-**Parameters:**
 
 Name | Type |
 ------ | ------ |
-`text` | string &#124; "" |
-`confidence` | number &#124; undefined |
-`status` | [ASRStatus](mmir_lib.md#asrstatus) |
-`alternatives?` | Array‹object› |
-`unstable?` | string |
+`MD5` | (str: string) => string |
 
 ___
 
-###  ASRStatus
+### EOSPause
 
-Ƭ **ASRStatus**: *"FINAL" | "INTERIM" | "INTERMEDIATE" | "RECORDING_BEGIN" | "RECORDING_DONE"*
-
-___
-
-###  Comparator
-
-Ƭ **Comparator**: *">=" | "<=" | ">" | "<" | "!=" | "!==" | "=" | "==" | "==="*
+Ƭ  **EOSPause**: \"short\" \| \"long\"
 
 ___
 
-###  ConfigurationChangeListener
+### EnvType
 
-Ƭ **ConfigurationChangeListener**: *function*
+Ƭ  **EnvType**: [PlatfromType](mmir_lib.md#platfromtype) \| \"cordova\"
+
+___
+
+### FileInfo
+
+Ƭ  **FileInfo**: { genPath: string ; name: string ; path: string  }
 
 #### Type declaration:
-
-▸ (`newValue`: any, `oldValue?`: any, `propertyName?`: string): *void*
-
-**Parameters:**
 
 Name | Type |
 ------ | ------ |
-`newValue` | any |
-`oldValue?` | any |
-`propertyName?` | string |
+`genPath` | string |
+`name` | string |
+`path` | string |
 
 ___
 
-###  EOSPause
+### GrammarEngineType
 
-Ƭ **EOSPause**: *"short" | "long"*
-
-___
-
-###  EnvType
-
-Ƭ **EnvType**: *[PlatfromType](mmir_lib.md#platfromtype) | "cordova"*
+Ƭ  **GrammarEngineType**: \"jscc\" \| \"jison\" \| \"pegjs\"
 
 ___
 
-###  FileInfo
+### GrammarType
 
-Ƭ **FileInfo**: *object*
-
-#### Type declaration:
-
-* **genPath**: *string*
-
-* **name**: *string*
-
-* **path**: *string*
+Ƭ  **GrammarType**: \"source\" \| \"bin\"
 
 ___
 
-###  GrammarEngineType
+### LogLevel
 
-Ƭ **GrammarEngineType**: *"jscc" | "jison" | "pegjs"*
-
-___
-
-###  GrammarType
-
-Ƭ **GrammarType**: *"source" | "bin"*
+Ƭ  **LogLevel**: \"verbose\" \| \"debug\" \| \"info\" \| \"warn\" \| \"error\" \| \"critical\" \| \"disabled\"
 
 ___
 
-###  LogLevel
+### LogLevelNum
 
-Ƭ **LogLevel**: *"verbose" | "debug" | "info" | "warn" | "error" | "critical" | "disabled"*
-
-___
-
-###  LogLevelNum
-
-Ƭ **LogLevelNum**: *0 | 1 | 2 | 3 | 4 | 5 | 6*
+Ƭ  **LogLevelNum**: 0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6
 
 ___
 
-###  MediaEventHandler
+### MediaEventHandler
 
-Ƭ **MediaEventHandler**: *[Function](../interfaces/mmir_lib.requirejs.md#function)*
-
-___
-
-###  MediaEventType
-
-Ƭ **MediaEventType**: *string*
+Ƭ  **MediaEventHandler**: [Function](../interfaces/mmir_lib.requirejs.md#function)
 
 ___
 
-###  MediaPluginEnvType
+### MediaEventType
 
-Ƭ **MediaPluginEnvType**: *"browser" | "cordova" | "android" | "ios"*
-
-___
-
-###  MediaPluginType
-
-Ƭ **MediaPluginType**: *"audio" | "asr" | "tts" | "prep" | string*
+Ƭ  **MediaEventType**: string
 
 ___
 
-###  PlatfromType
+### MediaPluginEnvType
 
-Ƭ **PlatfromType**: *"browser" | "android" | "ios" | "node" | "electron"*
-
-___
-
-###  PluginType
-
-Ƭ **PluginType**: *"custom" | [MediaPluginType](mmir_lib.md#mediaplugintype) | string*
+Ƭ  **MediaPluginEnvType**: \"browser\" \| \"cordova\" \| \"android\" \| \"ios\"
 
 ___
 
-###  ProcessingFunction
+### MediaPluginType
 
-Ƭ **ProcessingFunction**: *function*
-
-#### Type declaration:
-
-▸ (`input`: string | [Positions](../interfaces/mmir_lib.positions.md), `isProcessPositions?`: boolean): *string | [Positions](../interfaces/mmir_lib.positions.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`input` | string &#124; [Positions](../interfaces/mmir_lib.positions.md) |
-`isProcessPositions?` | boolean |
+Ƭ  **MediaPluginType**: \"audio\" \| \"asr\" \| \"tts\" \| \"prep\" \| string
 
 ___
 
-###  ProcessingPositionsInfo
+### PlatfromType
 
-Ƭ **ProcessingPositionsInfo**: *[ProcessingOrderInfo](../interfaces/mmir_lib.processingorderinfo.md) & [PositionsInfo](../interfaces/mmir_lib.positionsinfo.md)*
-
-___
-
-###  TTSOnComplete
-
-Ƭ **TTSOnComplete**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+Ƭ  **PlatfromType**: \"browser\" \| \"android\" \| \"ios\" \| \"node\" \| \"electron\"
 
 ___
 
-###  TTSOnError
+### PluginType
 
-Ƭ **TTSOnError**: *function*
-
-#### Type declaration:
-
-▸ (`error`: string | Error): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`error` | string &#124; Error |
+Ƭ  **PluginType**: \"custom\" \| [MediaPluginType](mmir_lib.md#mediaplugintype) \| string
 
 ___
 
-###  TTSOnReady
+### ProcessingFunction
 
-Ƭ **TTSOnReady**: *function*
+Ƭ  **ProcessingFunction**: (input: string \| [Positions](../interfaces/mmir_lib.positions.md), isProcessPositions?: boolean) => string \| [Positions](../interfaces/mmir_lib.positions.md)
 
-#### Type declaration:
+___
 
-▸ (`isReady?`: Boolean, `audio?`: [IAudio](../interfaces/mmir_lib.iaudio.md)): *void*
+### ProcessingPositionsInfo
 
-**Parameters:**
+Ƭ  **ProcessingPositionsInfo**: [ProcessingOrderInfo](../interfaces/mmir_lib.processingorderinfo.md) & [PositionsInfo](../interfaces/mmir_lib.positionsinfo.md)
 
-Name | Type |
------- | ------ |
-`isReady?` | Boolean |
-`audio?` | [IAudio](../interfaces/mmir_lib.iaudio.md) |
+___
+
+### TTSOnComplete
+
+Ƭ  **TTSOnComplete**: () => void
+
+___
+
+### TTSOnError
+
+Ƭ  **TTSOnError**: (error: string \| Error) => void
+
+___
+
+### TTSOnReady
+
+Ƭ  **TTSOnReady**: (isReady?: Boolean, audio?: [IAudio](../interfaces/mmir_lib.iaudio.md)) => void
 
 ## Variables
 
-### `Const` _define
+### \_define
 
-• **_define**: *null | [RequireJsDefine](../interfaces/mmir_lib.requirejsdefine.md)*
-
-___
-
-###  _mmirLibPath
-
-• **_mmirLibPath**: *string*
+• `Const` **\_define**: null \| [RequireJsDefine](../interfaces/mmir_lib.requirejsdefine.md)
 
 ___
 
-### `Const` conf
+### \_mmirLibPath
 
-• **conf**: *[ConfigurationManager](../interfaces/mmir_lib.configurationmanager.md)*
-
-___
-
-### `Const` ctrl
-
-• **ctrl**: *[ControllerManager](../interfaces/mmir_lib.controllermanager.md)*
+•  **\_mmirLibPath**: string
 
 ___
 
-###  debug
+### conf
 
-• **debug**: *boolean*
-
-___
-
-### `Const` dialog
-
-• **dialog**: *[DialogManager](../interfaces/mmir_lib.dialogmanager.md)*
+• `Const` **conf**: [ConfigurationManager](../interfaces/mmir_lib.configurationmanager.md)
 
 ___
 
-### `Const` dialogEngine
+### ctrl
 
-• **dialogEngine**: *[DialogEngine](../interfaces/mmir_lib.dialogengine.md)*
-
-___
-
-### `Const` input
-
-• **input**: *[InputManager](../interfaces/mmir_lib.inputmanager.md)*
+• `Const` **ctrl**: [ControllerManager](../interfaces/mmir_lib.controllermanager.md)
 
 ___
 
-### `Const` inputEngine
+### debug
 
-• **inputEngine**: *[InputEngine](../interfaces/mmir_lib.inputengine.md)*
-
-___
-
-###  jquery
-
-• **jquery**: *undefined | any*
+•  **debug**: boolean
 
 ___
 
-### `Const` lang
+### dialog
 
-• **lang**: *[LanguageManager](../interfaces/mmir_lib.languagemanager.md)*
-
-___
-
-###  libMode
-
-• **libMode**: *undefined | "min"*
+• `Const` **dialog**: [DialogManager](../interfaces/mmir_lib.dialogmanager.md)
 
 ___
 
-###  logLevel
+### dialogEngine
 
-• **logLevel**: *[LogLevelNum](mmir_lib.md#loglevelnum) | [LogLevel](mmir_lib.md#loglevel) | [LogLevelOptions](../interfaces/mmir_lib.logleveloptions.md)*
-
-___
-
-###  logTrace
-
-• **logTrace**: *boolean | object*
+• `Const` **dialogEngine**: [DialogEngine](../interfaces/mmir_lib.dialogengine.md)
 
 ___
 
-### `Const` media
+### input
 
-• **media**: *[MediaManager](../interfaces/mmir_lib.mediamanager.md)*
-
-___
-
-### `Const` mmirName
-
-• **mmirName**: *"mmir" | string*
+• `Const` **input**: [InputManager](../interfaces/mmir_lib.inputmanager.md)
 
 ___
 
-### `Const` model
+### inputEngine
 
-• **model**: *[ModelManager](../interfaces/mmir_lib.modelmanager.md)*
-
-___
-
-### `Const` notifier
-
-• **notifier**: *[NotificationManager](../interfaces/mmir_lib.notificationmanager.md)*
+• `Const` **inputEngine**: [InputEngine](../interfaces/mmir_lib.inputengine.md)
 
 ___
 
-### `Const` present
+### jquery
 
-• **present**: *[PresentationManager](../interfaces/mmir_lib.presentationmanager.md)*
-
-___
-
-### `Const` require
-
-• **require**: *[RequireJs](../interfaces/mmir_lib.requirejs.md)*
+•  **jquery**: undefined \| any
 
 ___
 
-### `Const` res
+### lang
 
-• **res**: *[Resources](../interfaces/mmir_lib.resources.md)*
-
-___
-
-### `Const` semantic
-
-• **semantic**: *[SemanticInterpreter](../interfaces/mmir_lib.semanticinterpreter.md)*
+• `Const` **lang**: [LanguageManager](../interfaces/mmir_lib.languagemanager.md)
 
 ___
 
-###  startModule
+### libMode
 
-• **startModule**: *string*
-
-___
-
-###  startModules
-
-• **startModules**: *undefined | Array‹string›*
+•  **libMode**: undefined \| \"min\"
 
 ___
 
-### `Const` util
+### logLevel
 
-• **util**: *[CommonUtils](../interfaces/mmir_lib.commonutils.md)*
-
-___
-
-### `Const` version
-
-• **version**: *string*
+•  **logLevel**: [LogLevelNum](mmir_lib.md#loglevelnum) \| [LogLevel](mmir_lib.md#loglevel) \| [LogLevelOptions](../interfaces/mmir_lib.logleveloptions.md)
 
 ___
 
-###  viewEngine
+### logTrace
 
-• **viewEngine**: *string*
+•  **logTrace**: boolean \| { depth: \"full\" \| any ; trace: boolean  }
+
+___
+
+### media
+
+• `Const` **media**: [MediaManager](../interfaces/mmir_lib.mediamanager.md)
+
+___
+
+### mmirName
+
+• `Const` **mmirName**: \"mmir\" \| string
+
+___
+
+### model
+
+• `Const` **model**: [ModelManager](../interfaces/mmir_lib.modelmanager.md)
+
+___
+
+### notifier
+
+• `Const` **notifier**: [NotificationManager](../interfaces/mmir_lib.notificationmanager.md)
+
+___
+
+### present
+
+• `Const` **present**: [PresentationManager](../interfaces/mmir_lib.presentationmanager.md)
+
+___
+
+### require
+
+• `Const` **require**: [RequireJs](../interfaces/mmir_lib.requirejs.md)
+
+___
+
+### res
+
+• `Const` **res**: [Resources](../interfaces/mmir_lib.resources.md)
+
+___
+
+### semantic
+
+• `Const` **semantic**: [SemanticInterpreter](../interfaces/mmir_lib.semanticinterpreter.md)
+
+___
+
+### startModule
+
+•  **startModule**: string
+
+___
+
+### startModules
+
+•  **startModules**: undefined \| string[]
+
+___
+
+### util
+
+• `Const` **util**: [CommonUtils](../interfaces/mmir_lib.commonutils.md)
+
+___
+
+### version
+
+• `Const` **version**: string
+
+___
+
+### viewEngine
+
+•  **viewEngine**: string
 
 ## Functions
 
-###  config
+### config
 
-▸ **config**(`requirejsConfig`: object): *void*
+▸ **config**(`requirejsConfig`: {}): void
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`requirejsConfig` | object |
+`requirejsConfig` | {} |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  isVersion
+### isVersion
 
-▸ **isVersion**(`verion`: string, `comparator`: [Comparator](mmir_lib.md#comparator)): *boolean*
+▸ **isVersion**(`verion`: string, `comparator`: [Comparator](mmir_lib.md#comparator)): boolean
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `verion` | string |
 `comparator` | [Comparator](mmir_lib.md#comparator) |
 
-**Returns:** *boolean*
+**Returns:** boolean
 
 ___
 
-###  ready
+### ready
 
-▸ **ready**(`onFrameworkReady`: function): *any*
+▸ **ready**(`onFrameworkReady`: (...args: any[]) => any): any
 
-**Parameters:**
-
-▪ **onFrameworkReady**: *function*
-
-▸ (...`args`: any[]): *any*
-
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`...args` | any[] |
+`onFrameworkReady` | (...args: any[]) => any |
 
-**Returns:** *any*
+**Returns:** any

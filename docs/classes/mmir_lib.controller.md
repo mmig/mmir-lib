@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Controller](mmir_lib.controller.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Controller
 
 # Class: Controller
 
@@ -31,11 +33,11 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new Controller**(`name`: any, `jsonDef`: any, `instanceConstr`: [Function](../interfaces/mmir_lib.requirejs.md#function)): *[Controller](mmir_lib.controller.md)*
+\+ **new Controller**(`name`: any, `jsonDef`: any, `instanceConstr`: [Function](../interfaces/mmir_lib.requirejs.md#function)): [Controller](mmir_lib.controller.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -43,79 +45,79 @@ Name | Type |
 `jsonDef` | any |
 `instanceConstr` | [Function](../interfaces/mmir_lib.requirejs.md#function) |
 
-**Returns:** *[Controller](mmir_lib.controller.md)*
+**Returns:** [Controller](mmir_lib.controller.md)
 
 ## Methods
 
-###  getHelper
+### getHelper
 
-▸ **getHelper**(): *[Helper](mmir_lib.helper.md)*
+▸ **getHelper**(): [Helper](mmir_lib.helper.md)
 
-**Returns:** *[Helper](mmir_lib.helper.md)*
-
-___
-
-###  getLayout
-
-▸ **getLayout**(): *[FileInfo](../modules/mmir_lib.md#fileinfo)*
-
-**Returns:** *[FileInfo](../modules/mmir_lib.md#fileinfo)*
+**Returns:** [Helper](mmir_lib.helper.md)
 
 ___
 
-###  getLayoutName
+### getLayout
 
-▸ **getLayoutName**(): *string*
+▸ **getLayout**(): [FileInfo](../modules/mmir_lib.md#fileinfo)
 
-**Returns:** *string*
-
-___
-
-###  getName
-
-▸ **getName**(): *string*
-
-**Returns:** *string*
+**Returns:** [FileInfo](../modules/mmir_lib.md#fileinfo)
 
 ___
 
-###  getPartialNames
+### getLayoutName
 
-▸ **getPartialNames**(): *Array‹string›*
+▸ **getLayoutName**(): string
 
-**Returns:** *Array‹string›*
-
-___
-
-###  getPartials
-
-▸ **getPartials**(): *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
-
-**Returns:** *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
+**Returns:** string
 
 ___
 
-###  getViewNames
+### getName
 
-▸ **getViewNames**(): *Array‹string›*
+▸ **getName**(): string
 
-**Returns:** *Array‹string›*
-
-___
-
-###  getViews
-
-▸ **getViews**(): *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
-
-**Returns:** *Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›*
+**Returns:** string
 
 ___
 
-###  loadHelper
+### getPartialNames
 
-▸ **loadHelper**(`name`: string, `helperPath`: string, `ctx`: any): *void*
+▸ **getPartialNames**(): string[]
 
-**Parameters:**
+**Returns:** string[]
+
+___
+
+### getPartials
+
+▸ **getPartials**(): [FileInfo](../modules/mmir_lib.md#fileinfo)[]
+
+**Returns:** [FileInfo](../modules/mmir_lib.md#fileinfo)[]
+
+___
+
+### getViewNames
+
+▸ **getViewNames**(): string[]
+
+**Returns:** string[]
+
+___
+
+### getViews
+
+▸ **getViews**(): [FileInfo](../modules/mmir_lib.md#fileinfo)[]
+
+**Returns:** [FileInfo](../modules/mmir_lib.md#fileinfo)[]
+
+___
+
+### loadHelper
+
+▸ **loadHelper**(`name`: string, `helperPath`: string, `ctx`: any): void
+
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -123,59 +125,43 @@ Name | Type |
 `helperPath` | string |
 `ctx` | any |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  parsePartials
+### parsePartials
 
-▸ **parsePartials**(`partialDefs`: Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›): *void*
+▸ **parsePartials**(`partialDefs`: [FileInfo](../modules/mmir_lib.md#fileinfo)[]): void
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`partialDefs` | Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)› |
+`partialDefs` | [FileInfo](../modules/mmir_lib.md#fileinfo)[] |
 
-**Returns:** *void*
+**Returns:** void
 
 ___
 
-###  parseViews
+### parseViews
 
-▸ **parseViews**(`viewDefs`: Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)›): *void*
+▸ **parseViews**(`viewDefs`: [FileInfo](../modules/mmir_lib.md#fileinfo)[]): void
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`viewDefs` | Array‹[FileInfo](../modules/mmir_lib.md#fileinfo)› |
+`viewDefs` | [FileInfo](../modules/mmir_lib.md#fileinfo)[] |
 
-**Returns:** *void*
-
-___
-
-###  perform
-
-▸ **perform**(`actionName`: string, `data`: any, ...`args`: any[]): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`actionName` | string |
-`data` | any |
-`...args` | any[] |
-
-**Returns:** *any*
+**Returns:** void
 
 ___
 
-###  performHelper
+### perform
 
-▸ **performHelper**(`actionName`: string, `data`: any, ...`args`: any[]): *any*
+▸ **perform**(`actionName`: string, `data`: any, ...`args`: any[]): any
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -183,15 +169,15 @@ Name | Type |
 `data` | any |
 `...args` | any[] |
 
-**Returns:** *any*
+**Returns:** any
 
 ___
 
-###  performIfPresent
+### performHelper
 
-▸ **performIfPresent**(`actionName`: string, `data`: any, ...`args`: any[]): *any*
+▸ **performHelper**(`actionName`: string, `data`: any, ...`args`: any[]): any
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -199,4 +185,20 @@ Name | Type |
 `data` | any |
 `...args` | any[] |
 
-**Returns:** *any*
+**Returns:** any
+
+___
+
+### performIfPresent
+
+▸ **performIfPresent**(`actionName`: string, `data`: any, ...`args`: any[]): any
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`actionName` | string |
+`data` | any |
+`...args` | any[] |
+
+**Returns:** any

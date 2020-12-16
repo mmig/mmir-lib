@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [IAudio](mmir_lib.iaudio.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / IAudio
 
 # Interface: IAudio
 
@@ -10,12 +12,12 @@
 
 ### Properties
 
-* [_constructor](mmir_lib.iaudio.md#_constructor)
 * [disable](mmir_lib.iaudio.md#disable)
 * [enable](mmir_lib.iaudio.md#enable)
 * [getDuration](mmir_lib.iaudio.md#getduration)
 * [isEnabled](mmir_lib.iaudio.md#isenabled)
 * [isPaused](mmir_lib.iaudio.md#ispaused)
+* [new](mmir_lib.iaudio.md#new)
 * [play](mmir_lib.iaudio.md#play)
 * [release](mmir_lib.iaudio.md#release)
 * [setVolume](mmir_lib.iaudio.md#setvolume)
@@ -23,115 +25,60 @@
 
 ## Properties
 
-###  _constructor
+### disable
 
-• **_constructor**: *function*
-
-#### Type declaration:
-
-▸ (`url`: string, `onPlayedCallback`: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), `failureCallBack`: [TTSOnError](../modules/mmir_lib.md#ttsonerror), `onLoadedCallBack`: [TTSOnReady](../modules/mmir_lib.md#ttsonready)): *[IAudio](mmir_lib.iaudio.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`url` | string |
-`onPlayedCallback` | [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete) |
-`failureCallBack` | [TTSOnError](../modules/mmir_lib.md#ttsonerror) |
-`onLoadedCallBack` | [TTSOnReady](../modules/mmir_lib.md#ttsonready) |
+•  **disable**: () => void
 
 ___
 
-###  disable
+### enable
 
-• **disable**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **enable**: () => void
 
 ___
 
-###  enable
+### getDuration
 
-• **enable**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **getDuration**: () => number
 
 ___
 
-###  getDuration
+### isEnabled
 
-• **getDuration**: *function*
-
-#### Type declaration:
-
-▸ (): *number*
+•  **isEnabled**: () => boolean
 
 ___
 
-###  isEnabled
+### isPaused
 
-• **isEnabled**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **isPaused**: () => boolean
 
 ___
 
-###  isPaused
+### new
 
-• **isPaused**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **new**: (url: string, onPlayedCallback: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallBack: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onLoadedCallBack: [TTSOnReady](../modules/mmir_lib.md#ttsonready)) => [IAudio](mmir_lib.iaudio.md)
 
 ___
 
-###  play
+### play
 
-• **play**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **play**: () => void
 
 ___
 
-###  release
+### release
 
-• **release**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **release**: () => void
 
 ___
 
-###  setVolume
+### setVolume
 
-• **setVolume**: *function*
-
-#### Type declaration:
-
-▸ (`volume`: number): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`volume` | number |
+•  **setVolume**: (volume: number) => void
 
 ___
 
-###  stop
+### stop
 
-• **stop**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **stop**: () => void

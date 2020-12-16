@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [Partial](mmir_lib.partial.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Partial
 
 # Class: Partial
 
@@ -22,11 +24,11 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new Partial**(`ctrl`: [Controller](mmir_lib.controller.md), `name`: string, `definition`: string): *[Partial](mmir_lib.partial.md)*
+\+ **new Partial**(`ctrl`: [Controller](mmir_lib.controller.md), `name`: string, `definition`: string): [Partial](mmir_lib.partial.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
@@ -34,44 +36,50 @@ Name | Type |
 `name` | string |
 `definition` | string |
 
-**Returns:** *[Partial](mmir_lib.partial.md)*
+**Returns:** [Partial](mmir_lib.partial.md)
 
 ## Methods
 
-###  getContentElement
+### getContentElement
 
-▸ **getContentElement**(): *[ContentElement](mmir_lib.contentelement.md)*
+▸ **getContentElement**(): [ContentElement](mmir_lib.contentelement.md)
 
-**Returns:** *[ContentElement](mmir_lib.contentelement.md)*
-
-___
-
-###  getController
-
-▸ **getController**(): *[Controller](mmir_lib.controller.md)*
-
-**Returns:** *[Controller](mmir_lib.controller.md)*
+**Returns:** [ContentElement](mmir_lib.contentelement.md)
 
 ___
 
-###  getDefinition
+### getController
 
-▸ **getDefinition**(): *string*
+▸ **getController**(): [Controller](mmir_lib.controller.md)
 
-**Returns:** *string*
-
-___
-
-###  getName
-
-▸ **getName**(): *string*
-
-**Returns:** *string*
+**Returns:** [Controller](mmir_lib.controller.md)
 
 ___
 
-###  stringify
+### getDefinition
 
-▸ **stringify**(): *string*
+▸ **getDefinition**(): string
 
-**Returns:** *string*
+**Returns:** string
+
+___
+
+### getName
+
+▸ **getName**(): string
+
+**Returns:** string
+
+___
+
+### stringify
+
+▸ **stringify**(`disableStrictMode?`: boolean): string
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`disableStrictMode?` | boolean |
+
+**Returns:** string

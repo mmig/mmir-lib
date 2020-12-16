@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ModelManager](mmir_lib.modelmanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ModelManager
 
 # Interface: ModelManager
 
@@ -16,36 +18,18 @@
 
 ## Properties
 
-###  get
+### get
 
-• **get**: *function*
-
-#### Type declaration:
-
-▸ (`modelName`: string): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`modelName` | string |
+•  **get**: (modelName: string) => any
 
 ___
 
-###  getNames
+### getNames
 
-• **getNames**: *function*
-
-#### Type declaration:
-
-▸ (): *Array‹string›*
+•  **getNames**: () => string[]
 
 ___
 
-###  init
+### init
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **init**: () => any

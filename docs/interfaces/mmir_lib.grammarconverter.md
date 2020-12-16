@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [GrammarConverter](mmir_lib.grammarconverter.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / GrammarConverter
 
 # Interface: GrammarConverter
 
@@ -7,6 +9,10 @@
 * **GrammarConverter**
 
 ## Index
+
+### Constructors
+
+* [constructor](mmir_lib.grammarconverter.md#constructor)
 
 ### Properties
 
@@ -20,10 +26,10 @@
 * [getStopWords](mmir_lib.grammarconverter.md#getstopwords)
 * [getStopWordsEncRegExpr](mmir_lib.grammarconverter.md#getstopwordsencregexpr)
 * [getStopWordsRegExpr](mmir_lib.grammarconverter.md#getstopwordsregexpr)
-* [grammar_definition](mmir_lib.grammarconverter.md#grammar_definition)
+* [grammar\_definition](mmir_lib.grammarconverter.md#grammar_definition)
 * [isAsyncExec](mmir_lib.grammarconverter.md#isasyncexec)
-* [js_grammar_definition](mmir_lib.grammarconverter.md#js_grammar_definition)
-* [json_grammar_definition](mmir_lib.grammarconverter.md#json_grammar_definition)
+* [js\_grammar\_definition](mmir_lib.grammarconverter.md#js_grammar_definition)
+* [json\_grammar\_definition](mmir_lib.grammarconverter.md#json_grammar_definition)
 * [loadGrammar](mmir_lib.grammarconverter.md#loadgrammar)
 * [loadResource](mmir_lib.grammarconverter.md#loadresource)
 * [maskAsUnicode](mmir_lib.grammarconverter.md#maskasunicode)
@@ -41,489 +47,218 @@
 * [setGrammarFunction](mmir_lib.grammarconverter.md#setgrammarfunction)
 * [setGrammarSource](mmir_lib.grammarconverter.md#setgrammarsource)
 * [setStopWords](mmir_lib.grammarconverter.md#setstopwords)
-* [stop_words_regexp](mmir_lib.grammarconverter.md#stop_words_regexp)
+* [stop\_words\_regexp](mmir_lib.grammarconverter.md#stop_words_regexp)
 * [unmaskJSON](mmir_lib.grammarconverter.md#unmaskjson)
 * [unmaskString](mmir_lib.grammarconverter.md#unmaskstring)
 
+## Constructors
+
+### constructor
+
+\+ **new GrammarConverter**(): [GrammarConverter](mmir_lib.grammarconverter.md)
+
+**Returns:** [GrammarConverter](mmir_lib.grammarconverter.md)
+
 ## Properties
 
-###  addProc
+### addProc
 
-• **addProc**: *function*
-
-#### Type declaration:
-
-▸ (`proc`: [ProcessingStep](mmir_lib.processingstep.md), `indexOrIsPrepend?`: number | boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`proc` | [ProcessingStep](mmir_lib.processingstep.md) |
-`indexOrIsPrepend?` | number &#124; boolean |
+•  **addProc**: (proc: [ProcessingStep](mmir_lib.processingstep.md), indexOrIsPrepend?: number \| boolean) => void
 
 ___
 
-###  convertOldFormat
+### convertOldFormat
 
-• **convertOldFormat**: *boolean*
-
-___
-
-###  executeGrammar
-
-• **executeGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`text`: string, `callback?`: function): *void*
-
-**Parameters:**
-
-▪ **text**: *string*
-
-▪`Optional`  **callback**: *function*
-
-▸ (`semanticResult`: object): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`semanticResult` | object |
+•  **convertOldFormat**: boolean
 
 ___
 
-###  getEncodedStopwords
+### executeGrammar
 
-• **getEncodedStopwords**: *function*
-
-#### Type declaration:
-
-▸ (): *Array‹string›*
+•  **executeGrammar**: (text: string, callback?: (semanticResult: {}) => void) => void
 
 ___
 
-###  getGrammarDef
+### getEncodedStopwords
 
-• **getGrammarDef**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getEncodedStopwords**: () => string[]
 
 ___
 
-###  getGrammarSource
+### getGrammarDef
 
-• **getGrammarSource**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getGrammarDef**: () => string
 
 ___
 
-###  getProcIndex
+### getGrammarSource
 
-• **getProcIndex**: *function*
-
-#### Type declaration:
-
-▸ (`procName`: string, `startIndex?`: number): *number*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`procName` | string |
-`startIndex?` | number |
+•  **getGrammarSource**: () => string
 
 ___
 
-###  getStopWords
+### getProcIndex
 
-• **getStopWords**: *function*
-
-#### Type declaration:
-
-▸ (): *Array‹string›*
+•  **getProcIndex**: (procName: string, startIndex?: number) => number
 
 ___
 
-###  getStopWordsEncRegExpr
+### getStopWords
 
-• **getStopWordsEncRegExpr**: *function*
-
-#### Type declaration:
-
-▸ (): *RegExp*
+•  **getStopWords**: () => string[]
 
 ___
 
-###  getStopWordsRegExpr
+### getStopWordsEncRegExpr
 
-• **getStopWordsRegExpr**: *function*
-
-#### Type declaration:
-
-▸ (): *RegExp*
+•  **getStopWordsEncRegExpr**: () => RegExp
 
 ___
 
-###  grammar_definition
+### getStopWordsRegExpr
 
-• **grammar_definition**: *string*
-
-___
-
-###  isAsyncExec
-
-• **isAsyncExec**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **getStopWordsRegExpr**: () => RegExp
 
 ___
 
-###  js_grammar_definition
+### grammar\_definition
 
-• **js_grammar_definition**: *string*
-
-___
-
-###  json_grammar_definition
-
-• **json_grammar_definition**: *[Grammar](mmir_lib.grammar.md)*
+•  **grammar\_definition**: string
 
 ___
 
-###  loadGrammar
+### isAsyncExec
 
-• **loadGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`successCallback`: function, `errorCallback`: function, `grammarUrl`: string, `doLoadSynchronously?`: boolean): *void*
-
-**Parameters:**
-
-▪ **successCallback**: *function*
-
-▸ (): *any*
-
-▪ **errorCallback**: *function*
-
-▸ (): *any*
-
-▪ **grammarUrl**: *string*
-
-▪`Optional`  **doLoadSynchronously**: *boolean*
+•  **isAsyncExec**: () => boolean
 
 ___
 
-###  loadResource
+### js\_grammar\_definition
 
-• **loadResource**: *function*
-
-#### Type declaration:
-
-▸ (`successCallback`: function, `errorCallback`: function, `resourceUrl`: string, `doLoadSynchronously?`: boolean): *void*
-
-**Parameters:**
-
-▪ **successCallback**: *function*
-
-▸ (): *any*
-
-▪ **errorCallback**: *function*
-
-▸ (): *any*
-
-▪ **resourceUrl**: *string*
-
-▪`Optional`  **doLoadSynchronously**: *boolean*
+•  **js\_grammar\_definition**: string
 
 ___
 
-###  maskAsUnicode
+### json\_grammar\_definition
 
-• **maskAsUnicode**: *function*
-
-#### Type declaration:
-
-▸ (`str`: string, `computePositions?`: boolean): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`str` | string |
-`computePositions?` | boolean |
+•  **json\_grammar\_definition**: [Grammar](mmir_lib.grammar.md)
 
 ___
 
-###  maskNames
+### loadGrammar
 
-• **maskNames**: *boolean*
-
-___
-
-###  maskString
-
-• **maskString**: *function*
-
-#### Type declaration:
-
-▸ (`str`: string, `computePositions?`: boolean, `prefix?`: string, `postfix?`: string): *string | [Positions](mmir_lib.positions.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`str` | string |
-`computePositions?` | boolean |
-`prefix?` | string |
-`postfix?` | string |
+•  **loadGrammar**: (successCallback: () => any, errorCallback: () => any, grammarUrl: string, doLoadSynchronously?: boolean) => void
 
 ___
 
-###  maskValues
+### loadResource
 
-• **maskValues**: *boolean*
-
-___
-
-###  parseStopWords
-
-• **parseStopWords**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **loadResource**: (successCallback: () => any, errorCallback: () => any, resourceUrl: string, doLoadSynchronously?: boolean) => void
 
 ___
 
-###  postproc
+### maskAsUnicode
 
-• **postproc**: *function*
-
-#### Type declaration:
-
-▸ (`procResult`: any, `pos`: [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo), `processingSteps?`: Array‹[ProcessingStep](mmir_lib.processingstep.md)›): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`procResult` | any |
-`pos` | [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo) |
-`processingSteps?` | Array‹[ProcessingStep](mmir_lib.processingstep.md)› |
+•  **maskAsUnicode**: (str: string, computePositions?: boolean) => string
 
 ___
 
-###  preproc
+### maskNames
 
-• **preproc**: *function*
-
-#### Type declaration:
-
-▸ (`thePhrase`: string, `pos?`: [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo), `processingSteps?`: Array‹[ProcessingStep](mmir_lib.processingstep.md)›): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`thePhrase` | string |
-`pos?` | [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo) |
-`processingSteps?` | Array‹[ProcessingStep](mmir_lib.processingstep.md)› |
+•  **maskNames**: boolean
 
 ___
 
-###  procList
+### maskString
 
-• **procList**: *Array‹[ProcessingStep](mmir_lib.processingstep.md)›*
-
-___
-
-###  recodeJSON
-
-• **recodeJSON**: *function*
-
-#### Type declaration:
-
-▸ (`json`: any, `recodeFunc`: function, `isMaskValues?`: boolean, `isMaskNames?`: boolean): *any*
-
-**Parameters:**
-
-▪ **json**: *any*
-
-▪ **recodeFunc**: *function*
-
-▸ (`str`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`str` | string |
-
-▪`Optional`  **isMaskValues**: *boolean*
-
-▪`Optional`  **isMaskNames**: *boolean*
+•  **maskString**: (str: string, computePositions?: boolean, prefix?: string, postfix?: string) => string \| [Positions](mmir_lib.positions.md)
 
 ___
 
-###  removeProc
+### maskValues
 
-• **removeProc**: *function*
-
-#### Type declaration:
-
-▸ (`proc`: number | string): *[ProcessingStep](mmir_lib.processingstep.md) | undefined*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`proc` | number &#124; string |
+•  **maskValues**: boolean
 
 ___
 
-###  removeStopwords
+### parseStopWords
 
-• **removeStopwords**: *function*
-
-#### Type declaration:
-
-▸ (`inputStr`: string, `isCalcPosition?`: boolean): *string | [Positions](mmir_lib.positions.md)*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`inputStr` | string |
-`isCalcPosition?` | boolean |
+•  **parseStopWords**: () => void
 
 ___
 
-###  setGrammarDef
+### postproc
 
-• **setGrammarDef**: *function*
-
-#### Type declaration:
-
-▸ (`rawGrammarSyntax`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`rawGrammarSyntax` | string |
+•  **postproc**: (procResult: any, pos: [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo), processingSteps?: [ProcessingStep](mmir_lib.processingstep.md)[]) => any
 
 ___
 
-###  setGrammarFunction
+### preproc
 
-• **setGrammarFunction**: *function*
-
-#### Type declaration:
-
-▸ (`execGrammarFunc`: function, `isAsync?`: boolean): *void*
-
-**Parameters:**
-
-▪ **execGrammarFunc**: *function*
-
-▸ (`text`: string, `callback?`: function): *void*
-
-**Parameters:**
-
-▪ **text**: *string*
-
-▪`Optional`  **callback**: *function*
-
-▸ (`semanticResult`: object): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`semanticResult` | object |
-
-▪`Optional`  **isAsync**: *boolean*
+•  **preproc**: (thePhrase: string, pos?: [ProcessingPositionsInfo](../modules/mmir_lib.md#processingpositionsinfo), processingSteps?: [ProcessingStep](mmir_lib.processingstep.md)[]) => string
 
 ___
 
-###  setGrammarSource
+### procList
 
-• **setGrammarSource**: *function*
-
-#### Type declaration:
-
-▸ (`src_code`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`src_code` | string |
+•  **procList**: [ProcessingStep](mmir_lib.processingstep.md)[]
 
 ___
 
-###  setStopWords
+### recodeJSON
 
-• **setStopWords**: *function*
-
-#### Type declaration:
-
-▸ (`stopWordArray`: Array‹string›): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`stopWordArray` | Array‹string› |
+•  **recodeJSON**: (json: any, recodeFunc: (str: string) => string, isMaskValues?: boolean, isMaskNames?: boolean) => any
 
 ___
 
-###  stop_words_regexp
+### removeProc
 
-• **stop_words_regexp**: *RegExp*
-
-___
-
-###  unmaskJSON
-
-• **unmaskJSON**: *function*
-
-#### Type declaration:
-
-▸ (`json`: any, `isMaskValues?`: boolean, `isMaskNames?`: boolean): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`json` | any |
-`isMaskValues?` | boolean |
-`isMaskNames?` | boolean |
+•  **removeProc**: (proc: number \| string) => [ProcessingStep](mmir_lib.processingstep.md) \| undefined
 
 ___
 
-###  unmaskString
+### removeStopwords
 
-• **unmaskString**: *function*
+•  **removeStopwords**: (inputStr: string, isCalcPosition?: boolean) => string \| [Positions](mmir_lib.positions.md)
 
-#### Type declaration:
+___
 
-▸ (`str`: string, `computePositions?`: boolean, `detector?`: RegExp): *string | [Positions](mmir_lib.positions.md)*
+### setGrammarDef
 
-**Parameters:**
+•  **setGrammarDef**: (rawGrammarSyntax: string) => void
 
-Name | Type |
------- | ------ |
-`str` | string |
-`computePositions?` | boolean |
-`detector?` | RegExp |
+___
+
+### setGrammarFunction
+
+•  **setGrammarFunction**: (execGrammarFunc: (text: string, callback?: (semanticResult: {}) => void) => void, isAsync?: boolean) => void
+
+___
+
+### setGrammarSource
+
+•  **setGrammarSource**: (src\_code: string) => void
+
+___
+
+### setStopWords
+
+•  **setStopWords**: (stopWordArray: string[]) => void
+
+___
+
+### stop\_words\_regexp
+
+•  **stop\_words\_regexp**: RegExp
+
+___
+
+### unmaskJSON
+
+•  **unmaskJSON**: (json: any, isMaskValues?: boolean, isMaskNames?: boolean) => any
+
+___
+
+### unmaskString
+
+•  **unmaskString**: (str: string, computePositions?: boolean, detector?: RegExp) => string \| [Positions](mmir_lib.positions.md)

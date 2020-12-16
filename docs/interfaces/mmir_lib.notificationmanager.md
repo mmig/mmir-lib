@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [NotificationManager](mmir_lib.notificationmanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / NotificationManager
 
 # Interface: NotificationManager
 
@@ -28,221 +30,90 @@
 
 ## Properties
 
-###  alert
+### alert
 
-• **alert**: *function*
-
-#### Type declaration:
-
-▸ (`message`: string, `alertCallback`: [Function](mmir_lib.requirejs.md#function), `title`: string, `buttonName`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`message` | string |
-`alertCallback` | [Function](mmir_lib.requirejs.md#function) |
-`title` | string |
-`buttonName` | string |
+•  **alert**: (message: string, alertCallback: [Function](mmir_lib.requirejs.md#function), title: string, buttonName: string) => void
 
 ___
 
-###  beep
+### beep
 
-• **beep**: *function*
-
-#### Type declaration:
-
-▸ (`times`: number): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`times` | number |
+•  **beep**: (times: number) => void
 
 ___
 
-###  confirm
+### confirm
 
-• **confirm**: *function*
-
-#### Type declaration:
-
-▸ (`message`: string, `confirmCallback`: [Function](mmir_lib.requirejs.md#function), `title`: string, `buttonLabels`: string[]): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`message` | string |
-`confirmCallback` | [Function](mmir_lib.requirejs.md#function) |
-`title` | string |
-`buttonLabels` | string[] |
+•  **confirm**: (message: string, confirmCallback: [Function](mmir_lib.requirejs.md#function), title: string, buttonLabels: string[]) => void
 
 ___
 
-###  createSound
+### createSound
 
-• **createSound**: *function*
-
-#### Type declaration:
-
-▸ (`name`: string, `url`: string, `isKeepOnPause`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`name` | string |
-`url` | string |
-`isKeepOnPause` | boolean |
+•  **createSound**: (name: string, url: string, isKeepOnPause: boolean) => void
 
 ___
 
-###  getVolume
+### getVolume
 
-• **getVolume**: *function*
-
-#### Type declaration:
-
-▸ (): *number*
+•  **getVolume**: () => number
 
 ___
 
-###  init
+### init
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **init**: () => any
 
 ___
 
-###  initBeep
+### initBeep
 
-• **initBeep**: *function*
-
-#### Type declaration:
-
-▸ (): *void*
+•  **initBeep**: () => void
 
 ___
 
-###  initSound
+### initSound
 
-• **initSound**: *function*
-
-#### Type declaration:
-
-▸ (`name`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`name` | string |
+•  **initSound**: (name: string) => void
 
 ___
 
-###  isVibrateAvailable
+### isVibrateAvailable
 
-• **isVibrateAvailable**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **isVibrateAvailable**: () => boolean
 
 ___
 
-###  isVibrateEnabled
+### isVibrateEnabled
 
-• **isVibrateEnabled**: *function*
-
-#### Type declaration:
-
-▸ (): *boolean*
+•  **isVibrateEnabled**: () => boolean
 
 ___
 
-###  playSound
+### playSound
 
-• **playSound**: *function*
-
-#### Type declaration:
-
-▸ (`name`: string, `times`: number, `onFinished`: [Function](mmir_lib.requirejs.md#function), `onError`: [Function](mmir_lib.requirejs.md#function)): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`name` | string |
-`times` | number |
-`onFinished` | [Function](mmir_lib.requirejs.md#function) |
-`onError` | [Function](mmir_lib.requirejs.md#function) |
+•  **playSound**: (name: string, times: number, onFinished: [Function](mmir_lib.requirejs.md#function), onError: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
-###  setVibrateEnabled
+### setVibrateEnabled
 
-• **setVibrateEnabled**: *function*
-
-#### Type declaration:
-
-▸ (`enabled`: boolean): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`enabled` | boolean |
+•  **setVibrateEnabled**: (enabled: boolean) => void
 
 ___
 
-###  setVolume
+### setVolume
 
-• **setVolume**: *function*
-
-#### Type declaration:
-
-▸ (`vol`: number): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`vol` | number |
+•  **setVolume**: (vol: number) => void
 
 ___
 
-###  stopSound
+### stopSound
 
-• **stopSound**: *function*
-
-#### Type declaration:
-
-▸ (`name`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`name` | string |
+•  **stopSound**: (name: string) => void
 
 ___
 
-###  vibrate
+### vibrate
 
-• **vibrate**: *function*
-
-#### Type declaration:
-
-▸ (`milliseconds`: number): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`milliseconds` | number |
+•  **vibrate**: (milliseconds: number) => void

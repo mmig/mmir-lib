@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [VoiceListOptions](mmir_lib.voicelistoptions.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / VoiceListOptions
 
 # Interface: VoiceListOptions
 
@@ -10,21 +12,21 @@
 
 ### Properties
 
-* [details](mmir_lib.voicelistoptions.md#optional-details)
-* [language](mmir_lib.voicelistoptions.md#optional-language)
+* [details](mmir_lib.voicelistoptions.md#details)
+* [language](mmir_lib.voicelistoptions.md#language)
 
 ## Properties
 
-### `Optional` details
+### details
 
-• **details**? : *boolean*
+• `Optional` **details**: boolean
 
 if TRUE, the returned list will be comprised of VoiceDetails objects instead of strings
 
 ___
 
-### `Optional` language
+### language
 
-• **language**? : *string*
+• `Optional` **language**: string
 
 if set, the returned voice list will be filtered by the specified language (may also include country-code)

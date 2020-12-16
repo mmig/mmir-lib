@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [CommonUtils](mmir_lib.commonutils.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / CommonUtils
 
 # Interface: CommonUtils
 
@@ -33,287 +35,120 @@
 
 ## Properties
 
-###  checkNetworkConnection
+### checkNetworkConnection
 
-• **checkNetworkConnection**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **checkNetworkConnection**: () => any
 
 ___
 
-###  concatArray
+### concatArray
 
-• **concatArray**: *function*
-
-#### Type declaration:
-
-▸ (`array`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`array` | any |
+•  **concatArray**: (array: any) => any
 
 ___
 
-###  getCompiledGrammarPath
+### getCompiledGrammarPath
 
-• **getCompiledGrammarPath**: *function*
-
-#### Type declaration:
-
-▸ (`generatedGrammarsPath`: string, `grammarId`: string, `isFileNameOnly?`: boolean): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`generatedGrammarsPath` | string |
-`grammarId` | string |
-`isFileNameOnly?` | boolean |
+•  **getCompiledGrammarPath**: (generatedGrammarsPath: string, grammarId: string, isFileNameOnly?: boolean) => string
 
 ___
 
-###  getCompiledResourcesIds
+### getCompiledResourcesIds
 
-• **getCompiledResourcesIds**: *function*
-
-#### Type declaration:
-
-▸ (`compiledResourcesPath`: string): *Array‹string›*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`compiledResourcesPath` | string |
+•  **getCompiledResourcesIds**: (compiledResourcesPath: string) => string[]
 
 ___
 
-###  getDirectoryStructure
+### getDirectoryStructure
 
-• **getDirectoryStructure**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **getDirectoryStructure**: () => any
 
 ___
 
-###  getLocalScript
+### getLocalScript
 
-• **getLocalScript**: *function*
-
-#### Type declaration:
-
-▸ (`scriptUrl`: any, `success`: any, `fail`: any, ...`args`: any[]): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`scriptUrl` | any |
-`success` | any |
-`fail` | any |
-`...args` | any[] |
+•  **getLocalScript**: (scriptUrl: any, success: any, fail: any, ...args: any[]) => void
 
 ___
 
-###  getPartialsPrefix
+### getPartialsPrefix
 
-• **getPartialsPrefix**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **getPartialsPrefix**: () => any
 
 ___
 
-###  init
+### init
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (`onsuccess`: any, `onerror`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`onsuccess` | any |
-`onerror` | any |
+•  **init**: (onsuccess: any, onerror: any) => any
 
 ___
 
-###  isArray
+### isArray
 
-• **isArray**: *function*
-
-#### Type declaration:
-
-▸ (`object`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`object` | any |
+•  **isArray**: (object: any) => any
 
 ___
 
-###  isRunningOnAndroid
+### isRunningOnAndroid
 
-• **isRunningOnAndroid**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **isRunningOnAndroid**: () => any
 
 ___
 
-###  isRunningOnSmartphone
+### isRunningOnSmartphone
 
-• **isRunningOnSmartphone**: *function*
-
-#### Type declaration:
-
-▸ (): *any*
+•  **isRunningOnSmartphone**: () => any
 
 ___
 
-###  listDir
+### listDir
 
-• **listDir**: *function*
-
-#### Type declaration:
-
-▸ (`pathname`: string, `filter`: RegExp | function): *Array‹string›*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`pathname` | string |
-`filter` | RegExp &#124; function |
+•  **listDir**: (pathname: string, filter: RegExp \| (entry: string) => boolean) => string[]
 
 ___
 
-###  loadCompiledGrammars
+### loadCompiledGrammars
 
-• **loadCompiledGrammars**: *function*
-
-#### Type declaration:
-
-▸ (`generatedGrammarsPath`: string, `cbFunction`: [Function](mmir_lib.requirejs.md#function), `ignoreGrammarIds?`: Array‹string›): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`generatedGrammarsPath` | string |
-`cbFunction` | [Function](mmir_lib.requirejs.md#function) |
-`ignoreGrammarIds?` | Array‹string› |
+•  **loadCompiledGrammars**: (generatedGrammarsPath: string, cbFunction: [Function](mmir_lib.requirejs.md#function), ignoreGrammarIds?: string[]) => any
 
 ___
 
-###  loadDirectoryStructure
+### loadDirectoryStructure
 
-• **loadDirectoryStructure**: *function*
-
-#### Type declaration:
-
-▸ (`success`: any, `errorFunc`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`success` | any |
-`errorFunc` | any |
+•  **loadDirectoryStructure**: (success: any, errorFunc: any) => any
 
 ___
 
-###  loadImpl
+### loadImpl
 
-• **loadImpl**: *function*
-
-#### Type declaration:
-
-▸ (`librariesPath`: any, `isSerial`: any, `completedCallback`: any, `checkIsAlreadyLoadedFunc`: any, `statusCallback`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`librariesPath` | any |
-`isSerial` | any |
-`completedCallback` | any |
-`checkIsAlreadyLoadedFunc` | any |
-`statusCallback` | any |
+•  **loadImpl**: (librariesPath: any, isSerial: any, completedCallback: any, checkIsAlreadyLoadedFunc: any, statusCallback: any) => any
 
 ___
 
-###  loadScript
+### loadScript
 
-• **loadScript**: *function*
-
-#### Type declaration:
-
-▸ (`url`: any, `successCallback`: any, `errorCallback`: any, ...`args`: any[]): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`url` | any |
-`successCallback` | any |
-`errorCallback` | any |
-`...args` | any[] |
+•  **loadScript**: (url: any, successCallback: any, errorCallback: any, ...args: any[]) => any
 
 ___
 
-###  parseParamsToDictionary
+### parseParamsToDictionary
 
-• **parseParamsToDictionary**: *function*
-
-#### Type declaration:
-
-▸ (`urlParamsPartStrings`: any): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`urlParamsPartStrings` | any |
+•  **parseParamsToDictionary**: (urlParamsPartStrings: any) => any
 
 ___
 
-###  regexHTMLComment
+### regexHTMLComment
 
-• **regexHTMLComment**: *RegExp*
-
-___
-
-###  requireProtocol
-
-• **requireProtocol**: *string*
+• `Readonly` **regexHTMLComment**: RegExp
 
 ___
 
-###  stripPathName
+### requireProtocol
 
-• **stripPathName**: *function*
+• `Readonly` **requireProtocol**: string
 
-#### Type declaration:
+___
 
-▸ (`pathname`: any): *any*
+### stripPathName
 
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`pathname` | any |
+•  **stripPathName**: (pathname: any) => any

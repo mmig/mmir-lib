@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MmirModule](mmir_lib.mmirmodule.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MmirModule
 
 # Interface: MmirModule
 
@@ -8,14 +10,14 @@
 
   ↳ **MmirModule**
 
-  ↳ [NodeMmirModule](mmir_lib.nodemmirmodule.md)
+  ↳↳ [NodeMmirModule](mmir_lib.nodemmirmodule.md)
 
 ## Index
 
 ### Properties
 
-* [_define](mmir_lib.mmirmodule.md#_define)
-* [_mmirLibPath](mmir_lib.mmirmodule.md#_mmirlibpath)
+* [\_define](mmir_lib.mmirmodule.md#_define)
+* [\_mmirLibPath](mmir_lib.mmirmodule.md#_mmirlibpath)
 * [conf](mmir_lib.mmirmodule.md#conf)
 * [config](mmir_lib.mmirmodule.md#config)
 * [ctrl](mmir_lib.mmirmodule.md#ctrl)
@@ -50,247 +52,221 @@
 
 ## Properties
 
-###  _define
+### \_define
 
-• **_define**: *null | [RequireJsDefine](mmir_lib.requirejsdefine.md)*
+• `Readonly` **\_define**: null \| [RequireJsDefine](mmir_lib.requirejsdefine.md)
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[_define](mmir_lib.mmircore.md#_define)*
 
 ___
 
-###  _mmirLibPath
+### \_mmirLibPath
 
-• **_mmirLibPath**: *string*
+•  **\_mmirLibPath**: string
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[_mmirLibPath](mmir_lib.mmircore.md#_mmirlibpath)*
 
 ___
 
-###  conf
+### conf
 
-• **conf**: *[ConfigurationManager](mmir_lib.configurationmanager.md)*
+• `Readonly` **conf**: [ConfigurationManager](mmir_lib.configurationmanager.md)
 
 ___
 
-###  config
+### config
 
-• **config**: *function*
+•  **config**: (requirejsConfig: {}) => void
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[config](mmir_lib.mmircore.md#config)*
 
-#### Type declaration:
+___
 
-▸ (`requirejsConfig`: object): *void*
+### ctrl
 
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`requirejsConfig` | object |
+• `Readonly` **ctrl**: [ControllerManager](mmir_lib.controllermanager.md)
 
 ___
 
-###  ctrl
+### debug
 
-• **ctrl**: *[ControllerManager](mmir_lib.controllermanager.md)*
-
-___
-
-###  debug
-
-• **debug**: *boolean*
+•  **debug**: boolean
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[debug](mmir_lib.mmircore.md#debug)*
 
 ___
 
-###  dialog
+### dialog
 
-• **dialog**: *[DialogManager](mmir_lib.dialogmanager.md)*
-
-___
-
-###  dialogEngine
-
-• **dialogEngine**: *[DialogEngine](mmir_lib.dialogengine.md)*
+• `Readonly` **dialog**: [DialogManager](mmir_lib.dialogmanager.md)
 
 ___
 
-###  input
+### dialogEngine
 
-• **input**: *[InputManager](mmir_lib.inputmanager.md)*
-
-___
-
-###  inputEngine
-
-• **inputEngine**: *[InputEngine](mmir_lib.inputengine.md)*
+• `Readonly` **dialogEngine**: [DialogEngine](mmir_lib.dialogengine.md)
 
 ___
 
-###  jquery
+### input
 
-• **jquery**: *undefined | any*
+• `Readonly` **input**: [InputManager](mmir_lib.inputmanager.md)
+
+___
+
+### inputEngine
+
+• `Readonly` **inputEngine**: [InputEngine](mmir_lib.inputengine.md)
+
+___
+
+### jquery
+
+•  **jquery**: undefined \| any
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[jquery](mmir_lib.mmircore.md#jquery)*
 
 ___
 
-###  lang
+### lang
 
-• **lang**: *[LanguageManager](mmir_lib.languagemanager.md)*
+• `Readonly` **lang**: [LanguageManager](mmir_lib.languagemanager.md)
 
 ___
 
-###  libMode
+### libMode
 
-• **libMode**: *undefined | "min"*
+•  **libMode**: undefined \| \"min\"
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[libMode](mmir_lib.mmircore.md#libmode)*
 
 ___
 
-###  logLevel
+### logLevel
 
-• **logLevel**: *[LogLevelNum](../modules/mmir_lib.md#loglevelnum) | [LogLevel](../modules/mmir_lib.md#loglevel) | [LogLevelOptions](mmir_lib.logleveloptions.md)*
+•  **logLevel**: [LogLevelNum](../modules/mmir_lib.md#loglevelnum) \| [LogLevel](../modules/mmir_lib.md#loglevel) \| [LogLevelOptions](mmir_lib.logleveloptions.md)
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[logLevel](mmir_lib.mmircore.md#loglevel)*
 
 ___
 
-###  logTrace
+### logTrace
 
-• **logTrace**: *boolean | object*
+•  **logTrace**: boolean \| { depth: \"full\" \| any ; trace: boolean  }
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[logTrace](mmir_lib.mmircore.md#logtrace)*
 
 ___
 
-###  media
+### media
 
-• **media**: *[MediaManager](mmir_lib.mediamanager.md)*
+• `Readonly` **media**: [MediaManager](mmir_lib.mediamanager.md)
 
 ___
 
-###  mmirName
+### mmirName
 
-• **mmirName**: *"mmir" | string*
+• `Readonly` **mmirName**: \"mmir\" \| string
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[mmirName](mmir_lib.mmircore.md#mmirname)*
 
 ___
 
-###  model
+### model
 
-• **model**: *[ModelManager](mmir_lib.modelmanager.md)*
-
-___
-
-###  notifier
-
-• **notifier**: *[NotificationManager](mmir_lib.notificationmanager.md)*
+• `Readonly` **model**: [ModelManager](mmir_lib.modelmanager.md)
 
 ___
 
-###  present
+### notifier
 
-• **present**: *[PresentationManager](mmir_lib.presentationmanager.md)*
+• `Readonly` **notifier**: [NotificationManager](mmir_lib.notificationmanager.md)
 
 ___
 
-###  ready
+### present
 
-• **ready**: *function*
+• `Readonly` **present**: [PresentationManager](mmir_lib.presentationmanager.md)
+
+___
+
+### ready
+
+•  **ready**: (onFrameworkReady: (...args: any[]) => any) => any
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[ready](mmir_lib.mmircore.md#ready)*
 
-#### Type declaration:
-
-▸ (`onFrameworkReady`: function): *any*
-
-**Parameters:**
-
-▪ **onFrameworkReady**: *function*
-
-▸ (...`args`: any[]): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`...args` | any[] |
-
 ___
 
-###  require
+### require
 
-• **require**: *[RequireJs](mmir_lib.requirejs.md)*
+• `Readonly` **require**: [RequireJs](mmir_lib.requirejs.md)
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[require](mmir_lib.mmircore.md#require)*
 
 ___
 
-###  res
+### res
 
-• **res**: *[Resources](mmir_lib.resources.md)*
-
-___
-
-###  semantic
-
-• **semantic**: *[SemanticInterpreter](mmir_lib.semanticinterpreter.md)*
+• `Readonly` **res**: [Resources](mmir_lib.resources.md)
 
 ___
 
-###  startModule
+### semantic
 
-• **startModule**: *string*
+• `Readonly` **semantic**: [SemanticInterpreter](mmir_lib.semanticinterpreter.md)
+
+___
+
+### startModule
+
+•  **startModule**: string
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[startModule](mmir_lib.mmircore.md#startmodule)*
 
 ___
 
-###  startModules
+### startModules
 
-• **startModules**: *undefined | Array‹string›*
+•  **startModules**: undefined \| string[]
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[startModules](mmir_lib.mmircore.md#startmodules)*
 
 ___
 
-###  util
+### util
 
-• **util**: *[CommonUtils](mmir_lib.commonutils.md)*
+• `Readonly` **util**: [CommonUtils](mmir_lib.commonutils.md)
 
 ___
 
-###  version
+### version
 
-• **version**: *string*
+• `Readonly` **version**: string
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[version](mmir_lib.mmircore.md#version)*
 
 ___
 
-###  viewEngine
+### viewEngine
 
-• **viewEngine**: *string*
+•  **viewEngine**: string
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[viewEngine](mmir_lib.mmircore.md#viewengine)*
 
 ## Methods
 
-###  isVersion
+### isVersion
 
-▸ **isVersion**(`verion`: string, `comparator`: [Comparator](../modules/mmir_lib.md#comparator)): *boolean*
+▸ **isVersion**(`verion`: string, `comparator`: [Comparator](../modules/mmir_lib.md#comparator)): boolean
 
 *Inherited from [MmirCore](mmir_lib.mmircore.md).[isVersion](mmir_lib.mmircore.md#isversion)*
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `verion` | string |
 `comparator` | [Comparator](../modules/mmir_lib.md#comparator) |
 
-**Returns:** *boolean*
+**Returns:** boolean

@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [IWaitReadyImpl](mmir_lib.iwaitreadyimpl.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / IWaitReadyImpl
 
 # Interface: IWaitReadyImpl
 
@@ -15,32 +17,12 @@
 
 ## Properties
 
-###  preparing
+### preparing
 
-• **preparing**: *function*
-
-#### Type declaration:
-
-▸ (`moduleName`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`moduleName` | string |
+•  **preparing**: (moduleName: string) => void
 
 ___
 
-###  ready
+### ready
 
-• **ready**: *function*
-
-#### Type declaration:
-
-▸ (`moduleName`: string): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`moduleName` | string |
+•  **ready**: (moduleName: string) => void

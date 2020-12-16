@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [MmirCore](mmir_lib.mmircore.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MmirCore
 
 # Interface: MmirCore
 
@@ -12,8 +14,8 @@
 
 ### Properties
 
-* [_define](mmir_lib.mmircore.md#_define)
-* [_mmirLibPath](mmir_lib.mmircore.md#_mmirlibpath)
+* [\_define](mmir_lib.mmircore.md#_define)
+* [\_mmirLibPath](mmir_lib.mmircore.md#_mmirlibpath)
 * [config](mmir_lib.mmircore.md#config)
 * [debug](mmir_lib.mmircore.md#debug)
 * [jquery](mmir_lib.mmircore.md#jquery)
@@ -34,131 +36,105 @@
 
 ## Properties
 
-###  _define
+### \_define
 
-• **_define**: *null | [RequireJsDefine](mmir_lib.requirejsdefine.md)*
-
-___
-
-###  _mmirLibPath
-
-• **_mmirLibPath**: *string*
+• `Readonly` **\_define**: null \| [RequireJsDefine](mmir_lib.requirejsdefine.md)
 
 ___
 
-###  config
+### \_mmirLibPath
 
-• **config**: *function*
-
-#### Type declaration:
-
-▸ (`requirejsConfig`: object): *void*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`requirejsConfig` | object |
+•  **\_mmirLibPath**: string
 
 ___
 
-###  debug
+### config
 
-• **debug**: *boolean*
-
-___
-
-###  jquery
-
-• **jquery**: *undefined | any*
+•  **config**: (requirejsConfig: {}) => void
 
 ___
 
-###  libMode
+### debug
 
-• **libMode**: *undefined | "min"*
-
-___
-
-###  logLevel
-
-• **logLevel**: *[LogLevelNum](../modules/mmir_lib.md#loglevelnum) | [LogLevel](../modules/mmir_lib.md#loglevel) | [LogLevelOptions](mmir_lib.logleveloptions.md)*
+•  **debug**: boolean
 
 ___
 
-###  logTrace
+### jquery
 
-• **logTrace**: *boolean | object*
-
-___
-
-###  mmirName
-
-• **mmirName**: *"mmir" | string*
+•  **jquery**: undefined \| any
 
 ___
 
-###  ready
+### libMode
 
-• **ready**: *function*
-
-#### Type declaration:
-
-▸ (`onFrameworkReady`: function): *any*
-
-**Parameters:**
-
-▪ **onFrameworkReady**: *function*
-
-▸ (...`args`: any[]): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`...args` | any[] |
+•  **libMode**: undefined \| \"min\"
 
 ___
 
-###  require
+### logLevel
 
-• **require**: *[RequireJs](mmir_lib.requirejs.md)*
-
-___
-
-###  startModule
-
-• **startModule**: *string*
+•  **logLevel**: [LogLevelNum](../modules/mmir_lib.md#loglevelnum) \| [LogLevel](../modules/mmir_lib.md#loglevel) \| [LogLevelOptions](mmir_lib.logleveloptions.md)
 
 ___
 
-###  startModules
+### logTrace
 
-• **startModules**: *undefined | Array‹string›*
-
-___
-
-###  version
-
-• **version**: *string*
+•  **logTrace**: boolean \| { depth: \"full\" \| any ; trace: boolean  }
 
 ___
 
-###  viewEngine
+### mmirName
 
-• **viewEngine**: *string*
+• `Readonly` **mmirName**: \"mmir\" \| string
+
+___
+
+### ready
+
+•  **ready**: (onFrameworkReady: (...args: any[]) => any) => any
+
+___
+
+### require
+
+• `Readonly` **require**: [RequireJs](mmir_lib.requirejs.md)
+
+___
+
+### startModule
+
+•  **startModule**: string
+
+___
+
+### startModules
+
+•  **startModules**: undefined \| string[]
+
+___
+
+### version
+
+• `Readonly` **version**: string
+
+___
+
+### viewEngine
+
+•  **viewEngine**: string
 
 ## Methods
 
-###  isVersion
+### isVersion
 
-▸ **isVersion**(`verion`: string, `comparator`: [Comparator](../modules/mmir_lib.md#comparator)): *boolean*
+▸ **isVersion**(`verion`: string, `comparator`: [Comparator](../modules/mmir_lib.md#comparator)): boolean
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
 `verion` | string |
 `comparator` | [Comparator](../modules/mmir_lib.md#comparator) |
 
-**Returns:** *boolean*
+**Returns:** boolean

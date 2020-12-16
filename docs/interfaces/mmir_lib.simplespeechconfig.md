@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [SimpleSpeechConfig](mmir_lib.simplespeechconfig.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / SimpleSpeechConfig
 
 # Interface: SimpleSpeechConfig
 
@@ -14,30 +16,30 @@
 
 ### Properties
 
-* [language](mmir_lib.simplespeechconfig.md#optional-language)
-* [long](mmir_lib.simplespeechconfig.md#optional-long)
-* [voice](mmir_lib.simplespeechconfig.md#optional-voice)
+* [language](mmir_lib.simplespeechconfig.md#language)
+* [long](mmir_lib.simplespeechconfig.md#long)
+* [voice](mmir_lib.simplespeechconfig.md#voice)
 
 ## Properties
 
-### `Optional` language
+### language
 
-• **language**? : *string*
+• `Optional` **language**: string
 
 local with 2-letter language- and country-code, separated with "-", e.g. "de-DE" or "en-US"
 
 ___
 
-### `Optional` long
+### long
 
-• **long**? : *string*
+• `Optional` **long**: string
 
 local with 3-letter language- and country-code, separated with "-", e.g. "deu-DEU" or "eng-USA"
 
 ___
 
-### `Optional` voice
+### voice
 
-• **voice**? : *"male" | "female" | string*
+• `Optional` **voice**: \"male\" \| \"female\" \| string
 
 voice name or feature (may not be supported by selected TTS plugin)

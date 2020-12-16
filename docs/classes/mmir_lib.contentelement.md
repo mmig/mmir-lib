@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ContentElement](mmir_lib.contentelement.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ContentElement
 
 # Class: ContentElement
 
@@ -29,121 +31,127 @@
 
 ## Constructors
 
-###  constructor
+### constructor
 
-\+ **new ContentElement**(`group`: [ParsingResult](mmir_lib.parsingresult.md) | Array‹string› | object, `view`: [View](mmir_lib.view.md), `parser`: any, `renderer`: any, ...`args`: any[]): *[ContentElement](mmir_lib.contentelement.md)*
+\+ **new ContentElement**(`group`: [ParsingResult](mmir_lib.parsingresult.md) \| string[] \| { content: string ; name: string ; offset?: number ; parent?: [ContentElement](mmir_lib.contentelement.md)  }, `view`: [View](mmir_lib.view.md), `parser`: any, `renderer`: any, ...`args`: any[]): [ContentElement](mmir_lib.contentelement.md)
 
-**Parameters:**
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`group` | [ParsingResult](mmir_lib.parsingresult.md) &#124; Array‹string› &#124; object |
+`group` | [ParsingResult](mmir_lib.parsingresult.md) \| string[] \| { content: string ; name: string ; offset?: number ; parent?: [ContentElement](mmir_lib.contentelement.md)  } |
 `view` | [View](mmir_lib.view.md) |
 `parser` | any |
 `renderer` | any |
 `...args` | any[] |
 
-**Returns:** *[ContentElement](mmir_lib.contentelement.md)*
+**Returns:** [ContentElement](mmir_lib.contentelement.md)
 
 ## Methods
 
-###  getController
+### getController
 
-▸ **getController**(): *[Controller](mmir_lib.controller.md)*
+▸ **getController**(): [Controller](mmir_lib.controller.md)
 
-**Returns:** *[Controller](mmir_lib.controller.md)*
-
-___
-
-###  getDefinition
-
-▸ **getDefinition**(): *string*
-
-**Returns:** *string*
+**Returns:** [Controller](mmir_lib.controller.md)
 
 ___
 
-###  getEnd
+### getDefinition
 
-▸ **getEnd**(): *number*
+▸ **getDefinition**(): string
 
-**Returns:** *number*
-
-___
-
-###  getName
-
-▸ **getName**(): *string*
-
-**Returns:** *string*
+**Returns:** string
 
 ___
 
-###  getOffset
+### getEnd
 
-▸ **getOffset**(): *number*
+▸ **getEnd**(): number
 
-**Returns:** *number*
-
-___
-
-###  getRawText
-
-▸ **getRawText**(): *string*
-
-**Returns:** *string*
+**Returns:** number
 
 ___
 
-###  getStart
+### getName
 
-▸ **getStart**(): *number*
+▸ **getName**(): string
 
-**Returns:** *number*
-
-___
-
-###  getView
-
-▸ **getView**(): *[View](mmir_lib.view.md)*
-
-**Returns:** *[View](mmir_lib.view.md)*
+**Returns:** string
 
 ___
 
-###  hasDynamicContent
+### getOffset
 
-▸ **hasDynamicContent**(): *boolean*
+▸ **getOffset**(): number
 
-**Returns:** *boolean*
-
-___
-
-###  stringify
-
-▸ **stringify**(): *string*
-
-**Returns:** *string*
+**Returns:** number
 
 ___
 
-###  toHtml
+### getRawText
 
-▸ **toHtml**(): *string*
+▸ **getRawText**(): string
 
-**Returns:** *string*
+**Returns:** string
 
 ___
 
-###  toStrings
+### getStart
 
-▸ **toStrings**(`renderingBuffer?`: Array‹string›, `data?`: any): *any*
+▸ **getStart**(): number
 
-**Parameters:**
+**Returns:** number
+
+___
+
+### getView
+
+▸ **getView**(): [View](mmir_lib.view.md)
+
+**Returns:** [View](mmir_lib.view.md)
+
+___
+
+### hasDynamicContent
+
+▸ **hasDynamicContent**(): boolean
+
+**Returns:** boolean
+
+___
+
+### stringify
+
+▸ **stringify**(`disableStrictMode?`: boolean): string
+
+#### Parameters:
 
 Name | Type |
 ------ | ------ |
-`renderingBuffer?` | Array‹string› |
+`disableStrictMode?` | boolean |
+
+**Returns:** string
+
+___
+
+### toHtml
+
+▸ **toHtml**(): string
+
+**Returns:** string
+
+___
+
+### toStrings
+
+▸ **toStrings**(`renderingBuffer?`: string[], `data?`: any): any
+
+#### Parameters:
+
+Name | Type |
+------ | ------ |
+`renderingBuffer?` | string[] |
 `data?` | any |
 
-**Returns:** *any*
+**Returns:** any

@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [LanguageManager](mmir_lib.languagemanager.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / LanguageManager
 
 # Interface: LanguageManager
 
@@ -27,203 +29,84 @@
 
 ## Properties
 
-###  determineLanguage
+### determineLanguage
 
-• **determineLanguage**: *function*
-
-#### Type declaration:
-
-▸ (`lang`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lang` | string |
+•  **determineLanguage**: (lang: string) => string
 
 ___
 
-###  existsDictionary
+### existsDictionary
 
-• **existsDictionary**: *function*
-
-#### Type declaration:
-
-▸ (`lang`: string): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lang` | string |
+•  **existsDictionary**: (lang: string) => boolean
 
 ___
 
-###  existsGrammar
+### existsGrammar
 
-• **existsGrammar**: *function*
-
-#### Type declaration:
-
-▸ (`lang`: string, `grammarType?`: [GrammarType](../modules/mmir_lib.md#grammartype)): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lang` | string |
-`grammarType?` | [GrammarType](../modules/mmir_lib.md#grammartype) |
+•  **existsGrammar**: (lang: string, grammarType?: [GrammarType](../modules/mmir_lib.md#grammartype)) => boolean
 
 ___
 
-###  existsSpeechConfig
+### existsSpeechConfig
 
-• **existsSpeechConfig**: *function*
-
-#### Type declaration:
-
-▸ (`lang`: string): *boolean*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lang` | string |
+•  **existsSpeechConfig**: (lang: string) => boolean
 
 ___
 
-###  fixLang
+### fixLang
 
-• **fixLang**: *function*
-
-#### Type declaration:
-
-▸ (`providerName`: string, `langCode`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`providerName` | string |
-`langCode` | string |
+•  **fixLang**: (providerName: string, langCode: string) => string
 
 ___
 
-###  getDefaultLanguage
+### getDefaultLanguage
 
-• **getDefaultLanguage**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getDefaultLanguage**: () => string
 
 ___
 
-###  getDictionary
+### getDictionary
 
-• **getDictionary**: *function*
-
-#### Type declaration:
-
-▸ (): *object*
-
-* \[ **id**: *string*\]: string
+•  **getDictionary**: () => { [id:string]: string;  }
 
 ___
 
-###  getLanguage
+### getLanguage
 
-• **getLanguage**: *function*
-
-#### Type declaration:
-
-▸ (): *string*
+•  **getLanguage**: () => string
 
 ___
 
-###  getLanguageConfig
+### getLanguageConfig
 
-• **getLanguageConfig**: *function*
-
-#### Type declaration:
-
-▸ (`pluginId`: string, `feature`: string, `separator?`: string): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`pluginId` | string |
-`feature` | string |
-`separator?` | string |
+•  **getLanguageConfig**: (pluginId: string, feature: string, separator?: string) => any
 
 ___
 
-###  getLanguages
+### getLanguages
 
-• **getLanguages**: *function*
-
-#### Type declaration:
-
-▸ (): *Array‹string›*
+•  **getLanguages**: () => string[]
 
 ___
 
-###  getSpeechConfig
+### getSpeechConfig
 
-• **getSpeechConfig**: *function*
-
-#### Type declaration:
-
-▸ (): *object*
-
-* \[ **config**: *string*\]: any
+•  **getSpeechConfig**: () => { [config:string]: any;  }
 
 ___
 
-###  getText
+### getText
 
-• **getText**: *function*
-
-#### Type declaration:
-
-▸ (`textVarName`: string): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`textVarName` | string |
+•  **getText**: (textVarName: string) => string
 
 ___
 
-###  init
+### init
 
-• **init**: *function*
-
-#### Type declaration:
-
-▸ (`lang`: string): *any*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lang` | string |
+•  **init**: (lang: string) => any
 
 ___
 
-###  setLanguage
+### setLanguage
 
-• **setLanguage**: *function*
-
-#### Type declaration:
-
-▸ (`lang`: string, `doNotLoadResources?`: boolean): *string*
-
-**Parameters:**
-
-Name | Type |
------- | ------ |
-`lang` | string |
-`doNotLoadResources?` | boolean |
+•  **setLanguage**: (lang: string, doNotLoadResources?: boolean) => string

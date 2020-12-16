@@ -1,4 +1,6 @@
-[mmir-lib 6.1.0](../README.md) › [mmir-lib](../modules/mmir_lib.md) › [ProcessingStep](mmir_lib.processingstep.md)
+**[mmir-lib 6.2.0](../README.md)**
+
+> [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ProcessingStep
 
 # Interface: ProcessingStep
 
@@ -11,23 +13,23 @@
 ### Properties
 
 * [name](mmir_lib.processingstep.md#name)
-* [post](mmir_lib.processingstep.md#optional-post)
-* [pre](mmir_lib.processingstep.md#optional-pre)
+* [post](mmir_lib.processingstep.md#post)
+* [pre](mmir_lib.processingstep.md#pre)
 
 ## Properties
 
-###  name
+### name
 
-• **name**: *string*
-
-___
-
-### `Optional` post
-
-• **post**? : *[ProcessingFunction](../modules/mmir_lib.md#processingfunction)*
+•  **name**: string
 
 ___
 
-### `Optional` pre
+### post
 
-• **pre**? : *[ProcessingFunction](../modules/mmir_lib.md#processingfunction)*
+• `Optional` **post**: [ProcessingFunction](../modules/mmir_lib.md#processingfunction)
+
+___
+
+### pre
+
+• `Optional` **pre**: [ProcessingFunction](../modules/mmir_lib.md#processingfunction)
