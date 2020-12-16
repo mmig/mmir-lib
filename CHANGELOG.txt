@@ -29,9 +29,61 @@ additional, required dependencies when running in node environment
                            NOTE: the mmir-lib and mmir-tooling code that is used within this example
                                  project may lack behind the most current version of their base
                                  repositories of mmir-lib and mmir-tooling.
- --------------
+--------------
  Change Log
- --------------
+--------------
+
+##################
+Version 6.2.0
+##################
+
+MODIFICATION:
+
+ * tools/codeGenUtils: added helper tools/codeGenUtils and extracted closure-wrapper functionality for generated code to it (e.g. for generated grammars and views)
+   * mmirf/parserModule: breaking internal change due to removed constants STORAGE_CODE_WRAP_PREFIX and STORAGE_CODE_WRAP_SUFFIX from mmirf/parserModule, replaced by functions getCodeWrapPrefix() and getCodeWrapSuffix()
+ * views:
+   * mvc/view etc: added optional argument disableStrictMode (boolean) to stringify() interface method
+   * explicitly make generated view-code strict (i.e. JavaScript strict mode)
+   * increment STORAGE_FILE_FORMAT_NUMBER to 4
+ * grammars:
+   * added optional argument option disableStrict (boolean) for generating grammars
+   * jison-engine: update jison version to 0.4.18 (in order to support JavaScript strict mode)
+   * explicitly make generated grammar-code strict (i.e. JavaScript strict mode)
+   * increment GRAMMAR_FILE_FORMAT_VERSION to 7
+ * languageManager.setLanguage(): now sets changes "language" setting in/with configurationManager.set("language", ...) which will also trigger a configuration change event
+ * mediaManager.getVoices({details: true}): added property `local?: boolean` in returned `VoiceDetails`, indicating if the voices is locally availabe or only via network connection
+   * added support for `VoiceDetails.local` in built-in TTS engines `ttsWebspeech` and `ttsMary`
+ * typings:
+    * `DialogManager`, `InputManager`: normalized typings by declaring and extending base interfaces `StateManager`
+    * `DialogEngine`, `InputEngine`: normalized typings by declaring and extending base interfaces `StateEngine`
+
+ADDITION:
+ * logger: added new optional last argument `reverseCallStack?: number` to all logging/printing function, e.g.
+   ```javascript
+   debug: function(className, funcName, msg, reverseCallStack)
+   ```
+   the optional _offset_ when printing the callstack position/information: a positive number will go further back/up the callstack.
+   This can be used in logging-helper functions to select the invoking function's position from the callstack instead of printing the information of the logging-helper function itself.
+
+ * typings:
+   * added typing for `mmirf/checksumUtils` (interface `ChecksumUtils`)
+   * added typing for `mmirf/logger` (interfaces `LoggerModule` and `Logger`)
+
+
+BUGFIX:
+
+ * mediaManager: do evaluate options when trying to invoke error-handler for not-implemented functions
+ * semantic/positionUtils: in _createPosPreProc(), removed undeclared variable sourcePos and fixed handling pos flag for enabling position calculation
+ * env/media/webMicLevels: do declare local variable db
+ * env/media/ttsWebspeech: when selecting voice by filter, do ensure that language corresponds to currently selected voice
+ * logger: shortcut functions (e.g. `d()` for `debug()`) now print the correct invoking function information
+ * typings:
+   * do declare constructor for GrammarConverter and IAudio
+   * fixed declaration for ConfigurationManager.on/.off/.addListener/.removeListener
+   * fixed typing for NodeMmirModule.init() method
+   * fixed typing for Grammar: make deprecated field stop_word optional
+   * fixed typing for MediaManagerPluginEntry: added missing (optional) property `config`
+ * semantic/grammarConverter: remove undeclared (and unused) variable `replLen` in `removeStopwords()`
 
 ##################
 Version 6.1.0

@@ -1,6 +1,6 @@
 {
   "name": "mmir-lib",
-  "version": "6.2.0-beta.1",
+  "version": "6.2.0",
   "description": "MMIR (Mobile Multimodal Interaction and Relay) library",
   "types": "mmir.d.ts",
   "repository": {
