@@ -8,21 +8,31 @@
 [![Guides](https://img.shields.io/badge/docs-guides-orange.svg?style=flat)](https://github.com/mmig/mmir/wiki)
 
 
-Source Code for the [mmir][5] (Mobile Multimodal Interaction and Relay)* library
+Source Code for the [mmir][5] (Mobile Multimodal Interaction and Relay)[*](#footnote1) library
 
 The `mmir` framework provides means for creating _minimal_ (client-based)
 _dialog systems_ for multimodal interactions:
 
- * state-based interaction handling using SCXML (e.g. for touch/click, speech, gesture interactions)
- * support and plugins for several speech input (Automatic Speech Recognition, ASR) engines
- * support and plugins for several speech output/synthesis (Text To Speech, TTS) engines
- * support for client- or sever-based NLU processing
-  * built-in support for grammars (similar to BNF grammars that parse input as _tokens_ and _utterances_)
+ * **state-based interaction** handling using SCXML (e.g. for touch/click, speech, gesture interactions)
+ * support and plugins for several **speech input** (Automatic Speech Recognition, ASR) engines
+ * support and plugins for several **speech output/synthesis** (Text To Speech, TTS) engines
+ * support for client- or sever-based **NLU processing**
+  * built-in support for **grammars** (similar to [BNF grammars][13<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-See API documentation is available at [/docs][6] (`md` format) or in [HTML format][7]
-(more details are available in [jsdoc-generated API documentation][8], and further details at [github.com/mmig/mmir][5]).
+<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
 
-For examples, see the [mmir-starter-kit][1] or [mmir-starter-ionic][2].
+- [Install](#install)
+- [API Documentation](#api-documentation)
+- [Examples](#examples)
+- [Pre-Building Grammars, State Machines etc.](#pre-building-grammars-state-machines-etc)
+- [Include in Web Page](#include-in-web-page)
+- [Node.js](#nodejs)
+	- [Node.js and WebWorker](#nodejs-and-webworker)
+- [Additional Notes](#additional-notes)
+- [Used Libraries](#used-libraries)
+- [License](#license)
+
+<!-- /TOC -->
 
 ----
 # Usage
@@ -42,7 +52,16 @@ For examples, see the [mmir-starter-kit][1] or [mmir-starter-ionic][2].
      ```
  * see [mmir-tooling][3] and [mmir-wepack][4] for more options
 
-## Building Grammars, State Machines etc.
+## API Documentation
+
+The API documentation is available at [/docs][6] (`md` format) or in [HTML format][7]
+(more details are available in [jsdoc-generated API documentation][8], and further details at [github.com/mmig/mmir][5]).
+
+## Examples
+
+For examples, see the [mmir-starter-kit][1] or [mmir-starter-ionic][2].
+
+## Pre-Building Grammars, State Machines etc.
 
  * Prerequesites: Node.js
 
@@ -159,7 +178,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
       framework in combination with Cordova 5 and later versions).
 
 ----
-#### Used Libraries
+## Used Libraries
 
 (see contents of `/vendor/libs/`)
 
@@ -181,14 +200,15 @@ NOTE: Integration with / loading of Cordova is designed to work with the
   (MIT; Copyright (c) 2017 Eric Wendelin and other contributors)
 
 ----
-#### License
+## License
 
 If not stated otherwise, all files and resources are provided under the MIT license
 
 ----
-_*: since version 6 the last letter of the acronym MMIR has been reasigned from
-    _Rendering_ to _Relay_ in order to account for the fact, that (graphical)
-    _rendering_ is not a major focus of the the framework anymore.
+<a href="footnote1"></a>
+_*: since version 6 the last letter of the acronym MMIR has been reasigned from_
+    *_Rendering_ to _Relay_ in order to account for the fact, that (graphical)*
+    *_rendering_ is not a major focus of the the framework anymore.*
 
 [0]: https://github.com/mmig/mmir-lib
 [1]: https://github.com/mmig/mmir-starter-kit
@@ -203,3 +223,4 @@ _*: since version 6 the last letter of the acronym MMIR has been reasigned from
 [10]: https://www.npmjs.com/package/webworker-threads
 [11]: https://github.com/audreyt/node-webworker-threads
 [12]: https://github.com/mmig/mmir-tooling#bare-bones-mmir-lib-integration
+[13]: https://en.wikipedia.org/wiki/BNF_grammar
