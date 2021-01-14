@@ -131,6 +131,9 @@ Version 6.0.0
 The resolution for the acronym MMIR has been changed to _Mobile Multimodal Interaction and Relay_ framework,
 to account for the changed focus of the framework:
 more precisely, that _Rendering_ is not considered an important part of the framework anymore.
+This means, that no new features will be added to the built-in template rendering engine and
+is condidred _deprecated_, i.e. support/integration for the built-in rendering engine
+may be dropped in one of the future major version updates.
 
 GENERAL NOTE:
 Switched mmir-related GitHub dependencies to npm depedencies for mmir packages, e.g.
@@ -248,7 +251,7 @@ BUGFIX:
    NOTE: this is not backwards compatible for generated grammars files with mmir v4.x
    RESOLUTION: recompile grammars with mmir (mmir-tooling) v5.x
  * [BREAKING CHANGE] languageManager:
-    * loadDictionary() and loadSpeechConfig() will not change the current language anymore, used setLanguage() instead
+    * loadDictionary() and loadSpeechConfig() will not change the current language anymore, use setLanguage() instead
     * on setLanguage() only load dictionary and speech configuration if they exists (i.e. if there are corresponding entries in directories.json)
  * [BREAKING CHANGE] worker/scionQueueWorker: for consistency, renamed file workers/ScionQueueWorker.js -> workers/scionQueueWorker.js
  * [BREAKING CHANGE] core.logTrace: if options object, do treat missing field trace same as default for logTrace, i.e. TRUE (instead of FALSE as before when options object was used)
