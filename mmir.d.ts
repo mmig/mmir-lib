@@ -429,10 +429,11 @@ export type MediaEventHandler = Function;
 export type MediaEventType = string;
 export interface MediaManager {
 	ctx: {[ctxId: string]: any};
+	plugins: Array<MediaManagerPluginEntry & {disabled?: true | DisabledPluginInfo}> | null,
 	waitReadyImpl: IWaitReadyImpl;
 
 	init: (successCallback?: Function, failureCallback?: Function, listenerList?: {name: string, listener: Function}[]) => any;
-	loadFile: (filePath: string, successCallback?: Function, failureCallback?: Function, execId?: string) => void;
+	loadFile: (filePath: string, successCallback?: Function, failureCallback?: Function, execId?: string, config?: any) => void;
 
 	addListener: (eventName: MediaEventType, eventHandler: MediaEventHandler) => void;
 	hasListeners: (eventName: MediaEventType) => boolean;
@@ -475,6 +476,28 @@ export interface MediaManager {
 
 	_preparing: (moduleName: string) => void;
 	_ready: (moduleName: string) => void;
+}
+
+/** MediaManager.loadPlugin: return value / info when loading media plugins in case they are not functional (e.g. for auto-created stub functions that invoke appropriate error-callback) */
+export interface DisabledPluginInfo {
+	/** name / ID of the (media) plugin */
+	mod: string;
+	/**
+	 * if list of (disabled/non-functional) function names:
+	 * stub functions will be created (which try to invoke an error-callback from the arguments or log an error)
+	 *
+	 * if dictionary of functions:
+	 * function implementations will be used as plugin implementation
+	 */
+	disabled?: string[] | {[field: string]: any};
+	/** a message to append to the error message for created stub-functions (see `disabled`) */
+	message?: string;
+	/**
+	 * option-name for error-callbacks when supplied via options-argument
+	 * (used created stub-functions, see `disabled`)
+	 * @default "error"
+	 */
+	errorCallbackName?: string;
 }
 
 export interface Logger {
