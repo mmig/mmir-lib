@@ -313,11 +313,11 @@ declare interface ConfigurationManager {
 	getString(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): string;
 	set(propertyName: string | string[], value: any): void;
 
-	on(propertyName: string, listener: ConfigurationChangeListener): void;
-	on(propertyNamePath:  string[], listener: ConfigurationChangeListener): void;
+	on(propertyName: string, listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
+	on(propertyNamePath:  string[], listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
 	on(allChangesListener: ConfigurationChangeListener): void;
-	addListener(propertyName: string, listener: ConfigurationChangeListener): void;
-	addListener(propertyNamePath:  string[], listener: ConfigurationChangeListener): void;
+	addListener(propertyName: string, listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
+	addListener(propertyNamePath:  string[], listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
 	addListener(allChangesListener: ConfigurationChangeListener): void;
 
 	off(propertyName: string, listener: ConfigurationChangeListener): void;
