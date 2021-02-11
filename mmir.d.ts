@@ -311,6 +311,7 @@ declare interface ConfigurationManager {
 	get(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): any;
 	getBoolean(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): boolean;
 	getString(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): string;
+	getNumber(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): number;
 	set(propertyName: string | string[], value: any): void;
 
 	on(propertyName: string, listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
