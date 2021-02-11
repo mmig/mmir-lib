@@ -308,11 +308,11 @@ export interface CommonUtils {
 	stripPathName: (pathname: any) => any;
 }
 declare interface ConfigurationManager {
-	get(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): any;
-	getBoolean(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): boolean;
-	getString(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): string;
-	getNumber(propertyName: string | string[], defaultValue?: any, useSafeAccess?: boolean): number;
-	set(propertyName: string | string[], value: any): void;
+	get(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): any;
+	getBoolean(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): boolean;
+	getString(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): string;
+	getNumber(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): number;
+	set(propertyName: string | string[], value: any): any;
 
 	on(propertyName: string, listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
 	on(propertyNamePath:  string[], listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
