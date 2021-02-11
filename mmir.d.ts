@@ -427,6 +427,8 @@ export interface LanguageManager {
 }
 export type MediaEventHandler = Function;
 export type MediaEventType = string;
+export type ListVoicesFunction = (options?: VoiceListOptions, successCallBack?: (voices: string | VoiceDetails[]) => void, failureCallBack?: Function) => void;
+export type ListLanguagesFunction = (successCallBack?: (languages: string[]) => void, failureCallBack?: Function) => void;
 export interface MediaManager {
 	ctx: {[ctxId: string]: any};
 	plugins: Array<MediaManagerPluginEntry & {disabled?: true | DisabledPluginInfo}> | null,
@@ -456,13 +458,17 @@ export interface MediaManager {
 	startRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError, intermediateResults?: boolean) => void;
 	stopRecord: (options?: ASROptions, successCallback?: ASROnStatus, failureCallback?: ASROnError) => void;
 	cancelRecognition: (successCallback?: Function, failureCallback?: Function) => void;
-	getRecognitionLanguages: (successCallBack?: Function, failureCallBack?: Function) => void;
+	getRecognitionLanguages: ListLanguagesFunction;
+	destroyRecognition: (successCallback?: (didDestroy: boolean) => void,failureCallback?: Function) => void;
+	initializeRecognition: (successCallback?: (didInitialize: boolean) => void,failureCallback?: Function) => void;
 
 	tts: (options: string | string[] | TTSOptions, successCallback?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: TTSOnReady, ...args: any[]) => void;
 	setTextToSpeechVolume: (newValue: number) => void;
 	cancelSpeech: (successCallBack?: Function, failureCallBack?: Function) => void;
-	getSpeechLanguages: (successCallBack?: Function, failureCallBack?: Function) => void;
-	getVoices: (options?: VoiceListOptions, successCallBack?: (voices: string | VoiceDetails[]) => void, failureCallBack?: Function) => void;
+	getSpeechLanguages: ListLanguagesFunction;
+	getVoices: ListVoicesFunction;
+	destroySpeech: (successCallback?: (didDestroy: boolean) => void,failureCallback?: Function) => void;
+	initializeSpeech: (successCallback?: (didInitialize: boolean) => void,failureCallback?: Function) => void;
 
 
 	// internal / "half public" functions (for use in plugin implementations)
