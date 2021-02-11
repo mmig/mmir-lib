@@ -330,7 +330,7 @@ declare interface ConfigurationManager {
 
 	toPath(pathStringOrList: string | string[]): string[];
 }
-export type ConfigurationChangeListener = (newValue: any, oldValue?: any, propertyName?: string) => void;
+export type ConfigurationChangeListener = (newValue: any, oldValue?: any, propertyName?: string[]) => void;
 export interface Resources {
 	getBasePath: () => string;
 	getBeepUrl: () => string;
