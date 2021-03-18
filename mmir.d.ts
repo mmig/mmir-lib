@@ -754,7 +754,7 @@ export type TTSOnComplete = () => void;
 export type TTSOnError = (error: string | Error) => void;
 export type TTSOnReady = (isReady?: Boolean, audio?: IAudio) => void;
 
-export type ASROnStatus = (text: string | "", confidence: number | undefined, status: ASRStatus, alternatives?: {result: string, score: number}[], unstable?: string) => void;
+export type ASROnStatus = (text: string | "", confidence: number | undefined, status: ASRStatus, alternatives?: {result: string, score: number}[], unstable?: string, custom?: any) => void;
 export type ASRStatus = "FINAL" | "INTERIM" | "INTERMEDIATE" | "RECORDING_BEGIN" | "RECORDING_DONE";
 export type ASROnError = (error: string | Error) => void;
 
