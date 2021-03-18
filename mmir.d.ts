@@ -309,10 +309,12 @@ export interface CommonUtils {
 }
 declare interface ConfigurationManager {
 	get(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): any;
+	get<T>(propertyName: string | string[], defaultValue?: T, setAsDefaultIfUnset?: boolean): T;
 	getBoolean(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): boolean;
 	getString(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): string;
 	getNumber(propertyName: string | string[], defaultValue?: any, setAsDefaultIfUnset?: boolean): number;
 	set(propertyName: string | string[], value: any): any;
+	set<T>(propertyName: string | string[], value: T): T;
 
 	on(propertyName: string, listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
 	on(propertyNamePath:  string[], listener: ConfigurationChangeListener, emitOnAdding?: boolean): void;
