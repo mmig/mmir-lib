@@ -34,6 +34,113 @@ additional, required dependencies when running in node environment
 --------------
 
 ##################
+Version 7.0.0-beta1
+##################
+
+REMOVED:
+
+ * [BREAKING CHANGE] in env/media/audiotts:
+   * removed backwards-compatiblity for deprecated hook `plugin.setMediaManager()`
+     (plugins must require `mediaManager` directly instead, e.g. `mmir.require('mmirf/mediaManager')`)
+ * [BREAKING CHANGE] in mediaManager: removed method `mediaManager._get_mmir()`
+   plugins should require mmir instance instead, e.g.
+   ```
+   define(['core'], function(mmir){
+      // -> use mmir instance
+   })
+   ```
+
+MODIFICATION:
+
+ * [BREAKING CHANGE] mediaManager:
+   * changed initialization interface for media plugins (i.e. signature for exported factory function):
+     `initialize: function(callBack, mediaManager, ctxId, moduleConfig)` -> `initialize: function(callBack, ctxId, moduleConfig)`
+     does not pass in the mediaManager instance as second argument anymore (if needed by the plugin, it should `require` it)
+   * renamed method `mediaManager.loadFile(..)` -> `mediaManager.loadPlugin(..)`
+ * [BREAKING CHANGE] env/media/audiotts:
+   * audiotts plugin implementations now need to return a factory function (not the plugin object itself):
+     `factory(logger)` (the `logger` argument is a logger instance that can be used during its intialization; after initialization it should request a dedicated logger instance via exposing the hook `getLogger()`)
+   * adapted env/media/ttsMary and env/media/ttsWebspeech plugin implementations according to new factory-interface of audiotts
+ * [BREAKING CHANGE] configurationManager:
+   * for configurationManager.get(): the meaning of optional third argument is changed from `useSafeAccess` to `setAsDefaultIfUnset`
+     support for "unsafe access" is dropped (i.e. throwing an exception if configuration path is not available); instead the third argument
+     is interpreted as "set specified default value, if there is not value (i.e. undefined) set yet"
+   * initialization of configurationManager is now asynchronous:
+     in order to avoid using synchronous XHR requests (for loading configuration data) the initialization is now done asynchronously.
+
+     This change can be ignored, if access to the `configurationManager` is done, after `mmir.ready()` has been fired, or initialization interfaces
+     (e.g. for media plugins) are used.
+
+     Otherwise, `configurationManager.init()` will return a promise that is revolved upon its initialization
+     ```
+     require('mmirf/configurationManager').init().then(function(){
+      //-> now configuration data is loaded
+     })
+     ```
+
+   * for configurationManager.get(path, ...) / get<String|Boolean>(path, ...) / set(path, ...): in case `path` is an `Array` its entries are not further processed
+     support for processing string-entries that contain dot-seprating notation is dropped, i.e.
+     ```
+     mmir.conf.get(['dot', 'separated.path'], ...);
+     //-> path evaluates to: ['dot', 'separated.path'] instead of ['dot', 'separated', 'path']
+     ```
+     If processing of path-Arrays with string-entries that contain dot-seprating notation is required, use (new) helper method `toPath(stringOrArray)`:
+     ```
+     mmir.conf.get(mmir.toPath(['dot', 'separated.path']), ...);
+     //-> mmir.toPath(['dot', 'separated.path']) -> ['dot', 'separated', 'path']
+     ```
+   * for configurationManager.on() / configurationManager.addListener():
+     the 3rd argument `path` is now an `Array` of strings, instead of a (dot-seperated) property-path string
+     (where the last entry of the `Array` is the property name itself)
+     ```
+     // old interface:
+     ConfigurationChangeListener(newValue: any, oldValue: any, propertyName: string) => void
+     // -> new interface:
+     ConfigurationChangeListener(newValue: any, oldValue: any, propertyName: string[]) => void
+     ```
+ * manager/dialog: changed implementation for WebWorker based event queuing:
+                   only use 1 Worker instance for all dialog engines (instead of one Worker per dialog engine)
+ * env/view/viewLoader: changed internal `isUpToDate(...)` to use asynchronous XHR requests
+
+ADDITION:
+
+ * mediaManager: support non-function/disabled result when loading media-plugins
+   * expose field `mediaManager.plugins` of all loaded media plugins
+   * extended plugin interface initialized-callback: function(exportedFunctions) -> function(exportedFunctions, /*optional: */nonFunctionalInfo)
+   * provide conveinance methods for generating stub-functions for non-functional/disabled media plugin interfaces
+     (i.e. functions that invoke a provided error callback or log the error, see docs)
+   * update/set field mediaManager.plugins[i].disabled in case plugin reports that it is non-function/disabled
+ * mediaManager and env/media/<audio-input-plugins>: added (optional) interface methods for audio-input-plugins (i.e. speech recogntion plugins)
+   * `destroyRecogntion: (successCallback?: (didDestroy: boolean) => void,failureCallback?: Function) => void`: destroys speech recognition instance
+   * `initializeRecogntion: (successCallback?: (didInitialize: boolean) => void,failureCallback?: Function) => void`: re-initialized speech recognition instance
+   * the success callback for speech recognition (i.e. for `recognize(..)`, `startRecord(..)`, `stopRecord(..)`) now supports an optional fifth argument `custom`:
+     the argument is dependent on the ASR engine / plugin, that is, a specific implementation may return some custom results via this argument
+ * mediaManager and env/media/<audio-output-plugins>: added (optional) interface methods for audio-output-plugins (i.e. speech synthesis plugins)
+   * `destroySpeech: (successCallback?: (didDestroy: boolean) => void,failureCallback?: Function) => void`: destroys speech synthesis instance
+   * `initializeSpeech: (successCallback?: (didInitialize: boolean) => void,failureCallback?: Function) => void`: re-initialized speech synthesis instance
+ * eventEmitter: support event handlers / hooks for functions set an the thisArgument with "on<event name>",
+                 by setting optional constructor argument enableHooks to true
+ * configurationManager:
+   * added optional third argument `emitOnAdding` (`boolean`) for `configurationManager.on()` and `configurationManager.addListener()`:
+     if `true` immediately fires listener with current value after adding it.
+   * added converter method `getNumber()` (works analogous to `getString()` and `getBoolean()`)
+   * configurationManager.set(): now returns the newly set value
+ * mmirf/events: added extension module mmirf/events/propertyHandler that attaches a function to the EventEmitter class
+   for creating event handler properties, e.g.
+   ```
+   var EventEmitter = mmir.require('mmirf/events/propertyHandler');
+   var emitter = new EventEmitter();
+   emitter.createEventHandlerProperty('SoundStart');
+   context.onsoundstart = function(){ console.log('sound has started') };
+   ```
+
+BUGFIX:
+
+ * env/media/micLevelsAnalysis:
+   * fixed compatibility for detecting & invoking getUserMedia(): do handle deprecation of navigator.getUserMedia()
+   * do handle case that that plugin is non-functional (e.g. due to missing getUserMedia())
+
+##################
 Version 6.2.0
 ##################
 
@@ -1048,7 +1155,7 @@ MODFIFICATIONS:
  * REFACTOR tools/commonUtils.js: loadScript is now "synonymous" with getLocalScript (i.e. removed "similar" implementation and invoke getLocalScript instead)
  * REFACTOR media/env/webkitAudioInput.js:
      * extracted microphone-levels analysis for web audio input into separate module / plugin
-     * microphone-levels analysis can be loaded as plugin via MediaManager.loadFile('webMicLevels', ....
+     * microphone-levels analysis can be loaded as plugin via MediaManager.loadFile('webMicLevels.js', ....
        * the this plugin should be loaded as "singleton": before loading, check if property MediaManager.micLevelsAnalysis already exists
      * the exported functions are then available at MediaManager.micLevelsAnalysis.<exported function>
 
