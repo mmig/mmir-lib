@@ -1,4 +1,4 @@
-**[mmir-lib 6.2.0](../README.md)**
+**[mmir-lib 7.0.0-beta1](../README.md)**
 
 > [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / ContentElement
 

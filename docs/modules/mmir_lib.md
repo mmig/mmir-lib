@@ -1,4 +1,4 @@
-**[mmir-lib 6.2.0](../README.md)**
+**[mmir-lib 7.0.0-beta1](../README.md)**
 
 > [Globals](../README.md) / mmir-lib
 
@@ -39,6 +39,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [DialogEngine](../interfaces/mmir_lib.dialogengine.md)
 * [DialogManager](../interfaces/mmir_lib.dialogmanager.md)
 * [DialogManager4Compatibility](../interfaces/mmir_lib.dialogmanager4compatibility.md)
+* [DisabledPluginInfo](../interfaces/mmir_lib.disabledplugininfo.md)
 * [EncodeUtils](../interfaces/mmir_lib.encodeutils.md)
 * [EnvInfo](../interfaces/mmir_lib.envinfo.md)
 * [Grammar](../interfaces/mmir_lib.grammar.md)
@@ -99,6 +100,8 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [FileInfo](mmir_lib.md#fileinfo)
 * [GrammarEngineType](mmir_lib.md#grammarenginetype)
 * [GrammarType](mmir_lib.md#grammartype)
+* [ListLanguagesFunction](mmir_lib.md#listlanguagesfunction)
+* [ListVoicesFunction](mmir_lib.md#listvoicesfunction)
 * [LogLevel](mmir_lib.md#loglevel)
 * [LogLevelNum](mmir_lib.md#loglevelnum)
 * [MediaEventHandler](mmir_lib.md#mediaeventhandler)
@@ -165,7 +168,7 @@ ___
 
 ### ASROnStatus
 
-Ƭ  **ASROnStatus**: (text: string \| "", confidence: number \| undefined, status: [ASRStatus](mmir_lib.md#asrstatus), alternatives?: { result: string ; score: number  }[], unstable?: string) => void
+Ƭ  **ASROnStatus**: (text: string \| "", confidence: number \| undefined, status: [ASRStatus](mmir_lib.md#asrstatus), alternatives?: { result: string ; score: number  }[], unstable?: string, custom?: any) => void
 
 ___
 
@@ -197,7 +200,7 @@ ___
 
 ### ConfigurationChangeListener
 
-Ƭ  **ConfigurationChangeListener**: (newValue: any, oldValue?: any, propertyName?: string) => void
+Ƭ  **ConfigurationChangeListener**: (newValue: any, oldValue?: any, propertyName?: string[]) => void
 
 ___
 
@@ -248,6 +251,18 @@ ___
 ### GrammarType
 
 Ƭ  **GrammarType**: \"source\" \| \"bin\"
+
+___
+
+### ListLanguagesFunction
+
+Ƭ  **ListLanguagesFunction**: (successCallBack?: (languages: string[]) => void, failureCallBack?: [Function](../interfaces/mmir_lib.requirejs.md#function)) => void
+
+___
+
+### ListVoicesFunction
+
+Ƭ  **ListVoicesFunction**: (options?: [VoiceListOptions](../interfaces/mmir_lib.voicelistoptions.md), successCallBack?: (voices: string \| [VoiceDetails](../interfaces/mmir_lib.voicedetails.md)[]) => void, failureCallBack?: [Function](../interfaces/mmir_lib.requirejs.md#function)) => void
 
 ___
 

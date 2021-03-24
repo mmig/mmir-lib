@@ -1,4 +1,4 @@
-**[mmir-lib 6.2.0](../README.md)**
+**[mmir-lib 7.0.0-beta1](../README.md)**
 
 > [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MediaManager
 
@@ -24,6 +24,8 @@
 * [cancelSpeech](mmir_lib.mediamanager.md#cancelspeech)
 * [createEmptyAudio](mmir_lib.mediamanager.md#createemptyaudio)
 * [ctx](mmir_lib.mediamanager.md#ctx)
+* [destroyRecognition](mmir_lib.mediamanager.md#destroyrecognition)
+* [destroySpeech](mmir_lib.mediamanager.md#destroyspeech)
 * [getFunc](mmir_lib.mediamanager.md#getfunc)
 * [getListeners](mmir_lib.mediamanager.md#getlisteners)
 * [getRecognitionLanguages](mmir_lib.mediamanager.md#getrecognitionlanguages)
@@ -33,12 +35,15 @@
 * [getWAVAsAudio](mmir_lib.mediamanager.md#getwavasaudio)
 * [hasListeners](mmir_lib.mediamanager.md#haslisteners)
 * [init](mmir_lib.mediamanager.md#init)
+* [initializeRecognition](mmir_lib.mediamanager.md#initializerecognition)
+* [initializeSpeech](mmir_lib.mediamanager.md#initializespeech)
 * [loadFile](mmir_lib.mediamanager.md#loadfile)
 * [off](mmir_lib.mediamanager.md#off)
 * [on](mmir_lib.mediamanager.md#on)
 * [perform](mmir_lib.mediamanager.md#perform)
 * [playURL](mmir_lib.mediamanager.md#playurl)
 * [playWAV](mmir_lib.mediamanager.md#playwav)
+* [plugins](mmir_lib.mediamanager.md#plugins)
 * [recognize](mmir_lib.mediamanager.md#recognize)
 * [removeListener](mmir_lib.mediamanager.md#removelistener)
 * [setDefaultCtx](mmir_lib.mediamanager.md#setdefaultctx)
@@ -124,6 +129,18 @@ ___
 
 ___
 
+### destroyRecognition
+
+•  **destroyRecognition**: (successCallback?: (didDestroy: boolean) => void, failureCallback?: [Function](mmir_lib.requirejs.md#function)) => void
+
+___
+
+### destroySpeech
+
+•  **destroySpeech**: (successCallback?: (didDestroy: boolean) => void, failureCallback?: [Function](mmir_lib.requirejs.md#function)) => void
+
+___
+
 ### getFunc
 
 •  **getFunc**: (ctx: string, funcName: string) => any
@@ -138,13 +155,13 @@ ___
 
 ### getRecognitionLanguages
 
-•  **getRecognitionLanguages**: (successCallBack?: [Function](mmir_lib.requirejs.md#function), failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
+•  **getRecognitionLanguages**: [ListLanguagesFunction](../modules/mmir_lib.md#listlanguagesfunction)
 
 ___
 
 ### getSpeechLanguages
 
-•  **getSpeechLanguages**: (successCallBack?: [Function](mmir_lib.requirejs.md#function), failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
+•  **getSpeechLanguages**: [ListLanguagesFunction](../modules/mmir_lib.md#listlanguagesfunction)
 
 ___
 
@@ -156,7 +173,7 @@ ___
 
 ### getVoices
 
-•  **getVoices**: (options?: [VoiceListOptions](mmir_lib.voicelistoptions.md), successCallBack?: (voices: string \| [VoiceDetails](mmir_lib.voicedetails.md)[]) => void, failureCallBack?: [Function](mmir_lib.requirejs.md#function)) => void
+•  **getVoices**: [ListVoicesFunction](../modules/mmir_lib.md#listvoicesfunction)
 
 ___
 
@@ -178,9 +195,21 @@ ___
 
 ___
 
+### initializeRecognition
+
+•  **initializeRecognition**: (successCallback?: (didInitialize: boolean) => void, failureCallback?: [Function](mmir_lib.requirejs.md#function)) => void
+
+___
+
+### initializeSpeech
+
+•  **initializeSpeech**: (successCallback?: (didInitialize: boolean) => void, failureCallback?: [Function](mmir_lib.requirejs.md#function)) => void
+
+___
+
 ### loadFile
 
-•  **loadFile**: (filePath: string, successCallback?: [Function](mmir_lib.requirejs.md#function), failureCallback?: [Function](mmir_lib.requirejs.md#function), execId?: string) => void
+•  **loadFile**: (filePath: string, successCallback?: [Function](mmir_lib.requirejs.md#function), failureCallback?: [Function](mmir_lib.requirejs.md#function), execId?: string, config?: any) => void
 
 ___
 
@@ -211,6 +240,12 @@ ___
 ### playWAV
 
 •  **playWAV**: (blob: any, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
+
+___
+
+### plugins
+
+•  **plugins**: Array<[MediaManagerPluginEntry](mmir_lib.mediamanagerpluginentry.md) & { disabled?: true \| [DisabledPluginInfo](mmir_lib.disabledplugininfo.md)  }\> \| null
 
 ___
 
