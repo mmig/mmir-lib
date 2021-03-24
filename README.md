@@ -199,7 +199,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
   (BSD; Copyright (c) 2013 Terence Parr)
  * crypto-js MD5 3.1.9-1 (custom build)  
   (MIT; Copyright (c) 2009-2013 Jeff Mott, Copyright (c) 2013-2016 Evan Vosberg)
- * stacktrace-js 2.0.0  
+ * stacktrace-js 2.0.2  
   (MIT; Copyright (c) 2017 Eric Wendelin and other contributors)
 
 ----
