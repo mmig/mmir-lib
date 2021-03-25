@@ -33,6 +33,18 @@ additional, required dependencies when running in node environment
  Change Log
 --------------
 
+
+##################
+Version 7.0.0-beta2
+##################
+
+MODIFICATION:
+
+ * lib/vendor: updated/recompiled vendor libraries
+ * mvc/parser/gen: recompiled view parser libraries
+ * improved API docs for mediaManager and scion queue worker
+
+
 ##################
 Version 7.0.0-beta1
 ##################
