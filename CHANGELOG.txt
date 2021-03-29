@@ -33,6 +33,25 @@ additional, required dependencies when running in node environment
  Change Log
 --------------
 
+##################
+Version 7.0.0-beta3
+##################
+
+REMOVED:
+
+ * [BREAKING CHANGE] in manager/dialog: moved factory method for cordova-plugin based event queue to plugin itself
+   if cordova-plugin base event queue is used, it may cause errors if mmir is initialized before cordova plugin is available
+   WORKAROUND: wait for initialization of cordova before initializing mmir
+
+ADDITION:
+
+ * env/media/cordovaAudio: added support for `getWAVAsAudio()` for `cordova` environment
+
+BUGFIX:
+
+ * env/media/cordovaAudio: fixed `playWAV()` for `cordova` environment: do not try to create `Media(Blob -> DataUrl, ...)`, but create & temporary file instead (analogous to new `getWAVAsAudio()` implementation)
+ * env/media/webAudio: fixed `getWAVAsAudio()` for `web` environment: do release data-blob handle if audio was prematurely released
+ * mediaManager: added missing placeholder/proxy function for audio output API method `getWAVAsAudio()`
 
 ##################
 Version 7.0.0-beta2
