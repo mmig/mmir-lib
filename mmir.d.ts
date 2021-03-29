@@ -450,10 +450,12 @@ export interface MediaManager {
 	on: (eventName: MediaEventType, eventHandler: MediaEventHandler) => void;
 
 	createEmptyAudio: () => IAudio;
-	getURLAsAudio: (url: string, onEnd: any, failureCallback: any, successCallback: any, audioObj: IAudio, ...args: any[]) => IAudio;
-	getWAVAsAudio: (blob: any, callback: any, onEnd: any, failureCallback: any, onInit: any, emptyAudioObj: IAudio) => IAudio;
+	getURLAsAudio: (url: string, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, successCallback?: Function, audioObj?: IAudio, ...args: any[]) => IAudio;
+	getWAVAsAudio: (blob: Blob, onCreate: Function, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: Function, emptyAudioObj?: IAudio) => IAudio;
+	getAudio: (urlOrData: string | Blob, callback: any, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onInit?: Function, emptyAudioObj?: IAudio) => IAudio;
 	playURL: (url: string, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
-	playWAV: (blob: any, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
+	playWAV: (blob: Blob, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
+	play: (urlOrData: string | Blob, onEnd?: TTSOnComplete, failureCallback?: TTSOnError, onReady?: Function) => void;
 
 	getFunc: (ctx: string, funcName: string) => any;
 	perform: (ctx: string, funcName: string, args?: any[]) => any;
