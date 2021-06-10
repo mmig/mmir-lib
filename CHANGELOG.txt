@@ -34,6 +34,21 @@ additional, required dependencies when running in node environment
 --------------
 
 ##################
+Version 7.0.0-beta4
+##################
+
+MODIFICATION:
+
+ * languageManager.getLanguageConfig(): use current language code as fallback if field "language" is missing
+ * storageUtils: set file-format version to 5 (due to BUGFIX for views; see below)
+                 NOTE: generated views should be recompiled after updating to this library version
+
+BUGFIX:
+ * languageManager.getResourceUri("dictionary" | "speechConfig" | "grammar"): do support resource loading of of ES modules with default export
+ * storageUtils & views: FIXED stringify()-methods for views: do use storageUtils.getCodeWrapSuffix() correctly
+                        (and removed outdated interanl constant STORAGE_CODE_WRAP_SUFFIX)
+
+##################
 Version 7.0.0-beta3
 ##################
 
