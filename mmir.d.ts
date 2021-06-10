@@ -157,7 +157,7 @@ export type ProcessingPositionsInfo = ProcessingOrderInfo & PositionsInfo;
 
 export interface GrammarConverter {
 
-	new();
+	new(): GrammarConverter;
 
 	procList: ProcessingStep[];
 
