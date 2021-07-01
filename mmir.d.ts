@@ -112,10 +112,11 @@ export interface NodeMmirModule extends MmirModule {
 
 export type LogLevel = 'verbose' | 'debug' | 'info' | 'warn' | 'error' | 'critical' | 'disabled';
 export type LogLevelNum =   0    |    1    |   2    |   3    |   4     |      5     |     6;
+export type LogLevelNumField ='0'|   '1'   |  '2'   |  '3'   |  '4'    |     '5'    |    '6';
 
 export interface LogLevelOptions {
 	level?: LogLevel | LogLevelNum;
-	levels?: {[logLevel in LogLevel]?: string[]} & {[logLevelNum in LogLevelNum]?: string[]};
+	levels?: {[logLevel in LogLevel]?: string[]} & {[logLevelNum in LogLevelNumField]?: string[]};
 	modules?: {[moduleId: string]: LogLevel | LogLevelNum};
 }
 
