@@ -34,6 +34,14 @@ additional, required dependencies when running in node environment
 --------------
 
 ##################
+Version 7.0.0-beta5
+##################
+
+BUGFIX:
+ * typings: use string typings for log-config field names in LogLevelOptions
+
+
+##################
 Version 7.0.0-beta4
 ##################
 
