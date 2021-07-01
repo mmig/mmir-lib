@@ -35,7 +35,7 @@
     "update:version": "updateversion --enable-package-lock --from-package ./ --regexp-target lib/core.js --version-regexp \"/(var\\s+CORE_VERSION\\s+=\\s+)\"\"§VERSION§\"\"/m\" --replace-pattern \"$1\"\"$0\"\""
   },
   "dependencies": {
-    "@scion-scxml/scxml": "^4.3.25",
+    "@scion-scxml/scxml": "^4.3.26",
     "requirejs": "^2.3.6",
     "xmlhttprequest": "^1.8.0"
   },
