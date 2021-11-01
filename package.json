@@ -35,12 +35,12 @@
     "update:version": "updateversion --enable-package-lock --from-package ./ --regexp-target lib/core.js --version-regexp \"/(var\\s+CORE_VERSION\\s+=\\s+)\"\"§VERSION§\"\"/m\" --replace-pattern \"$1\"\"$0\"\""
   },
   "dependencies": {
-    "@scion-scxml/scxml": "^4.3.26",
+    "@scion-scxml/scxml": "^4.3.27",
     "requirejs": "^2.3.6",
     "xmlhttprequest": "^1.8.0"
   },
   "devDependencies": {
-    "@types/requirejs": "^2.1.32",
+    "@types/requirejs": "^2.1.34",
     "cross-var": "^1.1.0",
     "fs-extra": "^9.1.0",
     "mmir-plugin-exports": "^2.5.3",
