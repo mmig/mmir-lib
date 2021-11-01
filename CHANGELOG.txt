@@ -34,6 +34,18 @@ additional, required dependencies when running in node environment
 --------------
 
 ##################
+Version 7.0.0-beta6
+##################
+
+FIX:
+ * webAudioInput: HACK for handling case the `SpeechRecognition.stop()` does not actually stop if called shortly after `SpeechRecognition.start()` was invoked (tested in `Chrome` v94.x):  
+   WORKAROUND: detect, if `SpeechRecognition.start()` was called shortly before `stopRecord()` is called (currently 60 ms), and if so, do trigger `SpeechRecognition.stop()` delayed
+
+
+BUGFIX:
+ * state engineConfig: remove superfluous comma/argument for debug output for printing active state events
+
+##################
 Version 7.0.0-beta5
 ##################
 
