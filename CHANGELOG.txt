@@ -44,6 +44,11 @@ IMPROVE:
 
 BUGFIX:
  * webspeechAudioInput: fixed invalid placeholder function name `failureCallback` -> `failureCallBack`
+ * ttsWebspeech: fixed search/filtering for voice selection
+   * added simple check for exact voice-name match
+   * added RegExp escaping for matching/filtering voice-name via RegExp:
+     i.e. escape special RegExp character when converting voice-name to filter-RegExp, adapapted from
+     MIT License, Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (https://sindresorhus.com), https://github.com/sindresorhus/escape-string-regexp
 
 ##################
 Version 7.0.0-beta6
