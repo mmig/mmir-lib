@@ -17,7 +17,7 @@ _dialog systems_ for multimodal interactions:
  * support and plugins for several **speech input** (Automatic Speech Recognition, ASR) engines
  * support and plugins for several **speech output/synthesis** (Text To Speech, TTS) engines
  * support for client- or sever-based **NLU processing**
-  * built-in support for **grammars** (similar to [BNF grammars][13<!-- TOC depthFrom:2 depthTo:6 withLinks:1 updateOnSave:1 orderedList:0 -->
+  * built-in support for **grammars** (similar to [BNF grammars][13])
 
 
 __Overview:__
