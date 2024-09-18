@@ -34,6 +34,16 @@ additional, required dependencies when running in node environment
 --------------
 
 ##################
+Version 7.0.1
+##################
+
+BUGFIX:
+ * ttsWebspeech: HACK for Chrome BUG (https://issues.chromium.org/issues/41294170)
+                 that causes SpeechSynthesis utterances to stop after ~ 15 secs
+                 WORKAROUND: pause() & immediately resume() in regular intervals seems to circumvent the problem
+
+
+##################
 Version 7.0.0
 ##################
 
