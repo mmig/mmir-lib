@@ -185,7 +185,7 @@ NOTE: Integration with / loading of Cordova is designed to work with the
 
 (see contents of `/vendor/libs/`)
 
- * RequireJS 2.3.6  
+ * RequireJS 2.3.7  
   (BSD or MIT; Copyright jQuery Foundation and other contributors)
  * SCION v1, @scion-scxml/core v2.6.22 (custom build)  
   (LGPLv3, Apache License v2.0; Copyright 2018 Jacobean Research and Development, LLC)
