@@ -1,4 +1,4 @@
-**[mmir-lib 7.0.0-beta1](../README.md)**
+**[mmir-lib 7.1.0](../README.md)**
 
 > [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / EnvInfo
 
@@ -14,6 +14,7 @@
 
 * [envSetting](mmir_lib.envinfo.md#envsetting)
 * [isBrowserEnv](mmir_lib.envinfo.md#isbrowserenv)
+* [isCapacitorEnv](mmir_lib.envinfo.md#iscapacitorenv)
 * [isCordovaEnv](mmir_lib.envinfo.md#iscordovaenv)
 * [isNodeEnv](mmir_lib.envinfo.md#isnodeenv)
 * [platform](mmir_lib.envinfo.md#platform)
@@ -29,6 +30,12 @@ ___
 ### isBrowserEnv
 
 •  **isBrowserEnv**: boolean
+
+___
+
+### isCapacitorEnv
+
+•  **isCapacitorEnv**: boolean
 
 ___
 

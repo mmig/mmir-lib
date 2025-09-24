@@ -1,4 +1,4 @@
-**[mmir-lib 7.0.0-beta1](../README.md)**
+**[mmir-lib 7.1.0](../README.md)**
 
 > [Globals](../README.md) / mmir-lib
 
@@ -104,6 +104,7 @@ __NOTE__ The API documentation for `mmir-lib` has not been fully migrated to
 * [ListVoicesFunction](mmir_lib.md#listvoicesfunction)
 * [LogLevel](mmir_lib.md#loglevel)
 * [LogLevelNum](mmir_lib.md#loglevelnum)
+* [LogLevelNumField](mmir_lib.md#loglevelnumfield)
 * [MediaEventHandler](mmir_lib.md#mediaeventhandler)
 * [MediaEventType](mmir_lib.md#mediaeventtype)
 * [MediaPluginEnvType](mmir_lib.md#mediapluginenvtype)
@@ -275,6 +276,12 @@ ___
 ### LogLevelNum
 
 Ƭ  **LogLevelNum**: 0 \| 1 \| 2 \| 3 \| 4 \| 5 \| 6
+
+___
+
+### LogLevelNumField
+
+Ƭ  **LogLevelNumField**: \"0\" \| \"1\" \| \"2\" \| \"3\" \| \"4\" \| \"5\" \| \"6\"
 
 ___
 

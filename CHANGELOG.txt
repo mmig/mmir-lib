@@ -34,14 +34,23 @@ additional, required dependencies when running in node environment
 --------------
 
 ##################
+Version 7.1.0
+##################
+
+ADDITION:
+ * add initial support for `capacitor` integration _(as alternative/in addition to `cordova`)_
+
+BUGFIX:
+ * `cordova` (integration): add fallback for deprecated `document.write()` in manual cordova-initialization script
+
+
+##################
 Version 7.0.1
 ##################
 
 BUGFIX:
- * ttsWebspeech: HACK for Chrome BUG (https://issues.chromium.org/issues/41294170)
-                 that causes SpeechSynthesis utterances to stop after ~ 15 secs
-                 WORKAROUND: pause() & immediately resume() in regular intervals seems to circumvent the problem
-
+ * webspeechAudioInput: HACK for Chrome `SpeechSynthesis` BUG (https://issues.chromium.org/issues/41294170)  
+                        fix long-running BUG for Chrome's `SpeechSynthesis` that causes utterances to stop after ~ 15 secs for some voices
 
 ##################
 Version 7.0.0

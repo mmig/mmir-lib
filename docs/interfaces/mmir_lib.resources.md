@@ -1,4 +1,4 @@
-**[mmir-lib 7.0.0-beta1](../README.md)**
+**[mmir-lib 7.1.0](../README.md)**
 
 > [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / Resources
 
@@ -40,6 +40,7 @@
 * [getWorkerPath](mmir_lib.resources.md#getworkerpath)
 * [init](mmir_lib.resources.md#init)
 * [isBrowserEnv](mmir_lib.resources.md#isbrowserenv)
+* [isCapacitorEnv](mmir_lib.resources.md#iscapacitorenv)
 * [isCordovaEnv](mmir_lib.resources.md#iscordovaenv)
 
 ## Properties
@@ -209,6 +210,12 @@ ___
 ### isBrowserEnv
 
 •  **isBrowserEnv**: () => boolean
+
+___
+
+### isCapacitorEnv
+
+•  **isCapacitorEnv**: () => boolean
 
 ___
 

@@ -1,4 +1,4 @@
-**[mmir-lib 7.0.0-beta1](../README.md)**
+**[mmir-lib 7.1.0](../README.md)**
 
 > [Globals](../README.md) / [mmir-lib](../modules/mmir_lib.md) / MediaManager
 
@@ -26,6 +26,7 @@
 * [ctx](mmir_lib.mediamanager.md#ctx)
 * [destroyRecognition](mmir_lib.mediamanager.md#destroyrecognition)
 * [destroySpeech](mmir_lib.mediamanager.md#destroyspeech)
+* [getAudio](mmir_lib.mediamanager.md#getaudio)
 * [getFunc](mmir_lib.mediamanager.md#getfunc)
 * [getListeners](mmir_lib.mediamanager.md#getlisteners)
 * [getRecognitionLanguages](mmir_lib.mediamanager.md#getrecognitionlanguages)
@@ -41,6 +42,7 @@
 * [off](mmir_lib.mediamanager.md#off)
 * [on](mmir_lib.mediamanager.md#on)
 * [perform](mmir_lib.mediamanager.md#perform)
+* [play](mmir_lib.mediamanager.md#play)
 * [playURL](mmir_lib.mediamanager.md#playurl)
 * [playWAV](mmir_lib.mediamanager.md#playwav)
 * [plugins](mmir_lib.mediamanager.md#plugins)
@@ -141,6 +143,12 @@ ___
 
 ___
 
+### getAudio
+
+•  **getAudio**: (urlOrData: string \| Blob, callback: any, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onInit?: [Function](mmir_lib.requirejs.md#function), emptyAudioObj?: [IAudio](mmir_lib.iaudio.md)) => [IAudio](mmir_lib.iaudio.md)
+
+___
+
 ### getFunc
 
 •  **getFunc**: (ctx: string, funcName: string) => any
@@ -167,7 +175,7 @@ ___
 
 ### getURLAsAudio
 
-•  **getURLAsAudio**: (url: string, onEnd: any, failureCallback: any, successCallback: any, audioObj: [IAudio](mmir_lib.iaudio.md), ...args: any[]) => [IAudio](mmir_lib.iaudio.md)
+•  **getURLAsAudio**: (url: string, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), successCallback?: [Function](mmir_lib.requirejs.md#function), audioObj?: [IAudio](mmir_lib.iaudio.md), ...args: any[]) => [IAudio](mmir_lib.iaudio.md)
 
 ___
 
@@ -179,7 +187,7 @@ ___
 
 ### getWAVAsAudio
 
-•  **getWAVAsAudio**: (blob: any, callback: any, onEnd: any, failureCallback: any, onInit: any, emptyAudioObj: [IAudio](mmir_lib.iaudio.md)) => [IAudio](mmir_lib.iaudio.md)
+•  **getWAVAsAudio**: (blob: Blob, onCreate: [Function](mmir_lib.requirejs.md#function), onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onInit?: [Function](mmir_lib.requirejs.md#function), emptyAudioObj?: [IAudio](mmir_lib.iaudio.md)) => [IAudio](mmir_lib.iaudio.md)
 
 ___
 
@@ -231,6 +239,12 @@ ___
 
 ___
 
+### play
+
+•  **play**: (urlOrData: string \| Blob, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
+
+___
+
 ### playURL
 
 •  **playURL**: (url: string, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
@@ -239,7 +253,7 @@ ___
 
 ### playWAV
 
-•  **playWAV**: (blob: any, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
+•  **playWAV**: (blob: Blob, onEnd?: [TTSOnComplete](../modules/mmir_lib.md#ttsoncomplete), failureCallback?: [TTSOnError](../modules/mmir_lib.md#ttsonerror), onReady?: [Function](mmir_lib.requirejs.md#function)) => void
 
 ___
 
