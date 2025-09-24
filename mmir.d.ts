@@ -364,12 +364,14 @@ export interface Resources {
 	init: (theForBrowserParameter?: EnvType|EnvInfo&{isAbsolutePath?: true|((path: string)=>boolean)}|string|boolean, isReset?: boolean) => any;
 	isBrowserEnv: () => boolean;
 	isCordovaEnv: () => boolean;
+	isCapacitorEnv: () => boolean;
 }
 export type PlatfromType = "browser" | "android" | "ios" | "node" | "electron";
 export type EnvType = PlatfromType | "cordova";
 export interface EnvInfo {
 	isBrowserEnv: boolean,
 	isCordovaEnv: boolean,
+	isCapacitorEnv: boolean,
 	isNodeEnv: boolean,
 	platform: PlatfromType | "default",
 	envSetting: EnvType | "default" | string
